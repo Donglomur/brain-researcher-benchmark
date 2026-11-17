@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Builds causal predictor histories and scores matched behavior, neural-history and shifted-neural probabilities using equal-worm log-loss contrasts and paired worm uncertainty. Native H5/MAT conversion, complete animal/episode identities, actual causal preprocessing and fitting, rights, authentic references and final target/window/protocol qualification remain open; scorer receipts do not attest those operations.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

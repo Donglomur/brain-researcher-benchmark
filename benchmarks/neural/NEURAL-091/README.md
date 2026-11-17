@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prepares exposure-aware Neuropixels exports with stimulus-family/repeat/time guards, computes train-only rate/state controls, and scores exact predictions with mouse-macro Poisson bits per spike. Authentic recording/presentation identity, SDK/NWB and clock compatibility, complete allowed stimulus inputs, protected execution, competent stimulus-transfer references, rights and scientific qualification remain held.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

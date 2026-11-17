@@ -1,0 +1,135 @@
+{
+  "schema": "initial_evaluator_source_provenance_v1",
+  "task_id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+  "canonical_contract": {
+    "path": "../../task.json",
+    "sha256": "dfe88f71ca905acdec513203ed249480b3b2224f66fb9d4bfd71a4a2a8398aea"
+  },
+  "paper": {
+    "doi": "10.1038/s41593-026-02409-7",
+    "url": "https://www.nature.com/articles/s41593-026-02409-7",
+    "pmcid": "PMC13633125",
+    "scope": "Figure 6f; source-concordance diagnostic and explicit prospective pointwise improvement"
+  },
+  "official_source_commit": "8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8",
+  "inspected_primary_files": [
+    {
+      "path": "README.md",
+      "bytes": 19853,
+      "sha256": "7553fe5e66635e0fc59d9387b4fa7dea69157c7c75311cac16ed94c0003c3bff",
+      "source_url": "https://raw.githubusercontent.com/heyslab/StructuredExperience_NatNeuro_2026/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/README.md",
+      "retrieval_url": "https://cdn.jsdelivr.net/gh/heyslab/StructuredExperience_NatNeuro_2026@8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/README.md"
+    },
+    {
+      "path": "ms_figures/ephys_time_decoding/test_ephys_decode.py",
+      "bytes": 14197,
+      "sha256": "ee745ab9653559c677d1236c99816cd50824c7cbda93bde22c3f8df5426a2489",
+      "source_url": "https://raw.githubusercontent.com/heyslab/StructuredExperience_NatNeuro_2026/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/test_ephys_decode.py",
+      "retrieval_url": "https://cdn.jsdelivr.net/gh/heyslab/StructuredExperience_NatNeuro_2026@8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/test_ephys_decode.py"
+    },
+    {
+      "path": "ms_figures/ephys_time_decoding/time_decoding_ephys.py",
+      "bytes": 5692,
+      "sha256": "54b2530012aa298ea53689dc598eb1d466b376e478225c3e853561fdd47203d6",
+      "source_url": "https://raw.githubusercontent.com/heyslab/StructuredExperience_NatNeuro_2026/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/time_decoding_ephys.py",
+      "retrieval_url": "https://cdn.jsdelivr.net/gh/heyslab/StructuredExperience_NatNeuro_2026@8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/time_decoding_ephys.py"
+    }
+  ],
+  "semantic_mapping": [
+    {
+      "implementation": "circular_squared_seconds",
+      "authority": "task reproduction.owner_source_target; pinned consumer calc_error",
+      "decision": "integer bins 0..39; shortest circular distance on20s;0.5s/bin; squared seconds"
+    },
+    {
+      "implementation": "ordered_folds, _unit_descriptions",
+      "authority": "task improvement.within_session_split/evaluation_split/context_access; pinned producer np.array_split",
+      "decision": "ten source-order contiguous trial folds; seven development mice; source-context-only calibration; all test contexts; prospective calibration order preserves roster, not a native Index.difference ordering equivalence claim"
+    },
+    {
+      "implementation": "validate_roster",
+      "authority": "task experimental_units/data_contract",
+      "decision": "all13 explicit session IDs, author-attested eight-mouse join,4+4 strata and exact session multiplicities; all-unit-zero-event/unresolved support hard refusal"
+    },
+    {
+      "implementation": "score_predictions",
+      "authority": "task improvement.aggregation and endpoint",
+      "decision": "40bins\u2192trial\u2192ordered context pair\u2192six across pairs\u2192session\u2192mouse\u2192equal8mouse mean; all3 within pairs and strata retained"
+    },
+    {
+      "implementation": "compare_predictions",
+      "authority": "task improvement.inference",
+      "decision": "all8 paired baseline-minus-candidate losses; all256 sign assignments; inclusive two-sided tail fraction descriptive only"
+    },
+    {
+      "implementation": "summarize_reproduction",
+      "authority": "pinned consumer Figure6f and task reproduction.owner_source_target",
+      "decision": "source-only3within/6across pair averaging, signed and absolute gap separately, SciPy ttest_ind equal_var=True on8vs5session gaps; no animal-inference claim"
+    }
+  ],
+  "prospective_policies": [
+    "Owner-only expected rows generated before actor output from full ordered roster; domain-separated HMAC-SHA256 opaque IDs; exact ID/class prediction schema.",
+    "Every query fold must contain all three contexts; absent context/calibration support refuses instead of dropping units.",
+    "Explicit prospective_pointwise_0p5s roster route and source_concordance_0p5s reproduction route only; paper-only unspecified1s/0.5s route refuses.",
+    "Freeze hashes and plan are verifiable structural records; no claim of authentication, temporal enforcement, candidate sandboxing, cache isolation or shared resource budget enforcement.",
+    "Sign-tail ties use inclusive comparison with a one-ULP boundary allowance; this is a descriptive numerical policy, not statistical significance."
+  ],
+  "runtime": {
+    "core": "Python3.10+ standard library",
+    "reproduction_optional_dependency": "SciPy; bounded tests observed1.17.1; not a native author-runtime pin",
+    "installation_performed": false
+  },
+  "source_rights": "No official code vendored or redistributed. Public readability is not a rights decision; task code_view_rights_revision gate remains open.",
+  "status": {
+    "runnable_benchmark": false,
+    "scientifically_qualified": false,
+    "submission_ready": false
+  },
+  "preserved_gates": [
+    {
+      "id": "complete_authentic_inputs",
+      "requirement": "Acquire and authenticate the entire checksum-bound ephys object, every opaque member and the source-defined13-session/eight-mouse join. No authentic neural archive has been acquired in this workstream.",
+      "status": "open"
+    },
+    {
+      "id": "trial_unit_authority",
+      "requirement": "An owner-approved contained native reader must prove the complete behavior trial roster, all units/raw rows, source trial ordering, clocks, source exclusions and duplicate-alias policy. A full behavior/unit roster is not reconstructible from spike-bearing rows alone.",
+      "status": "open"
+    },
+    {
+      "id": "all_unit_zero_event_trials",
+      "requirement": "The producer derives trials from retained event rows; all-unit-zero-event trials may disappear. The current constructor refuses them. Resolve against authentic behavior and native source; never silently drop them or add synthetic zeros while claiming source parity. Individual units lacking events for an otherwise present trial and retained out-of-window event trials are separate cases.",
+      "status": "open_hard_refusal"
+    },
+    {
+      "id": "code_view_rights_revision",
+      "requirement": "Select exact file-scoped author-code rights, revision, attribution and dependency notices. Zenodo CC-BY4 metadata explicitly includes the ZIP, but no root license exists and the nested Apache2 fixed-point subtree does not license the whole release. Nine-file comparison does not prove full Git-tree equivalence. Do not mount the answer-containing ZIP as candidate input.",
+      "status": "open"
+    },
+    {
+      "id": "paper_only_identifiability",
+      "requirement": "Adjudicate the paper's nearest1s versus source0.5s methods and reasonable paper-only variants before activation. Owner source-concordance cannot be the sole paper-understanding score; do not supply the owner recipe to both arms.",
+      "status": "open"
+    },
+    {
+      "id": "native_reference_and_baseline",
+      "requirement": "Select actual dependency/runtime identities and implement a minimal source-preserving reference wrapper; compare all13x9 context-pair outputs freshly, with source trial order, inclusion and preprocessing unchanged. The independent stdlib feature translation and synthetic controls do not prove Pandas/SciPy/LDA parity. Cached author predictions are not truth. Run competent baselines on identical complete inputs after separate selection.",
+      "status": "open"
+    },
+    {
+      "id": "production_owner_and_leakage",
+      "requirement": "Implement and demonstrate real per-fit process/storage isolation and immutable policy/calibration/query boundaries under one outer deadline and aggregate resource accounting. Current state checks and trusted46-control owner are not an arbitrary-candidate sandbox. Freeze no-neural, preprocessing-edge, clock, order, batch and cache adversarial checks; time accuracy alone is not neural understanding.",
+      "status": "open"
+    },
+    {
+      "id": "scorer_uncertainty_and_tolerances",
+      "requirement": "Authenticate the complete private expected-row universe before candidate output; freeze numeric tolerances from native parity and rounding anchors before evaluation. Use mouse aggregation, retain all eight paired differences, and keep256sign tails descriptive because LOOM training overlaps. Published session t-test is reproduction, not independent-animal inference.",
+      "status": "open"
+    },
+    {
+      "id": "empirical_evaluation",
+      "requirement": "Fresh root-selected finite reference/baseline/candidate operations, complete original outputs, independent result review and honest contamination limits. No real candidate/model comparison or scientific qualification has occurred.",
+      "status": "unselected"
+    }
+  ]
+}

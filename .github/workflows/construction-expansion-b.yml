@@ -1,0 +1,1573 @@
+# Generated source-engineering controls; no scientific qualification is established.
+name: Construction expansion B
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: construction-expansion-b-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+
+jobs:
+  expansion-b-source-identities:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities batch 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-015/docs/initial-evaluator-v1.md",
+                  "bytes": 16389,
+                  "sha256": "5c68f483c6a2c1b5ff035a5b0696b8674449cb845ff499164af8e98c6f466f49"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 746,
+                  "sha256": "f555e62f274ff471cbbc6bbd8607c252d1dc00a0ea6f47d0eeb4f1f3824c8856"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/catalog.json",
+                  "bytes": 3150,
+                  "sha256": "31aab0168d2f6dcf2c230a6649320d03f53f415b726991eb8f12c02d3a800942"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 21047,
+                  "sha256": "366dff43d2624a1cbdf7651a7f0ef00f0dad6cae01480e75d600a7c969096f2a"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 9676,
+                  "sha256": "6e25589feaccf3c8cd39080ef188390cffde4d6ad52f427210a7991337987943"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11956,
+                  "sha256": "eb7b6cc594c9890b20311da576dfd7299ce1fe86775677a873024555f2ccd169"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-015/task.json",
+                  "bytes": 28703,
+                  "sha256": "0defdcc095905ddb5186f2b0de0861ba2d527bb25a449bffa777b622e69f204c"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/docs/initial-evaluator-v1.md",
+                  "bytes": 13966,
+                  "sha256": "81afe9cfbd5dd03780ec0b7c08bb953029d73f8b9693eb70d188b0781b87c5c0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1907,
+                  "sha256": "b76396a30ce9ccac1367d4909f7d2aa1f5bdaee5e2be4a0708c248fc794a0a82"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 27214,
+                  "sha256": "67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 3052,
+                  "sha256": "205d691f30f293bb66d1d197636070daf37ecdacf9826022446b66470631917c"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 14345,
+                  "sha256": "dbb3a546b9b68e38ca9afa67dd68d968717d9f30737bc8a85ae2b1af07e0b6a7"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/task.json",
+                  "bytes": 16180,
+                  "sha256": "d3c7673c371b01421467ac792f66dc14e0e345e7c6b8ce5496377d80cd576bb9"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/docs/initial-evaluator-v1.md",
+                  "bytes": 14303,
+                  "sha256": "3228eff352827d7ca27df7944f15d125aa7e7bc67213d10f0644fc6d2789c44e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1513,
+                  "sha256": "d8c382413f07b6126630418a7093f020539f619cbe92e8ee1fe8ec9a82053dda"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20454,
+                  "sha256": "f68673aba242f827aeb16c8dbd03da095cdadbeed78025773d070f03a2db84db"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 2439,
+                  "sha256": "82df5eb6d569c595c5c18ff4e40d82fa1fb5ccc5571c66cc55a50ea0f931481d"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11591,
+                  "sha256": "b52e7aed42d602999a0c095337fa33e9cdf0bb46259c0d3f5323adcdaa4e147f"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-065/task.json",
+                  "bytes": 11607,
+                  "sha256": "1888547c763c67793b92ae4d1602c51917aa9d898755291e421ed545a54f7c47"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/docs/initial-evaluator-v1.md",
+                  "bytes": 15573,
+                  "sha256": "448d9552abe31e1424e40806002c3852994341cc08071ac18553f26637d68948"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1717,
+                  "sha256": "74bf227d4940828f63825889469c152aa0379431648fbf588ae36ce72f6c11de"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/aasd_evaluator.py",
+                  "bytes": 23219,
+                  "sha256": "ff323a38b5070e8c891f6f13355ab5e404c968aaacab6740971941ca47ffa45a"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 11552,
+                  "sha256": "5be2d0a91e4f878b6efe6b8669a53d02e2541c903dbf784796f1bbf813eb155f"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/tests/test_aasd_evaluator.py",
+                  "bytes": 13500,
+                  "sha256": "f79d97685afd42f90ba3867e9d72b65264e794e85d307fb1cd158de35ce9849e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/task.json",
+                  "bytes": 16041,
+                  "sha256": "0ee94e7c532697065e3fe1797c512cf10a8ed08f27f2b63bec8a87150e6b80ba"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/docs/initial-evaluator-v1.md",
+                  "bytes": 13552,
+                  "sha256": "fff4dba971fc24665f348fda714020fcc2acd08117f20d6280b62bc7dd75a4a0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1129,
+                  "sha256": "32685d33c437ddddd710fcdd0ca2e780a1cfcb7f078dfd20f3bc832afe6ddedf"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1/plexus_evaluator.py",
+                  "bytes": 23554,
+                  "sha256": "19910bab93292c536efda7a904b67ee1937f6e42a4c3b411d5dcc09d89a50fc6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1/sources.json",
+                  "bytes": 7597,
+                  "sha256": "c71a574d2055f85f207bafb4fbd0666531b5cc64860edd999fe3f2e86f6fa8cb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12482,
+                  "sha256": "f670d8121d41fb56978fc2125a2cb0fe9edaf0aefc1f3ee590b2f7f597928dac"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/task.json",
+                  "bytes": 8641,
+                  "sha256": "125009ce994e355a227ce6cf87ab2923a43336ea7dbfe216afdadbcc46b25ef7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/docs/initial-evaluator-v1.md",
+                  "bytes": 11505,
+                  "sha256": "42eaca4f182df32ca9b266182e8dae402683e4474d8890e04bc03df7bd31b236"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 2343,
+                  "sha256": "8c7ffa1eb99850cad931a6c38d7439357b880030856559a53e68a67f227606ed"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 18399,
+                  "sha256": "94a7b3d508fe5e4f9398808b36754b9e8b30c608e1e7c2c823468d95d19fd6d5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 10207,
+                  "sha256": "3dfa729d94e7b1aa30a31433669b51d5ab1b6c93c8d4dd6975c3589ef2baf2f5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 13496,
+                  "sha256": "d575424f7935fb07653b25254b476f8d3dd9667b0232adf79f70ce14918bd87a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-024/task.json",
+                  "bytes": 19137,
+                  "sha256": "c7b6aa9cd264aeb0d7b7021e5fdd2bd2a670ed97cc8cdd01f061bd0b41852201"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/docs/initial-evaluator-v1.md",
+                  "bytes": 12616,
+                  "sha256": "d1a660215f2be1ccae34ddcb19d0e86fd22c0e026597b0b51d153573bd12e26a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1673,
+                  "sha256": "17e86cad23185c9165ac3416f04893ee077678959100f43baecb516e1236a6f8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 23286,
+                  "sha256": "0d4bcca3d6608693f3676c0e9958b3646b6723581e2fa585810bdf183b782047"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2831,
+                  "sha256": "17082363fe0503af8a05eb36441ea26cc1c8f6a12da687c891e3c460f307d2e7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 15788,
+                  "sha256": "9831165ab6202b99c83ec4713ab8326b3dc5cf23cf44f3e897a2fc8f77aad502"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-009/task.json",
+                  "bytes": 19354,
+                  "sha256": "6407aa25a490bc29f256e5f8e063b1782e633c5c7ec5e4a409d0b864430c3a30"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/docs/initial-evaluator-v1.md",
+                  "bytes": 12808,
+                  "sha256": "37949088bbe9a6a2271bbbb85407ecc3e3c6a469702f47f922a91df45bd47064"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1331,
+                  "sha256": "6422e622c9520fbb2174f13df8fcef54b7d4a267a87b63705a010dc38749a1b4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20407,
+                  "sha256": "fe288c5949733daaf546553655b2f3419184db3136902d3a1f7c9d55b08dfb94"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/example_control.json",
+                  "bytes": 11797,
+                  "sha256": "0cfe0d07b85f4c27daa8d5a6269dad9544fa42780bb3b32033dbf78e22963b8a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2839,
+                  "sha256": "4d3ee20c32549f69c432783d8c31f5874901fa3ab491dbfccc2474a56d441573"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10032,
+                  "sha256": "47695193ee50001cdd817a50c6570cb4d1e9baf5e7eae3c3c4ca36aa5d8bf375"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-011/task.json",
+                  "bytes": 28324,
+                  "sha256": "8a452a1a2f4ad7be2f51af72392f9f5de03db9791b3f19d5e4cb92a9e68dc0f6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/docs/initial-evaluator-v1.md",
+                  "bytes": 11742,
+                  "sha256": "8f62660e379e8bd4c2af9716e8610cda4a5158eb11754459de1e8895a3c01dc7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1044,
+                  "sha256": "3f366e305886516c230c5c5fc61fc0d9e34b82287a5721cff91dbd337fc50346"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/pfc_evaluator.py",
+                  "bytes": 24352,
+                  "sha256": "5a2b9cf0b0c7ea2319827f209ba49301fb45aa6a8f06cab9b869e799be1b82eb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/source_contract.json",
+                  "bytes": 9628,
+                  "sha256": "b25dd8c848e9a020003ec0ebb87216e19213b4975474f3dfe600d0f6c756a0a7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/tests/test_pfc_evaluator.py",
+                  "bytes": 9325,
+                  "sha256": "7c0836bb16d41f49471efea1c81304ca009b3256586a47b89150d1ab3925f033"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-007/task.json",
+                  "bytes": 51355,
+                  "sha256": "5b90d33727d900a940a6e7bb01bd614b91fa7d7756c18c922bc6f51f040b4466"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 56 > 0
+          assert sum(row['bytes'] for row in rows) == 724414 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 724414,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Verify reviewed source identities batch 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/docs/initial-evaluator-v1.md",
+                  "bytes": 15328,
+                  "sha256": "c774143bffbbcb34978000c001aba0c3f73c4821c9e1d5d14dec07c6b0bf6cd7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1656,
+                  "sha256": "91b695e45015305139a7a9e9a7620d8974982f402592bfce0130a202423dad96"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 22641,
+                  "sha256": "73321ef6ec154951caf2815abc8d28bd0b831cc6506e6ad2e7f9a0d2fffb92ab"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3861,
+                  "sha256": "b010e1fda83c6e55b1b8970a232eddb9d767ea4deb5ee35a82acd35ee5d3fa15"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 16697,
+                  "sha256": "d5ba20543a9981a5e704b389f0ff43250e6728fef3d067542d6e18485526d3e3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/task.json",
+                  "bytes": 15797,
+                  "sha256": "b622f1c1fabd91722da8fd95e8179b4156c8f5b66bf35f7f2c8689fab13b241b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/docs/initial-evaluator-v1.md",
+                  "bytes": 10429,
+                  "sha256": "821becc63496b0fd772711d9e54279ce33f857c696eed950a0c1f66dd53d531f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1211,
+                  "sha256": "b639200230b01ca939c2b07911cb9a7d57a6a78d062162d234113a06650e0a70"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 19170,
+                  "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2681,
+                  "sha256": "59833e2dc7017bac2b32b2a0c1c1752a45bfd6b383d5e8abbce8187f63b157ee"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10161,
+                  "sha256": "1063203395709462045c1c72ab4a533ac619ea14046eb9be710608dd995b6665"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/task.json",
+                  "bytes": 30161,
+                  "sha256": "10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/docs/initial-evaluator-v1.md",
+                  "bytes": 11518,
+                  "sha256": "f23f925714dab78da409b39c1ab280c69f6dcc687ecef730d589398d796415b0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1848,
+                  "sha256": "8359355e3701376363feaaae7854ea983a8f5134be37e1d43fecc28ed17e4f0a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20394,
+                  "sha256": "8f43913ffd77c112e4184f8f2a01e5b3b8d3081f485d0cb065ec6353ef8a6a3a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/population.json",
+                  "bytes": 10741,
+                  "sha256": "626482a09a9fd6fd1c0713667aaeef97176f37e2ad21937a9df068c71041df9e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 3186,
+                  "sha256": "83731c07f2a97a9dd6bbd6718808366efdae2622aa6fd8c03d307496cf931a86"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12710,
+                  "sha256": "dd6ad051b024d9586dc0cb2bd56abdb338e1dab87165c381ac649ea4ccdf4151"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-030/task.json",
+                  "bytes": 162244,
+                  "sha256": "6de9351af83dcd990e576873f65802b6df7df963dbdf3c008100b1d87dc0806e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/docs/initial-evaluator-v1.md",
+                  "bytes": 12166,
+                  "sha256": "3f86416b3aed976ee7ca3a90c77c15e62b3869475911b3b0f27a824f3835af7a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1263,
+                  "sha256": "5a3c944b1c6df979dbf2652620ce5f3894293967d8f2926966be4c76ca85ecd9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/grounding.py",
+                  "bytes": 18311,
+                  "sha256": "1a9ae2432fd941ef531b5f1078731f1ce3ee3dd878311aaa17e729c9573c0014"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/make_control.py",
+                  "bytes": 3016,
+                  "sha256": "1a485fe215c9dfd0e6df3b4e1b5673c3fe013a7cd412c5e21cb6ea45d575b3e0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 3696,
+                  "sha256": "eee5ef2a340b687bc537fcaafd3cc7a991a4fa79672a5c2c3a835f68d8afbcd3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/tests/test_grounding.py",
+                  "bytes": 8638,
+                  "sha256": "8e6b9b70edce590bf632a30fdf4566ea26e29b86d8ce5bf39c728556a337c30f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-042/task.json",
+                  "bytes": 128221,
+                  "sha256": "a136bac3f4f192ace492257181f68638b4f8c73a4f7e0e4d7793756b3215e455"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/docs/initial-evaluator-v1.md",
+                  "bytes": 13787,
+                  "sha256": "2036585279aab448434a0add177ad0480d43444429ee6946217ce948a9203266"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1054,
+                  "sha256": "d8b6affad41a64fa93a87fb5d9dd3c344abdb3b47feeccb3e6e10ad7234e1634"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 24920,
+                  "sha256": "a11766b99b5fa85387f259d7e98b11c8331272afcade0dba7cec94ee27de9c7d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 7749,
+                  "sha256": "352ed0957292c199c8ff2efa1145ef82107ee6674e9bd7ca1e7846fd8db8eca3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9604,
+                  "sha256": "b5e2d8012de14fc694081c00880df88504090020e1d1f00ded302fbe3ec83a2c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-005/task.json",
+                  "bytes": 77749,
+                  "sha256": "98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/docs/initial-evaluator-v1.md",
+                  "bytes": 14211,
+                  "sha256": "35975b0e891409cb711f12447740a01a5636e957b7dcb0e10697b1c306eeaeb5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1482,
+                  "sha256": "e5051f3dcf2291ad76be768b7a84b7ea644e48e2f327cb6d40856429b9a6114f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/SOURCES.json",
+                  "bytes": 5389,
+                  "sha256": "2011968f6347fe29667fcc239e14545e7ef3c7f6cbfa7a3fcd6aa70e3a787ef3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 29788,
+                  "sha256": "1d067cda6b6e003ed06b66fc5a0c0b7b3e53a290a8b862fa08c82768473cb290"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/generated_control.py",
+                  "bytes": 3940,
+                  "sha256": "ec66e1186ee057b281e557ba562180abc5a57a27b4e78ea300ce81e46f456e2d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12246,
+                  "sha256": "19866a63be977c54025e989b54edcb22d9d08cdd7f2533354c8511478e45792e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-006/task.json",
+                  "bytes": 31269,
+                  "sha256": "4b06cd0993642d160ce1f953434c777292f771c86d27896feafa5775c64ca4ef"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/docs/initial-evaluator-v1.md",
+                  "bytes": 10863,
+                  "sha256": "c03ce310b044f1fb925064bcc4750e379d04d73b7b97e2dffb6b4bc56effbdc7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1591,
+                  "sha256": "c79294529098784ec66ca0545d8c1946fd167e088961bcad14dbc478920b3e95"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py",
+                  "bytes": 21579,
+                  "sha256": "7baf4c56b895b75927dc59d0f7a0f0f2d91425617c5b3e7e64b918a159db3955"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 5061,
+                  "sha256": "cb742b20e27b1196639b8e363a4f49f0c33931edaa3e4d859f53dece7ef76eb4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests/test_beta_evaluator.py",
+                  "bytes": 9503,
+                  "sha256": "3d0e5e4c9734adf6a50a58ce92cad03cc29a0e1e70169abc0e0c6d1bcc5a5e3a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-005/task.json",
+                  "bytes": 22792,
+                  "sha256": "63db4f561502a929cbff41fbdf04a6fdb7fa6b9ccf8972803304bf3c247d36d6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/docs/initial-evaluator-v1.md",
+                  "bytes": 12447,
+                  "sha256": "b6ef6025b67f130d6478500ccc44b0cbb19ce09f249374e9b409413592400995"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1/PROVENANCE.json",
+                  "bytes": 3221,
+                  "sha256": "f70b943c90784a281f5ef41eaca342e2743337f8c3a8edef485410bd5b18e1fb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 890,
+                  "sha256": "e4bd7c76badb7b65a60a4c827db2a352bb932d304cac5ed4d39c75f97990c71f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 25780,
+                  "sha256": "2cbfa3be223cdef714619c2db287bb77de0833c40f9c0c7e20044e6cc272e9f9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12568,
+                  "sha256": "661a89ffc8f54f6fed5153fc8be4b9233cc3fec8bed43c4e462d7d5f8638195b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-019/task.json",
+                  "bytes": 14781,
+                  "sha256": "ee4a4b656d9a0e4575165c9c02d74fd6889741cbd0cf3e934fb5ad7593aacabd"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 51 > 0
+          assert sum(row['bytes'] for row in rows) == 922009 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 922009,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+
+  expansion-b-neural-015:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for NEURAL-015
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.AlignmentControls.test_cli_roundtrip_and_nonzero_rejection', 'test_evaluator.AlignmentControls.test_clock_failures_and_no_extrapolation', 'test_evaluator.AlignmentControls.test_inclusive_tolerance_union_and_no_event_matching', 'test_evaluator.AlignmentControls.test_json_duplicate_keys_and_nonfinite_are_rejected', 'test_evaluator.AlignmentControls.test_nearest_trigger_rounding_and_endpoints', 'test_evaluator.AlignmentControls.test_pause_clock_must_be_segmented_before_alignment', 'test_evaluator.CohortControls.test_entrant_cannot_supply_control_or_future_context', 'test_evaluator.CohortControls.test_full_path_population_macro_and_shift', 'test_evaluator.CohortControls.test_guard_shift_and_query_binding', 'test_evaluator.CohortControls.test_movie_and_person_leakage_rejected', 'test_evaluator.CohortControls.test_no_label_bearing_unknown_fields', 'test_evaluator.CohortControls.test_prediction_validation', 'test_evaluator.CohortControls.test_reference_and_test_coverage_cannot_be_reduced', 'test_evaluator.CohortControls.test_sign_reversed_shift_has_no_wrap', 'test_evaluator.CohortControls.test_submission_rejects_missing_duplicate_unknown_ids', 'test_evaluator.CohortControls.test_target_free_allowlist', 'test_evaluator.MetricControls.test_balanced_diagnostic_has_half_prevalence_null', 'test_evaluator.MetricControls.test_clipping_is_explicit_and_counted', 'test_evaluator.MetricControls.test_constant_null_is_prevalence', 'test_evaluator.MetricControls.test_incremental_loss_sign_and_exact_value', 'test_evaluator.MetricControls.test_independent_tie_reference_and_permutation', 'test_evaluator.MetricControls.test_macro_is_not_pooled_or_session_average', 'test_evaluator.MetricControls.test_undefined_ap_preserved_not_dropped']
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 23 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 23, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'NEURAL-015', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-neural-028:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for NEURAL-028
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.TestContractAndPopulation.test_after_targets_never_change_any_fit', 'test_evaluator.TestContractAndPopulation.test_alignment_and_nonfinite_rejected', 'test_evaluator.TestContractAndPopulation.test_animal_regime_leakage_rejected', 'test_evaluator.TestContractAndPopulation.test_cli', 'test_evaluator.TestContractAndPopulation.test_constant_activity_yields_held_not_false_success', 'test_evaluator.TestContractAndPopulation.test_constant_nonbinary_training_target_has_undefined_scaled_loss', 'test_evaluator.TestContractAndPopulation.test_drop_session_rejected', 'test_evaluator.TestContractAndPopulation.test_duplicate_biological_tuple_rejected', 'test_evaluator.TestContractAndPopulation.test_end_to_end_population_and_strict_json', 'test_evaluator.TestContractAndPopulation.test_malformed_structure_and_policy_rejected', 'test_evaluator.TestContractAndPopulation.test_missing_area_holds_complete_area_endpoint', 'test_evaluator.TestContractAndPopulation.test_no_common_support_rejected', 'test_evaluator.TestContractAndPopulation.test_no_exchangeable_trial_null_is_held', 'test_evaluator.TestContractAndPopulation.test_phase_leakage_rejected', 'test_evaluator.TestContractAndPopulation.test_session_aggregation_does_not_pseudoreplicate_animals', 'test_evaluator.TestContractAndPopulation.test_test_neural_changes_do_not_change_own_fit', 'test_evaluator.TestContractAndPopulation.test_trial_null_is_reproducible_and_accounts_whole_trials', 'test_evaluator.TestSourceStatistics.test_arithmetic_sd_not_pooled_variance', 'test_evaluator.TestSourceStatistics.test_constant_nonbinary_unequal_lengths_are_undefined', 'test_evaluator.TestSourceStatistics.test_independent_global_cue_split_and_reward_window', 'test_evaluator.TestSourceStatistics.test_independent_reference_fixture_and_invariance', 'test_evaluator.TestSourceStatistics.test_population_not_sample_sd_and_sign', 'test_evaluator.TestSourceStatistics.test_reward_gate_and_all_area_denominator', 'test_evaluator.TestSourceStatistics.test_reward_uses_all_trial_cue_mean', 'test_evaluator.TestSourceStatistics.test_undefined_neurons_not_dropped', 'test_evaluator.TestSourceStatistics.test_weighted_moments_remove_occupancy_effect']
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 26 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 26, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'NEURAL-028', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-neural-065:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for NEURAL-065
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.MetricControls.test_exact_class_identity_and_edit_operations', 'test_evaluator.MetricControls.test_independent_oracle_alias_and_two_level_weighting', 'test_evaluator.MetricControls.test_insertion_cer_not_clipped_and_constants_valid', 'test_evaluator.MetricControls.test_modality_qualified_aliases_and_exclusions', 'test_evaluator.MetricControls.test_query_allowlist_and_single_person_uncertainty', 'test_evaluator.MetricControls.test_reordering_predictions_does_not_change_score', 'test_evaluator.RejectionControls.test_alignment_loss_keystroke_order_and_residual', 'test_evaluator.RejectionControls.test_calibration_and_v1_target_gates', 'test_evaluator.RejectionControls.test_cli_success_and_duplicate_json_key_failure', 'test_evaluator.RejectionControls.test_documented_losses_are_accounted_not_silently_dropped', 'test_evaluator.RejectionControls.test_fixed_lm_separate_and_matching', 'test_evaluator.RejectionControls.test_grouped_template_variants_and_biological_session_aliases', 'test_evaluator.RejectionControls.test_missing_extra_duplicate_and_bound_submission', 'test_evaluator.RejectionControls.test_neural_asset_identity_leakage', 'test_evaluator.RejectionControls.test_person_alias_and_template_leakage', 'test_evaluator.RejectionControls.test_session_leakage']
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-065/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 16 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 16, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'NEURAL-065', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-neural-scope-20261114-aasd-report:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for NEURAL-SCOPE-20261114-AASD-REPORT
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_aasd_evaluator.FullPath.test_cli_and_duplicate_json_rejection', 'test_aasd_evaluator.FullPath.test_score_retains_passive_and_all_trial_coverage', 'test_aasd_evaluator.MetricOracles.test_counts_pool_before_balanced_accuracy', 'test_aasd_evaluator.MetricOracles.test_logloss_calibration_and_fixed_tie_rule', 'test_aasd_evaluator.MetricOracles.test_one_class_folds_and_participant_denominator', 'test_aasd_evaluator.MetricOracles.test_participant_bootstrap_and_exact_paired_null', 'test_aasd_evaluator.MetricOracles.test_prediction_contract_cannot_shrink_scoring_denominator', 'test_aasd_evaluator.PopulationAndSplits.test_double_holdout_excludes_whole_person_and_family_fold', 'test_aasd_evaluator.PopulationAndSplits.test_events_and_states_fail_closed', 'test_aasd_evaluator.PopulationAndSplits.test_full_cohort_grid_and_motor_guard', 'test_aasd_evaluator.PopulationAndSplits.test_inventory_rejects_silent_census_narrowing', 'test_aasd_evaluator.StateAndContext.test_complete_trial_has_exactly_58_common_context_windows', 'test_aasd_evaluator.StateAndContext.test_exact_duration_majority_and_tie', 'test_aasd_evaluator.StateAndContext.test_half_open_events_and_no_retroactive_initialization', 'test_aasd_evaluator.StateAndContext.test_missing_invalid_and_unaligned_context']
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/tests', pattern='test_aasd_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 15 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'NEURAL-SCOPE-20261114-AASD-REPORT', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-candidate-20261114-plexus:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-CANDIDATE-20261114-PLEXUS
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.ContractTests.test_batch_leakage_and_lineage_leakage', 'test_evaluator.ContractTests.test_brier_comparison_includes_single_class_plates', 'test_evaluator.ContractTests.test_cli_real_path_and_duplicate_json_guard', 'test_evaluator.ContractTests.test_control_truth_and_duplicates', 'test_evaluator.ContractTests.test_end_to_end_complete_screen_and_paired_plate_estimates', 'test_evaluator.ContractTests.test_exact_52_gene_population_and_all_methods', 'test_evaluator.ContractTests.test_missing_gene_cannot_be_hidden_by_census', 'test_evaluator.ContractTests.test_nonfinite_boolean_probability_and_manifest_tamper', 'test_evaluator.ContractTests.test_physical_batch_cross_line_leakage', 'test_evaluator.ContractTests.test_unavailable_gene_retained_in_fdr_family', 'test_evaluator.ContractTests.test_version_and_checkpoint_rejection', 'test_evaluator.StatisticalTests.test_by_keeps_full_family_and_monotone', 'test_evaluator.StatisticalTests.test_calibration_closed_form', 'test_evaluator.StatisticalTests.test_cluster_interval_requires_biological_replication', 'test_evaluator.StatisticalTests.test_permutation_null_and_exchangeability_gate', 'test_evaluator.StatisticalTests.test_sign_direction_and_plus_one', 'test_evaluator.StatisticalTests.test_tie_aware_auc_and_degenerate_class']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 17 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 17, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-CANDIDATE-20261114-PLEXUS', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-find-024:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-FIND-024
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.CorrelationTests.test_bad_stimulus_exclusion_is_audited', 'test_evaluator.CorrelationTests.test_cached_input_role_fails', 'test_evaluator.CorrelationTests.test_cli_pins_input_and_rejects_tampering', 'test_evaluator.CorrelationTests.test_complex_inputs_are_not_silently_projected_to_real', 'test_evaluator.CorrelationTests.test_duplicate_physical_context_rejected', 'test_evaluator.CorrelationTests.test_extreme_finite_pearson_and_orthogonal_reference', 'test_evaluator.CorrelationTests.test_hand_derived_same_and_opposite_context', 'test_evaluator.CorrelationTests.test_independent_corrected_correlation_above_one_is_not_clipped', 'test_evaluator.CorrelationTests.test_interpolation_exposes_zero_variance_without_dropping', 'test_evaluator.CorrelationTests.test_missing_cell_after_bad_stimulus_exclusion_fails', 'test_evaluator.CorrelationTests.test_missing_participant_fails', 'test_evaluator.CorrelationTests.test_near_equal_rates_are_canonicalized_and_cannot_duplicate_cells', 'test_evaluator.CorrelationTests.test_negative_ceiling_remains_unclipped_and_undefined_ratio', 'test_evaluator.CorrelationTests.test_no_out_of_bounds_or_nonfinite_or_assessment_selection', 'test_evaluator.CorrelationTests.test_no_silent_segment_intersection', 'test_evaluator.CorrelationTests.test_prospective_holdout_preserves_story_rows', 'test_evaluator.CorrelationTests.test_ratio_of_means_is_not_mean_of_ratios', 'test_evaluator.CorrelationTests.test_same_stimulus_cannot_cross_rates', 'test_evaluator.CorrelationTests.test_segment_cannot_be_in_recorded_poststimulus_padding', 'test_evaluator.CorrelationTests.test_story_split_is_global_and_mode_explicit', 'test_evaluator.CorrelationTests.test_subnormal_ceiling_preserves_raw_values_and_nulls_overflow', 'test_evaluator.CorrelationTests.test_summary_balances_participants_not_electrodes', 'test_evaluator.CorrelationTests.test_two_nearly_identical_slow_rates_cannot_replace_fast_rate']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 23 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 23, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-FIND-024', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-find-add-009:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-FIND-ADD-009
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.AcousticTests.test_explicit_resource_budget', 'test_evaluator.AcousticTests.test_full_population_and_paired_conditions', 'test_evaluator.AcousticTests.test_independent_bandwise_oracle_and_exhaustive_path_cost', 'test_evaluator.AcousticTests.test_independent_silence_removal_and_repeated_time', 'test_evaluator.AcousticTests.test_manual_path_and_cost', 'test_evaluator.AcousticTests.test_matched_resource_exposure', 'test_evaluator.AcousticTests.test_pretrained_cannot_omit_training_provenance', 'test_evaluator.AcousticTests.test_reject_missing_extra_duplicate_trial_condition', 'test_evaluator.AcousticTests.test_reviewer_duplicate_physical_trials_and_invalid_profile', 'test_evaluator.AcousticTests.test_sessions_are_not_weighted_by_frame_or_trial_count', 'test_evaluator.AcousticTests.test_signed_correlation_and_not_flattened', 'test_evaluator.AcousticTests.test_source_session_roster_cannot_be_subsetted', 'test_evaluator.AcousticTests.test_train_selection_original_trial_and_session_leakage', 'test_evaluator.AcousticTests.test_undefined_and_nonfinite_bands_are_not_omitted', 'test_evaluator.CliTests.test_cli_input_pins_and_rejected_output_preservation', 'test_evaluator.CliTests.test_duplicate_json_keys_rejected', 'test_evaluator.CliTests.test_receipts_bind_bytes_read_before_evaluation', 'test_evaluator.ListeningTests.test_missing_listener_and_reused_pair_rejected', 'test_evaluator.ListeningTests.test_named_listening_cohort_count_is_not_relabeled', 'test_evaluator.ListeningTests.test_sentence_pair_then_seven_listener_median', 'test_evaluator.ListeningTests.test_token_edit_insertions_unbounded_empty_response']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 21 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 21, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-FIND-ADD-009', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-find-rep-011:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-FIND-REP-011
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.CohortTests.test_fail_closed_alignment_and_identity', 'test_evaluator.CohortTests.test_longitudinal_censoring_and_terminal_rows', 'test_evaluator.CohortTests.test_no_future_elimination_block_selection_for_prediction', 'test_evaluator.CohortTests.test_reappearance_and_new_spines_excluded_but_contemporaneous_neighbor_kept', 'test_evaluator.EventTests.test_duration_uses_sample_count', 'test_evaluator.EventTests.test_entire_active_run_and_nonoverlap', 'test_evaluator.EventTests.test_exact_neighborhood_boundary_and_zero_denominator', 'test_evaluator.EventTests.test_independent_coactivity_control', 'test_evaluator.PredictionTests.test_all_censored_mouse_is_explicit', 'test_evaluator.PredictionTests.test_cli_real_path_and_no_overwrite', 'test_evaluator.PredictionTests.test_equal_mouse_metrics_not_pooled', 'test_evaluator.PredictionTests.test_holdout_labels_do_not_change_fitted_transform_or_coefficients', 'test_evaluator.PredictionTests.test_prediction_coverage_and_probabilities', 'test_evaluator.PredictionTests.test_single_class_folds_and_determinism', 'test_evaluator.PredictionTests.test_training_transform_ignores_extreme_test_features']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 15 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-FIND-REP-011', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-root-add-007:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-ROOT-ADD-007
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_pfc_evaluator.BoundaryControls.test_all_mice_contexts_required_and_labels_rejected', 'test_pfc_evaluator.BoundaryControls.test_cli_json_output_and_malformed_no_output', 'test_pfc_evaluator.BoundaryControls.test_matched_counts_disclosed', 'test_pfc_evaluator.BoundaryControls.test_nonfinite_ties_unregistered_and_phase_leakage', 'test_pfc_evaluator.BoundaryControls.test_pipeline_and_input_order_invariance', 'test_pfc_evaluator.BoundaryControls.test_session_phase_and_trial_correctness_consistency', 'test_pfc_evaluator.DecoderControls.test_forward_reverse_and_group_shared_null', 'test_pfc_evaluator.DecoderControls.test_independently_computed_poisson_odds', 'test_pfc_evaluator.DecoderControls.test_zero_likelihood_ties_and_bad_counts', 'test_pfc_evaluator.RankControls.test_clustering_is_recomputed_and_label_invariant', 'test_pfc_evaluator.RankControls.test_complete_three_cell_distribution', 'test_pfc_evaluator.RankControls.test_four_mouse_uncertainty_cannot_manufacture_small_p', 'test_pfc_evaluator.RankControls.test_hand_computed_orders_and_overlap', 'test_pfc_evaluator.RankControls.test_unrelated_singletons_are_not_recurrence']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/tests', pattern='test_pfc_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 14 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-ROOT-ADD-007', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-scope-20261114-latentcircuit:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-SCOPE-20261114-LATENTCIRCUIT
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.AnalyticControls.test_equal_animals_despite_units_and_trial_imbalance', 'test_evaluator.AnalyticControls.test_equal_condition_weight_not_trial_weight', 'test_evaluator.AnalyticControls.test_metadata_only_assessment_packet', 'test_evaluator.AnalyticControls.test_one_training_sd_error_is_one', 'test_evaluator.AnalyticControls.test_outer_packet_not_directly_filtered_by_correctness', 'test_evaluator.AnalyticControls.test_owner_condition_mean_control_is_exactly_recomputed', 'test_evaluator.AnalyticControls.test_perfect_predictions_and_analytic_baseline', 'test_evaluator.AnalyticControls.test_retains_excluded_unit_and_original_reason', 'test_evaluator.AnalyticControls.test_training_scale_and_baseline_never_use_validation_or_outer_values', 'test_evaluator.RejectionControls.test_all_eligible_rows_need_nested_train_validation_outer_support', 'test_evaluator.RejectionControls.test_candidate_supplied_scale_is_forbidden', 'test_evaluator.RejectionControls.test_census_binding_cannot_be_silently_mutated', 'test_evaluator.RejectionControls.test_cli_complete_owner_flow', 'test_evaluator.RejectionControls.test_cli_pin_duplicate_json_and_overwrite_guards', 'test_evaluator.RejectionControls.test_missing_duplicate_unknown_or_projected_coordinates', 'test_evaluator.RejectionControls.test_missing_monkey_or_condition_or_unit_rows', 'test_evaluator.RejectionControls.test_native_clock_cannot_be_self_certified', 'test_evaluator.RejectionControls.test_nonfinite_boolean_and_extreme_numbers_rejected', 'test_evaluator.RejectionControls.test_original_exclusion_note_cannot_drop_eligible_unit', 'test_evaluator.RejectionControls.test_shared_physical_trial_cannot_cross_partitions', 'test_evaluator.RejectionControls.test_wrong_artifact_bytes_are_not_silently_accepted', 'test_evaluator.RejectionControls.test_zero_scale_cannot_drop_unit_or_borrow_held_scale']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 22 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 22, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-SCOPE-20261114-LATENTCIRCUIT', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-method-013:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-paper-method-013
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.CohortTests.test_cli_refuses_existing_payload_output', 'test_evaluator.CohortTests.test_common_trace_endpoint_excludes_extra_detected_reference', 'test_evaluator.CohortTests.test_duplicate_recording_and_wrong_frame_window', 'test_evaluator.CohortTests.test_full_cohort_common_trace_endpoint_and_runtime', 'test_evaluator.CohortTests.test_json_duplicate_key_rejected', 'test_evaluator.CohortTests.test_malformed_method_is_rejected_cleanly', 'test_evaluator.CohortTests.test_no_cohort_subsetting_or_wrong_depth', 'test_evaluator.CohortTests.test_runtime_overflow_is_rejected', 'test_evaluator.CohortTests.test_runtime_ratio_overflow_and_underflow_rejected', 'test_evaluator.CohortTests.test_runtime_scope_and_hardware_are_paired', 'test_evaluator.CohortTests.test_sha_integrity_and_reference_identity', 'test_evaluator.MetricsTests.test_bad_arrays_fail', 'test_evaluator.MetricsTests.test_best_overlap_and_ambiguity_fail_closed', 'test_evaluator.MetricsTests.test_constant_trace_is_undefined', 'test_evaluator.MetricsTests.test_empty_prediction_preserves_false_negatives', 'test_evaluator.MetricsTests.test_scale_offset_and_large_values', 'test_evaluator.MetricsTests.test_strict_threshold_and_analytical_counts', 'test_evaluator.MetricsTests.test_tile_layout_has_exact_padding_and_order']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 18 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 18, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-013', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-method-030:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-paper-method-030
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.Equations.test_bad_event_order_rejected', 'test_evaluator.Equations.test_boxcar_edges_and_spike_attenuation', 'test_evaluator.Equations.test_correlation_and_lag_sign', 'test_evaluator.Equations.test_empty_events_do_not_score_perfect', 'test_evaluator.Equations.test_extreme_correlation_is_stable', 'test_evaluator.Equations.test_f1_star_optimum_is_inside_interval', 'test_evaluator.Equations.test_hand_computed_precision_recall', 'test_evaluator.Equations.test_identity_spectrum_no_gain', 'test_evaluator.Equations.test_no_spectral_windows_is_explicit', 'test_evaluator.Equations.test_prominence_plateau_policy', 'test_evaluator.Equations.test_published_existential_matching_is_not_one_to_one', 'test_evaluator.Equations.test_spectral_amplitude_halving_is_six_db', 'test_evaluator.Equations.test_strict_two_millisecond_boundary', 'test_evaluator.PanelAndGrading.test_alignment_and_units_not_guessed', 'test_evaluator.PanelAndGrading.test_cell_aggregation_equal_weights', 'test_evaluator.PanelAndGrading.test_cli_complete_path', 'test_evaluator.PanelAndGrading.test_common_ep_support_and_constant_prediction_guard', 'test_evaluator.PanelAndGrading.test_end_to_end_generated_control', 'test_evaluator.PanelAndGrading.test_frozen_population_complete', 'test_evaluator.PanelAndGrading.test_missing_baseline_rejected', 'test_evaluator.PanelAndGrading.test_missing_recording_rejected', 'test_evaluator.PanelAndGrading.test_no_cell_cross_split', 'test_evaluator.PanelAndGrading.test_nonfinite_or_truncated_arrays_rejected', 'test_evaluator.PanelAndGrading.test_numeric_overflow_fails_closed', 'test_evaluator.PanelAndGrading.test_subthreshold_false_events_separate_from_f1_star', 'test_evaluator.PanelAndGrading.test_test_cell_fit_and_target_access_rejected', 'test_evaluator.PanelAndGrading.test_unknown_spectral_policy_rejected']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 27 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 27, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-030', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-method-042:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-paper-method-042
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_grounding.GroundingTests.test_complete_cli_inputs_and_hand_computed_metrics', 'test_grounding.GroundingTests.test_controls_are_paired_to_candidate_checkpoint', 'test_grounding.GroundingTests.test_duplicate_keys_and_nonfinite_json_rejected', 'test_grounding.GroundingTests.test_exposure_mismatch_leakage_and_subject_omission', 'test_grounding.GroundingTests.test_first_box_only_no_best_overlap_selection', 'test_grounding.GroundingTests.test_group_counts_and_partition', 'test_grounding.GroundingTests.test_hash_mismatch_rejected', 'test_grounding.GroundingTests.test_missing_images_and_malformed_boxes_keep_denominator', 'test_grounding.GroundingTests.test_native_cardinality_does_not_invent_per_class_minima', 'test_grounding.GroundingTests.test_pairing_ignores_insertion_order', 'test_grounding.GroundingTests.test_population_and_no_subject_holdout_claim', 'test_grounding.GroundingTests.test_reference_degenerate_and_empty_query_rejected', 'test_grounding.GroundingTests.test_shuffle_must_be_complete_bijection_without_fixed_images', 'test_grounding.GroundingTests.test_strict_iou_threshold_and_scale', 'test_grounding.GroundingTests.test_unequal_query_counts_not_image_macro_average', 'test_grounding.GroundingTests.test_unexpected_images_and_categories_rejected']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/tests', pattern='test_grounding.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 16 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 16, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-042', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-method-add-005:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-paper-method-add-005
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.FullPanel.test_prepare_baselines_score_complete_panel_and_rejections', 'test_evaluator.Mathematics.test_independent_phase_amplitude_units_and_observed_immunity', 'test_evaluator.Mathematics.test_independent_train_moments_fences_and_boundary', 'test_evaluator.Mathematics.test_input_shape_duplicate_and_day_validation', 'test_evaluator.Mathematics.test_periodogram_parseval_even_odd', 'test_evaluator.Mathematics.test_pinned_rounding_rng_and_schedule', 'test_evaluator.Mathematics.test_quality_counts_no_silent_exclusion', 'test_evaluator.Mathematics.test_target_isolation_and_train_only_ridge_closed_form']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 8 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 8, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-add-005', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-method-replacement-006:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-paper-method-replacement-006
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.Contract.test_complete_paired_control', 'test_evaluator.Contract.test_each_native_run_class_map_is_required', 'test_evaluator.Contract.test_json_duplicate_and_cli', 'test_evaluator.Contract.test_missing_duplicate_extra_and_wrong_ensemble_predictions', 'test_evaluator.Contract.test_missing_subject_rejected', 'test_evaluator.Contract.test_native_binding_canonicalizes_per_run_maps_and_rejects_wrong_order', 'test_evaluator.Contract.test_nonfinite_and_bounds', 'test_evaluator.Contract.test_overlap_rejected_touching_allowed', 'test_evaluator.Contract.test_reference_tamper_rejected_even_after_rehash', 'test_evaluator.Contract.test_reordering_predictions_does_not_change_result', 'test_evaluator.Contract.test_selected_channels_preserve_feature_order_not_rank_order', 'test_evaluator.Contract.test_source_trial_and_movie_bound', 'test_evaluator.Contract.test_subject_macro_not_pooled_windows', 'test_evaluator.Contract.test_submission_interface_does_not_export_targets_or_rank_fit_ids', 'test_evaluator.Contract.test_train_only_channel_rank_ids', 'test_evaluator.Contract.test_unmatched_resources_and_model_selection', 'test_evaluator.Metrics.test_blocks_merge_crossing_window_and_undefined_replicates', 'test_evaluator.Metrics.test_cutoff_tie_is_rejected', 'test_evaluator.Metrics.test_independent_pairwise_auc', 'test_evaluator.Metrics.test_one_class_auc_is_undefined', 'test_evaluator.Metrics.test_quartile_integer_rounding', 'test_evaluator.Metrics.test_source_class_f1_is_separate', 'test_evaluator.Metrics.test_ties_threshold_and_orientation']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-replacement-006/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 23 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 23, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-replacement-006', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-signal-add-005:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install reviewed hash-pinned generated-control dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-expansion-b-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-expansion-b-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({"verified_dependency_versions": actual}))
+          PY
+      - name: Generated controls for PAPER-paper-signal-add-005
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_beta_evaluator.EnvelopeTests.test_amplitude_scale_invariance', 'test_beta_evaluator.EnvelopeTests.test_bad_amplitude_or_single_zero_baseline_rejected', 'test_beta_evaluator.EnvelopeTests.test_independently_derived_reference_fixture', 'test_beta_evaluator.EnvelopeTests.test_matching_is_condition_independent_and_amplitude_blind', 'test_beta_evaluator.EnvelopeTests.test_matlab_index_endpoints_not_plot_times', 'test_beta_evaluator.EnvelopeTests.test_normalization_discrepancy_is_observable', 'test_beta_evaluator.EnvelopeTests.test_shift_null_constant_signal_and_reproducibility', 'test_beta_evaluator.StatisticalTests.test_cli_full53_pins_and_digest_rejection', 'test_beta_evaluator.StatisticalTests.test_folds_ignore_outcomes_and_keep_subject_once', 'test_beta_evaluator.StatisticalTests.test_missing_subject_covariate_wrong_quantity_and_count_rejected', 'test_beta_evaluator.StatisticalTests.test_ols_known_slope_and_rank_failure', 'test_beta_evaluator.StatisticalTests.test_subject_level_models_and_constant_count_matched_design']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests', pattern='test_beta_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 12 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 12, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-signal-add-005', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  expansion-b-paper-paper-signal-add-019:
+    needs: expansion-b-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls for PAPER-paper-signal-add-019
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          expected_ids = ['test_evaluator.IndependentAnalyticControls.test_cli_all_modules_and_holds', 'test_evaluator.IndependentAnalyticControls.test_constant_r2_null_and_alternative_sampling_explicit', 'test_evaluator.IndependentAnalyticControls.test_correct_latency_accuracy_keeps_errors', 'test_evaluator.IndependentAnalyticControls.test_erp_out_of_bin_source_trials_are_accounted_not_dropped', 'test_evaluator.IndependentAnalyticControls.test_erp_source_rois_bins_and_volts_conversion', 'test_evaluator.IndependentAnalyticControls.test_irregular_erp_window_uses_time_weighting', 'test_evaluator.IndependentAnalyticControls.test_law_mse_units', 'test_evaluator.IndependentAnalyticControls.test_leaking_preprocessing_rejected', 'test_evaluator.IndependentAnalyticControls.test_ll_groups_and_pairing', 'test_evaluator.IndependentAnalyticControls.test_loco_is_not_participant_holdout_and_catches_leakage', 'test_evaluator.IndependentAnalyticControls.test_missing_duplicate_or_misordered_trial_rejected', 'test_evaluator.IndependentAnalyticControls.test_missing_erp_trial_rejected', 'test_evaluator.IndependentAnalyticControls.test_missing_law_parameters_rejected', 'test_evaluator.IndependentAnalyticControls.test_missing_ll_trial_rejected', 'test_evaluator.IndependentAnalyticControls.test_mode_not_expectation_and_first_tie', 'test_evaluator.IndependentAnalyticControls.test_native_roster_cannot_shrink', 'test_evaluator.IndependentAnalyticControls.test_nonfinite_boolean_units_and_boundary_rejected', 'test_evaluator.IndependentAnalyticControls.test_participant_slopes_and_error_denominators', 'test_evaluator.IndependentAnalyticControls.test_primary_law_numeric_cases', 'test_evaluator.IndependentAnalyticControls.test_replication_does_not_change_participant_estimand', 'test_evaluator.IndependentAnalyticControls.test_six_stages_offset_and_combined', 'test_evaluator.IndependentAnalyticControls.test_source_asymmetric_loco_score_exposed', 'test_evaluator.IndependentAnalyticControls.test_wrong_posterior_normalization_rejected', 'test_evaluator.IndependentAnalyticControls.test_zero_mode_group_ambiguity_rejected']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 24 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 24, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-signal-add-019', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY

@@ -1,0 +1,3367 @@
+name: Construction expansion C
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: construction-expansion-c-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  MPLBACKEND: Agg
+
+jobs:
+  c-source-identities:
+    name: C / source identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed complete source closures batch 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-016/docs/initial-evaluator-v1.md",
+                  "bytes": 11451,
+                  "sha256": "c26c11e9508ebf6a76468e1acae2e3419be479ceddc7a5080f7164989057c183"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1500,
+                  "sha256": "69106fb2845899cc45c0805801049f87cf4f42505cf49dd2110b167b3e1bb804"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/controls.py",
+                  "bytes": 2339,
+                  "sha256": "1c4a7fedf64e5feb1b5a254eaa4d9e9db314968b247f698a858624e62a2610d0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 24584,
+                  "sha256": "143165389fc4093bd0e9ff8064269d7fbec118019d3867af54f5aa4f6c85b8a0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/source_manifest.json",
+                  "bytes": 6514,
+                  "sha256": "5a51e980e7fd2908d529ac5e5af65f4b934d1fc83d935bb987187aee0b7d150b"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 15190,
+                  "sha256": "182f635771f838c0ab69bf934b22571fa26b3101b30a3ab54fda58df23ed80bd"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/task.json",
+                  "bytes": 28911,
+                  "sha256": "ab8710a3ec322e86df18814b376f34c6b11910517dd4487fce807dcd767a5ac5"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/docs/initial-evaluator-v1.md",
+                  "bytes": 9973,
+                  "sha256": "ce5a13f89de99e0f8de6554eae451cc71dd77722c9412ea31e42cffb6d133078"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 2101,
+                  "sha256": "85331c4dcc34a8cd42d84e1bbf8c863e3fe3ab09b1858af21b3f899fc8912ddd"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 21207,
+                  "sha256": "19d1f793b0c59200420dcfd0570be911202c402698f488a3b75ae5a128f6db98"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 10411,
+                  "sha256": "7a5dfaed0579cae7b34a35ae5ba2923e8309464ba6ba10ef5c9f988c6463a712"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11650,
+                  "sha256": "81a90154801fbaafcaa32fda99f451b30cecf04953fa66d819681aaf3c2ba0b4"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/task.json",
+                  "bytes": 16626,
+                  "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/docs/initial-evaluator-v1.md",
+                  "sha256": "fe9bbb7ba9556f8cdb20d77bceb57c01b8f93599e67b8e33f51130fc1c4f5915",
+                  "bytes": 13245
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/README.md",
+                  "sha256": "78ab447b49a9b0d3e5de26d335e17f38e64757664e6f69af54eec68f2b8d5db0",
+                  "bytes": 1885
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/evaluator.py",
+                  "sha256": "66acc703b7f169d87d0d6e334e30588e03af4e41409ecc48e975d213051e375f",
+                  "bytes": 24748
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/provenance.json",
+                  "sha256": "98c40e26a4f0ef56d60f40f6ae1dcb37254398f4f2cfa6c2c53fbc520acf1ee6",
+                  "bytes": 5784
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "sha256": "465f54804e2b36feb44fac655a2f62bccf5f1453112c2d11b96fa15128138711",
+                  "bytes": 12447
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/task.json",
+                  "bytes": 13411,
+                  "sha256": "26b292bd06b0b3a11c7e9b96e44e4a7a1cd0a14ac559b579a3cb70db684630ae"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/docs/initial-evaluator-v1.md",
+                  "bytes": 11295,
+                  "sha256": "6e1c12763642d80b7dc7960f4e4f75f393cf9199174c4b3a2002acf1bc9dbbbc"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1463,
+                  "sha256": "84fb067b8ef901d581d7196b8179d36f4a482ed58fd06ae9ec6148e4369cb034"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/abr_evaluator.py",
+                  "bytes": 21275,
+                  "sha256": "54235e6913ff00f021592ecc73fced31eea1177d33fd48b7bda588181bcceb80"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/tests/test_independent_contract.py",
+                  "bytes": 10808,
+                  "sha256": "57735168103e2256b0fcb067438c7c5b8c27ccea0cd9ed104c35a9c47156bf4d"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/tests/test_interface.py",
+                  "bytes": 7355,
+                  "sha256": "f4a6cd341d439a392c1beddfab49c442a49bc4a1065a10473fa43fdabb50a2b5"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/task.json",
+                  "bytes": 28166,
+                  "sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/docs/initial-evaluator-v1.md",
+                  "bytes": 9836,
+                  "sha256": "14dc2f6761d00deab69cc4890a1f6dd05b79d1c8279e2cdc5b7fab88d623da00"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1579,
+                  "sha256": "5ae4e2e906d3108592da41446d8f1aa840dc39b8e75fc9d52fa7a9157dede87c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20139,
+                  "sha256": "6cd7e01664543a59d978bad2b03e9693d66e8520142ceecd533d889ef8b0e027"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 9343,
+                  "sha256": "06cc480d24cb7124ebd38a529b7487e2b33cebdaa9eaec1773d6518dacdfb7ca"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10971,
+                  "sha256": "afd7c9725e57801e250ac1bd22f0c926525dfccc73cff435e9edb22dcc4189f0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/task.json",
+                  "bytes": 7365,
+                  "sha256": "e90ae33da875213e1fa39479e32284a7997e6b91841f9cf2e6726e79ce2139be"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/docs/initial-evaluator-v1.md",
+                  "bytes": 9173,
+                  "sha256": "b218b128ca4ad3cffb2851beaf6330bfeebbcca2be38d426a36778ca879b9779"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1572,
+                  "sha256": "677c55859e9468cc90522f34dc91fde87a7af73208139af1363de17782d466c8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 17060,
+                  "sha256": "2a556a54cf7b2176ba0f2697e3e6784165b91d7315e89fc92c8b98b0bf5c38cb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 7752,
+                  "sha256": "593d5a184a009b04614c2d062b81e19364dbe99361fd1c3736f4c88464577563"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/task.json",
+                  "bytes": 83955,
+                  "sha256": "811245002efb23f378626e214f2d1579a38067db660e2f1b159b40a807b05911"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/docs/initial-evaluator-v1.md",
+                  "bytes": 8736,
+                  "sha256": "d94d690dab7435e0f683181125d61332a08d20c988dd6762e31274dac456b619"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1159,
+                  "sha256": "ce45e3f8348dd10260dadd8ed4d65527b9d40c73c58925f9fbea9d5bbd538981"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/UPSTREAM_LICENSE.txt",
+                  "bytes": 1516,
+                  "sha256": "94b004091788dde362d99467ff07d8e472f74015e10f11ff7fcdeba8d75e1ccb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 16419,
+                  "sha256": "85092a027679ba172f2b06e9b990ff774331b3cc275bb3c8d16e755343b48b1c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4116,
+                  "sha256": "06ade94f6437d042370e11d1244a7836113420e4aaffd89bd6c3b04dc779e306"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 7598,
+                  "sha256": "7832506ba5a0062a6a4d7e06a78fe95e55aceb2a004d8db070bae18039d3f997"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/tests/test_reference.py",
+                  "bytes": 5902,
+                  "sha256": "9a5eaaf42567265cd86669c813e627144142ee340477d6aab29b433daaa7d8a5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/task.json",
+                  "bytes": 37345,
+                  "sha256": "a90c0c9a0231bfb61ffe839aa7f203df47cb0d92f54aeec5803c81fb20fc557d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/docs/initial-evaluator-v1.md",
+                  "bytes": 8674,
+                  "sha256": "f91e6b5ba83da9992e55ed15e6e7b3c7e69ac69f85c9480d100e177b1cf81219"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1050,
+                  "sha256": "50e9ff563192d8434291a98accf633ebf6cd0ff89d631b556b5a2bcd8d05e31b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 22814,
+                  "sha256": "d88dd479491f9a695796feee5e82494e5c97f378707b07123f91c4422c63b78a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4660,
+                  "sha256": "4597f54cffa5163333e1becdc5cb922920429d0007923ac7f0992137ad9ffb06"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11372,
+                  "sha256": "e37f61236ffb3028db35a2f28537dc7dc199798cefbec8e96a3792fb3fb093a4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/task.json",
+                  "bytes": 20069,
+                  "sha256": "747c7a1b8d5a31d116bc510bfe68d987ef5afb4c3a139b297070390c9c2640d9"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1",
+              "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 50 > 0
+          assert sum(row['bytes'] for row in rows) == 644514 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 644514,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Verify reviewed complete source closures batch 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/docs/initial-evaluator-v1.md",
+                  "bytes": 10924,
+                  "sha256": "2e2622052920927d5c21449c6f1e6682ee102b58cbfdcca3a4077f4b49731f9b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1457,
+                  "sha256": "77a7ea4e3b9b32d1cf7ff8ca816e4627c8f8d4516812a5e1f98ad4da94872408"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/sensor_rsa.py",
+                  "bytes": 19777,
+                  "sha256": "c6fb86bbd0329e67115fc003b1f53dd7d8ef8a88586dda20bf3db450b83924c5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests/test_sensor_rsa.py",
+                  "bytes": 7824,
+                  "sha256": "7dc12ede12e93aba4873539b0b7af14679937bafcb78e52420997811f3d519a3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests/test_source_oracles.py",
+                  "bytes": 4750,
+                  "sha256": "2407f57c36a8c7cd5e89cba1a7f87dbad6ccef841469f20310a49d35eeefdf5f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/task.json",
+                  "bytes": 228311,
+                  "sha256": "40e9ad5a0593399399e449e0b005caa1f9e31f84bca32f91c96f8eb1c7da0edd"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/docs/initial-evaluator-v1.md",
+                  "bytes": 8383,
+                  "sha256": "be677fd54c1b2c889e7670a1ee7a954b97edf944cd717258c18eb74f3948721d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1217,
+                  "sha256": "f21cccb48e4234eff9ef1f76449e26e76c0345644baaebf8d4171b47b3360164"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20045,
+                  "sha256": "4d7ec918f40b1607841ccbd0e6da8036b105a9491460983e67f8fe0f06d2cfcb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3047,
+                  "sha256": "80a75e2e46d3d99533f878df1d4e780a76f4b76e2aff56f7242a07ea3c899147"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9578,
+                  "sha256": "eeb85f912f1f183be954e00e240c2636c41106088215cdfe17f91b63b3677a69"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/LICENSE",
+                  "bytes": 1066,
+                  "sha256": "6dd08a164db36acb6762968cd2fc7a61e97405341a36da046ca3711dab751760"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/__init__.py",
+                  "bytes": 66,
+                  "sha256": "ce0c53fdfef05443740b02eb8ee15537ee57ae6ed73a082d244908413f80cb30"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/neuron_stat.py",
+                  "bytes": 10290,
+                  "sha256": "24d9bff22d4eab46891101faed1e082e6483f326469f395850848b9139cf2a2a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/task.json",
+                  "bytes": 29438,
+                  "sha256": "52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/docs/initial-evaluator-v1.md",
+                  "bytes": 15021,
+                  "sha256": "1dd4ee6a2e6fc595a4befb8520e98a0830f07c272b2d85a1de5bd28f93594630"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1617,
+                  "sha256": "2a749d6bcffe440d4cd3ce26e5ea4abf8de5977b2c2051368ce35bb9ffa56d75"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 22698,
+                  "sha256": "938a4234138f10c8e6a1ecd4e5e361b4b7854e8eb150573028ce11b262a9c90c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 16127,
+                  "sha256": "6e459701d6368069c350be35baf2138456f283afc24ac0adcb47d099285e3854"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/task.json",
+                  "bytes": 38573,
+                  "sha256": "7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/docs/initial-evaluator-v1.md",
+                  "bytes": 13188,
+                  "sha256": "bd159d9c8da3094cc291f31b8de03a3e1d265f243ea936bc442137089b6a9db4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1474,
+                  "sha256": "64aadb2228e33803691a20a545e1a1db018ef743d0c50e0e5d3df1588e9b2340"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/evaluate.py",
+                  "bytes": 21206,
+                  "sha256": "54fdb376ec4da3c79925e06adc3f7825c0a5c318ddf1025dd613fc420f82922a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 7157,
+                  "sha256": "5476202a0baed8ed079702e08aa5b0ed4d7e136ecee82eccdc9ed55f4737579e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/tests/test_evaluate.py",
+                  "bytes": 11512,
+                  "sha256": "46190da5722b7585dc63f214447c898dc9b297483d7f6518bb0151e99b8f6e91"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/task.json",
+                  "bytes": 17637,
+                  "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/docs/initial-evaluator-v1.md",
+                  "bytes": 9435,
+                  "sha256": "10001593f8b99cb59e68f655b0846ffe8cc9c95dffe7e734ec63973feb9944af"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 958,
+                  "sha256": "923e3d348f84d65bc5e031ed879c2653c146eb0dc1ef511de3e107ff268129f6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 14211,
+                  "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3004,
+                  "sha256": "381a255d434869661894160f202f143782a212fba458e3c51e0474503c050c3c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9363,
+                  "sha256": "59d1f1c0569f9dbfe048692087e20c48a49c1b55c6ddd6a97b95bbb696c83233"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/task.json",
+                  "bytes": 39845,
+                  "sha256": "02f3c335df986b9276f0026fff9ffcd1d16a410be55372299a19ca93e87468af"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/docs/initial-evaluator-v1.md",
+                  "bytes": 12186,
+                  "sha256": "096f26c6192f558e9c4ff4e651a744eb33f3595ddcf7f974e096c374f6bbd0dc"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1530,
+                  "sha256": "ec628ce6c182a28d02c87b40628fb31982498070de143516c29ae99794efeb25"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 30192,
+                  "sha256": "fb208d1056b93438d157f927d60b5bd3b1a8dd1775fd0a9164203dc41ac43a62"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+                  "bytes": 4847,
+                  "sha256": "220729a882981b05929715310cbf983b446978749cafcb1e78ecd5f358cd1754"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_independent_controls.py",
+                  "bytes": 5490,
+                  "sha256": "4a15d7a42a2f6fe2f199812e4e255e643a20733660c10d7edd30ba80c1aed55a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_panel_integration.py",
+                  "bytes": 4887,
+                  "sha256": "272f4caedc8b39c737aed516f99b5e0e5a812a5f3fe8dcf1fda3e4c06ef3a55c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_pipeline.py",
+                  "bytes": 7341,
+                  "sha256": "93fb007d23732fbbe18ea73add4f966e67f98a8c2c55feacb1815c06e8fbbd02"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/task.json",
+                  "bytes": 28357,
+                  "sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/docs/initial-evaluator-v1.md",
+                  "bytes": 8669,
+                  "sha256": "38419d622344017c51a1a9014fce4a9b05d412d534fbe6448caf5fdecd2ac61a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1529,
+                  "sha256": "10273a182e52a09e5c11575e9e1ac5ef112b4ebb305a09663b24812f7e5d8c8c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 16130,
+                  "sha256": "9bf76a4c577867aa6098d23fe8ba99b320d70860ec8b55ce435cba7050114c59"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3362,
+                  "sha256": "dc466b91f4d81f30dcdbec3437327200c256987dd60d38902f0ef949e1a9089b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 8795,
+                  "sha256": "21433324531b0bd70f719a588d60a5e52e87e035276580a70f405693460d7df9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/task.json",
+                  "bytes": 39979,
+                  "sha256": "43a4653f5da2600d6df0733d2fff6a821aee5d9588234f236c5f147a6d302b12"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/docs/initial-evaluator-v1.md",
+                  "bytes": 10933,
+                  "sha256": "4c3bd0e55c922abdd1f9b4a1c43426a7dc57dc3ce4e3fbddacea24bda178e45b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/LICENSE",
+                  "bytes": 35149,
+                  "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1494,
+                  "sha256": "253b9b7f6b2f6ba64bb2078d5bff0e926e6f606bc4677cb4b77f993cb25c9cad"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 15429,
+                  "sha256": "c423cd3eae8501fc4484965ce232a0b422e45da251a2b267d3532faf5319e56d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2690,
+                  "sha256": "e5d61ff8e004cc7b3fd4969e6f5599ee279e96a62fe95c6ec7716c3d1dfd33b7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 8981,
+                  "sha256": "32067ef8b92bc29bc73d02f50ec423c8e73af3b2f31b6c5750957320c9eccf6b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/task.json",
+                  "bytes": 20725,
+                  "sha256": "66d8975ed4f868e9289d6824b0152105a6f8deaeca9d2efd97b2a8cbb4474aae"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1",
+              "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 53 > 0
+          assert sum(row['bytes'] for row in rows) == 867894 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 867894,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+
+  c-neural-016:
+    name: C / NEURAL-016
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-016/docs/initial-evaluator-v1.md",
+                  "bytes": 11451,
+                  "sha256": "c26c11e9508ebf6a76468e1acae2e3419be479ceddc7a5080f7164989057c183"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1500,
+                  "sha256": "69106fb2845899cc45c0805801049f87cf4f42505cf49dd2110b167b3e1bb804"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/controls.py",
+                  "bytes": 2339,
+                  "sha256": "1c4a7fedf64e5feb1b5a254eaa4d9e9db314968b247f698a858624e62a2610d0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 24584,
+                  "sha256": "143165389fc4093bd0e9ff8064269d7fbec118019d3867af54f5aa4f6c85b8a0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/source_manifest.json",
+                  "bytes": 6514,
+                  "sha256": "5a51e980e7fd2908d529ac5e5af65f4b934d1fc83d935bb987187aee0b7d150b"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 15190,
+                  "sha256": "182f635771f838c0ab69bf934b22571fa26b3101b30a3ab54fda58df23ed80bd"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-016/task.json",
+                  "bytes": 28911,
+                  "sha256": "ab8710a3ec322e86df18814b376f34c6b11910517dd4487fce807dcd767a5ac5"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 90489 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 90489,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 13 > 0, case_ids
+          assert suite.countTestCases() == 13
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 13, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'NEURAL-016', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-neural-040:
+    name: C / NEURAL-040
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-040/docs/initial-evaluator-v1.md",
+                  "bytes": 9973,
+                  "sha256": "ce5a13f89de99e0f8de6554eae451cc71dd77722c9412ea31e42cffb6d133078"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 2101,
+                  "sha256": "85331c4dcc34a8cd42d84e1bbf8c863e3fe3ab09b1858af21b3f899fc8912ddd"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 21207,
+                  "sha256": "19d1f793b0c59200420dcfd0570be911202c402698f488a3b75ae5a128f6db98"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 10411,
+                  "sha256": "7a5dfaed0579cae7b34a35ae5ba2923e8309464ba6ba10ef5c9f988c6463a712"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11650,
+                  "sha256": "81a90154801fbaafcaa32fda99f451b30cecf04953fa66d819681aaf3c2ba0b4"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-040/task.json",
+                  "bytes": 16626,
+                  "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 71968 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 71968,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 9 > 0, case_ids
+          assert suite.countTestCases() == 9
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 9, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'NEURAL-040', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-neural-072:
+    name: C / NEURAL-072
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-072/docs/initial-evaluator-v1.md",
+                  "sha256": "fe9bbb7ba9556f8cdb20d77bceb57c01b8f93599e67b8e33f51130fc1c4f5915",
+                  "bytes": 13245
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/README.md",
+                  "sha256": "78ab447b49a9b0d3e5de26d335e17f38e64757664e6f69af54eec68f2b8d5db0",
+                  "bytes": 1885
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/evaluator.py",
+                  "sha256": "66acc703b7f169d87d0d6e334e30588e03af4e41409ecc48e975d213051e375f",
+                  "bytes": 24748
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/provenance.json",
+                  "sha256": "98c40e26a4f0ef56d60f40f6ae1dcb37254398f4f2cfa6c2c53fbc520acf1ee6",
+                  "bytes": 5784
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "sha256": "465f54804e2b36feb44fac655a2f62bccf5f1453112c2d11b96fa15128138711",
+                  "bytes": 12447
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-072/task.json",
+                  "bytes": 13411,
+                  "sha256": "26b292bd06b0b3a11c7e9b96e44e4a7a1cd0a14ac559b579a3cb70db684630ae"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 71520 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 71520,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 23 > 0, case_ids
+          assert suite.countTestCases() == 23
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 23, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'NEURAL-072', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-neural-scope-20261114-abr-transfer:
+    name: C / NEURAL-SCOPE-20261114-ABR-TRANSFER
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/docs/initial-evaluator-v1.md",
+                  "bytes": 11295,
+                  "sha256": "6e1c12763642d80b7dc7960f4e4f75f393cf9199174c4b3a2002acf1bc9dbbbc"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1463,
+                  "sha256": "84fb067b8ef901d581d7196b8179d36f4a482ed58fd06ae9ec6148e4369cb034"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/abr_evaluator.py",
+                  "bytes": 21275,
+                  "sha256": "54235e6913ff00f021592ecc73fced31eea1177d33fd48b7bda588181bcceb80"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/tests/test_independent_contract.py",
+                  "bytes": 10808,
+                  "sha256": "57735168103e2256b0fcb067438c7c5b8c27ccea0cd9ed104c35a9c47156bf4d"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/tests/test_interface.py",
+                  "bytes": 7355,
+                  "sha256": "f4a6cd341d439a392c1beddfab49c442a49bc4a1065a10473fa43fdabb50a2b5"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/task.json",
+                  "bytes": 28166,
+                  "sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 80362 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 80362,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 26 > 0, case_ids
+          assert suite.countTestCases() == 26
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 26, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'NEURAL-SCOPE-20261114-ABR-TRANSFER', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-exp-20261113-004:
+    name: C / PAPER-EXP-20261113-004
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/docs/initial-evaluator-v1.md",
+                  "bytes": 9836,
+                  "sha256": "14dc2f6761d00deab69cc4890a1f6dd05b79d1c8279e2cdc5b7fab88d623da00"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1579,
+                  "sha256": "5ae4e2e906d3108592da41446d8f1aa840dc39b8e75fc9d52fa7a9157dede87c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20139,
+                  "sha256": "6cd7e01664543a59d978bad2b03e9693d66e8520142ceecd533d889ef8b0e027"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 9343,
+                  "sha256": "06cc480d24cb7124ebd38a529b7487e2b33cebdaa9eaec1773d6518dacdfb7ca"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10971,
+                  "sha256": "afd7c9725e57801e250ac1bd22f0c926525dfccc73cff435e9edb22dcc4189f0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-EXP-20261113-004/task.json",
+                  "bytes": 7365,
+                  "sha256": "e90ae33da875213e1fa39479e32284a7997e6b91841f9cf2e6726e79ce2139be"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 59233 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 59233,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 14 > 0, case_ids
+          assert suite.countTestCases() == 14
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-EXP-20261113-004', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-find-039:
+    name: C / PAPER-FIND-039
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/docs/initial-evaluator-v1.md",
+                  "bytes": 9173,
+                  "sha256": "b218b128ca4ad3cffb2851beaf6330bfeebbcca2be38d426a36778ca879b9779"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1572,
+                  "sha256": "677c55859e9468cc90522f34dc91fde87a7af73208139af1363de17782d466c8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 17060,
+                  "sha256": "2a556a54cf7b2176ba0f2697e3e6784165b91d7315e89fc92c8b98b0bf5c38cb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 7752,
+                  "sha256": "593d5a184a009b04614c2d062b81e19364dbe99361fd1c3736f4c88464577563"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-039/task.json",
+                  "bytes": 83955,
+                  "sha256": "811245002efb23f378626e214f2d1579a38067db660e2f1b159b40a807b05911"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 5 > 0
+          assert sum(row['bytes'] for row in rows) == 119512 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 119512,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          iniconfig==2.3.0 --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          pluggy==1.6.0 --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+          pygments==2.20.0 --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+          pytest==9.1.1 --hash=sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'iniconfig': '2.3.0', 'numpy': '2.4.6', 'packaging': '26.3', 'pluggy': '1.6.0', 'pygments': '2.20.0', 'pytest': '9.1.1', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import os
+          import pytest
+          os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD'] = '1'
+          class ExactCases:
+              def __init__(self):
+                  self.collected = []
+                  self.reports = []
+                  self.deselected = []
+                  self.collection_errors = []
+              def pytest_collection_finish(self, session):
+                  self.collected = [item.nodeid for item in session.items]
+                  assert len(self.collected) == len(set(self.collected)) == 17 > 0, self.collected
+              def pytest_runtest_logreport(self, report):
+                  self.reports.append(report)
+              def pytest_deselected(self, items):
+                  self.deselected.extend(item.nodeid for item in items)
+              def pytest_collectreport(self, report):
+                  if report.failed or report.skipped:
+                      self.collection_errors.append(str(report.longrepr))
+          audit = ExactCases()
+          status = pytest.main(['benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/tests', '-c', '/dev/null', '--rootdir', 'benchmarks/paper/PAPER-FIND-039/implementations/initial-evaluator-v1/tests',
+                                '--noconftest', '-p', 'no:cacheprovider', '-q'], plugins=[audit])
+          assert status == pytest.ExitCode.OK, status
+          assert len(audit.collected) == 17, audit.collected
+          assert not audit.deselected, audit.deselected
+          assert not audit.collection_errors, audit.collection_errors
+          assert len(audit.reports) == 17 * 3, [(r.nodeid, r.when, r.outcome) for r in audit.reports]
+          for nodeid in audit.collected:
+              reports = [report for report in audit.reports if report.nodeid == nodeid]
+              assert sorted(report.when for report in reports) == ['call', 'setup', 'teardown'], nodeid
+              assert all(report.passed and not hasattr(report, 'wasxfail') for report in reports), nodeid
+          print(json.dumps({'task_id': 'PAPER-FIND-039', 'collected': len(audit.collected),
+                            'executed': sum(r.when == 'call' for r in audit.reports),
+                            'case_ids': audit.collected, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-find-rep-001:
+    name: C / PAPER-FIND-REP-001
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/docs/initial-evaluator-v1.md",
+                  "bytes": 8736,
+                  "sha256": "d94d690dab7435e0f683181125d61332a08d20c988dd6762e31274dac456b619"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1159,
+                  "sha256": "ce45e3f8348dd10260dadd8ed4d65527b9d40c73c58925f9fbea9d5bbd538981"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/UPSTREAM_LICENSE.txt",
+                  "bytes": 1516,
+                  "sha256": "94b004091788dde362d99467ff07d8e472f74015e10f11ff7fcdeba8d75e1ccb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 16419,
+                  "sha256": "85092a027679ba172f2b06e9b990ff774331b3cc275bb3c8d16e755343b48b1c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4116,
+                  "sha256": "06ade94f6437d042370e11d1244a7836113420e4aaffd89bd6c3b04dc779e306"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 7598,
+                  "sha256": "7832506ba5a0062a6a4d7e06a78fe95e55aceb2a004d8db070bae18039d3f997"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/tests/test_reference.py",
+                  "bytes": 5902,
+                  "sha256": "9a5eaaf42567265cd86669c813e627144142ee340477d6aab29b433daaa7d8a5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-001/task.json",
+                  "bytes": 37345,
+                  "sha256": "a90c0c9a0231bfb61ffe839aa7f203df47cb0d92f54aeec5803c81fb20fc557d"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 82791 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 82791,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 21 > 0, case_ids
+          assert suite.countTestCases() == 21
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 21, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-FIND-REP-001', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-root-add-004:
+    name: C / PAPER-ROOT-ADD-004
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/docs/initial-evaluator-v1.md",
+                  "bytes": 8674,
+                  "sha256": "f91e6b5ba83da9992e55ed15e6e7b3c7e69ac69f85c9480d100e177b1cf81219"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1050,
+                  "sha256": "50e9ff563192d8434291a98accf633ebf6cd0ff89d631b556b5a2bcd8d05e31b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 22814,
+                  "sha256": "d88dd479491f9a695796feee5e82494e5c97f378707b07123f91c4422c63b78a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4660,
+                  "sha256": "4597f54cffa5163333e1becdc5cb922920429d0007923ac7f0992137ad9ffb06"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11372,
+                  "sha256": "e37f61236ffb3028db35a2f28537dc7dc199798cefbec8e96a3792fb3fb093a4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-004/task.json",
+                  "bytes": 20069,
+                  "sha256": "747c7a1b8d5a31d116bc510bfe68d987ef5afb4c3a139b297070390c9c2640d9"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 68639 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 68639,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 15 > 0, case_ids
+          assert suite.countTestCases() == 15
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-ROOT-ADD-004', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-root-add-010:
+    name: C / PAPER-ROOT-ADD-010
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/docs/initial-evaluator-v1.md",
+                  "bytes": 10924,
+                  "sha256": "2e2622052920927d5c21449c6f1e6682ee102b58cbfdcca3a4077f4b49731f9b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1457,
+                  "sha256": "77a7ea4e3b9b32d1cf7ff8ca816e4627c8f8d4516812a5e1f98ad4da94872408"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/sensor_rsa.py",
+                  "bytes": 19777,
+                  "sha256": "c6fb86bbd0329e67115fc003b1f53dd7d8ef8a88586dda20bf3db450b83924c5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests/test_sensor_rsa.py",
+                  "bytes": 7824,
+                  "sha256": "7dc12ede12e93aba4873539b0b7af14679937bafcb78e52420997811f3d519a3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests/test_source_oracles.py",
+                  "bytes": 4750,
+                  "sha256": "2407f57c36a8c7cd5e89cba1a7f87dbad6ccef841469f20310a49d35eeefdf5f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-010/task.json",
+                  "bytes": 228311,
+                  "sha256": "40e9ad5a0593399399e449e0b005caa1f9e31f84bca32f91c96f8eb1c7da0edd"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 273043 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 273043,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          certifi==2026.6.17 --hash=sha256:2227dcbaafe0d2f59279d1762ddddc37783ed4354594f194ffc31d20f41fc3db
+          charset_normalizer==3.4.7 --hash=sha256:2fe249cb4651fd12605b7288b24751d8bfd46d35f12a20b1ba33dea122e690df --hash=sha256:3dce51d0f5e7951f8bb4900c257dad282f49190fdbebecd4ba99bcc41fef404d
+          contourpy==1.3.3 --hash=sha256:51e79c1f7470158e838808d4a996fa9bac72c498e93d8ebe5119bc1e6becb0db
+          cycler==0.12.1 --hash=sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30
+          decorator==5.3.1 --hash=sha256:f47fe6fdbd2edd623ecfe36875d37aba411624e2670dd395dddae1358689bb3c
+          fonttools==4.65.0 --hash=sha256:a3991732c87b3f054a2a8cf86dd0d602833fa8cb37c911503173771646e1013d --hash=sha256:3060b8c1fc2329fa20265b7c138614143ea7c1624e26c5c180c76aeb74deae6f
+          idna==3.18 --hash=sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2
+          iniconfig==2.3.0 --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+          jinja2==3.1.6 --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
+          kiwisolver==1.5.1 --hash=sha256:95a02752aa032eef4aed01cda6d9b687c669bd0396bf4519eef8bba22a286720
+          lazy-loader==0.5 --hash=sha256:ab0ea149e9c554d4ffeeb21105ac60bed7f3b4fd69b1d2360a4add51b170b005
+          MarkupSafe==3.0.3 --hash=sha256:0bf2a864d67e76e5c9a34dc26ec616a66b9888e25e7b9460e1c76d3293bd9dbf
+          matplotlib==3.11.2 --hash=sha256:07d9b9fa60cd4c393692f50d0bb03123242ddf61c99bb0e95e75feb354e7c1a8
+          mne==1.13.2 --hash=sha256:36bbdd9fdc68431309a75e9dc6331b9de085cb6836688ac50b7b89f141a83cc3
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          pillow==12.3.0 --hash=sha256:23d27a3e0307ec2244cc51e7287b919aa68d097504ebe19df4e76a98a3eea5bd
+          platformdirs==4.10.0 --hash=sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a
+          pluggy==1.6.0 --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+          pooch==1.9.0 --hash=sha256:f265597baa9f760d25ceb29d0beb8186c243d6607b0f60b83ecf14078dbc703b
+          pygments==2.20.0 --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+          pyparsing==3.3.2 --hash=sha256:850ba148bd908d7e2411587e247a1e4f0327839c40e2e5e6d05a007ecc69911d
+          pytest==9.1.1 --hash=sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c
+          python-dateutil==2.9.0.post0 --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+          requests==2.34.2 --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          six==1.17.0 --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274
+          tqdm==4.70.1 --hash=sha256:c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73
+          urllib3==2.7.0 --hash=sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'certifi': '2026.6.17', 'charset_normalizer': '3.4.7', 'contourpy': '1.3.3', 'cycler': '0.12.1', 'decorator': '5.3.1', 'fonttools': '4.65.0', 'idna': '3.18', 'iniconfig': '2.3.0', 'jinja2': '3.1.6', 'kiwisolver': '1.5.1', 'lazy-loader': '0.5', 'MarkupSafe': '3.0.3', 'matplotlib': '3.11.2', 'mne': '1.13.2', 'numpy': '2.4.6', 'packaging': '26.3', 'pillow': '12.3.0', 'platformdirs': '4.10.0', 'pluggy': '1.6.0', 'pooch': '1.9.0', 'pygments': '2.20.0', 'pyparsing': '3.3.2', 'pytest': '9.1.1', 'python-dateutil': '2.9.0.post0', 'requests': '2.34.2', 'scipy': '1.17.1', 'six': '1.17.0', 'tqdm': '4.70.1', 'urllib3': '2.7.0'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import os
+          import pytest
+          os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD'] = '1'
+          class ExactCases:
+              def __init__(self):
+                  self.collected = []
+                  self.reports = []
+                  self.deselected = []
+                  self.collection_errors = []
+              def pytest_collection_finish(self, session):
+                  self.collected = [item.nodeid for item in session.items]
+                  assert len(self.collected) == len(set(self.collected)) == 22 > 0, self.collected
+              def pytest_runtest_logreport(self, report):
+                  self.reports.append(report)
+              def pytest_deselected(self, items):
+                  self.deselected.extend(item.nodeid for item in items)
+              def pytest_collectreport(self, report):
+                  if report.failed or report.skipped:
+                      self.collection_errors.append(str(report.longrepr))
+          audit = ExactCases()
+          status = pytest.main(['benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests', '-c', '/dev/null', '--rootdir', 'benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests',
+                                '--noconftest', '-p', 'no:cacheprovider', '-q'], plugins=[audit])
+          assert status == pytest.ExitCode.OK, status
+          assert len(audit.collected) == 22, audit.collected
+          assert not audit.deselected, audit.deselected
+          assert not audit.collection_errors, audit.collection_errors
+          assert len(audit.reports) == 22 * 3, [(r.nodeid, r.when, r.outcome) for r in audit.reports]
+          for nodeid in audit.collected:
+              reports = [report for report in audit.reports if report.nodeid == nodeid]
+              assert sorted(report.when for report in reports) == ['call', 'setup', 'teardown'], nodeid
+              assert all(report.passed and not hasattr(report, 'wasxfail') for report in reports), nodeid
+          print(json.dumps({'task_id': 'PAPER-ROOT-ADD-010', 'collected': len(audit.collected),
+                            'executed': sum(r.when == 'call' for r in audit.reports),
+                            'case_ids': audit.collected, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-009:
+    name: C / PAPER-paper-method-009
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/docs/initial-evaluator-v1.md",
+                  "bytes": 8383,
+                  "sha256": "be677fd54c1b2c889e7670a1ee7a954b97edf944cd717258c18eb74f3948721d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1217,
+                  "sha256": "f21cccb48e4234eff9ef1f76449e26e76c0345644baaebf8d4171b47b3360164"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20045,
+                  "sha256": "4d7ec918f40b1607841ccbd0e6da8036b105a9491460983e67f8fe0f06d2cfcb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3047,
+                  "sha256": "80a75e2e46d3d99533f878df1d4e780a76f4b76e2aff56f7242a07ea3c899147"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9578,
+                  "sha256": "eeb85f912f1f183be954e00e240c2636c41106088215cdfe17f91b63b3677a69"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/LICENSE",
+                  "bytes": 1066,
+                  "sha256": "6dd08a164db36acb6762968cd2fc7a61e97405341a36da046ca3711dab751760"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/__init__.py",
+                  "bytes": 66,
+                  "sha256": "ce0c53fdfef05443740b02eb8ee15537ee57ae6ed73a082d244908413f80cb30"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/third_party/neuron_stat.py",
+                  "bytes": 10290,
+                  "sha256": "24d9bff22d4eab46891101faed1e082e6483f326469f395850848b9139cf2a2a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-009/task.json",
+                  "bytes": 29438,
+                  "sha256": "52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 9 > 0
+          assert sum(row['bytes'] for row in rows) == 83130 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 83130,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-009/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 18 > 0, case_ids
+          assert suite.countTestCases() == 18
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 18, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-009', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-018:
+    name: C / PAPER-paper-method-018
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/docs/initial-evaluator-v1.md",
+                  "bytes": 15021,
+                  "sha256": "1dd4ee6a2e6fc595a4befb8520e98a0830f07c272b2d85a1de5bd28f93594630"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1617,
+                  "sha256": "2a749d6bcffe440d4cd3ce26e5ea4abf8de5977b2c2051368ce35bb9ffa56d75"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 22698,
+                  "sha256": "938a4234138f10c8e6a1ecd4e5e361b4b7854e8eb150573028ce11b262a9c90c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 16127,
+                  "sha256": "6e459701d6368069c350be35baf2138456f283afc24ac0adcb47d099285e3854"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/task.json",
+                  "bytes": 38573,
+                  "sha256": "7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 5 > 0
+          assert sum(row['bytes'] for row in rows) == 94036 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 94036,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 23 > 0, case_ids
+          assert suite.countTestCases() == 23
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 23, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-018', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-031:
+    name: C / PAPER-paper-method-031
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/docs/initial-evaluator-v1.md",
+                  "bytes": 13188,
+                  "sha256": "bd159d9c8da3094cc291f31b8de03a3e1d265f243ea936bc442137089b6a9db4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1474,
+                  "sha256": "64aadb2228e33803691a20a545e1a1db018ef743d0c50e0e5d3df1588e9b2340"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/evaluate.py",
+                  "bytes": 21206,
+                  "sha256": "54fdb376ec4da3c79925e06adc3f7825c0a5c318ddf1025dd613fc420f82922a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 7157,
+                  "sha256": "5476202a0baed8ed079702e08aa5b0ed4d7e136ecee82eccdc9ed55f4737579e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/tests/test_evaluate.py",
+                  "bytes": 11512,
+                  "sha256": "46190da5722b7585dc63f214447c898dc9b297483d7f6518bb0151e99b8f6e91"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-031/task.json",
+                  "bytes": 17637,
+                  "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 72174 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 72174,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-031/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 12 > 0, case_ids
+          assert suite.countTestCases() == 12
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 12, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-031', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-043:
+    name: C / PAPER-paper-method-043
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/docs/initial-evaluator-v1.md",
+                  "bytes": 9435,
+                  "sha256": "10001593f8b99cb59e68f655b0846ffe8cc9c95dffe7e734ec63973feb9944af"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 958,
+                  "sha256": "923e3d348f84d65bc5e031ed879c2653c146eb0dc1ef511de3e107ff268129f6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 14211,
+                  "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3004,
+                  "sha256": "381a255d434869661894160f202f143782a212fba458e3c51e0474503c050c3c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9363,
+                  "sha256": "59d1f1c0569f9dbfe048692087e20c48a49c1b55c6ddd6a97b95bbb696c83233"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/task.json",
+                  "bytes": 39845,
+                  "sha256": "02f3c335df986b9276f0026fff9ffcd1d16a410be55372299a19ca93e87468af"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 76816 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 76816,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 14 > 0, case_ids
+          assert suite.countTestCases() == 14
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-043', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-add-006:
+    name: C / PAPER-paper-method-add-006
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/docs/initial-evaluator-v1.md",
+                  "bytes": 12186,
+                  "sha256": "096f26c6192f558e9c4ff4e651a744eb33f3595ddcf7f974e096c374f6bbd0dc"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1530,
+                  "sha256": "ec628ce6c182a28d02c87b40628fb31982498070de143516c29ae99794efeb25"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 30192,
+                  "sha256": "fb208d1056b93438d157f927d60b5bd3b1a8dd1775fd0a9164203dc41ac43a62"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+                  "bytes": 4847,
+                  "sha256": "220729a882981b05929715310cbf983b446978749cafcb1e78ecd5f358cd1754"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_independent_controls.py",
+                  "bytes": 5490,
+                  "sha256": "4a15d7a42a2f6fe2f199812e4e255e643a20733660c10d7edd30ba80c1aed55a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_panel_integration.py",
+                  "bytes": 4887,
+                  "sha256": "272f4caedc8b39c737aed516f99b5e0e5a812a5f3fe8dcf1fda3e4c06ef3a55c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests/test_pipeline.py",
+                  "bytes": 7341,
+                  "sha256": "93fb007d23732fbbe18ea73add4f966e67f98a8c2c55feacb1815c06e8fbbd02"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-006/task.json",
+                  "bytes": 28357,
+                  "sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 94830 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 94830,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          joblib==1.5.3 --hash=sha256:5fc3c5039fc5ca8c0276333a188bbd59d6b7ab37fe6632daa76bc7f9ec18e713
+          narwhals==2.23.0 --hash=sha256:769e7b9ab102c93d8fa019f6b4cd1a657909b04a20bf6210e5a35aae06814ae9
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scikit-learn==1.9.1 --hash=sha256:52a0703bbc07ad27f560fa63fa68e4c54dd735bfbbf65b4dd3c225dc7547b6df
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          threadpoolctl==3.6.0 --hash=sha256:43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'joblib': '1.5.3', 'narwhals': '2.23.0', 'numpy': '2.4.6', 'scikit-learn': '1.9.1', 'scipy': '1.17.1', 'threadpoolctl': '3.6.0'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 21 > 0, case_ids
+          assert suite.countTestCases() == 21
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 21, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-add-006', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-method-replacement-011:
+    name: C / PAPER-paper-method-replacement-011
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/docs/initial-evaluator-v1.md",
+                  "bytes": 8669,
+                  "sha256": "38419d622344017c51a1a9014fce4a9b05d412d534fbe6448caf5fdecd2ac61a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1529,
+                  "sha256": "10273a182e52a09e5c11575e9e1ac5ef112b4ebb305a09663b24812f7e5d8c8c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 16130,
+                  "sha256": "9bf76a4c577867aa6098d23fe8ba99b320d70860ec8b55ce435cba7050114c59"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 3362,
+                  "sha256": "dc466b91f4d81f30dcdbec3437327200c256987dd60d38902f0ef949e1a9089b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 8795,
+                  "sha256": "21433324531b0bd70f719a588d60a5e52e87e035276580a70f405693460d7df9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-011/task.json",
+                  "bytes": 39979,
+                  "sha256": "43a4653f5da2600d6df0733d2fff6a821aee5d9588234f236c5f147a6d302b12"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 78464 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 78464,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 11 > 0, case_ids
+          assert suite.countTestCases() == 11
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 11, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-method-replacement-011', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+
+  c-paper-paper-signal-add-012:
+    name: C / PAPER-paper-signal-add-012
+    needs: c-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed task source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/docs/initial-evaluator-v1.md",
+                  "bytes": 10933,
+                  "sha256": "4c3bd0e55c922abdd1f9b4a1c43426a7dc57dc3ce4e3fbddacea24bda178e45b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/LICENSE",
+                  "bytes": 35149,
+                  "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1494,
+                  "sha256": "253b9b7f6b2f6ba64bb2078d5bff0e926e6f606bc4677cb4b77f993cb25c9cad"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 15429,
+                  "sha256": "c423cd3eae8501fc4484965ce232a0b422e45da251a2b267d3532faf5319e56d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2690,
+                  "sha256": "e5d61ff8e004cc7b3fd4969e6f5599ee279e96a62fe95c6ec7716c3d1dfd33b7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 8981,
+                  "sha256": "32067ef8b92bc29bc73d02f50ec423c8e73af3b2f31b6c5750957320c9eccf6b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-012/task.json",
+                  "bytes": 20725,
+                  "sha256": "66d8975ed4f868e9289d6824b0152105a6f8deaeca9d2efd97b2a8cbb4474aae"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 95401 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 95401,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheel dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/expansion-c-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/expansion-c-requirements.txt"
+      - name: Verify every runtime dependency version
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Run exact generated engineering controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MPLCONFIGDIR="${RUNNER_TEMP}/expansion-c-matplotlib"
+          export XDG_CACHE_HOME="${RUNNER_TEMP}/expansion-c-cache"
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/tests', pattern='test_*.py')
+          def flatten(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from flatten(case)
+                  else:
+                      yield case
+          collected = list(flatten(suite))
+          case_ids = [case.id() for case in collected]
+          assert len(case_ids) == len(set(case_ids)) == 10 > 0, case_ids
+          assert suite.countTestCases() == 10
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 10, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          assert result.wasSuccessful(), 'Generated engineering controls failed'
+          print(json.dumps({'task_id': 'PAPER-paper-signal-add-012', 'collected': len(case_ids), 'executed': result.testsRun,
+                            'case_ids': case_ids, 'skipped': 0, 'expected_failures': 0,
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          PY

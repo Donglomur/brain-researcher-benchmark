@@ -1,0 +1,59 @@
+{
+  "task_id": "PAPER-SCOPE-20261114-LATENTCIRCUIT",
+  "implementation_id": "initial-evaluator-v1",
+  "implementation_scope": "Prospective owner-side fixed-original-neuron held-trial scoring and packet/partition audits; not native reproduction",
+  "contract": {
+    "path": "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/task.json",
+    "bytes": 15797,
+    "sha256": "b622f1c1fabd91722da8fd95e8179b4156c8f5b66bf35f7f2c8689fab13b241b"
+  },
+  "primary_sources": [
+    {
+      "kind": "paper",
+      "doi": "10.1038/s41593-025-01869-7",
+      "url": "https://www.nature.com/articles/s41593-025-01869-7",
+      "inspected_full_text": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11893458/",
+      "evidence": "Complete empirical unit is both monkeys and 72 conditions; original empirical preprocessing differs from the prospective train-only policy; native timing/loss join remains unresolved.",
+      "rights": "CC-BY-4.0 article; third-party exceptions retained.",
+      "content_sha256": null,
+      "access": "Primary full text inspected using web tool; publisher endpoint redirected to inaccessible identity service. No article copy vendored."
+    },
+    {
+      "kind": "official_code",
+      "repository": "https://github.com/engellab/latentcircuit",
+      "commit": "3e151da42379a0e659f3fefcdc858a66eba1eaac",
+      "tag": "v1.0.0",
+      "inspected_urls": [
+        "https://raw.githubusercontent.com/engellab/latentcircuit/3e151da42379a0e659f3fefcdc858a66eba1eaac/README.md",
+        "https://raw.githubusercontent.com/engellab/latentcircuit/3e151da42379a0e659f3fefcdc858a66eba1eaac/latent_net.py",
+        "https://raw.githubusercontent.com/engellab/latentcircuit/3e151da42379a0e659f3fefcdc858a66eba1eaac/LICENSE"
+      ],
+      "evidence": "The released loss is mse_z + l_y*nmse_y; it does not supply the complete paper-specific PFC objective/timing adapter. README tutorial fits a trained RNN.",
+      "repository_rights": "MIT, Engel Lab 2024, independently web-inspected LICENSE.",
+      "zenodo_rights": "Existing contract records CC-BY-4.0 metadata for Zenodo 14020108; this distinct declaration is retained, not reconciled by this package.",
+      "content_sha256": null,
+      "access": "Exact commit paths inspected via web tool. Terminal HTTPS byte fetches failed with SSL EOF/SSL_ERROR_SYSCALL; no raw-byte hash claimed. No upstream code copied."
+    },
+    {
+      "kind": "data_source_metadata",
+      "url": "https://www.ini.uzh.ch/en/research/groups/mante/data.html",
+      "rights": "Page states GPL3 unless otherwise specified. Archive-specific notices remain uninspected.",
+      "access": "Independent reviewer inspected source page only. No archive acquired or admitted."
+    }
+  ],
+  "prospective_policy": {
+    "id": "original-neuron-condition-balanced-train-variance-v1",
+    "status": "New construction policy; not claimed to reproduce the paper normalization or metric",
+    "dimensions": "Original neuron identities, all 72 owner-mapped stimulus conditions, 15 owner-declared sample centers, both A and F",
+    "normalization": "Train-only per-neuron population variance with equal condition weight; zero scale is an error",
+    "aggregation": "Time mean, within-condition assessment-trial mean, 72-condition mean, original-unit mean within monkey, equal A/F mean",
+    "minimum_partition": "At least 2 train, 1 validation, 1 assessment correct trials per eligible unit and condition",
+    "eligible": "At least 4 correct trials in each of all 72 conditions; no candidate unit exclusion flag",
+    "selection": "Owner-declared trial split and frozen program artifact; byte identity alone does not prove protected execution"
+  },
+  "scientific_qualification": "unknown",
+  "authentic_data_admitted": false,
+  "native_reference_available": false,
+  "behavior_guard_available": false,
+  "protected_execution_qualified": false
+}

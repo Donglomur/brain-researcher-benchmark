@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Explicitly partitioned binned IBL trials to target-free task masks, a train-only prospective ridge reference, nine separate source-derived neural/behavior endpoints and paired comparisons retaining all 74 training and 10 heldout source session IDs. Exact ONE object membership/revisions, authenticated animal/probe joins, native eligibility/preprocessing/split and NEDS model parity, actual matched budgets, protected targets/tolerances, rights and scientific qualification remain held; complete generated coverage is not authentic population evidence.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

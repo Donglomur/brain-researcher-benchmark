@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective full-cohort word-onset fixed-grid scoring with source-informed trigger alignment, participant summaries and an operator-provided acoustic/visual comparison interface. Authentic HDF5/cohort alignment, frozen grid and tolerance policy, competent signal-derived references, code/media rights and protected execution remain held. Generated controls establish construction behavior only; scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

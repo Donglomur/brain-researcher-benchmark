@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective within-listener nuisance, lexical and contextual matrix encoders and independent held-story variance-contrast scoring, with train-only transformations, matched effective capacity, story-family checks, crossed uncertainty and an alignment diagnostic. Authentic NEURAL-071 case equality, full Narratives population, scan/transcript/HRF timing, atlas and checkpoint lineage, competent reference, rights, protected execution and resource admission remain open. The null diagnostic is not a calibrated significance test.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

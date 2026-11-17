@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective train-only matched-rank multimodal ridge encoder and separate held-out film/parcel/person Pearson scorer, with modality ablations, numerical-claim checks and descriptive uncertainty/null diagnostics for four participants and 1000 parcels each. Organizer fitting and trimming are not reproduced; authentic full input and parcel alignment, feature/model exposure and rights, matched reference execution and protected assessment remain unqualified.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

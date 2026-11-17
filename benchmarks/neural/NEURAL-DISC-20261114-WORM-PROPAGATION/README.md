@@ -18,9 +18,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Trace-packet conditional receiver-response reconstruction with training-only pair means, persistence and regularized convolution, separate development worms, target-free held exports, exact declared roster checks and hierarchical raw/normalized errors, correlation, area and paired worm uncertainty. Complete release/OSF condition reconciliation, missing segmentation partners, original trace extraction, independently authenticated worm/ROI joins, rights/exposure and protected scientific qualification remain held; post-stimulation source responses do not establish forecasting or direct synaptic edges.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

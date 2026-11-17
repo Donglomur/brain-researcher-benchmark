@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prepared-tensor arithmetic panel for eight reconstruction metrics with identity-bound pretrained, target-only and neural-free comparisons; SSIM is explicitly a prospective 2D endpoint. NeuroPictor training, diffusion inference, resizing and feature extraction are not implemented. Authentic 982-stimulus/session membership, checkpoint/pretraining ancestry, native metric parity, NSD/COCO/UKB/model rights, primary grading policy, reference competence, protected evaluation and full-population resources remain unresolved.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

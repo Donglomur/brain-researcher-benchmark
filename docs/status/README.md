@@ -9,9 +9,9 @@ not a leaderboard of completed scientific evaluations.
 | Original specifications | 200 | 100 paper and 100 neural |
 | Expansion drafts | 34 | 16 paper and 18 neural |
 | Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation artifact records | 298 | Task and shared source records, not runnable-task counts |
-| Tasks with owned implementation source | 168 | Source ownership does not establish complete task execution |
-| Tasks without owned implementation source | 66 | Registered definitions awaiting accepted source integration |
+| Implementation artifact records | 364 | Task and shared source records, not runnable-task counts |
+| Tasks with owned implementation source | 234 | Source ownership does not establish complete task execution |
+| Tasks without owned implementation source | 0 | Every registered task has at least one scoped source package |
 | Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
 
 The [registry](../../benchmarks/registry.json) is authoritative for current physical
@@ -21,6 +21,13 @@ overlapping inventories and must not be added to the task count or treated as
 current execution qualification.
 
 ## Current construction work
+
+The [66-task construction expansion](expansion-2026-11-17.md) fills the remaining
+source-ownership gaps. All 234 registered tasks now have owned implementation
+source. Package coverage varies: a component may implement only a defined
+endpoint within a larger task contract. This does not establish 234 complete,
+deployable or scientifically qualified benchmarks. The expansion adds 1,161
+generated test cases, passing locally without skips.
 
 The [November 17 construction update](construction-2026-11-17.md) adds eight
 independently reviewed components to existing tasks, with 266 generated CI test
@@ -78,7 +85,7 @@ or qualification follows from a directory move.
 ## Evidence and limits
 
 The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 298 artifact records; the separate source-integrity checker
+ownership and layout of 364 artifact records; the separate source-integrity checker
 verifies 222 files against recorded pins in four enrolled bundles. These are software/source
 coverage counts. They are not completed scientific evaluations.
 

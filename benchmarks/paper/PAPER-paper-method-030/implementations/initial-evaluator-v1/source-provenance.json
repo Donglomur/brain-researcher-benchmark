@@ -1,0 +1,51 @@
+{
+  "task_id": "PAPER-paper-method-030",
+  "retrieval_date_utc": "2026-11-17",
+  "contract_pin": {
+    "bytes": 162244,
+    "sha256": "6de9351af83dcd990e576873f65802b6df7df963dbdf3c008100b1d87dc0806e"
+  },
+  "sources": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11618097/fullTextXML",
+      "bytes": 328447,
+      "sha256": "23f7e4a5520dca77d56d57d9f2bd5034dadefd70446f071617b6f678f16f9951",
+      "role": "Primary published manuscript full text"
+    },
+    {
+      "url": "https://storage.googleapis.com/storage/v1/b/broad-dsp-cellmincer-data/o?prefix=PairedBeRST%2Fraw%2F&fields=items%28name%2Csize%2Cgeneration%2Cmd5Hash%29%2CnextPageToken&maxResults=1000",
+      "bytes": 4092,
+      "sha256": "524f7f07c562f2f5ced4c620c53281ee9529af646d30945dbca7bf196c8ee9e3",
+      "role": "Small current object metadata only; no data object acquisition"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cellarium-ai/CellMincer/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/manifest/miller-ephys-standard.yaml",
+      "revision": "8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942",
+      "role": "Web tool inspected text: 5000 frames, one segment, tyx order, 500Hz, no inferred active range"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cellarium-ai/CellMincer/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/preprocess/pairedephys.yaml",
+      "revision": "8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942",
+      "role": "Web tool inspected: polynomial order1; median smoothing501; no dejitter; no temporal trim"
+    }
+  ],
+  "source_reproduction": "Independent implementation; no author source or dataset payload redistributed",
+  "primary_metric": "Paper equations21-23: existential proximity, strict2ms, \u00b10.2mV prominence maximization",
+  "prospective_policy": [
+    "SciPy >= prominence and flat-peak midpoint conventions",
+    "Seven fixed prominence thresholds instead of unidentified original bins/grid",
+    "Empty-event handling and1ps floating-boundary guard",
+    "Held-out whole date-cell groups; no test-cell fitting",
+    "Externally frozen mV and clock calibration instead of historical test-EP affine optimization",
+    "Periodic Hann STFT, no padding, spectrum scaling and explicit ceiling,1e-12mV2 floor",
+    "Equal-cell aggregation with common EP-defined support and three-frame boxcar weak control"
+  ],
+  "native_holds": [
+    "Native TIFF/ABF loader validation, channel/units/polarity/clock correspondence, ROI/calibration reproducibility and reference pinning.",
+    "Fresh CellMincer and matched denoisers on declared equal-access held-out whole-cell panels; no authentic scientific runs authorized in this phase.",
+    "Paper trained on up to all26 recordings; a held-out split is prospective, not historical reproduction.",
+    "Historical paper-analysis source reported404; this review GitHub API retry was403 rate limited, not evidence of present repository absence.",
+    "Dataset redistribution license remains unresolved by public GCS listing; code license does not license data.",
+    "Full benchmark qualification and baseline competence remain unknown; generated controls establish engineering only."
+  ]
+}

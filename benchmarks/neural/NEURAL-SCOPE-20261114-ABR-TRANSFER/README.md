@@ -18,9 +18,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prepared-threshold engineering evaluator with a complete prediction/failure ledger, equal-animal metrics, paired bootstrap and separate historical/paper threshold-rule diagnostics. Authentic aggregate scoring is unavailable: the native target/support census, annotations and censoring, physical units, waveform adapters, rights, source-only baselines and protected qualification remain held. The existing components-abr-protected-fold-runner relationship is retained as related source only; its runner capabilities are not inherited by this owned evaluator.
 
 ## Related scientific source (different or narrower scope)
 

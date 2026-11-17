@@ -1,0 +1,73 @@
+{
+  "task_id": "PAPER-paper-method-050",
+  "implementation_version": "initial-evaluator-v1",
+  "contract_sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3",
+  "official_code_revision": "96060c1dd816181f32f089aaa686801aeae821bb",
+  "source_byte_hashes_verified": false,
+  "source_retrieval_note": "Pinned primary source rendered text inspected independently; raw terminal GitHub fetch failed TLS and API rate-limit. No raw-byte pin claim.",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/Preprocess.py",
+      "semantic_mapping": "spikeInfo2npy lines204-283: HDF5 references; waveform transpose; original unit order; sessions contiguous positive; channel geometry/shank first-unit references; optional PETH. Preprocess computes AutoCorr and ISI only when used by motion/clustering; optional PETH copied."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/settings.json",
+      "semantic_mapping": "PETH included in motion and shared-motion defaults; Waveform/AutoCorr used in final clustering. PETH excluded from all paths for independent PETH comparison."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/AutoCuration.py",
+      "semantic_mapping": "same-session collisions removed; singletons -1; all same-cluster unordered pairs counted; directional session fractions use source-session unit denominator. Output.npz stores object dictionary, so numerical arrays preferred for safe ingestion."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/Runner.py",
+      "semantic_mapping": "multishank output restores original indices; positive cluster labels offset, -1 unmatched; cross-shank matrix zeros uncomputed, not dissimilarity."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "semantic_mapping": "Comparison excludes PETH throughout pipeline, shares well-isolated populations and defaults; UnitMatch requires half-session waveforms. PETH similarity is Fisher z of Pearson r for concatenated press/release/poke \u00b1500ms windows,1ms bins. Two rats historically truncated31sessions after OOM; do not silently import truncation. Indirect functional evidence is not universal true identity."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "semantic_mapping": "Independent final review: Figure 5E uses consecutive recording DAYS, firing-rate eligibility (mean >=1Hz and peak >=5Hz), common support >=100 valid pairs across three methods, median and Friedman statistics. Figure 5F/G unmatched-pair outlier analysis uses >50 micrometer Gaussian null and 20 micrometer bins. These paper endpoints are NOT reconstructed by this all-pair mean diagnostic; day/eligibility/three-method/EMD/native coverage remain holds."
+    }
+  ],
+  "implementation_scope": [
+    "spikeInfo v7.3 referenced-struct to safe numeric NPY conversion with exact source inventory checks",
+    "identity-bound paired DANT/UnitMatch assignment diagnostics",
+    "source directional session match fractions",
+    "paper Fisher-z PETH consistency proxy",
+    "prospective biological-animal-grouped aggregation and split boundary"
+  ],
+  "prospective_choices": {
+    "population": "All 13 released datasets, all original units/sessions. Native quality filtering compatibility remains unresolved; no selected-unit intersection.",
+    "grouping": "Operator must bind dataset IDs to verified biological-animal metadata; Ekko and Punch regions cannot be separated. Regional metrics average within animal, then animals average equally.",
+    "yield": "Mean over ordered distinct session pairs within dataset; zero matches gives zero. Dataset and biological-animal averages are explicit prospective summaries, not saved paper numeric targets.",
+    "functional": "All unordered pairs within positive tracks, once each. Constant vectors undefined with counts. Correlations within eight float64 epsilons of +/-1 snap to signed infinity; stable pre-scaling before centering avoids overflow. This explicit numerical policy is prospective, not source-specified.",
+    "boundary": "Operator-controlled protected packet; complete settings and PETH exclusions attested and recursively checked. No executable provenance or secrecy inferred from JSON declarations.",
+    "reward": "No binary reward, calibrated neuron identity probability, or scientific pass/fail."
+  },
+  "rights": {
+    "source_code": "GPL-3.0 retained; no author code vendored",
+    "data": "CC-BY-4.0 source version 20019489",
+    "exposure": "Public results/data do not become globally unseen via local splits"
+  },
+  "preserved_holds": [
+    "No authentic data schema or converter parity demonstrated",
+    "All13 dataset full-session assessment remains required",
+    "UnitMatch half-session waveforms and approved exact settings unresolved",
+    "PETH feature provenance and exclusion from ALL matching/selection/manual curation require audit",
+    "Motion accuracy requires independent reference; retain descriptive estimates only",
+    "Identity calibration/accuracy needs independent actual identity labels",
+    "No qualified benchmark/full paper reproduction/meaningful difficulty/submission readiness claim",
+    "13 datasets are not proven13 independent animals; Ekko/Punch repeated region prefixes require actual RatName/Animals.xlsx grouping before animal split",
+    "Converter preserves raw SpikeTimes without scaling; downstream utilities expect ms but authentic units remain unverified",
+    "SessionIndex denotes ordinal sessions, not elapsed days",
+    "Figure5 day-specific rate eligibility, common three-method pair support, median/Friedman, unmatched-distance null/outliers and EMD endpoint remain unimplemented and unqualified."
+  ],
+  "admission": {
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "native_reference_executed": false,
+    "new_scientific_runs": 0
+  }
+}

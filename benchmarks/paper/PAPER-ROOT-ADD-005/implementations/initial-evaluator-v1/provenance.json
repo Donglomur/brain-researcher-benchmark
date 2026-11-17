@@ -1,0 +1,74 @@
+{
+  "task_id": "PAPER-ROOT-ADD-005",
+  "contract": {
+    "path": "benchmarks/paper/PAPER-ROOT-ADD-005/task.json",
+    "bytes": 21764,
+    "sha256": "5bee80c186ade546a9bd3d0ea5d093d6df2428239a407c0f40feace91e1732e6"
+  },
+  "policy_id": "prospective-image-family-category-nested-ridge-v1",
+  "implementation_kind": "independently_written_prospective_numerical_pipeline",
+  "official_source_revision": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+  "paper": "https://www.nature.com/articles/s41562-024-01980-y",
+  "paper_accessible_copy": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_linregcv.py",
+      "mapping": "exact filename-to-embedding lookup, response transpose, global X scaling, source 66-dimension encoding",
+      "inspected_lines_zero_based": [40, 75]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/glm.py",
+      "mapping": "source OLS intercept, 12 contiguous unshuffled folds and arithmetic mean fold Pearson; distinguishes prospective ridge/pooled-R2 endpoint",
+      "inspected_lines_zero_based": [1087, 1202]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_varpart.py",
+      "mapping": "source category-AUC dimension selection, global residualization of features and responses, clip-and-square mean correlation; distinguishes prospective same-target commonality",
+      "inspected_lines_zero_based": [20, 229]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/utils.py",
+      "mapping": "native derivative filenames, voxel_id metadata, 66-dimensional embedding filenames and exact image identifiers",
+      "inspected_lines_zero_based": [16, 101]
+    }
+  ],
+  "source_read_limit": "Inspected immutable-URL rendered text and primary paper. No upstream raw-byte digest claimed; review evidence hashes rendered excerpts separately.",
+  "shape_source_investigation": {
+    "verified_paper_locator": "Supplementary Methods 2 and Supplementary Figure 6",
+    "supplement_filename": "41562_2024_1980_MOESM1_ESM.pdf",
+    "supplement_contents_read": false,
+    "finding": "Paper contains an exploratory shape comparison, but exact descriptor definition, source columns and pinned implementation remain unverified after bounded source/metadata investigation.",
+    "held_gate": "Supplied generic shape columns do not establish source parity; read and bind the supplement and approved source implementation before empirical qualification."
+  },
+  "independent_controls": [
+    "Orthogonal additive predictors give same-response commonality 0.5, 0.5, 0, joint 1; source residual-response partial-r-squared instead gives 1, 1, -1.",
+    "Observed [0,1,2,3], prediction observed+1: Pearson 1, R2 0.2.",
+    "Observed [0,1,2,3], prediction 3-observed: Pearson -1, R2 -3.",
+    "Dimension R2 0.2, descriptor R2 0.3, combined R2 0.9: signed shared -0.4.",
+    "Catalog [zebra,aardvark], trial images [aardvark,zebra,aardvark] binds to [1,0,1].",
+    "Changing an outer-test response cannot alter that fold's model selection or prediction."
+  ],
+  "prospective_policies": [
+    "Equal image weighting by averaging all declared trial repetitions before fit",
+    "Transitive family OR operator-defined category grouping; fixed five outer and four inner folds",
+    "Train-only predictor normalization, per-voxel nested ridge penalty selection, unchanged response units",
+    "66 dimensions, category, shape, category+shape, combined and intercept baselines on paired populations",
+    "Signed pooled out-of-fold R2, Pearson diagnostics and same-response predictive commonality",
+    "Complete operator-roster checks and per-participant, per-voxel reporting; no hidden exclusions"
+  ],
+  "preserved_gates": [
+    "authentic complete data acquisition and source identity validation",
+    "native 52-category identity/completeness, exact shape recipe and category-family partition scientific qualification; arbitrary descriptor blocks do not establish comparator completeness",
+    "native source reproduction and independent empirical reference",
+    "native 30-dimension residual-response variance partition and 12-session correlation endpoint",
+    "protected reference/candidate isolation, equal access and compute budgets",
+    "image and component rights, cross-task exposure",
+    "full-cohort resource measurement, difficulty and scientific qualification"
+  ],
+  "scientific_runs": 0,
+  "authentic_array_payloads_read": false,
+  "archive_bytes_downloaded": 0,
+  "scientific_qualified": false,
+  "native_reproduction": false,
+  "full_contract_complete": false
+}

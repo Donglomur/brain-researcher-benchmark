@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective evaluator for paired nuisance/full held-out predictions, with separate incremental explained variance and R², declared person/movie and temporal split checks, complete recording accounting, participant summaries, paired uncertainty and a temporal control utility. Native Brain Treebank preprocessing, actual fit-lineage and privacy verification, electrode and population admission, competent references, rights and protected scientific evaluation remain unresolved. This shares the Brain Treebank source family with PAPER-paper-method-replacement-011, not an independent cohort.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

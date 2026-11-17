@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Bounded exported ECoG/pose arrays to prospective gamma features, grouped state/time versus gamma movement prediction, matched-event contrasts, patient/day summaries and temporal-shift diagnostics. Authentic NWB conversion, complete source population, anatomy/laterality and pose scale, stream alignment and artifact QC, frozen protocol/resources, protected targets and scientifically competent reference runs remain unqualified.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

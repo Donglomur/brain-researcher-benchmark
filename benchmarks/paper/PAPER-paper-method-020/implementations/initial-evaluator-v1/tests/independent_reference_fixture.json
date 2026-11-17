@@ -1,0 +1,181 @@
+{
+  "provenance": "Independently generated reference fixture; NOT native data, NOT observed decoder performance. S2 single-image group makes this a scoring-only fixture; transport fixture separately tests shuffle feasibility.",
+  "rows": [
+    {
+      "subject_id": "S1",
+      "image_id": "A",
+      "question_id": "S1/A/q0",
+      "answer": "yes",
+      "neural": "yes",
+      "no_neural": "yes",
+      "shuffled_neural": "no"
+    },
+    {
+      "subject_id": "S1",
+      "image_id": "A",
+      "question_id": "S1/A/q1",
+      "answer": "no",
+      "neural": "no",
+      "no_neural": "yes",
+      "shuffled_neural": "no"
+    },
+    {
+      "subject_id": "S1",
+      "image_id": "A",
+      "question_id": "S1/A/q2",
+      "answer": "hold",
+      "neural": "hold",
+      "no_neural": "ride",
+      "shuffled_neural": "ride"
+    },
+    {
+      "subject_id": "S1",
+      "image_id": "B",
+      "question_id": "S1/B/q0",
+      "answer": "yes",
+      "neural": "no",
+      "no_neural": "yes",
+      "shuffled_neural": "no"
+    },
+    {
+      "subject_id": "S2",
+      "image_id": "C",
+      "question_id": "S2/C/q0",
+      "answer": "on",
+      "neural": "on",
+      "no_neural": "under",
+      "shuffled_neural": "on"
+    },
+    {
+      "subject_id": "S2",
+      "image_id": "C",
+      "question_id": "S2/C/q1",
+      "answer": "yes",
+      "neural": "no",
+      "no_neural": "no",
+      "shuffled_neural": "yes"
+    }
+  ],
+  "expected": {
+    "neural": {
+      "correct": 4,
+      "n": 6,
+      "qa_micro_accuracy": {
+        "fraction": "2/3",
+        "value": 0.6666666666666666
+      },
+      "image_macro_accuracy": {
+        "fraction": "1/2",
+        "value": 0.5
+      },
+      "subject_macro_accuracy": {
+        "fraction": "5/8",
+        "value": 0.625
+      }
+    },
+    "no_neural": {
+      "correct": 2,
+      "n": 6,
+      "qa_micro_accuracy": {
+        "fraction": "1/3",
+        "value": 0.3333333333333333
+      },
+      "image_macro_accuracy": {
+        "fraction": "4/9",
+        "value": 0.4444444444444444
+      },
+      "subject_macro_accuracy": {
+        "fraction": "1/4",
+        "value": 0.25
+      }
+    },
+    "shuffled_neural": {
+      "correct": 3,
+      "n": 6,
+      "qa_micro_accuracy": {
+        "fraction": "1/2",
+        "value": 0.5
+      },
+      "image_macro_accuracy": {
+        "fraction": "4/9",
+        "value": 0.4444444444444444
+      },
+      "subject_macro_accuracy": {
+        "fraction": "5/8",
+        "value": 0.625
+      }
+    },
+    "neural_minus_controls_qa_micro_accuracy": {
+      "no_neural": {
+        "fraction": "1/3",
+        "value": 0.3333333333333333
+      },
+      "shuffled_neural": {
+        "fraction": "1/6",
+        "value": 0.16666666666666666
+      }
+    },
+    "neural_minus_controls_image_macro_accuracy": {
+      "no_neural": {
+        "fraction": "1/18",
+        "value": 0.05555555555555555
+      },
+      "shuffled_neural": {
+        "fraction": "1/18",
+        "value": 0.05555555555555555
+      }
+    },
+    "neural_minus_controls_subject_macro_accuracy": {
+      "no_neural": {
+        "fraction": "3/8",
+        "value": 0.375
+      },
+      "shuffled_neural": {
+        "fraction": "0",
+        "value": 0.0
+      }
+    }
+  },
+  "transport_fixture": {
+    "records": [
+      {
+        "subject_id": "S1",
+        "image_id": "A",
+        "split": "test",
+        "qa_count": 3
+      },
+      {
+        "subject_id": "S1",
+        "image_id": "B",
+        "split": "test",
+        "qa_count": 1
+      },
+      {
+        "subject_id": "S2",
+        "image_id": "C",
+        "split": "test",
+        "qa_count": 2
+      },
+      {
+        "subject_id": "S2",
+        "image_id": "D",
+        "split": "test",
+        "qa_count": 4
+      }
+    ],
+    "expected_allowed_derangement": {
+      "S1/A": "S1/B",
+      "S1/B": "S1/A",
+      "S2/C": "S2/D",
+      "S2/D": "S2/C"
+    },
+    "invariants": [
+      "same subject and split",
+      "different image identity",
+      "one donor image per recipient image across every recipient QA",
+      "bijection within each subject/split",
+      "no targets or answers used in mapping"
+    ],
+    "singleton_policy": "Reject as infeasible rather than self-pair or cross a boundary."
+  }
+}

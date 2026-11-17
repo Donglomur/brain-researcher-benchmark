@@ -1,0 +1,145 @@
+{
+  "task_id": "NEURAL-015",
+  "contract": {
+    "path": "benchmarks/neural/NEURAL-015/task.json",
+    "bytes": 28703,
+    "sha256": "0defdcc095905ddb5186f2b0de0861ba2d527bb25a449bffa777b622e69f204c"
+  },
+  "source_code_reused": false,
+  "primary_sources": [
+    {
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "pin": "arXiv:2411.08343v1, 13 November 2024",
+      "sections": [
+        "A.9 Linear decoding",
+        "A.8 GLM analysis",
+        "A.1 Audio transcription and alignment"
+      ],
+      "findings": "The paper describes manually annotated word onsets and a separate balanced sentence-onset versus nonspeech decoder with logistic regression, decimation, train-fitted normalization, within-subject 80/20 tests and ROC-AUC. It does not establish this task\u2019s fixed-grid word-boundary AP, tolerance or person-plus-movie transfer design."
+    },
+    {
+      "url": "https://braintreebank.dev/",
+      "pin": "live primary project page read 2026-11-17 UTC",
+      "findings": "Project page states data CC BY 4.0 and lists source recordings. This does not settle separate source-code licensing or third-party movie redistribution."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/trial_data_reader.py",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "data/trial_data_reader.py",
+      "bytes_from_git_tree": 14687,
+      "git_blob_sha1": "a34e74119609bc9ef0bfe9952e97618c07741b30",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Nearest-trigger index mapping in lines 39\u201367; round(index + delta_seconds * sampling_frequency), not a fit between adjacent trigger anchors. Starts after final trigger cause a break."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/trial_data.py",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "data/trial_data.py",
+      "bytes_from_git_tree": 2331,
+      "git_blob_sha1": "c98869166d368c5590cee69673563af5ff7802cd",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Metadata filename identifies movie, transcript uses start/end; source dropna across every transcript feature can remove otherwise valid boundary targets."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/all_trials.json",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "data/all_trials.json",
+      "bytes_from_git_tree": 419,
+      "git_blob_sha1": "7a1fcc0b61ef847ae6d883c0d4316699dc2e22b7",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Exact recording identifiers agree with 26-recording registered catalog."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/speech_nonspeech_subject_data.py",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "data/speech_nonspeech_subject_data.py",
+      "bytes_from_git_tree": 3601,
+      "git_blob_sha1": "e75ac1626e64853c24e3d78fee840bd83e34a7a5",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Concatenates trials within subject and distinguishes sentence-onset from nonspeech data constructors; does not define fixed-grid word boundary scoring."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "regression_runner.py",
+      "bytes_from_git_tree": 5694,
+      "git_blob_sha1": "6b46b63d144b09fb7c0a291f54fc12e21b1eb093",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Test-set path decimates neural features tenfold, uses training-fitted StandardScaler and logistic regression, reports ROC-AUC; not NEURAL-015 AP."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "run_time_tests.py",
+      "bytes_from_git_tree": 8877,
+      "git_blob_sha1": "3575d622b4cbc05e7730d83a55aeb7a6255efe67",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Timed per-electrode model evaluation; helper cross-validation variables have reversed train/validation appends, reinforcing unresolved reference-path review."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/README.md",
+      "repository_commit": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "path": "README.md",
+      "bytes_from_git_tree": 4292,
+      "git_blob_sha1": "c7c1781d0d5741503a9cb41545f3e94176f15777",
+      "sha256": null,
+      "sha256_status": "Raw network content hashing failed; exact commit and Git object pin obtained from primary GitHub recursive tree and contents inspected through web tool.",
+      "findings": "Published linear decoding command selects sentence_onset_regression; no fixed-grid NEURAL-015 estimator is established."
+    }
+  ],
+  "source_tree_provenance": {
+    "url": "https://api.github.com/repos/czlwang/brain_treebank_code_release/git/trees/c54ba38eab7814538bc03b1b6d29a3f50f034e12?recursive=1",
+    "response_sha256": "9633c03acebdc376d821d63c75029b6ac0ad7167fa0b0c404c7c5211f290ba62",
+    "license_file_present_in_tree": false
+  },
+  "requirements_mapping": [
+    {
+      "contract_field": "primary_outputs",
+      "requirement": "Boundary probabilities on fixed time grid; no timing target in query metadata",
+      "consequence": "Build all query grid IDs independently of onsets; keep onset labels and onset-bearing transcript fields private. Reject additional metadata fields or use strict allowlist."
+    },
+    {
+      "contract_field": "biological_unit",
+      "requirement": "10 participants, 26 recording presentations, 21 movie IDs",
+      "consequence": "Use frozen full catalog; no silent subject/session omission. Any excluded recording requires explicit pre-outcome justification and prevents full-population claim."
+    },
+    {
+      "contract_field": "split.policy",
+      "requirement": "Outer person and whole movie/continuous blocks; repeated movies grouped; temporal guards cover all feature lags",
+      "consequence": "Fit/adaptation/validation cannot contain test participants or test movie IDs. Same-stimulus records from other participants are exclusions. Verify guards in actual feature support, not only central timestamps."
+    },
+    {
+      "contract_field": "evaluation.observable_endpoints.definition",
+      "requirement": "Participant-macro boundary AUPRC and incremental log loss over acoustic/visual controls",
+      "consequence": "Compute pooled-grid AP and mean log loss within each participant, then unweighted participant mean, under a declared prospective AP convention; report acoustic/visual comparator coverage and direction."
+    },
+    {
+      "contract_field": "controls",
+      "requirement": "Whole-movie holdout, balanced timestamp grid, motion/loudness baselines, latency shift",
+      "consequence": "Whole-movie grouping is enforceable. Balance is ambiguous and needs explicit prospective semantics. Acoustic/visual comparator predictions must derive from allowed continuous context and same split. Shift controls need no wrapping or cross-record mixing and common paired row coverage."
+    },
+    {
+      "contract_field": "holds",
+      "requirement": "Validate triggers, source arrays, reference, privacy, rights, protocol, scorer and replication",
+      "consequence": "Engineering evaluator cannot clear authentic alignment/arrays, baseline execution, source licensing, native packets, replication or scientific admission."
+    }
+  ],
+  "prospective_profile": "prospective-onset-uniform-grid-v1",
+  "scientific_qualification": "unknown",
+  "native_execution": false,
+  "remaining_holds": [
+    "Authentic trigger interpolation accuracy and dropped-trigger behavior",
+    "Actual HDF5 shape, units, sampling and electrode inclusion",
+    "Frozen tolerance/grid/balance/within-person estimator and protocol",
+    "Acoustic/visual baseline provenance and signal-derived reference execution",
+    "Complete private/public packet hashes and access enforcement",
+    "Unversioned source input content hashes and code/media rights",
+    "Independent scoring/reference reproduction and predetermined scientific admission"
+  ]
+}

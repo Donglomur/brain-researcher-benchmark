@@ -30,9 +30,14 @@ These values are copied from the task definition. They do not establish current 
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Owner-side chronological calibration/guard/evaluation splitting, opaque neural-only query projection and paired animal-level cosine scoring for the prospective reward-relative improvement endpoint, with the 11-animal by seven-day structural panel. Complete Figures 2–3 reproduction, authentic coordinate and native-loader equivalence, cohort/cell admission, official calibrated comparator and occupancy shuffles, protected execution and measured native resources remain unresolved. Receipts and hashes do not authenticate actual fitting behavior.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

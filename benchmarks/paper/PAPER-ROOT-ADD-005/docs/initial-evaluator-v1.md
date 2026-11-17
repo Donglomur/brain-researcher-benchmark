@@ -1,0 +1,58 @@
+# Prospective image encoding evaluator
+
+This implementation adds an executable numerical pipeline for `PAPER-ROOT-ADD-005`: exact stimulus binding, complete operator-roster checks for participants `01`, `02`, `03`, nested grouped ridge baselines, paired held-out predictions, and signed predictive commonality. It is a construction component. It does **not** reproduce the native analysis or qualify an empirical benchmark. The canonical `task.json`, historical evidence and admission state remain unchanged. Every result records `native_reproduction=false`, `scientific_qualified=false`, `full_contract_complete=false` and the unresolved gates.
+
+## Primary source and prospective choices
+
+The [paper](https://www.nature.com/articles/s41562-024-01980-y), available in [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/), and author repository commit `b1843e7eb92858c9c4a9ef88b4a5faea24752b49` establish the source semantics. [run_linregcv.py](https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_linregcv.py) binds stimulus filenames to 66-dimensional embeddings and transposes the response table into trial-by-voxel form. [utils.py](https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/utils.py) names `sub-{sub}_ResponseData.h5`, `sub-{sub}_VoxelMetadata.csv` and `sub-{sub}_StimulusMetadata.csv`; the native response `voxel_id` column is metadata, not a trial. This package accepts an explicitly identified numeric export, and does not pretend an uninspected positional table is already aligned.
+
+The paper reports 12 session-held-out folds. The pinned `LinRegCVPermutation` implementation in [glm.py](https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/glm.py) uses 12 contiguous unshuffled folds, OLS with an intercept, and the arithmetic mean of fold-wise voxel Pearson correlations. Session equivalence therefore depends on the source row order. Predictors are standardized before this native cross-validation. [run_varpart.py](https://raw.githubusercontent.com/ViCCo-Group/dimension_encoding/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_varpart.py) selects dimensions by category AUC, deduplicates selections, and residualizes both predictor blocks and responses against the opposite block before CV. It clips negative mean correlations to zero, squares them, and subtracts both unique quantities from the joint quantity. The paper describes 30 selected dimensions and 52 category regressors. Those residual-response scores are **not** same-response predictive R² commonality.
+
+The paper explicitly locates an exploratory object-shape comparison in Supplementary Methods 2 and Supplementary Fig. 6 (`41562_2024_1980_MOESM1_ESM.pdf`). That comparison exists; the supplement contents and corresponding pinned descriptor construction could not be retrieved during this bounded source investigation. The inspected README and main analysis files do not identify that separate feature definition. Accordingly, this interface requires declared shape-source provenance but retains a specific shape-source qualification hold; generic supplied shape columns do not establish native parity. Category and shape feature widths are reported rather than asserted to be the native 52-category/shape design. Native category identities/completeness and the exact shape recipe must be bound before admission; accepting an arbitrary finite descriptor block does not establish comparator completeness.
+
+The canonical task requests nested selection, image-family/category holdout, all 66 dimensions, category/shape comparisons and participant-specific reporting. The following explicit prospective policy implements that requested direction without asserting source equivalence:
+
+- Each input single-trial response is retained and bound to an exact stimulus identifier. Repetitions of an image are averaged before fitting, so every image has equal training and scoring weight. Repeat counts and original trial counts are reported. There is no response z-scoring; ridge fits an unpenalized response intercept.
+- Shared image-family **or** category holdout labels form transitive connected components. Components cannot cross folds. The category holdout label is an operator-defined partition label and is distinct from the potentially overlapping category descriptor columns. Components are sorted by size, with a membership hash for ties, then assigned to the least-loaded fold. No random seed or row order decides a split. Fewer than five components, or fewer than four inside an outer training set, fails closed.
+- Five outer folds estimate held-out prediction. Within each outer training set, four grouped folds choose each voxel's ridge penalty from `[0.01, 0.1, 1, 10, 100, 1000]` by pooled validation MSE; ties select the smallest penalty. Predictor means and population standard deviations are estimated only on the current fit rows. A constant training column has scale one.
+- Paired models use exactly the same images, voxels and folds: dimensions66, category, shape, category+shape, their combined model, and a training-mean intercept baseline. All five feature models use the same ridge search. Outer test responses never select a penalty or preprocessing statistic.
+- Each voxel receives pooled out-of-fold `R² = 1 - SSE/SST` and Pearson `r`, plus SSE and SST. R² and correlations remain signed. These are not the native arithmetic mean of fold correlations, noise-ceiling-corrected scores, p-values, or inferred reproduction targets.
+- Correlation normalizes centered vectors separately, avoiding an overflowing product of sums of squares. If finite input values nevertheless make the reported raw SSE/SST overflow or underflow, evaluation fails explicitly; numeric failure is not relabeled as a constant-target `null`.
+- Predictive commonality uses the same target responses: unique dimensions = combined R² − category+shape R²; unique category+shape = combined R² − dimensions R²; shared = dimensions R² + category+shape R² − combined R². Negative parts remain visible. Parts sum to combined R². They describe predictive overlap of independently tuned models, not causal or nonnegative anatomical attribution.
+- Participants remain separate; there is no cross-subject voxel correspondence or population-level scalar. Every voxel remains in the output. Undefined constant-target R² or constant-prediction correlation becomes JSON `null`; an all-voxel average is `null` if any member is undefined, with defined and total counts exposed.
+
+## Input and execution
+
+Use an existing Python environment with NumPy. Tests additionally use pytest. No installation, model fitting on authentic observations, or archive download is part of construction verification.
+
+```sh
+python3 benchmarks/paper/PAPER-ROOT-ADD-005/implementations/initial-evaluator-v1/evaluator.py \
+  --input operator-export.npz --roster operator-roster.json --output scores.json
+```
+
+The NPZ uses `allow_pickle=False`, contains only these keys, and uses Unicode or byte-string arrays for identifiers:
+
+| Key | Shape / interpretation |
+| --- | --- |
+| `stimulus_id` | Unique `[images]` exact image IDs; no case folding, path stripping or fuzzy matching |
+| `dimensions` | Finite numeric `[images, 66]` embedding values |
+| `category`, `shape` | Finite numeric `[images, features]`, each at least one column |
+| `image_family_id`, `category_group_id` | Nonempty string `[images]` holdout metadata |
+| `sub_01_trial_id`, `sub_02_trial_id`, `sub_03_trial_id` | Unique string `[trials]` identities within each participant |
+| `sub_01_stimulus_id` (and `02`, `03`) | String `[trials]` exact image mapping, repetitions allowed |
+| `sub_01_voxel_id` (and `02`, `03`) | Unique string `[voxels]` within each participant |
+| `sub_01_response` (and `02`, `03`) | Finite numeric `[trials, voxels]` single-trial responses |
+
+The independent operator roster is JSON with `task_id`, `stimulus_ids`, `participants` (exact keys `01`, `02`, `03`) and `feature_provenance`. Each participant has `trial_ids`, aligned `stimulus_ids_by_trial`, and `voxel_ids`. Row and voxel order can vary in the NPZ, but identity sets and the trial-to-image mapping must agree with the roster. All three participants must cover the full declared stimulus set. Incomplete, duplicate, unknown or nonfinite records fail instead of silently dropping observations. An empirical export with a different acquisition population requires an explicit contract decision, not a fallback subset.
+
+`feature_provenance` requires exactly `dimensions`, `category`, `shape`, and `holdout_labels`; each entry has nonempty `source_uri`, `revision`, `mapping_rule`, and a lowercase 64-character `sha256`. These are operator declarations about source artifacts, **not verified source bytes or permission grants**. The CLI separately hashes the actual NPZ and roster bytes. The roster must be prepared independently of candidate outputs; checking a self-authored roster cannot prove authentic population completeness.
+
+The result includes feature counts, provenance declarations, image/group identities, participant-specific trial and voxel counts, held-out predictions, per-voxel metrics/commonality and complete inner/outer fold index audits. Indices refer to `stimulus_ids`; voxel arrays refer to each participant's `voxel_ids`. It is intended for trusted operator use and may contain protected predictions and tuning details; no candidate-access protocol is established here. The evaluator reads prepared arrays into memory and returns predictions in JSON. Full-cohort memory, streaming native HDF conversion and storage requirements are not measured or solved by the small controls.
+
+## Verification and remaining gates
+
+Tests include independently derived exact ID joins; transitive family/category grouping; an augmented least-squares ridge reference; extreme held-out predictor isolation; outer-test-response perturbations that cannot alter that fold's prediction or selected alpha; repeat accounting; all-three-participant end-to-end CLI behavior; malformed population/dimension/nonfinite inputs; safe NPZ loading; signed metric/partition counterexamples; and large/tiny finite numeric-scale checks requested by the independent reviewer.
+
+The independent reference worker derived a decisive estimand control: orthogonal predictors `[-1,-1,1,1]` and `[-1,1,-1,1]` with their sum as response produce same-response R² unique parts `0.5, 0.5`, shared `0`, combined `1`. Native residual-response partial-correlation squares instead yield unique parts `1, 1` and shared `-1`. Another control has Pearson `1` but R² `0.2` after an additive prediction shift; anticorrelation gives Pearson `-1` and R² `-3`. These controls verify scientific distinctions, not empirical performance.
+
+Still open: selecting and acquiring the approved complete empirical population; verifying native table/voxel/stimulus identities and grouping labels; establishing the exact public shape descriptors and their scientific suitability; native source execution and independent empirical reference; native 30-dimension partition and 12-session correlation reproduction; noise ceiling/ROI and inferential endpoints; protected reference isolation and candidate replay; equal access/resource budgets; stimulus/component rights and exposure intersections; full-cohort performance and difficulty qualification. The source-data CC0 and source-code MIT records do not settle original image rights. No authentic array payload, 43 GB archive, native scientific campaign, or historical result is introduced by this package.

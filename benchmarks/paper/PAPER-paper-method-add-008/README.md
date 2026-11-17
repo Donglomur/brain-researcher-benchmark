@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Reduces complete native exports for four sorters into source curation distributions and a full Kilosort4 Bombcell-good raster. A3702 source-path identity, native sorter/curation execution, configuration and preprocessing discrepancies, model/dependency rights, numeric drift and cross-sorter agreement, protected references and scientific qualification remain open; yield/quality are not universal spike accuracy.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

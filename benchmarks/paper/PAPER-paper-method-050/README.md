@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Converts pinned spikeInfo HDF5 references into numeric arrays and computes paired full-population tracking-yield/PETH diagnostics with complete declared unit and animal accounting. Native schema/time units, real animal grouping, UnitMatch half-waveforms, PETH exclusion from every matching path, Figure 5 day/rate/three-method comparisons, true identity labels, protected lineage and scientific qualification remain open.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

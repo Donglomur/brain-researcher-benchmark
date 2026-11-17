@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Five-event point-time export metrics, six-stage durations, contrast effects, psychophysical-law parameters, ERP summaries and participant-held-out likelihood export checks. Native HMP compatibility/fitting, authentic EEG/trial inventory, correct-response parity, event selection and cluster/Bayesian analyses, rights and protected references remain held. This does not infer events from EEG or complete the native task; scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

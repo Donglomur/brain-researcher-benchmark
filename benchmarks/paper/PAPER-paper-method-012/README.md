@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Complete prepared-session fixed-bin CA1 neuron-pair mutual information, finite-sample quadratic extrapolation, IID-shuffle and temporal-shift diagnostics, animal-balanced descriptives and an explicit MAT preparation path. Authentic supplement bytes/schema and identities, spatial-bin conflict, native MINT/source-wrapper repair parity, complete empirical population, frozen reference/tolerances, protected assessment and scientific qualification remain held. PID, population decoding, other datasets and whole-paper reproduction are outside this component.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective within-cell dentate encoding from exported spike/event/eye/history trials through source-informed binning and event kernels, paired ridge Poisson models, nested contiguous trial-block fitting and held-out likelihoods. The implemented contrast is gap-direction encoding conditional on event/eye/history/saccade terms; direct attention and behavioral decoding remain unresolved. Authentic MAT/population reconciliation, native hierarchical MATLAB model parity, figure targets, protected evaluation and scientific qualification remain held.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

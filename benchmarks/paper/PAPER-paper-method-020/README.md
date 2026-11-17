@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Audits the complete CSI1 BOLD5000-QA inventory and image/person aliases, projects separate neural/zero/shuffled inference packets, and scores every declared structured QA answer. Native NPY conversion, actual stimulus identity, question-text leakage, genuine model provenance, protected runtime, source test-informed selection differences, broader person/stimulus independence, independently trained text-only baseline and scientific qualification remain open.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

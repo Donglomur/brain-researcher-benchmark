@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Content-pinned raw human LFP segment loading, an independent rigid registration control, shared interpolation and prospective paired consistency/fidelity comparison of supplied default-DREDge/alternate shifts against fixed/no correction, with Pt01–Pt03 cohort summaries. Authentic geometry/preprocessing and current data access, native default/alternate DREDge execution, full-population qualification, figure targets, external motion truth, protected evaluation, rights and scientific qualification remain held.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
