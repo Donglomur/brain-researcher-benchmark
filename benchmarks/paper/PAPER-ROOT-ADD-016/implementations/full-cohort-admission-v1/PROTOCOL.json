@@ -1,0 +1,86 @@
+{
+  "schema": "cardiac_reference_preparation_protocol_v1",
+  "benchmark_id": "PAPER-ROOT-ADD-016",
+  "role": "operator_preparation_not_candidate_grading_or_reference_acceptance",
+  "source_requirements": {
+    "input": {
+      "bytes": 47254,
+      "sha256": "6d122f256863197e49e9f7b39420cfe1c46741b3efa1fa66a6ec364337e48f11"
+    },
+    "ordered_participant_id_sha256": "c7d967a7a66f506ff8b90ebd73e445453d5226845bb5308f2409ff00e2ae8682",
+    "participants": 655,
+    "participant_split": "none_exposed_development_reconstruction",
+    "conditions": [
+      "ECG_not_rejected",
+      "ECG_rejected",
+      "ECG_components"
+    ],
+    "scales": [
+      "raw",
+      "zscore"
+    ],
+    "standardization": "full-column population mean and SD, ddof0; separate raw/zscore fits",
+    "variables": [
+      "alpha_c",
+      "beta",
+      "sigma",
+      "nu",
+      "alpha"
+    ],
+    "model_contract": "../matched-artifacts/MODEL_CONTRACT.json",
+    "summary_contract": "../matched-artifacts/MATH_SPEC.md",
+    "candidate_schema_unchanged": true
+  },
+  "operator_stream_interface": {
+    "schema": "cardiac_operator_draw_review_v1",
+    "manifest": "draws.json",
+    "encoding": "float64-le-chain-major",
+    "shape": [
+      4,
+      2000
+    ],
+    "streams": 30,
+    "bytes_per_stream": 64000,
+    "total_stream_bytes": 1920000,
+    "tuning_request": 2000,
+    "tuning_verified_from_retained_draws": false,
+    "producer_environment_execution_records": "separate exact hashed opaque bodies, not executed or considered attestation",
+    "seed_policy": "reported integer or null; no replacement of candidate sampler/seed rules",
+    "alpha_identity": "report full-draw binary64 discrepancy; no new tolerance or acceptance threshold"
+  },
+  "independently_computed": [
+    "complete input-column moments and source-model prior scales",
+    "three scalar density/Jacobian expectations per model; no native comparison",
+    "means, population SD, historical shortest94-percent HDI and100-draw batch MCSE for all30parameters"
+  ],
+  "reused_current_interface": "six-model-summary/summary_score.py validate; exact source identity authenticated before compile",
+  "historical_diagnostics": {
+    "source": "https://elifesciences.org/articles/100605",
+    "locator": "Methods / Statistical inference",
+    "divergent_transitions_reported": 0,
+    "rhat_reported_upper_exclusive": 1.05,
+    "ess_reported_lower_exclusive": 400,
+    "ess_variant": "not uniquely specified by paper statement",
+    "these_are_current_operator_admission_checks": false
+  },
+  "always_unestablished": [
+    "authentic acquisition and rights",
+    "independent inference and data dependence",
+    "tuning and convergence",
+    "native density parity and measured resource feasibility",
+    "protected custody and scientific qualification"
+  ],
+  "output_authority": {
+    "reference_accepted": false,
+    "runtime_qualified": false,
+    "scientific_qualified": false,
+    "automatic_existing_reference_binding": false
+  },
+  "new_interface_choices": [
+    "binary saved-draw transport",
+    "distinct declared fit IDs and distinct physical evidence/stream files",
+    "operator-only output directory and files",
+    "strict schema and bounded snapshots"
+  ],
+  "generated_validation_limit": "Structural/math and complete invented stream controls only; no positive authentic-input CLI or inference result."
+}
