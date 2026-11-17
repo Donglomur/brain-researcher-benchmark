@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-SMC-RNN-2024",
+  "track": "paper",
+  "title": "SMC-RNN: same-task improvement on the complete MC_Maze 20-ms panel",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "scientific_question": "Predict held-out neural activity and future activity on the complete standard MC_Maze20ms test panel; preserve both Table2 SMC-RNN proposal arms.",
+  "paper_identity": {
+    "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+    "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf"
+  },
+  "official_code": {
+    "url": "https://github.com/mackelab/smc_rnns",
+    "commit": "c808c76ad940491b0a14d2671e3884140aa61258"
+  },
+  "primary_outputs": [
+    "Complete predictions for both original causal-proposal and noncausal-proposal strata.",
+    "Original co-bps, velocity R2, PSTH R2 and forward bps for each arm."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+      "https://github.com/mackelab/smc_rnns",
+      "https://doi.org/10.48324/dandi.000128/0.220113.0400"
+    ],
+    "observation_boundary": "Original training/validation spikes and permitted behavior, test held-in spikes. Original test held-out spikes/behavior remain evaluator-only locally and are publicly exposed sinceJanuary2026. With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+    "target_exposure": "Original test targets publicly exposedJanuary2026; never untouched.",
+    "source_panels": [
+      {
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/reference_panel.json",
+        "bytes": 3665,
+        "sha256": "209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/reference_validation_panel.json",
+        "bytes": 4379,
+        "sha256": "772123900caed9a8fdfc7799cb5496e70ff89620cbb01d271afb960ef86ed54a"
+      }
+    ]
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/improvement.v1.json",
+      "bytes": 11750,
+      "sha256": "e9f6630889c6be51513e917d4225d324d91e6a4de6582cc3860a8018bd4e5a2c"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "not_applicable"
+  },
+  "allowed_candidate_methods": "With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+  "resources": {
+    "native_baseline_protocol": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/protocol.json",
+      "bytes": 5849,
+      "sha256": "c8d437ece9c57b9066c5167ad499eada673d425ea17a06a9a20d62410ecbd644"
+    },
+    "participant_access_budget": null,
+    "participant_resource_budget": null
+  },
+  "holds": [
+    "No complete author192×32test-score calibration or printed-score linkage yet.",
+    "No justified improvement effect, uncertainty or companion non-regression policy.",
+    "Original targets are publicly exposed; local isolation does not create an untouched holdout.",
+    "Generic scalar result admission must not silently discard either original arm; joint two-arm admission remains unqualified.",
+    "Paired materials and source software controls do not establish participant/model performance.",
+    "Temporal-access enforcement is unqualified: complete-array H5 delivery and an arm label do not enforce the source information bounds. Both-arm admission requires a reviewed execution boundary exposing only permitted prefixes, or an equivalent enforceable boundary with fixed model/randomness and audit evidence. Unrestricted full-window output cannot qualify the causal arm; broadening noncausal access is a distinct offline-access policy."
+  ],
+  "next_implementation_action": "Qualify both complete original author baselines and freeze a joint two-arm effect, uncertainty, companion and participant-budget policy before candidate evaluation.",
+  "provenance": {
+    "reviewed_implementation_commit": "5d63c9c2feda1243f23b791cbde949e11fa38aea",
+    "scientific_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.json",
+      "bytes": 3718,
+      "sha256": "a05e587878bab6846ba416cc36b3686613b5e5bfe0802d5fb02a42a47145f7bf"
+    },
+    "source_preparation_evidence": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json",
+      "bytes": 11752,
+      "sha256": "c356639fbf94bb062d662891806385a49a969c905e5059153667428d208d083f"
+    },
+    "native_cost_characterization": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/native-cost-characterization.json",
+      "bytes": 8060,
+      "sha256": "fe533a72234262a8cb5e52bd9052d116d0bb0bf8f440ad44c3bb87d5493f4dd7"
+    },
+    "registration_role": "Initial source-paper task with no prior benchmark definition."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false
+  }
+}
