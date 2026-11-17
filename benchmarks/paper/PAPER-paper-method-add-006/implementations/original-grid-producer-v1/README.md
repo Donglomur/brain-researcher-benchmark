@@ -13,6 +13,14 @@ improvement or SOTA result is established by this component. The full-run resour
 cost is unmeasured. Authentic execution needs its own admitted compute/storage
 protocol; these instructions are not evidence that such a run occurred.
 
+The complete cached input panel has now passed a separately admitted input-only
+join using source `44ef8f7d1d`: all 128 regional packets, 64 paired sessions and
+90 source identity/trial fields across nine selected assets. Independent review
+checked the saved result without reopening the arrays. The
+[input-validation receipt](INPUT_VALIDATION_RECEIPT.json) records the successful
+run and the earlier C-only layout refusal. Neither attempt fit a model, scored
+a scientific result or exported duplicate arrays.
+
 ## Source and preserved scope
 
 The [primary paper](https://doi.org/10.1038/s41593-025-02183-y) defines the scientific scope.
@@ -53,8 +61,10 @@ The loader checks the receipt, every case, loaded packet pin, distinct-trial
 count and within-trial correctness. This permits the original equal-trial mean,
 rather than a duration-weighted mean of bins. Without that proof, behavior is
 explicitly unavailable. The older PREPARATION001 source hash alone does not pin
-the subsequently added complete-trial guard. Authentic anatomical/epoch mapping
-still needs independent qualification against the selected NWB fields.
+the subsequently added complete-trial guard. Selected-source unit/epoch/time/
+trial joins are covered by the input-validation receipt. Original uncopied NWB
+table-reference attributes and independent anatomical truth remain outside that
+check.
 
 ## What runs
 
@@ -174,6 +184,6 @@ before claiming that seam passed. Neither suite reads original signals.
 Remaining scientific limits include the paper's CA1 24-neuron versus active-code
 19-neuron discrepancy, 0.48 versus caption 0.49 behavior/readout R², unrecovered
 historical file/RNG/runtime identity, source null-unit regional aggregation,
-independent NWB identity qualification, public-data exposure/rights and authentic
+original NWB table-reference/anatomical qualification, public-data exposure/rights and authentic
 comparator execution. Passing CI does not remove these limits or establish
 benchmark readiness, reproduction, improvement or a broader SOTA result.
