@@ -33,6 +33,10 @@ RUNTIME_ROOTS = (".neurobench",)
 PAPER_REVISION = "paper-improvement/v1"
 PAPER_OBJECTIVE = "surpass_source_paper_same_task"
 PAPER_DISPOSITIONS = {"improvement_ready", "design_ready", "source_unresolved", "ineligible"}
+NEURAL_REVISION = "neural-understanding/v1"
+NEURAL_OBJECTIVE = "infer_neural_or_behavioral_targets_from_permitted_observations"
+NEURAL_HISTORY = "historical/task.pre-understanding.v1.json"
+NEURAL_SNAPSHOT = "docs/provenance/registrations/neural-pre-understanding-v1.json"
 
 
 def need(value, message):
@@ -202,6 +206,90 @@ def paper_revision_members(reader, row, document):
     return {previous["path"], contract_pin["path"]}
 
 
+def neural_revision_registry(reader, registry, tasks):
+    """Authenticate the original neural roster without following old locators."""
+    for row in tasks:
+        if row.get("track") == "neural" and "specification_revision" in row:
+            revision = row["specification_revision"]
+            need(type(revision) is dict and revision.get("version") == NEURAL_REVISION,
+                 "Unsupported task specification revision")
+    metadata = registry.get("neural_understanding")
+    revised = any(type(row) is dict and row.get("track") == "neural"
+                  and "specification_revision" in row for row in tasks)
+    if metadata is None:
+        need(not revised, "Neural revision requires its original registry snapshot")
+        return None, None
+    need(type(metadata) is dict
+         and set(metadata) == {"schema_version", "objective", "coverage_required", "registered_count",
+                               "pre_understanding_registry"}
+         and metadata["schema_version"] == NEURAL_REVISION
+         and metadata["objective"] == NEURAL_OBJECTIVE and metadata["coverage_required"] is True
+         and type(metadata["registered_count"]) is int
+         and metadata["registered_count"] == sum(row.get("track") == "neural" for row in tasks),
+         "Invalid neural understanding coverage metadata")
+    history_pin = metadata["pre_understanding_registry"]
+    historical = metadata_pin(reader, history_pin, NEURAL_SNAPSHOT, "Pre-understanding registry")
+    need(historical.get("schema_version") == 1
+         and historical.get("kind") == "neuroscience_benchmark_registry"
+         and type(historical.get("tasks")) is list and 0 < len(historical["tasks"]) <= 1000,
+         "Unsupported pre-understanding registry")
+    previous = {}
+    for row in historical["tasks"]:
+        need(type(row) is dict and type(row.get("id")) is str and row["id"] not in previous,
+             "Invalid or duplicate pre-understanding task identity")
+        previous[row["id"]] = row
+    need({row["id"] for row in tasks if row["track"] == "neural"}
+         == {row["id"] for row in previous.values() if row.get("track") == "neural"},
+         "Neural revision must preserve the original registration roster")
+    return history_pin, previous
+
+
+def neural_revision_members(reader, row, document, previous_row):
+    """Own current neural metadata while preserving its exact original identity."""
+    revision = row.get("specification_revision")
+    need(row["track"] == "neural" and type(revision) is dict
+         and set(revision) == {"version", "previous_specification", "understanding_contract"}
+         and revision["version"] == NEURAL_REVISION, "Unsupported task specification revision")
+    directory = row["task_directory"]
+    previous = revision["previous_specification"]
+    old = metadata_pin(reader, previous, directory + "/" + NEURAL_HISTORY,
+                       "Historical neural specification")
+    original = row.get("original_specification")
+    need(type(original) is dict and set(original) == {"path", "bytes", "sha256"}
+         and type(original["bytes"]) is int
+         and all(original[key] == previous[key] for key in ("bytes", "sha256")),
+         "Neural revision does not preserve its original specification")
+    relative_path(original["path"])
+    need(type(previous_row) is dict and previous_row.get("track") == "neural"
+         and type(previous_row.get("specification")) is dict
+         and all(previous_row["specification"].get(key) == previous[key] for key in ("bytes", "sha256"))
+         and previous_row.get("original_specification") == original
+         and previous_row.get("specification_id") == row["specification_id"]
+         and previous_row.get("specification_alias") == row["specification_alias"]
+         and "specification_revision" not in previous_row,
+         "Neural revision lineage differs from the original registry")
+    old_identity = old.get("id", old.get("candidate_id", old.get("task_id")))
+    need(old_identity == row["specification_id"] and old.get("track", "neural") == "neural"
+         and old.get("objective") != NEURAL_OBJECTIVE, "Historical neural specification identity mismatch")
+    contract_pin = revision["understanding_contract"]
+    contract = metadata_pin(reader, contract_pin, directory + "/understanding.v1.json",
+                            "Neural understanding contract")
+    need(contract.get("schema_version") == NEURAL_REVISION and contract.get("task_id") == row["id"]
+         and contract.get("objective") == NEURAL_OBJECTIVE,
+         "Neural understanding contract identity mismatch")
+    evaluation = document.get("evaluation")
+    need(document.get("objective") == NEURAL_OBJECTIVE and type(evaluation) is dict
+         and evaluation.get("neural_understanding") == {
+             "schema_version": NEURAL_REVISION, "objective": NEURAL_OBJECTIVE,
+             "contract_path": "understanding.v1.json", "contract_sha256": contract_pin["sha256"],
+             "original_definition_path": NEURAL_HISTORY, "original_definition_sha256": previous["sha256"]},
+         "Current neural definition is not bound to its understanding contract and history")
+    need(row["scientific_readiness"] == "unknown"
+         and row["submission_readiness"] == "not_qualified_by_binding",
+         "Neural source binding cannot grant scientific qualification")
+    return {previous["path"], contract_pin["path"]}
+
+
 def check_namespace(root, prefix, boundaries, allowed_files):
     """Check ownership outside artifact boundaries without entering those closures."""
     stack = [prefix]
@@ -274,7 +362,9 @@ def prepare(reader):
     need(registry.get("schema_version") == 1 and registry.get("kind") == "neuroscience_benchmark_registry",
          "Unsupported current registry")
     tasks = registry.get("tasks")
-    need(isinstance(tasks, list) and 0 < len(tasks) <= 1000, "Invalid task inventory")
+    need(isinstance(tasks, list) and 0 < len(tasks) <= 1000
+         and all(type(row) is dict for row in tasks), "Invalid task inventory")
+    neural_history_pin, neural_previous = neural_revision_registry(reader, registry, tasks)
     by_id, task_paths, members, expected_pins = {}, {}, {}, {}
     classes = {"canonical": Counter(), "expansion": Counter()}
     allowed_files = {"paper": {"benchmarks/paper/README.md"}, "neural": {"benchmarks/neural/README.md"}}
@@ -300,9 +390,12 @@ def prepare(reader):
              "Task specification identity or alias mismatch: " + identifier)
         need(document.get("track", track) == track, "Task specification track mismatch")
         if "specification_revision" in row:
-            revision_members = paper_revision_members(reader, row, document)
+            if track == "paper":
+                revision_members = paper_revision_members(reader, row, document)
+            else:
+                revision_members = neural_revision_members(reader, row, document, neural_previous.get(identifier))
             for path in revision_members:
-                need(path not in members, "Duplicate paper revision metadata")
+                need(path not in members, "Duplicate task revision metadata")
                 members[path] = "task:" + identifier
             allowed_files[track].update(revision_members)
         else:
@@ -310,6 +403,8 @@ def prepare(reader):
                  "Source registry cannot grant scientific qualification")
             need(track != "paper" or not registry.get("paper_improvement", {}).get("coverage_required"),
                  "Paper improvement coverage requires every paper revision")
+            need(track != "neural" or neural_history_pin is None,
+                 "Neural understanding coverage requires every neural revision")
         members[pin["path"]] = "task:" + identifier
         allowed_files[track].update((directory + "/README.md", pin["path"]))
         for item in row.get("documentation", []):
@@ -419,6 +514,10 @@ def prepare(reader):
         need(history_path not in members, "Duplicate paper registry provenance")
         members[history_path] = "registration-provenance"
         expected_pins[history_path] = history_pin
+    if neural_history_pin is not None:
+        need(NEURAL_SNAPSHOT not in members, "Duplicate neural registry provenance")
+        members[NEURAL_SNAPSHOT] = "registration-provenance"
+        expected_pins[NEURAL_SNAPSHOT] = neural_history_pin
     artifact_files = artifact_members(root, artifacts)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)
