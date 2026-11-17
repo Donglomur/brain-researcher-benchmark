@@ -1,0 +1,177 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-099",
+  "title": "Auditory-evoked spike or declared CSD response prediction",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established for this task by this source review. Existing programme source and version-specific engineering evidence remain separate from scientific outcomes.",
+    "excluded_claims": [
+      "Equating nominal event rates with physiological spike rates without observation/exposure verification.",
+      "Treating anatomy-only archives or seven archives as independent cohorts.",
+      "Claiming CSD or continuous LFP coverage from an uninspected NWB field or a manifest.",
+      "Inferring direct neural understanding from a frozen programme score."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separates canonical physiological region/depth prediction from the manifest’s unauthenticated nominal-event-rate scope.",
+      "Corrects source route from anatomy-only001344 to recording-bearing archive family.",
+      "Defines rate denominator, whole-animal split, anatomy/calibration leakage and response-observation requirements before any programme or direct-understanding score.",
+      "Preserves the manifest-declared animal-macro MSE primary and MAE companion while marking both unexecuted and biologically unauthenticated."
+    ],
+    "source_review": "Current task definition, delivered implementation source and source-provenance notes inspected; existing scientific source audits reused. No authentic recordings, protected roster or reference targets read."
+  },
+  "evidence": [
+    {
+      "id": "historical_definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-099/historical/task.pre-understanding.v1.json",
+      "sha256": "96c5439446c1ed583f59d42f683ac8e6d8d2d40b823e81bdc83bf9d560e198d0",
+      "supports": "Preserved registered scientific target, source audits and unresolved scientific qualifications."
+    },
+    {
+      "id": "runtime_manifest",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/registered-runtime/manifest.json",
+      "sha256": "4090bd73c190ca6497752f8891a9f777efd5239cdd37ad2a8fca9d1e4b7c9668",
+      "supports": "Only delivered runtime member; nominal-event target and26-animal counts are declarations, not authenticated task delivery."
+    },
+    {
+      "id": "author_source",
+      "kind": "primary_source",
+      "url": "https://github.com/KatoLabUNC/Garcia_et_al_2025",
+      "locator": "Official README, auditory-cortex layer assignment; consulted2026-11-16.",
+      "supports": "Author source uses spike distributions, CSD responses and channel correlation for layer assignment, requiring explicit response-derived-anatomy handling; scripts are not a complete NWB prediction evaluator."
+    }
+  ],
+  "disposition": "target_mismatch",
+  "disposition_reason": "The registration proposes held-animal region/depth spike-rate or CSD trajectories, but the only published implementation member is a manifest for nominal released-event-rate prediction. Its packet, preparation and numerical scorer are absent from this checkout. The declared26-animal/1010-query scope cannot authenticate biological spike rates or the intended shared anatomical target; retain it as a historical alternative until the bridge is supplied.",
+  "scientific_target": {
+    "question": "Can a frozen method predict auditory-evoked population spike-rate trajectories in held-out animals on verified shared anatomical regions/depth bins, using stimulus/timing alone or the same inputs plus permitted prior neural history?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Independently measured held-out response counts divided by the actual bin exposure and eligible recorded-unit denominator, in spikes/s/source-unit on a frozen region/depth schema. A CSD trajectory is a separately declared outcome with separate units, never pooled with spike-rate error.",
+    "answer_origin": "Recording-bearing Garcia archives001419/001420/001421 after NWB event/unit/contact/animal and clock verification. The source anatomy-only archive001344 does not supply the response target. Current nominal released-event counts are not yet authenticated as this answer.",
+    "case_unit": "One complete held-animal stimulus trial with fixed response-bin and anatomical support masks; no per-unit correspondence between animals is presumed.",
+    "independent_unit": "Animal, grouping all sessions and cross-archive aliases; channels/units/trials are nested measurements.",
+    "inference_scope": "Cross-animal response prediction only after anatomy and observed exposure are verified. The present runtime manifest alone does not establish that inference; public source exposure also prevents an unseen-data claim by default.",
+    "exclusions": [
+      "Equating nominal event rates with physiological spike rates without observation/exposure verification.",
+      "Treating anatomy-only archives or seven archives as independent cohorts.",
+      "Claiming CSD or continuous LFP coverage from an uninspected NWB field or a manifest.",
+      "Inferring direct neural understanding from a frozen programme score."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Stimulus identity and onset/timing information on whole trials, with anatomy established independently of scored responses.",
+      "An explicitly paired history condition may add only neural bins preceding the prediction boundary; use the same animals, trials, target support and resource budget as timing-only.",
+      "Training/validation response trajectories and eligible-unit/time-exposure denominators; all normalization fitted without query responses."
+    ],
+    "forbidden_inputs": [
+      "Scored response bins, future-neural leakage through filtering, query responses used to define depth/layer alignment or select responsive units.",
+      "Hidden animal aliases, source answer-bearing filenames or independent evaluator targets.",
+      "Continuous LFP, corresponding units across animals or CSD targets unless the selected release actually verifies them."
+    ],
+    "case_identity": "Current manifest declares26animals,16train/5validation/5query and3222/1006/1010trials,20bins, but publishes no case roster or packet/scorer. Exact source IDs, anatomical joins and query membership are unverified, not reconstructed from these counts.",
+    "split": "Intended complete task groups every recording/alias of each animal. Manifest proposes16/5/5animal groups and one timing/history view per invocation; neither split membership nor paired-view equality is authenticated by delivered source.",
+    "coverage": "One registered task with separate timing/history access conditions. Only manifest source is present; no executable target preparation/scoring, exact20-bin physical durations, complete response support or current candidate/reference execution is delivered."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-macro mean squared population spike-rate trajectory error (prospective physiological target; manifest-only declared metric)",
+      "direction": "lower",
+      "aggregation": "Within each held animal, average squared error over predeclared eligible trial×region/depth×time bins using fixed support; then equal animals. If spike rates are authenticated, units are (spikes/s/eligible source-unit)^2.",
+      "rationale": "Preserves the delivered manifest’s animal_macro_mse primary and animal_macro_mae companion without implying a delivered numerical scorer. The prospective physiological response definition adds required units/exposure/anatomical authentication; CSD needs a separately frozen scale and scorer."
+    },
+    "secondary": [
+      "Animal-macro mean absolute error, preserving the manifest’s animal_macro_mae companion; physiological units require the same target authentication.",
+      "Per-animal and per-region/depth error and support/coverage; retain absent anatomical bins explicitly.",
+      "Paired timing-only versus history-augmented error on the identical query universe.",
+      "Separately reported CSD error only after verified units, corresponding depth and complete exposure."
+    ],
+    "comparators": [
+      {
+        "name": "Training population mean trajectory",
+        "inputs": "Training animals only, same stimulus and frozen shared anatomical schema.",
+        "procedure": "Proposed fixed stimulus-conditioned mean response; support masks and fallback for unseen stimulus/region fixed before query."
+      },
+      {
+        "name": "Timing-only versus history regression",
+        "inputs": "Identical stimulus/timing metadata, with prior neural history added only in the declared second arm.",
+        "procedure": "Proposed fixed ridge baseline: training-only feature scaling, alpha grid [0.01,0.1,1,10,100] selected by animal-grouped validation MSE, with nonnegative output clipping fixed before query. Timing-only and history-augmented variants use identical targets and splits; this comparator must be implemented and qualified before evaluation."
+      }
+    ],
+    "nuisance_controls": [
+      "Verify complete observation windows: no released event is not evidence of observed silence.",
+      "Establish actual spikes/unit, channel contact, stimulus onset and time exposure before assigning rate units.",
+      "Define anatomical correspondence and unit eligibility without selecting on evaluation responses; disclose response-derived laminar assignment and use separate calibration trials.",
+      "Keep trial boundaries and full filter/lag support outside scored future bins; compare recording density and missing-depth patterns across animals."
+    ],
+    "uncertainty": "Bootstrap or summarize paired errors by biological animal after cross-archive identity reconciliation; five declared query animals would limit inference even if authenticated. Do not treat1010trials or20bins as independent animal replication.",
+    "failure_policy": "Do not score until authentic case IDs, units, time exposure and target masks are bound. Require one finite trajectory per exact case/support bin; reject duplicates, omissions, extra cases and undefined normalization. Missing anatomy is declared support, not silently dropped favorable cases."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-099/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No numerical scorer body is delivered. The manifest declares animal_macro_mse primary and animal_macro_mae secondary with equal weight for five query animals and every query trial/bin required. Its nominal released-event-rate title does not verify physiological rate units or the canonical region/depth trajectory target.",
+    "target_fidelity": "different_target",
+    "delivered_scope": "Unqualified programme registration proposal only, one view per invocation, historical authoring-path references and explicit no execution/qualification flags.",
+    "missing": [
+      "Actual preparation/scoring source and authenticated public/private packet schema for the declared26animal scope.",
+      "Verified response semantics, complete observed intervals, per-unit denominator and physical bin widths.",
+      "Cross-animal anatomical correspondence and exact IDs/splits; paired timing/history evaluation."
+    ],
+    "execution_evidence": "Manifest explicitly records no actual candidate, grader, image or runtime qualification and no scientific execution during source construction; this revision only inspects its public bytes."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential numeric or plotted trial/history interpretation under a separately frozen response contract.",
+      "boundary": "No-tools condition must use the same permitted measured history and withhold target trajectory.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential region/depth/time response-history viewer; no delivered renderer.",
+      "boundary": "Typed views may show only input history and fixed anatomy, never query response arrays.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case numerical/model investigation is proposed, not supplied by the manifest.",
+      "boundary": "Keep tool/checkpoint exposure and calibration matched to the frozen-program comparison.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest describes timing/history programme conditions but refers to absent source packages.",
+      "boundary": "Declared per-view timing/history entrypoints reference absent source files; their argv and registration metadata do not supply an authenticated method freeze or complete scorer.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    }
+  }
+}

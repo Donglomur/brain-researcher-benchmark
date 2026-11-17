@@ -16,11 +16,11 @@
     ],
     "task_family": "naturalistic_encoding"
   },
-  "scientific_question": "Can frozen video features predict EEG responses during audiovisual naturalistic clips on held-out video identities under a declared target-normalization policy?",
+  "scientific_question": "Can permitted training responses and fixed video features predict the complete EEG response to held video identities in the same six participants, beyond matched or absent neural-training controls?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Channel-by-time predictions with a fixed mask and actual subject/session/run/trial joins; use a separately qualified train-only target normalization for hidden-target prediction, or explicitly label literal source reproduction retrospective."
+    "Held video EEG response arrays, independently joined to each participant, channel and time coordinate; the answer is measured EEG rather than the source paper narrative."
   ],
   "input_assets": {
     "routes": [
@@ -46,17 +46,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: EEG and eye tracking aligned to short videos, with image/video features for encoding; exact event/derivative schema unverified.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "All17 fixed visual feature outputs and permitted EEG responses for video IDs1..1000, with person/channel/time order and fit-only transforms.",
+      "At query time the current video features and sealed training state; measured, mismatched and absent training-neural views remain separate conditions."
+    ],
+    "forbidden_inputs": [
+      "EEG responses for query videos 1001..1102, query-derived normalization/noise-ceiling selection, prior query transcripts and protected reference results.",
+      "Answer-bearing targets or native whole-session transforms imported into the prospective condition."
+    ],
+    "case_identity": "Source protocol uses video IDs1..1000 for training and 1001..1102 for query, six person positions and complete 127-by 1800 output coordinates; runtime bundle aliases do not replace the canonical join.",
+    "split": "Same-six-person new-video split. Group every repetition of a video; preserve literal native whole-session normalization solely as a separately labeled retrospective reproduction branch.",
+    "coverage": "One registration; source scope contains 36 paired-seed bundles,3672 query contexts and 22032 person-video predictions. These are planned full-support condition counts, not completed runs or independent datasets. Authentic input and deployment qualification remain absent."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Participant, with repeated videos shared across people and trials nested within sessions.",
+  "case_definition": "One video query predicts the response of all six known people, [6,127,1800].",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Same-six-person new-video split. Group every repetition of a video; preserve literal native whole-session normalization solely as a separately labeled retrospective reproduction branch.",
+    "coverage": "One registration; source scope contains 36 paired-seed bundles,3672 query contexts and 22032 person-video predictions. These are planned full-support condition counts, not completed runs or independent datasets. Authentic input and deployment qualification remain absent."
   },
   "reference": {
     "source_code_url": "https://github.com/gifale95/EMD",
@@ -68,37 +74,107 @@
     "data_url": "https://openneuro.org/datasets/ds008257"
   },
   "controls": [
-    "Static-frame and motion-energy baselines",
-    "whole-video grouping",
-    "same repeats/features across arms."
+    "Keep all repeats of each video together; disclose shared stimuli with BOLD Moments and unknown checkpoint exposure.",
+    "Freeze fit-only target scaling and masks; do not select channels/times by test-derived reliability.",
+    "Report audiovisual/ocular/task covariates and whole-clip future information; encoding accuracy cannot remove them."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The query observation is a video feature tensor and the requested answer is held EEG; showing the target EEG would reverse the task.",
+      "boundary": "A direct neural-waveform interpretation assay would require a separately specified endpoint and must not inherit encoding scores.",
+      "evidence_ids": [
+        "encoding-protocol"
+      ],
+      "missing": [
+        "No direct neural-observation condition for this encoding target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "A viewer of held EEG would expose the prediction target; viewing stimulus material does not become neural-signal interpretation.",
+      "boundary": "Any future stimulus viewer must preserve the encoding target and be assessed separately.",
+      "evidence_ids": [
+        "encoding-protocol"
+      ],
+      "missing": [
+        "No typed neural-viewer endpoint is delivered."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Controller.investigate supplies an actual provider action loop with run_python, optional fit_helper and finish actions over the permitted current context; source is unconfigured and not executed here.",
+      "boundary": "Fresh query state, same permitted information within each paired tool condition, no query labels or grading feedback; provider/runtime qualification remains external.",
+      "evidence_ids": [
+        "participant-controller",
+        "participant-provider",
+        "participant-process",
+        "encoding-protocol"
+      ],
+      "missing": [
+        "Unconfigured native/provider transport and authentic full-input execution."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Controller.preseal freezes run(request) source before numeric exposure and run_candidates executes it for training, each current video and report; provider transport rejects F calls after exposure.",
+      "boundary": "Commit global policy before numeric exposure; no source revision or provider call during frozen execution; native reproduction is separate.",
+      "evidence_ids": [
+        "participant-controller",
+        "participant-process",
+        "participant-provider",
+        "encoding-protocol"
+      ],
+      "missing": [
+        "Authenticated training/query installation and independent execution qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro held-out correlation under a fixed time/channel mask.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Participant-macro mean coordinate-wise Pearson correlation over held videos",
+      "direction": "higher",
+      "aggregation": "Correlate predicted and measured responses across 102 videos separately at every 127x1800 coordinate, average all coordinates within each person, then average six people. Undefined coordinates propagate according to the scorer, not selective deletion.",
+      "rationale": "Assesses held neural-response structure over the full frozen target basis; calibration error is reported separately because correlation alone ignores scale and bias."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Full-support MSE and training-variance-normalized MSE.",
+      "Prespecified posterior-channel/time masks as secondary views only.",
+      "Paired measured-versus-mismatch/absent neural-information contrasts, investigative-minus-frozen and helper effects; retain all signed outcomes.",
+      "Native reproduction status and evidence-backed protocol-report credit remain separate non-neural-accuracy endpoints."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Training-selected R1/R2/R3 champion",
+        "inputs": "The same permitted training EEG, all required feature coordinates and fixed training folds.",
+        "procedure": "Existing source selects each participant’s reference family/settings using the complete training-only inner grid, then grades its held predictions; no query-based champion selection."
+      },
+      {
+        "name": "Training mean and zero predictions",
+        "inputs": "Permitted training response means or no neural information.",
+        "procedure": "Existing fixed simple baselines expose scale/correlation pathologies and no-signal performance."
+      },
+      {
+        "name": "Mismatched and absent neural-training views",
+        "inputs": "Declared mismatch or absent labels under the same permitted stimulus feature support.",
+        "procedure": "Existing matched condition axis tests dependence on aligned neural training; it does not isolate causal neural mechanisms."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep all repeats of each video together; disclose shared stimuli with BOLD Moments and unknown checkpoint exposure.",
+      "Freeze fit-only target scaling and masks; do not select channels/times by test-derived reliability.",
+      "Report audiovisual/ocular/task covariates and whole-clip future information; encoding accuracy cannot remove them."
+    ],
+    "uncertainty": "Six-person and shared-video resampling in the source is conditional on fixed fits and the observed cohort/videos; no refitting uncertainty, population confidence or confirmatory winner follows.",
+    "failure_policy": "Require every held video and 127x1800 coordinate for all six people and prescribed condition panels. Preserve incomplete, failed, constant or undefined outcomes; no best-success subset and no rewarding unsupported report claims.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "f7a29e2b61bca54434307a4790ac8efa7eeed3122600758c607d76037136c373",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "5f8c0544b874469226900a696f8976bb9b701306fb8f1b38e47cd66b6f316ec6"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -282,6 +358,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

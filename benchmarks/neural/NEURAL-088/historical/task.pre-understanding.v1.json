@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-088",
+  "track": "neural",
+  "title": "Functional similarity and measured synaptic anatomy",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N050"
+    ],
+    "titles": [
+      "MICrONS functional recordings with connectomic correspondence"
+    ],
+    "overlap_groups": [
+      "microns-functional-connectomics"
+    ],
+    "task_family": "structure_function"
+  },
+  "scientific_question": "Does functional response similarity improve prediction of a declared anatomical measure—synapse count, conversion rate or cleft volume—after prespecified geometry/type/quality controls?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Signed held-out structural-outcome contrasts with neuron/spatial dependence; distinguish somatic distance from axon–dendrite co-travel opportunity and make no causal/physiological-strength claim."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/000402",
+      "https://doi.org/10.1038/s41586-025-08790-w",
+      "https://github.com/cajal/microns_phase3_nda",
+      "https://github.com/cajal/microns-nda-access"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N050",
+        "ledger": "catalog/datasets_nonfmri_noneeg.json",
+        "record_sha256": "2652147e411dc29c0bd1f2c7a8ffb5c1ec2377e67a8548a566f248882c65a516",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: calcium response features and verified neuron correspondence to EM connectivity tables; anatomy-only data cannot satisfy this neural-input task.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "one mouse; recording blocks and neurons nested within mouse",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/cajal/microns_phase3_nda",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned functional-access/mapping and historical synapse-query tools plus the scientific wiring-analysis source. The latter requires an unresolved empirical edge-table route; saved results are not neural inputs or a predictive reference.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1038/s41586-025-08790-w",
+    "data_url": "https://dandiarchive.org/dandiset/000402"
+  },
+  "controls": [
+    "Distance/type matching",
+    "endpoint dependence",
+    "reconstruction quality",
+    "response-shuffle within matched groups."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed held-out connectivity-loss gain and neuron/spatial-block uncertainty.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Freeze one connectivity endpoint and mapped-cell eligibility; distinguish functional recordings from anatomy-only subsets."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "One mouse, approximately 75,000 functionally recorded neurons. Functional archive predates 2025 paper; new annotation releases are not new animals. Anatomy-only subsets are not counted. Source audit only; not execution-qualified."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-N050",
+      "construction_gates": [
+        {
+          "gate": "published functional manifest and source pins",
+          "status": "closed_metadata_scope"
+        },
+        {
+          "gate": "live version-consistent CAVE/mapping/synapse access and export license",
+          "status": "unresolved"
+        },
+        {
+          "gate": "bounded real neural+structural input bridge",
+          "status": "unresolved",
+          "reason": "Full functional DB incompatible with10GB target; edge_data input route unresolved; no partial packet acquired"
+        },
+        {
+          "gate": "actual NWB headers, timing, masks and join parity",
+          "status": "not_tested"
+        },
+        {
+          "gate": "eligible negatives and structural outcome semantics",
+          "status": "requires_prespecified_rule"
+        },
+        {
+          "gate": "train-only features and grouped confirmation split",
+          "status": "proposal_only"
+        },
+        {
+          "gate": "independent reference, alternative valid methods, nuisance/leakage tests",
+          "status": "not_run"
+        },
+        {
+          "gate": "agent difficulty/scientific qualification",
+          "status": "not_run"
+        }
+      ]
+    }
+  ],
+  "next_implementation_action": [
+    "A separate BossDB v1 pickle route matches the older paper code; the later Feather route remains unresolved. Raw-neural tasks still need a version-consistent structural/functional bridge and eligible pair universe; cleft volume is not physiological strength."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "reason": "The available outcomes are anatomical measures, not physiological synaptic efficacy.",
+    "remaining_gates": [
+      "Choose one anatomical outcome and estimand before analysis.",
+      "Freeze the mapping and selected cohort; disclose unblinded functional selection.",
+      "Verify the neural-input and target-table bridge; retain one-animal limits."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/microns-v1/audit.md",
+        "sha256": "95fc9183e3b9088092336d4eee5ecb09f1e6427bc3468b9020f8c1a8b9a05fa8"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-N050",
+      "name": "MICrONS",
+      "assignment_ids": [
+        "NEURAL-087",
+        "NEURAL-088"
+      ],
+      "checked_on": "2026-10-30",
+      "audit_path": "authoring/neural-source-audits/microns-v1/audit.json",
+      "narrative_path": "authoring/neural-source-audits/microns-v1/audit.md",
+      "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "construction_implication": "A separate BossDB v1 pickle route matches the older paper code; the later Feather route remains unresolved. Raw-neural tasks still need a version-consistent structural/functional bridge and eligible pair universe; cleft volume is not physiological strength.",
+      "remaining_gates": [
+        {
+          "gate": "published functional manifest and source pins",
+          "status": "closed_metadata_scope"
+        },
+        {
+          "gate": "live version-consistent CAVE/mapping/synapse access and export license",
+          "status": "unresolved"
+        },
+        {
+          "gate": "bounded real neural+structural input bridge",
+          "status": "unresolved",
+          "reason": "Full functional DB incompatible with10GB target; edge_data input route unresolved; no partial packet acquired"
+        },
+        {
+          "gate": "actual NWB headers, timing, masks and join parity",
+          "status": "not_tested"
+        },
+        {
+          "gate": "eligible negatives and structural outcome semantics",
+          "status": "requires_prespecified_rule"
+        },
+        {
+          "gate": "train-only features and grouped confirmation split",
+          "status": "proposal_only"
+        },
+        {
+          "gate": "independent reference, alternative valid methods, nuisance/leakage tests",
+          "status": "not_run"
+        },
+        {
+          "gate": "agent difficulty/scientific qualification",
+          "status": "not_run"
+        }
+      ],
+      "explicit_response_body_bytes": 1283261,
+      "request_attempts": 34,
+      "request_wall_seconds_sum": 15.51566708291648,
+      "independent_source_cap_bytes": 2000000,
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false,
+      "route_reconciliation": {
+        "path": "authoring/paper-construction-audit/microns-route-reconciliation.json",
+        "paper_id": "PAPER-FIND-020",
+        "conclusion": "Same paper and repository, different pinned source formats. The independently documented BossDB v1 pickle route matches the older inspected code. Missing edge_data.feather in the later inspected tree is an unresolved route for that revision, not evidence that all inputs for the paper are unavailable.",
+        "pickle_source_commit": "bc9302a21443453b1f39819676f2388e91bd43a3",
+        "feather_source_commit": "9005c2d9e8742a5853be90fb07d5f7dbc4a29433",
+        "observed_pickle_head_bytes": 496146118,
+        "payload_checksum_or_schema_qualified": false,
+        "raw_neural_input_bridge_qualified": false,
+        "original_audit_and_gates_preserved": true,
+        "remaining_route_gates": [
+          "Acquire only exact approved pickle objects in a bounded isolated intake, verify payload hashes and safe serialization handling; HEAD lengths and multipart ETags are not content SHA256s.",
+          "Verify actual dataframe columns, types, node/edge IDs, selection/quality labels and required feature coverage against the pinned source.",
+          "Resolve which code release and preprocessing correspond to the published result; do not assume pickle and Feather schemas or values are equivalent.",
+          "Check source-table-specific rights before redistribution; MIT code does not establish every input component license.",
+          "Prespecify measured versus in-silico analyses, graph/spatial dependence and single-animal inference; a processed-data reference cannot qualify raw-neural or causal claims."
+        ]
+      }
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "6bdc0b4a2d74d7eeaab3e6f846f6cddcccbf48987f160a4557b94f3292ff7749",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
+        "bytes": 82580,
+        "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
+      },
+      {
+        "path": "authoring/neural-source-audits/microns-v1/audit.json",
+        "bytes": 12182,
+        "sha256": "1c80a29a896774a4431f384cbb212aae058f4e1ed02410ca6fa973bb4181771d"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

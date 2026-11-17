@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-094",
+  "track": "neural",
+  "title": "Decision correlates beyond movement",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N061"
+    ],
+    "titles": [
+      "Steinmetz 2019 distributed decision-making recordings"
+    ],
+    "overlap_groups": [
+      "steinmetz-2019"
+    ],
+    "task_family": "decision_readout"
+  },
+  "scientific_question": "Which choice-related neural effects remain after stimulus strength and measured movements are controlled?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Region-wise conditional choice-prediction contrasts over the same trials and matched unit budgets, with mouse-level uncertainty and a declared per-session/alignment policy."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://doi.org/10.6084/m9.figshare.9598406",
+      "https://www.nature.com/articles/s41586-019-1787-x",
+      "https://github.com/nsteinme/steinmetz-et-al-2019"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N061",
+        "ledger": "catalog/datasets_nonfmri_noneeg.json",
+        "record_sha256": "f15620958b12993307a9141ca2c63ec560c33d9937f83ce814ce2ac2bae04e8b",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: spike times, stimulus contrasts, wheel/movement and choices from the independent Steinmetz study; causal window metadata requires audit.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "mouse; recording sessions nested",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/nsteinme/steinmetz-et-al-2019",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned ALF loader and conditional-choice statistic with actual selected headers/labels. The broader reduced-rank pipeline has external/lab-local dependencies and is not turnkey.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41586-019-1787-x",
+    "data_url": "https://doi.org/10.6084/m9.figshare.9598406"
+  },
+  "controls": [
+    "Joint stimulus, measured-movement and history comparator.",
+    "Verified initial-wheel versus final-choice definitions.",
+    "Equal unit budgets and sensitivity to unmeasured movement and temporal windows.",
+    "No causal necessity claim."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed held-out choice-loss improvement over joint sensory/movement baseline.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Audit complete nuisance streams and their timing; shared task with IBL is a family replication, not independent target discovery."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Distinct source study from IBL Brain-Wide Map despite related task and investigators; animal/session metadata still need exact overlap audit. Source audit only; not execution-qualified."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-N061",
+      "construction_gates": [
+        "Acquire selected session arrays and verify spike sorting/index bases, interval coverage and anatomy joins",
+        "Validate sparse wheel timestamp interpolation, movement onset and eye/face alignment before defining premovement windows",
+        "Choose an execution strategy for independent minimal analysis versus adapted author pipeline; missing external lab helpers are not a mere filename repair",
+        "Define cross-animal evaluation with non-corresponding recorded units: aggregate participant-level effects or explicitly specify permitted per-session fitting/alignment",
+        "Freeze history/stimulus/movement controls, unit-count budgets and regional support; no causal regional conclusions or executed performance claims"
+      ]
+    }
+  ],
+  "next_implementation_action": [
+    "Audit complete nuisance streams and their timing; shared task with IBL is a family replication, not independent target discovery."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "keep",
+    "reason": "Conditional choice analysis is appropriate with explicit movement and unit-fitting limits; its existing noncausal scope is sound.",
+    "remaining_gates": [
+      "Verify timestamp, anatomy and choice joins.",
+      "Choose per-session fitting versus a separately defined held-out-mouse transfer task.",
+      "Do not assume the lab-local reduced-rank pipeline is turnkey."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/DISCOVERY_AUDIT_FOUR.md",
+        "sha256": "0f72b37b9423a32e28cfade15961dfc8f6cdfcc6174bf02617aa83980b38c289"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-N061",
+      "name": "Steinmetz et al. 2019",
+      "assignment_ids": [
+        "NEURAL-093",
+        "NEURAL-094"
+      ],
+      "checked_on": "2026-10-29",
+      "audit_path": "docs/neuroscience-benchmarks/build/discovery_audit_four.json",
+      "narrative_path": "docs/neuroscience-benchmarks/build/DISCOVERY_AUDIT_FOUR.md",
+      "audit_scope": "Author-linked archive versions, complete ONE file inventory, one session of actual NPY headers and tiny label/QC arrays verified. Neural sample loading and complete author analysis remain unexecuted.",
+      "remaining_gates": [
+        "Acquire selected session arrays and verify spike sorting/index bases, interval coverage and anatomy joins",
+        "Validate sparse wheel timestamp interpolation, movement onset and eye/face alignment before defining premovement windows",
+        "Choose an execution strategy for independent minimal analysis versus adapted author pipeline; missing external lab helpers are not a mere filename repair",
+        "Define cross-animal evaluation with non-corresponding recorded units: aggregate participant-level effects or explicitly specify permitted per-session fitting/alignment",
+        "Freeze history/stimulus/movement controls, unit-count budgets and regional support; no causal regional conclusions or executed performance claims"
+      ],
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "bcae59c0a315d0b399569f18d36b46934ef0ee8c401629aba9aa105040b01971",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
+        "bytes": 82580,
+        "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/discovery_audit_four.json",
+        "bytes": 52985,
+        "sha256": "14a31537248b3013a3a6587df2986f7bb28e8e95358d78b0aab6f169fad54b4f"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

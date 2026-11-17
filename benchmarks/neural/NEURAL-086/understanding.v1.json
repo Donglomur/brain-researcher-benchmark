@@ -1,0 +1,344 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-086",
+  "title": "EEG reading effects beyond fixation and words",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Installed source implements a meaningful complete-panel prediction/investigation design, but original-source joins, matched-item support, native operators and execution/isolation remain unqualified. Current task is source-condition inference; fixed chronology leaves causal reading-demand interpretation unidentified.",
+  "scientific_target": {
+    "question": "What signed held-out condition-prediction difference does adding EEG produce for the independently frozen covariate procedure on paired first-fixation word support, and what explanations survive the documented controls?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "A reproducible finite-panel quantity D_R = log_loss(R_COVARIATES) - log_loss(R_PLUS_EEG), with its complete person/item matrix, support, uncertainty and limitations. Its sign is not presupposed and no published narrative supplies the answer.",
+    "answer_origin": "Original source-condition provenance joined to all 36 original MAT containers. Numeric contrast answers must be recomputed by the protected scorer from captured predictions; labels and joins are not included in the public source package.",
+    "case_unit": "Paired original word position and fixation-window context nested in exact sentence and person; an investigation covers the complete panel.",
+    "independent_unit": "18 source participants; shared sentence items are crossed dependencies, while words, repeats, folds and files are not additional people.",
+    "inference_scope": "Finite observed source-condition prediction. Fixed block order, common sentence order, concurrent task instructions and source-wide preprocessing prevent causal reading-demand or pure neural-origin interpretation even after text/gaze adjustment.",
+    "exclusions": [
+      "Causal effect of reading demand from the fixed-order observational condition contrast.",
+      "Raw EEG understanding from a released band-summary score.",
+      "Cross-subject independent replication from90 fold contexts or13302 presentations.",
+      "Improvement over current SOTA or human-level interpretation without a matched empirical study."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Condition-specific permitted EEG representation: released summaries, band-spatial values, cleaned waveforms or raw waveforms must be frozen separately; no representation interchange by name.",
+      "085 uses nine fixed information arms including text, gaze, EEG, nuisance masks and NTGE;086 uses COVARIATES, PLUS_EEG and a matched shuffled-EEG control.",
+      "Released N085 summary and band-spatial aliases both expose840 mean features; released N086 common covariates have46 columns and PLUS_EEG adds8 scalp band means. Other representations require an explicit different ABI."
+    ],
+    "forbidden_inputs": [
+      "Query NR/TSR labels; task-coded filenames, source blocks and administrative IDs in ranked candidate views.",
+      "Reference/query score feedback before all submissions are sealed; query-informed normalization, feature selection or regularization.",
+      "Raw/cleaned waveforms or metadata added only to one supposedly matched access-mode arm."
+    ],
+    "case_identity": "splits.token generates campaign-secret HMAC IDs from job identity, person, condition, source presentation index and word position. Exact public case IDs depend on a qualified original-source join and are not manufactured in this revision.",
+    "split": "Implemented source design leaves one of18 people and one of5 conservative text-group folds out jointly; training contains all 17 other people and excludes the query text group. Inner tuning is3 person-groups by3 text-groups and fits transforms on training only. These are source algorithms, not a completed authenticated split.",
+    "coverage": "Complete planned disposition of18 people,36 logical containers and13302 presentations; all contexts/arms/representations remain conditions. Primary J is the qualified exact shared-text set; paper63 duplicate obligations, legacy56 exact texts and58 occurrences are different counts that must be reconciled. No convenient matched subset replaces the full disposition census."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "N086_EVIDENCE_GROUNDED_INVESTIGATION",
+      "direction": "higher",
+      "aggregation": "Six independently adjudicated0–2 rubric dimensions divided by12, only after exact numerical recomputation and source/support admission. Primary scientific D_R averages repeats, conditions, paired word positions, items and18 people equally.",
+      "rationale": "Reward accurate estimand, numerical evidence, dependence, alternatives, null/support reasoning and reproducibility, regardless of whether EEG gain is positive, negative or unavailable; calibrated rubric remains unqualified."
+    },
+    "secondary": [
+      "Participant-macro balanced accuracy, Brier score, class calibration and all per-person/item losses.",
+      "Matched, full and condition-exclusive text strata; first/later repeat, duration and source-block diagnostics.",
+      "Fixed reference same-information performance and its EEG-augmentation contrast; candidate self-contrast stays descriptive.",
+      "FFD primary; TRT/GD/GPT/SFD context contrasts retained separately, with required-unscorable dispositions when unsupported."
+    ],
+    "comparators": [
+      {
+        "name": "R_LINEAR_NESTED_V1",
+        "inputs": "Exactly the selected candidate information arm and representation; training labels only.",
+        "procedure": "Implemented source: weighted ridge logistic regression; lambda grid .001,.01,.1,1,10,100 chosen by held-person/item inner folds with train-only encoder. No qualified fitted comparator result is supplied."
+      },
+      {
+        "name": "R_NONLINEAR_V1 or waveform temporal reference",
+        "inputs": "Same selected representation and training/query observations.",
+        "procedure": "Source supplies fixed histogram gradient-boosting companion for summaries and requires temporal-convolution reference for waveforms; dependencies, data and native qualification remain unresolved."
+      },
+      {
+        "name": "Independent nuisance and EEG-alignment controls",
+        "inputs": "Text/gaze and identical availability masks; duration/count, ocular channels and protected shuffled EEG where source-qualified.",
+        "procedure": "Source declares independent fixed controls. Source block/chronology is a trusted identifiability diagnostic only, not candidate input. A candidate cannot select a favorable control after scoring."
+      }
+    ],
+    "nuisance_controls": [
+      "Hold exact/conservative text groups across people and repeated presentations together; report exclusive-text scope separately.",
+      "Keep missingness/support features identical between EEG-added and covariate arms; test masks and duration/count alone.",
+      "Retain gaze/EOG, task-screen and chronology explanations; fixed chronology saturates source condition and is structurally unresolved.",
+      "Use training-only preprocessing; document source-native task-wide cleaning as an exposure limitation.",
+      "Audit ZuCo1/ZuCo2 and checkpoint training overlap before any unseen-data claim."
+    ],
+    "uncertainty": "Source computes1000 crossed person/item resamples (seed 194086) of fixed paired predictions; no model refitting or population coverage claim. Report all 18 person values and item support, not word-level pseudoreplication.",
+    "failure_policy": "Reject missing/extra/duplicate IDs, nonfinite or outside[0,1] probabilities and misbound evidence. Preserve all source dispositions. Missing required matched cells yield null primary with reasons; unsupported contexts are not replaced by zero or dropped to create a favorable contrast."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-086/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-086/implementations/registered-runtime/score.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/README.md",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/SCIENTIFIC_CONTRACT.json",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/SCOPE.json",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/PUBLIC_SOURCE_PROVENANCE.json",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/scoring.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/metrics.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/splits.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/constants.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/reference.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/reference_plan.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/investigation.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/engine.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/programme.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/run_program.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/campaign_worker.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/process.py",
+      "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/oci.py"
+    ],
+    "scorer_target": "Source scoring.py recomputes fixed/candidate paired predictive contrasts; investigation.py checks numerical equality and traceable claims, then requires independently sourced calibrated ratings. Positive EEG gain is never required.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Callable source and task scoring bridge exist for the full planned programme. Shared README explicitly supplies no authentic inputs, fitted states, scientific results or qualifying runtime receipts.28 gates remain unresolved, including chronology identifiability. The two mode labels share the fixed FIT/INFER controller; the case_adaptive label is not an implemented interactive investigator.",
+    "missing": [
+      "Authenticate original36 containers and complete source-event/ABI/text-overlap joins; reconcile all duplicate-text obligations.",
+      "Qualify each selected native operator, complete-case coverage and same-information fixed reference.",
+      "Exercise real isolation and label custody with authentic inputs before claiming a usable study.",
+      "Qualify independent blind raters and rubric calibration; source cannot manufacture a valid investigation ranking."
+    ],
+    "execution_evidence": "This revision inspected source only. Package metadata retains unqualified execution and no new model or human outcome; code presence is not a successful programme run."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A frozen sentence EEG/gaze observation or fixed evidence panel could support direct responses; existing programme arrays and downstream analysis are not a no-tools presentation.",
+      "boundary": "A future no-tools condition must fix representation and context, match query support, disclose demonstrations and withhold source-condition metadata.",
+      "evidence_ids": [
+        "source_status"
+      ],
+      "missing": [
+        "No direct observation transport, complete response collection or matched empirical condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential EEG waveform/band-topography plus permitted gaze views for each case; no typed renderer is shipped for this task.",
+      "boundary": "Rendering must preserve declared information support and suppress task labels, raw-file identifiers and unrestricted array return.",
+      "evidence_ids": [
+        "source_status"
+      ],
+      "missing": [
+        "No task-specific typed actions, rendering provenance or isolated participant transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The source accepts a case_adaptive label and frozen bundled offline code, but executes the same FIT → immutable state → single INFER process chain. It does not deliver a separate interactive investigator or model/tool action loop.",
+      "boundary": "The current code may perform calculations inside a precommitted participant programme. That execution is counted as frozen-programme support; a future tool-assisted condition must define an actual adaptive actor, matching observations/tools/budget and case resets without evaluator feedback.",
+      "evidence_ids": [
+        "actor_engine",
+        "actor_policy",
+        "actor_oci"
+      ],
+      "missing": [
+        "No distinct adaptive actor/controller or model/tool request-response protocol is implemented.",
+        "Authentic source preparation, fixed-tool comparisons and execution/isolation qualification remain unresolved."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Concrete entry and campaign driver launch a captured FIT process, freeze its output state, then launch a single INFER process on the held-person/held-item case. Candidate code and bundled offline numerical tools are precommitted.",
+      "boundary": "Programme frozen before views; all selected cases/arms complete, training-only fitting and protected targets opened after global submission admission.",
+      "evidence_ids": [
+        "programme_entry",
+        "campaign_driver",
+        "actor_engine",
+        "actor_process",
+        "actor_oci"
+      ],
+      "missing": [
+        "Complete authenticated input/operator/runtime qualification and real fixed-reference runs."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-086/historical/task.pre-understanding.v1.json",
+      "sha256": "58d8894b307b187122059bb99f8f0702865fede92272e67522c96dcd00d3ca51",
+      "supports": "Preserved original target, source audit conclusions and limits; this revision does not retroactively replace prior evidence."
+    },
+    {
+      "id": "scorer",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/scoring.py",
+      "sha256": "d4de6b7d7d8552b1491b62dfd9822e857751db2f9dd4eea6c30818e9020cfaed",
+      "supports": "Actual protected joins and task-specific primary-score routing; no result asserted."
+    },
+    {
+      "id": "metrics",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/metrics.py",
+      "sha256": "30a06338aff4cd73b724bb22576c646c36c579ed51f7417df06f8b686bfae56d",
+      "supports": "Complete person/item support, signed paired contrasts, fixed-prediction descriptive resampling and missing-support null semantics."
+    },
+    {
+      "id": "splits",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/splits.py",
+      "sha256": "7866726abf492ebff978d6249ec22a891edd3af7c57743b1542e1491169efcaa",
+      "supports": "Held-person and held-text-fold partitions; HMAC case IDs and complete training-person checks."
+    },
+    {
+      "id": "scope",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/SCOPE.json",
+      "sha256": "b639a3b580a9a43ddf33aef401d3a990e28526efef276ff6cf1d5c85160470b2",
+      "supports": "Declared 18-person/36-container/13302-presentation census and unresolved matched-item reconciliation."
+    },
+    {
+      "id": "reference",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/reference.py",
+      "sha256": "660e53b823576d799af294dee6426514caad494e9c7f3811f02dcc088f76f115",
+      "supports": "Fixed nested ridge logistic reference, nonlinear companion and train-only fitting design."
+    },
+    {
+      "id": "scientific",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/SCIENTIFIC_CONTRACT.json",
+      "sha256": "25a8bc6c28532c2f252d4a565eb3f22e29a046de0d1dd9f4d4d050b165282c37",
+      "supports": "Scientific estimands, controls, complete support and independent investigation rubric."
+    },
+    {
+      "id": "source_status",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/README.md",
+      "sha256": "d32fa8df829a46719a7a3fda7d284c1d19d40316835324ef650e603474d520fb",
+      "supports": "Source-only delivery; unqualified operators, all 28 gates unresolved, no data/results bundled."
+    },
+    {
+      "id": "zuco_paper",
+      "kind": "primary_source",
+      "url": "https://aclanthology.org/2020.lrec-1.18/",
+      "locator": "Dataset abstract and linked source paper",
+      "supports": "Simultaneous EEG and gaze for18 participants under natural and task-specific reading; 349 and 390 sentence presentations in source paradigms."
+    },
+    {
+      "id": "zuco_data",
+      "kind": "primary_source",
+      "url": "https://osf.io/2urht/",
+      "locator": "Original dataset route cited in source paper; reused registered provenance",
+      "supports": "Original ZuCo2 input source, kept distinct from later benchmark archives."
+    },
+    {
+      "id": "additional_source_0",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-086/implementations/registered-runtime/manifest.json",
+      "sha256": "992f9ba2a9096113b5b60f8fbf2f655ae945b1daaf0b031add6bb2172d090a9b",
+      "supports": "Historical registered source interfaces and explicitly unqualified execution metadata."
+    },
+    {
+      "id": "additional_source_1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-086/implementations/registered-runtime/score.py",
+      "sha256": "f2be6c43f792a8a5c5b39da7146cef1ca25f20c6e7b6d413e98c217263a205f6",
+      "supports": "Canonical task-specific protected scoring bridge and shared scorer pin."
+    },
+    {
+      "id": "additional_source_5",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/normative/PUBLIC_SOURCE_PROVENANCE.json",
+      "sha256": "6452a1c1ee3ff792c81ae27a50e8a575fe4381eb9f1078a7e7c8bb32e9917295",
+      "supports": "Published historical source attribution and distinction between unbundled snapshots and current source."
+    },
+    {
+      "id": "additional_source_9",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/constants.py",
+      "sha256": "3350545e506a2fd9b1c1326c2effca102792d053ba05cb51bcfe72ac4ddbf64e",
+      "supports": "Explicit source people, bands, representations, modes and information-arm dimensions."
+    },
+    {
+      "id": "additional_source_11",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/reference_plan.py",
+      "sha256": "3e0f78a74141667d466a0d1d0c2b86213100f27482f5078ab844b4dfd0b1802f",
+      "supports": "Fixed reference/control coordinate expansion for each frozen candidate job."
+    },
+    {
+      "id": "additional_source_12",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/investigation.py",
+      "sha256": "20942b331379bc15a40d7800f27ba1851a1d8fdbe00de74e5cb450f1a415b784",
+      "supports": "Executable analysis evidence identity, exact recomputation and independent calibrated rating requirements."
+    },
+    {
+      "id": "actor_engine",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/engine.py",
+      "sha256": "0f354f7ec4297796435fcc2fd085b20892ab43e2ae2433835963f92894f0600e",
+      "supports": "Concrete participant route: FIT subprocess, captured immutable state, then one INFER subprocess for the complete current case; mode string checked but no interactive actor/broker loop."
+    },
+    {
+      "id": "actor_policy",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/programme.py",
+      "sha256": "9fb0e85d5ddd57d36041b834d79ee37160679ceb66dbbda6cfb7152d2e099541",
+      "supports": "Participant source closure and method policy admission; tools limited to bundled offline code and network none, not an implemented adaptive investigator."
+    },
+    {
+      "id": "programme_entry",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/run_program.py",
+      "sha256": "7c6a495521ceead0aa79db969a00f9275f439b1bf9b0d24c6c97907d778e69a5",
+      "supports": "Executable reviewed selection entry invokes the trusted campaign worker through captured process ownership."
+    },
+    {
+      "id": "campaign_driver",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/campaign_worker.py",
+      "sha256": "0ec72163a1ff315ee8cad02f8da9f6d2169e4e8978d4a5c8fa00a41a10e48e75",
+      "supports": "Concrete driver constructs Engine and schedules complete participant/reference FIT/INFER chains."
+    },
+    {
+      "id": "actor_process",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/process.py",
+      "sha256": "cb1caa8751b59e936856bf31dae7ba1c1d06fc8960f3d04f513fba0e247318a2",
+      "supports": "Bounded subprocess execution and complete request/output capture."
+    },
+    {
+      "id": "actor_oci",
+      "kind": "local_source",
+      "path": "benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1/zuco/oci.py",
+      "sha256": "b75ee94aebdde45cb315523a03cf72c21178a84cff6bd081aa6dcb6f509b0e91",
+      "supports": "Concrete prospective OCI launch mounts candidate/view/state and invokes the pinned participant entry; authentic isolation qualification remains separate."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model outcome is established by the inspected source. This revision reads public source and metadata only; programme, direct-observation and viewer performance remain distinct.",
+    "excluded_claims": [
+      "Causal effect of reading demand from the fixed-order observational condition contrast.",
+      "Raw EEG understanding from a released band-summary score.",
+      "Cross-subject independent replication from90 fold contexts or13302 presentations.",
+      "Improvement over current SOTA or human-level interpretation without a matched empirical study."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind current task to actual protected ZuCo scoring semantics instead of the obsolete not-implemented entry.",
+      "Separate exact source-condition inference from causal demand or neural-origin claims under fixed chronology.",
+      "Make full presentation disposition and unresolved matched-item reconciliation explicit; programme conditions do not multiply benchmark count.",
+      "Separate direct/viewer delivery gaps from actual case-adaptive/frozen source.",
+      "Preserve sign-neutral investigation reward and independent rubric qualification; a positive self-controlled gain is not the target.",
+      "Strict actor audit: downgrade tool-assisted delivery because the shared mode-labelled FIT/INFER lifecycle has no adaptive actor loop; pin actual executable frozen-programme route."
+    ],
+    "source_review": "Original registration, installed source and primary source references reviewed; no authentic input or private target read."
+  }
+}

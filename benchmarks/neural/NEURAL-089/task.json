@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-089",
   "track": "neural",
-  "title": "Phoneme decoding from listening MEG",
+  "title": "Event-aligned phoneme classification in the original LibriBrain participant",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "speech_perception"
   },
-  "scientific_question": "Can MEG phoneme classification generalize to held-out narrative recordings within the original LibriBrain2025 participant under a frozen recording split?",
+  "scientific_question": "Can a precommitted decoder infer the 39-class phoneme label from complete event-aligned MEG windows in the original held recording, beyond class-prior and altered-signal controls?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Phoneme probabilities on organizer-defined event windows."
+    "Original annotated phoneme identity in the fixed 39-class vocabulary for each eligible held-recording event."
   ],
   "input_assets": {
     "routes": [
@@ -47,17 +47,25 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: listening MEG plus phoneme/transcript annotations from one frozen LibriBrain edition; exact event schema/participant mapping pending.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "All 306 channels in verified source order, 250 Hz; 125 samples beginning at int(timemeg*250), corresponding to 0–0.5 seconds after a supplied event onset.",
+      "Pooled population channel moments fitted on continuous samples from all 88 training recordings; normalized float32 windows clipped to ±10.",
+      "Labeled training observations; development labels for method selection only, not estimator or normalizer fitting."
+    ],
+    "forbidden_inputs": [
+      "Query phoneme labels; original source_rows provenance carrying query truth; source/run identity and target-derived event fields in query views.",
+      "Transcript/audio or public-label lookup during protected MEG inference; these are not the declared query observation.",
+      "Cross-query mutable state and target-batch normalization."
+    ],
+    "case_identity": "Source manifest freezes all 90 run keys; validation 0/11/Sherlock1/2 and query 0/12/Sherlock1/2. Runtime uses 24-hex opaque query IDs. Actual Q is derived from complete authentic preparation, not the historical example count 6862.",
+    "split": "Delivered source preserves exact native 88 training/1 development/1 query recordings. Sessions, chapters and repeated narratives may overlap across partitions. A new story-family split would be a separately named adapted condition requiring new membership and guards.",
+    "coverage": "All eligible source events in all 90 runs, all 306 channels and 125 samples are required; no missing-run or shortened-window subset. Candidate and independent reference each complete MEG, ZERO_MEG, PERMUTED_LABELS and PRIOR on every Q query, with 6Q+8 total native phases."
   },
-  "biological_unit": "Original 2025 phoneme build: one participant, with recording/story blocks as uncertainty units; phonemes are not independent people.",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "One participant; native query is one recording, with overlapping windows and shared narrative material.",
+  "case_definition": "One complete 306-channel by 125-sample event window; opaque query IDs join private annotations.",
   "split": {
-    "policy": "Initial contract: within the original 2025 participant, hold out complete narrative recordings under a pinned manifest. Group repeated passages and overlapping story/chapter families across recordings before fixing train/development/evaluation membership, and apply temporal guards covering the complete signal-window, filtering and feature-context support. Fit normalization and select models on permitted training/development recordings only. Freeze the native-versus-adapted split distinction if story grouping changes organizer membership. Report recording/story-block uncertainty; no cross-person generalization claim. Verify actual narrative overlap before calling this unseen-story transfer.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Delivered source preserves exact native 88 training/1 development/1 query recordings. Sessions, chapters and repeated narratives may overlap across partitions. A new story-family split would be a separately named adapted condition requiring new membership and guards.",
+    "coverage": "All eligible source events in all 90 runs, all 306 channels and 125 samples are required; no missing-run or shortened-window subset. Candidate and independent reference each complete MEG, ZERO_MEG, PERMUTED_LABELS and PRIOR on every Q query, with 6Q+8 total native phases."
   },
   "reference": {
     "source_code_url": "https://github.com/neural-processing-lab/pnpl",
@@ -69,38 +77,105 @@
     "data_url": "https://neural-processing-lab.github.io/2025-libribrain-competition/editions/2026/"
   },
   "controls": [
-    "Transcript/acoustic timing priors, with their access and pretrained-text exposure declared.",
-    "No phoneme target labels or target-derived event fields in the query.",
-    "Whole-recording partitions with repeated-passage/story-family grouping and signal/context guard bands.",
-    "Within-person recording/story-block uncertainty; the original 2025 participant supplies no across-person replication."
+    "Privileged event onsets and overlapping 0–0.5-second windows are explicit assistance.",
+    "Train-only normalization; development labels cannot fit transforms.",
+    "Narrative/session overlap and historically public source labels limit contamination and transfer claims.",
+    "Keep source/native split distinct from any future chapter-family grouping."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A complete event-aligned multichannel numerical window could define direct classification, but no direct presentation/answer harness is supplied.",
+      "boundary": "Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded.",
+      "evidence_ids": [
+        "prepare",
+        "score"
+      ],
+      "missing": [
+        "No bounded direct-response representation, participant transport or complete response collection is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme.",
+      "boundary": "No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata.",
+      "evidence_ids": [
+        "prepare",
+        "score"
+      ],
+      "missing": [
+        "No typed viewer or viewer-model evaluation for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A future per-event investigator could use the same 306x125 observation and a frozen decoder tool.",
+      "boundary": "Equal calibration and tool budget, case-state reset and no private feedback must be specified; current pointwise executable inference is not an adaptive investigator.",
+      "evidence_ids": [
+        "design"
+      ],
+      "missing": [
+        "No separately implemented case-adaptive investigator and matched tool ablations."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Full 90 fit/seal/pointwise-inference programme with four matched arms and independent reference.",
+      "boundary": "Source frozen before numerical exposure; models sealed before query; complete candidate/reference closures precede target access.",
+      "evidence_ids": [
+        "frozen_controller",
+        "frozen_transport"
+      ],
+      "missing": [
+        "Authentic preparation and execution qualification; measured complete-panel feasibility."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Fixed 39-class macro-F1 with opaque-ID joins, finite probability checks and a declared absent-class policy; retain source accuracy separately. Do not inherit 2026 top-10 balanced accuracy for 50 words.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "macro_f1_39",
+      "direction": "higher",
+      "aggregation": "All query predictions form a 39-class confusion matrix; F1 is averaged across all 39 classes including zero F1 for absent classes. Lowest class index wins argmax ties.",
+      "rationale": "Preserves the implemented class-balanced phoneme-label endpoint without replacing it with 2026 word accuracy."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Accuracy; fixed 39 precision/recall; per-class support and full confusion matrix.",
+      "Report MEG minus each altered-signal/prior arm and candidate minus independent reference separately; no combined reward.",
+      "Probability log loss/calibration is a useful prospective secondary metric but is not implemented by this scorer."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Fixed five-pass linear reference",
+        "inputs": "Five 25-sample means per each 306 channels (1530 features); training observations only.",
+        "procedure": "Implemented prospective StandardScaler plus SGDClassifier(log_loss, L2, alpha=1e-4, random_state=89), five passes, batch 128, fixed row order; not the author CNN and not empirically qualified."
+      },
+      {
+        "name": "Matched zero-input and label-permutation controls",
+        "inputs": "Same full query IDs; normalized zero windows reuse the sealed MEG model; within-run permuted training/development labels use a fresh model.",
+        "procedure": "Both candidate/reference complete each arm. Zero is a training-mean contrast; permutation is one fixed descriptive control, not a permutation significance test."
+      },
+      {
+        "name": "Labels-only prior",
+        "inputs": "Aggregated training class counts only, no query count/identity/timing.",
+        "procedure": "Independent reference emits Laplace-smoothed prior; trusted assembler broadcasts one probability vector over fullQ."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Privileged event onsets and overlapping 0–0.5-second windows are explicit assistance.",
+      "Train-only normalization; development labels cannot fit transforms.",
+      "Narrative/session overlap and historically public source labels limit contamination and transfer claims.",
+      "Keep source/native split distinct from any future chapter-family grouping."
+    ],
+    "uncertainty": "One query recording from one participant does not support independent-recording or participant-level confidence intervals. Retain exact finite-panel class distributions; phoneme windows are dependent.",
+    "failure_policy": "Reject nonfinite, boolean, negative, non-simplex or probability vectors without exactly 39 entries and missing/extra/duplicate IDs before private targets. Unknown source labels/short windows fail full preparation. Incomplete panels remain unscored with all failure dispositions.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "86d01f47eb92e13ef8fbf3ab192095f960084e1b643168f786df0c035437ca8c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "bf44ebc628b2f87d612b45db4f4da2e86a3c6ec71e188ae3bfb2275712fe1bf1"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -285,6 +360,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

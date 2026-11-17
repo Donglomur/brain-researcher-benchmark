@@ -16,11 +16,11 @@
     ],
     "task_family": "conscious_perception"
   },
-  "scientific_question": "In a fixed experiment1 modality and eligible participant set, do predeclared sustained-versus-transient content predictions survive stimulus-duration, offset, task-relevance and report controls?",
+  "scientific_question": "Can a bounded investigation correctly estimate and interpret all prespecified sustained-versus-transient category-information contrasts on the fixed COGITATE experiment1 MEG panel, retaining duration/offset and task-relevance alternatives?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Signed temporal-content contrasts for specified operational predictions with multiplicity and sensitivity context; not a verdict on an entire consciousness theory or experiment2 seen/unseen perception."
+    "The independently recomputed orientation-balanced accuracy cells and signed temporal contrasts under one fixed crossvalidated estimator. A positive sustained-content effect is not a known answer."
   ],
   "input_assets": {
     "routes": [
@@ -48,17 +48,25 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: one recording-bearing COGITATE experiment/modality plus content, duration, relevance/report labels; site/person linkage pending.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "All eligible face/object trials for the declared33people, three durations500/1000/1500ms, two relevance conditions and three orientations; labels are observed analysis inputs here.",
+      "Six fixed good magnetometers in original author epochs; no additional filtering/smoothing/resampling. Baseline[-0.5,-0.3)s; six-sensor means over fixed200-ms pre/onset/middle/late/post windows.",
+      "Task instructions and helper schemas inA; same observations plus original author-source evidence inB."
+    ],
+    "forbidden_inputs": [
+      "Independent benchmark reference report, private fitted states or grading feedback.",
+      "A labeled NEURAL-098 packet before a claimed unexposed NEURAL-097 evaluation on this source family.",
+      "Query-person/physical-image fitting, label-aware test pseudotrials or imputation of structurally unavailable late windows."
+    ],
+    "case_identity": "Participant keys come from the exact external COHORT.json; all42cell and24contrast keys are fixed by public/protocol.py. Actual complete admitted observation inventory remains unavailable in the public source projection.",
+    "split": "For each held participant×image half, train only1500-ms trials of the other32participants and opposite image identities; all repetitions/orientations of an image stay together. Each query is used once across image halves. This internal analysis split does not hide the observed labels from the investigator.",
+    "coverage": "33people,66outerfolds, five training windows/330fits,1386accuracy cells and792contrasts; every relevance/duration/orientation support cell must exist. A/B andF/I conditions are within this one task. Central runtime remains source_only_inactive."
   },
-  "biological_unit": "participant and acquisition site; modality cohorts must be mapped rather than presumed identical",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Participant in one selected SA-prefix phase3/V1 duration-task cohort; trial/image repetitions and overlapping training fits are dependent.",
+  "case_definition": "Complete33-participant analysis with42accuracy cells and24contrasts per participant; cells are report entries, not independent cases.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "For each held participant×image half, train only1500-ms trials of the other32participants and opposite image identities; all repetitions/orientations of an image stay together. Each query is used once across image halves. This internal analysis split does not hide the observed labels from the investigator.",
+    "coverage": "33people,66outerfolds, five training windows/330fits,1386accuracy cells and792contrasts; every relevance/duration/orientation support cell must exist. A/B andF/I conditions are within this one task. Central runtime remains source_only_inactive."
   },
   "reference": {
     "source_code_url": "https://github.com/Cogitate-consortium/cogitate-msp1",
@@ -70,38 +78,100 @@
     "data_url": "https://www.arc-cogitate.com/data-bundles"
   },
   "controls": [
-    "Fixed windows before outcomes",
-    "duration matching",
-    "report/motor controls",
-    "transparent null/inconclusive outcomes."
+    "Remove recorded response/button trials over the full stated interval; verify actual stimulus offset within1.01raw samples and no subsequent-stimulus intrusion.",
+    "Keep structural NaNs for nonexistent short/medium late windows; do not turn them into classifier features.",
+    "Distinguish diagonal decodability from onset-to-later transfer; retain duration and relevance interactions.",
+    "Report source preprocessing/ICA/filter history and the risk of retrospective motor or temporal leakage."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "Complete33-person crossvalidated numerical analysis cannot be reduced to a single observation answer without changing this fixed reconstruction endpoint.",
+      "boundary": "A future direct interpretation of supplied summaries would be a separately named condition with its own answer contract.",
+      "evidence_ids": [],
+      "missing": [
+        "No direct endpoint exists; do not relabel programme MAE as direct understanding."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential temporal-accuracy/contrast inspection after an authenticated analysis; no typed viewer delivered.",
+      "boundary": "Plot views must disclose estimator and support, and cannot replace the raw-analysis reconstruction comparison.",
+      "evidence_ids": [],
+      "missing": [
+        "Viewer implementation and independently scored interpretation claims."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The I-labelled source exposes the complete observed packet during external-agent programme authoring, then seals and replays one programme. It does not supply a participant investigator actor, a numerical-tool interaction loop or per-case investigation.",
+      "boundary": "workflow.py invokes a separately provided agent_command/model harness and later executes analysis.json reconstruction without model feedback. Full-packet authoring access must not be described as an isolated case-adaptive condition.",
+      "evidence_ids": [
+        "mode_audit_workflow",
+        "mode_audit_views",
+        "mode_audit_broker"
+      ],
+      "missing": [
+        "Actual investigator actor/tool protocol and an explicit whole-cohort versus per-case investigation definition.",
+        "Genuine external model-harness producers, native qualification and empirical equal-arm comparison."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F-labelled source seals an analysis programme before evaluation-packet exposure and replays it on the full packet to produce analysis.json; actual authoring harness is separately supplied.",
+      "boundary": "All33people and all report cells/contrasts required with same observed inputs asI.",
+      "evidence_ids": [
+        "analysis_source",
+        "runtime_manifest",
+        "mode_audit_workflow",
+        "mode_audit_views",
+        "mode_audit_process"
+      ],
+      "missing": [
+        "Native execution and independent complete reference qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed participant-level contrast with prespecified multiple-testing control and evidence agreement.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    "primary": {
+      "name": "Equal-participant mean absolute accuracy-cell reconstruction error (calibration endpoint)",
+      "direction": "lower",
+      "aggregation": "Average absolute error over42fixed cells within participant, then equally across33participants.",
+      "rationale": "This is what the delivered score.py implements. It measures faithful execution of the declared analysis, not scientific insight; an understanding claim additionally requires independently scored supported interpretations, which this artifact-only scorer does not establish."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Equal-participant mean absolute signed-contrast reconstruction error across24contrasts.",
+      "All24 signed means and participant SD/descriptive SE reported without significance selection.",
+      "Proposed interpretation endpoint: correct estimator/offset/relevance/support claims against independently computed evidence; current numeric scorer does not grade these claims."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Independent fixed logistic-analysis reference",
+        "inputs": "Same labeled six-sensor observations, physically separated training participant/images.",
+        "procedure": "Declared LogisticRegression(C=1,liblinear,tol=1e-8,max_iter=2000,random_state=98098); training-only scaling and participant×class×relevance×orientation weights; diagonal and onset-transfer predictions. Convergence failure withholds construction."
+      },
+      {
+        "name": "Pre-stimulus and offset-matched temporal comparisons",
+        "inputs": "Prespecified pre/onset/middle/late/post windows on the identical eligible panel.",
+        "procedure": "Retain fixed difference-in-differences for500vs1500ms middle and1000vs1500ms late, plus late−onset and post−late contrasts; no favorable sign selection or automatic baseline subtraction."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Remove recorded response/button trials over the full stated interval; verify actual stimulus offset within1.01raw samples and no subsequent-stimulus intrusion.",
+      "Keep structural NaNs for nonexistent short/medium late windows; do not turn them into classifier features.",
+      "Distinguish diagonal decodability from onset-to-later transfer; retain duration and relevance interactions.",
+      "Report source preprocessing/ICA/filter history and the risk of retrospective motor or temporal leakage."
+    ],
+    "uncertainty": "Participant SD and SD/sqrt33 are descriptive only. All24contrasts remain visible; calibrated inference and multiple-comparison treatment require separate empirical qualification. No fixed effect direction is rewarded.",
+    "failure_policy": "All33participants,42cells and24contrasts required; finite bounded cells and derived contrasts must agree within1e-12. Validate entire report before reference access. Missing support makes the fixed panel unavailable rather than silently reducing the cohort.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "eb676e958d32d3a774e5b635729a029d50720e993dbc05a5db90999ffbefde8c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "46ce8813ae22fbaf7e7ceaac43fd5418b36b29dcb78e4f0d6a0e8e4b052f19da"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -240,6 +310,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

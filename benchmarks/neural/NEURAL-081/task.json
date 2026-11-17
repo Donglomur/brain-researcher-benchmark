@@ -16,11 +16,11 @@
     ],
     "task_family": "music_imagery"
   },
-  "scientific_question": "Can EEG identify an imagined musical excerpt without concurrent audio input?",
+  "scientific_question": "Can a model infer the instructed excerpt class from a fixed no-concurrent-audio EEG window of an excluded participant, with performance beyond a matched zero-waveform control?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Excerpt probabilities for verified no-concurrent-audio imagery epochs with fixed-duration or explicitly duration-controlled windows, and no event-marker channel or excerpt-coded cue metadata."
+    "The instructed excerpt identifier in canonical class order[1,2,3,4,11,12,13,14,21,22,23,24]; it is not a verified report of the participant’s subjective melody content."
   ],
   "input_assets": {
     "routes": [
@@ -44,17 +44,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: EEG from music perception/imagery trials with excerpt/condition/timing labels; no actual audio or excerpt ID in imagery query.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Complete64-channel source-ordered windows after within-sample average reference and fixed four-sample averaging 512 Hz→128 Hz; no outside-window padding or fitted session preprocessing is added.",
+      "All permitted labeled training windows from other nine participants, opaque group aliases and four sealed reference states for the current fold/view. ZERO replaces all training/query waveforms with positive float32 zeros while retaining support and labels."
+    ],
+    "forbidden_inputs": [
+      "Held-person labeled calibration, other query windows or query batches, prior conversations, cross-query state, target correctness and grading feedback.",
+      "Source event timestamps/names, excerpt-coded cues, actual concurrent audio, unrestricted retrieval and model updates shared across episodes."
+    ],
+    "case_identity": "Canonical IDs privately bind source-event index/onset and participant; candidates receive opaque 32 hex row/group aliases and the exact 12 nonconsecutive class IDs. The complete trial census N is source-dependent and not fabricated here.",
+    "split": "Leave one participant out; train on the other nine. Every admitted condition 4 trial and all 12 classes per participant are required; current-query unlabeled transduction is allowed for candidates but fixed references remain inductive.",
+    "coverage": "Complete10-person support, two waveform views and three replications; all 12 N candidate closures and 240 complete assessment panels are required. Source preparation maps 105 exact prerequisites; N and authentic eligibility are not established by constructor success."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Ten biological participants; multiple excerpt/repetition trials are nested and LOPO training folds overlap.",
+  "case_definition": "Exactly one current EEG window [64,512], float32 volts at 128 Hz, representing four seconds beginning 0.5 s after source onset.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Leave one participant out; train on the other nine. Every admitted condition 4 trial and all 12 classes per participant are required; current-query unlabeled transduction is allowed for candidates but fixed references remain inductive.",
+    "coverage": "Complete10-person support, two waveform views and three replications; all 12 N candidate closures and 240 complete assessment panels are required. Source preparation maps 105 exact prerequisites; N and authentic eligibility are not established by constructor success."
   },
   "reference": {
     "source_code_url": "https://github.com/sstober/openmiir",
@@ -66,37 +72,109 @@
     "data_url": "https://openmiir.github.io/"
   },
   "controls": [
-    "No excerpt-coded cue metadata",
-    "imagery timing/metronome baseline",
-    "session/repetition grouping."
+    "Fixed equal-duration crop removes excerpt-length leakage; authenticate imagery cue/audio boundaries rather than trusting synthetic feedback pseudo-times.",
+    "Exclude event markers/filename/order and held-person calibration; enforce fresh single-query state.",
+    "Retain all source channels/trials including original bad-channel flags; report flag prevalence after closure.",
+    "Disclose candidate current-query transduction versus inductive reference access and cue/perception/ocular/motor alternatives."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A fixed 64 channel four-second waveform can support a no-tools numerical/visual observation condition with the same 12-label answer.",
+      "boundary": "Any direct arm must receive a bounded declared observation and its own matched demonstrations, without numerical/model calls or held labels; programme evidence cannot stand in.",
+      "evidence_ids": [
+        "candidate-protocol"
+      ],
+      "missing": [
+        "No no-tools packet/renderer and direct-model transport or trial evidence."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed time/channel waveform inspection preserving the fixed four-second observation and label schema.",
+      "boundary": "A viewer must restrict rendering/actions and never return raw arrays, private event identities or other queries.",
+      "evidence_ids": [
+        "candidate-protocol"
+      ],
+      "missing": [
+        "No task-specific typed viewer or audited image transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "episodes.investigate implements the provider/python/predict action loop, candidate_runner.execute runs each numerical action, and the study controller collects the complete case result; these are source capabilities without authentic/runtime qualification.",
+      "boundary": "At most declared native actions within matched episode resources; current-query transduction permitted, all state reset and no feedback.",
+      "evidence_ids": [
+        "participant-episodes",
+        "participant-runner",
+        "participant-controller",
+        "participant-provider",
+        "candidate-protocol"
+      ],
+      "missing": [
+        "Authentic full input and enforced provider/native isolation qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "episodes.author seals predict(context) before authentic exposure; episodes.fixed and candidate_runner.execute implement one no-provider native invocation per query with the same permitted observations and numerical toolkit.",
+      "boundary": "One native invocation per current query under declared matched budgets; precommitted algorithm may use permitted single-query transduction.",
+      "evidence_ids": [
+        "participant-episodes",
+        "participant-runner",
+        "participant-controller",
+        "candidate-protocol"
+      ],
+      "missing": [
+        "Complete reference fits and independently qualified physical execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Participant-macro 12-class balanced accuracy",
+      "direction": "higher",
+      "aggregation": "Compute12 class recalls within each of 10 people, average equally across classes and people; report paired I-minus-F and EEG-minus-ZERO separately.",
+      "rationale": "Weights people and classes equally while preserving the true instruction-label target and mandatory no-waveform comparator."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Participant-macro NLL with declared 1e-12 log floor; retain probability validation without renormalization.",
+      "Complete per-class confusion/recall, paired mode/view contrasts, reference comparisons and three-replication range/sample SD.",
+      "Leave-one-person aggregation sensitivity, not retraining or population confidence intervals."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "BP_LDA, TM_LDA and RBF_KRR",
+        "inputs": "The same complete permitted training windows and group structure for each view.",
+        "procedure": "Existing source completes all training-person-held inner settings and temperature selection; strongest family chosen solely from training."
+      },
+      {
+        "name": "Historical BP_LDA plus uniform and Laplace priors",
+        "inputs": "Historical declared training recipe or training class counts only.",
+        "procedure": "Existing source preserves historical algorithm as a distinct comparator without claiming numerical parity; analytic priors expose class-frequency shortcuts."
+      },
+      {
+        "name": "ZERO waveform view",
+        "inputs": "Identical labels/group/protocol/budgets but all-zero waveforms in both train and query.",
+        "procedure": "Independent reference fitting and both candidate modes run on full unchanged support; no EEG-fitted state transfers to ZERO."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Fixed equal-duration crop removes excerpt-length leakage; authenticate imagery cue/audio boundaries rather than trusting synthetic feedback pseudo-times.",
+      "Exclude event markers/filename/order and held-person calibration; enforce fresh single-query state.",
+      "Retain all source channels/trials including original bad-channel flags; report flag prevalence after closure.",
+      "Disclose candidate current-query transduction versus inductive reference access and cue/perception/ocular/motor alternatives."
+    ],
+    "uncertainty": "Ten fixed people and overlapping LOPO folds support descriptive paired biological effects. Report omission sensitivity and algorithm-replication variation; do not use iid-trial significance or interpret repetitions as people.",
+    "failure_policy": "Require exactly 12 finite[0,1]probabilities summing within 1e-6; no renormalization. Every class/person/view/replication and all 240 panels must close before targets open; incomplete support or unknown closure refuses complete assessment.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "be9cdeb60c4e485f1a1634789ac9ee0fd6f488333f871c496f8a96f246326c3a",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "b01afeb4ce8f61f399a2966e15b5d5fa9df8c7790c1b4ebb4e69bb061994cb5d"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -224,6 +302,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }
