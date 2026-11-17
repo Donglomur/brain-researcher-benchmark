@@ -1,0 +1,295 @@
+{
+  "authentic_arrays_read_by_this_construction": 0,
+  "comparison_executed": false,
+  "forward_reference": {
+    "all_neuron_observations": 10153,
+    "all_representation_sessions": 17,
+    "checkpoint_model_configuration": "load saved cfg.model and model_state_dict from completed source checkpoint",
+    "checkpoint_readout_order": "numeric increasing epoch; exact same literal row order across checkpoints",
+    "collector": "sorted literal unit IDs, float64 sums, per-ID counts, distributed sum if enabled, per-ID mean",
+    "complete_population_policy": "benchmark must reject zero-count/missing original IDs; source warning/omission is retained as provenance, not silently accepted",
+    "entry": [
+      "bash",
+      "utils/forward_all_epochs.sh",
+      "<completed-run-id>",
+      "bugeon_transductive",
+      "<frozen-batch-size>",
+      "<frozen-epoch-stride>"
+    ],
+    "forward_config_default_batch_size": 32,
+    "helper_defaults": {
+      "batch_size": 128,
+      "epoch_stride": 1
+    },
+    "label_projection": "only after full-population embeddings; membership filter to all1500 subclass IDs, retaining actual relative row order",
+    "limit_observation_time": null,
+    "readout": "unchanged multi_split_resample_transductive_v1; ROS42 before training-only StandardScaler; selected validation macro-F1, selected train+val refit, pooled test macro-F1",
+    "sampler": "torch_brain SequentialFixedWindowSampler(window_length=model.ctx_duration,step=None,drop_short=True), source distributed wrapper"
+  },
+  "horizon_resolution": {
+    "historical_30_epoch_identity_claim": false,
+    "historical_bugeon_epoch_count": null,
+    "historical_seed_list": null,
+    "initial_loader_length_source": "src/trainers/contrastive.py:247-266; random window sampler, distributed truncation and drop_last=True",
+    "prospective_num_epochs": null,
+    "prospective_proposal_not_adopted": "ceil(50000 / initial_source_loader_steps_per_epoch), before either method; retain literal sampler and record actual stochastic epoch step counts",
+    "prospective_step_policy": null,
+    "readme_instruction": "Set num_epochs such that the total number of training steps is roughly 50,000.",
+    "schedule_dependency": "lr_step uses configured num_epochs and initial steps_per_epoch; truncating a longer run is not a shorter configured schedule"
+  },
+  "models_trained_or_forwarded": 0,
+  "required_external_revisions": {
+    "brainsets": "61c8a7bc4fb39412a4d2f12c6209936606d4c12f",
+    "temporaldata": "b0a92bf4f9e36e27c5eddbf02c8acbd5df90ee39",
+    "torch_brain": "d48b0c822fbcaa27e15ba982bd6f619ed4260cd7"
+  },
+  "runtime_limits": {
+    "actual_cuda_runtime_qualified": false,
+    "cpu_or_mps_substitution_admitted": false,
+    "selected_readout_current_runtime_is_historical_training_runtime": false,
+    "source_cuda_required": true,
+    "source_declared_dependencies_are_a_resolved_environment": false,
+    "xformers_flash_attention_required": true
+  },
+  "schema": "nuclr-original-source-recipe-trace-v1",
+  "scientific_qualification": false,
+  "selection": "subclass_ordinary_transductive_complete_current_v1",
+  "source_commit": "0fa409b304147ace00507063d44f03155691af62",
+  "source_defaults": {
+    "checkpoint_every_n_epochs": 1,
+    "checkpoint_position": "after training epoch, before diagnostic validation",
+    "debug": null,
+    "default_num_epochs": 30,
+    "diagnostic_validation_excludes_sessions": [
+      "sb025_20191004",
+      "sb026_20191011",
+      "sb028_20191106",
+      "sb030_20200108"
+    ],
+    "diagnostic_validation_is_final_source_split": false,
+    "entry": [
+      "python",
+      "train.py",
+      "--config-name",
+      "train_ca",
+      "data=bugeon_transductive"
+    ],
+    "grad_clip_max_norm": 1.0,
+    "loss_config": "configs/loss/sw_dcl.yaml",
+    "lr_cosine_decay_start_epoch": 1,
+    "lr_max": 0.000125,
+    "lr_rise_epochs": 1,
+    "maximum_second_view_distance_seconds": 240.0,
+    "model": "src.models.nuclr_v2ga_ca2.NuclrV2gaCa2",
+    "num_workers": 7,
+    "optimizer_config": "configs/optim/adamw.yaml",
+    "persistent_workers_if_positive": true,
+    "precision": "bf16",
+    "reference_calcium_dropout": "preserve literal raw-only mutation, including its random draws; normalized model inputs and units remain unchanged",
+    "seed": 42,
+    "total_batch_size": 16,
+    "train_dataset": "all bugeon_transcriptomic_2022 sessions; no downstream-label subset",
+    "trainer": "src.trainers.contrastive.ContrastiveTrainer",
+    "transform_config": "configs/train_transform/unit_dropout.yaml",
+    "view_seconds": 30.0
+  },
+  "source_files": [
+    {
+      "bytes": 1310,
+      "path": "train.py",
+      "sha256": "8515041a5787d30b298fd5c1b8d2c336de4ea29ad0025f289f7cf0ab0223fc96"
+    },
+    {
+      "bytes": 3328,
+      "path": "README.md",
+      "sha256": "36cd702e79499dae1800fa138d3a58745f49ea681d9ece11a0de79cac70f7f0a"
+    },
+    {
+      "bytes": 537,
+      "path": "requirements.txt",
+      "sha256": "c2d56fe1824eade5c759ae00c9d01ec80817123a480cbd8351edb0cc362bdd1a"
+    },
+    {
+      "bytes": 1722,
+      "path": "preprocess/README.md",
+      "sha256": "4dbc0cab6e4b1a0611f7ff06390a2cf97e7632ca2fa120fcb2bfbb72da11b150"
+    },
+    {
+      "bytes": 7235,
+      "path": "preprocess/bugeon/prepare_data.py",
+      "sha256": "10af34325fcc3dedb47a3cb461b562ac0292f1481e9d3a757c094f6866ae35c0"
+    },
+    {
+      "bytes": 1239,
+      "path": "configs/train_ca.yaml",
+      "sha256": "416acd72f1dec57d67768edf297f9e3f31c57d2d8ac54bc99dc57946ef932467"
+    },
+    {
+      "bytes": 726,
+      "path": "configs/forward.yaml",
+      "sha256": "e8a00b69ebae09ac98210dcf2744747e13f6e60414a3a83600cbc1bf299d7c64"
+    },
+    {
+      "bytes": 290,
+      "path": "configs/data/bugeon_transductive.yaml",
+      "sha256": "8052247f856f0e6e8e55afdf3027042be700ddb43be63dd8a7e880fa876f4530"
+    },
+    {
+      "bytes": 82,
+      "path": "configs/data/train_dataset/bugeon_all.yaml",
+      "sha256": "e1feffd61e1b2bc0fc958dfd70553ce2cedf024fa1e69dfb2beeeef1ad2fc6d3"
+    },
+    {
+      "bytes": 203,
+      "path": "configs/model/nuclr_v2ga_ca2.yaml",
+      "sha256": "b75736bf83acb2b732550fda338cee41673be340821677e69f9e0cf44cf7ddb5"
+    },
+    {
+      "bytes": 53,
+      "path": "configs/trainer/contrastive.yaml",
+      "sha256": "1f18c2ce1b12c3e0169fc13b23aaf7aee10d50211557a19c1bce272aee6c70d9"
+    },
+    {
+      "bytes": 43,
+      "path": "configs/trainer/forward.yaml",
+      "sha256": "29ed48e3bc3cf7d24ee4276eff2ca68e5387b2994a1783663deddf85c308b3ca"
+    },
+    {
+      "bytes": 114,
+      "path": "configs/loss/sw_dcl.yaml",
+      "sha256": "12bd32c3e1ed9c254e467488bfd54c22bb5907bb7bbb278db474d5bd2988a11a"
+    },
+    {
+      "bytes": 65,
+      "path": "configs/train_transform/unit_dropout.yaml",
+      "sha256": "6b32f951e52df3044036f45818e79c270f091e2c56e66f61a9d007d23e364ad5"
+    },
+    {
+      "bytes": 27,
+      "path": "configs/optim/adamw.yaml",
+      "sha256": "3ad67e20406f767e0b8d986b9cdc8777fd607ecb96277dbe5cf723788e3d74b2"
+    },
+    {
+      "bytes": 9436,
+      "path": "src/trainers/trainer.py",
+      "sha256": "bfa11594d727237ebf370920e6a4856fe7871a75c0e8b6b19ed923708cab4bc6"
+    },
+    {
+      "bytes": 13241,
+      "path": "src/trainers/contrastive.py",
+      "sha256": "186c696de775538295a4da4a7552d280adcdf449bdd66cccb2a647764a9a0cd9"
+    },
+    {
+      "bytes": 5219,
+      "path": "src/trainers/forward.py",
+      "sha256": "71d1d286b9fb563bb7905200f00ac85d8b1bd2def25db537dab5418e200107d7"
+    },
+    {
+      "bytes": 10044,
+      "path": "src/dataset.py",
+      "sha256": "ac2d0b625920be800e982b59db097f7bdae05b8be88931cc8fca1b048976b348"
+    },
+    {
+      "bytes": 10301,
+      "path": "src/samplers.py",
+      "sha256": "29ac75478a1f95be50b71297415636c05bde6e14d1bedfc787ececf0bef1ca01"
+    },
+    {
+      "bytes": 5906,
+      "path": "src/models/nuclr_v2ga_ca2.py",
+      "sha256": "3b26a22d9ab4c08857a28c2bdf9b6c2d108b272a5c2dc3f025c7ab2fad27918d"
+    },
+    {
+      "bytes": 1684,
+      "path": "src/evaluators/collector.py",
+      "sha256": "836c4138a8966b21a9b212857d8f12e603b50a5112493a85e6fb2f0fda5daa0a"
+    },
+    {
+      "bytes": 4488,
+      "path": "src/evaluators/bugeon.py",
+      "sha256": "9643bb996ac5c43d83bf0530ac018e48eab24c604d276eb2dd02629c285c5393"
+    },
+    {
+      "bytes": 1606,
+      "path": "src/transforms/unit_dropout.py",
+      "sha256": "c9b04c012fe53944b11e0aa9e3b1688ac71920827ad1b1de5e871ac889687e88"
+    },
+    {
+      "bytes": 4580,
+      "path": "src/losses/sw_contrastive.py",
+      "sha256": "e396bdeacb6cf8fc70336b92ece7757bd31ad88762fbe441199d0463fa07f212"
+    },
+    {
+      "bytes": 6186,
+      "path": "src/nn/attention.py",
+      "sha256": "7fc22c91c85f6f05ca5c076f32023575a3035d64a499d87d952393ea52132038"
+    },
+    {
+      "bytes": 715,
+      "path": "src/checkpoint.py",
+      "sha256": "f6b5dec0ee43e805404cf15611bb7c40992193a691662c439fb45ac0cf7bc01d"
+    },
+    {
+      "bytes": 6488,
+      "path": "src/utils.py",
+      "sha256": "8f8dc022a950583ce276e036db693d82028bcd97ac381894d0609d8fce5c6bda"
+    },
+    {
+      "bytes": 4456,
+      "path": "src/logger.py",
+      "sha256": "f9ba5262c7012f07070c6dbad8e00773464f3ba2c278bb45cfa67a5704c4f597"
+    },
+    {
+      "bytes": 916,
+      "path": "utils/forward_all_epochs.sh",
+      "sha256": "3968731b42ba0bb569650295af13903c22390df19e7fc923cdcf0c703658da0e"
+    },
+    {
+      "bytes": 1506,
+      "path": "eval_scripts/utils.py",
+      "sha256": "f813bc57f8de0c492f05a23e172f21a40e28e5b0663afe057a658d7f8dc79938"
+    },
+    {
+      "bytes": 6587,
+      "path": "eval_scripts/multi_split_eval.py",
+      "sha256": "d7de1027643595308fd10daf8608d8d0ab466011ff80304f359ee7e44b5d4449"
+    }
+  ],
+  "source_mechanism_hypothesis": {
+    "candidate_context_visibility": "source-derived hypothesis is owner-only or author-code condition; do not inject into paper+data-only context",
+    "candidate_implemented": false,
+    "consumer": {
+      "lines": "147-166",
+      "path": "src/models/nuclr_v2ga_ca2.py",
+      "sha256": "3b26a22d9ab4c08857a28c2bdf9b6c2d108b272a5c2dc3f025c7ab2fad27918d"
+    },
+    "novelty_claim": false,
+    "performance_gain_observed": false,
+    "prospective_candidate": "consistently mask native-order unit metadata plus raw and normalized activity columns using the same sampled mask",
+    "reference_behavior_changed": false,
+    "transform": {
+      "lines": "31-43",
+      "path": "src/transforms/unit_dropout.py",
+      "sha256": "c9b04c012fe53944b11e0aa9e3b1688ac71920827ad1b1de5e871ac889687e88"
+    }
+  },
+  "source_repository": "https://github.com/nerdslab/nuclr",
+  "source_review_sha256": "2594e34910916bcc5624699a24fe294876c4aa5474bdee3f88c745307adca90e",
+  "source_runtime_declarations": {
+    "numpy": "1.23.5",
+    "python_readme": "3.10",
+    "ray": "2.42.1",
+    "scikit-learn": "1.6.1",
+    "torch": "2.8",
+    "xformers": "0.0.32.post2"
+  },
+  "status": "source_configuration_frozen_execution_recipe_incomplete",
+  "still_required_before_execution": [
+    "Authenticate and qualify exact temporaldata/brainsets serialization and torch_brain discovery/window semantics on generated controls; no guessed endpoints.",
+    "Admit a finite fresh-output full17-session HDF5 conversion and record complete array/identity/shape/normalization and loader roundtrip.",
+    "Freeze reviewed CUDA device count, worker count, complete resolved dependency tuple, epoch/step policy, seed roster, checkpoint set, forward batch/stride and resource budgets before either method.",
+    "Keep complete owner labels and released per-epoch diagnostics outside both participant contexts; restricted candidate delivery/execution and authorized supervision remain unimplemented.",
+    "Run genuine owner reference and frozen independent candidates; bind checkpoints, training receipts, full10153 embedding contribution counts and selected1500 readout packets.",
+    "Report reproduction and improvement separately under both access conditions; no arbitrary margin or invented inference criterion; existing scientific qualification remains unresolved."
+  ]
+}
