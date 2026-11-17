@@ -1,9 +1,11 @@
 # Same-task paper improvement
 
-Every current paper task requires surpassing the source-paper result on the same
-original scientific task. Reproduction is a calibration prerequisite and cannot
-earn active paper success. The original 116 registrations are retained; their
-current eligibility and readiness are counted separately in the
+This guide describes the retained `improvement/v1` outcome: surpassing the
+source-paper result on the same original scientific task. Within that outcome,
+reproduction supplies calibration and does not establish improvement. Paper
+reproduction is also an independent outcome, judged by its frozen original-finding
+agreement rule; its success does not require improvement. The original 116
+registrations are retained; their current eligibility and readiness are counted separately in the
 [paper catalog](../../../benchmarks/catalog/paper.md).
 
 Each task has a versioned `improvement.v1.json` with paper-specific evidence,
@@ -89,8 +91,9 @@ metadata admission returns 0.
 
 Legacy `score` and `run` commands refuse paper adapters unless `--calibration` is
 explicit. Their outputs retain their historical numerical meaning and cannot
-establish the current success objective. Existing pilot results are preserved as
-calibration, including failures and exposed development endpoints.
+establish the `improvement/v1` success objective or independently verified paper
+reproduction. Existing pilot results are preserved as calibration, including
+failures and exposed development endpoints.
 
 ## Maintaining current bindings
 
