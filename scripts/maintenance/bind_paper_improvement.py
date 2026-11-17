@@ -258,8 +258,8 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
     old_ids = {row["id"] for row in original_registry["tasks"]}
     implementations = implementation_rows(current, registered_ids)
     old_implementations = implementation_rows(original_registry, old_ids)
-    require([row["id"] for row in implementations] == [row["id"] for row in old_implementations],
-            "implementation IDs/order changed from historical registry")
+    require({row["id"] for row in old_implementations} <= {row["id"] for row in implementations},
+            "historical implementation removed from current registry")
     old_impl_by_id = {row["id"]: row for row in old_implementations}
     paper_ids = set(current_by_id)
     task_root = root / "benchmarks/paper"
@@ -337,7 +337,11 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
                                   "blocking_issues": copy.deepcopy(contract["blocking_issues"])},
         })
     for row in registry["implementations"]:
-        original = old_impl_by_id[row["id"]]
+        original = old_impl_by_id.get(row["id"])
+        if original is None:
+            # A later implementation may be an actual improvement evaluator;
+            # this migration only classifies preserved pre-improvement artifacts.
+            continue
         require(row.get("owner_ids") == original.get("owner_ids")
                 and row.get("related_task_ids", []) == original.get("related_task_ids", []),
                 "implementation task ownership changed: " + row["id"])

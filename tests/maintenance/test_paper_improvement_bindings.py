@@ -243,6 +243,33 @@ class PaperBindingTests(unittest.TestCase):
         updated = load(self.root, builder.REGISTRY)["implementations"][1]
         self.assertEqual(updated, shared)
 
+    def test_later_implementations_are_preserved_without_reclassifying_them(self):
+        self.bind()
+        registry = load(self.root, builder.REGISTRY)
+        additions = [
+            {"id": "future-neural", "owner_ids": ["NEURAL-fixture"], "related_task_ids": [], "role": "neural_runtime"},
+            {"id": "future-paper", "owner_ids": [self.paper_rows[0]["id"]], "related_task_ids": [],
+             "role": "future_improvement_evaluator", "scope_notes": "Explicitly outside the historical migration"},
+        ]
+        registry["implementations"].extend(additions)
+        put(self.root, builder.REGISTRY, registry)
+        self.bind(check=True)
+        self.bind()
+        self.assertEqual(load(self.root, builder.REGISTRY)["implementations"][-2:], additions)
+
+    def test_historical_implementation_removal_or_owner_change_is_rejected(self):
+        self.bind()
+        registry = load(self.root, builder.REGISTRY)
+        removed = copy.deepcopy(registry)
+        removed["implementations"].pop(0)
+        put(self.root, builder.REGISTRY, removed)
+        with self.assertRaisesRegex(ValueError, "historical implementation removed"):
+            self.bind()
+        registry["implementations"][0]["owner_ids"] = ["NEURAL-fixture"]
+        put(self.root, builder.REGISTRY, registry)
+        with self.assertRaisesRegex(ValueError, "ownership changed"):
+            self.bind()
+
     def test_expansion_missing_common_metadata_has_neutral_defaults(self):
         row = self.paper_rows[-1]
         def remove_common(doc):
