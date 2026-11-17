@@ -130,7 +130,7 @@ class UnavailableScopeCatalogTests(unittest.TestCase):
                 for command in (lambda: cli.paper_contract(self.identifier, self.root),
                                 lambda: cli.compare_paper(self.identifier, self.root / 'missing.json', self.root),
                                 lambda: cli.check_paper_outcome(self.identifier, self.root / 'missing.json', self.root)):
-                    with self.assertRaisesRegex(ValueError, 'Primary paper outcomes are unavailable'):
+                    with self.assertRaisesRegex(ValueError, 'Current .* admission is unavailable'):
                         command()
 
     def test_actual_marker_cannot_exchange_status_reason_mapping(self):

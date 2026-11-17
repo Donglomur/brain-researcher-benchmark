@@ -436,7 +436,7 @@ def paper_contract(task_id, root=ROOT, *, outcome='improvement'):
         binding = task.get('paper_outcomes')
         if binding is not None:
             if binding.get('availability') == 'unavailable':
-                raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+                raise ValueError('Current primary improvement admission is unavailable: ' + binding['reason'])
             pin = binding.get('improvement_contract')
             if type(pin) is not dict:
                 raise ValueError('No explicit current improvement contract is bound for ' + task_id)
@@ -461,7 +461,7 @@ def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
         raise ValueError('No current paper outcome contracts are bound for ' + task_id)
     unavailable = binding.get('availability') == 'unavailable'
     if unavailable and not allow_unavailable:
-        raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+        raise ValueError('Current complete-primary paired-outcome admission is unavailable: ' + binding['reason'])
     gap = binding.get('availability') == 'source_declaration_unavailable'
     if gap and not allow_unavailable:
         raise ValueError('Paired paper outcome admission is unavailable without a source-grounded reproduction declaration: ' + task_id)

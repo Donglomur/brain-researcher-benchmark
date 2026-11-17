@@ -980,7 +980,7 @@ def paper_count_text(catalog):
                      + 'These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.\n\n')
         mismatch_count = outcomes['primary_unavailable'] - neutral_count
         if mismatch_count:
-            dual_text += (f"Primary outcomes are unavailable for **{mismatch_count} tasks** with an explicit scientific scope mismatch. "
+            dual_text += (f"Complete primary-outcome pairing is unavailable for **{mismatch_count} tasks** with an explicit scientific scope mismatch. "
                           'Their retained secondary improvement policies are not admitted as primary outcomes.\n\n')
         if neutral_count:
             dual_text += (f"Complete primary-outcome pairing is unavailable for **{neutral_count} tasks**. "
@@ -1291,7 +1291,8 @@ def render_tracks(catalog):
                              + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['remaining_source_limits'])
                              + '\n')
                 elif unavailable:
-                    text += ('**Primary reproduction and improvement outcomes are unavailable.** '
+                    text += ('**Current complete-primary paired-outcome admission is unavailable.** '
+                             'Independent reproduction remains separately assessable under the stated source limits. '
                              + markdown_text(outcomes['reason']) + '\n\n'
                              + '**Primary scientific scope:** ' + markdown_text(outcomes['primary_scope']) + '\n\n'
                              + ('**Retained improvement contract coverage:** ' if neutral_unavailable_reason(outcomes)

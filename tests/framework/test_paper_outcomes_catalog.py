@@ -451,7 +451,7 @@ class PaperOutcomesCatalogTests(unittest.TestCase):
                 for command in (lambda: cli.paper_contract(view['id'], self.root),
                                 lambda: cli.compare_paper(view['id'], self.root / 'absent.json', self.root),
                                 lambda: cli.check_paper_outcome(view['id'], self.root / 'absent.json', self.root)):
-                    with self.assertRaisesRegex(ValueError, 'Primary paper outcomes are unavailable'):
+                    with self.assertRaisesRegex(ValueError, 'Current .* admission is unavailable'):
                         command()
                 with self.assertRaisesRegex(ValueError, 'No reproduction proposal'):
                     cli.paper_contract(view['id'], self.root, outcome='reproduction')
@@ -463,7 +463,7 @@ class PaperOutcomesCatalogTests(unittest.TestCase):
             self.assertEqual(cli.paper_contract(view['id'], self.root, outcome='reproduction'), reproduction)
             self.assertEqual(cli.paper_outcomes(view['id'], self.root)['summary']['scientific_outcomes'],
                              {'reproduction': 'unknown', 'improvement': 'unknown'})
-            with self.assertRaisesRegex(ValueError, 'Primary paper outcomes are unavailable'):
+            with self.assertRaisesRegex(ValueError, 'Current complete-primary paired-outcome admission is unavailable'):
                 cli.check_paper_outcome(view['id'], self.root / 'absent.json', self.root)
 
     def test_unavailable_primary_render_and_counts_keep_secondary_separate(self):
@@ -485,10 +485,10 @@ class PaperOutcomesCatalogTests(unittest.TestCase):
         self.assertIn('Outcome metadata covers **117/117 paper tasks**', count_text)
         self.assertIn('contract declarations and unavailability records', count_text)
         self.assertIn('completion of both outcomes requires separate qualifying execution evidence', count_text)
-        self.assertIn('Primary outcomes are unavailable for **1 tasks**', count_text)
+        self.assertIn('Complete primary-outcome pairing is unavailable for **1 tasks**', count_text)
         self.assertNotIn('Dual-outcome contracts cover', count_text)
         page = catalog.render_tracks(discovered)[current['task_directory'] + '/README.md'].decode()
-        self.assertIn('Primary reproduction and improvement outcomes are unavailable', page)
+        self.assertIn('Current complete-primary paired-outcome admission is unavailable', page)
         self.assertIn('Reproduction proposal (inspection only)', page)
         self.assertIn('Retained secondary improvement policy', page)
         self.assertIn('Primary and retained secondary scope decision', page)

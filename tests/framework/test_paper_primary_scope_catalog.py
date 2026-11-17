@@ -92,7 +92,7 @@ class PrimaryScopeCatalogTests(unittest.TestCase):
         self.assertIn('Source only', page)
         self.assertIn('Prospective extension only', page)
         self.assertIn('Reviewed primary scope correction', page)
-        self.assertNotIn('Primary reproduction and improvement outcomes are unavailable', page)
+        self.assertNotIn('Current complete-primary paired-outcome admission is unavailable', page)
         self.assertNotIn('Reproduction proposal (inspection only)', page)
         self.assertIn(binding.SCOPE_PATH, set(catalog.source_links(discovered)))
 
