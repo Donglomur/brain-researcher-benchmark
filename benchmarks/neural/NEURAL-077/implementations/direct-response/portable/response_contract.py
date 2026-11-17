@@ -26,6 +26,7 @@ def parse(body,expected_id):
 
 
 def complete(rows,expected_ids):
+    if type(expected_ids)is not list:raise ValueError('Public identities must be an ordered JSON array')
     if len(expected_ids)!=400 or not all(valid_id(value)for value in expected_ids)or len(set(expected_ids))!=400:raise ValueError('Complete fixed public ID set with identities of 1 through 48 characters')
     if len(rows)!=400:raise ValueError('All responses required; no adaptive omission')
     observed={}

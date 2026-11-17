@@ -14,25 +14,40 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parent / "portable"
 PACKAGE = ROOT.parent
 REPOSITORY = PACKAGE.parents[4]
-CURRENT_PINS = REPOSITORY / "benchmarks/integrity/current-closures/neural077-direct-response/SOURCE_PINS.json"
+CURRENT_PINS = REPOSITORY / "benchmarks/integrity/current-closures/input-neural077/SOURCE_PINS.json"
+PREDECESSOR_PINS = REPOSITORY / "benchmarks/integrity/current-closures/neural077-direct-response/SOURCE_PINS.json"
 
 
 def verify_current_source():
     current = json.loads(CURRENT_PINS.read_text())
-    if (current.get("schema") != "neural077_direct_response_current_source_v1"
+    if (current.get("schema") != "neural077_direct_response_current_source_v2"
             or current.get("package") != PACKAGE.relative_to(REPOSITORY).as_posix()):
         raise ValueError("Exact current source descriptor required")
-    predecessor = (PACKAGE / "SOURCE_PINS.json").read_bytes()
-    if (len(predecessor) != current["predecessor"]["bytes"]
+    predecessor = PREDECESSOR_PINS.read_bytes()
+    if (current["predecessor"]["path"] != PREDECESSOR_PINS.relative_to(REPOSITORY).as_posix()
+            or len(predecessor) != current["predecessor"]["bytes"]
             or hashlib.sha256(predecessor).hexdigest() != current["predecessor"]["sha256"]):
+        raise ValueError("Predecessor source descriptor changed")
+    previous = json.loads(predecessor)
+    original_body = (PACKAGE / "SOURCE_PINS.json").read_bytes()
+    if (current["historical"] != previous["predecessor"]
+            or current["historical"]["path"] != (PACKAGE / "SOURCE_PINS.json").relative_to(REPOSITORY).as_posix()
+            or len(original_body) != current["historical"]["bytes"]
+            or hashlib.sha256(original_body).hexdigest() != current["historical"]["sha256"]):
         raise ValueError("Historical source descriptor changed")
-    original = json.loads(predecessor)
+    original = json.loads(original_body)
     if set(current["members"]) != set(original["members"]):
         raise ValueError("The complete original member roster is required")
+    if set(current["members"]) != set(previous["members"]):
+        raise ValueError("The complete predecessor member roster is required")
     changed = {name for name, pin in current["members"].items()
                if pin != original["members"][name]}
     if changed != {"portable/response_contract.py", "test_collector_destination.py"}:
         raise ValueError("Only the response validator and its controls may change")
+    predecessor_changes = {name for name, pin in current["members"].items()
+                           if pin != previous["members"][name]}
+    if predecessor_changes != changed:
+        raise ValueError("Only the same two members may change from the predecessor")
     for name, pin in current["members"].items():
         if Path(name).is_absolute() or ".." in Path(name).parts:
             raise ValueError("Source member must remain inside the package")
@@ -171,6 +186,26 @@ class CollectorDestinationTests(unittest.TestCase):
         result = json.loads(self.invoke(self.root / "maximum.npz"))
         self.assertEqual(result["rows"], 400)
         self.assertEqual(self.calls[0][1]["trial_ids"], (ids, "<U48"))
+
+    def test_nonarray_identity_panel_prevents_output_creation(self):
+        malformed = (("object", dict.fromkeys(self.ids)),
+                     ("string", "".join(chr(256 + i) for i in range(400))),
+                     ("null", None), ("integer", 400), ("boolean", True))
+        for label, ids in malformed:
+            with self.subTest(label=label):
+                self.manifest.write_text(json.dumps({"development_ids": ids}))
+                # The object and string both have 400 unique valid string
+                # elements, so contents/cardinality checks alone are insufficient.
+                if isinstance(ids, (dict, str)):
+                    self.responses.write_text("".join(json.dumps({"trial_id": identifier,
+                        "target_probability": 0.25}) + "\n" for identifier in ids))
+                target = self.root / (label + ".npz")
+                self.numpy.asarray = mock.Mock(side_effect=AssertionError("No array construction"))
+                with self.assertRaisesRegex(ValueError, "ordered JSON array"):
+                    self.invoke(target)
+                self.numpy.asarray.assert_not_called()
+                self.assertFalse(target.exists())
+                self.assertEqual(self.calls, [])
 
 
 if __name__ == "__main__":
