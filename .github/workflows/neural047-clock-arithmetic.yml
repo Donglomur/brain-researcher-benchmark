@@ -1,0 +1,302 @@
+# Generated source controls only; no native or scientific qualification.
+name: NEURAL047 clock arithmetic controls
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: neural047-clock-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  clock-arithmetic-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify repaired source identities and complete package namespace
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/integrity/current-closures/numeric-neural047/SOURCE.json",
+                  "bytes": 6110,
+                  "sha256": "8ee3ab81908b3dff44fead81e4d426af415f3fdfead7b0cbf13126b2eea51426"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/CURRENT_RUNTIME_SOURCE_MANIFEST.json",
+                  "bytes": 4274,
+                  "sha256": "87501a1a940ba7e2fe6f832885ccaf3cc1435ae914a40d06de6551832526944f"
+              },
+              {
+                  "bytes": 717,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/DEPLOYMENT.json",
+                  "sha256": "3b1b15cb9e3baa0d7a971f537985915a3d5f0cbe49b049d5016a4d9987d09fd3"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/GATES.json",
+                  "bytes": 2757,
+                  "sha256": "5f246ff596c9b15dcdda50987c42a6af0cc3dbbf4950ab4b301970da97f83b72"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/PROTOCOL.json",
+                  "bytes": 3758,
+                  "sha256": "0ce5e26a7592c5f9ec13a70014a2eda6dacec78ab98087eb95cfb6b03c6eeb4c"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/PROVENANCE.md",
+                  "bytes": 1889,
+                  "sha256": "0a10b4a1d7e1f232abd437d6f55393fed2d7f4b503c9023e82066cbf5694e726"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/README.md",
+                  "bytes": 7055,
+                  "sha256": "7d8db4076269f66ad61e7d0f1cecd4e9daf575f810e41f66d580faee97bfed4e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/RUNTIME_SOURCE_MANIFEST.json",
+                  "bytes": 4274,
+                  "sha256": "ede00b4d774ae4e6c163173f0c0de5219cf263c4eb785c9e596c8ddaa68aff25"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/SCIENTIFIC_CONTRACT.md",
+                  "bytes": 4068,
+                  "sha256": "18a32894edd0a59d5ccc1f81f5794eadd20df6b92fa90cb3ba1144023ac8a794"
+              },
+              {
+                  "bytes": 2850,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/native_export/export_WB_fields.m",
+                  "sha256": "a4373829d737e8b220a396713fa6317bb2499cc93a91e7a023c74a989fcdb33c"
+              },
+              {
+                  "bytes": 73,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/__init__.py",
+                  "sha256": "db348634e53445abd0b8ca058f6affcd312690da160175ce166f0ed3b55798bf"
+              },
+              {
+                  "bytes": 6322,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/admission.py",
+                  "sha256": "da7f706a8e808795defaaea4cd9784b7a20af2f8c98662842db3b3892463c643"
+              },
+              {
+                  "bytes": 6717,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/budgets.py",
+                  "sha256": "a1b25480255dc0f3d77ccb53ae832e611b8bc336bc71eb76a959fcfef3ce781f"
+              },
+              {
+                  "bytes": 6054,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/common.py",
+                  "sha256": "5ebade54d11f5aca124fc7c771baa229cc9604677bc5459b2715c2d350c44dcc"
+              },
+              {
+                  "bytes": 3476,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/deployment.py",
+                  "sha256": "49bc37c8ac65b5a56aa3e1c3cd473b896d5be76415057121c504aa2ad415a97e"
+              },
+              {
+                  "bytes": 2981,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/development.py",
+                  "sha256": "b229968969e14d6414da4b73ef6dfa10f1d402b67afab5db6669207e30155ce5"
+              },
+              {
+                  "bytes": 7549,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/evidence.py",
+                  "sha256": "f1ca8f776a49461ff651a86c5529b1303ad2e9e4433ad43c368d38bbde91b6c5"
+              },
+              {
+                  "bytes": 2391,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/execution.py",
+                  "sha256": "f4230c2f122c626712cf8b190d581f8be50d82f6d9edc8369a581437caeb6eb4"
+              },
+              {
+                  "bytes": 1857,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/final_policy.py",
+                  "sha256": "b4eb6d8d1845540c75f70cac9eff23009ab28552f5992c2e6cc185e0c23483a1"
+              },
+              {
+                  "bytes": 73,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/__init__.py",
+                  "sha256": "db348634e53445abd0b8ca058f6affcd312690da160175ce166f0ed3b55798bf"
+              },
+              {
+                  "bytes": 4396,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/delivery_io.py",
+                  "sha256": "9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7"
+              },
+              {
+                  "bytes": 1836,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/features.py",
+                  "sha256": "91eb0446aad27e7179f25ebb052af4977879d5613ec0955e6633b39866b6361e"
+              },
+              {
+                  "bytes": 9230,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/history.py",
+                  "sha256": "b038c5013ab01b7a3239493ddf8ebcd7969548fa9f02d9446d13b41aec228f22"
+              },
+              {
+                  "bytes": 7895,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/prepare.py",
+                  "sha256": "aaeea04a3333547c52ac7f35d8454f2e63859170e66a6803ccdd36da24177e56"
+              },
+              {
+                  "bytes": 8486,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/scorer_core.py",
+                  "sha256": "95632beb1090f7be4946300cb895e5db6780c69d4d63842ccf28423f74c38ef7"
+              },
+              {
+                  "bytes": 4288,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/source_map.py",
+                  "sha256": "bfa7dcae040bc21e6c3b33d2861c95595c069764a43463906b3170e46707fe01"
+              },
+              {
+                  "bytes": 14688,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/native.py",
+                  "sha256": "d2b070e76b3224b22ac0f5ea809c30731bd672802f8645a460db02bafa57ed97"
+              },
+              {
+                  "bytes": 11413,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/outer.py",
+                  "sha256": "866443be998dbb1a5acb35877d525af868188dedf87c76690611e2abeb4cd5d8"
+              },
+              {
+                  "bytes": 3981,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/packets.py",
+                  "sha256": "40d83ffccb526232b7c10af0f71fcb21727c5871e76d6b44c3eec89b3e019bf3"
+              },
+              {
+                  "bytes": 1872,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/preparation.py",
+                  "sha256": "cc1191afc11e0ce5e57aa66bc8202de2c7dd51c3889dc3e5d69d1c0842209f66"
+              },
+              {
+                  "bytes": 10153,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/provider.py",
+                  "sha256": "7edecc71ae2e62bb58c4373e984f0fdba6888c3fbd6aea832fb6783ee5801874"
+              },
+              {
+                  "bytes": 3848,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/references.py",
+                  "sha256": "db1d5d3ac97cd9bf075aa95a7b39b5e517a4a031f008d437aad35dcccc3c6adc"
+              },
+              {
+                  "bytes": 12101,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/runner.py",
+                  "sha256": "03ad479b7e13b8fe6d89409ed02aed486a705dcbae5640c496c4ba7135f4bac1"
+              },
+              {
+                  "bytes": 1111,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/reference_entry.py",
+                  "sha256": "17d3f09cc73cfc25ae670678843d74dc2fd9a42ada7a0f86448e4ed8ad3710a6"
+              },
+              {
+                  "bytes": 1800,
+                  "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/run.py",
+                  "sha256": "07c8ea453fc70ed09285086adb550452adb3f1be2301e843e96ce912f47f724e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/task.json",
+                  "bytes": 10439,
+                  "sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
+              },
+              {
+                  "path": "tests/benchmarks/test_neural047_clock_arithmetic.py",
+                  "bytes": 18731,
+                  "sha256": "f088b4118506057c7f6ae6280e30aea5255b175c0948a05fe37e22d0e96ab47b"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3"
+          ]
+          assert len(rows) == 37 > 0
+          assert sum(row['bytes'] for row in rows) == 201513 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 201513,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Run bounded generated clock and source-admission controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/benchmarks', pattern='test_neural047_clock_arithmetic.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 22, f"Expected 22 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 22, f"Expected 22 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/benchmarks/test_neural047_clock_arithmetic.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
