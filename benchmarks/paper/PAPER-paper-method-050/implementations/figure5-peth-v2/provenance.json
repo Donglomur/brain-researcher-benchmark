@@ -1,0 +1,74 @@
+{
+  "task_id": "PAPER-paper-method-050",
+  "implementation_version": "figure5-peth-v2",
+  "component": "original Figure 5E PETH fidelity scorer",
+  "source": {
+    "doi": "10.1016/j.patter.2026.101590",
+    "article_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+    "retrieved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13494646/fullTextXML",
+    "format": "primary article JATS XML via Europe PMC",
+    "bytes": 307090,
+    "sha256": "91ef8fda659cb90426140a64b015fb73d03f832c5df53c1ff2e14a71f46c6d80",
+    "locators": [
+      {
+        "section": "4.9.3, Equation 11",
+        "mapping": "Pearson correlation followed by inverse hyperbolic tangent; press/release/poke concatenated 3000-bin PETH, 1 ms bins, +/-500 ms per event."
+      },
+      {
+        "section": "Figure 5E and comparison methods",
+        "mapping": "Matched units on consecutive calendar days, mean firing rate at least 1 Hz and peak PETH firing rate at least 5 Hz. Exclude datasets below 100 valid pairs in any of DANT, UnitMatch and EMD. Per-dataset median PETH similarity; original eight retained datasets."
+      },
+      {
+        "section": "Statistical analysis",
+        "mapping": "Friedman across methods; source R PMCMRplus, with Nemenyi post hoc when appropriate. This kernel computes the three-baseline tie-corrected omnibus statistic and asymptotic chi-square(df=2) p-value only. It does not implement Nemenyi."
+      }
+    ]
+  },
+  "predecessor": {
+    "implementation": "../initial-evaluator-v1",
+    "preserved": true,
+    "distinction": "Predecessor all-pair mean and prospective all13/animal-split diagnostic is not the Figure5E filtered median. No predecessor or canonical files modified."
+  },
+  "numerical_policy": {
+    "correlation": "Float64-equivalent Python float, prescaling before centering; constant vectors undefined; within eight machine epsilons of absolute correlation one snapped to signed infinity, inherited explicitly from predecessor engineering policy.",
+    "median": "Standard odd/even median; central opposite infinities undefined, not zero-filled.",
+    "friedman": "Rank within each dataset, average tied ranks, standard tie correction, three original method columns only. Undefined retained median blocks statistic; all-method ties in every dataset explicitly undefined.",
+    "support": "At least100 defined pairs in each original method. Optional candidate cannot change the selected dataset support.",
+    "dates": "Exact ISO calendar dates separated by one day; ordinal session adjacency is insufficient. Native author date-index parity remains unverified.",
+    "rate": "Source mean-rate metadata supplied by operator with measurement provenance; peak threshold calculated directly from PETH bins in Hz. Authentic source mean-rate preparation remains unresolved."
+  },
+  "population_and_execution": {
+    "original_figure5_population": "41591 units,12 datasets,10 rats; rats2/4 first31sessions and rat6 excluded. Exact mapping to version20019489 release not recovered by this component.",
+    "full_assignments_required": true,
+    "silent_population_intersection": false,
+    "peth_independence": "Explicit operator assertion required; external executable provenance still needs audit and this declaration is not proof.",
+    "source_population_authenticated": false,
+    "native_data_prepared": false,
+    "author_methods_executed": false
+  },
+  "outcomes": {
+    "reproduction": "First-class outcome; this is an executable safeguard component, with no empirical reproduction score.",
+    "improvement": "First-class separate outcome; optional candidate report does not define a non-degradation threshold or establish improvement.",
+    "paired_conditions": "Same operator population/scorer intended for paper+data and paper+data+author-code conditions. Participant delivery remains unbuilt here.",
+    "current_sota": "not assessed"
+  },
+  "remaining_components": [
+    "Authenticate original cohort/session/unit mapping and exact source preprocessing",
+    "Prepare authentic rate/date/PETH observations and audit PETH exclusion through all matching, motion, tuning and curation stages",
+    "Run DANT, UnitMatch and EMD on original common population, including UnitMatch half-session waveform requirements",
+    "Reconstruct Figure5D Equation19 mixed model and source estimated marginal means",
+    "Recover and score original joint-sort precision/recall, unmatched-pair and cross-shank controls",
+    "Justify joint improvement/non-degradation uncertainty rule and build paired participant delivery"
+  ],
+  "qualification": "source-grounded software component; generated controls only; no scientific benchmark admission",
+  "resources": {
+    "source_bytes_retained": 307090,
+    "failed_source_bytes_charged_conservatively": 4096,
+    "total_source_bytes_charged": 311186,
+    "source_reservation_id": "paper04-tracking-source01",
+    "scientific_runs": 0,
+    "model_runs": 0,
+    "installs": 0,
+    "authentic_neural_data_bytes": 0
+  }
+}
