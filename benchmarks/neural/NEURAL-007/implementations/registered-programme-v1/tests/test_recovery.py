@@ -197,7 +197,7 @@ class Recovery(unittest.TestCase):
         result, calls, alarms = self.dispatch(review)
         self.assertEqual(result, 0)
         self.assertEqual(calls[0]['endpoint'], review['docker_host'])
-        self.assertEqual(calls[0]['deadline'] - calls[0]['origin'], 180)
+        self.assertEqual(calls[0]['deadline'], calls[0]['origin'] + 180)
         self.assertTrue(97 < alarms[0][1] <= 98)
         for endpoint in (None, '', 'tcp://host:2375', 'unix://relative', 'unix:///a/../b', 'unix:///a\nb', 'unix:///a,b'):
             with self.subTest(endpoint=endpoint), self.assertRaises((KeyError, ValueError)):
@@ -256,7 +256,7 @@ class Recovery(unittest.TestCase):
         self.qualify(review)
         result, calls, alarms = self.dispatch(review, 'submission')
         self.assertEqual(result, 0)
-        self.assertEqual(calls[0]['deadline'] - calls[0]['origin'], 100)
+        self.assertEqual(calls[0]['deadline'], calls[0]['origin'] + 100)
         self.assertTrue(57 < alarms[0][1] <= 58)
 
     def test_stale_or_insufficient_allocation_refuses_before_execute(self):
