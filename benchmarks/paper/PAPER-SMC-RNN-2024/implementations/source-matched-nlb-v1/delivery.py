@@ -79,13 +79,6 @@ def no_private_paths(value):
                 "private absolute paths are forbidden in participant metadata")
 
 
-def write_json(path, data):
-    no_private_paths(data)
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True, allow_nan=False) + "\n")
-
-
 def copy_verified(source, destination, expected_sha256):
     shutil.copyfile(source, destination)
     require(contract.sha256(destination) == expected_sha256, "file changed during participant export")
@@ -213,9 +206,29 @@ def file_inventory(root):
     return rows
 
 
+def plan_source(plan, relative, source, expected_hash):
+    require(relative not in plan, "duplicate delivery path")
+    plan[relative] = {"source": Path(source), "bytes": Path(source).stat().st_size,
+                      "sha256": expected_hash}
+
+
+def plan_json(plan, relative, data):
+    no_private_paths(data)
+    require(relative not in plan, "duplicate delivery path")
+    content = (json.dumps(data, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
+    plan[relative] = {"content": content, "bytes": len(content),
+                      "sha256": hashlib.sha256(content).hexdigest()}
+
+
+def planned_inventory(plan):
+    return [{"path": path, "bytes": row["bytes"], "sha256": row["sha256"]}
+            for path, row in sorted(plan.items())]
+
+
 def export_pair(prepared_root, author_source, paper, output, *,
-                source_manifest=SOURCE_MANIFEST, protocol=PROTOCOL):
+                source_manifest=SOURCE_MANIFEST, protocol=PROTOCOL, reserve_bytes=0):
     """Export an immutable, allowlisted pair after authentic phase admission."""
+    require(type(reserve_bytes) is int and reserve_bytes >= 0, "reserve_bytes must be a nonnegative integer")
     output = Path(output).resolve()
     require(not output.exists(), "paired delivery output already exists")
     require(not any((ancestor / ".git").exists() for ancestor in (output, *output.parents)),
@@ -233,15 +246,6 @@ def export_pair(prepared_root, author_source, paper, output, *,
     val, val_root = admitted_phase(prepared_root, "val")
     code, code_metadata = official_source_files(author_source, source_manifest)
     output.parent.mkdir(parents=True, exist_ok=True)
-    input_bytes = sum(
-        (root / name).stat().st_size for root, names in
-        ((test_root, ("train_input_20ms.h5", "eval_input_20ms.h5")),
-         (val_root, ("train_input_20ms.h5", "eval_input_20ms.h5", "eval_target_20ms.h5"))) for name in names
-    )
-    estimated_export_bytes = 2 * (input_bytes + paper.stat().st_size)
-    estimated_export_bytes += sum(row["bytes"] for _, _, row in code) + 4 * 1024**2
-    require(shutil.disk_usage(output.parent).free - estimated_export_bytes >= 60 * 1024**3,
-            "export would violate the 60 GiB free-disk floor")
     task = {
         "schema": "smc_participant_task_v1", "task_id": "PAPER-SMC-RNN-2024",
         "objective": "Improve the matching original Table 2 SMC-RNN co-bps result on the complete MC_Maze 20-ms test panel; report every companion metric.",
@@ -264,67 +268,76 @@ def export_pair(prepared_root, author_source, paper, output, *,
         "exposure": "Original test targets became public in January 2026. Local exclusion does not make this an untouched holdout.",
         "interpretation": "Reproduction is calibration. A positive point difference alone is not an improvement finding; prespecify uncertainty and companion non-regression before candidate scoring. Exceeding SMC-RNN does not establish current SOTA.",
     }
-    with tempfile.TemporaryDirectory(prefix=".smc-pair-", dir=output.parent) as temporary:
-        staging = Path(temporary) / "pair"
-        inventories = {}
-        for condition in CONDITIONS:
-            destination = staging / condition
-            destination.mkdir(parents=True)
-            copy_verified(paper, destination / "paper.pdf", PAPER_SHA256)
-            write_json(destination / "paper.json", {"url": PAPER_URL, "sha256": contract.sha256(paper),
+    # Plan every byte, including both copies and all JSON manifests, before
+    # writing payloads. Atomic rename adds no second copy of the staged pair.
+    plans, inventories = {}, {}
+    for condition in CONDITIONS:
+        plan = plans[condition] = {}
+        plan_source(plan, "paper.pdf", paper, PAPER_SHA256)
+        plan_json(plan, "paper.json", {"url": PAPER_URL, "sha256": PAPER_SHA256,
                        "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
                        "authors": ["Matthijs Pals", "A Erdem Sagtekin", "Felix Pei", "Manuel Gloeckler", "Jakob H Macke"],
                        "publication": "NeurIPS 2024", "source_locations": ["Supplement B.5/Table 2", "Supplement D.7"]})
-            copy_verified(protocol, destination / "protocol.json", contract.sha256(PROTOCOL))
-            write_json(destination / "task.json", task)
-            write_json(destination / "attribution.json", {
+        plan_source(plan, "protocol.json", protocol, contract.sha256(PROTOCOL))
+        plan_json(plan, "task.json", task)
+        plan_json(plan, "attribution.json", {
                 "dataset": "Mark Churchland and Matthew Kaufman (2022), MC_Maze: macaque primary motor and dorsal premotor cortex spiking activity during delayed reaching",
                 "dataset_url": "https://doi.org/10.48324/dandi.000128/0.220113.0400", "dataset_license": "CC-BY-4.0",
                 "nlb_tools": "neurallatents/nlb_tools 0.0.3, MIT; source tensor recipe preserved",
                 "data_transform": "20-ms binning and original train/validation/test tensors; validation targets included, test targets excluded",
             })
-            for phase, panel, root in (("val", val, val_root), ("test", test, test_root)):
-                target_dir = destination / "inputs" / "mc_maze" / phase
-                target_dir.mkdir(parents=True)
-                names = ["train_input_20ms.h5", "eval_input_20ms.h5"]
-                if phase == "val":
-                    names.append("eval_target_20ms.h5")
-                for name in names:
-                    expected_hash = panel["validation_target_sha256"] if name.startswith("eval_target_") else panel["inputs_sha256"][name]
-                    copy_verified(root / name, target_dir / name, expected_hash)
-                # Only authenticated scientific identity fields are participant metadata.
-                public_panel = {key: panel[key] for key in contract.PANEL_IDENTITY_FIELDS}
-                public_panel["inputs_sha256"] = panel["inputs_sha256"]
-                if phase == "val":
-                    public_panel["validation_target_sha256"] = panel["validation_target_sha256"]
-                    public_panel["validation_target_shapes"] = panel["validation_target_shapes"]
-                write_json(target_dir / "panel.json", public_panel)
-            if condition == "paper_with_code":
-                for path, relative, row in code:
-                    target = destination / "official_source" / str(relative)
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    copy_verified(path, target, row["sha256"])
-                write_json(destination / "official_source_manifest.json",
-                           {**code_metadata, "files": [row for _, _, row in code]})
-            inventories[condition] = file_inventory(destination)
-            write_json(destination / "delivery_manifest.json", {
+        for phase, panel, root in (("val", val, val_root), ("test", test, test_root)):
+            relative_dir = "inputs/mc_maze/" + phase + "/"
+            names = ["train_input_20ms.h5", "eval_input_20ms.h5"]
+            if phase == "val":
+                names.append("eval_target_20ms.h5")
+            for name in names:
+                expected_hash = panel["validation_target_sha256"] if name.startswith("eval_target_") else panel["inputs_sha256"][name]
+                plan_source(plan, relative_dir + name, root / name, expected_hash)
+            public_panel = {key: panel[key] for key in contract.PANEL_IDENTITY_FIELDS}
+            public_panel["inputs_sha256"] = panel["inputs_sha256"]
+            if phase == "val":
+                public_panel["validation_target_sha256"] = panel["validation_target_sha256"]
+                public_panel["validation_target_shapes"] = panel["validation_target_shapes"]
+            plan_json(plan, relative_dir + "panel.json", public_panel)
+        if condition == "paper_with_code":
+            for path, relative, row in code:
+                plan_source(plan, "official_source/" + str(relative), path, row["sha256"])
+            plan_json(plan, "official_source_manifest.json", {**code_metadata, "files": [row for _, _, row in code]})
+        inventories[condition] = planned_inventory(plan)
+        plan_json(plan, "delivery_manifest.json", {
                 "schema": "smc_participant_delivery_v1", "condition": condition,
                 "status": "participant_materials_prepared", "files": inventories[condition],
                 "validation_targets": "included_identically_as_permitted_original_validation_observations",
                 "boundary": "Allowlisted materials only. No execution, sandbox, network restriction, or protected-test claim follows.",
             })
-        left = {row["path"]: row["sha256"] for row in inventories[CONDITIONS[0]]}
-        right = {row["path"]: row["sha256"] for row in inventories[CONDITIONS[1]]}
-        require(all(right.get(path) == digest for path, digest in left.items()), "paired shared files differ")
-        additions = sorted(set(right) - set(left))
-        require(all(path.startswith("official_source/") or path == "official_source_manifest.json" for path in additions),
-                "paired conditions differ outside official code")
-        pair = {"schema": "smc_paired_delivery_v1", "task_id": "PAPER-SMC-RNN-2024",
+    left = {row["path"]: row["sha256"] for row in inventories[CONDITIONS[0]]}
+    right = {row["path"]: row["sha256"] for row in inventories[CONDITIONS[1]]}
+    require(all(right.get(path) == digest for path, digest in left.items()), "paired shared files differ")
+    additions = sorted(set(right) - set(left))
+    require(all(path.startswith("official_source/") or path == "official_source_manifest.json" for path in additions),
+            "paired conditions differ outside official code")
+    pair = {"schema": "smc_paired_delivery_v1", "task_id": "PAPER-SMC-RNN-2024",
                 "status": "participant_materials_prepared", "conditions": list(CONDITIONS),
                 "shared_files": left, "code_condition_additions": additions,
-                "condition_manifest_sha256": {condition: contract.sha256(staging / condition / "delivery_manifest.json") for condition in CONDITIONS},
+                "condition_manifest_sha256": {condition: plans[condition]["delivery_manifest.json"]["sha256"] for condition in CONDITIONS},
+                "operator_disk_reserve_bytes": reserve_bytes,
                 "episode_executed": False, "solver_results": None, "scientific_qualification": False}
-        write_json(staging / "pair_manifest.json", pair)
+    entire_plan = {condition + "/" + path: row for condition in CONDITIONS for path, row in plans[condition].items()}
+    plan_json(entire_plan, "pair_manifest.json", pair)
+    payload_bytes = sum(row["bytes"] for row in entire_plan.values())
+    require(shutil.disk_usage(output.parent).free >= payload_bytes + reserve_bytes,
+            "insufficient disk capacity for complete paired payloads plus the explicit operator reserve")
+    with tempfile.TemporaryDirectory(prefix=".smc-pair-", dir=output.parent) as temporary:
+        staging = Path(temporary) / "pair"
+        for relative, row in entire_plan.items():
+            destination = staging / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            if "source" in row:
+                copy_verified(row["source"], destination, row["sha256"])
+            else:
+                destination.write_bytes(row["content"])
+        require(file_inventory(staging) == planned_inventory(entire_plan), "written delivery differs from the complete byte plan")
         staging.rename(output)
     return pair
 
@@ -335,9 +348,11 @@ def main(argv=None):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--source-manifest", type=Path, default=SOURCE_MANIFEST)
     parser.add_argument("--protocol", type=Path, default=PROTOCOL)
+    parser.add_argument("--reserve-bytes", type=int, default=0,
+                        help="Additional free-disk reserve after the complete paired export; default 0. Local wave operators must pass 64424509440.")
     args = parser.parse_args(argv)
     result = export_pair(args.prepared_root, args.author_source, args.paper, args.output,
-                         source_manifest=args.source_manifest, protocol=args.protocol)
+                         source_manifest=args.source_manifest, protocol=args.protocol, reserve_bytes=args.reserve_bytes)
     print(json.dumps(result, indent=2, sort_keys=True))
 
 

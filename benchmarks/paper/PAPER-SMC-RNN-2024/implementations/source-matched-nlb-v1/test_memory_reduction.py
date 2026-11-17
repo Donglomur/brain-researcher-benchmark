@@ -1,7 +1,14 @@
 """Generated numerical controls only; no source benchmark performance."""
+import importlib.util
+from pathlib import Path
 import unittest
 import numpy as np
-from memory_reduction import verify_reduction
+
+
+SPEC = importlib.util.spec_from_file_location("smc_memory_reduction", Path(__file__).with_name("memory_reduction.py"))
+memory_reduction = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(memory_reduction)
+verify_reduction = memory_reduction.verify_reduction
 
 
 class ReductionTests(unittest.TestCase):

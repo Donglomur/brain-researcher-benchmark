@@ -1,7 +1,17 @@
-"""Generated software controls only; these fixtures are not neural observations."""
+"""Generated software controls only; these fixtures are not neural observations.
+
+The original-scorer numerical control always runs against the vendored, unchanged
+MIT evaluator from the authenticated official nlb-tools==0.0.3 wheel. Provenance
+and its license are in third_party/nlb_tools_0_0_3. CI must install NumPy, SciPy,
+scikit-learn and h5py; missing dependencies are failures, never silent skips.
+The production loader independently requires evaluation.py SHA256
+05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476.
+This mandatory control calls the unchanged scorer on generated arrays only.
+CI dependency versions may differ from the source-qualification environment in
+requirements-cpu.txt; CI establishes generated compatibility, not paper scores.
+"""
 import importlib.util
 import json
-import os
 from pathlib import Path
 import tempfile
 import types
@@ -205,7 +215,10 @@ class ScorerTests(unittest.TestCase):
         self.target.write_bytes(b"generated operator file")
         fake = types.SimpleNamespace(evaluate=lambda target, pred:
                                      [{scorer.DATASET + "_split": dict(zip(scorer.METRICS, (0.3, 0.8, 0.5, 0.2)))}])
-        with patch.object(scorer, "load_original_scorer", return_value=fake):
+        # This generated mock does not execute scientific dependencies. Its
+        # version metadata must not make generic CI require scikit-learn.
+        with patch.object(scorer, "load_original_scorer", return_value=fake), \
+                patch.object(scorer.importlib.metadata, "version", return_value="generated-fixture-only"):
             report = self.score()
         self.assertEqual(set(report["metrics"]), set(scorer.METRICS))
         self.assertAlmostEqual(report["difference_from_published"]["co-bps"], -0.0225)
@@ -221,7 +234,6 @@ class ScorerTests(unittest.TestCase):
             with self.assertRaisesRegex(scorer.ContractError, "companion metrics"):
                 self.score()
 
-    @unittest.skipUnless(os.environ.get("SMC_ORIGINAL_SCORER"), "set SMC_ORIGINAL_SCORER to verified evaluation.py")
     def test_original_scorer_generated_numerical_control(self):
         """Runs the actual unchanged scorer, not a mirror implementation."""
         rng = np.random.default_rng(73)
@@ -237,7 +249,12 @@ class ScorerTests(unittest.TestCase):
             for index in range(108):
                 conditions[index] = np.array([index] if index < 4 else [], dtype=np.int64)
         self.freeze()
-        report = self.score(os.environ["SMC_ORIGINAL_SCORER"])
+        original = Path(__file__).parent / "third_party" / "nlb_tools_0_0_3" / "evaluation.py"
+        provenance = scorer.read_json(original.parent / "PROVENANCE.json")
+        for name, identity in provenance["files"].items():
+            self.assertEqual(scorer.sha256(original.parent / name), identity["sha256"])
+            self.assertEqual((original.parent / name).stat().st_size, identity["bytes"])
+        report = self.score(original)
         with h5py.File(self.target, "r") as target, h5py.File(self.pred, "r") as pred:
             counts = target[scorer.DATASET]["eval_spikes_heldout"][()]
             rates = pred[scorer.DATASET]["eval_rates_heldout"][()]
