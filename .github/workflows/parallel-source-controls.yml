@@ -54,11 +54,12 @@ jobs:
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
           pins = [
-              ('scripts/maintenance/run_parallel_source_controls.py', 25002, '695e39233626efa06ec25a53f8808793c7853fd2276f639d5215e4d74597c891'),
-              ('tests/maintenance/test_parallel_source_controls.py', 21146, '8dd5db4bd9ef1cfdb31d037f8245661ed7cec727b3d92303224bb198c4148ce4'),
-              ('benchmarks/integrity/parallel-source-controls.v1.json', 146692, '97b12427e25d048c94868bcfc6729f87c524b90000984e6304d4b93646046920'),
+              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 26530, 'sha256': '04b916987dfed1d003fb43f04e384576655dc1423d3c75f8f4ba29ff554bbcf2'},
+              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 27731, 'sha256': '810d8a0f6dfa9063e39c5b6266c2307bea1b3ef61b9944ab6e9cda421b05cdd8'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 146702, 'sha256': 'e483a44745089019067bb5d702bef90e7dddaf3f0bb9d7a20b4e7d39b7ecbb3c'},
           ]
-          for path, size, digest in pins:
+          for pin in pins:
+              path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
                   before = os.fstat(stream.fileno())
                   assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size, path

@@ -84,12 +84,39 @@ class NeuralRepositoryLineageTests(unittest.TestCase):
 
     def test_neural_revision_members_and_original_registry_are_owned_without_execution(self):
         result = self.build()
-        self.assertEqual(result["source_files"], 13)
         self.assertFalse(result["scientific_execution"])
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(checks.check_repository(self.root)["source_check"], "passed")
         self.assertEqual((self.root / checks.NEURAL_SNAPSHOT).read_bytes(), self.original_registry)
         records = {row["path"]: row for row in json.loads((self.root / checks.INVENTORY).read_bytes())["files"]}
+        maintenance_members = {
+            "benchmarks/integrity/parallel-source-controls.v1.json",
+            "scripts/maintenance/run_parallel_source_controls.py",
+            "tests/maintenance/test_parallel_source_controls.py",
+        }
+        expected_members = maintenance_members | {
+            "benchmarks/paper/PAPER-001/task.json",
+            "benchmarks/paper/PAPER-002/task.json",
+            "benchmarks/neural/NEURAL-001/task.json",
+            "benchmarks/neural/NEURAL-002/task.json",
+            "benchmarks/paper/PAPER-001/implementations/example/example.py",
+            "benchmarks/shared/diagnostic/example/example.py",
+            "benchmarks/integrity/current.json",
+            "benchmarks/integrity/current-closures/example/binding.json",
+            "docs/provenance/registrations/neural-pre-understanding-v1.json",
+            "benchmarks/neural/NEURAL-001/historical/task.pre-understanding.v1.json",
+            "benchmarks/neural/NEURAL-001/understanding.v1.json",
+            "benchmarks/neural/NEURAL-002/historical/task.pre-understanding.v1.json",
+            "benchmarks/neural/NEURAL-002/understanding.v1.json",
+        }
+        self.assertEqual(set(records), expected_members)
+        self.assertEqual(result["source_files"], len(expected_members))
+        # The shared fixture's maintenance sources must be read from this temporary root.
+        for path in maintenance_members:
+            raw = (self.root / path).read_bytes()
+            self.assertEqual(records[path]["owner"], "generated-source-controls")
+            self.assertEqual(records[path]["bytes"], len(raw))
+            self.assertEqual(records[path]["sha256"], hashlib.sha256(raw).hexdigest())
         self.assertEqual(records[checks.NEURAL_SNAPSHOT]["owner"], "registration-provenance")
         for row in self.rows:
             for key in ("previous_specification", "understanding_contract"):

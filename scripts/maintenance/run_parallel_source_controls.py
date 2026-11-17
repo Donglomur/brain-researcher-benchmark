@@ -37,6 +37,10 @@ def need(condition, message):
         raise ValueError(message)
 
 
+class ControlFailure(ValueError):
+    """A command failed admission after its owned process cleanup completed."""
+
+
 def relative(value):
     need(type(value) is str and value and '\\' not in value, 'relative path required')
     p = PurePosixPath(value)
@@ -157,10 +161,13 @@ def run_command(argv, cwd, environment, log, seconds):
         finally:
             if process is not None:
                 stop_group(process)
-    need(log.stat().st_size <= MAX_LOG_BYTES, 'log byte limit')
+    if log.stat().st_size > MAX_LOG_BYTES:
+        raise ControlFailure('log byte limit')
     output = log.read_text(errors='replace')
-    need(reason is None, reason or '')
-    need(code == 0, 'control process exit %d; see %s' % (code, log.name))
+    if reason is not None:
+        raise ControlFailure(reason)
+    if code != 0:
+        raise ControlFailure('control process exit %d; see %s' % (code, log.name))
     return output, time.monotonic() - started
 
 
@@ -249,6 +256,7 @@ def run(root, manifest, group, output, fixtures=None):
     inventory = bounded_json(root/'benchmarks/integrity/source-ownership.json', 8*1024*1024)
     pins = {r['path']: r for r in inventory['files']}
     fixture_paths = bind_fixtures(document, selected, fixtures)
+    working_directories = {}
     for row in selected:
         for name in row['test_paths']:
             need(name in pins, 'test lacks current source ownership: ' + name)
@@ -257,6 +265,7 @@ def run(root, manifest, group, output, fixtures=None):
             need(not value.startswith('/Users/') and not value.startswith('/home/'), 'private path in manifest')
             need('${' not in value or value == '${PYTHON}' or value in fixture_paths,
                  'unresolved command placeholder: ' + value)
+        working_directories[row['id']] = local(root,row['cwd'],directory=True)
     output.mkdir(parents=True)
     environment = dict(os.environ)
     for name in ('PYTHONPATH','PYTHONHOME','PYTEST_ADDOPTS','PYTEST_PLUGINS'):
@@ -265,23 +274,49 @@ def run(root, manifest, group, output, fixtures=None):
     environment.update({'PYTHONNOUSERSITE':'1','PYTHONDONTWRITEBYTECODE':'1',
                         'PYTEST_DISABLE_PLUGIN_AUTOLOAD':'1'})
     results = []
+    failures = []
     for row in selected:
         # -u also applies under -I, unlike PYTHONUNBUFFERED. Keep nested mutant
         # stdout in actual order relative to the outer framework's stderr.
         argv = [sys.executable, '-u'] + [fixture_paths.get(x, x) for x in row['argv'][1:]]
         child_env = dict(environment)
         child_env.update({k:fixture_paths.get(v, v) for k,v in row.get('environment', {}).items()})
-        text, elapsed = run_command(argv, local(root,row['cwd'],directory=True), child_env,
-                                    output/(row['id']+'.log'), row['timeout_seconds'])
-        result = result_summary(text, row['runner'], row['expected_tests'], row.get('expected_output'))
-        results.append({'id':row['id'],'task_id':row['task_id'],**result,'wall_seconds':elapsed})
+        started = time.monotonic()
+        problem = None
+        try:
+            text, elapsed = run_command(argv, working_directories[row['id']], child_env,
+                                        output/(row['id']+'.log'), row['timeout_seconds'])
+        except ControlFailure as error:
+            problem = error
+        else:
+            try:
+                result = result_summary(text, row['runner'], row['expected_tests'], row.get('expected_output'))
+            except ValueError as error:
+                problem = error
+        if problem is None:
+            record = {'id':row['id'],'task_id':row['task_id'],**result,'wall_seconds':elapsed}
+            results.append(record)
+        else:
+            record = {'id':row['id'],'task_id':row['task_id'],'status':'failed',
+                      'error':str(problem),'log':row['id']+'.log',
+                      'wall_seconds':time.monotonic()-started}
+            failures.append(record)
+        attempted = len(results)+len(failures)
+        status = 'failed' if failures else ('passed' if attempted == len(selected) else 'running')
         (output/'results.json').write_text(json.dumps({'scope':'generated_software_controls_only',
-            'scientific_qualification':False,'group':group,'completed':results},indent=2)+'\n')
-        print(json.dumps(results[-1]),flush=True)
+            'scientific_qualification':False,'group':group,'status':status,
+            'attempted':attempted,'completed':results,'failed':failures},indent=2)+'\n')
+        print(json.dumps(record),flush=True)
+    need(not failures, '%d of %d authenticated commands failed; see results.json' % (len(failures),len(selected)))
     return results
 
 
 FIXTURE_HOSTS = frozenset({'raw.githubusercontent.com', 'physionet.org'})
+# PhysioNet's authenticated RECORDS redirect identifies this one public object.
+# It is a direct address exception, never a general S3 host or redirect rule.
+FIXTURE_EXACT_URLS = frozenset({
+    'https://physionet-open.s3.amazonaws.com/chbmit/1.0.0/RECORDS',
+})
 MAX_FIXTURE_FILES = 64
 MAX_FIXTURE_BYTES = 2 * 1024 * 1024
 FIXTURE_SECONDS = 180
@@ -306,8 +341,9 @@ def _url(value):
     _require(type(value) is str and value.isascii() and not any(c.isspace() for c in value),
              'public HTTPS fixture URL required')
     parsed = urllib.parse.urlsplit(value)
-    _require(parsed.scheme == 'https' and parsed.netloc in FIXTURE_HOSTS
-             and parsed.hostname in FIXTURE_HOSTS and not parsed.fragment
+    _require(parsed.scheme == 'https' and
+             ((parsed.netloc in FIXTURE_HOSTS and parsed.hostname in FIXTURE_HOSTS)
+              or value in FIXTURE_EXACT_URLS) and not parsed.fragment
              and parsed.username is None and parsed.password is None,
              'fixture URL host or credentials refused')
     return parsed
