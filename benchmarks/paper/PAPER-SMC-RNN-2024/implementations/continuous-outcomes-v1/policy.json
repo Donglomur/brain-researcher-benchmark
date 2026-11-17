@@ -1,0 +1,79 @@
+{
+  "schema": "smc_continuous_measurement_policy_v1",
+  "task_id": "PAPER-SMC-RNN-2024",
+  "root_adoption_sha256": "39d1f05ccbcfe49190676dcc2ba6b71ad6218059adc5762ea616df40dee214da",
+  "council_review_sha256": "0de6754f424b802c80e7944503bf5e0befcf47b561719801ca8ad4eb8750a0d4",
+  "independent_statistics_review_sha256": "520397519ace674aecbdd9547741a52e962300a0a05dd1eebfe16f7ad85e1680",
+  "estimand": "Exact unchanged original evaluator measurements on the fixed complete original MC_Maze 20-ms panel, conditional on frozen submitted rate tensors.",
+  "conditions": ["paper_data", "paper_data_author_code"],
+  "outcomes": {
+    "reproduction": {
+      "submission_keys": ["causal", "noncausal"],
+      "measurement": "All eight original source-method findings, with published and corresponding current-release reference values, signed and absolute differences for every metric.",
+      "recipe": {"particles": 192, "repeats": 32, "smooth": false},
+      "recipe_scope": "Declared original source-method condition only. Independently authored faithful implementation is allowed; declaration does not prove actual method fidelity or AI authorship.",
+      "binary_agreement": "not_applicable",
+      "numeric_tolerance": null,
+      "aggregation_across_arms_or_metrics": "none"
+    },
+    "improvement": {
+      "submission_keys": ["offline"],
+      "primary_metric": "co-bps",
+      "measurement": "One complete original offline four-metric vector and signed differences from every retained SMC reference and each separate published source-paper comparison vector. Positive co-bps differences are descriptive ordering, not binary scientific wins.",
+      "selected_smc_reference_id": "current_release_noncausal",
+      "reference_selection": "Maximum co-bps among both published SMC and both current-release SMC references; retain the complete associated vector and every other reference.",
+      "binary_win": "not_applicable",
+      "companion_rule": "Report all companion differences and negative differences as tradeoffs; no invented non-regression margin."
+    }
+  },
+  "metrics": ["co-bps", "vel R2", "psth R2", "fp-bps"],
+  "smc_references": [
+    {"id": "published_causal", "role": "published", "arm": "causal", "metrics": {"co-bps": 0.3225, "vel R2": 0.8479, "psth R2": 0.5927, "fp-bps": 0.2184}},
+    {"id": "published_noncausal", "role": "published", "arm": "noncausal", "metrics": {"co-bps": 0.3407, "vel R2": 0.8902, "psth R2": 0.5963, "fp-bps": 0.2417}},
+    {"id": "current_release_causal", "role": "current_release_reference", "arm": "causal", "score_receipt_sha256": "52a648cde45554b46875c4b2020ecec27aef9cebbcccffff056faec50d93e26d", "metrics": {"co-bps": 0.3221297803678063, "vel R2": 0.8459605026793974, "psth R2": 0.5931377256416359, "fp-bps": 0.21924211546771746}},
+    {"id": "current_release_noncausal", "role": "current_release_reference", "arm": "noncausal", "score_receipt_sha256": "2fa4487ebe14df127c97e89288877ca2a0a73aa75699a6dd66fc8df0c7fe1ac4", "metrics": {"co-bps": 0.3410160879591172, "vel R2": 0.8898607459432769, "psth R2": 0.5958331235016836, "fp-bps": 0.2418654447016941}}
+  ],
+  "source_paper_published_context": [
+    {"id": "LFADS", "role": "source_paper_published_context", "locally_rerun": false, "metrics": {"co-bps": 0.3554, "vel R2": 0.8906, "psth R2": 0.6002, "fp-bps": 0.2454}},
+    {"id": "NDT", "role": "source_paper_published_context", "locally_rerun": false, "metrics": {"co-bps": 0.3597, "vel R2": 0.8897, "psth R2": 0.6172, "fp-bps": 0.2442}}
+  ],
+  "later_literature_context": [
+    {"name": "LangevinFlow", "reported_co_bps": 0.3641, "source": "https://arxiv.org/html/2507.11531v2", "attribution": "Existing reviewed calibration report cites authors' 2026-03-10 Table1 MC_Maze20ms; no new literature retrieval or local evaluation."},
+    {"name": "MINT", "reported_co_bps": 0.3295, "source": "https://arxiv.org/html/2507.11531v2", "attribution": "Reported by LangevinFlow in existing reviewed calibration report; not independently sourced from original MINT publication."}
+  ],
+  "reference_evidence": {
+    "report_path": "docs/science/smc-author-calibration-20261117.json",
+    "report_sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1",
+    "historical_checkpoint_data_version_linkage": "not_established",
+    "noncausal_supervisor_success": false,
+    "noncausal_completed_scalar_output": "Separately authenticated and accepted without rerun; failed supervisor history remains failed.",
+    "role": "Current-release diagnostic references, not AI attempts or proof of exact historical reconstruction."
+  },
+  "access": {
+    "training_validation": "Exactly the admitted original training/validation tensors and supplied original validation targets in each participant inventory.",
+    "test": "All35held-in observation bins from the same test trial; no test held-out spikes, future spikes or behavior.",
+    "behavior_guidance_allowed": true,
+    "validation_selection_allowed": true,
+    "test_feedback_allowed": false,
+    "test_wide_adaptation_allowed": false,
+    "cross_test_trial_inference_allowed": false,
+    "final_submissions_per_outcome": 1,
+    "excluded_materials": ["Original test targets", "Operator predictions", "Author checkpoints", "New raw fields or extra trials"],
+    "source_method_dependencies": "Preserve source-method dependencies for the named reproduction condition; do not impose them on primary offline improvement."
+  },
+  "uncertainty": {
+    "measurement": "fixed_panel_point_measurements",
+    "biological_generalization": "not_estimated",
+    "source_and_candidate_seed_variation": "not_estimated",
+    "target_resampling": "not_allowed",
+    "confidence_intervals": null,
+    "published_rounding": "Retain printed values; display precision is not an equivalence margin."
+  },
+  "construction": {
+    "AI_attempt_required": false,
+    "required": ["Complete usable interfaces", "Actual authenticated bound materials", "Meaningful typed policies", "Explicit matched resource/access settings for episode admission"],
+    "result_attribution": "Actual AI attribution and verified source-method fidelity require per-submission execution evidence, separately from benchmark construction."
+  },
+  "target_exposure": "public_original_test_targets_released_2026_01",
+  "claim_limits": ["No binary reproduction or improvement pass", "No biological generalization", "No meaningful superiority or equivalence claim", "No causal-online claim", "No untouched holdout", "No current SOTA or temporal completeness claim"]
+}
