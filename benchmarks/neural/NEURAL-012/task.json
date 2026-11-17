@@ -18,11 +18,11 @@
     ],
     "task_family": "seizure_detection"
   },
-  "scientific_question": "Which changes in CHB-to-Siena detection remain after montage mapping, auxiliary-channel removal and calibration controls?",
+  "scientific_question": "For a detector trained only on CHB-MIT people, what is its complete-Siena event performance, and how do fixed harmonization and normalization change the paired target-person outcome?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Cross-cohort prediction contrasts and a source-versus-target nuisance analysis."
+    "Siena equal-person event F1 and paired harmonized-minus-native, normalized-minus-harmonized and harmonized-minus-timing contrasts, with mandatory sensitivity and false alarms."
   ],
   "input_assets": {
     "routes": [
@@ -119,19 +119,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Representative EDF header: 35 channels at 512 Hz, including 29 labeled EEG channels plus EKG/SPO2/HR/auxiliary/marker channels; 2,625 one-second records. Neural-only input must exclude auxiliary and MK channels.",
-    "allowed_context": "14-row subject_info.csv records patient ID, age, sex, seizure type, localization/lateralization, EEG channel count and seizure count; event files give clock-based seizure starts/ends. Counts sum to 47 seizures.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Subtract registration start from seizure clock, handling day wrap and known source corrections. Actual PN00-1 event is 1143–1213 s. PN00-3 source has an impossible one-hour-long end-time typo; official parser corrects end time to18.29.29 and handles other filename/spacing exceptions.",
-    "source_contract_evidence": "41-file manifest, 14-row subject table, actual event text, 9,216-byte EDF header and source correction/annotation parser inspected; no signal samples downloaded."
+    "inputs": [
+      "Genuine EEG channels with physical calibration: CHB native 256 Hz and Siena native 512 Hz, subject to source-header verification.",
+      "Native, fixed 18-edge harmonized, whole-record median/IQR-normalized, and timing-only views defined in the source control recipe."
+    ],
+    "forbidden_inputs": [
+      "Siena seizure labels for fitting or zero-calibration selection",
+      "Query records/signals/identities during CHB fitting",
+      "Auxiliary channels or guessed duplicate/derived montage edges",
+      "Analyst report accuracy used as detector-quality reward"
+    ],
+    "case_identity": "Full source panel enforces 727 unique opaque prepared records, 23+14 disjoint people and 2,908 recording-by-arm outputs. Four arms are conditions within one registration.",
+    "split": "For each arm, 23 CHB leave-one-person-out jobs provide source audit and an additional all-CHB fit predicts every Siena patient. Fit/predict phases are distinct; target prediction may jointly adapt unlabeled transient state under Q1, so this is not pointwise induction.",
+    "coverage": "96 logical jobs and 192 fit/predict invocations; no recording or failed arm may disappear. Corpus bytes, true montage/reference compatibility and complete observed runtime are unqualified."
   },
-  "biological_unit": "14 independent PN patient identifiers, with multiple files per patient; all files remain grouped. This is a separate adult cohort from pediatric CHB-MIT, not a processed CHB subset.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "23 CHB people and 14 distinct Siena people; cross-cohort means are unpaired, within-Siena arm contrasts are paired.",
+  "case_definition": "One complete frozen four-arm cross-cohort panel: 686 CHB and 41 Siena recordings.",
   "split": {
-    "policy": "Group complete PN patient recordings; cross-cohort task uses CHB training and Siena confirmation with a locked channel/calibration policy.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "For each arm, 23 CHB leave-one-person-out jobs provide source audit and an additional all-CHB fit predicts every Siena patient. Fit/predict phases are distinct; target prediction may jointly adapt unlabeled transient state under Q1, so this is not pointwise induction.",
+    "coverage": "96 logical jobs and 192 fit/predict invocations; no recording or failed arm may disappear. Corpus bytes, true montage/reference compatibility and complete observed runtime are unqualified."
   },
   "reference": {
     "source_code_url": "https://github.com/esl-epfl/epilepsy2bids",
@@ -146,49 +152,98 @@
     "data_url": "https://physionet.org/content/siena-scalp-eeg/1.0.0/"
   },
   "controls": [
-    "Locked channel map",
-    "no target seizure labels for zero-calibration arm",
-    "age/acquisition confounding acknowledged."
+    "Hold detector family fixed when interpreting preprocessing; otherwise call it a bundled method comparison.",
+    "Preserve PN05-3/PN14-3 clock-origin alternatives until source adjudication.",
+    "Audit unique forward/reverse CHB edges and Siena common-reference evidence before subtraction.",
+    "Retain offline/transductive status for zero-phase filters and future-dependent normalization."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Whole-cohort transfer contrasts require complete quantitative evidence; a single EEG trace is not a suitable substitute. A direct numerical-summary condition is possible but not delivered with withheld answers.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Waveform viewing can assist montage/artifact inspection but does not replace the full transfer estimand; no typed viewer condition is supplied.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Source analysis and reconstruction CLI are available; actual exploratory per-case interpretation with withheld targets remains unqualified.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "The analysis/reconstruction CLI is operator computation; a target-withholding adaptive participant investigation condition is not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Source phased fit/predict programme and fixed references are available for the full panel; authentic staging, host protection and execution remain unestablished.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [
+        "implementation-1",
+        "campaign_source"
+      ],
+      "missing": [
+        "Authentic source admission, protected runtime/environment and complete original fit/predict execution remain unqualified."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed target-patient event-F1 and false-alarm changes, with participant uncertainty.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Siena_equal_person_event_f1",
+      "direction": "higher",
+      "aggregation": "Per arm, pool event counts within each of 14 Siena people and average person F1; paired changes retain those same people.",
+      "rationale": "Directly scores the biological target; analysis_reconstruction remains a separate calibration outcome."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Siena event sensitivity and false alarms per 24 observed hours for every arm",
+      "Target paired contrasts and unpaired target-minus-source cohort shifts",
+      "Clock-profile sensitivity, complete false-alarm localization and observed support",
+      "maximum_scaled_reconstruction_error only as arithmetic-calibration accuracy"
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Native EEG reference",
+        "inputs": "Native valid EEG channels, no Siena labels",
+        "procedure": "Source median-channel log-line-length method with threshold trained on CHB people; empirical competence unqualified."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Harmonized/normalized reference pair",
+        "inputs": "Same selected detector family with fixed 18 edges and declared transforms",
+        "procedure": "Source recipe bundles montage, filter and resampling; normalization additionally uses unlabeled whole-record statistics."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Audited timing reference",
+        "inputs": "Training-person-balanced ictal prevalence by elapsed minute",
+        "procedure": "Exact fixed Laplace-smoothed timing source required; arbitrary metadata programmes are a broader comparator."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Hold detector family fixed when interpreting preprocessing; otherwise call it a bundled method comparison.",
+      "Preserve PN05-3/PN14-3 clock-origin alternatives until source adjudication.",
+      "Audit unique forward/reverse CHB edges and Siena common-reference evidence before subtraction.",
+      "Retain offline/transductive status for zero-phase filters and future-dependent normalization."
+    ],
+    "uncertainty": "Within-target contrasts use paired Siena patient summaries; CHB-to-Siena shifts use independent cohort summaries, never person pairing. Current standard errors are descriptive conditional on shared fitted models and do not establish population causality.",
+    "failure_policy": "Require complete 727-record/four-arm streams and exact score-to-event transformation; missing montage edges, zero IQR, ambiguous source profiles or incomplete phase lineage invalidate the full selected comparison, not just inconvenient rows.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "892ae1fe8045e80eb9b16953662b36de09024516bf4c854fe0f5bcbd77223bce",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "b5242449dfe9a858a50cd61ac3f367669c2f7a33f90194cb6afd45e3a01da82b"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -274,6 +329,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

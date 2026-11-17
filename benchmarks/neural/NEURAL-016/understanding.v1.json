@@ -1,0 +1,204 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-016",
+  "title": "Linguistic effects beyond natural-movie covariates",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The paired held-out neural-response evaluator is delivered and distinguishes EV from R². It verifies declared prediction/fit IDs, not actual fitting or clinical electrode correspondence; native preparation and a competent fixed nuisance/full reference remain missing.",
+  "scientific_target": {
+    "question": "Do prespecified linguistic features improve held-out neural-response prediction beyond speaker, acoustics, visual motion and word timing under person/movie and temporal separation?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "The full-minus-nuisance held-out neural prediction contrast on identical scalar response rows; negative, zero or inconclusive increments are valid empirical outcomes.",
+    "answer_origin": "Operator-private scalar responses derived from actual Brain Treebank intracranial signals under a frozen response definition/window. Published biological narrative is not the answer key.",
+    "case_unit": "An electrode response row within one continuous recording block; scoring is nested by block, electrode and person.",
+    "independent_unit": "10 clinical participants, with26 recording presentations and21 movies; electrode/word count does not increase biological n.",
+    "inference_scope": "Predictive contribution conditional on measured nuisance features and a verified fit protocol; no causal effect of language or clinical population guarantee.",
+    "exclusions": [
+      "Causal linguistic mechanism from incremental prediction alone",
+      "EV and R² used interchangeably",
+      "Cross-person prediction without independently resolved electrode/output mapping",
+      "Source paper GLM reproduction inferred from prospective held-out contrasts"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Permitted continuous acoustic/visual/speaker/word-timing features and declared linguistic regressors for encoding; training neural responses only.",
+      "Query linguistic/nuisance observations with nonpositive feature lags and fixed response-window guard; query neural responses remain private."
+    ],
+    "forbidden_inputs": [
+      "Held-out neural responses during feature/electrode selection, normalization, tuning or model fit",
+      "Cross-fold person/movie overlap or response-window leakage",
+      "Using row-index rolling as an autocorrelation control for irregular word times"
+    ],
+    "case_identity": "Exact row IDs bind participant/movie/recording/electrode/block/time; all26 canonical recordings are accounted for as included or explicitly excluded. Source electrode and word completeness is not discovered by the evaluator.",
+    "split": "Each fold forbids training/test participant, movie, recording and block overlap; complete blocks must be scored together. Native cross-person electrode representation and source inclusion require separate review.",
+    "coverage": "Every declared row and included recording is scored, with all26 source recordings visible. Frozen exclusions are permitted but cannot be interpreted as validated full-population/electrode coverage."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "delta_r2",
+      "direction": "two_sided",
+      "aggregation": "Compute held-block R² full-minus-nuisance; equal-average blocks within electrode, electrodes within person, then people.",
+      "rationale": "This revision prospectively selects the SSE-based signed delta R² estimand because it penalizes constant bias; either sign is scientifically valid. A larger incremental effect alone is not more accurate understanding and can result from weakening nuisance prediction. Any programme ranking uses absolute full-model held-target R² against an independently fixed competent nuisance/reference procedure. Submitted claim correctness is error against the independently computed contrast. Historical delta-EV remains distinct."
+    },
+    "secondary": [
+      "delta_explained_variance computed separately because residual variance ignores constant bias",
+      "Absolute nuisance/full R² and EV, per-person/electrode/block contrasts and exclusion accounting",
+      "Refitted joint linguistic temporal-shift contrasts and descriptive add-one rank where assumptions hold",
+      "Constant-predictor and biased-perfect controls"
+    ],
+    "comparators": [
+      {
+        "name": "Fixed nuisance-only encoding model",
+        "inputs": "Speaker, acoustics, visual motion and word timing, no linguistic features",
+        "procedure": "Proposed training-only ridge/GLM reference using identical response/folds and frozen hyperparameter selection; actual competent fit is not delivered."
+      },
+      {
+        "name": "Same model plus linguistic features",
+        "inputs": "Same nuisance features plus prespecified lexical/syntax regressors",
+        "procedure": "Matched capacity/selection policy needed so feature contribution is not a search-budget difference."
+      },
+      {
+        "name": "Refitted linguistic temporal-shift control",
+        "inputs": "All linguistic columns jointly shifted within uniform-time blocks; nuisance unchanged",
+        "procedure": "Source utility exists for uniform grids only; native irregular word-time conditional null needs a separately justified construction."
+      }
+    ],
+    "nuisance_controls": [
+      "Select anatomy/electrodes, preprocessing and hyperparameters using training only.",
+      "Preserve common movie identities across participants in fold grouping.",
+      "Freeze response statistic/window and full lag support; guards cover response and feature extents.",
+      "Verify actual fit artifacts and signal provenance; hashes alone do not prove target isolation.",
+      "Do not optimize a submitted explanation toward a positive language increment or weaken the nuisance arm. Freeze the independent nuisance procedure and retain absolute full/nuisance quality; score submitted contrast claims by agreement regardless of sign."
+    ],
+    "uncertainty": "Source paired participant bootstrap describes selected-cohort contrasts and omits intervals for one person. Repeated stimuli, common model training and clinical electrode selection require additional treatment before population inference; null rank is descriptive, not a calibrated p-value.",
+    "failure_policy": "Reject constant target blocks, nonfinite values, duplicate/missing/extra rows or split-block outputs. Negative increments remain valid; do not select favorable electrodes after testing. Full constant predictions follow the predeclared report/reject policy."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/controls.py",
+      "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/source_manifest.json",
+      "benchmarks/neural/NEURAL-016/docs/initial-evaluator-v1.md"
+    ],
+    "scorer_target": "Computes genuine held-response EV/R² contrasts from private targets and supplied nuisance/full predictions, with declared split/fit checks and hierarchical aggregation. It does not train or verify the submitted models or recover native responses.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Prospective numerical evaluator, source roster checks, paired summaries and uniform-time shift utility with generated controls; no authentic neural pipeline or executed reference.",
+    "missing": [
+      "Resolve native response extraction, complete electrode/word inventory and cross-person output mapping.",
+      "Execute fixed matched nuisance/full reference under verified train-only fitting.",
+      "Bind genuine signal/feature/fit lineage and protect query targets.",
+      "Justify conditional temporal null for irregular native word times."
+    ],
+    "execution_evidence": "Documentation records generated EV/R², bias, temporal-leakage and CLI checks; no authentic model/recording execution."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools analyst could interpret a frozen quantitative contrast display, but the displayed answer cannot itself be used as a prediction target. No withheld-answer direct condition is delivered.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Signal visualization can support diagnosis of extraction/alignment; no typed viewer is supplied and it would not by itself estimate a whole-cohort linguistic increment.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Source evaluator and control utility support operator numerical analysis; a target-isolated adaptive participant investigation loop remains absent.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A frozen nuisance/full predictor pair can emit the implemented schema, but no protected model fit/predict runner or qualified reference is supplied.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "143165389fc4093bd0e9ff8064269d7fbec118019d3867af54f5aa4f6c85b8a0",
+      "supports": "Computes genuine held-response EV/R² contrasts from private targets and supplied nuisance/full predictions, with declared split/fit checks and hierarchical aggregation. It does not train or verify the submitted models or recover native responses."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/controls.py",
+      "sha256": "1c4a7fedf64e5feb1b5a254eaa4d9e9db314968b247f698a858624e62a2610d0",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-016/implementations/initial-evaluator-v1/source_manifest.json",
+      "sha256": "5a51e980e7fd2908d529ac5e5af65f4b934d1fc83d935bb987187aee0b7d150b",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-016/docs/initial-evaluator-v1.md",
+      "sha256": "c26c11e9508ebf6a76468e1acae2e3419be479ceddc7a5080f7164989057c183",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://braintreebank.dev/",
+      "locator": "Primary dataset page, inspected 2026-11-16",
+      "supports": "Intracranial natural-movie language observations and annotation source."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Sections3,4,A.8, prior reviewed source",
+      "supports": "Word-aligned neural responses and linguistic/audiovisual GLM background; prospective held-out estimator is distinct."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://github.com/czlwang/brain_treebank_code_release/tree/c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "locator": "Pinned author analysis source",
+      "supports": "Original GLM/feature source inspected in preserved implementation review, not an executed reference."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Causal linguistic mechanism from incremental prediction alone",
+      "EV and R² used interchangeably",
+      "Cross-person prediction without independently resolved electrode/output mapping",
+      "Source paper GLM reproduction inferred from prospective held-out contrasts"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Freeze delta R² as current prospective primary while retaining distinct delta-EV and historical recipe semantics.",
+      "Make response-target privacy, cross-person electrode mapping and conditional-null limitations explicit."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

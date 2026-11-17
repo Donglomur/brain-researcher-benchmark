@@ -1,0 +1,221 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-001",
+  "title": "Audiobook-calibrated sentence-envelope inference from MEG",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The complete24-person/2880-interval programme recipe and scorer exist, but authenticated packets and an admitted executable environment are absent. The concrete target is unseen-sentence acoustic-envelope reconstruction after same-person audiobook calibration, not a decoder fitted without that person.",
+  "scientific_target": {
+    "question": "For each person, how accurately can that person’s labeled audiobook MEG calibration support sample-aligned acoustic-envelope inference from separate OLSA sentence MEG?",
+    "target_kind": "measurement_reconstruction",
+    "known_answer": "The source processed acoustic-envelope time series over each complete OLSA interval; this measured stimulus target is separate from the source paper’s published aggregate result.",
+    "answer_origin": "Source processed OLSA envelopes aligned to recorded MEG under the pinned author timing/preprocessing recipe; restricted raw OLSA audio is not required by this target.",
+    "case_unit": "One participant episode with120 scored sentence intervals; every sample in each retained interval is scored.",
+    "independent_unit": "24 participants; repeated presentations of70 shared sentence identities and nested runs remain dependent.",
+    "inference_scope": "Retrospective within-person cross-task decoding with labeled audiobook calibration; scores quantify acoustic-envelope prediction, not semantic comprehension or unaided waveform interpretation.",
+    "exclusions": [
+      "No cross-person decoder generalization without calibration is established.",
+      "No causal or online inference: continuous filtering and duration+0.5s poststimulus access are declared.",
+      "No native/no-tools understanding, original-paper metric reproduction, human-level performance or hidden-holdout claim."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Per-person labeled audiobook MEG/envelope calibration from all source-declared retained whole runs, using training-only model selection and normalization.",
+      "Query306-channel MEG in original channel order,64Hz after declared MaxFilter/FieldTrip0.5–4Hz processing and+3 raw1000Hz samples latency adjustment; complete sentence intervals and boundaries."
+    ],
+    "forbidden_inputs": [
+      "Held sentence envelopes or audio/MISC channels; sentence/text/playlist identity, intelligibility, SNR, event-onset tables and original source filenames.",
+      "Other participants’ calibration, held-label feedback, query-fitted normalization and cross-query fitted state outside the frozen protocol."
+    ],
+    "case_identity": "Current source emits sub-XX:sentence-NNN in source order; private target-independent aliases/order are required before participant delivery, preserving120 exact interval boundaries per person.",
+    "split": "Train/tune within each person on complete audiobook-run groups, then evaluate all separate OLSA intervals. All70 OLSA identities stay out of labeled calibration. All24 people are reported equally; this is not an outer held-person model-training split.",
+    "coverage": "Specified24 people ×120 intervals=2880 nested scored observations,94 source runs in corrected design; authenticated complete packets are not delivered. Eleven comparison panels are conditions within this single task."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "person_macro_mean_sentence_fisher_z_spearman",
+      "direction": "higher",
+      "aggregation": "Compute signed Spearman per complete interval with average ties; finite Fisher transform; equal mean over120 interval trials/person, then equal mean over24 people.",
+      "rationale": "Matches the actual scorer and weights people equally while retaining every sentence trial; source paper padding/pooled reproduction and unique-stimulus averaging are distinct estimators."
+    },
+    "secondary": [
+      "Raw signed Spearman and Pearson per interval/person; coverage and constant-prediction counts.",
+      "Matched neural-versus-no-neural contrasts; disclose all panel outcomes and the permitted method/tool access."
+    ],
+    "comparators": [
+      {
+        "name": "training_only_neural_decoder",
+        "inputs": "Same person’s permitted audiobook neural/envelope calibration and query MEG.",
+        "procedure": "Predeclare a train-only mTRF/ridge family with whole-run validation; source reference machinery exists but empirical competence is unqualified."
+      },
+      {
+        "name": "no_neural_audiobook_prior",
+        "inputs": "Same audiobook targets and permitted interval support, without query MEG.",
+        "procedure": "Freeze a target-time prior under matched calibration/budgets; quantify how much score can follow acoustic regularity or interval duration alone."
+      },
+      {
+        "name": "disclosed_half_shift_diagnostic",
+        "inputs": "The same query MEG after the public within-interval half-shift.",
+        "procedure": "Retain as robustness condition only: an actor may invert the disclosed transform, so success is not evidence against neural dependence."
+      }
+    ],
+    "nuisance_controls": [
+      "Preserve sentence duration and true sample boundaries; never pad artificial zero tails into scoring.",
+      "Fit normalization and model selection on complete audiobook runs only; no source-global normalization across query data.",
+      "Treat repeated/shared sentences as dependency groups and strip their identities from the participant view.",
+      "Authenticate3ms alignment and source snapshot equivalence before target packaging."
+    ],
+    "uncertainty": "Report participant paired effects and repeated-stimulus dependence. The scorer supplies no population CI; a future inference procedure must account for shared sentence identity and full episode fitting.",
+    "failure_policy": "Require all24 files and exact120 IDs/boundaries each before private target access; missing/duplicate/nonfinite rows invalidate complete coverage. Constant predictions are valid and score0 correlation; constant targets invalidate the operator packet."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-001/implementations/intake-and-delivery/public/TASK.md",
+      "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/support/score_core.py",
+      "benchmarks/neural/NEURAL-001/implementations/programme-source/CANONICAL_METRIC_CLARIFICATION.json",
+      "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/SCIENTIFIC_CORRECTION.json",
+      "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/investigator.py",
+      "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/run_program.py",
+      "benchmarks/neural/NEURAL-001/implementations/intake-and-delivery/intake/code/speech/decoding/training_decoding.m"
+    ],
+    "scorer_target": "Sample-aligned observed acoustic envelope using interval Spearman and person-macro Fisher-z; not a source-paper table reconstruction.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete-scope scoring, reference and investigation source exists. The public entry explicitly refuses unqualified execution; source recipes do not constitute authenticated cohort packets.",
+    "missing": [
+      "Complete source-prepared and authenticated24-person packets with protected target maps.",
+      "Admitted execution engine, fit/query state isolation, measured resource envelope and independent scorer/reference execution.",
+      "Target-independent participant identity/order projection and exposure audit."
+    ],
+    "execution_evidence": "Metric/control corrections explicitly report no runtime/scientific execution. No new arrays, targets or model outputs were accessed for this review."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A numerical or plotted complete sentence MEG observation could support a separate no-tools response condition.",
+      "boundary": "Must retain identical interval support/calibration information while preventing code, fitted decoder calls and source identity access.",
+      "evidence_ids": [],
+      "missing": [
+        "No direct response renderer/collection protocol or model trial for this task."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential channel/time rendering of complete306-channel sentence MEG with typed navigation.",
+      "boundary": "Typed image-only actions would need fixed content/precision and complete response collection; current numerical tools are not this viewer.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed renderer or participant transport supplied."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Fresh per-case investigation loop with bounded numerical Python tools and a submitted inference program.",
+      "boundary": "Same admitted inputs/tools/compute as comparator; engine must enforce target and other-query exclusion; returned text tools are not direct observation.",
+      "evidence_ids": [
+        "investigator"
+      ],
+      "missing": [
+        "Actual engine/provider/isolation qualifications and authenticated operands."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted method with training-only calibration and declared inference procedure.",
+      "boundary": "Freeze source/fit rules before held observations; fresh per-person state, no query fitting or target feedback.",
+      "evidence_ids": [
+        "task_protocol",
+        "entry"
+      ],
+      "missing": [
+        "Runnable admission profile and complete authenticated packets; CLI currently refuses."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "task_protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/intake-and-delivery/public/TASK.md",
+      "sha256": "73516f5aef93e9b2ca8982b1be53cd3cd91f8c1c14faaaa9d973fb3e8b68f96f",
+      "supports": "Complete24-person/120-interval scope, same-person audiobook calibration, target-free306-channel observation, preprocessing and output protocol."
+    },
+    {
+      "id": "scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/support/score_core.py",
+      "sha256": "e2834aa57431ff2481a578768923db522e87f0876852418477ecb45e30a942f2",
+      "supports": "Signed complete-interval Spearman/Fisher aggregation and constant-vector conventions."
+    },
+    {
+      "id": "metric_correction",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/programme-source/CANONICAL_METRIC_CLARIFICATION.json",
+      "sha256": "8c7a27986f3ac16a1c273d3a7767361aee323a61f4fc42ecd7c562ff0a7eeb3c",
+      "supports": "120 interval-trial weighting, not70 unique stimulus weighting; source order needs target-independent aliases."
+    },
+    {
+      "id": "control_correction",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/SCIENTIFIC_CORRECTION.json",
+      "sha256": "2562628a68a08caa914dccfda30a293b63858ef8d9971a95d227c3e7d8eb6822",
+      "supports": "Public half-shift is invertible robustness condition, not neural-information-removal null."
+    },
+    {
+      "id": "investigator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/investigator.py",
+      "sha256": "cc1df0d58a50fc8826779647dd9c92b0a624d7e47e739b4c9b553ba7089599ac",
+      "supports": "Bounded fresh tool-use loop exists as source; engine isolation separate."
+    },
+    {
+      "id": "entry",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/programme-source/implementation-v1/correction-v3/package/run_program.py",
+      "sha256": "a1c1f821a94be4745cd3ed3dfd58a95a3bd292fa9e1c28e000c7b2d033f99730",
+      "supports": "Installed CLI refuses unqualified operation before opening scientific operands."
+    },
+    {
+      "id": "author_decoder",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-001/implementations/intake-and-delivery/intake/code/speech/decoding/training_decoding.m",
+      "sha256": "1ad2928d191f9269a5bc2da0776cbec70b5e44dfa9de324df54cd91bbe5abff2",
+      "supports": "Official subject-level audiobook-to-OLSA decoding; original padding/normalization differ from benchmark estimator."
+    },
+    {
+      "id": "source_dataset",
+      "kind": "primary_source",
+      "url": "https://openneuro.org/datasets/ds006468/versions/1.1.1",
+      "locator": "MEG-SCANS version1.1.1; verified source route recorded by intake",
+      "supports": "Original participant/task collection; public development provenance, not a hidden test set."
+    },
+    {
+      "id": "source_code",
+      "kind": "primary_source",
+      "url": "https://github.com/tillhabersetzer/MEG-SCANS/tree/32bfc690e28e7591b45d96615c59b2d53b6a7165",
+      "locator": "speech/decoding/training_decoding.m and preprocessing scripts; mirrored source inspected",
+      "supports": "Within-participant calibration, waveform decoding and author preprocessing lineage."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "This revision inspected source and existing construction evidence only. The four historical neural programme attempts concern NEURAL-007 and NEURAL-077, not this task; no direct-observation or typed-viewer model result is asserted here.",
+    "excluded_claims": [
+      "No cross-person decoder generalization without calibration is established.",
+      "No causal or online inference: continuous filtering and duration+0.5s poststimulus access are declared.",
+      "No native/no-tools understanding, original-paper metric reproduction, human-level performance or hidden-holdout claim."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Correct the split claim to same-person audiobook calibration and unseen-sentence transfer.",
+      "Bind the primary to120 interval-trial Spearman/Fisher weighting and preserve shared-stimulus dependence.",
+      "Classify the disclosed half-shift as invertible robustness, not a neural-removal null.",
+      "Separate source-available computational modes from undelivered direct/viewer conditions."
+    ],
+    "source_review": "Inspected original registered definition, implementation source and source-bound scientific corrections. Primary-source citations reuse verified source provenance; publisher web checks were unavailable and do not add new source validation."
+  }
+}

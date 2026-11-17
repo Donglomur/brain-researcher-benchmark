@@ -1,0 +1,177 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-013",
+  "title": "Attempted-speech phoneme-sequence decoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "design_only",
+  "disposition_reason": "The assigned registered-runtime artifact is a historical declaration with empty entrypoints and unscored full45 semantics; its referenced authoring paths are not present in this task delivery. It does not deliver a usable phoneme evaluator or qualified programme. The adjacent NEURAL-014 implementation is a different calibration protocol and cannot silently substitute.",
+  "scientific_target": {
+    "question": "How accurately can a precommitted neural decoder predict attempted-speech phoneme sequences in later T15 sessions without query labels or a query-time language-model correction?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The source phoneme sequence for each retained attempted-speech trial, including the declared word-boundary symbol and edit denominator policy.",
+    "answer_origin": "Publicly labeled train/validation HDF5 members of the author Dryad v5 T15 release; transcript/phoneme fields must be operator-private for query trials. Official competition test targets are a distinct exposure regime.",
+    "case_unit": "One complete attempted-speech trial feature time series from a later session.",
+    "independent_unit": "One biological participant T15; 45 date-coded sessions are repeated measures, not 45 people.",
+    "inference_scope": "Later-session generalization within one participant on a prospective public-development split; not the paper deployed online decoder or a population result.",
+    "exclusions": [
+      "Clinical speech efficacy or new-person generalization",
+      "Paper WER or competition performance inferred from local PER",
+      "Completed scoring inferred from a historical source_complete status"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Source-defined 512 ordered intracortical features per 20 ms step, with full trial length and fixed feature provenance; authentic feature-axis/calibration verification still required.",
+      "Permitted labels only for earlier training/development sessions; frozen decoder state for later inference."
+    ],
+    "forbidden_inputs": [
+      "Query transcriptions, phoneme sequences, sentence identifiers or answer-bearing source paths",
+      "Query-label calibration under the zero-calibration task",
+      "Undeclared pretrained language exposure or cross-split repeated sentence leakage"
+    ],
+    "case_identity": "Historical manifest declares all 45 sessions, split 27 training/9 development/9 query, with pointwise query semantics; no authenticated complete query-ID manifest or retained trial count is delivered.",
+    "split": "Chronological 27/9/9 session policy is declared. Repeated sentence identities must be grouped across partitions with a frozen precedence rule before use; do not borrow NEURAL-014 calibration permissions.",
+    "coverage": "One participant/all 45 declared sessions; delivered manifest says full prepared packet required and metric_computed=false. Published trial totals require reconciliation rather than selecting a convenient subset."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "later_session_macro_phoneme_error_rate",
+      "direction": "lower",
+      "aggregation": "For each of nine later sessions, sum token edit distances and divide by that session reference token count; then equal-session mean. Freeze vocabulary and boundary-token denominator before execution.",
+      "rationale": "Measures a genuine withheld sequence target, with session weighting that avoids long sessions silently dominating."
+    },
+    "secondary": [
+      "Pooled edit counts and token denominators, insertions/deletions/substitutions",
+      "Per-session PER, sequence exact-match and complete trial coverage",
+      "Neural-shuffle and zero-feature degradation plus fixed language-only prior",
+      "Latency, fit cost and declared calibration-label exposure"
+    ],
+    "comparators": [
+      {
+        "name": "Pinned author neural decoder",
+        "inputs": "Permitted earlier-session neural features and labels",
+        "procedure": "Proposed source-compatible baseline pinned to author revision; updated competition PyTorch baseline is not asserted identical to the 2024 deployed model."
+      },
+      {
+        "name": "No-neural sequence prior",
+        "inputs": "Only permitted training phoneme sequences",
+        "procedure": "Proposed fixed unconditional prior, evaluated on exactly the same later queries."
+      },
+      {
+        "name": "Neural-shuffled frozen decoder",
+        "inputs": "Same model and durations; training-frozen corruption policy",
+        "procedure": "Proposed signal-dependence control; no refitting on query labels."
+      }
+    ],
+    "nuisance_controls": [
+      "Group identical normalized text across train/development/query, not only trial IDs.",
+      "Keep 512-feature ordering, source preprocessing and any normalization exposure explicit.",
+      "Separate duration/language priors from neural sequence information.",
+      "Use session-level summaries without claiming independent biological replications."
+    ],
+    "uncertainty": "Report all nine later-session outcomes and descriptive paired session contrasts within T15. Session resampling, if added, is conditional repeated-measure uncertainty and cannot create a population confidence interval from one person.",
+    "failure_policy": "Missing or duplicate trial IDs prevent a complete score. Empty predicted sequences are valid deletions; nonfinite inputs, invalid vocabulary or unbounded outputs are malformed. Preserve all retained source trials and explicit exclusion reasons."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-013/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No scorer body is delivered under the assigned task artifact: manifest.entrypoints is empty, result_contract.metric_computed=false, and private grading is disabled. Historical paths and hashes are lineage evidence only.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "A declared full45 frozen fit/pointwise-query plan with no public operative evaluator or complete packet in this task folder.",
+    "missing": [
+      "Recover and port the exact declared source or implement a reviewed task-native PER evaluator.",
+      "Authenticate full source labeled-member inventory, feature axes and all retained trial IDs.",
+      "Freeze repeated-sentence policy and qualify a competent fixed neural reference.",
+      "Supply a runnable participant phase interface and protected scorer without changing zero-calibration scope."
+    ],
+    "execution_evidence": "Manifest explicitly records not_run, runtime_qualified=false and scientific_qualified=false; this revision made no data/model run."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Direct numerical interpretation of a complete 512-feature trial would require learned mapping and a declared demonstration budget; no such observation-only condition is delivered.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A feature heatmap may aid inspection but has no delivered validated mapping to phoneme sequences. A viewer must preserve full observations and score the same sequence target to be comparable.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A tool-assisted per-trial decoder investigation is possible with declared checkpoints and equal inputs; no active case broker or scorer is delivered here.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical manifest describes one frozen fit and every pointwise query, but referenced programme bodies/entrypoint are not delivered and results are explicitly unscored.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-013/implementations/registered-runtime/manifest.json",
+      "sha256": "09abfdca2277a55f01995d724844c0c10d30e64798178de85da10f4eb880ac96",
+      "supports": "No scorer body is delivered under the assigned task artifact: manifest.entrypoints is empty, result_contract.metric_computed=false, and private grading is disabled. Historical paths and hashes are lineage evidence only."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.5061/dryad.dncjsxm85",
+      "locator": "Author Dryad v5 release",
+      "supports": "Public source data and one-participant T15 acquisition."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text",
+      "locator": "Official repository, inspected 2026-11-16",
+      "supports": "Author analysis and updated competition baseline are distinct execution targets."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1056/NEJMoa2314132",
+      "locator": "Original speech neuroprosthesis report",
+      "supports": "Primary scientific origin; local prospective PER does not reproduce deployed WER."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Clinical speech efficacy or new-person generalization",
+      "Paper WER or competition performance inferred from local PER",
+      "Completed scoring inferred from a historical source_complete status"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace source_complete implication with actual manifest-only, unscored delivery.",
+      "Preserve zero-calibration and one-person scope rather than silently borrowing NEURAL-014 adaptation."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-012",
+  "title": "Cross-cohort seizure robustness",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The source now separates frozen-detector performance from analyst reconstruction. Its four-arm full CHB/Siena programme is source-available, but authentic channel/clock adjudication and observed complete execution remain missing; report reconstruction alone cannot establish transfer.",
+  "scientific_target": {
+    "question": "For a detector trained only on CHB-MIT people, what is its complete-Siena event performance, and how do fixed harmonization and normalization change the paired target-person outcome?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Siena equal-person event F1 and paired harmonized-minus-native, normalized-minus-harmonized and harmonized-minus-timing contrasts, with mandatory sensitivity and false alarms.",
+    "answer_origin": "Separately frozen detector streams on all 727 recordings plus private source annotations under one adjudicated clock/label profile.",
+    "case_unit": "One complete frozen four-arm cross-cohort panel: 686 CHB and 41 Siena recordings.",
+    "independent_unit": "23 CHB people and 14 distinct Siena people; cross-cohort means are unpaired, within-Siena arm contrasts are paired.",
+    "inference_scope": "Offline/transductive preprocessing transfer across age/acquisition cohorts; bundled harmonization cannot identify one causal source of the shift.",
+    "exclusions": [
+      "Online detection from whole-record zero-phase filtering or median/IQR normalization",
+      "Pairing CHB people with unrelated Siena people",
+      "Neural detection competence inferred from maximum reconstruction error",
+      "Attributing cohort shift specifically to age, montage or sampling rate"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Genuine EEG channels with physical calibration: CHB native 256 Hz and Siena native 512 Hz, subject to source-header verification.",
+      "Native, fixed 18-edge harmonized, whole-record median/IQR-normalized, and timing-only views defined in the source control recipe."
+    ],
+    "forbidden_inputs": [
+      "Siena seizure labels for fitting or zero-calibration selection",
+      "Query records/signals/identities during CHB fitting",
+      "Auxiliary channels or guessed duplicate/derived montage edges",
+      "Analyst report accuracy used as detector-quality reward"
+    ],
+    "case_identity": "Full source panel enforces 727 unique opaque prepared records, 23+14 disjoint people and 2,908 recording-by-arm outputs. Four arms are conditions within one registration.",
+    "split": "For each arm, 23 CHB leave-one-person-out jobs provide source audit and an additional all-CHB fit predicts every Siena patient. Fit/predict phases are distinct; target prediction may jointly adapt unlabeled transient state under Q1, so this is not pointwise induction.",
+    "coverage": "96 logical jobs and 192 fit/predict invocations; no recording or failed arm may disappear. Corpus bytes, true montage/reference compatibility and complete observed runtime are unqualified."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Siena_equal_person_event_f1",
+      "direction": "higher",
+      "aggregation": "Per arm, pool event counts within each of 14 Siena people and average person F1; paired changes retain those same people.",
+      "rationale": "Directly scores the biological target; analysis_reconstruction remains a separate calibration outcome."
+    },
+    "secondary": [
+      "Siena event sensitivity and false alarms per 24 observed hours for every arm",
+      "Target paired contrasts and unpaired target-minus-source cohort shifts",
+      "Clock-profile sensitivity, complete false-alarm localization and observed support",
+      "maximum_scaled_reconstruction_error only as arithmetic-calibration accuracy"
+    ],
+    "comparators": [
+      {
+        "name": "Native EEG reference",
+        "inputs": "Native valid EEG channels, no Siena labels",
+        "procedure": "Source median-channel log-line-length method with threshold trained on CHB people; empirical competence unqualified."
+      },
+      {
+        "name": "Harmonized/normalized reference pair",
+        "inputs": "Same selected detector family with fixed 18 edges and declared transforms",
+        "procedure": "Source recipe bundles montage, filter and resampling; normalization additionally uses unlabeled whole-record statistics."
+      },
+      {
+        "name": "Audited timing reference",
+        "inputs": "Training-person-balanced ictal prevalence by elapsed minute",
+        "procedure": "Exact fixed Laplace-smoothed timing source required; arbitrary metadata programmes are a broader comparator."
+      }
+    ],
+    "nuisance_controls": [
+      "Hold detector family fixed when interpreting preprocessing; otherwise call it a bundled method comparison.",
+      "Preserve PN05-3/PN14-3 clock-origin alternatives until source adjudication.",
+      "Audit unique forward/reverse CHB edges and Siena common-reference evidence before subtraction.",
+      "Retain offline/transductive status for zero-phase filters and future-dependent normalization."
+    ],
+    "uncertainty": "Within-target contrasts use paired Siena patient summaries; CHB-to-Siena shifts use independent cohort summaries, never person pairing. Current standard errors are descriptive conditional on shared fitted models and do not establish population causality.",
+    "failure_policy": "Require complete 727-record/four-arm streams and exact score-to-event transformation; missing montage edges, zero IQR, ambiguous source profiles or incomplete phase lineage invalidate the full selected comparison, not just inconvenient rows."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/public/TASK.md",
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/public/control_recipe.py",
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/analysis.py",
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/score.py",
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/prepare_case.py",
+      "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/campaign_owner.py"
+    ],
+    "scorer_target": "analysis.detector_outcomes computes actual frozen stream Siena_equal_person_event_f1 and companion metrics. analysis.grade separately returns maximum_scaled_reconstruction_error for the released report; score.py writes distinct outcomes.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete scientific graph, reference/preprocessing source, target outcome calculator and reconstruction grade; authentic input/runtime qualification remains absent.",
+    "missing": [
+      "Resolve native clock, common-reference and montage-source joins.",
+      "Execute the complete frozen four-arm source and target programme with observed fitting lineage.",
+      "Use detector_outcomes as scientific endpoint and keep analyst reconstruction separately labeled.",
+      "Build a target-withholding investigation condition for adaptive interpretation claims."
+    ],
+    "execution_evidence": "Source inspection confirms both outcome paths; neither was executed on authentic EEG by this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Whole-cohort transfer contrasts require complete quantitative evidence; a single EEG trace is not a suitable substitute. A direct numerical-summary condition is possible but not delivered with withheld answers.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Waveform viewing can assist montage/artifact inspection but does not replace the full transfer estimand; no typed viewer condition is supplied.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Source analysis and reconstruction CLI are available; actual exploratory per-case interpretation with withheld targets remains unqualified.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "The analysis/reconstruction CLI is operator computation; a target-withholding adaptive participant investigation condition is not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Source phased fit/predict programme and fixed references are available for the full panel; authentic staging, host protection and execution remain unestablished.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [
+        "implementation-1",
+        "campaign_source"
+      ],
+      "missing": [
+        "Authentic source admission, protected runtime/environment and complete original fit/predict execution remain unqualified."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/public/TASK.md",
+      "sha256": "ab6f3dd5df56b5275fa1062ac825688425b339c432b4916e8e412f4da058dc6a",
+      "supports": "analysis.detector_outcomes computes actual frozen stream Siena_equal_person_event_f1 and companion metrics. analysis.grade separately returns maximum_scaled_reconstruction_error for the released report; score.py writes distinct outcomes."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/public/control_recipe.py",
+      "sha256": "ecb215f98d40d2a935b045e6790a30215afa8c32e3bad5244c735bdc6617405e",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/analysis.py",
+      "sha256": "36206b4e197fe3d62fe9bb8d8895cde5b8a374d9fedec587a418b1f140d18caa",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/score.py",
+      "sha256": "4a3f606f418249f126ee43b75b52e87213870a2b0827be77dec5b5cf7fd55764",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/prepare_case.py",
+      "sha256": "ed06745b2016cb1ff5a7cbd3bb29f097fc1a31fccc81449f04dfe8c8c4eb2d94",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://physionet.org/content/chbmit/1.0.0/",
+      "locator": "CHB release",
+      "supports": "Source cohort and annotation evidence."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://physionet.org/content/siena-scalp-eeg/1.0.0/",
+      "locator": "Siena release",
+      "supports": "Independent target cohort and original recording metadata."
+    },
+    {
+      "id": "campaign_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-012/implementations/registered-runtime/runtime/source/neural012/private/campaign_owner.py",
+      "sha256": "59c4a83c7a33ce5dd5e837aad9fe8150de0ec7858e84f685e6fd179c3e73122d",
+      "supports": "Actual96-job/192-invocation fit/predict orchestration, original captured-fit state lineage and complete four-arm stream merge; explicitly no native isolation or semantic fit qualification."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Online detection from whole-record zero-phase filtering or median/IQR normalization",
+      "Pairing CHB people with unrelated Siena people",
+      "Neural detection competence inferred from maximum reconstruction error",
+      "Attributing cohort shift specifically to age, montage or sampling rate"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind scientific primary to existing detector_outcomes rather than analyst reconstruction grade.",
+      "Make offline transduction, unpaired cohort shift and bundled-transform limits explicit."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

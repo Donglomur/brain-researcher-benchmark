@@ -16,11 +16,11 @@
     ],
     "task_family": "sleep_staging"
   },
-  "scientific_question": "Can EEG identify five sleep stages in people excluded from fitting without using their hypnograms to trim the recording?",
+  "scientific_question": "Can permitted EEG/EOG observations predict technician-assigned five-stage sleep labels for every whole-clock epoch in held people, beyond clock and competent signal/model references?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Five probabilities for every eligible fixed 30-second epoch."
+    "R&K technician hypnogram labels mapped to W,N1,N2,N3,R with source stages3/4 merged intoN3; unknown/movement/conflicting intervals are privately unscored, never used to crop inputs."
   ],
   "input_assets": {
     "routes": [
@@ -75,19 +75,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Representative EDF header: EEG Fpz-Cz and EEG Pz-Oz at 100 Hz; horizontal EOG 100 Hz. Respiration, submental EMG, temperature and Event marker are 1 Hz in this file; channel rates must be read per asset.",
-    "allowed_context": "Actual EDF+ annotation file contains Sleep stage W,1,2,3,4,R,? with onset/duration. Merge 3+4 to N3 for a five-class task; mask unscored/movement intervals evaluator-side under an explicit policy.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Signal and annotation header start date/time agree (24 April 1989,16:13:00); EDF+ onset/duration labels align to the signal clock. First wake annotation spans 0–30,630 seconds; fixed 30-second epochs must use the recording clock.",
-    "source_contract_evidence": "Actual 2,048-byte EDF header and complete 4,620-byte hypnogram inspected; no EEG sample payload downloaded."
+    "inputs": [
+      "Finite feature condition: 100Hz source EEG Fpz-Cz, EEG Pz-Oz and horizontal EOG summarized as six features/channel plus three clock features; stored channel/feature names govern interpretation.",
+      "Six training people /16,290 epochs with training labels and score masks; two development people with no labels. Shared fixed pretrained YASA component outputs are a separate model-assisted observation condition.",
+      "Separate raw finite condition and full153-night programme source exist; whole153 design uses raw three-channel volts and clock, explicitly without YASA caches."
+    ],
+    "forbidden_inputs": [
+      "Development hypnograms, score masks, target annotations or label-derived recording boundaries.",
+      "Operator packages, answer-bearing source filenames/dates or hidden reserve assets.",
+      "Silent substitution of full-modality model-cache probabilities into an EEG-only arm."
+    ],
+    "case_identity": "Finite roster is development-001/00000..02779 and development-002/00000..02669, exactly5,450 epochs. Full-source planned roster is78 people/153nights in six fixed13-person folds; authentic complete epoch count remains unadmitted.",
+    "split": "Finite route: six fitting people and two already exposed development people, independent per-person application. Full153 plan: six outer folds,52 fitting+13 validation then65 final-training people per fold, all nights grouped; these scopes are not interchangeable.",
+    "coverage": "Require every whole-clock finite epoch even when private unknown/movement mask later removes its score. Full153 programme source has not supplied a complete empirical78-person result. Conditions, nights, channels and modes are nested, not extra benchmarks."
   },
-  "biological_unit": "78 Sleep Cassette people, multiple recording nights per person; MNE age_records.csv provides participant/night/asset mapping. Group all nights of one person in a split.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Person, combining all nights before person-level metrics. Epoch count is not biological sample size.",
+  "case_definition": "One complete person episode; required responses are probabilities for every fixed30-second epoch, with nights kept separate.",
   "split": {
-    "policy": "All nights for one person in one outer partition; full-clock epochs and fixed context; fit frequency features/scalers/thresholds on training people only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Finite route: six fitting people and two already exposed development people, independent per-person application. Full153 plan: six outer folds,52 fitting+13 validation then65 final-training people per fold, all nights grouped; these scopes are not interchangeable.",
+    "coverage": "Require every whole-clock finite epoch even when private unknown/movement mask later removes its score. Full153 programme source has not supplied a complete empirical78-person result. Conditions, nights, channels and modes are nested, not extra benchmarks."
   },
   "reference": {
     "source_code_url": "https://github.com/mne-tools/mne-python",
@@ -103,50 +109,104 @@
     "data_url": "https://physionet.org/content/sleep-edfx/1.0.0/"
   },
   "controls": [
-    "Time-of-night and majority baselines",
-    "all nights grouped",
-    "label-independent window eligibility",
-    "fixed context budget."
+    "All nights grouped by person, no label-dependent sleep-window cropping.",
+    "Separate feature, raw and pretrained-output observations and account for checkpoint exposure and preparation cost.",
+    "Clock-only/majority references, fixed context budgets and same-state shifted-input diagnostics; a shift is an alignment sensitivity check, not a causal null.",
+    "Full-source fitting-profile differences in query-visible method selection and amortized fitting must be reported, not assumed equal actual compute."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential direct sleep interpretation from prespecified scaled waveforms/numeric samples with fixed surrounding epochs.",
+      "boundary": "No tools or decoder caches; same authenticated target epochs and fixed context for all participants.",
+      "evidence_ids": [],
+      "missing": [
+        "No complete direct sleep transport, response collector or model trial is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed channel/time/scale waveform viewer for EEG/EOG, retaining calibrated time/amplitude axes and epoch context.",
+      "boundary": "Rendered views only; no raw-array export, masks, labels or cached stage predictions.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed sleep viewer or restrictive participant transport currently linked."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Whole-night programme source supports case-adaptive numerical investigation and separately declared reference/tool conditions.",
+      "boundary": "Matched allowed views/tool opportunities, finite cumulative cost and fresh person state; supplied model outputs are explicit model assistance.",
+      "evidence_ids": [
+        "full_contract",
+        "comparison",
+        "investigator_source"
+      ],
+      "missing": [
+        "Qualified authentic complete-cohort execution; fresh external investigator model context not proven by file exchange."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Finite precommitted program with separate person processes and complete5,450-epoch output; full153 programme is separately scoped.",
+      "boundary": "Commit complete source/configuration before development dispatch; no cross-person mutable state or private labels. Shared-host audit is not hostile-code isolation.",
+      "evidence_ids": [
+        "finite_audit",
+        "finite_instruction",
+        "audit_source",
+        "lifecycle_source"
+      ],
+      "missing": [
+        "Authentic hard-memory path requires qualified Linux runtime and exact dependency closure; old trials remain historical."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro macro-F1, with per-stage recall and full-night confusion matrices.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "equal_person_fixed_five_class_macro_F1",
+      "direction": "higher",
+      "aggregation": "Combine each person’s confusion counts across all of their nights, compute F1 for fixed W,N1,N2,N3,R, then average people equally. Absent and unpredicted class F1=0; probability ties choose first fixed class.",
+      "rationale": "Matches the known categorical stage labels while limiting dominance of common stages and long recordings; report absolute quality before any signal or mode gain."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Per-person confusion matrices, support, class F1/recall and truth-supported balanced accuracy.",
+      "Candidate-minus-fixed RF and candidate-minus-YASA differences on the exact finite panel.",
+      "For separately qualified full153 comparisons: C,EC,OC,EOC absolute panels and original-versus-shifted same-state sensitivity; no modality gain substitutes for absolute EOC score.",
+      "Probability calibration/log-loss diagnostics require actual probability panels; cannot reconstruct them from confusion counts."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "clock / training-majority",
+        "inputs": "Declared clock variables or training-person class proportions only.",
+        "procedure": "Prespecified nuisance controls with no development hypnogram fitting."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "fixed RF feature baseline",
+        "inputs": "Same training people and engineered EEG/EOG/clock view.",
+        "procedure": "Existing finite saved RF comparator; future complete-source fitting must keep all selection training-only."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "fixed YASA components/ensemble",
+        "inputs": "Supplied pretrained full-recording component probabilities in finite model-assisted condition.",
+        "procedure": "Existing measured comparator, never a perfect-answer oracle; weights/context differ from feature model and from EOG-only changes."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "All nights grouped by person, no label-dependent sleep-window cropping.",
+      "Separate feature, raw and pretrained-output observations and account for checkpoint exposure and preparation cost.",
+      "Clock-only/majority references, fixed context budgets and same-state shifted-input diagnostics; a shift is an alignment sensitivity check, not a causal null.",
+      "Full-source fitting-profile differences in query-visible method selection and amortized fitting must be reported, not assumed equal actual compute."
+    ],
+    "uncertainty": "Finite two-person results are descriptive, with both person values retained and no population interval. Full153 report provides person vectors and six-fold sensitivity, but shared training and one campaign do not justify naive independent-epoch or independent-fold confidence intervals.",
+    "failure_policy": "Require exact full-clock IDs and finite5-class probabilities summing to1 within1e-6 before any private labels; reject missing/extra/compressed/object arrays or invalid identities. Preserve operator failures separately; do not drop poor stages/people or crop after seeing labels.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "547e687244ae719e12f65a4da1d30cd0b7555840afd806b08c1afbe52511c81a",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "0f797d5108157b3f527bfaea7f8e4926bb20d47c504c85eff5e1440183b9af9c"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -236,6 +296,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

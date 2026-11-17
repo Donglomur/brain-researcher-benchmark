@@ -16,11 +16,11 @@
     ],
     "task_family": "natural_language_ephys"
   },
-  "scientific_question": "Do lexical surprisal or syntax features explain neural responses beyond speaker, acoustics, motion and word timing?",
+  "scientific_question": "Do prespecified linguistic features improve held-out neural-response prediction beyond speaker, acoustics, visual motion and word timing under person/movie and temporal separation?",
   "task_type": "investigation",
   "neural_role": "target",
   "primary_outputs": [
-    "Cross-validated neural encoding contrasts for prespecified linguistic regressors."
+    "The full-minus-nuisance held-out neural prediction contrast on identical scalar response rows; negative, zero or inconclusive increments are valid empirical outcomes."
   ],
   "input_assets": {
     "routes": [
@@ -412,19 +412,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Author quickstart reads sub_<id>_trial<id>.h5, group data, electrode_<number> one-dimensional arrays; sampling frequency2048Hz and voltage plotted in microvolts per author source. No HDF5 neural array header/value independently opened because recordings are compressed in large ZIPs.",
-    "allowed_context": "Actual transcript CSV header includes text, lemma, pos, deprel, sentence_idx, word_idx, idx_in_sentence, start/end, gpt2_surprisal, mel/RMS/pitch, motion/brightness and speaker features. Subject metadata JSON identifies movie; electrode-label/localization archives provide anatomy.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Actual timing CSV header is type,movie_time,start_time,end_time,trig_type,index,diff. Author code maps word start/end movie times to neural sample indices from nearest trigger plus2048Hz interpolation. Alignment error and dropped triggers remain empirical checks.",
-    "source_contract_evidence": "Author quickstart source, full small subject-metadata archive and first header line of one timing CSV and one transcript CSV inspected; no neural values or media retrieved."
+    "inputs": [
+      "Permitted continuous acoustic/visual/speaker/word-timing features and declared linguistic regressors for encoding; training neural responses only.",
+      "Query linguistic/nuisance observations with nonpositive feature lags and fixed response-window guard; query neural responses remain private."
+    ],
+    "forbidden_inputs": [
+      "Held-out neural responses during feature/electrode selection, normalization, tuning or model fit",
+      "Cross-fold person/movie overlap or response-window leakage",
+      "Using row-index rolling as an autocorrelation control for irregular word times"
+    ],
+    "case_identity": "Exact row IDs bind participant/movie/recording/electrode/block/time; all26 canonical recordings are accounted for as included or explicitly excluded. Source electrode and word completeness is not discovered by the evaluator.",
+    "split": "Each fold forbids training/test participant, movie, recording and block overlap; complete blocks must be scored together. Native cross-person electrode representation and source inclusion require separate review.",
+    "coverage": "Every declared row and included recording is scored, with all26 source recordings visible. Frozen exclusions are permitted but cannot be interpreted as validated full-population/electrode coverage."
   },
-  "biological_unit": "Ten clinical participants;26recording/movie presentations and21unique movie IDs confirmed from all26public subject metadata JSONs. Repeated movies across participants are stimulus overlap, not independent unseen stimuli.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "10 clinical participants, with26 recording presentations and21 movies; electrode/word count does not increase biological n.",
+  "case_definition": "An electrode response row within one continuous recording block; scoring is nested by block, electrode and person.",
   "split": {
-    "policy": "Outer person and whole movie/continuous blocks; repeated movies grouped for stimulus-transfer claims; temporal guard bands cover every feature lag.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Each fold forbids training/test participant, movie, recording and block overlap; complete blocks must be scored together. Native cross-person electrode representation and source inclusion require separate review.",
+    "coverage": "Every declared row and included recording is scored, with all26 source recordings visible. Frozen exclusions are permitted but cannot be interpreted as validated full-population/electrode coverage."
   },
   "reference": {
     "source_code_url": "https://github.com/czlwang/brain_treebank_code_release",
@@ -441,50 +446,97 @@
     "data_url": "https://braintreebank.dev/"
   },
   "controls": [
-    "Movie-block holdout",
-    "acoustic and visual nuisance models",
-    "autocorrelation-preserving permutation",
-    "anatomy selection on training only."
+    "Select anatomy/electrodes, preprocessing and hyperparameters using training only.",
+    "Preserve common movie identities across participants in fold grouping.",
+    "Freeze response statistic/window and full lag support; guards cover response and feature extents.",
+    "Verify actual fit artifacts and signal provenance; hashes alone do not prove target isolation.",
+    "Do not optimize a submitted explanation toward a positive language increment or weaken the nuisance arm. Freeze the independent nuisance procedure and retain absolute full/nuisance quality; score submitted contrast claims by agreement regardless of sign."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools analyst could interpret a frozen quantitative contrast display, but the displayed answer cannot itself be used as a prediction target. No withheld-answer direct condition is delivered.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Signal visualization can support diagnosis of extraction/alignment; no typed viewer is supplied and it would not by itself estimate a whole-cohort linguistic increment.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Source evaluator and control utility support operator numerical analysis; a target-isolated adaptive participant investigation loop remains absent.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A frozen nuisance/full predictor pair can emit the implemented schema, but no protected model fit/predict runner or qualified reference is supplied.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Held-out incremental explained variance and recomputed participant/electrode summaries.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "delta_r2",
+      "direction": "two_sided",
+      "aggregation": "Compute held-block R² full-minus-nuisance; equal-average blocks within electrode, electrodes within person, then people.",
+      "rationale": "This revision prospectively selects the SSE-based signed delta R² estimand because it penalizes constant bias; either sign is scientifically valid. A larger incremental effect alone is not more accurate understanding and can result from weakening nuisance prediction. Any programme ranking uses absolute full-model held-target R² against an independently fixed competent nuisance/reference procedure. Submitted claim correctness is error against the independently computed contrast. Historical delta-EV remains distinct."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "delta_explained_variance computed separately because residual variance ignores constant bias",
+      "Absolute nuisance/full R² and EV, per-person/electrode/block contrasts and exclusion accounting",
+      "Refitted joint linguistic temporal-shift contrasts and descriptive add-one rank where assumptions hold",
+      "Constant-predictor and biased-perfect controls"
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Fixed nuisance-only encoding model",
+        "inputs": "Speaker, acoustics, visual motion and word timing, no linguistic features",
+        "procedure": "Proposed training-only ridge/GLM reference using identical response/folds and frozen hyperparameter selection; actual competent fit is not delivered."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Same model plus linguistic features",
+        "inputs": "Same nuisance features plus prespecified lexical/syntax regressors",
+        "procedure": "Matched capacity/selection policy needed so feature contribution is not a search-budget difference."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Refitted linguistic temporal-shift control",
+        "inputs": "All linguistic columns jointly shifted within uniform-time blocks; nuisance unchanged",
+        "procedure": "Source utility exists for uniform grids only; native irregular word-time conditional null needs a separately justified construction."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Select anatomy/electrodes, preprocessing and hyperparameters using training only.",
+      "Preserve common movie identities across participants in fold grouping.",
+      "Freeze response statistic/window and full lag support; guards cover response and feature extents.",
+      "Verify actual fit artifacts and signal provenance; hashes alone do not prove target isolation.",
+      "Do not optimize a submitted explanation toward a positive language increment or weaken the nuisance arm. Freeze the independent nuisance procedure and retain absolute full/nuisance quality; score submitted contrast claims by agreement regardless of sign."
+    ],
+    "uncertainty": "Source paired participant bootstrap describes selected-cohort contrasts and omits intervals for one person. Repeated stimuli, common model training and clinical electrode selection require additional treatment before population inference; null rank is descriptive, not a calibrated p-value.",
+    "failure_policy": "Reject constant target blocks, nonfinite values, duplicate/missing/extra rows or split-block outputs. Negative increments remain valid; do not select favorable electrodes after testing. Full constant predictions follow the predeclared report/reject policy.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "961cd6e508d01e41b6e464d2c42613a817442e6d9136b5ff2e73976aab4c46c7",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "ab8710a3ec322e86df18814b376f34c6b11910517dd4487fce807dcd767a5ac5"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -573,6 +625,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

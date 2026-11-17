@@ -1,0 +1,209 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-008",
+  "title": "EOG information beyond EEG and sleep timing",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical developer controls remain scoped engineering evidence; this revision runs no model and does not turn source inspection into a performance result.",
+    "excluded_claims": [
+      "No maximizing the EOG-minus-EEG gap by deliberately weakening EEG.",
+      "No matched EOG effect from comparing YASA models with different pretrained weights.",
+      "No population confidence interval or p-value from the finite two people; no new independent sleep dataset."
+    ]
+  },
+  "disposition_reason": "Historical two-person paired scoring is documented, but the shipped score.py bridge points to an absent historical dependency. The current portable contribution helpers operate on an already admitted full153 grade; they do not deliver paired training or a raw-signal investigation. Restore the scorer/runner binding before advertising a runnable task.",
+  "scientific_target": {
+    "question": "Under matched procedures and complete person/epoch support, does adding horizontal EOG to EEG plus clock improve held-person sleep-stage predictions, especially REM recall?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Expert hypnogram stage labels for both observation arms and the deterministic paired differences from their independently committed prediction panels. The sign of the EOG contribution is unknown before evaluation and may be zero or negative.",
+    "answer_origin": "Same Sleep Cassette labels as NEURAL007, with R&K3/4 merged intoN3 and private unknown/movement mask. EOG contribution is a measured predictive contrast, not a known physiological effect.",
+    "case_unit": "One person with paired full-clock EEG+clock and EEG+EOG+clock predictions; epoch identities must match exactly across arms.",
+    "independent_unit": "Person; the finite two-person panel is shared with NEURAL007, not an independent cohort.",
+    "inference_scope": "Descriptive incremental predictive value of the provided EOG for matched declared procedures. Correct report arithmetic alone does not establish actual modality access, matched fitting, direct neural understanding or ocular causation.",
+    "exclusions": [
+      "No maximizing the EOG-minus-EEG gap by deliberately weakening EEG.",
+      "No matched EOG effect from comparing YASA models with different pretrained weights.",
+      "No population confidence interval or p-value from the finite two people; no new independent sleep dataset."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Historical finite arms:12 EEG engineered features +3 clock features versus those15 plus6 horizontal-EOG features; same six training people and same two held-development people.",
+      "Proposed full153 successor uses raw C/EC/OC/EOC views under the shared NEURAL007 whole-clock contract; it is not an adopted completed replacement for the finite engineered-feature task."
+    ],
+    "forbidden_inputs": [
+      "EOG or full-modality pretrained outputs in the EEG-only arm; shared YASA caches therefore cannot be blindly mounted.",
+      "Development stage labels, private masks, answer-bearing source annotations, or feedback before both full panels are committed.",
+      "Different training rows, hidden label-based crops or selectively dropped REM-poor people across arms."
+    ],
+    "case_identity": "Finite source fixes development-001 with2,780 epochs and development-002 with2,670, using canonical full-clock IDs in both arms. Full-source helper expects independently authenticated78-person/153-night support and never proves it from counts.",
+    "split": "Finite declared split is six training/two exposed development people with four reserved outside the package. Proposed full153 route shares six person-grouped folds with NEURAL007 and must be qualified separately.",
+    "coverage": "Finite:5,450 predictions per arm,10,900 total, both full panels plus optional claim file. Full153 helpers require all936 candidate and1,170 reference outputs before grading; those are planned delivery requirements, not observed completed predictions."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "paired_equal_person_macro_F1_difference_EEG_EOG_clock_minus_EEG_clock",
+      "direction": "two_sided",
+      "aggregation": "Compute each person’s fixed-five-class macro-F1 in each complete arm, subtract EEG+clock from EEG+EOG+clock, then average people equally; retain both absolute arms.",
+      "rationale": "The scientific question is an incremental contrast with either sign valid, not a scalar maximization game. Report full-arm absolute quality to expose deliberately weak baselines."
+    },
+    "secondary": [
+      "Equal-person REM-recall difference with explicit support; aggregate is null if any required person lacks true REM, while the primary includes everyone.",
+      "Both arms’ per-person confusion matrices, fixed-stage F1 and recall, and matched comparator contrasts.",
+      "Numeric claim agreement for the exact registered aggregates/people, explicitly separate from scientific reasoning.",
+      "Probability calibration needs actual probabilities and a bound companion; confusion matrices alone are insufficient."
+    ],
+    "comparators": [
+      {
+        "name": "matched RF EEG+clock / EEG+EOG+clock",
+        "inputs": "Same feature rows, labels, tuning policy and budget; only horizontal-EOG features added.",
+        "procedure": "Historical fixed RF comparator pair, to be rebound and authenticated before replay. Method differences require review."
+      },
+      {
+        "name": "clock-only / EEG-without-clock / EOG+clock / training-majority",
+        "inputs": "Prespecified nested signal and nuisance inputs.",
+        "procedure": "Historical comparator set; do not select a favorable subset after scoring."
+      },
+      {
+        "name": "fixed within-person EOG displacement",
+        "inputs": "Same model state with prespecified displaced query EOG.",
+        "procedure": "Alignment sensitivity diagnostic only; not a null distribution or causal intervention."
+      }
+    ],
+    "nuisance_controls": [
+      "Physically separate feature views and bind the same candidate source/recipe before either target score.",
+      "Verify same support and training/tuning semantics; finished probability files cannot prove these facts.",
+      "Keep both absolute metrics visible; no scientific success floor or reward based on a positive contrast.",
+      "Shared cohorts, preprocessing, folds and costs with NEURAL007 prohibit counting a replication or extra benchmark for each arm."
+    ],
+    "uncertainty": "Finite panel: two descriptive paired person values, no population interval/p-value. Full153 source offers person/fold sensitivity with shared-training dependence retained; any future population inference requires an explicit validated plan.",
+    "failure_policy": "Both exact full-clock probability panels must validate before private label access. Missing/duplicated/invalid epochs or inconsistent claim types are refused; undefined REM is null with full denominator, never silently reduced to supported people."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-008/implementations/registered-runtime/score.py",
+      "benchmarks/neural/NEURAL-008/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-008/implementations/registered-runtime/instructions.md",
+      "benchmarks/shared/sleep-eog/comparison-contract/CONTRACT.json",
+      "benchmarks/shared/sleep-eog/comparison-contract/README.md",
+      "benchmarks/shared/sleep-eog/comparison-contract/paired_sleep_contribution.py"
+    ],
+    "scorer_target": "Historical manifest describes genuine paired stage-label scoring, but current bridge requires missing authoring/sleep-eog/investigation-scorer-v2/run_outer.py. Shipped shared assessment recomputes numeric contrasts from a supplied, already-admitted full153 grade; it cannot generate predictions or verify empirical provenance.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Finite target contract and historical controls preserved; portable full153 contribution and claim-arithmetic source present. No current runnable paired task follows from those files alone.",
+    "missing": [
+      "Restore exact historical paired scorer and complete program dependency closure without weakening source pins.",
+      "Authenticate modality-separated training/execution and predictions before contrast interpretation.",
+      "If selecting full153, qualify the whole shared source programme and label it an explicit scope successor, not historical finite execution."
+    ],
+    "execution_evidence": "Historical manifest reports developer controls and a uniform ordinary-CLI submission. Those are not language-model results. The current bridge was source-inspected and its missing dependency confirmed; no model or protected scoring was run."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential direct matched EEG versus EEG+EOG waveform interpretation using identical epochs, scales and context.",
+      "boundary": "Separate model contexts for each arm; no pretrained probabilities or feedback, and no opportunity to see EOG before the EEG-only response.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered direct paired response collector, authentic waveform packet or model trial."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed multichannel waveform viewer with EOG disabled in EEG-only arm.",
+      "boundary": "The observation policy must be enforced by the viewer transport and paired response commitment, not a written instruction.",
+      "evidence_ids": [],
+      "missing": [
+        "No task-specific typed-viewer or paired transport implementation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Shared full153 investigation/report helper source, including matched signal contrasts and evidence-linked numerical claims.",
+      "boundary": "Requires separately admitted complete programme grade; helper arithmetic is not a standalone candidate episode.",
+      "evidence_ids": [
+        "comparison",
+        "comparison_source"
+      ],
+      "missing": [
+        "The supplied contribution helper computes report arithmetic, not a per-case investigator episode; current complete delivery and authenticated grade producer are absent."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical declared same-source programme executed independently in physically separated feature views.",
+      "boundary": "Both prediction panels must be committed before labels; existing manifests are lineage only.",
+      "evidence_ids": [
+        "finite_manifest",
+        "bridge"
+      ],
+      "missing": [
+        "Historical paired runner/scorer dependencies absent from this public closure; restore before claiming source-delivered execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "bridge",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-008/implementations/registered-runtime/score.py",
+      "sha256": "183abae296b564393dc7dde8c7916d4020491e9d66533f0242740b48e84dfa71",
+      "supports": "Exact historical target dependency is absent in public worktree, so bridge cannot execute."
+    },
+    {
+      "id": "finite_manifest",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-008/implementations/registered-runtime/manifest.json",
+      "sha256": "08e17caa940e12ea3e446536f8e3e3e8af0c1e49a38e234755ca98b7689b3a03",
+      "supports": "Historical finite modality/source/coverage and developer-control declarations."
+    },
+    {
+      "id": "finite_instruction",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-008/implementations/registered-runtime/instructions.md",
+      "sha256": "1fc3fed51553ff0a79ae6a5fb9901eb12e3c14b8b86b286985cee3e50224f2c7",
+      "supports": "Paired prediction endpoint, no gap maximization and matched-access limitations."
+    },
+    {
+      "id": "comparison",
+      "kind": "local_source",
+      "path": "benchmarks/shared/sleep-eog/comparison-contract/CONTRACT.json",
+      "sha256": "a4ebff574b474250326a66d9a32ad4f749d9551800c7233c8469539a75ee0f89",
+      "supports": "Proposed full153 readout with no qualification."
+    },
+    {
+      "id": "comparison_source",
+      "kind": "local_source",
+      "path": "benchmarks/shared/sleep-eog/comparison-contract/paired_sleep_contribution.py",
+      "sha256": "aa54e357819c836c16a5a129623b9bed7382a7e584385cc4ad59331d84d6930f",
+      "supports": "Already-admitted grade arithmetic only."
+    },
+    {
+      "id": "comparison_docs",
+      "kind": "local_source",
+      "path": "benchmarks/shared/sleep-eog/comparison-contract/README.md",
+      "sha256": "d4b827e12ce0d9aacef02c65dc63b8f1ac973fb63a404a9bbc1368b9014de618",
+      "supports": "Full-source successor not finite registration adoption; undefined REM and dependence rules."
+    },
+    {
+      "id": "sleep_source",
+      "kind": "primary_source",
+      "url": "https://physionet.org/content/sleep-edfx/1.0.0/",
+      "locator": "Data and Annotation Files; Sleep Cassette Study and Data",
+      "supports": "Manual stage labels and horizontal EOG/EEG recording modalities. Reopened2026-11-16."
+    }
+  ],
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Exposes missing historical bridge dependency instead of inheriting runnable=true from an old manifest.",
+      "Retains the EOG contrast as signed investigation, with complete absolute scores and no positive-gap reward.",
+      "Separates two-person engineered-feature history from the unqualified raw153-night successor and distinguishes arithmetic assessment from direct signal interpretation."
+    ],
+    "source_review": "Inspected bridge, historical manifest/instructions and shared full153 report source. Confirmed missing bridge target by source-tree existence check; no private data or model runs."
+  }
+}
