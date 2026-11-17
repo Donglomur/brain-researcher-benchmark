@@ -6,11 +6,13 @@ reproduction and improvement, and native neural interpretation and tool/model
 building, separate first-class outcomes. A source component may support only part
 of one outcome.
 
-The 117 currently bound paper contracts still use `improvement.v1.json` for the
-existing same-task superiority objective. Read that contract for its implemented
-comparison and holds; reviewed reproduction-outcome definitions are still needed.
-Historical calibration adapters, new-split extensions and source presence do not
-automatically qualify a reproduction or improvement. The
+Use `paper-contract TASK_ID --outcome reproduction` and `paper-outcomes TASK_ID`
+to inspect adopted reproduction contracts, their original-result scope and the
+separate improvement/access conditions. `paper-contract TASK_ID` defaults to the
+current improvement contract. Read explicit unavailability and unresolved source
+limits before choosing an implementation; a retained secondary endpoint cannot
+satisfy a different primary finding. Historical calibration adapters, new-split
+extensions and source presence do not qualify either outcome. The
 [current improvement guide](../science/paper-improvement/README.md) describes the
 delivered comparison path.
 
@@ -26,6 +28,8 @@ python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
 python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050 --outcome reproduction
+python3 -I -S -B scripts/neurobench.py paper-outcomes PAPER-FIND-050
 ```
 
 Run these metadata commands from the repository root. A task may have retained
@@ -78,19 +82,23 @@ qualification. Preserve both successful and failed outputs outside the checkout.
 
 ## Separate the question from the access condition
 
-For paper tasks, inspect `paper-contract TASK_ID` before selecting a scorer. That
-command currently returns the existing improvement contract. The historical paper
+For paper tasks, select reproduction or improvement, then paper + data or paper +
+data + author code. Inspect the selected contract and `paper-outcomes TASK_ID`
+before choosing a scorer. Each outcome has its own criteria; success in one does
+not establish the other. An `unknown` cell or a passing metadata/source check is
+not a completed scientific benchmark. The historical paper
 `score` and `run` routes still require `--calibration`; their outputs cannot establish
-the current improvement objective or automatically qualify the new reproduction
-outcome. Paper reproduction is now also a first-class research goal. Improvement
+the current improvement objective or automatically qualify AI reproduction. Improvement
 candidates may change architecture, inference or optimization while preserving
 the contract's permitted observations,
 cohort, split, evaluation, required controls and resource budget. The author-source
 recipe defines the baseline comparison.
 
-For neural tasks, choose native interpretation or tool/model building, then the
-specific direct-observation, typed-viewer, tool-assisted or frozen-programme
-condition named by the current definition.
+For neural tasks, distinguish direct interpretation without arbitrary analysis
+tools, interpretation through a restricted typed image-navigation viewer, and
+agent-built tools, models or programmes. Use the specific condition named by the
+current definition; a viewer is a tool-mediated observation condition, while a
+programme may include agent-created analysis or learning code.
 `neural-contract TASK_ID` reads its pinned `understanding.v1.json`, including the
 target, permitted observations, controls, source delivery and missing requirements.
 Prepared feature inputs, raw waveforms and rendered images expose different
@@ -108,6 +116,20 @@ checks exercise local denials and response handling. No model was called, and a
 remote provider's image delivery, capacity and context isolation remain unqualified.
 The guide separates zero-shot and four-demonstration conditions and preserves
 failed sessions; neither condition includes evaluator feedback.
+
+The [whole-night sleep viewer](../../benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/README.md)
+adds reviewed source for every one of the 5,450 development epochs. Typed actions
+show waveform images and permitted clock metadata, with past and future navigation
+within the current person, no labelled demonstrations and no evaluator feedback.
+Its construction used generated controls and existing input metadata; authentic
+viewer preparation/rendering, restricted provider transport and model performance
+remain unqualified. The canonical unsupported direct/viewer mode is unchanged.
+
+The sleep feature programme can learn from six training people's labels; the
+whole-night viewer is zero-shot and exposes raw waveform images plus clocks.
+These are distinct information budgets. The same task, person or query IDs permit
+a scoped capability comparison but cannot by themselves isolate an
+information-matched effect of tool access.
 
 For NEURAL-082, the [OpenMIIR source-support command](../../benchmarks/neural/NEURAL-082/implementations/openmiir-support-v1/README.md)
 authenticates the original metadata and enumerates all 66 stimulus pairs in each
@@ -136,7 +158,7 @@ before running them; data, targets, checkpoints and outputs stay outside public 
 
 | Task and route | Executable source and observed coverage | Remaining comparison requirements |
 | --- | --- | --- |
-| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md) | Original MC_Maze 20-ms preparation: validation 1,721 training / 574 evaluation trials; test 2,295 training / 574 evaluation trials; 182 neurons. `delivery.py` exports complete paired paper/data conditions. | Both original author arms need complete 192-particle, 32-repeat calibration. Temporal information access must be enforced; equal participant budgets and the improvement/uncertainty rule remain unqualified. |
+| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md) | Original MC_Maze 20-ms panel; the offline candidate uses the full 35-bin held-in observation window and one complete prediction set for co-smoothing and ten-bin future prediction. The current improvement successor retains the original panel, ordered arrays and four metrics. | Author calibration is partial: causal predictions using the original 192 particles × 32 repeats are frozen; the noncausal author run is in progress and both scores remain pending. The strongest retained published/reproduced comparator, matched participant budgets, behavior-guided fitting/selection policy and source-grounded uncertainty remain qualification gates. |
 | [REVE / PAPER-paper-method-003](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md) | `panel.py acquire`, `inspect`, `prepare`, `predict` and `score`; all 654 official EDFs for 109 participants prepared into 9,837 epochs, preserving the 1–70 / 71–89 / 90–109 train/validation/test split | Released-code and paper filtering recipes disagree; the exact downstream classifier checkpoint, historical run aggregation and author-model performance remain unresolved. No model inference ran. |
 | [DeepCaImX / PAPER-paper-method-013](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_PANEL.md) | `source_panel.py convert-rois` and `score-segmentation`; all ten original manual ROI files authenticated and converted, preserving 1,563 masks and spatial coordinates | Exact movie crop/frame mapping, paper-equivalent full checkpoint and native assembly are unresolved. Ten videos correspond to eight donors. No movie-to-mask inference ran; segmentation arithmetic alone leaves trace/runtime obligations open. |
 
@@ -148,15 +170,28 @@ The full native `panel.json` and smaller public `reference_panel.json` have
 different hashes because the latter is a metadata subset of the same frozen input
 panel; that difference does not indicate changed trials or arrays.
 
-The [SMC paired-delivery guide](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/DELIVERY.md)
-gives the export command. The [preparation evidence](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json)
-records the actual 56-file, 27,828,070-byte export: 12 identical shared-file identities
-and 29 additions for the code condition, excluding checkpoints, operator predictions
-and test targets. Materials alone do not enforce the causal or noncausal
-temporal-access bounds. A future runner must enforce and audit those permitted
-views; the source causal arm's reflect-padding startup is not strictly online.
-Any candidate architecture may satisfy the same information boundary. Both original
-arms must independently meet the frozen improvement rule.
+Use the [offline SMC delivery and scoring interface](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md)
+for the current full-window candidate condition. A trusted operator must freeze
+the complete paired materials, fitting and selection policy, equal budgets and
+scientific comparison before candidate results. Supplied behavior may guide
+learning only within the declared policy; actual use in fitting and selection is
+reported separately. This grants no test behavior, held-out test spikes or unseen
+future spikes. One candidate prediction set replaces the former arm-labelled
+candidate submissions. Positive score differences remain scientifically unknown
+until execution, output and comparison qualification are complete.
+
+The retained [source-matched SMC routes](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
+and [paired-delivery guide](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/DELIVERY.md)
+document author reproduction and calibration. Their
+[preparation evidence](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json)
+records an earlier complete paired export, excluding checkpoints, operator
+predictions and test targets. That receipt does not qualify a new offline export
+or candidate run. Both source-author arms must complete their calibration, and
+the offline comparison must select the strongest retained qualified/published
+reference; a lower reproduced score cannot replace a higher published comparator.
+Strict-online and source-prefix candidates need separately named information
+policies and appropriate comparators. The source causal arm's reflect-padding
+startup is not strictly online.
 
 The REVE guide gives the acquisition, complete-panel preparation, frozen prediction
 interface and evaluator commands. Its predictor receives signal shards and channel

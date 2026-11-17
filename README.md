@@ -23,6 +23,8 @@ python3 -I -S -B scripts/neurobench.py implementations NEURAL-077
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
 python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050 --outcome reproduction
+python3 -I -S -B scripts/neurobench.py paper-outcomes PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py operator routes
 ```
 
@@ -58,10 +60,10 @@ create extra task IDs or duplicate an execution count.
 | --- | --- |
 | **Paper reproduction** | Faithfully recover the task's complete original result under declared source, data and evaluation conditions, including required companion results and a justified agreement rule. Reproduction is a first-class outcome. |
 | **Paper improvement** | Surpass the source result on the same original task, with fixed observations, cohort, split, evaluation and required controls. Candidates may change architecture, inference or optimization within the declared observation and budget boundary. |
-| **Native neural interpretation** | Infer the specified target directly from permitted observations or through a typed viewer, with explicit representation, demonstration and action limits. |
+| **Native neural interpretation** | Infer the specified target directly without arbitrary analysis tools, or use only the typed image-navigation actions of a separately declared viewer condition. Each condition has explicit representation, demonstration and action limits. |
 | **Neural tool/model building** | Create or adapt a tool, model, investigation procedure or frozen programme to solve the neural task under declared data, tool and resource access, with attributable participant contributions. |
 
-Paper + data and paper + data + official code remain distinct access conditions.
+Paper + data and paper + data + author code remain distinct access conditions.
 Reproduction and improvement are assessed separately in either condition; one
 result does not establish the other.
 
@@ -74,34 +76,55 @@ The [restricted viewer transport](benchmarks/neural/NEURAL-077/implementations/v
 also collected all 400 scripted responses without scoring. Its local boundary
 checks do not establish model/provider delivery or neural interpretation.
 
-All 118 neural definitions now bind a current `understanding.v1.json` and preserve
+The registered neural definitions bind a current `understanding.v1.json` and preserve
 their exact predecessor. `neural-contract` exposes the target, observation limits,
 controls and separate access modes. The [neural catalog](benchmarks/catalog/neural.md)
-reports 13 delivered named scopes, 94 partial deliveries, seven designs and four
-target mismatches. These counts describe source coverage; the revision confers no
+reports current source coverage and target mismatches; these are separate from
 scientific qualification.
 
-The current 117 paper definitions still bind
-[improvement contracts](docs/science/paper-improvement/README.md) with their existing
-objective and schema. Reviewed per-task reproduction definitions are the next
-coverage requirement; the new design does not promote historical calibration
-attempts or inference probes to qualified reproductions. The
-[paper catalog](benchmarks/catalog/paper.md) distinguishes designs, unresolved source
-comparisons, ineligible papers and improvement-ready tasks. The current contracts
-establish no empirical paper improvement. A changed split, easier subset or different
-metric is an extension; current SOTA requires its own verified comparison.
+The [whole-night sleep viewer](benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/README.md)
+adds reviewed source for all 5,450 development epochs. Its authentic viewer
+preparation and rendering, provider image delivery and model performance remain
+unqualified; the canonical unsupported direct/viewer status is unchanged. This
+zero-shot waveform viewer and the feature programme that can learn from six
+training people's labels use different information budgets. Shared task and query
+IDs alone cannot establish an information-matched tool effect.
+
+For paper tasks, `paper-contract --outcome reproduction` and `paper-outcomes`
+inspect adopted reproduction definitions and their separate improvement and access
+conditions. `paper-contract` defaults to the current improvement contract.
+Read the task's explicit availability and source limits: some original findings
+still lack a complete reproduction interface or a justified same-result improvement
+comparison. A retained secondary endpoint cannot satisfy a different primary
+finding. A finding may support independent reproduction when an ordered
+improvement comparison is unavailable. The [paper catalog](benchmarks/catalog/paper.md)
+reports current reproduction coverage and improvement-contract dispositions;
+a declared contract, passing source tests or an `unknown`
+outcome cell is not a completed benchmark. Historical calibration attempts and
+author inference probes do not become qualified AI reproductions. A changed split,
+easier subset or different metric is an extension; current SOTA requires its own
+verified comparison.
 Concrete [paper-preparation routes](docs/usage/implementations.md#prepare-original-paper-endpoints)
 now cover the complete REVE PhysioNet input panel and DeepCaImX manual ROI panel.
 Their preparation and software-control reports are available through `evidence
 PAPER-paper-method-003` and `evidence PAPER-paper-method-013`; neither reports model
 inference. Author-model equivalence and paper improvement remain unresolved.
 
-The new [SMC-RNN registration](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
-adds the complete original MC_Maze 20-ms input panel and paired paper/data materials.
-Two author-checkpoint inference probes measured native cost; they produced no
-complete prediction set or scientific score. Full author calibration, enforceable
-temporal access and equal participant budgets remain unresolved. The original 116
-paper registrations remain preserved; the current roster is 117 paper and 118 neural.
+The [SMC-RNN offline outcome route](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md)
+uses the full original 35-bin held-in observation window and one complete candidate
+prediction set for co-smoothing and ten-bin future prediction. Its improvement
+successor preserves the original panel and four metrics. The retained
+[source-matched author routes](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
+serve author reproduction and calibration. Author calibration is partial: the
+complete causal author reference has produced and frozen predictions using the
+original 192 particles × 32 repeats on the full MC_Maze 20-ms panel. The noncausal
+author run is in progress; both scores remain pending. This is author-reference
+execution evidence; no paper-reproduction, candidate-improvement, AI-study or SOTA
+outcome is established. A paper-win claim still requires a qualified strongest
+retained published/reproduced comparator and matched participant budgets.
+Historical author-checkpoint probes measured native cost without producing a
+complete prediction set or scientific score. Source delivery does not discharge
+these gates.
 
 ## Find source and understand the counts
 
