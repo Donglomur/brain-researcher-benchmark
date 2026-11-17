@@ -158,6 +158,16 @@ window is never shortened to compensate. External whole-command supervision must
 cover the unchanged 780 seconds and observe the original final exit. The
 controller is not placed in a new host memory/CPU cgroup by this wrapper.
 
+Future launches also require the existing shared outer supervisor to preserve
+**60 GiB (64,424,509,440 bytes) free after all active reservations**, including
+this attempt, in addition to the unchanged legacy guards. The legacy 15 GB
+(15,000,000,000-byte) guard is insufficient on its own. Keep
+`--other-reserve-bytes` as the complete actual concurrent reservations; do not
+encode a floor uplift there. The 49,424,509,440-byte floor difference alone
+exceeds the original 22,000,000,000-byte aggregate ceiling and would change its
+admission. The shared supervisor must enforce the stronger floor independently;
+this recovered runtime does not itself implement that shared policy.
+
 Early startup, dispatch or the original source gate can refuse before creating
 an output directory or charge-intent/failure receipt. Retain external command
 supervision and logs, and reconcile the consumed startup/failure cost before a
