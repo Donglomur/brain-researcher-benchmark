@@ -1,0 +1,105 @@
+{
+  "schema": "isttc_empirical_estimation_binding_v1",
+  "task_id": "PAPER-paper-method-add-004",
+  "new_benchmark": false,
+  "scope": "Complete 5775-unit by four-method per-unit Figure7C fit producer; inferential GLMs and other paper panels are not implemented.",
+  "paper": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+  "official_repository": "https://github.com/iinnpp/isttc",
+  "revision": "e78cfd2b2ea79b7a7e707db7b79e218212497e43",
+  "source_observations": [
+    {
+      "file": "notebooks/mice/calculate_and_plot_acf.ipynb",
+      "git_blob": "f7a4791a61a40e12cd1919ec48ec409c12787831",
+      "cells": [
+        8,
+        10,
+        11
+      ],
+      "binding": "fs30000; full ACF50ms bins/nlags20; full iSTTC lag1500 ticks,dt750 ticks,30min."
+    },
+    {
+      "file": "src/isttc/scripts/run_allen_mice_data.py",
+      "git_blob": "23227f7dd903645c831c5cfcd2625bcc80d52f1a",
+      "sha256": "c25781b6f6d367f5912b298045cc28e60ccee60d076b02b237dc6f6f53e869f6",
+      "binding": "Trial Pearson and iSTTC concatenation calls, fit start_idx1,25ms dt,3000ms source trial-offset parameter. Driver defaults are not selected wholesale."
+    },
+    {
+      "file": "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+      "git_blob": "461c2b0aa62f8b23e28d164ad2bb1dc399389e26",
+      "sha256": "35d2bfa656d6bf1d828d3afda1c3f3b2735576ac8c824aac33f3e1f6f30fc820",
+      "cells": [
+        7,
+        10,
+        11,
+        19,
+        20,
+        21
+      ],
+      "binding": "Per-unit full fits start_idx1; four method names; first trial replicate; tau_ms=50*tau_bins."
+    }
+  ],
+  "external_runtime_files": {
+    "src/isttc/scripts/calculate_acf.py": {
+      "bytes": 28996,
+      "sha256": "e19fa6241c3ac8a7a9de5c4eb03d1791f0cc57a8bd2e3fd11ec041f864d575c9"
+    },
+    "src/isttc/scripts/calculate_tau.py": {
+      "bytes": 15595,
+      "sha256": "cf8f6488f1af1f92815b117603de947939211d4e5a68fa30c9f5b9aa0a7072e0"
+    },
+    "src/isttc/scripts/spike_train_utils.py": {
+      "bytes": 7027,
+      "sha256": "6a7ba6ac8d4eda4a9c3c4e1cdd8a49642224129398a7d2cecfbd43c48dc77668"
+    }
+  },
+  "parameters": {
+    "units": 5775,
+    "mice": 26,
+    "fit_coordinates": 23100,
+    "fs_hz": 30000,
+    "signal_ticks": 54000000,
+    "trials": 40,
+    "trial_ticks": 30000,
+    "bin_ms": 50,
+    "lag_ticks": 1500,
+    "sttc_dt_ticks": 750,
+    "n_lags_argument": 20,
+    "full_curve_points": 21,
+    "trial_curve_points": 20,
+    "trial_concatenation_offset_ticks": 90000,
+    "fit_start_idx": 1,
+    "tau_bin_ms": 50
+  },
+  "fit_semantics": {
+    "function": "a*(exp(-x/tau)+c)",
+    "bounds": "amplitude>=0,tau>=0,c unbounded; pinned default initialization",
+    "maxfev": 1000000000,
+    "fitted_support": "All source curve points from index1 through end, no padding",
+    "r_squared": "Author returned fit R-squared; finite negative values preserved",
+    "failures": "Nonfinite numeric fields become null with explicit reason; finite companion fields retained; interface/source errors abort."
+  },
+  "input_contract": {
+    "cohort": "../empirical-diagnostics/cohort.schema.json",
+    "estimates": "../empirical-diagnostics/estimates.schema.json",
+    "bridge_sha256": "802c08a03ef262d810e78b69bba72c0a8b4ef48e196cee0f179f97ae11756516",
+    "recordings": "Ordered JSONL normalized integer ticks, exact unit IDs,fs30000,extent54000000; original Allen ingestion is external.",
+    "windows": "Exact existing bridge window_rows prospective sequence verified from frozen seed and complete ordered cohort; historical RNG not recovered."
+  },
+  "dependencies": "Already installed numpy,scipy,scikit-learn,statsmodels; observed versions recorded, no publication-time lock claimed.",
+  "remaining_holds": [
+    "Authentic original cohort and unit/session/animal correspondence",
+    "Paper amplitude_cutoff0.01 versus acquisition default0.1 reconciliation",
+    "Original source data and rights admission",
+    "Prospectively frozen seed/custody rather than choosing favorable windows",
+    "Dependency/runtime numerical parity",
+    "Figure7C GLM and broader-paper reproduction",
+    "Protected trial-only improvement needs separate restricted interface"
+  ],
+  "readiness": {
+    "complete_producer_source": true,
+    "authentic_cohort_qualified": false,
+    "native_numerical_parity_qualified": false,
+    "paper_reproduction_pass": null
+  },
+  "license": "GPL-3.0; author scientific source remains external; article/data/dependency rights separate."
+}
