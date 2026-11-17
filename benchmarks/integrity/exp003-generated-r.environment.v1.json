@@ -1,7 +1,7 @@
 {
-  "schema": "exp003-generated-r-environment/v1",
+  "schema": "exp003-generated-r-environment/v2",
   "scope": "generated software/source controls only",
-  "source_commit": "9701e99e181f1f8056a5c6f2849eb56977a37bcb",
+  "source_commit": "d4ff815105b1f9e9b066554af27a755b46df6d5e",
   "namespace": "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-producer-v2",
   "field_schema": "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-full120-reconstruction-profile-v1/participant/FIELD_SCHEMA.json",
   "source_files": {
@@ -44,6 +44,38 @@
     "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-full120-reconstruction-profile-v1/participant/FIELD_SCHEMA.json": {
       "bytes": 11108,
       "sha256": "b6e220d597f2848c83f78c25cd981980888856431701441f426c329e555b9e22"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/README.md": {
+      "bytes": 9330,
+      "sha256": "841a37c70eec57478d5f65f5c194914ce64a0284f3637710fd15e4f3bd468530"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/SOURCE_BINDINGS.json": {
+      "bytes": 13797,
+      "sha256": "9cfe6bf8fdeacf11383cb1644eeb31d070abdf16dcf25087ddc386019effb21e"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/companion_contract.py": {
+      "bytes": 9828,
+      "sha256": "52daddec0a2754111daa3aaaa6f2a48e80ea6d3387555c8ddb158138cdfb746f"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/native_artifacts.R": {
+      "bytes": 16327,
+      "sha256": "ee80ec9c7d42bebae3fecd798cd92d55ed3536889a5dd9c7cebe9d261cbf4c5b"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/replay_companions.R": {
+      "bytes": 7894,
+      "sha256": "4100fcd10ef4e9927864251dc4a8e927999a21aa73c9636090cd4daa2fb714fb"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/replay_companions.py": {
+      "bytes": 11077,
+      "sha256": "264c83e799f4ab44a73f401841305d509c092d40dd6f5df9947f6dfc623ce080"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/tests/artifact_controls.R": {
+      "bytes": 19290,
+      "sha256": "153dda8a056ac3b582e7a9719845beaf4b34966d4845d6205c257ee3afa44583"
+    },
+    "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/tests/generated_controls.py": {
+      "bytes": 20976,
+      "sha256": "4976139453a7059c0e3373f573cca26fdc614ae8312994fd931c87c262de68e8"
     }
   },
   "image": {
@@ -113,9 +145,15 @@
     ],
     "payload_hash_must_be_verified_before_install": true
   },
-  "parse_expression": "for (p in c(\"collector.R\", \"source_selection.R\", \"replay_primary_dl.R\", \"tests/collector_controls.R\")) parse(p, keep.source = TRUE); cat(\"4 R source files parsed; no expressions evaluated.\\n\")",
-  "expected_generated_checks": 219,
+  "parse_expression": "for (p in c(\"collector.R\", \"source_selection.R\", \"replay_primary_dl.R\", \"tests/collector_controls.R\", \"../nider-primary-companions-v1/native_artifacts.R\", \"../nider-primary-companions-v1/replay_companions.R\", \"../nider-primary-companions-v1/tests/artifact_controls.R\")) parse(p, keep.source = TRUE); cat(\"7 R source files parsed; no expressions evaluated.\\n\")",
+  "expected_generated_checks": {
+    "collector": 219,
+    "native_artifacts": 237
+  },
   "expected_skips": 0,
   "authentic_data_or_author_estimator_execution": false,
-  "scientific_qualification": false
+  "scientific_qualification": false,
+  "predecessor_source_commit": "9701e99e181f1f8056a5c6f2849eb56977a37bcb",
+  "companion_namespace": "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1",
+  "suite_relationship": "Separate required suites. The 237 companion controls do not include or replace the 219 collector/source-selection controls; helper behavior overlaps."
 }

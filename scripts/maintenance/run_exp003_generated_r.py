@@ -199,10 +199,12 @@ def owned_container(argv, name, log):
         cleanup_container(name, log.with_name(log.name + '.cleanup'))
 
 
-def strict_result(parsed, controls):
-    need(parsed.strip() == '4 R source files parsed; no expressions evaluated.', 'parse success marker mismatch')
+def strict_result(parsed, controls, artifacts):
+    need(parsed.strip() == '7 R source files parsed; no expressions evaluated.', 'parse success marker mismatch')
     expected = 'Generated R collector/parse checks: 219 passed; no estimator called.'
     need(re.findall(r'^Generated R collector/parse checks: .*$', controls, re.MULTILINE) == [expected], 'generated control count/outcome mismatch')
+    expected_artifacts = 'Generated native artifact checks: 237 passed; no estimator called.'
+    need(re.findall(r'^Generated native artifact checks: .*$', artifacts, re.MULTILINE) == [expected_artifacts], 'generated artifact count/outcome mismatch')
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -258,6 +260,22 @@ def acquire_jsonlite(spec, output):
         (output / 'dependency-acquisition.json').write_text(json.dumps(receipt, indent=2) + '\n')
 
 
+def authenticate_sources(document, root):
+    names = (('namespace', 9), ('companion_namespace', 8))
+    members = set()
+    need(document['namespace'] != document['companion_namespace'], 'distinct source namespaces required')
+    for key, count in names:
+        prefix = document[key] + '/'
+        expected = {name[len(prefix):] for name in document['source_files'] if name.startswith(prefix)}
+        need(len(expected) == count, 'exact reviewed source namespace cardinality required')
+        exact_namespace(local(root, document[key]), expected)
+        members.update(prefix + name for name in expected)
+    need(set(document['source_files']) == members | {document['field_schema']}
+         and len(document['source_files']) == 18, 'only seventeen source files and field schema are admitted')
+    for name, pin in document['source_files'].items():
+        pinned(local(root, name), pin['bytes'], pin['sha256'])
+
+
 def main():
     need(len(sys.argv) == 6, 'descriptor bytes digest checkout output required')
     descriptor = Path(sys.argv[1])
@@ -266,17 +284,12 @@ def main():
     signal.signal(signal.SIGINT, cancel)
     root = Path(sys.argv[4]).resolve()
     output = Path(sys.argv[5]).absolute()
-    need(document['schema'] == 'exp003-generated-r-environment/v1', 'descriptor schema mismatch')
+    need(document['schema'] == 'exp003-generated-r-environment/v2', 'descriptor schema mismatch')
     need(not output.exists() and not output.is_symlink() and not output.resolve().is_relative_to(root), 'fresh external output required')
     for parent in output.parents:
         need(not parent.is_symlink(), 'output symlink refused')
     output.mkdir(mode=0o700)
-    prefix = document['namespace'] + '/'
-    expected_members = {name[len(prefix):] for name in document['source_files'] if name.startswith(prefix)}
-    need(len(expected_members) == 9, 'exact nine reviewed source files required')
-    exact_namespace(local(root, document['namespace']), expected_members)
-    for name, pin in document['source_files'].items():
-        pinned(local(root, name), pin['bytes'], pin['sha256'])
+    authenticate_sources(document, root)
     for name in THREADS:
         os.environ[name] = '1'
     image = document['image']['identity']
@@ -287,25 +300,28 @@ def main():
     archive = acquire_jsonlite(document['jsonlite'], output)
     library = output/'library';library.mkdir(mode=0o700)
     namespace = local(root, document['namespace'])
+    companion_namespace = local(root, document['companion_namespace'])
     field_schema = local(root, document['field_schema'])
     inside = '/inputs/nider-primary-producer-v2'
+    companion_inside = '/inputs/nider-primary-companions-v1'
     name = 'exp003-generated-' + str(os.getpid())
     common = ['docker','run','--rm','--name',name,'--platform','linux/arm64','--network','none','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--pids-limit','64','--cpus','1','--memory','256m','--memory-swap','256m','--user',str(os.getuid())+':'+str(os.getgid()),'--tmpfs','/tmp:rw,nosuid,nodev,size=134217728','--env','HOME=/tmp','--env','R_LIBS_USER=/library']
     for variable in THREADS:
         common += ['--env', variable+'=1']
-    def container(args, logfile, install=False):
+    def container(args, logfile, install=False, workdir=inside):
         mounts = ['--mount','type=bind,src='+str(library)+',dst=/library'+('' if install else ',readonly')]
         if install:
             mounts += ['--mount','type=bind,src='+str(archive)+',dst=/package/jsonlite.tar.gz,readonly']
         else:
-            mounts += ['--mount','type=bind,src='+str(namespace)+',dst='+inside+',readonly','--mount','type=bind,src='+str(field_schema)+',dst=/inputs/nider-full120-reconstruction-profile-v1/participant/FIELD_SCHEMA.json,readonly','--workdir',inside]
+            mounts += ['--mount','type=bind,src='+str(namespace)+',dst='+inside+',readonly','--mount','type=bind,src='+str(companion_namespace)+',dst='+companion_inside+',readonly','--mount','type=bind,src='+str(field_schema)+',dst=/inputs/nider-full120-reconstruction-profile-v1/participant/FIELD_SCHEMA.json,readonly','--workdir',workdir]
         return owned_container(common+mounts+[image]+args, name, output/logfile)
     container(['R','CMD','INSTALL','--no-docs','--no-html','--no-demo','--no-help','--no-multiarch','--library=/library','/package/jsonlite.tar.gz'],'jsonlite-install.log',install=True)
     container(['Rscript','--vanilla','-e','stopifnot(as.character(getRversion()) == "4.3.2", as.character(utils::packageVersion("jsonlite")) == "1.8.8"); print(sessionInfo())'],'runtime-version.log')
     parsed = container(['Rscript','--vanilla','-e',document['parse_expression']],'parse.log')
     controls = container(['Rscript','--vanilla','tests/collector_controls.R',inside],'generated-controls.log')
-    strict_result(parsed, controls)
-    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'parsed_files':4,'checks':219,'skips':0,'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
+    artifacts = container(['Rscript','--vanilla','tests/artifact_controls.R',companion_inside],'generated-artifact-controls.log',workdir=companion_inside)
+    strict_result(parsed, controls, artifacts)
+    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'parsed_files':7,'suites':{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}},'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
 
 
 if __name__ == '__main__':

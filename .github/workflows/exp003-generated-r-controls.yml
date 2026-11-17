@@ -42,14 +42,14 @@ jobs:
             /usr/bin/timeout --signal=TERM --kill-after=35s "${EXP003_SECONDS}s" python -I -S -B - "$@" <<'PY'
           import hashlib, os, stat, sys
           from pathlib import Path
-          
+
           def need(ok, message):
               if not ok:
                   raise ValueError(message)
-          
+
           def fingerprint(info):
               return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
-          
+
           def secure_parent(path):
               path = Path(path).absolute()
               need('..' not in path.parts, 'normalized absolute path required')
@@ -63,7 +63,7 @@ jobs:
               except BaseException:
                   os.close(descriptor)
                   raise
-          
+
           def pinned(path, size, digest):
               need(type(size) is int and 0 < size <= 65536, 'source extent refused')
               parent, name = secure_parent(path)
@@ -83,15 +83,15 @@ jobs:
                   if descriptor is not None:
                       os.close(descriptor)
                   os.close(parent)
-          
+
           local_pins = [
-              ("scripts/maintenance/run_exp003_generated_r.py", 14959, "0d8a6c0f95de42379157bb39a45cc8e937f114e8583af4be592f1ac967910a85"),
-              ("benchmarks/integrity/exp003-generated-r.environment.v1.json", 6031, "3de6839e6bcc7224bba06bee1088302f4ec0e5882bde8385d509b7c19c2284bc"),
-              ("tests/maintenance/test_exp003_generated_r.py", 13760, "fc7822ced04b716b9a09b00c18f87c493666fb4d0f0db1a454756ab3c9005699"),
+              {"path": "scripts/maintenance/run_exp003_generated_r.py", "bytes": 16234, "sha256": "4a632aeca4b7d1a8cedaed6204c96c498766c39806d296e1bea22f488a3aebd8"},
+              {"path": "benchmarks/integrity/exp003-generated-r.environment.v1.json", "bytes": 8424, "sha256": "0bc5a98d82b021e7ddce0cd09c4eebd7582c7d82864a28e82ee20af88e963600"},
+              {"path": "tests/maintenance/test_exp003_generated_r.py", "bytes": 18631, "sha256": "0d9cec0b5e54dd56fd3b190f7b9fbc8b9cf809c24bfbb1a930a23fd3d17fa741"},
           ]
-          verified = {name: pinned(Path(name), size, digest) for name, size, digest in local_pins}
+          verified = {item["path"]: pinned(Path(item["path"]), item["bytes"], item["sha256"]) for item in local_pins}
           p = sys.argv[1]
-          bootstrap, environment, controls = [item[0] for item in local_pins]
+          bootstrap, environment, controls = [item["path"] for item in local_pins]
           need(p in (bootstrap, controls), "only reviewed control entrypoints are executable")
           if p == bootstrap:
               need(len(sys.argv) == 4, "checkout and output arguments required")

@@ -84,6 +84,59 @@ class Controls(unittest.TestCase):
     def test_namespace_link_refused(self):
         root,expected=self.namespace();(root/'f0').unlink();(root/'f0').symlink_to(self.path)
         with self.assertRaisesRegex(ValueError,'linked'):m.exact_namespace(root,expected)
+    def composite_source(self):
+        root=self.root/'checkout';root.mkdir()
+        document={'namespace':'producer','companion_namespace':'companions','field_schema':'schema.json','source_files':{}}
+        for key,count in (('namespace',9),('companion_namespace',8)):
+            base=root/document[key];base.mkdir()
+            for index in range(count):
+                path=base/f'f{index}';path.write_bytes(b'x')
+                document['source_files'][str(path.relative_to(root))]={'bytes':1,'sha256':hashlib.sha256(b'x').hexdigest()}
+        (root/'schema.json').write_bytes(b'{}')
+        document['source_files']['schema.json']={'bytes':2,'sha256':hashlib.sha256(b'{}').hexdigest()}
+        return root,document
+    def test_composite_exact_nine_plus_eight_and_schema(self):
+        root,document=self.composite_source();m.authenticate_sources(document,root)
+    def test_composite_companion_extra_and_missing_refused(self):
+        root,document=self.composite_source();extra=root/'companions'/'extra';extra.write_bytes(b'x')
+        with self.assertRaisesRegex(ValueError,'unexpected'):m.authenticate_sources(document,root)
+        extra.unlink();(root/'companions'/'f0').unlink()
+        with self.assertRaisesRegex(ValueError,'membership mismatch'):m.authenticate_sources(document,root)
+    def test_composite_unlisted_source_and_pin_tamper_refused(self):
+        root,document=self.composite_source();document['source_files']['foreign.json']={'bytes':2,'sha256':'0'*64}
+        with self.assertRaisesRegex(ValueError,'only seventeen'):m.authenticate_sources(document,root)
+        del document['source_files']['foreign.json'];(root/'companions'/'f0').write_bytes(b'y')
+        with self.assertRaisesRegex(ValueError,'pin mismatch'):m.authenticate_sources(document,root)
+    def test_composite_commands_mounts_and_distinct_results(self):
+        root,document=self.composite_source()
+        document.update({'schema':'exp003-generated-r-environment/v2','source_commit':'frozen','image':{'identity':'rocker/r-ver@sha256:'+'a'*64,'config_digest':'sha256:'+'b'*64},'jsonlite':{},'parse_expression':'parse-seven-only'})
+        descriptor=self.root/'environment.json';raw=json.dumps(document).encode();descriptor.write_bytes(raw)
+        archive=self.root/'package.tar.gz';archive.write_bytes(b'not installed')
+        output=self.root/'output';captured=[]
+        def fake_command(argv,*args,**kwargs):
+            if argv[:3]==['docker','image','inspect']:
+                return json.dumps([{'Id':'sha256:'+'b'*64,'Os':'linux','Architecture':'arm64'}])
+            self.assertEqual(argv[:2],['docker','pull']);return ''
+        def fake_container(argv,name,log):
+            captured.append(argv)
+            if log.name=='parse.log':return '7 R source files parsed; no expressions evaluated.\n'
+            if log.name=='generated-controls.log':return 'Generated R collector/parse checks: 219 passed; no estimator called.\n'
+            if log.name=='generated-artifact-controls.log':return 'Generated native artifact checks: 237 passed; no estimator called.\n'
+            return ''
+        with patch.object(m.sys,'argv',['bootstrap',str(descriptor),str(len(raw)),hashlib.sha256(raw).hexdigest(),str(root),str(output)]),patch.object(m.signal,'signal'),patch.object(m,'command',side_effect=fake_command),patch.object(m,'acquire_jsonlite',return_value=archive),patch.object(m,'owned_container',side_effect=fake_container):
+            m.main()
+        self.assertEqual(len(captured),5)
+        for argv in captured[1:]:
+            for key,inside in (('namespace','/inputs/nider-primary-producer-v2'),('companion_namespace','/inputs/nider-primary-companions-v1')):
+                self.assertIn('type=bind,src='+str(root/document[key])+',dst='+inside+',readonly',argv)
+            self.assertEqual(argv[argv.index('--network')+1],'none')
+        self.assertEqual(captured[-2][-4:],['Rscript','--vanilla','tests/collector_controls.R','/inputs/nider-primary-producer-v2'])
+        self.assertEqual(captured[-1][-4:],['Rscript','--vanilla','tests/artifact_controls.R','/inputs/nider-primary-companions-v1'])
+        self.assertEqual(captured[-1][captured[-1].index('--workdir')+1],'/inputs/nider-primary-companions-v1')
+        result=json.loads((output/'result.json').read_text())
+        self.assertEqual(result['suites'],{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}})
+        self.assertEqual(result['parsed_files'],7);self.assertFalse(result['scientific_qualification'])
+
     def test_response_read_is_extent_plus_one(self):
         response=io.BytesIO(b'abcdef');raw=bytearray();receipt={}
         m.read_dependency_response(response,3,raw,receipt)
@@ -107,12 +160,15 @@ class Controls(unittest.TestCase):
             with self.assertRaises(ValueError):m.acquire_jsonlite({'url':'https://example.com/a','bytes':1053028},self.root)
         opener.assert_not_called()
     def test_exact_results_and_changed_counts(self):
-        parse='4 R source files parsed; no expressions evaluated.\n'
+        parse='7 R source files parsed; no expressions evaluated.\n'
         text='Generated R collector/parse checks: 219 passed; no estimator called.\n'
-        m.strict_result(parse,text)
+        artifacts='Generated native artifact checks: 237 passed; no estimator called.\n'
+        m.strict_result(parse,text,artifacts)
         for value in (text.replace('219','218'),text+text,text.replace('passed','skipped'),''):
-            with self.assertRaisesRegex(ValueError,'count/outcome'):m.strict_result(parse,value)
-        with self.assertRaisesRegex(ValueError,'parse'):m.strict_result('3 R source files parsed',text)
+            with self.assertRaisesRegex(ValueError,'count/outcome'):m.strict_result(parse,value,artifacts)
+        for value in (artifacts.replace('237','236'),artifacts+artifacts,artifacts.replace('passed','skipped'),'',text):
+            with self.assertRaisesRegex(ValueError,'count/outcome'):m.strict_result(parse,text,value)
+        with self.assertRaisesRegex(ValueError,'parse'):m.strict_result('4 R source files parsed',text,artifacts)
     def test_subprocess_exit_cannot_be_replaced_by_success_text(self):
         with self.assertRaisesRegex(ValueError,'command failed'):
             m.command([sys.executable,'-I','-S','-B','-c','print("success");raise SystemExit(1)'],self.root/'exit.log')
