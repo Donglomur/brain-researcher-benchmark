@@ -87,7 +87,7 @@ def guard(role, root=Path('/capture')):
          and (cg / 'memory.swap.max').read_text().strip() == '0'
          and (cg / 'pids.max').read_text().strip() == '64', 'observed holder cgroup bounds')
     quota, period = map(int, (cg / 'cpu.max').read_text().split())
-    need(quota == period and period > 0, 'observed holder one CPU')
+    need(period > 0 and quota * 4 == period, 'observed holder quarter CPU')
     mount_guard(root, p['total_cap'], True)
     mount_guard(READY_ROOT, 4096, False)
     sr = READY_ROOT.lstat()

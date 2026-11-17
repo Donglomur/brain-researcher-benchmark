@@ -6,6 +6,7 @@ import io
 import json
 import os
 from pathlib import Path
+import stat
 import sys
 import tempfile
 import time
@@ -378,10 +379,60 @@ class Delivery(unittest.TestCase):
         self.assertEqual((self.out/'packet').stat().st_mode&0o777,0o700)
 
 
+class HolderGuard(unittest.TestCase):
+    def test_actual_main_guard_cpu(self):
+        from transport import holder
+        policy={'schema':'osl_holder_policy_v1','phase_id':'generated','role':'operator',
+                'file_cap':524288,'total_cap':2097152,'files':8,'directories':1}
+        owner='osl-'+'a'*24+'/holder'
+        argv=['holder.py','hold','--owner-token',owner,'--role','operator',
+              '--policy','/generated/POLICY.json','--policy-sha256',common.pin(common.encoded(policy))['sha256']]
+        cases=[('quarter','25000 100000',True,{}),('different_period','50000 200000',True,{}),
+               ('small_period','1 4',True,{})]
+        cases += [(name,cpu,False,{}) for name,cpu in (
+            ('one_cpu','100000 100000'),('half_cpu','50000 100000'),('fifth_cpu','20000 100000'),
+            ('near_quarter','25000 100001'),('zero_quota','0 100000'),('negative_quota','-25000 100000'),
+            ('zero_period','25000 0'),('negative_period','25000 -100000'),('both_negative','-25000 -100000'),
+            ('both_zero','0 0'),('unlimited','max 100000'),('missing_period','25000'),
+            ('extra_token','25000 100000 1'),('malformed','quarter 100000'))]
+        cases += [(name,'25000 100000',False,{key:value}) for name,key,value in (
+            ('wrong_memory','memory.max','268435456'),('extra_swap','memory.swap.max','1'),
+            ('wrong_pids','pids.max','65'),('wrong_uid','uid',0),('public_ready','ready_mode',0o755),
+            ('writable_capture','capture_mode','rw'),('wrong_capacity','capture_bytes',2097153))]
+        class ReadyReached(Exception):pass
+        for name,cpu,accepted,overrides in cases:
+            with self.subTest(name=name):
+                values={'memory.max':'134217728','memory.swap.max':'0','pids.max':'64','cpu.max':cpu,
+                        'uid':65534,'ready_mode':0o700,'capture_mode':'ro','capture_bytes':2097152}|overrides
+                observations={'/sys/fs/cgroup/'+key:values[key] for key in
+                              ('memory.max','memory.swap.max','pids.max','cpu.max')}
+                observations['/proc/self/mountinfo']=(
+                    '23 22 0:1 / /capture '+values['capture_mode']+',noexec,nosuid,nodev - tmpfs tmpfs ro\n'
+                    '24 22 0:2 / /ready rw,noexec,nosuid,nodev - tmpfs tmpfs rw\n')
+                def read_text(path,*args,**kwargs):return observations[str(path)]
+                def lstat(path,*args,**kwargs):
+                    self.assertEqual(str(path),'/ready')
+                    return types.SimpleNamespace(st_mode=stat.S_IFDIR|values['ready_mode'],st_uid=65534,st_gid=65534,st_nlink=2)
+                def statvfs(path):
+                    return types.SimpleNamespace(f_blocks={'/capture':values['capture_bytes'],'/ready':4096}[str(path)],f_frsize=1)
+                with patch.object(sys,'argv',argv),patch.object(holder,'POLICY',None),\
+                     patch.object(holder,'load_policy',return_value=policy),patch.object(Path,'read_text',read_text),\
+                     patch.object(Path,'lstat',lstat),patch.object(holder.os,'getuid',return_value=values['uid']),\
+                     patch.object(holder.os,'statvfs',side_effect=statvfs),\
+                     patch.object(holder,'publish_ready',side_effect=ReadyReached) as ready,\
+                     patch.object(holder.time,'sleep',side_effect=AssertionError('Generated control never enters hold loop')):
+                    with self.assertRaises(ReadyReached if accepted else ValueError):holder.main()
+                    if accepted:ready.assert_called_once_with(Path('/capture'),owner)
+                    else:ready.assert_not_called()
+        print(json.dumps({'holder_guard_scenarios':len(cases),'actual_main_and_guard':True,
+                          'cgroup_mount_observations':'generated in memory','fixture_body_bytes_written':0}))
+
+
 if __name__=='__main__':
     print(json.dumps({'python':sys.version,'numpy':np.__version__,'fixture_scope':'invented complete 141/92 rows only'}))
-    suite=(unittest.TestSuite(Delivery(name) for name in sys.argv[1:]) if len(sys.argv)>1
-           else unittest.defaultTestLoader.loadTestsFromTestCase(Delivery))
+    suite=(unittest.TestSuite(HolderGuard(name.split('.',1)[1]) if name.startswith('HolderGuard.') else Delivery(name)
+                             for name in sys.argv[1:]) if len(sys.argv)>1
+           else unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromTestCase(cls) for cls in (Delivery,HolderGuard)))
     result=unittest.TextTestRunner(verbosity=2).run(suite)
     print(json.dumps({'generated_file_body_bytes_written':WRITES,'unknown_bytes':'filesystem metadata, Python/library I/O, failed partial writes not observed',
                       'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors)}))
