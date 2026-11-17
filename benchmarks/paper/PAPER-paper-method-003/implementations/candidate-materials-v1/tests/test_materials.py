@@ -27,6 +27,10 @@ def npy_bytes(value=0.0, *, shape=(1, 64, 800), descr="<f8", fortran=False):
 PAYLOAD = npy_bytes(1.25)
 
 
+def fixture_query_hashes(mapping):
+    return {row["signal"]: hashlib.sha256(PAYLOAD).hexdigest() for row in mapping["records"]}
+
+
 def fixture():
     records, targets = [], []
     for person in range(1, 110):
@@ -62,6 +66,7 @@ def repin(panel, target_doc=None):
 class MetadataControls(unittest.TestCase):
     def setUp(self):
         self.panel, self.targets = fixture()
+        self.mapping = m.mapping_document(self.panel)
 
     def test_complete_roster_and_label_projection(self):
         m.validate_panel(self.panel)
@@ -71,8 +76,8 @@ class MetadataControls(unittest.TestCase):
 
     def test_access_conditions_have_identical_data(self):
         labels = m.project_targets(self.panel, self.targets)
-        a = m.make_manifest(self.panel, labels, "paper_data")
-        b = m.make_manifest(self.panel, labels, "paper_data_code")
+        a = m.make_manifest(self.panel, labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
+        b = m.make_manifest(self.panel, labels, "paper_data_code", self.mapping, fixture_query_hashes(self.mapping))
         self.assertEqual(a["data"], b["data"])
         self.assertEqual(a["data_identity"], b["data_identity"])
         self.assertNotEqual(a["materials_identity"], b["materials_identity"])
@@ -82,7 +87,7 @@ class MetadataControls(unittest.TestCase):
 
     def test_private_fields_and_test_labels_are_not_forwarded(self):
         labels = m.project_targets(self.panel, self.targets)
-        manifest = m.make_manifest(self.panel, labels, "paper_data")
+        manifest = m.make_manifest(self.panel, labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
         self.assertNotIn("never-copy-this", json.dumps(manifest))
         self.assertNotIn("targets_identity", manifest)
         for row in manifest["data"]["records"]:
@@ -145,7 +150,7 @@ class MetadataControls(unittest.TestCase):
 
     def test_count_mismatch_remains_visible(self):
         labels = m.project_targets(self.panel, self.targets)
-        result = m.make_manifest(self.panel, labels, "paper_data")
+        result = m.make_manifest(self.panel, labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
         self.assertEqual(result["observed_epoch_count"], 654)
         self.assertEqual(result["published_epoch_count"], 9837)
         self.assertFalse(result["published_epoch_count_matches"])
@@ -160,8 +165,8 @@ class MetadataControls(unittest.TestCase):
 
     def test_same_complete_geometry_for_both_conditions(self):
         labels = m.project_targets(self.panel, self.targets)
-        a = m.make_manifest(self.panel, labels, "paper_data")
-        b = m.make_manifest(self.panel, labels, "paper_data_code")
+        a = m.make_manifest(self.panel, labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
+        b = m.make_manifest(self.panel, labels, "paper_data_code", self.mapping, fixture_query_hashes(self.mapping))
         self.assertEqual(a["data"]["geometry"], b["data"]["geometry"])
         self.assertEqual(len(a["data"]["geometry"]["electrodes_in_signal_channel_order"]), 64)
         aliases = dict(zip(m.CHANNELS, m.ELECTRODES))
@@ -289,6 +294,141 @@ class PublicationControls(unittest.TestCase):
             self.assertEqual((stage / "proof").read_bytes(), b"preserve")
 
 
+class OpaqueControls(unittest.TestCase):
+    def setUp(self):
+        self.panel, self.targets = fixture()
+        self.mapping = m.mapping_document(self.panel)
+        self.labels = m.project_targets(self.panel, self.targets)
+
+    def test_complete_private_source_order_and_shuffled_delivery(self):
+        m.validate_mapping(self.panel, self.mapping)
+        self.assertEqual(len(self.mapping["records"]), 120)
+        self.assertEqual([r["source_record_index"] for r in self.mapping["records"]], list(range(534, 654)))
+        self.assertNotEqual(self.mapping["delivery_order"], [r["signal"] for r in self.mapping["records"]])
+        self.assertEqual(set(self.mapping["delivery_order"]), {r["signal"] for r in self.mapping["records"]})
+
+    def test_public_test_metadata_has_no_direct_source_identity(self):
+        manifest = m.make_manifest(self.panel, self.labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
+        queries = [r for r in manifest["data"]["records"] if r["split"] == "test"]
+        self.assertEqual(len(queries), 120)
+        for row in queries:
+            self.assertEqual(set(row), {"split", "signal", "shape", "sha256", "event_ids"})
+            self.assertRegex(row["signal"], r"^signals/query-[0-9a-f]{32}\.npy$")
+            self.assertRegex(row["event_ids"][0], r"^trial-[0-9a-f]{32}$")
+        body = json.dumps(queries)
+        self.assertNotIn("S090R04", body)
+        self.assertNotIn("source_record_index", body)
+        self.assertNotIn("source_event_ids", body)
+
+    def test_duplicate_opaque_event_rejected_even_after_repin(self):
+        self.mapping["records"][1]["event_id"] = self.mapping["records"][0]["event_id"]
+        self.mapping.pop("mapping_identity")
+        self.mapping["mapping_identity"] = m.identity(self.mapping)
+        with self.assertRaisesRegex(m.MaterialError, "unique opaque test event"):
+            m.validate_mapping(self.panel, self.mapping)
+
+    def test_wrong_original_event_rejected_even_after_repin(self):
+        self.mapping["records"][0]["source_event_id"] = "S109R14-event001"
+        self.mapping.pop("mapping_identity")
+        self.mapping["mapping_identity"] = m.identity(self.mapping)
+        with self.assertRaisesRegex(m.MaterialError, "every exact original"):
+            m.validate_mapping(self.panel, self.mapping)
+
+    def test_source_order_delivery_rejected(self):
+        self.mapping["delivery_order"] = [r["signal"] for r in self.mapping["records"]]
+        self.mapping.pop("mapping_identity")
+        self.mapping["mapping_identity"] = m.identity(self.mapping)
+        with self.assertRaisesRegex(m.MaterialError, "non-source-order"):
+            m.validate_mapping(self.panel, self.mapping)
+
+    def test_mapping_reuse_preserves_condition_parity(self):
+        one = m.make_manifest(self.panel, self.labels, "paper_data", self.mapping, fixture_query_hashes(self.mapping))
+        two = m.make_manifest(self.panel, self.labels, "paper_data_code", self.mapping, fixture_query_hashes(self.mapping))
+        self.assertEqual(one["data_identity"], two["data_identity"])
+        other_mapping = m.mapping_document(self.panel)
+        other = m.make_manifest(self.panel, self.labels, "paper_data", other_mapping, fixture_query_hashes(other_mapping))
+        self.assertNotEqual(one["data_identity"], other["data_identity"])
+
+    def test_private_map_creation_mode_and_refuse_overwrite(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            inputs = root / "inputs"
+            inputs.mkdir()
+            panel_path = inputs / "panel.json"
+            panel_path.write_bytes(m.canonical(self.panel))
+            destination = root / "private-map.json"
+            receipt = m.create_mapping(panel_path, destination, expected_panel_identity=self.panel["panel_identity"])
+            self.assertEqual(stat.S_IMODE(destination.stat().st_mode), 0o600)
+            loaded = m.load_mapping(destination, self.panel, receipt["mapping_identity"])
+            self.assertEqual(len(loaded["records"]), 120)
+            with self.assertRaises(FileExistsError):
+                m.create_mapping(panel_path, destination, expected_panel_identity=self.panel["panel_identity"])
+            with self.assertRaisesRegex(m.MaterialError, "outside"):
+                m.create_mapping(panel_path, inputs / "map.json", expected_panel_identity=self.panel["panel_identity"])
+
+    def test_world_readable_private_mapping_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "mapping.json"
+            path.write_bytes(m.canonical(self.mapping))
+            path.chmod(0o644)
+            with self.assertRaisesRegex(m.MaterialError, "group/world"):
+                m.load_mapping(path, self.panel, self.mapping["mapping_identity"])
+
+    def test_mapping_flattens_all_source_rows_privately(self):
+        row = self.panel["records"][534]
+        row["shape"][0] = 2
+        row["event_ids"].append("S090R04-event002")
+        self.panel["counts"]["test"] += 1
+        self.panel["observed_epoch_count"] += 1
+        self.targets["targets"].append({"participant": 90, "run": 4, "split": "test", "label": 1,
+                                         "event_id": "S090R04-event002", "onset_sample_200hz": 2000})
+        repin(self.panel, self.targets)
+        m.validate_panel(self.panel)
+        mapping = m.mapping_document(self.panel)
+        m.validate_mapping(self.panel, mapping)
+        self.assertEqual(len(mapping["records"]), 121)
+        self.assertEqual([r["source_row_index"] for r in mapping["records"][:2]], [0, 1])
+        manifest = m.make_manifest(self.panel, m.project_targets(self.panel, self.targets), "paper_data",
+                                   mapping, fixture_query_hashes(mapping))
+        queries = [r for r in manifest["data"]["records"] if r["split"] == "test"]
+        self.assertEqual(len(queries), 121)
+        self.assertTrue(all(r["shape"] == [1, 64, 800] and len(r["event_ids"]) == 1 for r in queries))
+
+
+class EpochScatterControls(unittest.TestCase):
+    def test_exact_two_distinct_rows_repacked_without_numeric_change(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "two.npy"
+            body = npy_bytes(1.25, shape=(2, 64, 800))
+            body = body[:-64 * 800 * 8] + struct.pack("<d", -7.5) * (64 * 800)
+            source.write_bytes(body)
+            row = {"shape": [2, 64, 800], "sha256": hashlib.sha256(body).hexdigest()}
+            inspection = m.inspect_or_copy_signal(source, row)
+            for index, expected in ((1, npy_bytes(-7.5)), (0, PAYLOAD)):
+                output = root / f"opaque-{index}.npy"
+                receipt = m.copy_query_epoch(source, output, inspection, index)
+                self.assertEqual(output.read_bytes(), expected)
+                self.assertEqual(receipt["sha256"], hashlib.sha256(expected).hexdigest())
+                self.assertEqual(receipt["bytes"], len(expected))
+                self.assertEqual(stat.S_IMODE(output.stat().st_mode), 0o444)
+
+    def test_changed_source_refused_after_inspection(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "one.npy"
+            source.write_bytes(PAYLOAD)
+            inspection = m.inspect_or_copy_signal(source, {"shape": [1, 64, 800], "sha256": hashlib.sha256(PAYLOAD).hexdigest()})
+            source.write_bytes(npy_bytes(9.0))
+            with self.assertRaisesRegex(m.MaterialError, "changed after"):
+                m.copy_query_epoch(source, root / "query.npy", inspection, 0)
+            self.assertFalse((root / "query.npy").exists())
+
+    def test_invalid_private_row_refused(self):
+        with self.assertRaisesRegex(m.MaterialError, "valid private source row"):
+            m.copy_query_epoch("not-opened", "not-created", {"shape": [1, 64, 800]}, 1)
+
+
 class FullCohortControl(unittest.TestCase):
     def test_full654_export_and_failure_cleanup(self):
         fixture_parent = os.environ.get("REVE_FIXTURE_ROOT")
@@ -305,6 +445,10 @@ class FullCohortControl(unittest.TestCase):
             t = root / "operator-targets.json"
             p.write_bytes(m.canonical(panel))
             t.write_bytes(m.canonical(targets))
+            private_map = root / "private-map.json"
+            map_receipt = m.create_mapping(p, private_map, expected_panel_identity=panel["panel_identity"])
+            mapping = m.load_mapping(private_map, panel, map_receipt["mapping_identity"])
+            map_args = {"mapping_path": private_map, "expected_mapping_identity": mapping["mapping_identity"]}
             paper, code = root / "fixture-paper", root / "fixture-code"
             positions = root / "fixture-positions.json"
             paper.write_bytes(b"generated PDF stand-in; no scientific source claim")
@@ -312,7 +456,7 @@ class FullCohortControl(unittest.TestCase):
             geometry = {name: [0.1, 0.2, 0.3] for name in m.ELECTRODES}
             geometry.update({f"fixture{number}": [0.0, 0.0, 0.0] for number in range(543 - len(geometry))})
             positions.write_bytes(m.canonical(geometry))
-            generated_bytes += p.stat().st_size + t.stat().st_size + paper.stat().st_size + code.stat().st_size + positions.stat().st_size
+            generated_bytes += p.stat().st_size + t.stat().st_size + private_map.stat().st_size + paper.stat().st_size + code.stat().st_size + positions.stat().st_size
             replacements = {"PAPER_BYTES": paper.stat().st_size, "PAPER_SHA256": hashlib.sha256(paper.read_bytes()).hexdigest(),
                             "CODE_BYTES": code.stat().st_size, "CODE_SHA256": hashlib.sha256(code.read_bytes()).hexdigest(),
                             "POSITIONS_BYTES": positions.stat().st_size, "POSITIONS_SHA256": hashlib.sha256(positions.read_bytes()).hexdigest()}
@@ -321,12 +465,12 @@ class FullCohortControl(unittest.TestCase):
                 old = os.umask(0o077)
                 try:
                     result = m.export(p, t, paper, output, condition="paper_data_code", code_archive=code,
-                                      expected_panel_identity=panel["panel_identity"], positions_path=positions, max_bytes=512 * 1024**2)
+                                      expected_panel_identity=panel["panel_identity"], positions_path=positions, max_bytes=512 * 1024**2, **map_args)
                 finally:
                     os.umask(old)
                 generated_bytes += result["created_bytes"]
                 manifest = json.loads((output / "materials.json").read_bytes())
-                self.assertEqual(result["recordings"], 654)
+                self.assertEqual(result["source_recordings"], 654)
                 self.assertEqual(result["participants"], 109)
                 self.assertEqual(result["labelled_epochs"], 534)
                 self.assertFalse(result["test_labels_delivered"])
@@ -337,29 +481,59 @@ class FullCohortControl(unittest.TestCase):
                 self.assertEqual(stat.S_IMODE(output.stat().st_mode), 0o555)
                 self.assertEqual(stat.S_IMODE((output / "signals").stat().st_mode), 0o555)
                 self.assertTrue(all(stat.S_IMODE(f.stat().st_mode) == 0o444 for f in (output / "signals").iterdir()))
-                expected_manifest = m.make_manifest(panel, m.project_targets(panel, targets), "paper_data")
+                expected_manifest = m.make_manifest(panel, m.project_targets(panel, targets), "paper_data", mapping, fixture_query_hashes(mapping))
                 self.assertEqual(manifest["data_identity"], expected_manifest["data_identity"])
                 self.assertIsNone(expected_manifest["official_code"])
                 self.assertNotIn("never-copy-this", (output / "materials.json").read_text())
                 self.assertFalse(any("labels" in r for r in manifest["data"]["records"] if r["split"] == "test"))
+                renamed = {r["source_signal"]: r["signal"] for r in mapping["records"]}
                 for row in panel["records"]:
-                    published = output / "signals" / row["signal"]
+                    published = output / "signals" / renamed.get(row["signal"], row["signal"])
                     self.assertEqual(hashlib.sha256(published.read_bytes()).hexdigest(), row["sha256"])
                     self.assertNotEqual(published.stat().st_ino, (source / row["signal"]).stat().st_ino)
+                self.assertFalse(list((output / "signals").glob("S09*.npy")))
+                self.assertFalse(list((output / "signals").glob("S10*.npy")))
+                candidate = root / "candidate.json"
+                opaque = [r["event_id"] for r in mapping["records"]]
+                candidate.write_bytes(m.canonical({"schema": "reve-candidate-predictions-v1", "materials_identity": manifest["materials_identity"],
+                                                   "predictions": [{"event_id": eid, "prediction": 0} for eid in reversed(opaque)]}))
+                restored = root / "restored.json"
+                restored_receipt = m.restore_predictions(p, private_map, output / "materials.json", candidate, restored,
+                    expected_panel_identity=panel["panel_identity"], expected_mapping_identity=mapping["mapping_identity"],
+                    expected_materials_identity=manifest["materials_identity"])
+                self.assertEqual(restored_receipt["test_predictions"], 120)
+                restored_doc = json.loads(restored.read_bytes())
+                original_test = [eid for r in panel["records"] if r["split"] == "test" for eid in r["event_ids"]]
+                self.assertEqual([r["event_id"] for r in restored_doc["predictions"]], original_test)
+                self.assertEqual(stat.S_IMODE(restored.stat().st_mode), 0o600)
+                metric_path = Path(__file__).resolve().parents[2] / "original-physionet" / "metrics.py"
+                metric_spec = importlib.util.spec_from_file_location("reve_original_metrics", metric_path)
+                metric = importlib.util.module_from_spec(metric_spec)
+                metric_spec.loader.exec_module(metric)
+                numerical = metric.score_predictions(restored_doc["predictions"],
+                    [r for r in targets["targets"] if r["split"] == "test"])
+                self.assertEqual(numerical["pooled"]["n_events"], 120)
+                self.assertEqual(numerical["pooled"]["balanced_accuracy"], 0.25)
+                self.assertEqual(len(numerical["per_participant"]), 20)
+                generated_bytes += candidate.stat().st_size + restored.stat().st_size
                 with self.assertRaisesRegex(m.MaterialError, "fresh output"):
-                    m.export(p, t, paper, output, condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions)
+                    m.export(p, t, paper, output, condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions, **map_args)
                 with self.assertRaisesRegex(m.MaterialError, "selected operator identity"):
-                    m.export(p, t, paper, root / "wrong", condition="paper_data", expected_panel_identity="0" * 64, positions_path=positions)
+                    m.export(p, t, paper, root / "wrong", condition="paper_data", expected_panel_identity="0" * 64, positions_path=positions, **map_args)
                 with self.assertRaisesRegex(m.MaterialError, "insufficient"):
-                    m.export(p, t, paper, root / "small", condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions, max_bytes=100)
+                    m.export(p, t, paper, root / "small", condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions, max_bytes=100, **map_args)
                 # A real first-shard hash failure removes the partially copied tree.
                 panel["records"][0]["sha256"] = "0" * 64
                 repin(panel, targets)
                 p.write_bytes(m.canonical(panel))
                 t.write_bytes(m.canonical(targets))
                 generated_bytes += p.stat().st_size + t.stat().st_size
+                private_map.unlink()
+                new_map = m.create_mapping(p, private_map, expected_panel_identity=panel["panel_identity"])
+                generated_bytes += private_map.stat().st_size
+                map_args["expected_mapping_identity"] = new_map["mapping_identity"]
                 with self.assertRaisesRegex(m.MaterialError, "digest mismatch"):
-                    m.export(p, t, paper, root / "failure", condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions)
+                    m.export(p, t, paper, root / "failure", condition="paper_data", expected_panel_identity=panel["panel_identity"], positions_path=positions, **map_args)
                 generated_bytes += paper.stat().st_size + positions.stat().st_size + len(PAYLOAD)
                 self.assertFalse((root / "failure").exists())
                 self.assertFalse(list(root.glob(".reve-materials-*")))

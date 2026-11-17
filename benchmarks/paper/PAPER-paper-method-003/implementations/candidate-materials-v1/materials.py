@@ -8,13 +8,14 @@ from __future__ import annotations
 import argparse
 from array import array
 import ast
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 import hashlib
 import json
 import math
 import os
 from pathlib import Path
 import re
+import secrets
 import shutil
 import stat
 import struct
@@ -193,6 +194,116 @@ def project_targets(panel, target_document):
     return allowed
 
 
+def mapping_document(panel):
+    """Create one private test-ID map to reuse across both access conditions."""
+    used = set()
+    def token():
+        while True:
+            value = secrets.token_hex(16)
+            if value not in used:
+                used.add(value)
+                return value
+    records = []
+    for index, source in enumerate(panel["records"]):
+        if source["split"] == "test":
+            for row_index, event_id in enumerate(source["event_ids"]):
+                records.append({"source_record_index": index, "source_row_index": row_index,
+                            "participant": source["participant"],
+                            "run": source["run"], "source_signal": source["signal"],
+                            "source_event_id": event_id, "sha256": source["sha256"],
+                            "shape": source["shape"], "signal": "query-" + token() + ".npy",
+                            "event_id": "trial-" + token()})
+    order = [row["signal"] for row in records]
+    secrets.SystemRandom().shuffle(order)
+    # Prevent accidental identity order, including a deliberately controlled RNG.
+    if order == [row["signal"] for row in records]:
+        order = order[1:] + order[:1]
+    result = {"schema": "reve-private-test-epochs-v1", "source_panel_identity": panel["panel_identity"],
+              "records": records, "delivery_order": order}
+    result["mapping_identity"] = identity(result)
+    return result
+
+
+def validate_mapping(panel, document):
+    require(isinstance(document, dict), "private mapping must be an object")
+    document = dict(document)
+    claimed = document.pop("mapping_identity", None)
+    require(isinstance(claimed, str) and HEX.fullmatch(claimed) and identity(document) == claimed,
+            "private mapping identity mismatch")
+    require(document.get("schema") == "reve-private-test-epochs-v1" and
+            document.get("source_panel_identity") == panel["panel_identity"], "private mapping panel mismatch")
+    expected = [(i, j, row, event) for i, row in enumerate(panel["records"]) if row["split"] == "test"
+                for j, event in enumerate(row["event_ids"])]
+    rows = document.get("records")
+    require(isinstance(rows, list) and len(rows) == len(expected) == panel["counts"]["test"],
+            "complete original test-epoch map required")
+    signals, events = set(), set()
+    for row, (index, row_index, source, event) in zip(rows, expected):
+        require(isinstance(row, dict), "invalid private mapping row")
+        require(type(row.get("source_record_index")) is int and row["source_record_index"] == index and
+                type(row.get("source_row_index")) is int and row["source_row_index"] == row_index and
+                type(row.get("participant")) is int and row["participant"] == source["participant"] and
+                type(row.get("run")) is int and row["run"] == source["run"] and
+                row.get("source_signal") == source["signal"] and
+                row.get("source_event_id") == event and
+                row.get("shape") == source["shape"] and row.get("sha256") == source["sha256"],
+                "private map must preserve every exact original recording/event in original order")
+        signal = row.get("signal")
+        require(isinstance(signal, str) and re.fullmatch(r"query-[0-9a-f]{32}\.npy", signal) and signal not in signals,
+                "unique opaque test shard name required")
+        signals.add(signal)
+        eid = row.get("event_id")
+        require(isinstance(eid, str) and re.fullmatch(r"trial-[0-9a-f]{32}", eid) and eid not in events,
+                "unique opaque test event ID required")
+        events.add(eid)
+    order = document.get("delivery_order")
+    require(isinstance(order, list) and all(isinstance(x, str) for x in order) and
+            len(order) == len(signals) and set(order) == signals and
+            order != [row["signal"] for row in rows], "complete non-source-order test delivery required")
+    document["mapping_identity"] = claimed
+    return document
+
+
+def _write_private_json(path, value):
+    body = canonical(value) + b"\n"
+    require(len(body) <= MAX_JSON_BYTES, "private JSON exceeds bounded allocation")
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0), 0o600)
+    with os.fdopen(fd, "wb") as handle:
+        handle.write(body)
+        os.fchmod(handle.fileno(), 0o600)
+    return len(body)
+
+
+def _selected_panel(path, expected):
+    panel = validate_panel(read_json(path))
+    require(isinstance(expected, str) and HEX.fullmatch(expected) and panel["panel_identity"] == expected,
+            "panel differs from independently selected operator identity")
+    return panel
+
+
+def create_mapping(panel_path, output, *, expected_panel_identity):
+    panel = _selected_panel(panel_path, expected_panel_identity)
+    output = Path(output).absolute()
+    output = output.parent.resolve(strict=True) / output.name
+    require(not output.is_relative_to(Path(panel_path).parent.resolve(strict=True)),
+            "private map must remain outside the public signal tree")
+    result = mapping_document(panel)
+    validate_mapping(panel, result)
+    written = _write_private_json(output, result)
+    return {"mapping_identity": result["mapping_identity"], "source_panel_identity": panel["panel_identity"],
+            "test_records": 120, "test_events": panel["counts"]["test"], "created_bytes": written,
+            "role": "private evaluator join; not participant material"}
+
+
+def load_mapping(path, panel, expected):
+    info = Path(path).lstat()
+    require(stat.S_IMODE(info.st_mode) & 0o077 == 0, "private mapping cannot be group/world accessible")
+    mapping = validate_mapping(panel, read_json(path))
+    require(isinstance(expected, str) and HEX.fullmatch(expected) and mapping["mapping_identity"] == expected,
+            "mapping differs from independently selected operator identity")
+    return mapping
+
+
 def _write_json(path, value):
     body = canonical(value) + b"\n"
     require(len(body) <= MAX_JSON_BYTES, "output JSON exceeds bound")
@@ -220,10 +331,11 @@ def _copy_blob(source, destination, expected_hash, expected_size):
     return size
 
 
-def copy_signal(source, destination, row):
-    """Copy exactly one finite C-order little-endian float64 NPY, streaming."""
+def inspect_or_copy_signal(source, row, destination=None):
+    """Authenticate one full original NPY; optionally copy its bytes unchanged."""
     digest = hashlib.sha256()
     with regular(source, MAX_SHARD_BYTES) as (inp, size):
+        stable_state = _state(os.fstat(inp.fileno()))
         prefix = inp.read(8)
         require(prefix[:6] == b"\x93NUMPY" and prefix[6:] in (b"\x01\x00", b"\x02\x00", b"\x03\x00"),
                 "ordinary NumPy array format required")
@@ -246,8 +358,9 @@ def copy_signal(source, destination, row):
         prefix = prefix + encoded_size + header
         require(size == len(prefix) + math.prod(row["shape"]) * 8, "NumPy payload length differs")
         digest.update(prefix)
-        with Path(destination).open("xb") as out:
-            out.write(prefix)
+        with (Path(destination).open("xb") if destination is not None else nullcontext(None)) as out:
+            if out is not None:
+                out.write(prefix)
             remaining = size - len(prefix)
             while remaining:
                 chunk = inp.read(min(CHUNK, remaining))
@@ -258,32 +371,74 @@ def copy_signal(source, destination, row):
                     numbers.byteswap()
                 require(all(math.isfinite(x) for x in numbers), "nonfinite signal payload")
                 digest.update(chunk)
-                out.write(chunk)
+                if out is not None:
+                    out.write(chunk)
                 remaining -= len(chunk)
             require(inp.read(1) == b"", "unexpected trailing signal bytes")
     require(digest.hexdigest() == row["sha256"], "signal shard digest mismatch")
+    if destination is not None:
+        os.chmod(destination, 0o444)
+    return {"bytes": size, "data_offset": len(prefix), "shape": row["shape"],
+            "stable_state": stable_state, "sha256": row["sha256"]}
+
+
+def copy_signal(source, destination, row):
+    return inspect_or_copy_signal(source, row, destination)["bytes"]
+
+
+def copy_query_epoch(source, destination, inspection, row_index):
+    """Repack one exact float64 row, retaining values and hiding source grouping."""
+    require(type(row_index) is int and 0 <= row_index < inspection["shape"][0], "valid private source row required")
+    header = repr({"descr": "<f8", "fortran_order": False, "shape": (1, 64, 800)}).encode("latin1")
+    header += b" " * ((-len(header) - 11) % 64) + b"\n"
+    prefix = b"\x93NUMPY\x01\x00" + struct.pack("<H", len(header)) + header
+    row_bytes = 64 * 800 * 8
+    digest = hashlib.sha256(prefix)
+    with regular(source, MAX_SHARD_BYTES) as (inp, _size):
+        require(_state(os.fstat(inp.fileno())) == inspection["stable_state"], "source shard changed after full validation")
+        inp.seek(inspection["data_offset"] + row_index * row_bytes)
+        with Path(destination).open("xb") as out:
+            out.write(prefix)
+            remaining = row_bytes
+            while remaining:
+                chunk = inp.read(min(CHUNK, remaining))
+                require(chunk and len(chunk) % 8 == 0, "truncated validated query row")
+                out.write(chunk)
+                digest.update(chunk)
+                remaining -= len(chunk)
     os.chmod(destination, 0o444)
-    return size
+    return {"bytes": len(prefix) + row_bytes, "sha256": digest.hexdigest()}
 
 
-def public_rows(panel, labels):
+def public_rows(panel, labels, mapping, query_hashes):
     """Whitelist the candidate schema; never forward arbitrary source fields."""
     rows = []
     for source in panel["records"]:
+        if source["split"] == "test":
+            continue
         row = {key: source[key] for key in ("participant", "run", "split", "shape", "sha256", "event_ids")}
         row["signal"] = "signals/" + source["signal"]
-        if source["split"] != "test":
-            row["labels"] = [labels[eid] for eid in source["event_ids"]]
+        row["labels"] = [labels[eid] for eid in source["event_ids"]]
         rows.append(row)
+    private = {row["signal"]: row for row in mapping["records"]}
+    require(isinstance(query_hashes, dict) and set(query_hashes) == set(private) and
+            all(isinstance(value, str) and HEX.fullmatch(value) for value in query_hashes.values()),
+            "complete emitted-query hashes required")
+    for signal in mapping["delivery_order"]:
+        source = private[signal]
+        rows.append({"split": "test", "signal": "signals/" + signal,
+                     "shape": [1, 64, 800], "sha256": query_hashes[signal], "event_ids": [source["event_id"]]})
     return rows
 
 
-def make_manifest(panel, labels, condition):
+def make_manifest(panel, labels, condition, mapping, query_hashes):
     """Construct the same observation payload under either official-code condition."""
     require(condition in CONDITIONS, "unknown access condition")
     data = {"profile": PROFILE, "units": "uV", "dtype": "float64", "sampling_hz": 200,
             "channels": CHANNELS, "class_order": ["left_fist", "right_fist", "both_fists", "feet"],
-            "counts": panel["counts"], "records": public_rows(panel, labels),
+            "counts": panel["counts"], "records": public_rows(panel, labels, mapping, query_hashes),
+            "test_mapping_identity": mapping["mapping_identity"],
+            "test_layout": "one_epoch_per_opaque_file_in_one_persisted_global_shuffle",
             "geometry": {"path": "positions.json", "sha256": POSITIONS_SHA256,
                          "bytes": POSITIONS_BYTES, "electrodes_in_signal_channel_order": ELECTRODES,
                          "coordinate_convention": "unchanged numeric coordinates in the pinned author bank"}}
@@ -343,7 +498,7 @@ def publish(stage, output):
 
 
 def export(panel_path, targets_path, paper_path, output, *, condition, expected_panel_identity, positions_path,
-           code_archive=None, max_bytes=MAX_TOTAL_BYTES):
+           mapping_path, expected_mapping_identity, code_archive=None, max_bytes=MAX_TOTAL_BYTES):
     """Make a fresh physical participant tree, publishing only after validation.
 
     The caller must authenticate custody of the original prepared panel. Hashes
@@ -359,13 +514,11 @@ def export(panel_path, targets_path, paper_path, output, *, condition, expected_
     signal_root = panel_path.parent.resolve(strict=True)
     # A resolved root is intentional; all source members below it must be ordinary.
     require(not (signal_root / panel_path.name).is_symlink(), "panel symlink is forbidden")
-    panel = validate_panel(read_json(signal_root / panel_path.name))
-    require(isinstance(expected_panel_identity, str) and HEX.fullmatch(expected_panel_identity) and
-            panel["panel_identity"] == expected_panel_identity,
-            "panel differs from independently selected operator identity")
+    panel = _selected_panel(signal_root / panel_path.name, expected_panel_identity)
+    mapping = load_mapping(mapping_path, panel, expected_mapping_identity)
     labels = project_targets(panel, read_json(targets_path))
-    rows = public_rows(panel, labels)
-    expected_signal_bytes = sum(math.prod(r["shape"]) * 8 + 65548 for r in rows)
+    expected_signal_bytes = sum(math.prod(r["shape"]) * 8 + 65548 for r in panel["records"] if r["split"] != "test")
+    expected_signal_bytes += panel["counts"]["test"] * (64 * 800 * 8 + 65548)
     require(expected_signal_bytes + PAPER_BYTES + POSITIONS_BYTES + (CODE_BYTES if code_archive else 0) + MAX_JSON_BYTES <= max_bytes,
             "complete material budget is insufficient; no truncated panel is emitted")
     output = Path(output).absolute()
@@ -391,39 +544,134 @@ def export(panel_path, targets_path, paper_path, output, *, condition, expected_
                     for key, value in geometry.items()), "finite three-coordinate author bank required")
         if code_archive is not None:
             known_written += _copy_blob(code_archive, stage / "official-code.tar.gz", CODE_SHA256, CODE_BYTES)
+        inspected = {}
         for source in panel["records"]:
-            known_written += copy_signal(signal_root / source["signal"], stage / "signals" / source["signal"], source)
-        manifest = make_manifest(panel, labels, condition)
+            if source["split"] != "test":
+                known_written += copy_signal(signal_root / source["signal"], stage / "signals" / source["signal"], source)
+            else:
+                inspected[source["signal"]] = inspect_or_copy_signal(signal_root / source["signal"], source)
+        queries = {row["signal"]: row for row in mapping["records"]}
+        query_hashes = {}
+        # Query creation order is the same global shuffle as the public manifest;
+        # filenames, grouping, insertion order and row order expose no source run ID.
+        for name in mapping["delivery_order"]:
+            query = queries[name]
+            result = copy_query_epoch(signal_root / query["source_signal"], stage / "signals" / name,
+                                      inspected[query["source_signal"]], query["source_row_index"])
+            known_written += result["bytes"]
+            query_hashes[name] = result["sha256"]
+        manifest = make_manifest(panel, labels, condition, mapping, query_hashes)
         known_written += _write_json(stage / "materials.json", manifest)
         require(known_written <= max_bytes, "completed export exceeds byte allocation")
         os.chmod(stage / "signals", 0o555)
         publish(stage, output)
         return {"schema": "reve-candidate-materials-receipt-v1", "condition": condition,
                 "materials_identity": manifest["materials_identity"], "data_identity": manifest["data_identity"],
-                "source_panel_identity": panel["panel_identity"], "recordings": 654, "participants": 109,
+                "source_panel_identity": panel["panel_identity"], "source_recordings": 654, "participants": 109,
+                "private_mapping_identity": mapping["mapping_identity"],
                 "counts": panel["counts"], "labelled_epochs": len(labels), "test_labels_delivered": False,
-                "created_bytes": known_written, "files": 657 + int(code_archive is not None),
+                "created_bytes": known_written, "signal_files": 534 + len(queries),
+                "files": 537 + len(queries) + int(code_archive is not None),
                 "scientific_qualification": False}
     except BaseException:
         discard_owned_tree(stage, stage_owner)
         raise
 
 
+def restore_predictions(panel_path, mapping_path, materials_path, predictions_path, output, *,
+                        expected_panel_identity, expected_mapping_identity, expected_materials_identity):
+    """Restore every opaque test ID to the original scorer interface, privately."""
+    panel = _selected_panel(panel_path, expected_panel_identity)
+    mapping = load_mapping(mapping_path, panel, expected_mapping_identity)
+    manifest = read_json(materials_path)
+    claimed = manifest.pop("materials_identity", None)
+    require(claimed == expected_materials_identity and isinstance(claimed, str) and HEX.fullmatch(claimed) and
+            identity(manifest) == claimed, "independently selected participant materials identity mismatch")
+    data = manifest.get("data")
+    require(manifest.get("schema") == "reve-candidate-materials-v1" and isinstance(data, dict) and
+            manifest.get("source_panel_identity") == panel["panel_identity"] and
+            manifest.get("data_identity") == identity(data) and
+            data.get("test_mapping_identity") == mapping["mapping_identity"], "material/panel/mapping join differs")
+    expected_rows = [{"split": "test", "signal": "signals/" + signal, "shape": [1, 64, 800],
+                      "event_ids": [row["event_id"]]}
+                     for signal in mapping["delivery_order"]
+                     for row in mapping["records"] if row["signal"] == signal]
+    require(isinstance(data.get("records"), list), "participant record roster missing")
+    observed_rows = [r for r in data["records"] if isinstance(r, dict) and r.get("split") == "test"]
+    require([{k: v for k, v in row.items() if k != "sha256"} for row in observed_rows] == expected_rows and
+            all(isinstance(row.get("sha256"), str) and HEX.fullmatch(row["sha256"]) for row in observed_rows),
+            "participant test support differs from exact private mapping")
+    submission = read_json(predictions_path)
+    require(submission.get("schema") == "reve-candidate-predictions-v1" and
+            submission.get("materials_identity") == claimed, "candidate prediction/material identity mismatch")
+    predictions = submission.get("predictions")
+    original = {row["event_id"]: row["source_event_id"] for row in mapping["records"]}
+    require(isinstance(predictions, list) and len(predictions) == len(original), "complete test predictions required")
+    restored = {}
+    for row in predictions:
+        require(isinstance(row, dict) and set(row) in ({"event_id", "prediction"}, {"event_id", "scores"}),
+                "prediction row must contain an ID and exactly one declared output")
+        eid = row["event_id"]
+        require(isinstance(eid, str) and eid in original and eid not in restored, "opaque prediction IDs must be a bijection")
+        if "prediction" in row:
+            require(type(row["prediction"]) is int and row["prediction"] in range(4), "four-class prediction required")
+            value = {"prediction": row["prediction"]}
+        else:
+            scores = row["scores"]
+            require(isinstance(scores, list) and len(scores) == 4 and
+                    all(type(v) in (int, float) and math.isfinite(v) for v in scores), "finite four-class scores required")
+            value = {"scores": scores}
+        restored[eid] = {"event_id": original[eid], **value}
+    ordered = [restored[row["event_id"]] for row in mapping["records"]]
+    output = Path(output).absolute()
+    output = output.parent.resolve(strict=True) / output.name
+    require(not output.is_relative_to(Path(materials_path).parent.resolve(strict=True)),
+            "restored original IDs belong outside participant materials")
+    result = {"schema": "reve-restored-predictions-v1", "panel_identity": panel["panel_identity"],
+              "split": "test", "predictions": ordered, "materials_identity": claimed,
+              "private_mapping_identity": mapping["mapping_identity"], "candidate_submission_identity": identity(submission),
+              "claim": "private bijective restoration only; no scoring or scientific qualification"}
+    written = _write_private_json(output, result)
+    return {key: value for key, value in result.items() if key != "predictions"} | {
+        "test_predictions": len(ordered), "created_bytes": written}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--panel", required=True)
-    parser.add_argument("--expected-panel-identity", required=True)
-    parser.add_argument("--targets", required=True)
-    parser.add_argument("--paper", required=True)
-    parser.add_argument("--positions", required=True)
-    parser.add_argument("--condition", choices=CONDITIONS, required=True)
-    parser.add_argument("--code-archive")
-    parser.add_argument("--output", required=True)
-    parser.add_argument("--max-bytes", type=int, default=MAX_TOTAL_BYTES)
+    sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("map", "export", "restore"):
+        command = sub.add_parser(name)
+        command.add_argument("--panel", required=True)
+        command.add_argument("--expected-panel-identity", required=True)
+        command.add_argument("--output", required=True)
+        if name != "map":
+            command.add_argument("--private-map", required=True)
+            command.add_argument("--expected-mapping-identity", required=True)
+        if name == "export":
+            command.add_argument("--targets", required=True)
+            command.add_argument("--paper", required=True)
+            command.add_argument("--positions", required=True)
+            command.add_argument("--condition", choices=CONDITIONS, required=True)
+            command.add_argument("--code-archive")
+            command.add_argument("--max-bytes", type=int, default=MAX_TOTAL_BYTES)
+        if name == "restore":
+            command.add_argument("--materials", required=True)
+            command.add_argument("--expected-materials-identity", required=True)
+            command.add_argument("--predictions", required=True)
     args = parser.parse_args(argv)
-    result = export(args.panel, args.targets, args.paper, args.output,
-                    condition=args.condition, expected_panel_identity=args.expected_panel_identity,
-                    positions_path=args.positions, code_archive=args.code_archive, max_bytes=args.max_bytes)
+    if args.command == "map":
+        result = create_mapping(args.panel, args.output, expected_panel_identity=args.expected_panel_identity)
+    elif args.command == "export":
+        result = export(args.panel, args.targets, args.paper, args.output,
+                        condition=args.condition, expected_panel_identity=args.expected_panel_identity,
+                        positions_path=args.positions, mapping_path=args.private_map,
+                        expected_mapping_identity=args.expected_mapping_identity,
+                        code_archive=args.code_archive, max_bytes=args.max_bytes)
+    else:
+        result = restore_predictions(args.panel, args.private_map, args.materials, args.predictions, args.output,
+                                     expected_panel_identity=args.expected_panel_identity,
+                                     expected_mapping_identity=args.expected_mapping_identity,
+                                     expected_materials_identity=args.expected_materials_identity)
     print(json.dumps(result, indent=2, allow_nan=False))
 
 

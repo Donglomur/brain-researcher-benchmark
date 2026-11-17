@@ -1,9 +1,10 @@
 # Complete REVE participant materials
 
 This operator command turns the existing complete PhysioNet preparation into a
-physical participant directory. It supplies every declared signal shard, training
+physical participant directory. It supplies every declared signal epoch, training
 and validation labels, the original paper, and the same electrode geometry in both
-paper access conditions. Test labels remain outside the directory. The
+paper access conditions. Test labels and original test identities remain outside
+the directory. The
 code-assisted condition additionally receives the exact official source archive.
 
 This closes a missing delivery step in the
@@ -16,7 +17,7 @@ links back to operator files and forwards no arbitrary source-manifest fields.
 ## Exact scope
 
 The required source roster is all **109 people × six imagery runs = 654
-recordings**, in original order. Participants 1–70 are training, 71–89 validation,
+recordings**, with original ordering retained privately. Participants 1–70 are training, 71–89 validation,
 and 90–109 test. Every event declared by the authenticated input panel must be
 present. Signals remain little-endian C-order float64 microvolts with 64 channels
 and 800 samples. No normalization, filtering, epoch truncation or model is added.
@@ -33,12 +34,23 @@ dataset. If a separately prepared panel has a different observed epoch count,
 the exported manifest retains that discrepancy. It does not force a count match
 or qualify the different panel for the paper comparison.
 
-Original event IDs and person/run metadata are preserved. Run identity narrows the
-possible imagery labels to left/right fist or both fists/feet; the strict author
-inference adapter receives signals and geometry rather than run metadata as model
-features. Before an admitted candidate comparison, define equal metadata access
-or provide an explicitly revised opaque-ID view with private evaluator joins.
-Packet parity alone does not resolve that scientific observation-policy question.
+Run identity narrows the possible imagery labels to left/right fist or both
+fists/feet. The new participant view therefore supplies test observations as
+**individual epochs in one persisted global shuffled order**, with opaque file
+and event IDs. Test person/run metadata, run grouping and original within-run order
+are absent from participant metadata and physical file-creation order. The private
+mapping retains source record and row indices, exact original event IDs and source
+hashes for evaluator restoration. Both access conditions must reuse that same
+mapping. Training/validation labels and their original source metadata remain
+available. No original panel file is rewritten.
+
+Each test epoch is extracted by copying its exact float64 row bytes into a new
+one-epoch NPY. This changes packaging and packet hashes, not signal values, samples,
+labels, evaluation split or scientific metric. Source shards are authenticated
+fully before extraction and checked for inode/size/time changes while rows are
+copied. The reference also receives epoch signals and geometry without test-run
+metadata. This is an explicit participant-view correction, not a claim that the
+public source dataset became an unseen holdout.
 
 Both conditions include the exact 543-position author bank. The manifest lists
 the 64 electrode aliases in signal-channel order, including T3/T4/T5/T6 for
@@ -52,10 +64,20 @@ and temporary storage and admit the preparation operation through the enclosing
 operator's resource controls. Inputs must already exist; the command performs no
 downloads or dependency installation.
 
+First create one private mapping, outside participant inputs. Keep the returned
+mapping identity and reuse this file for both conditions:
+
 ```sh
-python3 materials.py \
+python3 materials.py map \
   --panel "$PREPARED/inputs/panel.json" \
   --expected-panel-identity "$SELECTED_PANEL_IDENTITY" \
+  --output "$PRIVATE_TEST_MAP"
+
+python3 materials.py export \
+  --panel "$PREPARED/inputs/panel.json" \
+  --expected-panel-identity "$SELECTED_PANEL_IDENTITY" \
+  --private-map "$PRIVATE_TEST_MAP" \
+  --expected-mapping-identity "$SELECTED_MAPPING_IDENTITY" \
   --targets "$PREPARED/operator/targets.json" \
   --paper "$ORIGINAL_PROCEEDINGS_PDF" \
   --positions "$AUTHOR_SOURCE/hf/reve-positions/positions.json" \
@@ -67,7 +89,7 @@ python3 materials.py \
 For `paper_data_code`, add `--code-archive "$PINNED_AUTHOR_TARBALL"`. Supplying
 code to `paper_data`, or omitting it from `paper_data_code`, is rejected. The
 published `data_identity` is identical across conditions for identical panel,
-labels and geometry. `materials_identity` also binds the access condition and
+labels, geometry and private mapping. `materials_identity` also binds the access condition and
 therefore differs. Neither identity counts as another scientific task or run.
 
 The destination must not exist, and its parent must already exist and be owned by
@@ -95,15 +117,41 @@ The directory contains:
 
 - `materials.json`: input conditions, source identity, exact signal/event mapping,
   labels for training/validation only, source count discrepancies and limits.
-- `signals/`: all 654 original NPY shards copied without numerical changes.
+- `signals/`: 534 unchanged training/validation source shards plus one NPY per
+  test epoch, globally shuffled and given opaque names. The observed authentic
+  panel would produce 1,803 test files, or 2,337 signal files total.
 - `positions.json`: the same pinned complete geometry bank in both conditions.
 - `paper.pdf`: exact final NeurIPS proceedings paper.
 - `official-code.tar.gz`: code-assisted condition only; unchanged official source
   archive at commit `06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7`.
 
-Each test recording has event IDs and signals but **no `labels` member**. The
-candidate submits predictions in the existing original-panel event-ID interface;
-the operator uses the separate protected target manifest and original scorer.
+Each test entry has one opaque event ID and signal but **no `labels`, `participant`
+or `run` member**. A candidate submission is a JSON object with schema
+`reve-candidate-predictions-v1`, the exact `materials_identity`, and `predictions`:
+one row for each opaque event, containing `event_id` and either an integer
+`prediction` in 0–3 or four finite `scores` in the declared class order.
+
+The evaluator restores the complete prediction set to original source event IDs
+and ordering before using the unchanged original scorer:
+
+```sh
+python3 materials.py restore \
+  --panel "$PREPARED/inputs/panel.json" \
+  --expected-panel-identity "$SELECTED_PANEL_IDENTITY" \
+  --private-map "$PRIVATE_TEST_MAP" \
+  --expected-mapping-identity "$SELECTED_MAPPING_IDENTITY" \
+  --materials "$PARTICIPANT_DIRECTORY/materials.json" \
+  --expected-materials-identity "$SELECTED_MATERIALS_IDENTITY" \
+  --predictions "$CANDIDATE_PREDICTIONS" \
+  --output "$PRIVATE_RESTORED_PREDICTIONS"
+```
+
+Private maps and restored predictions are created with mode0600 and cannot
+overwrite existing files. The map cannot be placed in the source signal tree;
+restored predictions cannot be written into participant materials. Restoration
+rejects incomplete, duplicate, extra, invalid-class or nonfinite predictions. It
+reads no target labels and calculates no scientific score. The operator uses its
+separate target manifest and `original-physionet/panel.py score` for evaluation.
 The code archive contains its original MIT source license. Dataset and pretrained
 weight terms remain separate; this repository redistributes none of these input
 payloads.
@@ -122,6 +170,8 @@ and its lineage must be separately provisioned and qualified before an experimen
 validation, physical streaming/copy behavior, permitted-label projection,
 condition parity, geometry aliases, source hash failures, NPY dtype/shape/finite
 checks, link refusal, private-umask publication, output collisions and cleanup.
+Opaque-map controls verify complete inverse joins, and separate multi-row NPY
+controls verify exact extraction of distinct epochs and source-mutation refusal.
 Its positive integration fixture contains one generated epoch in each of the 654
 recordings. Pinned document bytes are replaced with explicitly generated stand-ins
 inside the test only. This is a complete source-shaped software control, not an
