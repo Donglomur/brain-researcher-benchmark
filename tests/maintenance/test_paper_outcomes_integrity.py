@@ -89,6 +89,7 @@ class PaperOutcomesIntegrityTests(unittest.TestCase):
             "schema_version": binding.VERSION, "coverage_required": True, "registered_count": 1,
             "pre_outcomes_registry": binding.pin(binding.SNAPSHOT, self.read(binding.SNAPSHOT)),
         }
+        self.registry.setdefault("historical_registries", []).append(self.registry["paper_outcomes"]["pre_outcomes_registry"])
         self.task = binding.project_task(self.prior_task, self.prior_row, self.improvement)
         self.save_current_task()
         self.save_reproduction()

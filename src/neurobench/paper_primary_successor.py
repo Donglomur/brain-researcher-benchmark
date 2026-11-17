@@ -156,6 +156,9 @@ class _Authenticated:
     def __setattr__(self, name, value):
         raise AttributeError("Authenticated SMC metadata is immutable")
 
+    def __delattr__(self, name):
+        raise AttributeError("Authenticated SMC metadata is immutable")
+
     def _get(self, key):
         return json.loads(self._payload)[key]
 

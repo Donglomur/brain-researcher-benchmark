@@ -26,6 +26,8 @@ REPRODUCTION_FILES = {"paper-reproduction/v1": REPRODUCTION,
                       "paper-reproduction/v2": "reproduction.v2.json"}
 OUTCOMES = "outcomes.v1.json"
 REGISTRY = "benchmarks/registry.json"
+PRIMARY_SUCCESSOR_TASK = "PAPER-SMC-RNN-2024"
+PRIMARY_SUCCESSOR_FIELDS = frozenset(("primary_policy_revision", "primary_improvement_contract"))
 CONDITIONS = ("paper_data", "paper_data_author_code")
 SCOPE_PATH = "docs/provenance/paper-outcome-scope-decisions.v1.json"
 SCOPE_VERSION = "paper-outcome-scope-decisions/v1"
@@ -108,6 +110,46 @@ def engine(reproduction=None):
             sys.modules.pop(name, None)
         raise
     return sys.modules[result_name]
+
+
+def primary_successor_module():
+    """Load the one fixed metadata selector, never a task implementation."""
+    path = Path(__file__).resolve().with_name("paper_primary_successor.py")
+    name = "_neurobench_primary_successor_" + hashlib.sha256(str(path).encode()).hexdigest()[:16]
+    if name not in sys.modules:
+        need(path.is_file() and not path.is_symlink() and path.stat().st_size <= 1024 * 1024,
+             "Expected bounded primary successor framework source")
+        spec = importlib.util.spec_from_file_location(name, path)
+        need(spec is not None, "Cannot load primary successor framework source")
+        module = importlib.util.module_from_spec(spec)
+        exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+        sys.modules[name] = module
+    return sys.modules[name]
+
+
+def has_primary_successor(row):
+    """Check selector shape only; full context must authenticate its content.
+
+    The adopted SMC task requires this explicit policy. The source-only original
+    task, which has no paper_outcomes binding, remains an unchanged predecessor.
+    No other task may use these selectors, and a partial pair never falls back.
+    """
+    declared = row.get("paper_outcomes")
+    if declared is None:
+        return False
+    need(type(declared) is dict, "Paper outcome binding must be an object")
+    selected = PRIMARY_SUCCESSOR_FIELDS & set(declared)
+    if row.get("id") != PRIMARY_SUCCESSOR_TASK:
+        need(not selected, "Primary successor selectors are restricted to the reviewed SMC task")
+        return False
+    need(selected == PRIMARY_SUCCESSOR_FIELDS and "reproduction_contract" in declared,
+         "Adopted SMC outcomes require both explicit primary successor selectors and reproduction")
+    home = "benchmarks/paper/" + PRIMARY_SUCCESSOR_TASK
+    for field, filename in (("primary_policy_revision", "primary-successor.v1.json"),
+                            ("primary_improvement_contract", "improvement.temporal-scope.v1.json")):
+        require_pin(declared[field], home + "/" + filename, "SMC " + field)
+        need(0 < declared[field]["bytes"] <= 65536, "SMC successor metadata must be bounded")
+    return True
 
 
 def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1",
@@ -378,7 +420,14 @@ def coverage(registry, read_pin):
     for row in papers:
         prior = old[row["id"]]
         need("paper_outcomes" not in prior, "Pre-outcomes row must precede outcome adoption")
+        successor_selected = has_primary_successor(row)
         for field in PRESERVED_ROW_FIELDS:
+            if field == "title" and successor_selected:
+                # This one title is deferred, not accepted: context() must prove
+                # the exact reviewed projection after authenticating all pins.
+                need(type(row.get("title")) is str and bool(row["title"].strip())
+                     and "title" in prior, "SMC title requires current and retained declarations")
+                continue
             need((field in row) == (field in prior) and encode(row.get(field)) == encode(prior.get(field)),
                  "Paper outcome binding changed prior " + field + ": " + row["id"])
     return old
@@ -454,7 +503,10 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     need(home == "benchmarks/paper/" + identifier, "Paper outcome task home mismatch")
     binding = row.get("paper_outcomes")
     base_keys = {"schema_version", "previous_specification", "outcomes"}
-    need(type(binding) is dict and set(binding) in (base_keys, base_keys | {"reproduction_contract"})
+    successor_selected = has_primary_successor(row)
+    allowed_keys = ((base_keys | {"reproduction_contract"} | PRIMARY_SUCCESSOR_FIELDS,)
+                    if successor_selected else (base_keys, base_keys | {"reproduction_contract"}))
+    need(type(binding) is dict and set(binding) in allowed_keys
          and binding["schema_version"] == VERSION, "Invalid paper outcome task binding")
     prior = previous_rows[identifier]
     previous_pin = binding["previous_specification"]
@@ -465,13 +517,28 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     improvement_pin = row["specification_revision"]["improvement_contract"]
     require_pin(improvement_pin, home + "/improvement.v1.json", "improvement contract")
     improvement = improvement_contract if improvement_contract is not None else read_pin(improvement_pin, "Improvement contract")
+    retained_improvement, retained_improvement_pin = improvement, improvement_pin
     scope = getattr(previous_rows, "scope_decisions", None)
     scope_entry = scope["entries"].get(identifier) if scope else None
     primary_correction = scope.get("same_primary_corrections", {}).get(identifier) if scope else None
     reproduction = read_reproduction(binding["reproduction_contract"], home, read_pin) if "reproduction_contract" in binding else None
+    successor = None
+    if successor_selected:
+        need(scope_entry is None and primary_correction is None,
+             "SMC temporal successor cannot combine another primary scope projection")
+        successor = primary_successor_module().authenticate(
+            revision_pin=binding["primary_policy_revision"], primary_pin=binding["primary_improvement_contract"],
+            reproduction_pin=binding["reproduction_contract"], previous_pin=previous_pin,
+            retained_improvement_pin=retained_improvement_pin, read_pin=read_pin)
+        need(engine().contract_digest(retained_improvement) == engine().contract_digest(successor.retained_improvement),
+             "Retained improvement differs from authenticated SMC lineage")
+        improvement, improvement_pin = successor.primary_improvement, binding["primary_improvement_contract"]
     projected = project_task(previous_document, prior, improvement, scope_entry,
                              reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
                              primary_correction=primary_correction)
+    if successor is not None:
+        projected = primary_successor_module().project(projected, successor)
+        need(row.get("title") == projected["title"], "SMC current title differs from the reviewed successor projection")
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
@@ -481,6 +548,16 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     members = {previous_pin["path"], binding["outcomes"]["path"]}
     if "reproduction_contract" in binding:
         members.add(binding["reproduction_contract"]["path"])
+    successor_provenance = None
+    if successor is not None:
+        successor_members = {member["path"]: member for member in successor.members}
+        successor_provenance = {
+            "projection": successor_members[primary_successor_module().PROJECTION],
+            "scientific_contract": successor_members[home + "/docs/scientific-contract.temporal-scope.v1.json"],
+        }
+        for member in successor.members:
+            need(member["path"] not in members, "Duplicate primary successor metadata member")
+            members.add(member["path"])
     unavailable = outcomes.get("schema_version") == UNAVAILABLE
     need(unavailable == (scope_entry is not None), "Corrected primary scopes cannot use a mixed-scope normal outcome bundle")
     if unavailable:
@@ -500,7 +577,14 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     need(not result["errors"] and result["task_count"] == 1,
          "Invalid independent paper outcome summary")
     return {"previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
-            "improvement_contract": improvement, "reproduction_contract": reproduction,
+            "improvement_contract": improvement, "improvement_contract_pin": improvement_pin,
+            "retained_improvement_contract": retained_improvement,
+            "retained_improvement_contract_pin": retained_improvement_pin,
+            "primary_policy_revision": successor.descriptor_pin if successor else None,
+            "primary_policy_provenance": successor_provenance,
+            "candidate_interface": successor.candidate_interface if successor else None,
+            "author_reproduction_routes": successor.author_reproduction_routes if successor else None,
+            "reproduction_contract": reproduction,
             "outcomes": outcomes, "summary": result, "availability": "unavailable" if unavailable else "available",
             "primary_scope_correction": primary_correction,
             "scope_decision_pin": getattr(previous_rows, "scope_pin", None),
@@ -532,13 +616,23 @@ def public_summary(row, bound):
             "availability": bound["availability"],
             "previous_specification": copy.deepcopy(binding["previous_specification"]),
             "reproduction_contract": copy.deepcopy(binding.get("reproduction_contract")),
-            "improvement_contract": copy.deepcopy(row["specification_revision"]["improvement_contract"]),
+            "improvement_contract": copy.deepcopy(bound["improvement_contract_pin"]),
             "outcomes": copy.deepcopy(binding["outcomes"]),
             "reproduction_eligibility": reproduction["eligibility"] if reproduction is not None else None,
             "reproduction_blocking_issues": copy.deepcopy(reproduction["blocking_issues"]) if reproduction is not None else [],
             "cells": copy.deepcopy(bound["summary"]["cells"]),
             "scientific_outcomes": {"reproduction": "unknown", "improvement": "unknown"},
             "assurance": bound["summary"]["assurance"]}
+    if bound.get("primary_policy_revision") is not None:
+        result.update({
+            "improvement_disposition": bound["improvement_contract"]["disposition"],
+            "retained_improvement_contract": copy.deepcopy(bound["retained_improvement_contract_pin"]),
+            "retained_improvement_role": "retained_pre_outcomes_policy",
+            "primary_policy_revision": copy.deepcopy(bound["primary_policy_revision"]),
+            "primary_policy_provenance": copy.deepcopy(bound["primary_policy_provenance"]),
+            "candidate_interface": copy.deepcopy(bound["candidate_interface"]),
+            "author_reproduction_routes": copy.deepcopy(bound["author_reproduction_routes"]),
+        })
     if bound["availability"] == "unavailable":
         for field in ("reason_code", "reason", "primary_scope", "retained_secondary_improvement", "root_scope_decision"):
             result[field] = copy.deepcopy(bound["outcomes"][field])

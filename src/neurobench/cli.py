@@ -40,7 +40,7 @@ def public_catalog_module():
 
 def public_summary(catalog):
     counts = catalog['counts']
-    return {'target_assignments': counts['total'], 'delivery_specifications': counts['total'],
+    result = {'target_assignments': counts['total'], 'delivery_specifications': counts['total'],
             'paper_specifications': counts['paper'], 'neural_specifications': counts['neural'],
             'canonical_source_specifications': counts['canonical_specifications'],
             'expansion_drafts': counts['expansion_drafts'],
@@ -64,6 +64,15 @@ def public_summary(catalog):
                            'Selected public reports are indexed separately with their scopes. '
                            'Raw runtime receipts, candidate code, data and private construction ledgers are not inspected.',
             'counting_note': catalog['counting_note']}
+    selected = []
+    for row in catalog['tasks']:
+        outcomes = row.get('paper_outcomes', {})
+        if outcomes.get('primary_policy_revision') is not None:
+            selected.append({'task_id': row['id'], 'improvement_contract': outcomes['improvement_contract'],
+                             **{field: outcomes[field] for field in public_catalog_module().PRIMARY_SUCCESSOR_PUBLIC_FIELDS}})
+    if selected:
+        result['selected_primary_policies'] = selected
+    return result
 
 
 def public_implementations(catalog, task):
@@ -422,13 +431,18 @@ def paper_contract(task_id, root=ROOT, *, outcome='improvement'):
         if pin is None:
             raise ValueError('No reproduction proposal is bound for inspection: ' + task_id)
     else:
-        binding = task.get('paper_outcomes', {})
-        if binding.get('availability') == 'unavailable':
-            raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
-        improvement = task.get('paper_improvement')
-        if not improvement:
-            raise ValueError('No current paper improvement contract is bound for ' + task_id)
-        pin = improvement['contract']
+        binding = task.get('paper_outcomes')
+        if binding is not None:
+            if binding.get('availability') == 'unavailable':
+                raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+            pin = binding.get('improvement_contract')
+            if type(pin) is not dict:
+                raise ValueError('No explicit current improvement contract is bound for ' + task_id)
+        else:
+            improvement = task.get('paper_improvement')
+            if not improvement:
+                raise ValueError('No current paper improvement contract is bound for ' + task_id)
+            pin = improvement['contract']
     raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
     return builder.improvement_module().loads_contract(raw.decode('utf-8'))
 
@@ -474,9 +488,15 @@ def paper_outcomes(task_id, root=ROOT):
                engine.summary(documents['outcomes'], documents['reproduction'], documents['improvement']))
     if 'primary_scope_correction' in binding:
         summary['primary_scope_correction'] = binding['primary_scope_correction']
+    pins = {key: binding[key] for key in
+            ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')}
+    if binding.get('primary_policy_revision') is not None:
+        for field in public_catalog_module().PRIMARY_SUCCESSOR_PUBLIC_FIELDS:
+            summary[field] = binding[field]
+        for field in ('retained_improvement_contract', 'primary_policy_revision', 'primary_policy_provenance'):
+            pins[field] = binding[field]
     return {'task_id': task_id, 'specification': task['specification'],
-            'binding': {key: binding[key] for key in
-                        ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')},
+            'binding': pins,
             'descriptor': documents['outcomes'],
             'summary': summary}
 

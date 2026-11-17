@@ -708,9 +708,16 @@ def prepare(reader):
         expected_pins[NEURAL_SNAPSHOT] = neural_history_pin
     if prior_outcome_rows is not None:
         outcome_history = registry["paper_outcomes"]["pre_outcomes_registry"]
-        need(outcome_module.SNAPSHOT not in members, "Duplicate paper outcome registry provenance")
-        members[outcome_module.SNAPSHOT] = "registration-provenance"
-        expected_pins[outcome_module.SNAPSHOT] = outcome_history
+        enrolled = [item for item in registry.get("historical_registries", [])
+                    if type(item) is dict and item.get("path") == outcome_module.SNAPSHOT]
+        need(len(enrolled) == 1, "Paper outcome snapshot must be exactly enrolled in historical registries")
+        outcome_module.require_pin(enrolled[0], outcome_module.SNAPSHOT, "historically enrolled paper outcome snapshot")
+        # The ordinary historical loop already owns this exact source. Reuse
+        # only that authenticated registration; all other overlap guards remain.
+        need(enrolled[0] == outcome_history
+             and members.get(outcome_module.SNAPSHOT) == "registration-provenance"
+             and expected_pins.get(outcome_module.SNAPSHOT) == outcome_history,
+             "Paper outcome snapshot enrollment pin or owner mismatch")
         if prior_outcome_rows.scope_pin is not None:
             need(outcome_module.SCOPE_PATH not in members, "Duplicate paper scope-decision provenance")
             members[outcome_module.SCOPE_PATH] = "registration-provenance"

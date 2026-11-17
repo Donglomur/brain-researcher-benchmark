@@ -95,6 +95,21 @@ def prior_lineage(reader, registry, rows, contexts=None):
             checker.paper_revision_members(reader, previous_row, document)
 
 
+def snapshot_enrollment(registry, snapshot_pin, *, add=False):
+    """Enroll the exact snapshot once without replacing any historical record."""
+    history = registry.get("historical_registries", [])
+    binding.need(type(history) is list and all(type(item) is dict for item in history),
+                 "Invalid pre-outcomes snapshot enrollment inventory")
+    existing = [item for item in history if item.get("path") == binding.SNAPSHOT]
+    binding.need(len(existing) <= 1, "Duplicate pre-outcomes snapshot enrollment")
+    if existing:
+        binding.require_pin(existing[0], binding.SNAPSHOT, "enrolled pre-outcomes snapshot")
+        binding.need(existing[0] == snapshot_pin, "Conflicting pre-outcomes snapshot enrollment")
+    else:
+        binding.need(add, "Missing pre-outcomes snapshot enrollment")
+        registry.setdefault("historical_registries", []).append(copy.deepcopy(snapshot_pin))
+
+
 def validate_existing(root=ROOT):
     """Authenticate all existing outcome bindings; return no replacement bytes.
 
@@ -108,6 +123,7 @@ def validate_existing(root=ROOT):
     read_pin = lambda pin, label: read_pinned(reader, pin, label)
     previous = binding.coverage(registry, read_pin)
     binding.need(previous is not None, "Current paper outcome bindings are required")
+    snapshot_enrollment(registry, registry["paper_outcomes"]["pre_outcomes_registry"])
     contexts = {}
     for row in papers:
         document = read_pin(row["specification"], "Current paper definition")
@@ -148,6 +164,7 @@ def build_outputs(root=ROOT):
             binding.need(old_snapshot == snapshot_raw, "Refusing to replace an existing pre-outcomes registry snapshot")
         prior_lineage(reader, registry, papers)
     updated = copy.deepcopy(registry)
+    snapshot_enrollment(updated, snapshot_pin, add=True)
     updated_rows = {row["id"]: row for row in updated["tasks"]}
     outputs = {binding.SNAPSHOT: snapshot_raw}
     contexts = {}
@@ -156,6 +173,7 @@ def build_outputs(root=ROOT):
         prior = previous[identifier]
         improvement_pin = prior["specification_revision"]["improvement_contract"]
         improvement = read_pin(improvement_pin, "Improvement contract")
+        archive_pending = False
         if already_bound:
             current = read_pin(row["specification"], "Current paper definition")
             context = binding.context(row, current, previous, read_pin, improvement_contract=improvement)
@@ -168,9 +186,17 @@ def build_outputs(root=ROOT):
             previous_document = binding.engine().loads_contract(archived_raw.decode("utf-8"))
             archive_pin = binding.pin(home + "/" + binding.HISTORY, archived_raw)
             archive_path = checker.checked_path(root, archive_pin["path"], missing=True)
-            if archive_path.exists():
+            archive_pending = not archive_path.exists()
+            if not archive_pending:
                 existing_archive, _ = raw(reader, archive_pin["path"])
                 binding.need(existing_archive == archived_raw, "Refusing to replace a pre-outcomes task archive")
+        # A prospective successor must authenticate its immutable predecessor
+        # before that archive is written. No other member may be read virtually.
+        def planned_read(member_pin, label):
+            if archive_pending and member_pin["path"] == archive_pin["path"]:
+                binding.need(member_pin == archive_pin, "Pending archive pin mismatch")
+                return binding.engine().loads_contract(archived_raw.decode("utf-8"))
+            return read_pin(member_pin, label)
         scopes = previous.scope_decisions
         outcomes_raw, outcomes_pin = raw(reader, home + "/" + binding.OUTCOMES)
         outcomes = binding.engine().loads_contract(outcomes_raw.decode("utf-8"))
@@ -190,28 +216,47 @@ def build_outputs(root=ROOT):
         else:
             binding.need(not reproduction_paths,
                          "An existing reproduction proposal must be explicitly bound")
-        projected = binding.project_task(previous_document, prior, improvement,
+        new_binding = {"schema_version": binding.VERSION, "previous_specification": archive_pin,
+                       "outcomes": outcomes_pin}
+        if reproduction_pin is not None:
+            new_binding["reproduction_contract"] = reproduction_pin
+        selected_improvement = improvement
+        successor = None
+        if identifier == binding.PRIMARY_SUCCESSOR_TASK:
+            # This one adopted task requires the reviewed offline policy. Missing
+            # descriptors or policies fail; the old policy is never a fallback.
+            module = binding.primary_successor_module()
+            if already_bound:
+                selected = row["paper_outcomes"]
+                revision_pin = selected["primary_policy_revision"]
+                primary_pin = selected["primary_improvement_contract"]
+            else:
+                _, revision_pin = raw(reader, module.DESCRIPTOR)
+                _, primary_pin = raw(reader, home + "/improvement.temporal-scope.v1.json")
+            new_binding.update(primary_policy_revision=revision_pin, primary_improvement_contract=primary_pin)
+            binding.has_primary_successor({**row, "paper_outcomes": new_binding})
+            binding.need(not scopes or (identifier not in scopes["entries"]
+                         and identifier not in scopes.get("same_primary_corrections", {})),
+                         "SMC temporal successor cannot combine another primary scope projection")
+            successor = module.authenticate(revision_pin=revision_pin, primary_pin=primary_pin,
+                reproduction_pin=reproduction_pin, previous_pin=archive_pin,
+                retained_improvement_pin=improvement_pin, read_pin=planned_read)
+            binding.need(binding.engine().contract_digest(improvement) == binding.engine().contract_digest(successor.retained_improvement),
+                         "Retained improvement differs from authenticated SMC lineage")
+            selected_improvement = successor.primary_improvement
+        projected = binding.project_task(previous_document, prior, selected_improvement,
                                          scopes["entries"].get(identifier) if scopes else None,
                                          reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
                                          primary_correction=scopes.get("same_primary_corrections", {}).get(identifier) if scopes else None)
+        if successor is not None:
+            projected = module.project(projected, successor)
+            updated_rows[identifier]["title"] = projected["title"]
         current_body = binding.encode(projected)
         current_pin = binding.pin(home + "/task.json", current_body)
         updated_rows[identifier]["specification"] = current_pin
-        updated_rows[identifier]["paper_outcomes"] = {
-            "schema_version": binding.VERSION, "previous_specification": archive_pin,
-            "outcomes": outcomes_pin,
-        }
-        if reproduction_pin is not None:
-            updated_rows[identifier]["paper_outcomes"]["reproduction_contract"] = reproduction_pin
+        updated_rows[identifier]["paper_outcomes"] = new_binding
         outputs[archive_pin["path"]] = archived_raw
         outputs[current_pin["path"]] = current_body
-        # Only the exact pending immutable archive is read virtually. Scientific
-        # sidecars and existing members still use the bounded authenticated reader.
-        def planned_read(member_pin, label):
-            if member_pin["path"] == archive_pin["path"]:
-                binding.need(member_pin == archive_pin, "Pending archive pin mismatch")
-                return binding.engine().loads_contract(archived_raw.decode("utf-8"))
-            return read_pin(member_pin, label)
         binding.context(updated_rows[identifier], projected, previous, planned_read, improvement_contract=improvement)
     if already_bound:
         prior_lineage(reader, snapshot, papers, contexts)

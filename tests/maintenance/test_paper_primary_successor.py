@@ -152,6 +152,11 @@ class PrimarySuccessorTests(unittest.TestCase):
         self.assertEqual(successor.project(self.base, state), expected)
         with self.assertRaises(AttributeError):
             state._payload = "{}"
+        with self.assertRaises(AttributeError):
+            del state._payload
+        with self.assertRaises(AttributeError):
+            del state._seal
+        self.assertEqual(successor.project(self.base, state), expected)
         with self.assertRaises(ValueError):
             successor.project(self.base, {})
 
