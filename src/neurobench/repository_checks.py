@@ -16,6 +16,10 @@ RELOCATIONS = "docs/provenance/relocations/2026-11-16.json"
 INVENTORY = "benchmarks/integrity/source-ownership.json"
 CURRENT_BINDINGS = "benchmarks/integrity/current.json"
 CURRENT_CLOSURES = "benchmarks/integrity/current-closures"
+PARALLEL_CONTROL_MANIFEST = "benchmarks/integrity/parallel-source-controls.v1.json"
+PARALLEL_CONTROL_SOURCES = (PARALLEL_CONTROL_MANIFEST,
+                            "scripts/maintenance/run_parallel_source_controls.py",
+                            "tests/maintenance/test_parallel_source_controls.py")
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
@@ -674,13 +678,19 @@ def prepare(reader):
     # These are live source-binding descriptors, not additional benchmark artifacts.
     # Hash JSON descriptors and their exact README.md guides without following
     # any source or private-payload locators.
-    check_namespace(root, "benchmarks/integrity", {CURRENT_CLOSURES}, {CURRENT_BINDINGS, INVENTORY})
+    check_namespace(root, "benchmarks/integrity", {CURRENT_CLOSURES},
+                    {CURRENT_BINDINGS, INVENTORY, PARALLEL_CONTROL_MANIFEST})
     checked_path(root, CURRENT_BINDINGS)
     binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}], binding_metadata_only=True)
     binding_files[CURRENT_BINDINGS] = "current-binding-metadata"
     binding_files = dict.fromkeys(binding_files, "current-binding-metadata")
     need(not set(members) & set(binding_files), "Current binding metadata overlaps artifact source")
     members.update(binding_files)
+    # Exact reviewed CI sources are owned without executing commands or following locators.
+    need(not set(members) & set(PARALLEL_CONTROL_SOURCES), "Parallel control source overlaps owned source")
+    for path in PARALLEL_CONTROL_SOURCES:
+        checked_path(root, path)
+        members[path] = "generated-source-controls"
     need(len(members) <= MAX_FILES, "Source file count limit exceeded")
     ledger, ledger_pin = reader.document(RELOCATIONS)
     need(ledger.get("schema_version") == 1 and isinstance(ledger.get("files"), list)
