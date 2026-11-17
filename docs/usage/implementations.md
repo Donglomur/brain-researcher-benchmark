@@ -161,11 +161,11 @@ before running them; data, targets, checkpoints and outputs stay outside public 
 
 | Task and route | Executable source and observed coverage | Remaining comparison requirements |
 | --- | --- | --- |
-| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md) | Original MC_Maze 20-ms panel; the offline candidate uses the full 35-bin held-in observation window and one complete prediction set for co-smoothing and ten-bin future prediction. The current improvement successor retains the original panel, ordered arrays and four metrics. [Author calibration completed](../science/smc-author-calibration-20261117.md) both full prediction arms at 192 particles × 32 repeats and both four-metric aggregates. | The noncausal supervised scoring stage remains failed; its authenticated scalar output was accepted as recovered calibration evidence without a rerun. Calibration does not establish an AI, reproduction or improvement outcome. The strongest retained published/reproduced comparator, matched participant budgets, behavior-guided fitting/selection policy and source-grounded uncertainty remain qualification gates. |
+| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/continuous-outcomes-v2/README.md) | Current `prepare`, `inspect`, `freeze` and `score` source preserves the original MC_Maze 20-ms panel: both source methods' eight reproduction findings and one offline candidate's four metrics, with reference discrepancies. Access conditions compare paper/data against the same materials plus pinned official code and ten released model/configuration/history files. [Author calibration completed](../science/smc-author-calibration-20261117.md) both full prediction arms at 192 particles × 32 repeats and both four-metric aggregates. | Fresh current materials and runtime boundaries remain to be validated. Reports are continuous fixed-panel measurements, not binary reproduction or improvement decisions. The failed noncausal supervisor and independently accepted recovered scalar output remain distinct; calibration is not an AI outcome. Released models do not establish exact historical training exposure or checkpoint-to-paper identity. |
 | [REVE / PAPER-paper-method-003](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md) | `panel.py acquire`, `inspect`, `prepare`, `predict` and `score`; all 654 official EDFs for 109 participants prepared into 9,837 epochs, preserving the 1–70 / 71–89 / 90–109 train/validation/test split | Released-code and paper filtering recipes disagree; the exact downstream classifier checkpoint, historical run aggregation and author-model performance remain unresolved. No model inference ran. |
 | [DeepCaImX / PAPER-paper-method-013](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_PANEL.md) | `source_panel.py convert-rois` and `score-segmentation`; all ten original manual ROI files authenticated and converted, preserving 1,563 masks and spatial coordinates | Exact movie crop/frame mapping, paper-equivalent full checkpoint and native assembly are unresolved. Ten videos correspond to eight donors. No movie-to-mask inference ran; segmentation arithmetic alone leaves trace/runtime obligations open. |
 
-For SMC-RNN, keep the two environments separate: original NWB preparation uses
+For the retained SMC-RNN author routes, keep the two environments separate: original NWB preparation uses
 Python 3.9 and pandas 1.3.4; Python 3.11 with pandas 1.5.3 is the separate inference
 environment and reads already-frozen HDF5 inputs only. Preparing the NWBs with
 pandas 1.5.3 truncated original trial support and is retained as a failed attempt.
@@ -173,27 +173,29 @@ The full native `panel.json` and smaller public `reference_panel.json` have
 different hashes because the latter is a metadata subset of the same frozen input
 panel; that difference does not indicate changed trials or arrays.
 
-Use the [offline SMC delivery and scoring interface](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md)
-for the current full-window candidate condition. A trusted operator must freeze
-the complete paired materials, fitting and selection policy, equal budgets and
-scientific comparison before candidate results. Supplied behavior may guide
-learning only within the declared policy; actual use in fitting and selection is
-reported separately. This grants no test behavior, held-out test spikes or unseen
-future spikes. One candidate prediction set replaces the former arm-labelled
-candidate submissions. Positive score differences remain scientifically unknown
-until execution, output and comparison qualification are complete.
+Use the [current SMC continuous interface](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/continuous-outcomes-v2/README.md)
+with the exact adopted task identity for a fresh paired export. The assisted
+condition adds official source and the ten allowlisted released assets; it measures
+code and pretrained-asset assistance together. The source-only v1 condition remains
+historical and must not be relabelled as v2. Both conditions keep the original inputs
+and matched per-outcome resource profiles. Supplied validation behavior may guide
+fitting or selection only under the declared policy; actual usage is reported.
+No original test target or operator prediction is delivered. Reproduction freezes
+both source-method arms together; improvement freezes one complete offline
+prediction set using the full 35-bin held-in window. Original metrics and reference
+differences are reported without new equivalence thresholds or binary wins.
 
 The retained [source-matched SMC routes](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
 and [paired-delivery guide](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/DELIVERY.md)
 document author reproduction and calibration. Their
 [preparation evidence](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json)
 records an earlier complete paired export, excluding checkpoints, operator
-predictions and test targets. That receipt does not qualify a new offline export
+predictions and test targets. That receipt does not qualify a new code-and-weights export
 or candidate run. Both source-author arms now have authenticated [calibration
 results](../science/smc-author-calibration-20261117.md), with the failed noncausal
-supervisor and recovered scalar output preserved. The offline comparison must
-still select the strongest retained qualified/published
-reference; a lower reproduced score cannot replace a higher published comparator.
+supervisor and recovered scalar output preserved. Current reports retain the SMC
+references and the paper's complete LFADS/NDT vectors separately; exceeding SMC
+alone does not establish a gain over the paper's strongest published comparison.
 Strict-online and source-prefix candidates need separately named information
 policies and appropriate comparators. The source causal arm's reflect-padding
 startup is not strictly online.

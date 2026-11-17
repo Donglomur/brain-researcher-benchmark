@@ -180,8 +180,11 @@ def has_continuous_outcomes(row):
     need(row.get("id") == PRIMARY_SUCCESSOR_TASK and row.get("track") == "paper",
          "Continuous outcome selection is restricted to the reviewed SMC task")
     need(has_primary_successor(row), "Continuous SMC must retain its temporal predecessor selectors")
-    require_pin(declared["continuous_policy_revision"],
-                primary_successor_module().CONTINUOUS_DESCRIPTOR, "SMC continuous policy revision")
+    module = primary_successor_module()
+    selected = declared["continuous_policy_revision"]
+    need(type(selected) is dict and selected.get("path") in (module.CONTINUOUS_DESCRIPTOR, module.OFFICIAL_ASSETS_DESCRIPTOR),
+         "SMC continuous revision requires an explicitly reviewed versioned path")
+    require_pin(selected, selected["path"], "SMC continuous policy revision")
     need(0 < declared["continuous_policy_revision"]["bytes"] <= 65536,
          "SMC continuous revision must be bounded")
     return True
@@ -658,16 +661,19 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                              primary_correction=primary_correction)
     if successor is not None:
         projected = successor_module.project(projected, successor)
-        need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
+        if not continuous_selected:
+            need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
     retained_current = pin(home + "/task.json", encode(projected))
     continuous = None
     continuous_selection = None
+    current_continuous = None
     if continuous_selected:
-        continuous = successor_module.authenticate_continuous(
+        current_continuous = successor_module.current_continuous(
             revision_pin=binding["continuous_policy_revision"], temporal=successor,
             temporal_task=projected, read_pin=read_pin)
-        projected = successor_module.project_continuous(projected, continuous)
-        continuous_selection = successor_module.continuous_public_selection(continuous)
+        projected, continuous = current_continuous["projected"], current_continuous["current"]
+        continuous_selection = current_continuous["selection"]
+        need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
@@ -712,16 +718,17 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
          "Invalid independent paper outcome summary")
     retained_temporal_summary = result if continuous is not None else None
     if continuous is not None:
-        for member in continuous.members:
-            need(member["path"] not in members, "Duplicate continuous task metadata member")
-            members.add(member["path"])
+        for handle in current_continuous["handles"]:
+            for member in handle.members:
+                need(member["path"] not in members, "Duplicate continuous task metadata member")
+                members.add(member["path"])
         result = {"task_id": identifier, "task_count": 1, "errors": [],
                   "cells": [{"outcome": outcome, "condition": condition,
                              "eligibility": None, "endpoint_eligible": None,
                              "pairing_status": "uninstantiated", "condition_available": False,
                              "scientific_outcome": "unknown", "receipt": None, "result_status": "not_attempted"}
                             for outcome in ("reproduction", "improvement")
-                            for condition in ("paper_data", "paper_data_author_code")],
+                            for condition in continuous_selection["conditions"]],
                   "paired_metadata_admitted": {"reproduction": False, "improvement": False},
                   "assurance": "Authenticated continuous measurement policy and source routes; no instantiated episode, submitted result, binary pass or scientific qualification."}
     return {"previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
@@ -729,11 +736,11 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
             "retained_improvement_contract": retained_improvement,
             "retained_improvement_contract_pin": retained_improvement_pin,
             "primary_policy_revision": continuous_selection["revision"] if continuous else successor.descriptor_pin if successor else None,
-            "primary_policy_provenance": {"amendment": successor_module.continuous_pin("amendment"),
-                                          "policy": successor_module.continuous_pin("policy")} if continuous else successor_provenance,
+            "primary_policy_provenance": current_continuous["provenance"] if continuous else successor_provenance,
             "candidate_interface": continuous_selection["candidate_interface"] if continuous else successor.candidate_interface if successor else None,
             "author_reproduction_routes": continuous_selection["author_reproduction_routes"] if continuous else successor.author_reproduction_routes if successor else None,
-            "continuous_outcomes_v1": continuous_selection,
+            "continuous_outcomes_v1": continuous_selection if current_continuous and current_continuous["version"] == 1 else None,
+            "continuous_outcomes_v2": continuous_selection if current_continuous and current_continuous["version"] == 2 else None,
             "continuous_policy": continuous.snapshot()["documents"]["policy"] if continuous else None,
             "retained_temporal_summary": retained_temporal_summary,
             "reproduction_contract": reproduction,
@@ -798,8 +805,9 @@ def public_primary_scope_correction(entry, scope_pin, task_id):
 def public_summary(row, bound):
     """Expose declarations without treating metadata consistency as performance."""
     binding = row["paper_outcomes"]
-    if bound.get("continuous_outcomes_v1") is not None:
-        continuous = bound["continuous_outcomes_v1"]
+    continuous_key = "continuous_outcomes_v2" if bound.get("continuous_outcomes_v2") is not None else "continuous_outcomes_v1"
+    if bound.get(continuous_key) is not None:
+        continuous = bound[continuous_key]
         return {"schema_version": VERSION, "objective": OBJECTIVE, "availability": "available",
                 "previous_specification": copy.deepcopy(binding["previous_specification"]),
                 "reproduction_contract": copy.deepcopy(continuous["policy"]),
@@ -815,7 +823,7 @@ def public_summary(row, bound):
                 "primary_policy_provenance": copy.deepcopy(bound["primary_policy_provenance"]),
                 "candidate_interface": copy.deepcopy(bound["candidate_interface"]),
                 "author_reproduction_routes": copy.deepcopy(bound["author_reproduction_routes"]),
-                "continuous_outcomes_v1": copy.deepcopy(continuous)}
+                continuous_key: copy.deepcopy(continuous)}
     if bound["availability"] == "source_declaration_unavailable":
         gap = bound["source_declaration_gap"]
         return {"schema_version": VERSION, "objective": OBJECTIVE,

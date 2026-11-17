@@ -1,0 +1,219 @@
+{
+  "authors": [
+    "Jing Cai",
+    "Sydney Cash",
+    "Ziv Williams"
+  ],
+  "complete_panel_precision": "Original float64 only; no silent float32-to-float64 extension.",
+  "construction_evidence": "Generated controls and pinned source metadata; no authentic input/result arrays consumed by this component at source cutoff.",
+  "contrast_schedule": [
+    {
+      "author_call": "permutation_test_1side(values0.reshape(-1), values1.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "population",
+      "nsamp": 100000,
+      "ordinal_one_based": 1,
+      "right": "syn",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values0.reshape(-1), values2.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "population",
+      "nsamp": 100000,
+      "ordinal_one_based": 2,
+      "right": "word2vec",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values0.reshape(-1), values3.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "population",
+      "nsamp": 100000,
+      "ordinal_one_based": 3,
+      "right": "sem_syn",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values1.reshape(-1), values2.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "syn",
+      "nsamp": 100000,
+      "ordinal_one_based": 4,
+      "right": "word2vec",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values1.reshape(-1), values3.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "syn",
+      "nsamp": 100000,
+      "ordinal_one_based": 5,
+      "right": "sem_syn",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values2.reshape(-1), values3.reshape(-1), nsamp=100000, seed=46)",
+      "cell_zero_based": 9,
+      "left": "word2vec",
+      "nsamp": 100000,
+      "ordinal_one_based": 6,
+      "right": "sem_syn",
+      "seed": 46
+    },
+    {
+      "author_call": "permutation_test_1side(values1.reshape(-1), values1s.reshape(-1), nsamp=100000, seed=20)",
+      "cell_zero_based": 10,
+      "left": "syn",
+      "nsamp": 100000,
+      "ordinal_one_based": 7,
+      "right": "syn_shuffle",
+      "seed": 20
+    },
+    {
+      "author_call": "permutation_test_1side(values2.reshape(-1), values2s.reshape(-1), nsamp=100000, seed=20)",
+      "cell_zero_based": 10,
+      "left": "word2vec",
+      "nsamp": 100000,
+      "ordinal_one_based": 8,
+      "right": "word2vec_shuffle",
+      "seed": 20
+    },
+    {
+      "author_call": "permutation_test_1side(values3.reshape(-1), values3s.reshape(-1), nsamp=100000, seed=20)",
+      "cell_zero_based": 10,
+      "left": "sem_syn",
+      "nsamp": 100000,
+      "ordinal_one_based": 9,
+      "right": "sem_syn_shuffle",
+      "seed": 20
+    }
+  ],
+  "figure3c_curve": {
+    "bounds_supplied": false,
+    "fit": "scipy.optimize.curve_fit(exponential_func, gram_n, output, p0=(-8,-0.08,0.08)); all other solver options default.",
+    "function": "a * np.exp(b*x) + c",
+    "grid": "np.linspace(1,10,100)",
+    "outputs": [
+      "popt",
+      "pcov",
+      "x_fit",
+      "y_fit"
+    ],
+    "p0": [
+      -8,
+      -0.08,
+      0.08
+    ],
+    "selection": "One argmax layer of equal14-session group mean for each context length; first index on ties.",
+    "sem_plot_only": "values.std(ddof=0) / sqrt(14)",
+    "uncertainty_limit": "Covariance from the source five-point fit is not participant-level or independent confirmatory uncertainty.",
+    "weighted_by_sem": false,
+    "x": [
+      1,
+      3,
+      5,
+      7,
+      10
+    ],
+    "y": "Mean across14 sessions at the independently selected layer for each of5 lengths."
+  },
+  "helper_fixture": {
+    "bytes": 1309,
+    "sha256": "3d61d21a3b0bd25e54afc7013395fe609ddae16578800ed29015efe6e840be39",
+    "transformation": "Original function bodies retained; trailing whitespace stripped; explanatory attribution/import wrapper added."
+  },
+  "helper_functions": [
+    {
+      "ast_representation": "Python3 ast.dump(include_attributes=False) UTF-8; source text digest is authoritative across parser versions.",
+      "ast_sha256": "b9554f9e8d23eb30ca63bb2b74a81944a10c13f3455dfdadd87d9420a96d8219",
+      "name": "perm_test_boot",
+      "notebook_cell_zero_based": 8,
+      "source_excerpt_bytes": 220,
+      "source_excerpt_sha256": "b5e9b26dd61c2397524f0e7620fd98f101c6bc72aa91a126d4f2eef75f07bc47"
+    },
+    {
+      "ast_representation": "Python3 ast.dump(include_attributes=False) UTF-8; source text digest is authoritative across parser versions.",
+      "ast_sha256": "d0a2c2ab3915084e0cc9fe071261474da68059f25bc6e31af8fdb5dfed09ccf6",
+      "name": "permutation_test_1side",
+      "notebook_cell_zero_based": 8,
+      "source_excerpt_bytes": 397,
+      "source_excerpt_sha256": "22b31ba216e7faa929db008966d5bdc117f3fd87d4c3a7feca679eee4e914d6f"
+    },
+    {
+      "ast_representation": "Python3 ast.dump(include_attributes=False) UTF-8; source text digest is authoritative across parser versions.",
+      "ast_sha256": "0b5639d760dab948874380d1f3dd94e206378b52aff0a7d20ddf2540e3a06021",
+      "name": "exponential_func",
+      "notebook_cell_zero_based": 14,
+      "source_excerpt_bytes": 160,
+      "source_excerpt_sha256": "7f0a36d3675ecd9d1e2da1b66157612db33177f936ff4c35c8fc2b9e780ce7fa"
+    }
+  ],
+  "limits": [
+    "Literal source42 flattened entries per arm are not42 independent people; original unpaired pooling and unadjusted p-values are explicit.",
+    "Undefined permutation inputs are refused rather than converting the source NaN hazard to zero significance.",
+    "Historical numerical parity, protected candidate custody and scientific decision thresholds remain unqualified.",
+    "The579-versus567 Figure3f identity join remains separate; valid declared Figure3b/c/d/e outputs are retained.",
+    "Operator-supplied preparation SHA establishes identity of a separately trusted complete receipt, not independent proof of execution.",
+    "Performance endpoints remain means and paired candidate/reference deltas, never a smaller p-value."
+  ],
+  "original_environment_metadata": {
+    "numpy": "1.24.3",
+    "python": "3.11.3",
+    "scipy": "1.10.1"
+  },
+  "paper": "https://www.nature.com/articles/s41586-026-10691-5",
+  "provided_results": {
+    "expanded_bytes": 6339760,
+    "independent_AI_reproduction": false,
+    "logical_checksum_member_eof_charge_bytes": 24856518,
+    "members": 224,
+    "method_execution_authenticated": false
+  },
+  "record": "https://zenodo.org/records/20128462",
+  "schema": "language-original-inference-source-provenance/v1",
+  "scientific_qualification": false,
+  "source_cells": {
+    "10": {
+      "ast_sha256": "eb6582adeaf01db9ff21588372d2df64124f475281a57ba1bca5248a75ba7ae0",
+      "source_bytes": 769,
+      "source_sha256": "6f171f4e88c3de9772ee221c716fbe8e91ee7a796567e1e1a2e1a42316c3bcd8"
+    },
+    "13": {
+      "ast_sha256": "26266f5b09d845a5d84412039f24de5204b32d56b6666c8e305bdb674baea939",
+      "source_bytes": 229,
+      "source_sha256": "c772202cf334ab2550dc0b181056db0fc3b61897d0d0b8565d846100434733c3"
+    },
+    "14": {
+      "ast_sha256": "ffe8ce274ca15c316c5e670a099b66f7ed4d28625e239e0cb03e9db48cffca91",
+      "source_bytes": 196,
+      "source_sha256": "9d91f4e5a3ff4f7819583694b971183a1c5c1d1ff3dca7cd675c54a27a54a74f"
+    },
+    "15": {
+      "ast_sha256": "644413a602bbc833544971b05428f792a9268bb3478b9093d327b4f9cdf0b355",
+      "source_bytes": 1151,
+      "source_sha256": "3d2da4172bbc28c53dccc2f010c32a8396dfb179223e6e5a5660fec09c619f9e"
+    },
+    "8": {
+      "ast_sha256": "9a00e418ad1b3db47550d697dd829f11e806781e055986dc9ad09e0ffc558f2e",
+      "source_bytes": 1560,
+      "source_sha256": "ac7eb80bf96fb67868f48ae9e3cb63a9a8c210fdd4c53b1e157058de0bac18af"
+    },
+    "9": {
+      "ast_sha256": "a204d6ff67dc9a79ddbbc61ec20a6564320a4ba2074b913d5358f0a96cab0fed",
+      "source_bytes": 1137,
+      "source_sha256": "185e10fc816949263489cb7573d0dc8ba1d2cb140c93e5ad21c8ecef9893dfc4"
+    }
+  },
+  "source_helper_receipt": {
+    "bytes": 9590,
+    "sha256": "11835c2ebd468f592fe1642fb066ada41c74a126c80292feb29427efb1975e1f"
+  },
+  "source_license_metadata": "CC-BY-4.0; source attribution does not imply endorsement",
+  "source_notebook": {
+    "archive_member": "analysis/computation/figure/Figure3.ipynb",
+    "bytes": 280036,
+    "sha256": "3cec508ef352d004525e377589d69dc05e6551f1356bcdb7a3b3ee2ca983239b"
+  },
+  "source_notebook_acquisition_scope_at_construction": "Previously bounded ZIP member read/CRC; later whole-archive authentication is separate evidence."
+}

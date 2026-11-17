@@ -111,8 +111,23 @@ are engineering controls, not results on authentic data.
 python -B -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Native library execution and complete authentic preparation are not established
-by those tests. Additional unresolved requirements include the publication's
+The separate required native command uses real `tslearn==0.6.3` on two generated
+four-ROI, 1000-sample cases. It checks the analytical identical-signal result,
+independent sample-SD/OLS normalization, agreement with a direct native DBA call,
+and a negative shifted-pulse case that distinguishes DBA from an arithmetic-mean
+proxy and checks that squaring precedes the maximum.
+Missing or mismatched tslearn fails; there is no mock, replacement or skip. This
+command is intended for the separately locked hosted-CI environment. Its source
+alone is not evidence of execution, and it does not establish complete PySPI or
+historical-environment parity, authentic reference results, or improvement.
+
+```sh
+python -B -m unittest discover -s native_tests -p 'test_*.py' -v
+```
+
+Successful native checks would establish selected DBA execution on generated
+cases only; authentic preparation has its separate receipt. Authentic feature
+and reference execution remain unestablished. Additional unresolved requirements include the publication's
 v1/v2 empirical-release and corrected-supplement join; original row multiplicity,
 ordering and realized folds; authenticated historical native runtime; full-
 precision original feature/distribution and fold-output joins; source comparator

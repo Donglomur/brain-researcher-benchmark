@@ -105,7 +105,14 @@
     "numpy226": {
       "python": "3.11.18",
       "packages": {
-        "numpy": "2.2.6"
+        "numpy": "2.2.6",
+        "tslearn": "0.6.3",
+        "scipy": "1.15.3",
+        "scikit-learn": "1.6.1",
+        "numba": "0.61.2",
+        "llvmlite": "0.44.0",
+        "joblib": "1.5.3",
+        "threadpoolctl": "3.6.0"
       },
       "scope": "Generated software compatibility only; historical source environment evidence remains distinct."
     }
@@ -6162,6 +6169,129 @@
         "benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/tests/test_original_inputs.py"
       ],
       "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-inference-v1/test_inference.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 23,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "id": "PAPER-ROOT-ADD-001.command-03",
+      "task_id": "PAPER-ROOT-ADD-001",
+      "group": "scientific",
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-inference-v1/test_inference.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/continuous-outcomes-v2/test_benchmark.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 20,
+      "fixtures": [],
+      "group": "scientific",
+      "id": "PAPER-SMC-RNN-2024.command-04",
+      "runner": "unittest",
+      "task_id": "PAPER-SMC-RNN-2024",
+      "test_paths": [
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/continuous-outcomes-v2/test_benchmark.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "id": "PAPER-paper-method-add-002.command-02",
+      "task_id": "PAPER-paper-method-add-002",
+      "group": "scientific",
+      "runner": "unittest",
+      "argv": [
+        "${PYTHON}",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-add-002/implementations/source-producer-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 18,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-add-002/implementations/source-producer-v1/tests/test_numeric_producer.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PAPER-paper-method-add-010.command-03",
+      "task_id": "PAPER-paper-method-add-010",
+      "group": "numpy226",
+      "runner": "unittest",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-add-010/implementations/original-feature-producer-v1/native_tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 2,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-add-010/implementations/original-feature-producer-v1/native_tests/test_tslearn_dba.py"
+      ],
+      "fixtures": [],
+      "environment": {
+        "NUMBA_NUM_THREADS": "1"
+      }
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/current-condition-evaluator-v1",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 54,
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-replacement-015.command-03",
+      "runner": "unittest",
+      "task_id": "PAPER-paper-method-replacement-015",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/current-condition-evaluator-v1/test_artifact_io.py",
+        "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/current-condition-evaluator-v1/test_evaluate.py"
+      ],
+      "timeout_seconds": 180
     }
   ],
   "source_only_assignments": [
