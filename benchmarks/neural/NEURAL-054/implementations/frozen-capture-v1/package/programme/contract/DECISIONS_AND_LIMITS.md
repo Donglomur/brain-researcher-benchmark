@@ -1,0 +1,23 @@
+# Design decisions and limits
+
+The existing question asked whether early category decoding survives image and eye explanations. The full paper and original methods support a careful operational question: does an independently evaluated agent improve prediction relative to explicitly bounded visual/ocular controls? The27 targets are deterministic source annotations. A positive finite-model result cannot prove irreducible information given the complete image.
+
+The legacy condition held all arms to eight total principal components and accepted captured predictions. This reallocates nuisance representation when MEG is added and lets candidates weaken their own nuisance denominator. The proposal retains that recipe asR0, adds fixed regularized LDA on full features (R1) and unchanged per-family projections (R2), and fixes primary comparisons against independentR1. It also requires actual submitted source to build, train, freeze, predict and be graded behind protected boundaries.
+
+**Fixed reference-bank feasibility:** The primary paper uses default LDA; exhaustive tuning is not necessary to define this benchmark. The canonical bank uses fixed models with zero search fits. All 240 outer cases, five windows, five arms, 27 labels and the full cohort are retained. Nonlinear and tuning studies require separately designed full-scope extensions with explicit finite selection and compute policies. No empirical feasibility, runtime or speed claim follows from this design.
+
+Exact pure-reference input equality eliminates960 redundant VISUAL-window fits per family. The inherited session-exclusion rule prevents automatically sharing fits across held test sessions. Shared regularized LDA algebra reduces27 label systems to one common matrix and label-specific rank-one corrections; native numerical parity must still be checked. Arm-prefix sharing and direct-label fallback have explicit bounds. No empirical compute or speed claim is made.
+
+The new covariance, ridge and priors are fully specified in REFERENCE_ALGEBRA.md. They differ from the source paper's default pairwise LDA and are not claimed to reproduce it. Adaptive label-dependent shrinkage would invalidate the shared-factor argument and cannot be substituted. R0 logistic models have different Hessians across labels and are not claimed to share a linear solve.
+
+Source review found unresolved release, absolute optical-origin, eye-invalidity, geometry and native-environment bridges. All remain open. Invalid pupil-array and cropped-eye-source expressions are static observations, not evidence that released data were affected. No original source was repaired, no native data were probed and no authentic values were inspected.
+
+P and I are full-feature modes; D is a separate no-tools diagnostic on trusted training-only eight-dimensional summaries; R tests interpretation after predictions are frozen. The complete API designs all conditions, but a future campaign must separately declare its selected conditions and budgets. Every selected condition needs full support. Evaluating a complete P condition does not establish I/D/R capability or justify running their entire Cartesian product implicitly.
+
+All37 future controls are unexecuted. Static validation authenticates ordinary sources and checks design correspondence, anchors, declared ID-domain partitions, graph acyclicity and formulas. It generates no neural fixture, fits no model and qualifies no empirical result. One benchmark remains one benchmark.
+
+Independent design review precedes implementation. Source acceptance, native numerical qualification, complete empirical evaluation and scientific acceptance remain separate decisions. Null, negative or inconclusive results can be scientifically correct; no preferred biological story is rewarded.
+
+**Independent reference lifecycle:** S08 contains R01–R08 and produces a complete observed reference bank, with source, state, query, probability, original completion and resources bound to S14/S19 and A07/A08. Mandatory outputs do not depend on NUM_REF tool use or candidate abstention. The full scientific scope, gates, future controls and reference algebra remain required; source presence does not establish native or scientific qualification.
+
+**Summary-control and mode lifecycle:** S18 owns independent DC01–DC08 summary-control production, collection and sealing, plus a separate no-tools DA01 candidate branch. Mode-derived typed banks and report, metric and failure rules cover D-only, mixed and R-only conditions. The LDA method and full-core reference lifecycle are retained. All 29 gates remain open, with bank-specific requirements scoped by selected modes. No algorithm, support or workload subset replaces the full original question.

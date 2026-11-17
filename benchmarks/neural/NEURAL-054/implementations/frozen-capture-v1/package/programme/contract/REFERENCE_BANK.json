@@ -1,0 +1,162 @@
+{
+  "schema": "neural054_independent_reference_bank_design_v2",
+  "status": "UNEXECUTED_SOURCE_DESIGN",
+  "paper_reference_equivalence": false,
+  "role": "The participant cannot choose, provide, weaken or replace the fixed primary nuisance comparator.",
+  "scientific_basis": "The primary paper s4-10 uses default LDA for time-resolved MEG decoding, without a hyperparameter Cartesian grid. R1/R2 are prospective regularized binary LDA controls for this different 27-label task, not an author-result replay. R0 preserves the existing packet's logistic comparator.",
+  "common": {
+    "training_only_imputation": "Ocular absent-bin means use the median of observed means in the eligible outer training rows. An entirely absent training column uses0 as an explicit absence convention and retains coverage. No query fitting.",
+    "scaling": "Each permitted family uses training-only StandardScaler; a constant feature centers to zero with unit scale. Family transformations are independent of which other families are present.",
+    "labels": "All27 independent binary source annotations. Both classes required in each outer training population; absence blocks complete qualification.",
+    "state_binding": "Exact source/environment/training membership/features/label order/configuration/completion/costs and query support; no cross-case participant state reuse. Bind original reference inference and complete collection observations to actual probability artifacts andS14/S19.",
+    "scope": "All240 outer cases \u00d75windows \u00d75arms for every mandatory reference, with exactly identical support.",
+    "randomness": "Deterministic fixed configurations. Platform/library/numerical behavior remains a qualification gate.",
+    "primary_competence": "Independent implementation/numerical correctness, adequate class support and source-informed model adequacy for the declared bounded linear comparison. No claim that the nuisance model is SOTA or exhausts nonlinear/visual explanations, and no test-score threshold selects or deletes a reference."
+  },
+  "inner_selection": {
+    "version": "N054-optional-inner-full27-v1",
+    "mandatory_reference_search": false,
+    "outer_training_people": 3,
+    "session_buckets": 3,
+    "concept_buckets": 3,
+    "cases_per_outer": 27,
+    "session_bucket": "first8 SHA256('NEURAL054-inner-session-v1:'+source_session_ordinal) modulo3, excluding outer held session",
+    "concept_bucket": "first8 SHA256('NEURAL054-inner-concept-v1:'+source_concept_nr) modulo3, excluding outer held concept group",
+    "validation": "Held inner person AND session bucket AND concept bucket; train excludes all three. All27 partitions cover every eligible outer-training row once.",
+    "purpose": "Training-only grouping API for participants and separately declared optional tuning studies; producing this metadata does not require executing27 reference fits.",
+    "pooled_validation": "Pool concept buckets per person/session before class-balanced metric; never silently omit classes or rerandomize groups.",
+    "candidate_access": "All permitted training rows and groups; participants may use a declared training strategy under accounted limits.",
+    "no_test_selection": true
+  },
+  "families": [
+    {
+      "id": "R0",
+      "kind": "legacy_fixed_total8_logistic",
+      "mandatory": true,
+      "tuned": false,
+      "configurations": 1,
+      "definition": "Preserve exact legacy public/reference_program.py: per-family StandardScaler; divide bysqrt(original_dimension*number_of_families); concatenate; fullSVDPCA8/no whitening with s8>s1*1e-10;27 independent balanced liblinear L2 logistic models C1,tol1e-4,max_iter2000,seed0; strict convergence. Historical fixed-capacity reallocation diagnostic, never primary denominator.",
+      "sharing": "Fit each of27 logistic objectives independently. Vectorized scheduling is allowed only with proven equivalence; logistic Hessians generally differ across labels, so no shared-linear-solve claim."
+    },
+    {
+      "id": "R1",
+      "kind": "full_core_regularized_binary_LDA",
+      "mandatory": true,
+      "tuned": false,
+      "configurations": 1,
+      "ridge_lambda": 0.1,
+      "definition": "All standardized permitted core features, with no PCA. For each label use unbiased pooled within-class covariance plus0.1 I and equal class priors; stable sigmoid of the resulting linear discriminant. Fixed ridge is10% of one nonconstant standardized feature's population variance, selected prospectively to regularize the high-dimensional inverse. No empirical tuning or claimed optimality.",
+      "shared_solution": "REFERENCE_ALGEBRA.md gives one common regularized total-covariance factorization plus all27 RHS and label-specific rank-one corrections, exactly equivalent in real arithmetic to27 separate pooled-covariance LDA solves. Native numerical equivalence remains mandatory."
+    },
+    {
+      "id": "R2",
+      "kind": "additive_block8_regularized_binary_LDA",
+      "mandatory": true,
+      "tuned": false,
+      "configurations": 1,
+      "ridge_lambda": 0.0125,
+      "definition": "PCA8 separately within each standardized family with the same strict rank guard; standardize each retained PC on training rows and divide bysqrt8, independent of family count. Concatenate unchanged family coordinates. Apply the same pooled-covariance LDA with lambda0.0125,10% of one normalized PC variance. Dimensions V8/O8/N16/M8/J24. Adding neural features never changes nuisance coordinates or ridge scale.",
+      "shared_solution": "Same exact common-factor/rank-one algebra asR1; low-dimensional shared solves. Effective capacity still increases when features are added."
+    },
+    {
+      "id": "R4",
+      "kind": "balanced_constant",
+      "mandatory": true,
+      "tuned": false,
+      "configurations": 1,
+      "definition": "q=0.5 per label; balanced-loss sanity context, no fit."
+    },
+    {
+      "id": "R5",
+      "kind": "training_prevalence_prior",
+      "mandatory": true,
+      "tuned": false,
+      "configurations": 1,
+      "definition": "q=(trainingpositive+1)/(trainingrows+2); unweighted-prevalence context, not the balanced primary denominator."
+    }
+  ],
+  "primary_comparator": {
+    "selection": "Fixed R1 NUISANCE. No model/configuration selection on inner or outer outcomes. E02 uses fixedR1 JOINT. All other mandatory references are reported separately.",
+    "eligibility": "R0/R1/R2 and all required contexts must have complete full-scope dispositions. An inadequate implementation or missing required output makes the primary unqualified; a scientifically valid weak, null or negative result remains reported.",
+    "probability_scope": "Equal-prior Gaussian class-conditional discriminant probabilities target the balanced task under model assumptions; no source-prevalence calibration guarantee.",
+    "no_candidate_control": true
+  },
+  "fixed_family_diagnostics": "Report R0/R1/R2 paired NUISANCE\u2013JOINT effects for every fixed window, all raw arms, and all individual-person outcomes. Do not select the best family/window on held results.",
+  "reuse": {
+    "mandatory_pure_reference_only": "The fixed trusted recipes depend only on permitted features, labels and explicit configuration, not window labels or participant-supplied group-conditioned behavior. CandidateP/I are allowed to branch on window and do not inherit this reuse.",
+    "visual_windows": "Within each outer training membership, all five VISUAL windows are exactly the same feature/label input and recipe. Fit once, emit five separately bound logical output artifacts. This yields5040 distinct reference feature/training views, not6000.",
+    "outer_memberships": "The original split removes the held session ordinal in every training person. Thus different held test sessions change training membership; no across-session fit reuse is justified. The240 person/session/concept training memberships remain distinct.",
+    "cross_person_visual": "Potential image-only equality across held people depends on actual image/session assignment, row multiplicity, canonical input order and reference information policy. No such identity is established here; it is excluded from scheduled savings.",
+    "family_preparation": "240*(1visual+5ocular+5neural)=2640 family preparations shared between mandatory fixed references, subject to exact transformation equivalence and immutable lineage.",
+    "LDA_factor_prefixes": "For each outer case/window, factor JOINT in [neural,ocular,visual] order: its leading principal factor servesNEURAL. FactorNUISANCE in [ocular,visual] order: its leading principal factor servesOCULAR. FactorVISUAL once per outer case. Each ofR1/R2 needs2640 factorizations if prefix qualification passes, versus5040 separate arm factorizations. Every arm retains its own27 RHS/rank-one corrections and output identities.",
+    "PCA": "Up to7680 decompositions:5040 R0 full-arm and2640 R2 family decompositions. A lower5040 requires independently qualified sharing of single-family PCA bases under constant rescaling/sign conventions; it is not assumed.",
+    "sufficient_statistics": "R1/R2 class means and cross-products share one training-matrix pass and27 RHS. Aggregating source-block sufficient statistics is only a future exact optimization after training-only imputation, fixed group membership, floating summation order and per-arm equivalence are independently qualified.",
+    "direct_label_fallback": "If the common-factor implementation is not numerically qualified for a case, use exact same perlabel covariance/regularization/prior direct solves only within admitted budget; at most272160 label factorizations for both LDA families. Otherwise fail closed."
+  },
+  "prospective_studies": [
+    {
+      "id": "R3",
+      "kind": "nonlinear_core_control",
+      "selected": false,
+      "reason": "Tests the specific alternative that finite linear nuisance capacity causes apparent neural gain. A full-scope nonlinear study is valuable but a chosen tree algorithm/grid is not mandated by the source paper.",
+      "requirements": "Separate accepted fixed architecture/configuration, whole240-case/five-window/five-arm support, training-only access, numerical controls and aggregate budget; no arbitrary Cartesian search added to canonical runtime."
+    },
+    {
+      "id": "TUNING",
+      "selected": false,
+      "reason": "Tests sensitivity to regularization/model selection, distinct from evaluating one reproducible fixed comparator.",
+      "requirements": "Prospectively choose and justify a finite selection policy, using only outer-training inner groups. Original eight-configuration\u00d727-fold draft is historical and not selected."
+    }
+  ],
+  "stronger_visual_extension": {
+    "status": "LIMITATION_RETAINED_FUTURE_STUDY_NOT_CORE_SUBSTITUTION",
+    "source_motivation": "PaperAppendix1 uses CORnet V1/IT activations for representative image selection; that does not qualify an encoder for this task.",
+    "needed": "Exact official source/weights/layer/rendering/exposure/rights and equal-information comparison contract; full biological scope if selected.",
+    "interpretation": "Core103-feature linear comparison cannot eliminate nonlinear or all visual explanations."
+  },
+  "future_workload": {
+    "mandatory_tuning_fits": 0,
+    "logical_recipe_views_per_fit_family": 6000,
+    "unique_fit_views_per_family": 5040,
+    "R0_binary_logistic_optimizations": 136080,
+    "R1_R2_shared_factorizations_lower": 5280,
+    "R1_R2_shared_factorizations_upper": 10080,
+    "R1_R2_label_RHS_and_rank_one_corrections": 272160,
+    "PCA_decompositions_lower": 5040,
+    "PCA_decompositions_upper": 7680,
+    "retired_nominal_tuned_binary_fit_count": 34992000,
+    "bounds_meaning": "Algebraic operation counts for the full required reference bank, conditional sharing explicitly stated; not runtime, exact physical IO, measured memory, proven feasibility or permission.",
+    "direct_label_LDA_fallback_factorizations_upper": 272160
+  },
+  "lifecycle": "REFERENCE_LIFECYCLE.json",
+  "required_outputs": {
+    "mandatory_for": [
+      "P/NUM",
+      "P/NUM_REF",
+      "I/NUM",
+      "I/NUM_REF"
+    ],
+    "families": [
+      "R0",
+      "R1",
+      "R2",
+      "R4",
+      "R5"
+    ],
+    "outer_cases": 240,
+    "windows": 5,
+    "arms": 5,
+    "logical_case_artifacts_per_family": 6000,
+    "logical_case_artifacts_total": 30000,
+    "query_rows_per_family": 2224800,
+    "probability_values_per_family": 60069600,
+    "query_rows_all_families": 11124000,
+    "probability_values_all_families": 300348000,
+    "candidate_call_independent": true,
+    "candidate_abstention_independent": true,
+    "D_scope": "D remains a distinct information profile with S18's complete exact-summary-only references; its scores cannot substitute for this full-core bank.",
+    "campaign_reuse": "A single sealed full reference bank may serve multiple selected NUM/NUM_REF/P/I/replicate conditions only when exact source, split, feature/query information policy, fixed reference/config/environment, target-support commitment and output mappings are identical. Each condition binds the complete bank. Otherwise create a separate complete bank. This never licenses candidate output reuse."
+  },
+  "output_production": "Actual independent R01\u2013R08 process before candidate decoder serving, not a fit seal or optional candidate tool invocation.",
+  "applicability": "Mandatory full-core bank when P or I is selected. D-only uses its own two same-summary controls under D_REFERENCE_LIFECYCLE.json; no R0/R1/R2/R4/R5 full-core outputs or fits are demanded by that condition."
+}

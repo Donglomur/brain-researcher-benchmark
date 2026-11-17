@@ -1,0 +1,9 @@
+# NEURAL-054 inactive frozen-capture source package
+
+The original scientific programme is retained. This successor adds one host-only namespace-capture module and repairs the original launcher. No scientific kernel or cohort was changed. Read CAPTURE_REPAIR_SCOPE.json before selecting this source.
+
+The original metadata-only plan operation and selected-campaign/modes routes remain in manifest.json, with the new exact source lock. The original registration/source bundle, full condition roster, opaque target release, original protected scorer and final custody gates remain required. Native execution is unqualified and requires an independently admitted immutable image, same-host Linux cgroup-v2 observer and actual permission to read the owned container through /proc/PID/root. A Docker Desktop or remote daemon does not satisfy this design merely because Docker commands work.
+
+Capture starts after the original supervisor completion signal and whole-container pause. Each copy separately checks original container ID/PID and running/paused state, original process starttime/root/unified cgroup, and cgroup.events frozen1. Only the kernel root magiclink is followed. Files and directories under /work and /observed use held directory descriptors and nofollow operations, single-link regular files, stable metadata/name joins and finite file/byte/depth/deadline limits. Trusted observations precede work output; partial copies stay in failed custody and their logical writes remain charged. Final removal does not substitute for an original participant wait.
+
+Generated tests and source manifests authenticate construction only. None of the original29 gates or scientific results is claimed closed. SOURCE_PROVENANCE.json and programme/REPAIR_RESPONSE.json retain historical evidence verbatim and do not qualify this successor.
