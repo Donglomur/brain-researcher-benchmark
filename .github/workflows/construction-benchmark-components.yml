@@ -20,6 +20,8 @@ env:
   OMP_NUM_THREADS: '1'
   MKL_NUM_THREADS: '1'
 
+# Source identity checks retain original PAPER task bytes as historical calibration evidence.
+# Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
   construction-source-identities:
     runs-on: ubuntu-24.04
@@ -255,7 +257,7 @@ jobs:
                   "sha256": "3d40ba1ff118059cf6df88e0a8bd29688486a1b6b57d3cfbcdf597cae04696b9"
               },
               {
-                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/task.json",
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/historical/task.pre-improvement.v1.json",
                   "bytes": 19324,
                   "sha256": "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"
               },
@@ -335,7 +337,7 @@ jobs:
                   "sha256": "fb74906c301ab11a36ab65688fd94eb75e6efcbfc1e2b9a4fd01177700c346bc"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-add-004/task.json",
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/historical/task.pre-improvement.v1.json",
                   "bytes": 30897,
                   "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
               },
@@ -373,7 +375,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 864989 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 866795 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -416,7 +418,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 864989,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 866795,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -509,7 +511,7 @@ jobs:
                   "sha256": "36eafec00f096a5ef22c4e271e61429901369989e72248543643f28913c9e0b6"
               },
               {
-                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/task.json",
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/historical/task.pre-improvement.v1.json",
                   "bytes": 111905,
                   "sha256": "8ab32cd773f3ac22132a9ffe33ad8325594af7af311a70b0040ab068d9f58bf9"
               },
@@ -569,7 +571,7 @@ jobs:
                   "sha256": "0acaa103779e64dde48260780f004fb7f10bdf13a337a29d3c7ad3cb5931d169"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-add-010/task.json",
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/historical/task.pre-improvement.v1.json",
                   "bytes": 76435,
                   "sha256": "4a30ed061c0a4dcafbf7a67f24c67df98cfffda9d55cd6a6dd3fb88819e77062"
               },
@@ -595,7 +597,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1"
           ]
           assert len(rows) == 31 > 0
-          assert sum(row['bytes'] for row in rows) == 668191 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 669999 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -638,7 +640,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 668191,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 669999,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
