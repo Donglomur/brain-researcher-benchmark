@@ -1,0 +1,34 @@
+{
+  "schema": "reve-primary-neutral-architecture-v1",
+  "kind": "nonexecutable_architecture_metadata",
+  "model": "REVE-Base",
+  "encoder": {
+    "layers": 22,
+    "embedding_width": 512,
+    "attention_heads": 8,
+    "head_width": 64,
+    "feedforward_width": 1361,
+    "feedforward_activation": "GEGLU",
+    "patch_size_samples": 200,
+    "patch_overlap_samples": 20,
+    "position_fourier_frequencies": 4,
+    "training_position_noise_standard_deviation": 0.0025
+  },
+  "pretrained_state": {
+    "tensor_count": 140,
+    "parameters": 69189632,
+    "dtype": "float32",
+    "classification_query_shape": [1, 1, 512],
+    "contains_trained_PhysioNet_classifier": false
+  },
+  "reference_four_class_head": {
+    "context": "classification query attends to encoder tokens; prepend resulting context to tokens",
+    "pooling": "flatten",
+    "input_width": 131584,
+    "normalization": "RMSNorm",
+    "dropout_probability": 0.0,
+    "output_classes": ["left_fist", "right_fist", "both_fists", "feet"]
+  },
+  "primary_access": "Identical architecture metadata and weights for both arms. No executable author encoder implementation is included. The paper/data arm must implement its method; only the code arm receives the official research repository.",
+  "qualification": "Architecture information does not identify a trained downstream checkpoint or establish historical Table12 reproduction."
+}

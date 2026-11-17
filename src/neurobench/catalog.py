@@ -213,8 +213,47 @@ def counts(tasks):
 
 
 def external_links(doc):
-    """Only public HTTP(S) source citations; omit signed/query/userinfo URLs."""
+    """Public citations, with finite reviewed schema/query exceptions only.
+
+    Link kinds describe source roles, never access, readiness or execution.
+    Unreviewed input routes remain generic; model weights are not neural data.
+    """
+    structured_papers = {
+        'PAPER-CANDIDATE-20261114-' + suffix
+        for suffix in ('DFINE', 'DPAD', 'DUNL', 'NPVC', 'PLEXUS', 'POYO', 'SBIND')
+    } | {
+        'PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113',
+        'PAPER-SCOPE-20261114-LATENTCIRCUIT',
+        'PAPER-SCOPE-20261114-REM-DYNAMICS',
+    }
+    # These exact public identifier queries were omitted by the old blanket
+    # query refusal. No other query, token or signed URL becomes publishable.
+    query_citations = {
+        ('PAPER-paper-method-012', 'paper'):
+            'https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934',
+        ('PAPER-paper-method-add-004', 'paper'):
+            'https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385',
+        ('PAPER-paper-method-replacement-006', 'paper'):
+            'https://openreview.net/forum?id=FVuqJt3c4L',
+        ('PAPER-paper-method-replacement-008', 'paper'):
+            'https://openreview.net/forum?id=LDjBDk3Czb',
+        ('PAPER-paper-method-replacement-012', 'paper'):
+            'https://openreview.net/forum?id=zt3RKc6VBp',
+        ('PAPER-CANDIDATE-20261114-NPVC', 'data'):
+            'https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/NL1CAQ',
+    }
+    empirical_route_zero = {
+        'PAPER-paper-method-012': 'https://doi.org/10.1371/journal.pcbi.1012934.s002',
+        'PAPER-paper-method-add-004':
+            'https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels',
+        'PAPER-paper-method-replacement-006': 'https://braintreebank.dev/',
+        'PAPER-paper-method-replacement-008': 'https://braintreebank.dev/',
+        'PAPER-paper-method-replacement-012': 'https://figshare.com/articles/dataset/19448531',
+    }
     found = set()
+    identifier = doc.get('id')
+    paper = doc.get('track') == 'paper'
+
     def collect(value, kind):
         if isinstance(value, str):
             if not value.startswith(('http://', 'https://')):
@@ -223,7 +262,10 @@ def external_links(doc):
                 parsed = urlsplit(value)
             except ValueError:
                 return
-            if (parsed.scheme in ('http', 'https') and parsed.hostname and not parsed.query
+            reviewed_query = (paper and isinstance(identifier, str)
+                              and query_citations.get((identifier, kind)) == value)
+            if (parsed.scheme in ('http', 'https') and parsed.hostname
+                    and (not parsed.query or reviewed_query)
                     and not parsed.fragment and not parsed.username and not parsed.password
                     and not any(c.isspace() for c in value)):
                 found.add((kind, value))
@@ -233,15 +275,47 @@ def external_links(doc):
         elif isinstance(value, list):
             for child in value:
                 collect(child, kind)
+
     for key, kind in [('paper_identity', 'paper'), ('paper', 'paper'),
                       ('official_code', 'code'), ('code', 'code'), ('data', 'data')]:
         collect(doc.get(key), kind)
+    if paper and isinstance(identifier, str) and identifier in structured_papers:
+        # Select declared primary fields. Do not recursively relabel historical
+        # provenance, dependencies, licenses or source code as empirical data.
+        provenance = doc.get('provenance', {})
+        if isinstance(provenance, dict):
+            primary_paper = provenance.get('paper', {})
+            if isinstance(primary_paper, dict):
+                collect(primary_paper.get('url'), 'paper')
+            code = provenance.get('official_code', {})
+            if isinstance(code, dict):
+                for key in ('repo', 'repository'):
+                    collect(code.get(key), 'code')
+            data = provenance.get('data', [])
+            for item in data if isinstance(data, list) else [data]:
+                if isinstance(item, dict):
+                    for key in ('url', 'source_page', 'neural_url'):
+                        collect(item.get(key), 'data')
+                    collect(item.get('preprocessing_code_url'), 'code')
+        repository = doc.get('official_repository', {})
+        if isinstance(repository, dict):
+            collect(repository.get('url'), 'code')
+        data_source = doc.get('data_source', {})
+        if isinstance(data_source, dict):
+            collect(data_source.get('exact_metadata_url'), 'data')
     input_assets = doc.get('input_assets', {})
     need(isinstance(input_assets, dict), 'Task input_assets must be an object when declared')
-    collect(input_assets.get('routes', []), 'source')
+    routes = input_assets.get('routes', [])
+    if isinstance(routes, list):
+        for position, route in enumerate(routes):
+            reviewed_data = (paper and isinstance(identifier, str) and position == 0
+                             and isinstance(route, str)
+                             and empirical_route_zero.get(identifier) == route)
+            collect(route, 'data' if reviewed_data else 'source')
+    else:
+        collect(routes, 'source')
     collect(doc.get('sources'), 'source')
     return [{'kind': kind, 'url': url} for kind, url in sorted(found)]
-
 
 def task_directory(identifier, track):
     need(track in ('paper', 'neural'), 'Unknown task track')
@@ -1141,8 +1215,17 @@ def evidence_text(catalog, base=OUTPUT):
     if not counts['tasks_with_recorded_evidence']:
         return ''
     probes = counts.get('author_model_inference_probes', 0)
-    probe_text = (f"Separately, **{probes} author-model inference probes** record partial source-model execution; "
-                  'complete author calibration remains unqualified. ') if probes else ''
+    probe_text = (f"Separately, **{probes} author-model inference probes** record historical partial source-model execution; "
+                  'those probes did not produce complete predictions or scores. ') if probes else ''
+    calibration = counts.get('author_reference_calibration_arms', 0)
+    material = counts.get('participant_material_preparation_reports', 0)
+    later_text = ''
+    if calibration:
+        later_text += (f"The separate SMC report records **{calibration} complete author-reference calibration arms**; "
+                       'the accepted recovered noncausal aggregate retains its failed supervisor. ')
+    if material:
+        later_text += ('The separate SMC material report records a **71-file participant-material pair**, '
+                       'with no participant execution. ')
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
@@ -1150,7 +1233,7 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts.get('paper_source_preparation_reports', 0)} paper and "
             f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
-            + probe_text
+            + probe_text + later_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')

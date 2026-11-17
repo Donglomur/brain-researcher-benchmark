@@ -104,6 +104,8 @@ The separately admitted runtime needs an existing immutable generic image and
 the exact v1 Linux/image/profile qualification. This command does not install,
 pull, download or authorize a campaign.
 
+The [cached-image dependency inventory](../../docs/scientific-image-inventory-20261117.json) records six missing selected metadata entries and four version differences against the author-reference stack. Scientific-runtime qualification remains unresolved; candidate programs retain their own dependency choices.
+
 ```sh
 python3 -I -B runner.py execute \
   --protocol /operator/protocol/PROTOCOL.json \

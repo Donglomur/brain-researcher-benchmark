@@ -1,0 +1,153 @@
+{
+  "schema": "neural096-descriptive-scientific-contract/v1",
+  "task_id": "NEURAL-096",
+  "method": "neural096-split-stratified-quarter-rate-contrasts/v1",
+  "status": "source_construction_generated_controls_only",
+  "selection": {
+    "file": "ROOT_SELECTION.json",
+    "bytes": 3131,
+    "sha256": "82c7a0e5acace4537423ca4f2403320b64d1e2621f2aef7d2760af86a91e25c0"
+  },
+  "cohort": {
+    "trials": 204,
+    "original_train": 150,
+    "original_validation": 54,
+    "units": 54,
+    "phase_bins": 20,
+    "recording_segments": 6,
+    "animals": 1,
+    "sessions": 1,
+    "previously_exposed": true
+  },
+  "cells": {
+    "count": 48,
+    "axes": [
+      "source_split",
+      "observation_segment",
+      "is_eye",
+      "theta"
+    ],
+    "levels": [
+      [
+        "train",
+        "val"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      [
+        false,
+        true
+      ],
+      [
+        0,
+        180
+      ]
+    ],
+    "prior_mapping": {
+      "long": "is_short is False",
+      "short": "is_short is True"
+    },
+    "complete_roster": true,
+    "unsupported": "Absent prior group produces explicit null summaries with counts; no zero substitution. Compute split-specific support from all204trials, not from combined3emptycells."
+  },
+  "rates": {
+    "formula": "count[i,u,t] / exposure_seconds[i,t]",
+    "units": "spikes/s/source unit",
+    "prior_mean": "Equal-trial arithmetic mean of per-trial rates within each declared cell and prior. This is not pooled counts divided by pooled exposure.",
+    "basis": "Fixed original54-unit coordinate identity, all20phasebins; no fit, smoothing, PCA or selectedneuron subset.",
+    "alignment": "Original whole nativeSet-Go intervals, divided into20phasebins using original representededges; response conditioning and speed information limits remain."
+  },
+  "summary": {
+    "orientation": "long minus short",
+    "quarters": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      [
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    ],
+    "quarter_signed_mean_hz": "Mean over54units and5bins of long-prior mean rate minus short-prior mean rate.",
+    "quarter_rms_hz": "Square root of mean over54units and5bins of squared prior-mean difference. Not mean trialwise RMS, noise correction or significance.",
+    "outputs_per_supported_cell": 8,
+    "full_signed_vectors": "Evaluator-private retained54x20difference per supportedcell.",
+    "complete_support_aggregate": null,
+    "scope": "Prospectively chosen benchmark summaries; neither original paper metric nor complete unit-level trajectory geometry."
+  },
+  "observations": {
+    "matched_conditions": [
+      "typed_viewer_aggregate",
+      "frozen_programme_aggregate"
+    ],
+    "shared_values": "The exact same complete48-cell prior-specific54x20mean rate arrays, sourceunitIDs andsupport counts. No private differences or expectedanswer.",
+    "viewer": "Typed exactcell selection; pairedSVGheatmaps with one commonscale forbothpriors/allcells, allunit/bin axes andmissinggroups. Eight-bitcolorandvisualprecisionarelimitations; no model/provider/raster qualification.",
+    "numerical_programme": "Same underlying aggregate values atnumericprecision; no triallevel responses in thiscondition.",
+    "richer_raw_trial_condition": "Not implemented; would need a separately labelled information condition."
+  },
+  "grading": {
+    "numeric": "Continuous mean/max absolute error forfour signedquartermeans andfourRMS values, withpercell details. Missing any supported estimate blocks numerical aggregate.",
+    "support": "Separate cell status/count correctness andcomplete/partial/no-supported conclusion.",
+    "interpretation_scope": "descriptive_phase_summary",
+    "uncertainty": {
+      "status": "not_qualified",
+      "reason_codes": [
+        "single_exposed_animal_session",
+        "assignment_and_dependence_unverified",
+        "recording_segments_not_randomized_blocks"
+      ]
+    },
+    "forbidden_inference": [
+      "No required positive effect/sign reward.",
+      "No arbitrary binarywin or viewer-specific widenedtolerance.",
+      "No inference from sixsegments as independent/randomizedblocks.",
+      "No prospectiveintervalprediction, historicalGPFA reproduction, causal orpopulation claim."
+    ]
+  },
+  "source_boundary": {
+    "original_preparation_receipt_bytes": 3688,
+    "original_preparation_receipt_sha256": "3011373f5286ee20e3b308644f22c27203cfcd69b971d2f1ff039584734982ac",
+    "input_source_sha256": "6212aaee2c978d1cd53fbfb433d11f418ed27cd83017b8b2befa4a1d7add5198",
+    "limits": "Saved preparation authentication is not an independent original-NWBspike reread or independent recoveryof14additionalunitIDs."
+  },
+  "runtime": {
+    "operator_preparation": "Available source; exactsource files andoutputcompletion bound.",
+    "grading": "Operator suppliescompletionSHA frozenbeforeparticipant exposure.",
+    "participant_executor": null,
+    "remote_model_provider": null,
+    "hostile_participant_isolation_qualified": false
+  },
+  "scientific_completion": {
+    "authentic_reference_run_this_revision": false,
+    "new_model_trials": 0,
+    "full_original_uncertainty_task_completed": false,
+    "registry_or_readiness_promotion": false
+  }
+}

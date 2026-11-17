@@ -53,6 +53,8 @@ evidence.
 | [DeepCaImX source preparation](deepcaimx-source-preparation-20261116.json) | All ten original manual ROI files, 1,563 ROIs and eight donors; target-backed arithmetic controls | Reference conversion and segmentation scorer behavior; no movie-to-mask model, with crop/frame mapping, checkpoint equivalence and native assembly unresolved |
 | [SMC-RNN source preparation](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json) | Complete original MC_Maze 20-ms inputs and paired participant materials; 2,869 trials and 182 neurons | Authentic source preparation and matched material export; no participant episode or author-baseline qualification |
 | [SMC-RNN native inference probes](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/native-cost-characterization.json) | Two selected author models exercised on first train/evaluation chunks with the original 192 particles | Native inference cost characterization, separately from generated memory controls; no complete predictions, score, full 32-repeat calibration or candidate attempt |
+| [SMC-RNN author calibration](../science/smc-author-calibration-20261117.md) | Both complete selected author predictions at 192 particles × 32 repeats and four original metrics per arm | Accepted reference outputs; noncausal supervisor remains failed. No candidate/AI study, paper-reproduction threshold, uncertainty estimate or SOTA claim |
+| [SMC-RNN version2 materials](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json) | Independently verified external 71-file pair, 31,393,479 bytes, with ten released assets only in the assisted condition | Material preparation and access separation; no participant episode, model/scoring run or scientific outcome |
 | [NEURAL-096 Set–Go preparation](../../benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/AUTHENTIC_PREPARATION.json) | All 204 declared nominal-800-ms training/validation trials, 54 released units and 81,311 spikes; saved-packet consistency audit | Complete declared observation preparation, with no fitted trajectory, prior contrast, uncertainty estimate, participant episode or model trial |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
@@ -63,11 +65,16 @@ additional benchmarks or agent attempts. Within the selected reports, there are
 pilot evaluated programmes on exposed development people, so its results do not
 measure unseen-population generalization or direct reading of neural signals.
 
-The two SMC-RNN author-model probes are actual bounded inference operations,
+The two historical SMC-RNN author-model probes are actual bounded inference operations,
 reported separately from the eight historical solver attempts and 16 native
 operator controls. They produced no complete prediction set or score and added
 no new candidate or solver episode. Generated repeat-allocation controls did not
-execute a model and are separate from those probes.
+execute a model and are separate from those probes. Later, both complete author
+predictions and all eight original metric aggregates were authenticated; the
+noncausal aggregate was accepted as recovered reference output with its failed
+supervisor preserved. The calibration report retains its original draft and
+publication-pending assembly flags; neither these flags nor the accepted scalar
+outputs establish an AI reproduction or improvement result.
 
 The native controls retained failures as well as accepted fixed-output scores.
 Incomplete submissions were refused before private-stage dispatch, with zero
@@ -149,11 +156,17 @@ contrast estimate or scientific qualification follows from this preparation.
 The [SMC-RNN original MC_Maze route](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
 prepares all 2,869 original trials and 182 neurons at 20 ms. Validation has 1,721
 training and 574 evaluation trials; test has 2,295 training and 574 evaluation trials.
-The actual paired-materials export contains 56 files totaling 27,828,070 bytes,
-with 12 shared-file identities and 29 code-condition additions. It executes no
-participant episode. Full author calibration for both original arms, enforceable
-temporal information access, equal participant budgets and the final uncertainty
-rule remain unresolved. The original test targets are publicly exposed; local
+The historical source-only export contains 56 files totaling 27,828,070 bytes.
+The separately [verified version2 material pair](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json)
+contains 71 files totaling 31,393,479 bytes; only the assisted condition includes
+the ten released model/configuration/history assets. These are external prepared
+payloads, not files published in the receipt, and no participant episode ran.
+Both complete author predictions and four-metric aggregates are now recorded in
+the [author calibration report](../science/smc-author-calibration-20261117.md).
+The noncausal aggregate was accepted as recovered reference output while its
+supervisor remains failed. Exact paper linkage, participant runtime enforcement,
+matched budgets and scientific reproduction/improvement qualification remain
+separate requirements. The original test targets are publicly exposed; local
 separation does not create an untouched holdout.
 
 The [REVE PhysioNet route](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md)
