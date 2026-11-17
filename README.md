@@ -9,6 +9,11 @@ submission qualification remain unestablished.
 
 **[Paper research](benchmarks/paper/README.md) · [Neural-data understanding](benchmarks/neural/README.md) · [Implementations](docs/usage/implementations.md) · [Current status](docs/status/README.md)**
 
+The [first difficulty pilot](docs/science/difficulty-pilot-20261117.md) reports
+eight scored agent attempts on four authentic-data endpoints, including baseline
+comparisons and limitations. These scoped development results do not establish
+whole-task scientific qualification.
+
 ## Two research tracks
 
 | Track | Scientific question | Controlled comparison |
