@@ -1,0 +1,1220 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-ADD-009",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original primary acoustic and companion findings are identifiable, but authentic full-cohort/split/control identities, complete numerical companion trajectories, source-matched analysis and independent granular verification, and justified reproduction criteria remain unresolved. Those genuine source/evaluation gaps justify source_unresolved independently of scalar/categorical v1 lacking the native fixed-decoder trajectory representation. The retained findings do not claim complete native-panel coverage. Existing acoustic/listener arithmetic and public-table extraction are useful components, not computational reproduction. Reproduction remains separate from improvement.",
+  "source_paper": {
+    "title": "An instantaneous voice-synthesis neuroprosthesis",
+    "url": "https://www.nature.com/articles/s41586-025-09127-3"
+  },
+  "evidence": [
+    {
+      "id": "voice-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Results: Flexible and accurate brain-to-voice; Fig. 2b; Extended Data Figs. 2b, 4 and 5; Methods: Decoder training and Automated evaluation metrics of synthesized speech",
+      "supports": "Final-paper causal synthesis task, original aggregate acoustic result, causal training chronology, and metric definition. Original nonspeech/acoustic-contamination controls and fixed-decoder performance across later sessions are distinct source requirements."
+    },
+    {
+      "id": "voice-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.2280gb64f",
+      "locator": "May 08, 2026 version; README Overview, Files and Change log",
+      "supports": "All-session neural archive, processed feature types, per-session target features, trial metadata and original decoder availability; 2025 release was control-only."
+    },
+    {
+      "id": "voice-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Neuroprosthetics-Lab/brain-to-voice-2025/cff4875decd35ff0f98a944035377a25b43ba79c/README.md",
+      "locator": "Overview; Data setup; Training; Inference",
+      "supports": "Author training/inference route and LPCNet dependency; offline demo scope."
+    },
+    {
+      "id": "voice-demo-split",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Neuroprosthetics-Lab/brain-to-voice-2025/cff4875decd35ff0f98a944035377a25b43ba79c/configs/training_data_args.yaml",
+      "locator": "Comment at line 5 and sessions list",
+      "supports": "Released example holds out t15_day195 and trains through t15_day193; this is not evidence that it reproduces the complete paper evaluation."
+    },
+    {
+      "id": "voice-supplement",
+      "kind": "paper",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-025-09127-3/MediaObjects/41586_2025_9127_MOESM1_ESM.pdf",
+      "locator": "Supplementary Table 1, page 2; PDF SHA-256 004d08f6c8a929a15dbcd61af114dcb5a1102652d78d1c8c32415870d510c514",
+      "supports": "Fourteen evaluation/training-date rows with cumulative training sentences/hours. Training dates are not exact last acquisition dates. Day139/training132/reported5 is an unresolved source discrepancy; all table rows do not establish the primary 956-trial cohort."
+    },
+    {
+      "id": "voice-primary-listening",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Results Flexible and accurate brain-to-voice; Fig. 2l; Methods Human evaluation of synthesized speech assessments 1 and 2",
+      "supports": "Primary vocalized transcript matching uses 956 trials; 58 mimed trials are distinct. Each matching trial has 15 accepted human answers to six same-length alternatives with intelligible-control quality filtering. Main open transcription uses 90 evaluation trials and seven listeners per trial drawn from 28 people, pairs of sentences, and median WER/PER across seven listeners. Residual microphone speech uses 20 separate trials; 38 video examples are a separate cohort."
+    },
+    {
+      "id": "voice-mcd-transfer",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Extended Data Fig. 2a,b; Methods Automated evaluation metrics of synthesized speech",
+      "supports": "Original MCD companion uses 25 Mel-frequency bands after inter-word silence removal. Fixed decoder trained on day165 is applied to later-session neural trials (caption n=956), with session-specific correlation means and SD and reported decline after approximately 15 days. Exact source numeric series and trial IDs remain unbound."
+    },
+    {
+      "id": "voice-nonspeech",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Results Flexible and accurate brain-to-voice; Extended Data Fig. 4a-c",
+      "supports": "No audible speech was synthesized during shown nonspeech vocalizations/orofacial movements, coughing, throat clearing, yawning and background talking; attempted speech is the positive control. Full event identity, timing and a source-grounded audibility decision remain unresolved."
+    },
+    {
+      "id": "voice-contamination",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Methods Acoustic contamination analysis; Extended Data Fig. 5a",
+      "supports": "627 representative trials across evaluation weeks and regular speech, word emphasis and question modulation; microphone/electrode spectral correlations under the cited original analysis. Static-only nonspeech microphone sections were replaced by zero. Published acoustically correlated fraction is 3.03%; trial-specific masks, frequency matrices, statistical criteria and identities require recovery."
+    },
+    {
+      "id": "voice-biosignals",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Methods Decoding non-invasive biosignals; Extended Data Fig. 5b-d",
+      "supports": "240 simultaneous-recording sentences from a 50-word vocabulary; ten-fold cross-validation with separate neural, microphone, stethoscope, IMU and combined-biosignal decoders. Input feature counts are 512,40,40,240,320 respectively; 10 ms bins and 600 ms context are source constraints. Retain all five correlation distributions/means/SD and original rank-sum comparison. Matched 30-trial neural/stethoscope listening comparison uses seven listeners and paired-sentence WER/PER."
+    },
+    {
+      "id": "voice-local-interfaces",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark",
+      "locator": "benchmarks/paper/PAPER-FIND-ADD-009/implementations/initial-evaluator-v1/evaluator.py; source-chronology-v1/recover_chronology.py; integrated SOURCE d3a4d4ed420bbab19d253da5b44eefca1d73eb00; existing source bytes independently compared with this commit",
+      "supports": [
+        "Existing evaluator.py SHA-256 0d4bcca3d6608693f3676c0e9958b3646b6723581e2fa585810bdf183b782047 exposes acoustic --plan/--reference/--prediction/--output, score_trial(reference_row,prediction_row), evaluate_acoustic(manifest,references,predictions), and transcriptions mode/evaluate_transcriptions(plan,references,predictions). This is a prospective feature/token scorer, not a source-matched end-to-end submitted-analysis or independent verification program.",
+        "Acoustic rows use trial_id, mel_db time-by-40 matrices and separate speech_mask; predictions add condition_id. score_trial emits all 40 band correlations, trial mean, retained-frame counts, DTW path length and cost. evaluate_acoustic emits per-trial/session results but accepts only declared day195 or prospective holdouts with one decoder per condition; it cannot authenticate original rolling histories or the 240-trial ten-fold controls. Waveform-to-feature extraction, source silence detection, DTW parity, original identities and replay are not supplied.",
+        "Transcription inputs retain ordered two-trial pair IDs, seven listener IDs, and exact word/phoneme tokens. Outputs include listener edit counts and reference-token denominators, each pair median WER/PER and aggregate summaries. Source pairs/listener recruitment, raw responses, tokenization and phonemization provenance remain absent; ASR-generated transcripts cannot substitute for original listeners.",
+        "Required submitted analysis must emit causally produced waveform samples with source time coordinates, trial/session/model identities and training membership; independent operator must regenerate 40-band spectra, independent masks, alignment and per-band/per-trial scores from the actual waveforms. For an implementation using the author LPCNet route, retain its 20-dimensional features at 10 ms frames (18 Bark cepstra, pitch period and pitch strength), distinct from the 40-Mel-band evaluation representation. Different internal methods remain permissible under the same original observations, chronology and comparison conditions.",
+        "Required companion outputs are event-indexed nonspeech and attempted-speech waveforms with audible-synthesis decisions; all 627 microphone-static masks, electrode spectral-correlation matrices and original contamination decisions; all 240 trial-by-fold-by-modality waveforms/features/40-band scores and fold memberships; original listener responses, pair identities and edit denominators; and every original later-session trial prediction under the fixed day165 decoder with per-session means/SD. Source-native identities and independent verifier coverage for these outputs are unresolved, so no required-output identity hash is invented.",
+        "source-chronology-v1/recover_chronology.py SHA-256 354258b619c65456d666aaef4d59763a35654e3a2f1ffeb4c94a034f07dbed6d exposes recover(sources) and the authenticated --supplement-pdf/--training-config/--session-config/--output CLI. It recovers published table metadata only. Its independently reviewed table extraction cannot establish computational reproduction, authentic neural preparation, or any AI outcome."
+      ]
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Causal synthesis of attempted cued speech from T15 neural activity, together with the source nonspeech/acoustic-contamination controls and cross-session generalization checks. Fig. 2b acoustic accuracy is the proposed primary prediction endpoint, not a complete replacement of the canonical task.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad DOI 10.5061/dryad.2280gb64f, May 08, 2026 release including t15_neural_data.zip; retain its distinct t15_control_experiment.zip control cohort. Payload hashes and exact evaluation manifest remain admission work.",
+      "evidence_ids": [
+        "voice-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The Fig. 2b primary vocalized cohort is T15 with 956 predetermined sentence trials. Bind the separate nonspeech/biosignal control cohorts and original later-session fixed-decoder generalization cohort before full-scope admission; mimed, own-voice and free-response cohorts cannot be pooled into the primary score.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Recover the original predetermined sessions, trial IDs and per-session training cutoffs from Supplementary Table 1 and release metadata. The paper trains each evaluation decoder on data available up to one week earlier. Do not replace this with the code example day195 holdout or random frame splits.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-demo-split",
+        "voice-supplement"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Released trial-level spike-band-power and threshold-crossing features with historical session identity; training target acoustic features are available. Test cue text, target speech features and speech timings belong to evaluation, never inference inputs.",
+      "evidence_ids": [
+        "voice-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The release supplies log-transformed, normalized and smoothed neural features and aligned LPCNet targets. The author implementation supplies the decoder/vocoder route; preprocessing and vocalization/silence decisions must be pinned before evaluation.",
+      "evidence_ids": [
+        "voice-data",
+        "voice-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per trial, compute Pearson correlation in each of 40 Mel bands after the paper-specified silence removal and dynamic-time-warp alignment; average across bands. Keep waveform sampling, spectrogram settings and alignment frozen.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Report the mean of trial correlations over the full original 956-trial vocalized evaluation cohort, with the paper standard deviation as descriptive spread. Preserve session-level results; neither Mel bins nor sliding windows are independent replications.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Required panel is the original T15 956-trial predetermined vocalized acoustic mean and descriptive SD, original vocalized MCD companion and intelligibility assessments, nonspeech/attempted-speech controls, original 627-trial acoustic-contamination analysis, all five 240-trial ten-fold neural/biosignal synthesis conditions and their matched 30-trial listening comparison, and the complete later-session fixed-day165 correlation trajectory with means and SD. Primary listening retains the 956-trial transcript-matching assessment, 90-trial open transcription and separate 20-trial residual-speech comparator; 58 mimed matching trials and 38 video examples remain separately labelled and cannot be pooled into the primary result. Exact predetermined sessions/trial identities, MCD values, biosignal correlation magnitudes and original later-session trajectory values/roster are unresolved. The complete identity-indexed fixed-day165 session trajectory is a required native structured output that scalar/categorical v1 cannot represent. No unresolved session-family placeholder or invented scalar reduction is admitted below; the retained source-supported temporal-decline category is incomplete without that numerical trajectory. Source session identities and numerical series are also genuinely unresolved, independently of the schema limitation. Public training-table rows do not identify this panel.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening",
+        "voice-mcd-transfer",
+        "voice-nonspeech",
+        "voice-contamination",
+        "voice-biosignals",
+        "voice-data",
+        "voice-supplement"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same source paper, authentic authorized original data, original split/chronology and task instructions; only paper_data_author_code additionally receives the frozen original author-code package. Causal neural synthesis may use original eligible past-session training data and matched vocoder/external-speech resources, with only causal spike-band-power/threshold-crossing observations at inference. Test cue text, target audio/acoustic features, reference synthesis and target-derived timing/masks are operator evaluation material and may not synthesize predictions. Contamination/biosignal control analyses may use their original co-recorded microphone, stethoscope and IMU observations for their own conditions only, without leaking them into neural predictions. Original human response records support listening analyses; invented listeners or automated transcripts do not. The paper and its printed claims/table are exposed inputs: reproducing their text/numbers without independently executed granular data analysis is insufficient. No current protected delivery, code-exposure or cumulative-budget protocol is bound.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-data",
+        "voice-code",
+        "voice-biosignals",
+        "voice-primary-listening"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "primary_mean_mel_correlation",
+      "kind": "scalar",
+      "description": "Final-paper Fig. 2b mean acoustic correlation for all 956 predetermined vocalized sentence trials; not the demo score or preprint value.",
+      "status": "verified",
+      "expected": 0.83,
+      "units": "dimensionless Pearson r",
+      "aggregation": "For each trial independently remove inter-word silence, align target and predicted 40-Mel-band spectra, calculate Pearson r in each band and average across 40 bands; arithmetic mean over all 956 trial scores.",
+      "evidence_ids": [
+        "voice-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Recording session with nested sentence trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper"
+        ]
+      }
+    },
+    {
+      "id": "primary_sd_mel_correlation",
+      "kind": "scalar",
+      "description": "Descriptive SD accompanying the original 956-trial mean, not an error bar on a reproduced population mean or an allowed tolerance.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Descriptive spread of the complete original trial-level correlations; source SD convention must be matched, with session-level values retained.",
+      "evidence_ids": [
+        "voice-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Recording session with nested sentence trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper"
+        ]
+      }
+    },
+    {
+      "id": "primary_mcd_mean",
+      "kind": "scalar",
+      "description": "Original vocalized MCD mean in Extended Data Fig. 2a; source value and metric conventions have not been recovered. Do not substitute the acausal-versus-causal example comparison.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source MCD units; scale/convention unresolved",
+      "aggregation": "Original vocalized-trial MCD after inter-word silence removal using source 25-band procedure, aggregated as source mean; original values and exact cohort binding unresolved.",
+      "evidence_ids": [
+        "voice-mcd-transfer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Recording session with nested sentence trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      }
+    },
+    {
+      "id": "primary_mcd_sd",
+      "kind": "scalar",
+      "description": "Original vocalized MCD sd in Extended Data Fig. 2a; source value and metric conventions have not been recovered. Do not substitute the acausal-versus-causal example comparison.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source MCD units; scale/convention unresolved",
+      "aggregation": "Original vocalized-trial MCD after inter-word silence removal using source 25-band procedure, aggregated as source sd; original values and exact cohort binding unresolved.",
+      "evidence_ids": [
+        "voice-mcd-transfer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Recording session with nested sentence trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      }
+    },
+    {
+      "id": "primary_open_per",
+      "kind": "scalar",
+      "description": "Fig. 2l PER for 90 primary synthesized evaluation trials; residual and synthesized populations remain separate.",
+      "status": "verified",
+      "expected": 0.34,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Concatenate each original ordered sentence pair, compute PER from original tokens for each of seven listeners, then the pair median; retain complete pair distribution and its source-reported median.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair and listener panel, nested in one participant; dependence and pairing remain unbound",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "primary_open_wer",
+      "kind": "scalar",
+      "description": "Fig. 2l WER for 90 primary synthesized evaluation trials; residual and synthesized populations remain separate.",
+      "status": "verified",
+      "expected": 0.4375,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Concatenate each original ordered sentence pair, compute WER from original tokens for each of seven listeners, then the pair median; retain complete pair distribution and its source-reported median.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair and listener panel, nested in one participant; dependence and pairing remain unbound",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "residual_open_per",
+      "kind": "scalar",
+      "description": "Fig. 2l PER for 20 residual dysarthric microphone trials; residual and synthesized populations remain separate.",
+      "status": "verified",
+      "expected": 0.8387,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Concatenate each original ordered sentence pair, compute PER from original tokens for each of seven listeners, then the pair median; retain complete pair distribution and its source-reported median.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair and listener panel, nested in one participant; dependence and pairing remain unbound",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "residual_open_wer",
+      "kind": "scalar",
+      "description": "Fig. 2l WER for 20 residual dysarthric microphone trials; residual and synthesized populations remain separate.",
+      "status": "verified",
+      "expected": 0.9643,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Concatenate each original ordered sentence pair, compute WER from original tokens for each of seven listeners, then the pair median; retain complete pair distribution and its source-reported median.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair and listener panel, nested in one participant; dependence and pairing remain unbound",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "primary_matching_mean",
+      "kind": "scalar",
+      "description": "Source-reported mean transcript-matching accuracy for the 956 vocalized evaluation sentences; do not pool the separately assessed 58 mimed trials.",
+      "status": "verified",
+      "expected": 0.9434,
+      "units": "correct-response fraction",
+      "aggregation": "Per sentence, accuracy across 15 accepted human choices among six equal-length alternatives after the original intelligible-control exclusion/replacement; mean across all original 956 vocalized sentences.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Sentence trial with nested accepted listeners and recording session in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "primary_matching_median",
+      "kind": "scalar",
+      "description": "Source-reported median transcript-matching accuracy for the 956 vocalized evaluation sentences; do not pool the separately assessed 58 mimed trials.",
+      "status": "verified",
+      "expected": 1.0,
+      "units": "correct-response fraction",
+      "aggregation": "Per sentence, accuracy across 15 accepted human choices among six equal-length alternatives after the original intelligible-control exclusion/replacement; median across all original 956 vocalized sentences.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Sentence trial with nested accepted listeners and recording session in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-paper",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "nonspeech_no_spurious_voice",
+      "kind": "categorical",
+      "description": "Original nonspeech/orofacial/background-speech examples show no synthesized audible speech while voluntary attempted speech produces voice.",
+      "status": "verified",
+      "expected": "no_audible_voice_during_source_nonspeech_events",
+      "units": "source finding category",
+      "aggregation": "Recreate every original nonspeech event and matched attempted-speech positive control; do not score silence by selectively dropping events or inventing an audibility threshold.",
+      "evidence_ids": [
+        "voice-nonspeech"
+      ],
+      "categories": [
+        "no_audible_voice_during_source_nonspeech_events",
+        "audible_voice_during_source_nonspeech_events"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categories identify a source finding; they do not replace required numerical magnitudes, trajectories or an independently justified inferential rule.",
+        "evidence_ids": [
+          "voice-nonspeech"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original event within trial/session in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-nonspeech"
+        ]
+      }
+    },
+    {
+      "id": "acoustically_correlated_trial_fraction",
+      "kind": "scalar",
+      "description": "Reported fraction of acoustically correlated trials among 627 representative original trials spanning regular speech, word emphasis and question modulation.",
+      "status": "verified",
+      "expected": 0.0303,
+      "units": "fraction of original trials",
+      "aggregation": "Recreate source per-trial contamination decisions after the documented microphone-static removal and electrode spectral-correlation analysis; divide count by all 627 source trials. No exact positive count is inferred from the rounded percentage.",
+      "evidence_ids": [
+        "voice-contamination"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-contamination"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original recording session/task with nested representative trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-contamination"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_neural_mean_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c neural mean correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated neural synthesized speech: retain all fold memberships and trial-level 40-band correlations; source mean over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_neural_sd_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c neural sd correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated neural synthesized speech: retain all fold memberships and trial-level 40-band correlations; source sd over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_microphone_mean_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c microphone mean correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated microphone synthesized speech: retain all fold memberships and trial-level 40-band correlations; source mean over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_microphone_sd_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c microphone sd correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated microphone synthesized speech: retain all fold memberships and trial-level 40-band correlations; source sd over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_stethoscope_mean_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c stethoscope mean correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated stethoscope synthesized speech: retain all fold memberships and trial-level 40-band correlations; source mean over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_stethoscope_sd_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c stethoscope sd correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated stethoscope synthesized speech: retain all fold memberships and trial-level 40-band correlations; source sd over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_imu_mean_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c imu mean correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated imu synthesized speech: retain all fold memberships and trial-level 40-band correlations; source mean over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_imu_sd_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c imu sd correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated imu synthesized speech: retain all fold memberships and trial-level 40-band correlations; source sd over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_combined_biosignals_mean_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c combined_biosignals mean correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated combined_biosignals synthesized speech: retain all fold memberships and trial-level 40-band correlations; source mean over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_combined_biosignals_sd_r",
+      "kind": "scalar",
+      "description": "Extended Data Fig. 5c combined_biosignals sd correlation; numeric source magnitude has not been recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson r",
+      "aggregation": "Complete matched 240-trial original ten-fold cross-validated combined_biosignals synthesized speech: retain all fold memberships and trial-level 40-band correlations; source sd over the full cohort. No session-holdout or reduced-vocabulary replacement of this original 50-word control task.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with repeated ten-fold model dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_neural_quality_contrast",
+      "kind": "categorical",
+      "description": "Original neural decoding quality exceeds each residual acoustic/vibration control; preserve all numerical condition distributions and source comparison procedures.",
+      "status": "verified",
+      "expected": "neural_correlation_exceeds_non_neural_controls",
+      "units": "source finding category",
+      "aggregation": "All 240 matched trials and all five source modalities, source Wilcoxon rank-sum procedure and original comparisons; aggregate significance alone cannot replace the five means/SD or listening controls.",
+      "evidence_ids": [
+        "voice-biosignals"
+      ],
+      "categories": [
+        "neural_correlation_exceeds_non_neural_controls",
+        "original_quality_contrast_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categories identify a source finding; they do not replace required numerical magnitudes, trajectories or an independently justified inferential rule.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original trial with ten-fold fitting dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_listening_neural_per",
+      "kind": "scalar",
+      "description": "Source median PER for neural synthesis in the matched 30-trial neural/stethoscope listening comparison.",
+      "status": "verified",
+      "expected": 0.371,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Original ordered sentence pairs from the same 30 trials, seven original listener responses per trial/condition, pair-level median PER and source median over pair results; no substitute ASR transcripts.",
+      "evidence_ids": [
+        "voice-biosignals",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair with nested listener and decoder-condition dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_listening_neural_wer",
+      "kind": "scalar",
+      "description": "Source median WER for neural synthesis in the matched 30-trial neural/stethoscope listening comparison.",
+      "status": "verified",
+      "expected": 0.436,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Original ordered sentence pairs from the same 30 trials, seven original listener responses per trial/condition, pair-level median WER and source median over pair results; no substitute ASR transcripts.",
+      "evidence_ids": [
+        "voice-biosignals",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair with nested listener and decoder-condition dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_listening_stethoscope_per",
+      "kind": "scalar",
+      "description": "Source median PER for stethoscope synthesis in the matched 30-trial neural/stethoscope listening comparison.",
+      "status": "verified",
+      "expected": 0.745,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Original ordered sentence pairs from the same 30 trials, seven original listener responses per trial/condition, pair-level median PER and source median over pair results; no substitute ASR transcripts.",
+      "evidence_ids": [
+        "voice-biosignals",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair with nested listener and decoder-condition dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "biosignal_listening_stethoscope_wer",
+      "kind": "scalar",
+      "description": "Source median WER for stethoscope synthesis in the matched 30-trial neural/stethoscope listening comparison.",
+      "status": "verified",
+      "expected": 1.0,
+      "units": "error fraction; insertions can exceed one",
+      "aggregation": "Original ordered sentence pairs from the same 30 trials, seven original listener responses per trial/condition, pair-level median WER and source median over pair results; no substitute ASR transcripts.",
+      "evidence_ids": [
+        "voice-biosignals",
+        "voice-primary-listening"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-faithful execution variability or justified equivalence criterion is bound. Do not use printed precision, descriptive SD, an old grader tolerance or an invented numerical margin as automatic success.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original sentence pair with nested listener and decoder-condition dependence in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-biosignals",
+          "voice-primary-listening"
+        ]
+      }
+    },
+    {
+      "id": "fixed_day165_temporal_decline",
+      "kind": "categorical",
+      "description": "Source reports noticeable decline in fixed-decoder quality after approximately 15 days; the complete numerical trajectory above remains mandatory.",
+      "status": "verified",
+      "expected": "decline_after_approximately_15_days",
+      "units": "source finding category",
+      "aggregation": "Use the original later-session fixed-day165 trajectory, not a re-trained decoder per session, a selected pair of dates or an invented exact breakpoint.",
+      "evidence_ids": [
+        "voice-mcd-transfer"
+      ],
+      "categories": [
+        "decline_after_approximately_15_days",
+        "source_temporal_decline_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categories identify a source finding; they do not replace required numerical magnitudes, trajectories or an independently justified inferential rule.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-matched reproduction decision and uncertainty procedure must be frozen after authentic identities and evaluator parity are recovered. No interval, significance threshold or deterministic equivalence rule is currently justified.",
+        "independent_unit": "Original recording session with nested trials in participant T15",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published descriptive spread and source rounding do not by themselves justify a numerical reproduction tolerance or independent replication. Preserve source grouping and dependence; a copied aggregate, weaker significance or nonrejection is insufficient.",
+        "evidence_ids": [
+          "voice-mcd-transfer"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The original 956-trial predetermined vocalized identity and per-session decoder/training memberships are not bound to authenticated release files. Fourteen public supplementary rows do not identify the Fig. 2b blue sessions.",
+    "The unchanged split anchor preserves the earlier contract wording about one week; recovered Supplementary Table 1 must control future source reconciliation, not a universal seven-day rule. It lists training dates rather than exact last acquisition dates, and day139/training132/reported5 is unresolved.",
+    "Published day195 training count 8315 and the pinned author demo total_trials 8184 differ by 131 with unknown cause; the day195 demo cannot be assumed to reproduce the original full panel.",
+    "The original waveform frontend, silence masks, Mel/dB conventions, DTW cost/ties, MCD conventions and source SD convention are not independently calibrated. Existing score_trial and acoustic CLI implement prospective feature arithmetic, not historical parity.",
+    "Full nonspeech event identities/timing/audibility rules and original 627-trial contamination memberships/masks/statistical procedure remain unbound. A source qualitative example is not a verified complete event rate.",
+    "Original 240-trial ten-fold fold memberships, modality-specific trained decoders, per-trial predictions, all source correlation magnitudes and matched 30-trial listening pair/response provenance remain unbound. The existing acoustic manifest supports no original ten-fold execution.",
+    "Original primary 90-trial listener pairs/word and phoneme tokenization/response identities, separate 20-trial residual comparator and 956-trial accepted matching responses remain unbound; 58 mimed and 38 video examples cannot be silently pooled.",
+    "Source gap: fixed-day165 later-session roster, trial identities, numerical mean/SD series and verified source-native execution remain unresolved. Separate engineering gap: scalar/categorical v1 has no native identity-indexed trajectory finding. Two unresolved scalar family placeholders were removed; no pooled scalar, invented reduction, or qualitative decline category can satisfy the complete original trajectory. Structured-output support and genuine source recovery are both needed.",
+    "No source-grounded reproduction tolerance, independent uncertainty criterion, full-panel evaluator, authentic data manifest, granular-output identity manifest or independent verification program is qualified. Printed precision and descriptive spread are not invented success margins.",
+    "The paper and table are permitted inputs. The chronology recovery program and a program that prints source means do not establish computational reproduction. Operator execution must recompute source-native outputs and verify their complete derivation from authentic data.",
+    "No immutable common input/exposure manifest, author-code manifest, cumulative access/resource budgets or paired run protocol is bound for either outcome. Paper+data and paper+data+author-code conditions remain unavailable for admitted results until those are complete.",
+    "No new AI reproduction or improvement run exists. Existing source extraction/software controls and author calibration cannot populate the four AI cells; offline replay cannot reproduce participant feedback under a changed closed-loop intervention."
+  ]
+}
