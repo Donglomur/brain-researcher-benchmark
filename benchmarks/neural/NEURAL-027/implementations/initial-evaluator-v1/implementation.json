@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "task_id": "NEURAL-027",
+  "implementation_id": "initial-evaluator-v1",
+  "scope": "Source-decoded frame to trial/position packets, prospective train-only decoding/control, and mouse-macro exposure-phase evaluator",
+  "status": "prospective_engineering_reference",
+  "scientific_qualification": "unknown",
+  "submission_ready": false,
+  "authentic_source_executed": false,
+  "canonical_contract": {
+    "path": "benchmarks/neural/NEURAL-027/task.json",
+    "bytes": 15976,
+    "sha256": "9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9"
+  },
+  "source_family": "zhong-pretraining-janelia-28811129",
+  "related_registration": "PAPER-FIND-REP-007",
+  "independent_cohort_claim": false,
+  "entrypoint": "evaluator.py",
+  "dependencies": {
+    "python": ">=3.11",
+    "numpy": "Existing runtime; no installation performed"
+  },
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+    "data_kind": "generated engineering controls only",
+    "independent_review_required": true
+  },
+  "primary_provenance": [
+    {
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/README.md",
+      "read_via": "https://api.github.com/repos/MouseLand/zhong-et-al-2025/contents/README.md?ref=ba64ac697f5d9914926baac79399e80707a5f3a6",
+      "bytes": 191,
+      "sha256": "4e2f874d26948fbd21017bef707ea73710ae71c09dcb2cdd26304e933e19d9df",
+      "git_blob": "4fa51313e2de2d98befa3549015e19de8e6826c5",
+      "finding": "Repository describes preprocessing intermediate results and figure plotting; not an executed benchmark baseline."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/data_process_script.ipynb",
+      "read_via": "https://api.github.com/repos/MouseLand/zhong-et-al-2025/contents/data_process_script.ipynb?ref=ba64ac697f5d9914926baac79399e80707a5f3a6",
+      "bytes": 23939,
+      "sha256": "e8ed05d5610ac84e250ea4c43c3c7321df2fbe609fd19af700c29993becc7ef0",
+      "git_blob": "721ac7b066a99b1da6153696c5228e637ad30a1d",
+      "findings": [
+        "Cell 4 documents ft_trInd, ft_Pos, ft_PosCum, ft_move, ft_WallID, frame timestamps, and stimulus identity map. It states 3.17Hz; timestamp/schema verification is still absent because payloads were not read.",
+        "Cell 9 loads spks, uses nfr to truncate behavior, keeps ft_move>0, and globally interpolates cumulative position into 60 bins per corridor.",
+        "Cell 6 loads Imaging_Exp_info.npy through a Windows path literal. Cell 9 supports behavior keys with optional stimtype suffix.",
+        "Stimulus map is 0 circle1;1 circle2;2 leaf1;3 leaf2;4 leaf3;5 leaf1_swap1;6 leaf1_swap2. These are stim_id values, not necessarily raw ft_WallID values."
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/utils.py",
+      "read_via": "https://api.github.com/repos/MouseLand/zhong-et-al-2025/contents/utils.py?ref=ba64ac697f5d9914926baac79399e80707a5f3a6",
+      "bytes": 46223,
+      "sha256": "3b28bcc4dc5d5ac93105317e7c65711d537796bcf14c0dcd4383fd35d1f79e33",
+      "git_blob": "823392bb0e6ddbd934dd066371e1f65ce05b298f",
+      "findings": [
+        "load_spk lines338-342 concatenates spks chunks along neurons; filename mname_datexp_blk_neural_data.npy.",
+        "spk_pos_interp lines105-118 divides cumulative position by Corridor_Length and interpolates across the flattened session.",
+        "neu_area_ID lines312-324 maps V1 8; mHV 0,1,2,9; lHV 5,6; aHV 3,4. load_retino lines330-336 reads mname_datexp_trans.npz and iarea.",
+        "Get_coding_direction lines530,549-550,556-557 maps canonical stim_id through UniqWalls before comparison against raw ft_WallID or WallName.",
+        "Get_coding_direction lines559-564 uses all trials for centering/scaling; lines548-551/579-580 use odd/even stimulus selection. It is not a leakage-qualified prelearning held-out-animal prediction reference.",
+        "Get_coding_direction lines514-517 suffixes repeated mname to distinguish sessions. The new scorer must retain original mname as the cluster."
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/LICENSE",
+      "read_via": "https://api.github.com/repos/MouseLand/zhong-et-al-2025/contents/LICENSE?ref=ba64ac697f5d9914926baac79399e80707a5f3a6",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "finding": "GNU GPL version 3 text is present. Do not silently relicense copied code; independent interface implementation does not establish broader redistribution clearance."
+    },
+    {
+      "url": "https://api.figshare.com/v2/articles/28811129/versions/2",
+      "bytes": 102957,
+      "sha256": "b877fa83f7570aff4be3c33450c19346705336ed496937d162e5f384e67fd6fb",
+      "findings": [
+        "Exact article version2 doi10.25378/janelia.28811129.v2; metadata license CC BY4.0.",
+        "297 top-level files total452233500962 bytes; file count is not animal/session count.",
+        "Metadata describes beh,spk,SVD_dec first400PCs,retinotopy. No payload file was fetched."
+      ]
+    },
+    {
+      "url": "https://www.nature.com/articles/s41586-025-09180-y",
+      "bytes": 541701,
+      "sha256": "1eaf2edb10721126f2f9c7d02a6d8bfc6c7a38b7583f37a8c235ea10df249d6d",
+      "findings": [
+        "Primary paper studies rewarded tasks versus unrewarded exposure using populations in V1 and higher visual areas; benchmark decoding is a prospective distinct endpoint.",
+        "Data availability points to Figshare v1; frozen task specifies v2. Preserve v2 loader/adaptation qualification."
+      ]
+    }
+  ],
+  "requirements_mapping": [
+    {
+      "contract": "input_assets.recording_contract; allowed_inputs.time_alignment",
+      "implementation_requirement": "Accept explicit neurons-by-frames spks chunks and per-frame vectors; validate numeric finite neural inputs, equal frame axes or explicitly accounted source truncation, raw-wall/canonical mapping, biological IDs, and per-trial constant labels. Never infer exact clock latencies."
+    },
+    {
+      "contract": "primary_outputs; controls equal stimulus availability",
+      "implementation_requirement": "Predeclare fixed position/trial packet selection, bins and class set; maintain equal available class set across requested animal/phase cells. Report selected/excluded/missing trial/bin/session counts. Never silently treat omitted predictions or unavailable classes as successful evaluation."
+    },
+    {
+      "contract": "split.policy; biological_unit",
+      "implementation_requirement": "Keep every date/block of an original mname in one outer split. Predeclare source/training and target/exposure phases and exact session set; reject incomplete or extra session inventory. Multiple dates are not independent mice."
+    },
+    {
+      "contract": "allowed_inputs.allowed_context_policy; controls no WallID in query",
+      "implementation_requirement": "Operator privately derives labels and opaque IDs. Public query allowlist excludes WallID,stim_id,WallName,UniqWalls,lick/reward/source answer proxies and future fields. Public descriptors must not encode stimulus values."
+    },
+    {
+      "contract": "task_specific alignment hold",
+      "implementation_requirement": "Explicit prospective feature alignment is required. Source regional anatomy pooling gives a defensible fixed-width feature space, but does not establish cross-day cell registration or author-equivalent representation."
+    },
+    {
+      "contract": "reference; controls movement/position-only",
+      "implementation_requirement": "Train normalization and decoder only on predeclared training animals/phases. Match baseline item IDs and source split. Movement and normalized position alone form the required behavior comparator. A diagonal Gaussian classifier is a prospective reference, not author decoder reproduction."
+    },
+    {
+      "contract": "evaluation.observable_endpoints",
+      "implementation_requirement": "For each phase compute each original mouse log loss and balanced accuracy, then average mice equally. Define within-mouse weighting, clipping, class order/ties and any bin aggregation prospectively. Do not pool sessions or rows across mice as independent observations."
+    },
+    {
+      "contract": "split.uncertainty",
+      "implementation_requirement": "Paired differences resample original mice, not packets/trials/dates. One mouse gives descriptive difference without population CI. Reject unpaired comparator/method IDs or mismatched phases."
+    }
+  ],
+  "prospective_choices": [
+    "Local mean binning with ft_Pos/Corridor_Length avoids author global interpolation across trial boundaries but is not source-equivalent. Notebook documents positions; source code directly verifies only cumulative-position/Corridor_Length scaling. Payload unit/range checks remain necessary.",
+    "Requiring all four regional groups is a prospective inclusion criterion; it may omit sessions. Retain exact exclusion ledger and complete planned cohort gate until real payload availability is checked.",
+    "Anatomical regional means are fixed semantics that avoid pretending neuron identities align across mice. They may discard stimulus information and cannot establish reference competence on generated controls.",
+    "Mouse/class-balanced Gaussian fitting, uniform prior, variance floor, clipping epsilon, bootstrap seed/count and aggregation weights are new protocol choices. Freeze them before outcomes and label rationale.",
+    "Strict class coverage should reject missing requested mouse-phase-class cells rather than silently change the estimand. Complete source population identity remains unverified."
+  ],
+  "preserved_gates": [
+    "No source NPY/NPZ payloads loaded or validated.",
+    "Exact animal/session population, full cohort availability and feature group completeness unknown.",
+    "Cross-session cells not registered; regional aggregation is prospective calibration only.",
+    "Time fields mentioned in notebook do not establish verified timing/schema.",
+    "Protocol/resource/access freeze and root scientific admission remain unresolved.",
+    "Author source not executed; reference scientific competence and independent authentic comparator untested.",
+    "Public development data are not protected held-out benchmark evidence.",
+    "GPL source and CC BY4.0 metadata observations do not replace final rights review.",
+    "No causal or intervention-assignment conclusions.",
+    "Scientific qualification unknown; no new benchmark IDs."
+  ],
+  "rights": {
+    "code_source": "GPLv3 source inspected; no source code vendored",
+    "data_metadata": "Figshare v2 CC BY 4.0 observed; operator payload/redistribution verification remains required"
+  },
+  "native_bridge": "API accepts decoded source arrays; CLI reads safe numeric/string NPZ only. Original author pickled NPY intake and equality verification remain unresolved."
+}

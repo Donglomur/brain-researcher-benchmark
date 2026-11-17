@@ -1,0 +1,289 @@
+{
+  "provenance": "Independently hand-derived generated controls; separately checked against pinned timescoring426f8d2b77974641dc9db71884e0812b249ba93b. Not authentic Siena results.",
+  "controls": [
+    {
+      "name": "one_tp_one_fp",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          80,
+          90
+        ],
+        [
+          1000,
+          1010
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 1,
+        "fp": 1,
+        "f1": 0.6666666666666666,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 24
+      }
+    },
+    {
+      "name": "one_alarm_detects_two_refs",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          110
+        ],
+        [
+          300,
+          310
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          100,
+          310
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 2,
+        "tp": 2,
+        "fp": 0,
+        "f1": 1,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "merge_gap_89",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          110
+        ],
+        [
+          199,
+          209
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          100,
+          105
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 1,
+        "fp": 0,
+        "f1": 1,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "do_not_merge_gap_90",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          110
+        ],
+        [
+          200,
+          210
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          100,
+          105
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 2,
+        "tp": 1,
+        "fp": 0,
+        "f1": 0.6666666666666666,
+        "sensitivity": 0.5,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "strict_tolerance_boundary",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          60,
+          70
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 0,
+        "fp": 1,
+        "f1": 0,
+        "sensitivity": 0,
+        "false_alarms_per_24h": 24
+      }
+    },
+    {
+      "name": "tolerance_one_tick_overlap",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          69.9,
+          70.1
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 1,
+        "fp": 0,
+        "f1": 1,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "long_reference_split_and_overlap",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          701
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          699,
+          700
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 3,
+        "tp": 2,
+        "fp": 0,
+        "f1": 0.8,
+        "sensitivity": 0.6666666666666666,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "long_hypothesis_split",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          0,
+          601
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 1,
+        "fp": 2,
+        "f1": 0.5,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 48
+      }
+    },
+    {
+      "name": "all_zero_detector",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 0,
+        "fp": 0,
+        "f1": 0,
+        "sensitivity": 0,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "background_only_false_alarm",
+      "duration_seconds": 3600,
+      "reference_events": [],
+      "hypothesis_events": [
+        [
+          100,
+          110
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 0,
+        "tp": 0,
+        "fp": 1,
+        "f1": 0,
+        "sensitivity": null,
+        "false_alarms_per_24h": 24
+      }
+    },
+    {
+      "name": "background_only_silence",
+      "duration_seconds": 3600,
+      "reference_events": [],
+      "hypothesis_events": [],
+      "expected_independently_derived": {
+        "n_ref": 0,
+        "tp": 0,
+        "fp": 0,
+        "f1": null,
+        "sensitivity": null,
+        "false_alarms_per_24h": 0
+      }
+    },
+    {
+      "name": "constant_positive_detector",
+      "duration_seconds": 3600,
+      "reference_events": [
+        [
+          100,
+          130
+        ]
+      ],
+      "hypothesis_events": [
+        [
+          0,
+          3600
+        ]
+      ],
+      "expected_independently_derived": {
+        "n_ref": 1,
+        "tp": 1,
+        "fp": 11,
+        "f1": 0.15384615384615385,
+        "sensitivity": 1,
+        "false_alarms_per_24h": 264
+      }
+    }
+  ]
+}
