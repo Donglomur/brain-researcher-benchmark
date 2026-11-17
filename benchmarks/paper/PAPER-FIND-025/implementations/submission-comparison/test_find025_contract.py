@@ -1,14 +1,89 @@
 """Invented declaration/aggregation controls, never scientific validation."""
 from copy import deepcopy
+from fractions import Fraction
 import json
 import math
 import unittest
 import find025_contract as c
 from invented_fixture import fixture, rebind, score_records
-from metric_primitives import signed_variance_explained, squared_pearson_correlation
+from metric_primitives import UndefinedMetric, signed_variance_explained, squared_pearson_correlation
 
 
 class ContractControls(unittest.TestCase):
+    def test_perfect_correlation_is_accepted_in_both_evaluator_modes(self):
+        value = squared_pearson_correlation(range(17), range(17))
+        self.assertEqual(value, 1.0)
+        for mode, metric, comparisons in (
+                ('code_reconstruction', c.CORR, 12),
+                ('protected_improvement', c.PAIRED_CORR, 28)):
+            with self.subTest(mode=mode):
+                p, s, e = fixture(mode)
+                for row in e:
+                    if row['identity']['metric_id'] == metric:
+                        row['value'] = value
+                r = c.report(p, s, e)
+                self.assertEqual(sum(x['status'] == 'declared_comparable'
+                                     for x in r['comparisons']), comparisons)
+                self.assertEqual(set(x['obligation'] for x in r['comparisons']),
+                                 set(c.OBLIGATIONS))
+                self.assertFalse(r['execution_ready'])
+                self.assertFalse(r['scientifically_qualified'])
+                self.assertIsNone(r['paper_pass'])
+
+    def test_external_correlation_overshoot_remains_strictly_rejected(self):
+        for mode, metric in (('code_reconstruction', c.CORR),
+                             ('protected_improvement', c.PAIRED_CORR)):
+            for invalid in (math.nextafter(1.0, math.inf), 1.001, -1e-16):
+                with self.subTest(mode=mode, invalid=invalid):
+                    p, s, e = fixture(mode)
+                    next(row for row in e if row['identity']['metric_id'] == metric)['value'] = invalid
+                    with self.assertRaises(c.ContractError):
+                        c.report(p, s, e)
+
+    def test_affine_correlation_is_bounded_without_changing_signed_variance(self):
+        for n in (2, 4, 17, 101):
+            observed = list(range(n))
+            for scale in (-3, -0.1, 0.1, 2):
+                with self.subTest(n=n, scale=scale):
+                    value = squared_pearson_correlation(observed, [scale*v + 10 for v in observed])
+                    self.assertLessEqual(value, 1.0)
+                    self.assertAlmostEqual(value, 1.0, places=14)
+        self.assertEqual(signed_variance_explained([0, 1, 2], [10, 11, 12]), -149)
+
+    def test_nonperfect_correlation_matches_independent_rational_reference(self):
+        observed = [0, 1, 2, 3, 4, 5]
+        predicted = [2, -1, 4, 0, 7, 3]
+        n = len(observed)
+        numerator = n*sum(v*w for v, w in zip(observed, predicted)) - sum(observed)*sum(predicted)
+        denominator = ((n*sum(v*v for v in observed) - sum(observed)**2) *
+                       (n*sum(v*v for v in predicted) - sum(predicted)**2))
+        expected = float(Fraction(numerator**2, denominator))
+        value = squared_pearson_correlation(observed, predicted)
+        self.assertGreater(value, 0.0)
+        self.assertLess(value, 1.0)
+        self.assertAlmostEqual(value, expected, places=15)
+        self.assertEqual(squared_pearson_correlation([-1, 0, 1], [1, -2, 1]), 0.0)
+
+    def test_correlation_constant_support_stays_undefined(self):
+        for observed, predicted in (([2, 2, 2], [0, 1, 2]),
+                                     ([0, 1, 2], [2, 2, 2]), ([2], [3])):
+            with self.subTest(observed=observed, predicted=predicted):
+                with self.assertRaises(UndefinedMetric):
+                    squared_pearson_correlation(observed, predicted)
+
+    def test_material_correlation_arithmetic_error_is_not_clipped(self):
+        # Subnormal squared products materially distort the normalization.
+        # Blanket clipping would disguise that arithmetic error as success.
+        observed = [i*1e-162 for i in range(6)]
+        with self.assertRaisesRegex(UndefinedMetric, 'arithmetic outside'):
+            squared_pearson_correlation(observed, [2*v for v in observed])
+
+    def test_nonfinite_correlation_inputs_stay_rejected(self):
+        for invalid in (math.nan, math.inf, -math.inf):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    squared_pearson_correlation([0, invalid, 2], [0, 1, 2])
+
     def test_pending_real_plan_is_incomplete(self):
         p = c.pending_plan()
         r = c.report(p, [], [])

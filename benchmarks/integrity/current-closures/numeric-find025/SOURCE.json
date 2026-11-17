@@ -1,0 +1,108 @@
+{
+  "schema": "numeric-find025-current-source-v1",
+  "task_id": "PAPER-FIND-025",
+  "artifact_id": "benchmarks-scientific_contracts-find025",
+  "component_path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison",
+  "scope": "source-only bounded correlation-roundoff repair and generated controls",
+  "execution_authority": false,
+  "scientific_qualification": false,
+  "arithmetic_policy": {
+    "function": "squared_pearson_correlation",
+    "unchanged_interval": [
+      0,
+      1
+    ],
+    "maximum_repaired_value": 1.0000000000000018,
+    "repair": "Only internally computed finite values above 1 and within eight ULPs at 1 return 1.0.",
+    "larger_violation": "UndefinedMetric",
+    "external_evaluator_validation": "Unchanged strict [0,1] bounds; no tolerance."
+  },
+  "current_files": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/metric_primitives.py",
+      "bytes": 3621,
+      "sha256": "3489e5cbabac7e78c9922076ce8adf45b4ec089bbc245089cb21bcd5808c8193"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/test_find025_contract.py",
+      "bytes": 23526,
+      "sha256": "e2e9eb8de9f8dfdadfe5837ed37300593431c5c54989fb07cf85280d855b08a1"
+    },
+    {
+      "path": "tests/benchmarks/test_numeric_find025.py",
+      "bytes": 1094,
+      "sha256": "7fe642686d23154ff2afacd90d0786ffe16fce3e4bde6291a7f48090de885090"
+    },
+    {
+      "path": "benchmarks/integrity/current-closures/numeric-find025/README.md",
+      "bytes": 2256,
+      "sha256": "d71785c85bc9a730a57a57cbbb670c4f012718eb3828adc0151d257db294d2f5"
+    }
+  ],
+  "unchanged_contract_files": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/CONTRACT.md",
+      "bytes": 16072,
+      "sha256": "cef38e3e1ed5e7ffa04b17351b6702b54be335cdb96a12883a3243e24fa434c8"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/README.md",
+      "bytes": 5156,
+      "sha256": "33922b62818f1e743a5b5d067eba2596616044a5a47ff32b17d2a21dcf116450"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/find025_contract.py",
+      "bytes": 27082,
+      "sha256": "adccd1362fc7f96b967467377ca834b3fbb95581252bd3c8210d79e6eb6d3ce9"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/invented_fixture.py",
+      "bytes": 3546,
+      "sha256": "35b0c32f91d4dbf2eb7c43f3bb27b3bb13aab3d76e0b6169dd33d9403ad9f1dd"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/operator_plan.schema.json",
+      "bytes": 32397,
+      "sha256": "036e8267a0bbc997f3c2b4ecd70c9a3909a6a9035dd5935ed11feddad5005718"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/pending_plan.json",
+      "bytes": 3097,
+      "sha256": "697b760bcc39872766a2bc5b3ba63a5d6cb07f9e994a2113829ae3b830a0d4a4"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/submission.schema.json",
+      "bytes": 16786,
+      "sha256": "ea78c4c912b492c92bad9add03335f86404dfb34968c84563e99867d993a21d6"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-025/task.json",
+      "bytes": 66978,
+      "sha256": "6d3a37a131b02627a0d6306982a676eb8120424578f9d1775dc0b53ce1f313d6"
+    }
+  ],
+  "historical_binding": {
+    "source_commit": "8a07b93da68e8b9cf193cdba7d09faa17bf56a43",
+    "original_path": "benchmarks/scientific_contracts/find025",
+    "relocation_record": "docs/provenance/relocations/2026-11-16.json",
+    "metric_primitive_pre_repair": {
+      "bytes": 3052,
+      "sha256": "110357a65d5cbbff4cd2f7df3dfccec52d899e6cb9cf947df0222d7dba11513e"
+    },
+    "test_suite_pre_repair": {
+      "bytes": 19370,
+      "sha256": "e45aa90ddc5882176a5db419032aa14ed7ac0e91ba3ed481302106dde885a160"
+    },
+    "semantics": "Registry/catalog source commits and evidence plus relocation records remain historical; this descriptor binds the current repair. Original package prose about byte identity and 50 methods describes that prior state."
+  },
+  "current_binding_trace": [
+    "benchmarks/registry.json and benchmarks/catalog/catalog.json locate the current component directory.",
+    "benchmarks/integrity/source-ownership.json inventories active component file hashes.",
+    ".github/workflows/neuroscience-source-integrity.yml openbmi-find-source executes test_find025_contract.py."
+  ],
+  "limits": [
+    "No array/cohort constructor, artifact provenance validation or scientific execution is introduced.",
+    "Canonical task, full obligations, metric identities, signed variance explained, external score validation and scientific holds remain unchanged.",
+    "Original overflow, underflow and cancellation limits are not generally repaired; material out-of-range arithmetic is refused."
+  ]
+}
