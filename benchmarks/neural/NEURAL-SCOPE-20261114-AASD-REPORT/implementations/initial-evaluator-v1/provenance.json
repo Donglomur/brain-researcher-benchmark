@@ -1,0 +1,151 @@
+{
+  "schema": "aasd-initial-evaluator-provenance-v1",
+  "registered_task_id": "NEURAL-SCOPE-20261114-AASD-REPORT",
+  "specification_id": "HOLD-NEURAL-FRONTIER-AASD-20261114",
+  "specification_alias": true,
+  "contract": {
+    "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/task.json",
+    "bytes": 16041,
+    "sha256": "0ee94e7c532697065e3fe1797c512cf10a8ed08f27f2b63bec8a87150e6b80ba"
+  },
+  "sources": [
+    {
+      "id": "paper",
+      "url": "https://www.nature.com/articles/s41597-026-07244-w?error=cookies_not_supported&code=1",
+      "canonical_url": "https://doi.org/10.1038/s41597-026-07244-w",
+      "version_of_record": "2026-06-12",
+      "published": "2026-04-16",
+      "read_status": "full primary text retrieved through web tool; base URL initially redirected to inaccessible login",
+      "observations": "18 adults; 6 active blocks and 1 passive block of 10 one-minute trials. Both response keys use the dominant hand. Passive alternation is described as final despite randomized-block wording. No horizontal EOG. Paper preprocessing order is reference, filter, downsample, segment. Paper specifies 65 TRF lags at 128 Hz over 0\u2013500 ms but not orientation. Paper describes trial-level 8:1:1 and five-fold evaluation, not this contract's person/mixture split. Data records describe an Excel stimulus-trigger map and passive records. Article license is CC BY-NC-ND 4.0; stimulus licensing language is distinct from data license."
+    },
+    {
+      "id": "pinned_readme",
+      "url": "https://raw.githubusercontent.com/XXuefeii/AASD-Processing/033856b3f4762b5fa33bc096b0de9f04bf0b5205/README.md",
+      "repository_commit": "033856b3f4762b5fa33bc096b0de9f04bf0b5205",
+      "repository_tree": "5939f568ed6de3fa4b87e7f6d6dc328a4c9f3875",
+      "read_status": "full primary text retrieved through web tool",
+      "observations": "Documents 60 active trials, six blocks, 18 participants; repository structure lists README and preprocessing script. This does not prove passive-record absence."
+    },
+    {
+      "id": "pinned_matlab",
+      "url": "https://raw.githubusercontent.com/XXuefeii/AASD-Processing/033856b3f4762b5fa33bc096b0de9f04bf0b5205/src/AASD_processing.m",
+      "repository_commit": "033856b3f4762b5fa33bc096b0de9f04bf0b5205",
+      "read_status": "full primary text retrieved through web tool; no source code copied",
+      "observations": "Deletes final four channels, selects trigger codes 11\u201370, and segments using inclusive MATLAB indices. Merges segments before filtering, then resamples and references mastoids. ICA calls are comments. Trigger-coded output filenames can expose label-related metadata. These observations do not resolve native channel identities, event units, timing or passive completeness."
+    },
+    {
+      "id": "zenodo",
+      "url": "https://zenodo.org/records/17413336",
+      "version": "v1",
+      "created": "2025-10-22",
+      "modified": "2026-02-25",
+      "read_status": "public metadata page read; no archive accessed",
+      "observations": "Metadata explicitly describes passive final block beyond 60 attention trials. Published object MD5 values match the contract: processed 8ed97d44056d6b0c34ffd9505624adce, stimuli e0be11ebc667da4a739b208de89b9182, raw 1e4760203e1c47ea84e199b1b782ee3f."
+    }
+  ],
+  "source_pin_limit": "Exact pinned Git commit URLs were successfully read. Direct HTTPS shell transport failed; content SHA256 was not independently obtained. The empty-stream shasum emitted after failed curl is invalid and was discarded. GitHub API and Zenodo API endpoints failed through web tool. Contract bytes/hash are independently checked locally.",
+  "requirements_mapping": [
+    {
+      "requirement": "All 18 persons; 1080 active +180 passive nominal trials",
+      "implementation_rule": "Require explicit fixed 18-person roster and account for every expected trial using included/excluded/missing status plus reasons. Never manufacture a complete inventory from submitted prediction rows.",
+      "status": "implementable normalized-input census; authentic cohort/native mapping held"
+    },
+    {
+      "requirement": "1 s nonoverlapping targets, 2 s common context",
+      "implementation_rule": "Use declared trial grid, half-open target [t,t+1), context [t-.5,t+1.5), same channels/timestamps/validity for every method; reject all partial/missing context and any neighboring-trial padding.",
+      "status": "implementable after explicit normalized sample schema; native alignment held"
+    },
+    {
+      "requirement": "Defined initial report state; majority state; ties/uninitialized explicit",
+      "implementation_rule": "Reconstruct right-continuous state from evaluator-only key reports and per-trial initialization, integrate state duration across target, require state known at target start, exclude exact half-duration tie. Never carry state across trials.",
+      "status": "prospective normalized event semantics must be documented; authentic key code mapping held"
+    },
+    {
+      "requirement": "Pool confusion across three mixtures per person, then 18-person macro",
+      "implementation_rule": "For each person sum TN,FP,FN,TP over all three folds, compute (TN/(TN+FP)+TP/(TP+FN))/2 when both denominators positive; primary is equal mean over exactly18 defined person scores.",
+      "status": "fully specified by contract"
+    },
+    {
+      "requirement": "One-class folds retained; missing class participant changes estimability",
+      "implementation_rule": "Retain one-class fold observed counts; if any person lacks a class, primary=null/not_estimable; expose each person/fold counts and observed recalls, subset BA with explicit denominator, and log loss on all defined labels.",
+      "status": "fully specified by contract"
+    },
+    {
+      "requirement": "Prediction contract cannot change scientific denominator",
+      "implementation_rule": "Every eligible case must have exactly one finite valid prediction per expected method/fold; reject missing, duplicate, unexpected or invalid predictions rather than dropping them.",
+      "status": "fully specified by contract"
+    },
+    {
+      "requirement": "Participant-macro log loss and calibration",
+      "implementation_rule": "Compute person metrics after pooling folds; no window-weighted global mean presented as participant macro. Probability clipping/endpoints, classification ties, calibration bins and empty-person handling require explicit prospective policy.",
+      "status": "aggregation specified; numerical/calibration policy prospective"
+    },
+    {
+      "requirement": "LOPO crossed with fixed three mixture families",
+      "implementation_rule": "54 test cells; training for (person,fold) excludes held person everywhere AND held mixture fold in all persons. Freeze overlap-connected family map before outcomes; internal validation remains grouped and within allowed development data.",
+      "status": "split generator/auditor implementable; native overlap graph held"
+    },
+    {
+      "requirement": "No normalization/calibration/weights/hyperparameters from held data",
+      "implementation_rule": "Expose training-membership audit; do not claim that metadata checks prove model fitting complied.",
+      "status": "audit implementable; native execution provenance held"
+    },
+    {
+      "requirement": "At least2s keypress sensitivity",
+      "implementation_rule": "Choose and disclose a prespecified distance convention. Recommended conservative target-interval minimum distance to every key; retain all cases in primary and produce separate guard stratum. Future keys are evaluator-only.",
+      "status": "explicit prospective interval convention required"
+    },
+    {
+      "requirement": "Passive motor diagnostic",
+      "implementation_rule": "Report separately on all available passive trials using response-key labels; do not call labels attention ground truth or use passive success/failure as proof of specificity. Specify whether supplied predictions are frozen-head transfer or a separate motor probe.",
+      "status": "separate scoring implementable; feature provenance/probe execution held"
+    },
+    {
+      "requirement": "Transition/switch-density/block/order/class coverage strata",
+      "implementation_rule": "Derive strata evaluator-side with fixed bins/identities and report case, trial and participant denominators and missing classes. Never expose hidden labels or key events as model features.",
+      "status": "prospective bin definitions required"
+    },
+    {
+      "requirement": "Paired person uncertainty",
+      "implementation_rule": "Compute per-person candidate-minus-comparator effects; resample/sign-flip persons with all their dependent windows together; retain all18 pairing when claiming all18.",
+      "status": "implementable; meaningful scientific inference remains held"
+    },
+    {
+      "requirement": "Paper numbers are historical",
+      "implementation_rule": "Do not test against70.36%/50.5% or label comparison reproduction; split, context and metric differ.",
+      "status": "documentation constraint"
+    },
+    {
+      "requirement": "Motor, time/audio, EOG and shifted-EEG challenges",
+      "implementation_rule": "A scorer can compare named submitted arms but cannot certify their scientific provenance from name/schema alone. Preserve missing-arm and execution holds.",
+      "status": "scoring supports comparison; authentic competent baselines held"
+    },
+    {
+      "requirement": "Rights and preprocessing/native gates",
+      "implementation_rule": "No copied official code; independently implement mathematical scorer; do not redistribute stimuli/data or assert missing source license resolved.",
+      "status": "holds retained"
+    }
+  ],
+  "prospective_policies": {
+    "label_state": "right-continuous, exact duration-majority, no unknown-start imputation or cross-trial carry",
+    "time": "integer nanoseconds; explicit normalized 128 Hz derivative grid; no native latency conversion claimed",
+    "classification_threshold": "p_right >= 0.5 predicts right",
+    "log_loss": "natural log; clip only log-loss argument to [1e-15,1-1e-15]",
+    "calibration": "ten fixed right-probability reliability bins, participant-macro ECE",
+    "motor_guard": "minimum key distance from entire closed target interval >= 2 s",
+    "passive_probe": "frozen attention-trained outer-cell decoder transfer; executor provenance held",
+    "uncertainty": "paired participant bootstrap, 2000 replicates seed1729; exact 2^18 sign-flip test"
+  },
+  "unresolved_holds": [
+    "Native full18 participant/1260 trial census and documented exclusions; passive inclusion in processed files.",
+    "Native key codes, time units, per-trial initial report state, overlapping/conflicting events, trigger-to-stimulus map.",
+    "Acquired/removed/retained channels including EOG, valid sample masks and exact EEG/audio alignment; published source and paper preprocessing order conflict.",
+    "Connected stimulus sentence/audio overlap graph and feasibility of three mixture folds; no unseen-speaker claim.",
+    "Official code reuse license; actual stimulus/HRTF rights chain.",
+    "Authentic competent baselines, matched information exposure, grouped fitting provenance, protected access boundary and leakage challenges.",
+    "All engineering outputs remain construction only; no authentic result, attention specificity, reproduction or scientific qualification established."
+  ],
+  "qualification": "unknown",
+  "native_runs": 0,
+  "copied_official_source": false
+}

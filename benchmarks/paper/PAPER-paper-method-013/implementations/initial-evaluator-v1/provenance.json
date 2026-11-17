@@ -1,0 +1,55 @@
+{
+  "task_id": "PAPER-paper-method-013",
+  "canonical_task_sha256": "10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12",
+  "official_source_revision": "305a4827929b2c6e82e44c5c69b2ea9d410e20a4",
+  "paper": {
+    "doi": "10.1038/s42256-024-00892-w",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12327232/",
+    "source_location": "Methods: comparison with other calcium imaging processing methods; evaluation of neuronal segmentation and trace extraction",
+    "inspected_via": "primary article indexed text and independent source workers; direct page retrieval sometimes blocked",
+    "semantics": [
+      "IoU strictly greater than 0.5",
+      "largest IoU prediction for each reference ROI",
+      "trace comparison on reference ROIs detected by all compared methods",
+      "Pearson trace correlation",
+      "processing runtime excludes data loading and writing"
+    ]
+  },
+  "pinned_code": [
+    {
+      "url": "https://raw.githubusercontent.com/KangningZhang/DeepCaImX/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/README.md",
+      "role": "synthetic-trained full model and source asset context"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/KangningZhang/DeepCaImX/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Preprocessing%20of%20Experimental%20Samples/Prepro_Exp_Sample.ipynb",
+      "role": "fluorescence-derived trace reference preprocessing"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/KangningZhang/DeepCaImX/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Data%20Tailor/tailor.m",
+      "role": "generic row-first tiling geometry; not the full assembly pipeline"
+    }
+  ],
+  "upstream_source_byte_hashes": [
+    {
+      "path": "README.md",
+      "bytes": 10425,
+      "sha256": "3341cf20e7e869961760c46025900c3128bbb3465a13f22838d6c8fc74584bc8"
+    },
+    {
+      "path": "Data Tailor/tailor.m",
+      "bytes": 2627,
+      "sha256": "ecaa6717aa0ed52c3f017677775efbd542aec28bd2f71f5570d701f7c5113c9d"
+    }
+  ],
+  "upstream_source_pin_note": "README and tailor bytes independently retrieved through public GitHub Contents API at the exact revision; recomputed Git blob SHA1 matched API. Source notebooks remain revision-pinned without acquired byte hashes. No archive or model acquired.",
+  "prospective_policies": [
+    "first prediction row breaks equal-IoU ties",
+    "shared selected prediction across reference ROIs fails closed",
+    "pooled and macro recording/depth summaries",
+    "null common-set mean if any included trace correlation is undefined",
+    "all runtime context identities must agree",
+    "strict separate-reference NPZ boundary"
+  ],
+  "qualification": "unknown",
+  "new_native_scientific_runs": 0
+}
