@@ -1,0 +1,179 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-021",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "Ineligible for the registered developmental association task. Age/region effects in alpha frequency and intrinsic timescales are descriptive cross-sectional relationships. Increasing their R², significance or effect magnitude would not establish a better biological estimate; the local participant-held-out prediction scorer introduces a different task.",
+  "source_paper": {
+    "title": "Developmental relationships between the human alpha rhythm and intrinsic neural timescales are dependent on neural hierarchy",
+    "url": "https://doi.org/10.1152/jn.00435.2025"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://journals.physiology.org/doi/full/10.1152/jn.00435.2025",
+      "locator": "Methods: Participants, Signal Processing, Spectral Calculations, Spectral Parameterization; Figs. 2–4 and Tables 1–3",
+      "supports": "Source population, spectral estimands and descriptive age/hierarchy regressions."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/README.md",
+      "locator": "Intended order of operations and dependencies",
+      "supports": "Links source data and specifies spectrum, spectral-fit, statistics sequence with the author Lorentzian FOOOF fork."
+    },
+    {
+      "id": "author_stats",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/PAF_INT_stats_figs.ipynb",
+      "locator": "Parameter/QC loading; sensorimotor/association grouping; PAF/INT omnibus/region regressions; interaction model cells",
+      "supports": "Source fit0 QC, grouped smoothing and participant/region aggregation preceding descriptive regressions."
+    },
+    {
+      "id": "author_fit",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/spect_aper_fitting.ipynb",
+      "locator": "Lorentzian fit setup, PAF and INT extraction cells",
+      "supports": "Author estimator conventions and dependency-sensitive spectral extraction."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-021/docs/initial-evaluator-v1.md",
+      "locator": "Source semantics and prospective repairs; Native scientific gates retained",
+      "supports": "Local held-out prediction metric and train-only comparator are prospective; native spectral conventions remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate peak alpha frequency and intrinsic timescale, then characterize age relationships and their dependence on sensorimotor versus association hierarchy.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Original resting ECoG release Zenodo 16954184, linked by the paper; author README links the associated concept record 16954183.",
+      "evidence_ids": [
+        "paper",
+        "author_readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Thirteen cross-sectional epilepsy-monitoring participants, approximately ages 3–33, with variable coverage of six cortical regions.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "Original age/hierarchy regressions use the observed clinical cohort; no paper prediction holdout is defined. Local participant-held-out PAF/INT errors constitute an extension.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Resting ECoG, participant age, cortical-region assignments and montage/channel information.",
+      "evidence_ids": [
+        "paper",
+        "author_readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper preprocessing and Lorentzian spectral fitting are documented, but historical fork identity, knee-to-timescale conversion and paper 3–14 Hz versus code 2–14 Hz alpha selection require reconciliation.",
+      "evidence_ids": [
+        "paper",
+        "author_fit",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "PAF, INT and their age/hierarchy regression coefficients, correlations and R² quantify associations. R² is explanatory fit here, not a protected prediction baseline.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "The author notebook pools eligible time rows within participant/region or context, then regresses participant summaries against log2 age; the interaction uses participant-region summaries.",
+      "evidence_ids": [
+        "author_stats"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered performance metric for hierarchy-dependent developmental associations",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "description": "Published regression R² and p values are association statistics, not algorithmic performance scores eligible for maximization.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "description": "No authentic source spectral-to-statistics rerun is established. The local train-only region-mean predictor is not an author baseline.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "A larger age association or smaller p value does not supply a meaningful improvement in estimation accuracy.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No paper-win uncertainty rule applies to maximizing the descriptive associations.",
+      "independent_unit": "Participant; regional and temporal measurements are nested.",
+      "rationale": "Regional rows and overlapping spectral windows cannot provide independent participant replication.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ]
+    },
+    "paper_win_requires": [
+      "Do not promote regression significance, fit R² or closeness to source PAF/INT tables into a superiority claim.",
+      "Keep participant-held-out prediction and the local same-region mean comparator as a separately labelled extension.",
+      "An estimation-method replacement would need independently justified targets and the same original evaluation; changing the cohort or split is not a paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; biological findings and reconstruction agreement are not SOTA scores.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active loop for maximizing developmental associations; native estimator reconciliation remains calibration work.",
+    "candidate_freeze": "Not applicable for this descriptive endpoint. A future predictive extension must freeze a separate contract.",
+    "final_evaluation": "The local score-heldout route cannot establish surpassing the source developmental finding.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep original association statistics, author reproduction and prospective predictor errors distinct."
+  },
+  "blocking_issues": [
+    "The source developmental finding has no ordered algorithmic success endpoint.",
+    "Historical spectral dependency and paper/code estimator discrepancies remain unresolved; native calibration is incomplete."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the postfit statistics implementation and prospective participant-held-out scoring component. Neither a better train-only predictor comparison nor stronger age/hierarchy inference establishes a same-task paper victory."
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-NEW-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Source-native rebinding selects original synapse detection and partner assignment on the source 16 expert-annotated cutouts (Extended Data Fig. 2b), with reported aggregate F-score 0.83. Original cutout identities, annotations, training overlap, matching rules and author detector/checkpoint remain unbound; descriptive connectome analyses stay calibration.",
+  "source_paper": {
+    "title": "Distributed control circuits across a brain-and-cord connectome",
+    "url": "https://doi.org/10.1038/s41586-026-10735-w"
+  },
+  "evidence": [
+    {
+      "id": "author_overview",
+      "kind": "author_code",
+      "url": "https://github.com/htem/BANC-project",
+      "locator": "About BANC; What the paper reports; Reproducing a figure; Data resources",
+      "supports": "Identifies the adult female fly connectome, versioned graph route and biological figure-reproduction scope."
+    },
+    {
+      "id": "edge_loader",
+      "kind": "author_code",
+      "url": "https://github.com/htem/BANC-project/blob/2e78ce38e946ab80e120a42f504a019b3a567fef/R/startup/banc-edgelist.R",
+      "locator": "lines 1–16, 29–36, 94–108",
+      "supports": "v2 synapse-edge route and proofread/roughly-proofread endpoint filters; per-analysis synapse thresholds."
+    },
+    {
+      "id": "sensory_panel",
+      "kind": "author_code",
+      "url": "https://github.com/htem/BANC-project/blob/2e78ce38e946ab80e120a42f504a019b3a567fef/R/figures/panels_sensory_motor.R",
+      "locator": "Fig. 2e/ED4b–d header; influence threshold, body-part aggregation and Wilcoxon comparison blocks",
+      "supports": "Descriptive adjusted-influence heatmaps and anatomical group contrasts."
+    },
+    {
+      "id": "software_release",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/20350642",
+      "locator": "Description and Files, v2.0.5 release",
+      "supports": "Author analysis/figure archive and linked dataset DOI 10.7910/DVN/7WTH1N; no payload rerun."
+    },
+    {
+      "id": "nt_panel",
+      "kind": "author_code",
+      "url": "https://github.com/htem/BANC-project/blob/2e78ce38e946ab80e120a42f504a019b3a567fef/R/figures/panels_transmitter_predictions.R",
+      "locator": "ED3a–e classifier-calibration/confusion blocks",
+      "supports": "The source includes a distinct neurotransmitter classifier analysis; it is not the registered graph-organization endpoint."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-NEW-003/implementations/registered-runtime/complete-banc-v1/runtime/contracts/EVALUATION_CONTRACT.json",
+      "locator": "Improvement comparison and prediction-task selection sections",
+      "supports": "Legacy fidelity-preserving time/memory/residual comparison is engineering improvement, not an observed biological result surpassed."
+    },
+    {
+      "id": "paper_detection",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13518251/",
+      "locator": "Results: automated synapse identification and Extended Data Fig. 2b; Methods: Synapse detection and Synapse detection evaluation",
+      "supports": "Reports F-score 0.83, precision 0.87, recall 0.78 and an aggregate evaluation over 16 independently expert-annotated cutouts; describes original detector/postprocessing."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Detect synaptic links and assign both partners in the original BANC EM evaluation cutouts; either incorrect partner is a source evaluation error.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original BANC synapses_v2 evaluation images and 16 expert-annotated cutouts must be identified and version-pinned; the graph-edgelist release alone is not the detector evaluation dataset.",
+      "evidence_ids": [
+        "paper_detection",
+        "edge_loader"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All 16 source cutouts, each 2×2×0.7 micrometres, sampled across the one-fly CNS; preserve their full regional coverage.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Recover the exact 16 evaluation cutout coordinates and their relationship to FAFB pretraining and the 721 additional BANC training labels. A new cutout split cannot inherit the published score.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original aligned EM imagery at source detector resolution; expert annotations and assessment partner identities remain evaluator-owned.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses 8×8×45 nm detection inputs, 16×16×45 nm output/assignment, removes objects below three voxels and merges identical assignments within 200 nm. Exact deployed model/configuration and evaluation matching settings remain unbound.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Aggregate F1=2TP/(2TP+FP+FN), with either partner incorrect counted as an error. Exact prediction-to-expert matching and ambiguity-adjudication rules must be frozen; precision/recall remain required diagnostics.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Sum TP, FP and FN across all 16 original cutouts before computing overall precision, recall and F-score; do not substitute a mean of per-cutout F1 values.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Aggregate synaptic-link F1 on original 16 expert-annotated cutouts (ED Fig. 2b)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.83,
+      "description": "Source-reported overall F-score; precision 0.87 and recall 0.78 are separately reported. These rounded figures require original counts for exact candidate comparison.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Recover the original FAFB-pretrained/BANC-tuned detector and partner-assignment checkpoint, preprocessing and evaluation artifacts; no author rerun has been performed.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Meaningful F1 gain must be justified against finite annotation counts, annotation ambiguity and regional variation; no universal margin or improvement inferred from rounded values.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "No superiority rule is admitted until original evaluation identities and paired baseline outputs are recovered.",
+      "independent_unit": "Evaluation cutout/region conditional on the single fly; synapses within a cutout are dependent.",
+      "rationale": "Paired cutout-level baseline/candidate counts and dependence-aware uncertainty are needed; sixteen cutouts do not establish independent-animal replication.",
+      "evidence_ids": [
+        "paper_detection"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact original 16 cutouts, annotations, partner identities, training/evaluation separation and matching rules.",
+      "Use identical source inputs and original task; a new set of regions, edited gold labels or easier partner-detection target is not a paper win.",
+      "Compare aggregate counts with a verified author baseline and the reported 0.83 F-score, retaining precision/recall and all per-cutout results.",
+      "Freeze candidate thresholds and all postprocessing before final evaluation; predeclare effect, uncertainty and equal access/resource budgets.",
+      "Graph reconstruction/runtime and separate neurotransmitter-classification scores cannot replace this detection endpoint."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator is distinct from an author rerun and from current SOTA; no current-SOTA comparison was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After original split recovery, expose only source-authorized training/development imagery and feedback; keep the original evaluation annotations protected.",
+    "candidate_freeze": "Freeze detector, partner assignment, checkpoint, thresholds and postprocessing before any final-cutout scoring.",
+    "final_evaluation": "Evaluate every original cutout with original matching rules and aggregate TP/FP/FN; compare to source/author baselines under predeclared effect and uncertainty criteria.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published F-score, exact source counts and reproduced author detector are distinct. Synapses_v3 is not silently substituted for the original v2 result; neurotransmitter prediction remains a separate source task."
+  },
+  "blocking_issues": [
+    "Original cutout coordinates, immutable expert annotations and training overlap have not been recovered.",
+    "Original detector/assignment checkpoints, full evaluation matching/adjudication code and raw baseline counts remain unbound.",
+    "No validated working evaluator, meaningful margin, uncertainty admission or concrete episode budgets exist for the selected route."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve graph organization/influence, resource comparisons and all historic source materials as calibration/engineering artifacts. Source-native current objective is the original ED2b synapse-detection task; existing graph runtime is not its evaluator."
+  }
+}

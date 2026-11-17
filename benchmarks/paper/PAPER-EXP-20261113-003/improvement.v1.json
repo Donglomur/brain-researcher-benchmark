@@ -1,0 +1,164 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-EXP-20261113-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper contains an original assessment of three pretrained neural decoders against individual reappraisal measures in Figure 5b/Extended Data Table 3, with training-cohort exclusions. This ordered predictive route must be recovered before admission. The legacy three-correlation meta-analysis and newly authored held-study CRPS are not this task; neither larger biological effects nor significance alone constitute improvement.",
+  "source_paper": {
+    "title": "Emotion regulation capacity lacks a shared neural signature",
+    "url": "https://www.nature.com/articles/s41586-026-11203-1"
+  },
+  "evidence": [
+    {
+      "id": "nider-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-026-11203-1",
+      "locator": "Results and Methods: Multivariate neuro-affective signatures; Figure 5b/caption; Extended Data Table 3; Divergence of capacity indices/Table 1 for legacy calibration only",
+      "supports": "Original fixed neural-signature assessment, original cohort/training-overlap exclusions, dot-product prediction and pooled standardized correlation analysis; distinct from the legacy summary meta-analysis."
+    },
+    {
+      "id": "nider-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MaurizioSicorello/NIDER_project/90e8f324f78701bc3b1a8af3b79685ca91084d05/scripts/s3_RmetaAnalysis.R",
+      "locator": "lines 24-68, 130-140, 193-240; extractMAinfo and three metacor calls",
+      "supports": "Workbook route, pairwise missingness/sample-size conventions, duplicated Morawetz row merge and DerSimonian-Laird estimation."
+    },
+    {
+      "id": "nider-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-003/task.json",
+      "locator": "reproduction, improvement, construction_gates; implementations/nider-full120-reconstruction-profile-v1/README.md; implementations/nider-full120-reconstruction-profile-v1/participant/METHODS.md: Mathematical meaning and limits",
+      "supports": "The 120-field comparator is reconstruction; fair 64-draw CRPS is explicitly an extension."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 5b prediction assessment: fixed neural-signature expression versus individual trait questionnaires and task-based affective reappraisal measures. Preserve every original decoder/target pairing.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original person-level beta-contrast images, outcome measures and pretrained signature-weight images for the source four-study assessment are not authenticated. The released study-summary workbook alone cannot supply this prediction task.",
+      "evidence_ids": [
+        "nider-paper",
+        "nider-code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 5 names four studies totaling 730 people: AHAB-2 180, PIP 176, Doren 139 and study 4 235. Exact participant identities, per-pair missingness and signature-specific inclusion joins remain unbound.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve pretrained-decoder assessment and original exclusions: negative-affect decoder excludes AHAB-2, ability decoder excludes PIP because those were their training samples. Exact training/evaluation overlap and complete model provenance require authentication; new leave-study-out folds are an extension.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source signature expression uses the person reappraise-negative minus view-negative beta image dotted with a fixed signature-weight image. Exact neural input/weight identities and accessible person-level data remain unresolved; outcome measures cannot be candidate inputs.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "For Figure 5b, source signature-expression scores and capacity measures are standardized within study, then pooled across people. Figure 5a condition-effect standardization is a different operation.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Between-person Pearson correlation for each original signature/target pairing, with original sign orientation: covariance divided by the product of standard deviations. The reported near-zero bound is not an exact baseline vector.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source reports study-specific and pooled person-level correlations after within-study standardization; no newly equal-weighted held-study CRPS or composite across signatures is defined.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 5b/Extended Data Table 3 original signature-to-capacity Pearson-correlation panel; target orientation and decision rule unresolved",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Exact Extended Data Table 3 decoder/target values have not been recovered as authenticated numeric results. The textual absolute-correlation bound of 0.06 must not replace the vector or become a guessed baseline.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No original pretrained signature weights, person-image join or full source assessment has been rerun. A meta-analysis reconstruction or new study-level predictor is not an author decoder baseline.",
+      "evidence_ids": [
+        "nider-paper",
+        "nider-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify an improvement in original predictive fidelity with fixed outcome orientation, full pairing coverage and source-compatible participants. Do not maximize an arbitrary association, absolute sign flip or significance statistic.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level comparison with study clustering/heterogeneity and original training-overlap exclusions; define simultaneous decisions across the retained decoder/target panel.",
+      "independent_unit": "Participant within study, with signature/outcome repeated measurements and cohort overlap explicitly resolved",
+      "rationale": "Neither voxels nor repeated signatures are independent people. The published pooled intervals do not by themselves qualify a candidate-superiority rule.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact original Figure 5b/Extended Data Table 3 prediction panel, numerical source baseline, pretrained weights and person-level input/outcome identities.",
+      "Preserve AHAB-2/PIP training-sample exclusions and original decoder-target support; do not train or select the candidate using final evaluation outcomes.",
+      "Fix the original target orientation and source-compatible predictive metric before iteration; require a justified meaningful gain and valid uncertainty against both the published result and author rerun.",
+      "Do not count summary-meta-analysis agreement, stronger biological significance, a new held-study CRPS task or a new cohort/split as surpassing this source prediction assessment."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper evaluates historical pretrained signatures. No matched present-day best decoder on this exact original cohort/panel has been verified.",
+      "evidence_ids": [
+        "nider-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Recover the original fixed-decoder assessment and a valid development-data policy before candidate iteration. Existing summary-meta-analysis and held-study CRPS work remain separate.",
+    "candidate_freeze": "Freeze candidate weights/method, permissible training sources, outcome orientation, preprocessing and all selection decisions before original-cohort final scoring.",
+    "final_evaluation": "Evaluate the frozen candidate and authenticated original decoders on exactly the paper-specific participants and decoder/target pairs with source training-overlap exclusions. No scientific run is admitted by this file.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep Table 3 published results, original-signature reruns, summary-meta-analysis calibration and prospective held-study predictors as separate evidence objects."
+  },
+  "blocking_issues": [
+    "Exact Table 3 numeric reference panel and predictive direction/decision rule not bound.",
+    "Person-level beta images/outcomes, signature weights and original participant/exclusion joins not authenticated.",
+    "Pretrained decoder training-overlap provenance and a permissible candidate-development policy are unresolved.",
+    "No admitted author decoder rerun, same-task evaluator, meaningful-effect/uncertainty rule or fixed access/resource budgets.",
+    "Legacy summary meta-analysis still has cohort-reuse and Fisher-z/reporting-scale ambiguities; it cannot stand in for the individual prediction route."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve all full120, trusted-owner and reporting-control materials unchanged as calibration of the three summary meta-analyses. This source-native Figure 5b assessment is recovered from the paper, not from the newly authored CRPS extension; no existing grader is silently repurposed."
+  }
+}

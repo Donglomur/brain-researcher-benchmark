@@ -1,0 +1,165 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DFINE",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original grid-reaching missing-observation experiment has an ordered behavior-correlation endpoint, but its exact curve values, historical ratio grid, session-file/fold identities and masking realizations are not recovered. Methods resolves the retained-versus-dropped ambiguity: rho is retained observations. The existing numerical component and a newly grouped error curve cannot substitute for the Figure 7e and Extended Data 6e–f paper baseline.",
+  "source_paper": {
+    "title": "Dynamical flexible inference of nonlinear latent factors and structures in neural population activity",
+    "url": "https://www.nature.com/articles/s41551-023-01106-1"
+  },
+  "evidence": [
+    {
+      "id": "dfine-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11735406/",
+      "locator": "Figure 7e; Extended Data Figure 6e–f; Methods: 2D grid reaching task, Evaluation using 5-fold cross-validation, Behaviour prediction accuracy—Motor datasets, Inference analyses with missing observations",
+      "supports": "Defines grid-reaching behavior prediction, complete temporal support, fivefold evaluation, observed-ratio masks and distinct filtering/smoothing conditions. Full text reviewed through Europe PMC fullTextXML for the same PMCID."
+    },
+    {
+      "id": "dfine-metric",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/torchDFINE/blob/37d25e332753eaba49f42e91766d0db8e186aefe/time_series_utils.py",
+      "locator": "get_pearson_cc, lines 81–109; z_score_tensor, lines 113–146",
+      "supports": "Pearson correlation is calculated per output dimension, stored as float32, then aggregated after the explicit NaN handling; fit/apply z-scoring is separate. Current code lineage does not establish historical Figure 7 parity."
+    },
+    {
+      "id": "dfine-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3854034",
+      "locator": "Version v2 record description; variable names; Supplements session list",
+      "supports": "Public source has sorted spikes, cursor position and timestamps for Indy/Loco; identifies seven listed 20160622_01–20160921_01 sessions with raw-data supplements. These listings do not alone establish the exact seven analysis files used by DFINE."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict cursor x/y position and x/y velocity at every test timepoint under source-defined missing neural observations, separately for causal filtering and noncausal smoothing; retain full Figure 7e curves and Extended Data 6e–f comparisons.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "The paper uses public O’Doherty/Sabes grid-reaching recordings. Zenodo 3854034 v2 supplies the relevant data family, but exact release/file/hash correspondence to the DFINE analysis remains unbound; the dataset’s unrelated decoder-result CSV is not a DFINE reference.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seven sessions of Monkey I from 20160622/01 through 20160921/01, right-hemisphere M1, are source specified. Recover the exact seven recording identities and selected neurons before admission; all seven are required and one monkey does not support independent-animal inference.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source uses five equal folds per session, training on four and testing on one. Exact ordered folds, temporal alignment and missing-mask realizations/replicates are unrecovered. rho ranges from 0.2 to 1, with exactly (1-rho)*100 observations dropped per 100 steps; full ratio grid and partial-block behavior require binding. A new blocked/held-session split is an extension.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Fully observed training neural activity; test neural activity contains the fixed source masks. Filtering accesses present/past observations only; smoothing may access future observations. Test behavior and dropped neural values remain evaluator-only. The behavioral readout is trained from smoothed training factors.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source specifies top 30 behavior-predictive neurons, 10 ms spike bins, causal Gaussian smoothing with 30 ms SD, 50 ms sampling and training-statistic z-scoring. Historical neuron selection, ordered support and readout/hyperparameter selection need a source-bound implementation; changing those choices must not silently change the published comparison.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-metric"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Behavior Pearson CC on all test times, including missing-neural times: r_d=sum((y_d-mean(y_d))*(p_d-mean(p_d)))/sqrt(sum((y_d-mean(y_d))^2)*sum((p_d-mean(p_d))^2)), then arithmetic mean over four dimensions. Current author code maps NaN correlation to zero before the dimension mean; historical caller parity remains a separate binding gate. Higher is better.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 7 curves average over sessions and cross-validation folds, with source confidence bounds. All 35 session-fold cells and every original ratio are required for each inference regime; historical mask-replicate handling and numeric curve values are unresolved. The paper does not specify a single integrated loss across ratios.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Complete source behavior-Pearson-CC curves by observed ratio and filtering/smoothing regime",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Figure 7e and Extended Data 6e–f identify the required DFINE curves and LDM/SAE controls, but exact source numerical values are not recovered. A p-value, chance level, approximate plot digitization or full-observation score is not the missing curve baseline.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authentic DFINE fit/inference/reference run is established. Current torchDFINE plus source Methods is a candidate route, pending original session/fold/mask/caller binding and a trustworthy full prediction export.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-metric"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a behavior-CC improvement rule across the full source curve only after recovering reference variability and intended decoding utility. No universal CC margin or integrated-error surrogate is justified here.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for identical source sessions/folds/masks, respecting correlated timepoints and repeated folds; define simultaneous curve decisions before final scoring.",
+      "independent_unit": "Recording session or defensible within-session temporal unit, conditional on one animal; folds, dimensions and missingness seeds are repeated measurements.",
+      "rationale": "The paper reports Wilcoxon tests and confidence bounds, but these do not provide a ready uncertainty rule for an improved method or independent animals. The original sampling hierarchy and repeat count must first be recovered.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind all original seven sessions, five folds, four behavior dimensions, complete ratio grid and mask identities; score every original test timepoint.",
+      "Compare a frozen candidate to independently rerun DFINE and the recovered paper curve under identical masks, preprocessing, readout selection and resource/access allowances.",
+      "Declare separate filtering and smoothing claims; any future observation used in the filtering path invalidates that claim. Retain LDM and SAE zero/neighbor-average controls at original 0.3/0.6 settings.",
+      "Meet the predeclared meaningful improvement and valid uncertainty rule across the original complete endpoint; reproduction, a new integrated-loss scalar, burst-dropout masks or a new split cannot constitute the paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; the source-paper comparison is specifically DFINE under its original missing-observation assay.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, expose original training data and an inner development policy confined to each source training fold; iterate inference/model choices with identical missingness feedback rules for both access arms.",
+    "candidate_freeze": "Freeze algorithm, hyperparameters, neural selection, readout fitting, preprocessing, code/weight hashes, inference regime and every allowed selection rule before any final source-fold result is revealed.",
+    "final_evaluation": "Run once on the complete bound original support against protected behavior labels and an independently fixed author reference. Public source test data require exposure accounting; changing the split to repair exposure is a separately named extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The trusted comparator is the authenticated source DFINE recipe, not candidate-supplied predictions or a weaker local model. Numerical score equality only calibrates reconstruction; published scores, rerun scores and future comparisons remain separate."
+  },
+  "blocking_issues": [
+    "Exact Figure 7e/Extended Data 6e–f numerical reference values and full observed-ratio grid are missing.",
+    "Seven session-file identities, top-neuron selection provenance and original fivefold sample identities are unbound.",
+    "Original mask seeds/replicate count, 100-step alignment and incomplete trailing-block semantics remain unresolved.",
+    "Current official code and the calibration scorer lack authenticated historical caller parity and a complete empirical reference.",
+    "Meaningful effect, dependence-aware uncertainty, finite feedback/compute budgets and protected execution are not fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve missing-observation/scorer.py and its tests/specification. They check complete prediction/mask shape and CC arithmetic on generated fixtures, not authentic inference or a paper win. Its equal-replicate averaging and partial-block refusal are implementation conventions awaiting source reconciliation; no original grader or evidence is replaced."
+  }
+}

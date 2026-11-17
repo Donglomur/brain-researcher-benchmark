@@ -1,0 +1,167 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-050",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The empirical spectrum/dynamics summaries have no performance ordering, but the existing complete-programme implementation also preserves original Figure 5 memory accuracy tasks. Those are a defensible original-task recovery route. Numeric source curves, invocation/delay grid and paper-code correspondence are unresolved; the authored prospective AUC memory task and five-frame forecasting task are not equivalent substitutes.",
+  "source_paper": {
+    "title": "A critical initialization for biological neural networks",
+    "url": "https://www.nature.com/articles/s41586-026-10528-1"
+  },
+  "evidence": [
+    {
+      "id": "critical-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-026-10528-1",
+      "locator": "Computations with symmetric dynamics; Figure 5d-f; Methods working-memory simulations",
+      "supports": "Original binary and zero-shot retrieval accuracy tasks, with fixed-lag and time-independent conditions and20 simulation replicates."
+    },
+    {
+      "id": "critical-memory-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/mouseland/critical_init/2c15edf4e770165fc3962dcc3920c8bcaf555bed/fig5/fig5.py",
+      "locator": "decode, decode_kmeans, run_zeroshot, run_multishot, get_acc_shuffle, time_shuffle, plot_with_time",
+      "supports": "Source normalization, two-fold decoding, ridge10 nearest retrieval, stochastic simulation and in-place temporal mixing."
+    },
+    {
+      "id": "critical-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-050/implementations/paper-find050-programme/source/contracts/PROGRAMME.json",
+      "locator": "memory_binary, memory_zeroshot, memory_aligned; GATES G04/G16; IMPROVEMENT.json",
+      "supports": "Existing source programme preserves original Figure 5 tasks but explicitly leaves invocation and decoder equivalence open; prospective grid/AUC differs."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 5 binary-input and novel-input memory retrieval at fixed lags and over time-independent conditions. Empirical spectral matching remains calibration.",
+      "evidence_ids": [
+        "critical-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original simulated networks, stimulus/noise realizations and exact delay/config invocation are not admitted. Fresh authored seeds or a new grid cannot be called the historical comparison.",
+      "evidence_ids": [
+        "critical-memory-code",
+        "critical-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original Figure 5 accuracy curves summarize20 simulations; empirical mouse recordings are a separate source result.",
+      "evidence_ids": [
+        "critical-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper describes distinct train/test noise and1,000 train/1,000 test inputs for zero-shot retrieval; source decode uses randomized two-fold membership. Exact original folds and time mixing need reconciliation.",
+      "evidence_ids": [
+        "critical-paper",
+        "critical-memory-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Simulated noisy neural activity under symmetric, nonsymmetric and echo-state dynamics; independent versus activity-aligned input regimes remain separate.",
+      "evidence_ids": [
+        "critical-paper",
+        "critical-memory-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Code normalizes each row with eps=0.001 and uses projected neural features; original invocation and paper decoder correspondence are not established.",
+      "evidence_ids": [
+        "critical-memory-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Fraction of correctly identified inputs per original lag/configuration: code averages correctness returned by its decoder.",
+      "evidence_ids": [
+        "critical-memory-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source displays mean and standard deviation across simulation replicates; no recovered scalar aggregation across all lag curves. The local trapezoidal AUC is a new endpoint.",
+      "evidence_ids": [
+        "critical-memory-code",
+        "critical-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 5 memory-retrieval accuracy curve; exact primary lag/configuration unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The reported curves have not been recovered as authenticated numeric values; no digitized or invented scalar baseline is supplied.",
+      "evidence_ids": [
+        "critical-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned fig5.py is a source route, but invocation/configuration, decoder semantics, failure handling and numerical agreement remain unqualified.",
+      "evidence_ids": [
+        "critical-memory-code",
+        "critical-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a retrieval-accuracy effect on the recovered original endpoint using task relevance and baseline variability, before candidate evaluation; no new AUC margin is inherited.",
+      "evidence_ids": [
+        "critical-registration"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired simulation-level comparisons after the original replication and score support are recovered; lag points and trials cannot be independent replicates.",
+      "independent_unit": "Independent simulated network/noise realization at the source replication level",
+      "rationale": "Repeated lags share a network and time-independent code mutates observations; valid resampling must preserve this structure.",
+      "evidence_ids": [
+        "critical-paper",
+        "critical-memory-code"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original Figure 5 invocation, delay grid, all specified dynamical families and decoder/fold semantics; retain complete required curves and failures.",
+      "Compare with an authenticated numeric source result and a qualified author rerun under identical simulation/input conditions.",
+      "Declare original endpoint, task-specific meaningful effect, uncertainty and complete episode budgets before optimization.",
+      "Do not count better power-law agreement, reconstruction, the chronological five-frame forecast, or the newly authored memory AUC/grid as a same-task win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The historical symmetric/nonsymmetric/echo-state comparison is verified; present-day best performance on this exact protocol is not.",
+      "evidence_ids": [
+        "critical-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Source recovery only until admission: expose declared development feedback only after an exact original-task comparator is reconstructed. Prospective simulation and forecast profiles remain separately labelled.",
+    "candidate_freeze": "Freeze candidate method, source configuration, all lag/condition choices and any tuned decoder before final source-protocol evaluation.",
+    "final_evaluation": "Use the recovered original simulation protocol and preserved full denominators; no substitute grid, easier noise condition or subset of networks. No evaluation is authorized by this file.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Authenticate published curve values separately from rerun author accuracy; reconstructed orchestration must not be described as the historical paper run."
+  },
+  "blocking_issues": [
+    "Authenticated numeric Figure 5 baseline missing.",
+    "Original delay grid/configuration/seed lineage and paper-code decoder correspondence unresolved.",
+    "In-place time shuffling and swallowed source failures need explicit equivalence/failure policy.",
+    "Primary scalar endpoint, justified meaningful effect, valid uncertainty, fixed access/resource budgets and an admitted evaluator are not established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "All empirical-core, complete-programme and simulation reconstruction materials remain calibration. Original source Figure 5 tasks are retained as recovery candidates; the authored prospective memory AUC and processed-signal forecast remain extensions."
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-004",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales.",
+  "source_paper": {
+    "title": "iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results 2.2–2.6; Figs. 3–7; Table 3; Methods 4.1.1–4.1.2, 4.3–4.5, 4.8 and 4.10",
+      "supports": "Synthetic generator parameters and full data grid; Allen cohort/QC; estimation recipe; Eq.21 and empirical reference definition. Eq.21 was visually inspected on PDF page26."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/README.md",
+      "locator": "How to run; Functions; acf_sttc_trial_concat",
+      "supports": "Author reproduction route for 10-minute continuous and 40 one-second trial records; four-estimator comparison and padded-trial treatment."
+    },
+    {
+      "id": "fitter",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_tau.py",
+      "locator": "func_single_exp; fit_single_exp; confidence interval helpers",
+      "supports": "Pinned implementation parameterizes the exponential directly by tau; publication Methods describes decay rate b and propagated tau uncertainty. Release parity requires verification."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-004/task.json",
+      "locator": "implementations/isttc-programme/README.md and baseline/baseline.py; implementations/sensitivity-glm-v1/POLICY.json",
+      "supports": "Finite synthetic programme, current-source-only baseline, prospective windows, QC .01 versus .1 discrepancy, and unresolved empirical/native parity."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Paper Table3 synthetic Hawkes parameter dataset and its duration/trial variants, plus Allen Visual Coding Neuropixels Functional Connectivity spontaneous activity. Use the original releases and manifestations; new simulations or new window draws are extensions.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Synthetic base comprises 100000 independent parameter sets with f 0.01–10Hz, alpha .1–.9 and tau 50–300ms. Empirical paper cohort is 5775 units spanning eight areas with presence ratio≥.9, ISI violations≤.5 and amplitude cutoff≤.01. Local retained loader policy differs on amplitude cutoff; authentic original roster is not reconciled.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This is an estimator study, not a published train/test learner split. Reuse the exact original 600-second records, 40/60/80/100 one-second trial draws and duration truncations; original trial/window realizations and any tuning exposure are not recovered. A held-out generator partition would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Spike times and the condition-specific observation duration/trial structure. The synthetic truth tau, generator parameters and author fitted results are evaluator information; empirical full-duration references must not leak into a trial-only candidate.",
+      "evidence_ids": [
+        "paper",
+        "readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Methods4.4–4.5 specify 20 lags, 50-ms lag/bin, 25-ms STTC tolerance, 3000-ms trial padding and single-exponential fitting from lag1 (lag2 for area fits), excluding NaN ACFs. Publication b-based fitting/uncertainty and current tau-based source must be reconciled; historical quality masks remain material.",
+      "evidence_ids": [
+        "paper",
+        "fitter",
+        "reg"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Methods4.8 Eq21 displays 100*(tau_est−tau_truth)/tau_truth. Registered policy uses 100*abs(tau_est−tau_ref)/tau_ref and conditional mean/median summaries. Resolve the original figure-producing absolute/signed convention and masks from primary code before assigning a lower-is-better success criterion. Empirical reference is full-duration ACF/iSTTC, so pseudo-REE is stability rather than truth error.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain complete original continuous/trial/duration conditions, success/failed-fit denominators and source condition/model summaries. No favorable successful-fit subset or newly weighted aggregate may replace source figures. Original numerical aggregate baseline and exact masks are not authenticated.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original synthetic relative timescale-estimation error and fit-coverage profile, with separately labeled empirical pseudo-error/stability companions",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper reports an 8% modeled reduction against ACF in continuous synthetic data and a coefficient −0.037, but these are contrasts, not a numeric iSTTC baseline error. Exact iSTTC condition-level error aggregates and their signed/absolute semantics remain unresolved.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The registered baseline.py is explicitly an unrun current-source adaptation at e78cfd2, not a publication-exact author rerun. The full synthetic finite programme also omits duration/trial sensitivity and empirical obligations.",
+      "evidence_ids": [
+        "readme",
+        "fitter",
+        "reg"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Do not reuse the 8% author-versus-ACF contrast, a stronger p-value or a favorable fitted subset as a margin. First recover the actual loss and failure coverage, then justify a reduction that represents meaningful timescale recovery.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "For synthetic comparisons retain paired methods/conditions within each original simulated parameter draw and account for repeated windows. For empirical summaries cluster by biological mouse and retain nested units; choose the decision rule only after source loss/estimand recovery.",
+      "independent_unit": "Synthetic independent parameter draw/spike-train realization; biological mouse for empirical inference.",
+      "rationale": "Repeated trials and duration versions of one spike train are dependent. Neurons within one animal are not independent animals; pseudo-error uncertainty does not validate biological truth.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original figure-producing error formula, failure masks, continuous/trial/duration grids, author fitter and numerical baseline before admission.",
+      "Use the same original 100000 synthetic realizations and all retained registered empirical obligations; a finite 600-second/40-trial subprogram cannot establish a whole-task win.",
+      "Require meaningful improvement in an authenticated truth-based synthetic error metric and a valid paired uncertainty rule while retaining all original fit failures and coverage; do not minimize signed bias to manufacture accuracy.",
+      "Keep real-data pseudo-REE and area contrasts as consistency evidence, not true-timescale accuracy. Stronger area significance or reproducing the reference is not superiority.",
+      "A new simulation, trial-window seed, QC threshold, fit mask or held-out-parameter split is a separately labeled extension and cannot be compared to paper results as a same-task win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was established by this source review; a paper baseline is not a present-day SOTA baseline.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source reconciliation, develop estimators on declared training/development observations with no access to final synthetic truths or empirical reference fits. Any development partition taken from the original panel must preserve an honestly labeled comparison; no new split is retroactively the paper task.",
+    "candidate_freeze": "Freeze estimator program, fitting/failure policy, original roster/condition manifest, trial windows, loss convention, reference recipe and access declarations before final truth scoring.",
+    "final_evaluation": "Evaluate candidate and publication-parity author method on the complete original condition support. Keep continuous, epoched and empirical stability results separate, with all failed estimates retained and no post-result eligibility changes.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "A current-source adapter, original paper contrast and publication-parity author rerun are different artifacts. Recover the original baseline before any paper-win claim; scientific runs and new resource allocations are outside this source curation."
+  },
+  "blocking_issues": [
+    "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
+    "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
+    "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
+    "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
+    "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Historical specifications and implementations remain calibration evidence; they do not establish surpassing the source paper."
+  }
+}

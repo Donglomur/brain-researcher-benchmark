@@ -1,0 +1,161 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-021",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The source tests a causal perturbation effect on behavior and EEG. Increasing an effect or its significance does not improve a prediction or estimator against known truth. Existing fixed-region and behavioral scorers reproduce specified summaries; selecting different windows or exclusions cannot become a same-task paper victory.",
+  "source_paper": {
+    "title": "Perturbing human V1 degrades the fidelity of visual working memory",
+    "url": "https://www.nature.com/articles/s41467-025-57882-8"
+  },
+  "evidence": [
+    {
+      "id": "tms-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-57882-8",
+      "locator": "Figure 2A-C and Methods: behavioral analysis and EEG",
+      "supports": "Paired TMS/no-TMS effects with 15 participants; uncertainty tests biological contrasts."
+    },
+    {
+      "id": "tms-figure-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/clayspacelab/Dake_Curtis_TMSV1_2025/1e2c149e6e61f85b45acb8486c0fb31dc38d2dfa/generateFigure2B.m",
+      "locator": "lines 4-19 and 21-35",
+      "supports": "Figure 2B uses released masterTFR derivative, specified time/frequency windows and subject averaging."
+    },
+    {
+      "id": "tms-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-021/task.json",
+      "locator": "input_assets.lineage_and_loader_evidence; implementations/registered-runtime/README.md; implementations/tms-figure2b-construction-v1/README.md",
+      "supports": "Historical reconstruction, participant-position limits and 15-versus16 source discrepancy are not improvement evidence."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "TMS effects on spatial memory error, alpha lateralization and occipital alpha/beta responses.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Released experiment derivatives used by the author Figure 2B route: masterTFR_allsubs.mat; behavioral analysis uses the source memory task.",
+      "evidence_ids": [
+        "tms-figure-code",
+        "tms-paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 2 reports 15 paired participants. Released arrays contain 15 positions, but exact physical-person-to-position identity is not verified; the sample count alone does not authenticate the original cohort join.",
+      "evidence_ids": [
+        "tms-paper",
+        "tms-registration"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "Within-person TMS/no-TMS and phosphene-field conditions, not a model train/test partition.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Condition-specific EEG power derivatives and memory-guided behavioral responses.",
+      "evidence_ids": [
+        "tms-paper",
+        "tms-figure-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The reviewed Figure 2B script selects 0.5-2 and 3-4.5 seconds and 7-20Hz by strict bounds before plotting; this derivative route cannot vary raw artifact removal.",
+      "evidence_ids": [
+        "tms-figure-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Paired behavioral-error and physiological contrasts; a larger contrast or smaller cluster p-value is not an accuracy score.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Participant summaries and paired contrasts; the figure script also averages subjects for the topographic display.",
+      "evidence_ids": [
+        "tms-paper",
+        "tms-figure-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered model-performance metric for the source perturbation effects",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Reported behavioral and EEG effects are biological findings, not a model score to exceed.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Existing source-compatible numerical summaries are calibration references.",
+      "evidence_ids": [
+        "tms-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "Neither stronger TMS effects nor outcome-selected windows define better scientific performance.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "Preserve paired-person uncertainty for effect estimation, without a paper-win threshold.",
+      "independent_unit": "Participant; conditions/trials are repeated measures",
+      "rationale": "Lower p-values cannot serve as the improvement outcome.",
+      "evidence_ids": [
+        "tms-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "No paper-win admission under this descriptive perturbation contract.",
+      "Retain all paired participants and controls for reproduction; do not optimize exclusions or frequency windows against the reported effect.",
+      "Any new memory predictor, artifact-removal estimator or population/split requires a separately reviewed task with a matched source comparator."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No ranked prediction task or present-day SOTA is claimed for the causal contrast.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for same-task improvement; continue to identify historical profiles as numerical calibration.",
+    "candidate_freeze": "No candidate optimization against perturbation effect magnitude is admitted.",
+    "final_evaluation": "Behavioral cells, Figure 2B outputs, fixed-region statistics and portable reconstructions may be checked only as calibration.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author effects and reconstruction references remain separate from any future predictive method benchmark."
+  },
+  "blocking_issues": [
+    "Source effect estimation has no monotonic model-performance success criterion.",
+    "Window/exclusion sensitivity is an extension, not surpassing the same scientific result.",
+    "Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve behavioral, Figure 2B, fixed-region and independent-condition profiles and their historical evidence. Their successful numerical comparisons do not establish better-than-paper science."
+  }
+}

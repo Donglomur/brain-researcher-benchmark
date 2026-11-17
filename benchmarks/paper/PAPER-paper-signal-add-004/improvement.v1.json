@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-004",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source orders fits within fixed models and representations and reports best of 10 reproducibility. Exact numeric baseline and historical objective/selection are not recovered: HMM free energy and DyNeMo final sampled training loss require different provenance. Age-effect significance and map similarity are not paper-win metrics; the held-person likelihood extension changes the original task.",
+  "source_paper": {
+    "title": "osl-dynamics, a toolbox for modeling fast dynamic brain activity",
+    "url": "https://elifesciences.org/articles/91949"
+  },
+  "evidence": [
+    {
+      "id": "osl-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10945565/",
+      "locator": "Methods5.2-5.7; Figure 1-5 reproducibility supplements; Discussion",
+      "supports": "Original datasets, group-level fitting, best of 10 source free-energy ordering and reproducibility; young/old analysis is illustrative."
+    },
+    {
+      "id": "osl-hmm-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/OHBA-analysis/osl-dynamics/064104d74d96e26ee37cd3d13fa6ed693b483894/examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+      "locator": "load_group_assignments; compare_summary_stats; config lines164-199",
+      "supports": "CTF TDE-HMM preparation, model/state capacity, group summaries and apparent inverted age plotting labels."
+    },
+    {
+      "id": "osl-dynemo-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/OHBA-analysis/osl-dynamics/064104d74d96e26ee37cd3d13fa6ed693b483894/examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py",
+      "locator": "load_group_assignments; config lines70-103",
+      "supports": "CTF TDE-DyNeMo source preparation and mode capacity; distinct objective/model from HMM."
+    },
+    {
+      "id": "osl-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-004/implementations/latent-state-programme/README.md",
+      "locator": "Six-branch original programme and separate held-person extension; SOURCE_CORRECTIONS.md: Native DyNeMo selection",
+      "supports": "Full CTF/Elekta original coverage, different historical revision and separately authored holdout objectives remain unqualified."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Fit source latent-state/network descriptions and assess their reproducibility under unchanged model hyperparameters; free-energy optimization is the potential ordered source route.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "CTF resting MEG and Elekta visual-task MEG used in the original paper. Payloads were not read.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "CTF 65 healthy participants; Elekta 19 participants with six runs each.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original group models use concatenated participant data. A new held-person partition is an extension, not the published fitting comparison.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-reconstructed regional MEG time series; original static, burst and network branches retain distinct inputs.",
+      "evidence_ids": [
+        "osl-paper",
+        "osl-hmm-code",
+        "osl-dynemo-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Reviewed CTF code uses 250 Hz data, 15 time embeddings, 80 PCA components, standardization, 8 HMM states or 7 DyNeMo modes. Historical cded3b2 versus registered 064104d recipe correspondence remains unqualified.",
+      "evidence_ids": [
+        "osl-hmm-code",
+        "osl-dynemo-code",
+        "osl-registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper describes variational free energy for fixed-hyperparameter fit ordering. Historical HMM free energy differs from DyNeMo final sampled training-epoch loss; exact criterion, branch normalization and reported values are not recovered.",
+      "evidence_ids": [
+        "osl-paper",
+        "osl-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper describes best of 10 selection and three independent sets. Historical HMM free energy and DyNeMo final history[loss][-1] are distinct criteria; post-fit free_energy() cannot recover the sampled final training trajectory. Exact original selection/aggregation remains unresolved.",
+      "evidence_ids": [
+        "osl-paper",
+        "osl-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original within-branch fit-selection statistic: HMM free energy or DyNeMo final training loss; exact source parity unresolved",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Supplementary free-energy plots show source run selection, but authenticated branch-specific numbers and exact score normalization have not been recovered.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author pipeline routes exist; no exact historical source/config runtime or empirical baseline rerun is admitted.",
+      "evidence_ids": [
+        "osl-hmm-code",
+        "osl-dynemo-code",
+        "osl-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful within-branch free-energy improvement must be justified against source objective scale and stochastic variability, without rewarding extra capacity or model changes that invalidate the objective comparison.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify paired independent optimization sets for a fitting claim, and person-grouped inference for biological summaries. No independent-time-bin uncertainty is acceptable.",
+      "independent_unit": "Independent fit set for optimization; participant for biological inference",
+      "rationale": "Three best of 10 sets illustrate source reproducibility but do not by themselves define an admission test or practical margin.",
+      "evidence_ids": [
+        "osl-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover numerical source free energy, exact representation/objective normalization, original branch coverage and historical runtime recipe.",
+      "Recover independently observed original DyNeMo training-trajectory loss; do not substitute post-fit free_energy() computed from final weights.",
+      "Preserve original cohort and fixed model capacity; never average incomparable HMM, DyNeMo, burst and static objectives into a victory score.",
+      "Predeclare an effect, uncertainty and equal access/compute policy including all attempted runs.",
+      "A new held-person split, stronger young/old significance or more attractive maps cannot establish surpassing this source result."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison on the exact fixed-branch original fitting objective has been verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Recover the original per-branch fitting benchmark before candidate iteration. Any later development/final fitting sets must preserve the source protocol; newly held-out people remain a labelled extension.",
+    "candidate_freeze": "Freeze candidate optimization method, source hyperparameters, seed/attempt policy, objective normalization and branch requirements before final evaluation.",
+    "final_evaluation": "Evaluate against qualified source-author baselines per original branch with unchanged cohort and representation. No execution or substitute holdout is admitted here.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source plotted free energies, rerun author values and prospective held-person likelihoods are separate; model capacity changes cannot exploit objective noncomparability."
+  },
+  "blocking_issues": [
+    "Original per-branch numeric baseline/normalization not recovered.",
+    "Native DyNeMo final training-epoch loss cannot be reconstructed from final weights; training-trajectory attestation and exact source-selection parity are missing.",
+    "Historical source revision and full six-branch preprocessing joins unresolved.",
+    "Fixed access/resource budgets, complete baseline execution, practical margin and valid optimization-set uncertainty missing.",
+    "Age-label inconsistency requires calibration repair; stronger age effects cannot be a success criterion."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the six-branch programme and all original state/map/summary reconstructions as calibration. The separately authored held-person likelihood programme is explicitly an extension and cannot satisfy this contract."
+  }
+}
