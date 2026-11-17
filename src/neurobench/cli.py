@@ -84,7 +84,9 @@ def public_implementations(catalog, task):
             'paper_improvement': task.get('paper_improvement'),
             'neural_understanding': task.get('neural_understanding'),
             'recorded_evidence': task.get('recorded_evidence', []),
-            'evaluation_role': 'calibration_only' if task['track'] == 'paper' else 'declared_source',
+            'evaluation_role': ('same_task_improvement_construction'
+                                if task.get('paper_improvement', {}).get('initial_registration')
+                                else 'calibration_only' if task['track'] == 'paper' else 'declared_source'),
             'implementations': sources(task['implementation_ids']),
             'related_sources': sources(task['related_implementation_ids']),
             'documentation': task.get('documentation', []),

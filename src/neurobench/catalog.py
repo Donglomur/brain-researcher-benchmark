@@ -23,6 +23,7 @@ COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'input_assets', 'evaluation', 'resources', 'holds',
           'next_implementation_action', 'provenance', 'admission'}
 READ_LIMIT = 24 * 1024 * 1024
+PAPER_PRE_IMPROVEMENT_COUNT = 116
 
 
 def improvement_module():
@@ -268,14 +269,31 @@ def discover(root=ROOT):
         need(previous_pin['path'] == 'docs/provenance/registrations/paper-pre-improvement-v1.json',
              'Unexpected pre-improvement registry location')
         previous_registry = checked_pin(reader, previous_pin, 'Pre-improvement registry')
-        need(previous_registry.get('schema_version') == 1
+        need(type(previous_registry.get('schema_version')) is int and previous_registry['schema_version'] == 1
              and previous_registry.get('kind') == 'neuroscience_benchmark_registry',
              'Unsupported pre-improvement registry')
         previous_rows = {row['id']: row for row in previous_registry['tasks']}
+        if any(row.get('specification_revision', {}).get('version') == 'paper-improvement/initial-v1' for row in rows):
+            prior_rows = list(previous_rows.values())
+            need(all(row.get('track') in ('paper', 'neural')
+                     and row.get('registration_class') in ('canonical', 'expansion') for row in prior_rows),
+                 'Invalid pre-improvement track or registration class')
+            expected_counts = {**counts(prior_rows),
+                               'canonical_specifications': sum(row['registration_class'] == 'canonical' for row in prior_rows),
+                               'expansion_drafts': sum(row['registration_class'] == 'expansion' for row in prior_rows)}
+            prior_counts = previous_registry.get('source_counts')
+            need(type(prior_counts) is dict
+                 and all(type(prior_counts.get(key)) is int and prior_counts[key] == value
+                         for key, value in expected_counts.items()),
+                 'Pre-improvement registration roster counts disagree')
+            need(sum(row['track'] == 'paper' for row in previous_rows.values()) == PAPER_PRE_IMPROVEMENT_COUNT
+                 and previous_registry.get('source_counts', {}).get('paper') == PAPER_PRE_IMPROVEMENT_COUNT,
+                 'Initial paper registrations must preserve all original paper registrations')
         need(len(previous_rows) == len(previous_registry['tasks'])
              and set(previous_rows) <= {row['id'] for row in rows}
              and {row['id'] for row in previous_rows.values() if row['track'] == 'paper'}
-             == {row['id'] for row in rows if row['track'] == 'paper'},
+             == {row['id'] for row in rows if row['track'] == 'paper'
+                 and row.get('specification_revision', {}).get('version') != 'paper-improvement/initial-v1'},
              'Paper overhaul must preserve the original registration roster')
     understanding_meta = registry.get('neural_understanding')
     previous_neural_rows = None
@@ -319,6 +337,7 @@ def discover(root=ROOT):
         original = row['original_specification']
         need(isinstance(original, dict) and isinstance(original.get('path'), str), 'Missing original task identity')
         revision = row.get('specification_revision')
+        need(revision is None or type(revision) is dict, 'Task specification revision must be an object')
         if track == 'paper' and registry.get('paper_improvement', {}).get('coverage_required'):
             need(revision is not None, 'Active paper improvement registry requires every paper contract')
         if track == 'neural' and registry.get('neural_understanding', {}).get('coverage_required'):
@@ -328,6 +347,49 @@ def discover(root=ROOT):
         if revision is None:
             need(all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
                  'Task definition differs from its preserved original identity')
+        elif revision.get('version') == 'paper-improvement/initial-v1':
+            need(track == 'paper' and previous_rows is not None and identifier not in previous_rows
+                 and set(revision) == {'version', 'improvement_contract', 'initial_registration'},
+                 'Initial paper registration cannot replace a historical task')
+            need(row['registration_class'] == 'expansion' and row['specification_id'] == identifier
+                 and row['specification_alias'] is False and original == row['specification']
+                 and set(row['specification']) == {'path', 'bytes', 'sha256'},
+                 'Initial paper specification must retain its exact registered identity')
+            registration_pin = revision['initial_registration']
+            registration_path = 'docs/provenance/registrations/paper-initial/' + identifier + '.json'
+            need(type(registration_pin) is dict and set(registration_pin) == {'path', 'bytes', 'sha256'}
+                 and registration_pin['path'] == registration_path and row['registry'] == registration_path
+                 and registration_pin in historical, 'Initial paper registration snapshot is not enrolled')
+            registration = checked_pin(reader, registration_pin, 'Initial paper registration')
+            pin = revision['improvement_contract']
+            need(type(pin) is dict and set(pin) == {'path', 'bytes', 'sha256'}
+                 and pin['path'] == directory + '/improvement.v1.json', 'Improvement contract is outside its task')
+            need(set(registration) == {'schema_version', 'task_id', 'source_commit', 'specification', 'improvement_contract'}
+                 and registration['schema_version'] == 'paper-improvement/initial-v1'
+                 and registration['task_id'] == identifier
+                 and isinstance(registration['source_commit'], str)
+                 and re.fullmatch(r'[0-9a-f]{40}', registration['source_commit'])
+                 and registration['specification'] == row['specification']
+                 and registration['improvement_contract'] == pin,
+                 'Initial paper registration differs from its preserved snapshot')
+            contract = checked_pin(reader, pin, 'Paper improvement contract')
+            engine = improvement_module()
+            errors = engine.validate_contract(contract, task_id=identifier)
+            need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
+            need(contract.get('legacy', {}).get('role') == 'no_predecessor'
+                 and contract['legacy'].get('original_task') is None,
+                 'Initial paper contract must not fabricate historical calibration')
+            need(doc.get('id') == identifier and doc.get('track') == 'paper'
+                 and doc.get('objective') == 'surpass_source_paper_same_task'
+                 and doc.get('evaluation') == {'objective': 'surpass_source_paper_same_task',
+                     'contract': pin, 'disposition': contract['disposition'], 'reproduction_role': 'not_applicable'}
+                 and doc.get('status') == contract['disposition']
+                 and doc.get('admission', {}).get('runnable') is False
+                 and doc['admission'].get('research_qualified') is False
+                 and doc['admission'].get('submission_ready', False) is False,
+                 'Initial paper definition is not bound to its improvement contract')
+            improvement = {**engine.summary(contract), 'contract': pin,
+                           'historical_specification': None, 'initial_registration': registration_pin}
         elif track == 'neural':
             need(previous_neural_rows is not None, 'Revised neural task requires its authenticated original registry')
             need(type(revision) is dict and set(revision) ==
@@ -386,6 +448,9 @@ def discover(root=ROOT):
             engine = improvement_module()
             errors = engine.validate_contract(contract, task_id=identifier)
             need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
+            need(contract.get('legacy', {}).get('role') == 'calibration_only'
+                 and contract['legacy'].get('original_task') == 'historical/task.pre-improvement.v1.json',
+                 'Historical paper contract must preserve its calibration predecessor')
             need(doc.get('objective') == 'surpass_source_paper_same_task'
                  and doc.get('evaluation', {}).get('contract') == pin
                  and doc.get('evaluation', {}).get('reproduction_role') == 'calibration_only'
@@ -427,7 +492,9 @@ def discover(root=ROOT):
         if improvement is not None:
             task['paper_improvement'] = improvement
             task['specification_revision'] = revision
-            task['runtime_lineage_note'] = 'Historical paper implementations are calibration components; they cannot establish same-task paper improvement.'
+            task['runtime_lineage_note'] = ('Historical paper implementations are calibration components; they cannot establish same-task paper improvement.'
+                                            if improvement['historical_specification'] else
+                                            'Initial source-paper task with no predecessor benchmark; source preparation and author calibration do not establish candidate superiority.')
         if understanding is not None:
             task['neural_understanding'] = understanding
             task['specification_revision'] = revision
@@ -504,7 +571,10 @@ def source_links(catalog):
         yield row['specification']['path']
         if row.get('paper_improvement'):
             yield row['paper_improvement']['contract']['path']
-            yield row['paper_improvement']['historical_specification']['path']
+            if row['paper_improvement']['historical_specification']:
+                yield row['paper_improvement']['historical_specification']['path']
+            else:
+                yield row['paper_improvement']['initial_registration']['path']
         if row.get('neural_understanding'):
             yield row['neural_understanding']['contract']['path']
             yield row['neural_understanding']['historical_specification']['path']
@@ -838,7 +908,9 @@ def render_tracks(catalog):
                          '**Disposition:** ' + markdown_text(improvement['disposition']) + '. '
                          + markdown_text(improvement.get('disposition_reason', '')) + '\n\n'
                          '- ' + markdown_link('Source-grounded improvement contract', improvement['contract']['path'], task) + '\n'
-                         '- ' + markdown_link('Preserved historical task definition (calibration only)', improvement['historical_specification']['path'], task) + '\n\n'
+                         '- ' + (markdown_link('Preserved historical task definition (calibration only)', improvement['historical_specification']['path'], task)
+                                 if improvement['historical_specification'] else
+                                 markdown_link('Initial source-paper task registration (no predecessor)', improvement['initial_registration']['path'], task)) + '\n\n'
                          'Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. '
                          'Published paper results, reproduced author baselines, and verified current SOTA are separate claims. '
                          'A new split, easier inputs, smaller cohort or changed metric is an extension.\n\n')
