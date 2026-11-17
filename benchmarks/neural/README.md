@@ -47,7 +47,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 3 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 2 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
-| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 4 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
+| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 5 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 4 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 2 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
@@ -108,7 +108,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-092](NEURAL-092/README.md) | Within-session count prediction followed by observed state-association investigation | 2 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |
 | [NEURAL-093](NEURAL-093/README.md) | Sensory evidence decoding during decisions | 2 | [manifest](NEURAL-093/implementations/registered-runtime/manifest.json) |
 | [NEURAL-094](NEURAL-094/README.md) | Decision correlates beyond movement | 3 | [manifest](NEURAL-094/implementations/registered-runtime/manifest.json) |
-| [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 8 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
+| [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 10 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
 | [NEURAL-096](NEURAL-096/README.md) | Prior-dependent neural timing representations | 3 | [manifest](NEURAL-096/implementations/registered-runtime/manifest.json) |
 | [NEURAL-097](NEURAL-097/README.md) | Task-irrelevant stimulus-content decoding | 2 | [manifest](NEURAL-097/implementations/registered-runtime/manifest.json) |
 | [NEURAL-098](NEURAL-098/README.md) | Sustained versus transient content information | 3 | [manifest](NEURAL-098/implementations/registered-runtime/manifest.json) |
@@ -133,7 +133,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-SCOPE-20261114-STROOP](NEURAL-SCOPE-20261114-STROOP/README.md) | Cross-person, unseen-session Stroop condition inference from frontal fNIRS | 3 | not linked |
 | [apcx-odor-pulse-evidence](apcx-odor-pulse-evidence/README.md) | Recover odor-pulse quantity and temporal sensory evidence from anterior piriform spike trains | 2 | not linked |
 | [clinical-ccep-stimulation-attribution](clinical-ccep-stimulation-attribution/README.md) | Anatomical stimulation-site attribution from complete VTC evoked responses | 4 | not linked |
-| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Recorded bedside responsiveness from native marker-relative EEG | 4 | not linked |
+| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Recorded bedside responsiveness from native marker-relative EEG | 5 | not linked |
 | [clinical-sensefog-stn-state](clinical-sensefog-stn-state/README.md) | Participant-held gait-state inference from bilateral STN LFP | 2 | not linked |
 | [marmoset-retinal-contrast-generalization](marmoset-retinal-contrast-generalization/README.md) | Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization | 2 | not linked |
 

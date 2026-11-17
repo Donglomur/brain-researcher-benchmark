@@ -40,6 +40,8 @@ jobs:
             python: '3.9.25'
           - group: numpy226
             python: '3.11.18'
+          - group: marble-native
+            python: '3.11.18'
     env:
       PARALLEL_CONTROL_GROUP: ${{ matrix.group }}
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
@@ -56,7 +58,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 26530, 'sha256': '04b916987dfed1d003fb43f04e384576655dc1423d3c75f8f4ba29ff554bbcf2'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 27731, 'sha256': '810d8a0f6dfa9063e39c5b6266c2307bea1b3ef61b9944ab6e9cda421b05cdd8'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 185465, 'sha256': '5d87f8ea3d6992bd461a636b940c5dfb29f28bffde218929dee292647f2515e5'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 192736, 'sha256': 'd4a595b722b8119cc444609272fa73bc62b536af7d931ee012082ca6815b1331'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -157,6 +159,21 @@ jobs:
           scikit-learn @ https://files.pythonhosted.org/packages/a8/f3/62fc9a5a659bb58a03cdd7e258956a5824bdc9b4bb3c5d932f55880be569/scikit_learn-1.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:25fc636bdaf1cc2f4a124a116312d837148b5e10872147bdaf4887926b8c03d8
           numba @ https://files.pythonhosted.org/packages/97/c8/8740616c8436c86c1b9a62e72cb891177d2c34c2d24ddcde4c390371bf4c/numba-0.61.2-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl --hash=sha256:3945615cd73c2c7eba2a85ccc9c1730c21cd3958bfcf5a44302abae0fb07bb60
           llvmlite @ https://files.pythonhosted.org/packages/99/fe/d030f1849ebb1f394bb3f7adad5e729b634fb100515594aca25c354ffc62/llvmlite-0.44.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:c5d22c3bfc842668168a786af4205ec8e3ad29fb1bc03fd11fd48460d0df64c1
+          joblib @ https://files.pythonhosted.org/packages/7b/91/984aca2ec129e2757d1e4e3c81c3fcda9d0f85b74670a094cc443d9ee949/joblib-1.5.3-py3-none-any.whl --hash=sha256:5fc3c5039fc5ca8c0276333a188bbd59d6b7ab37fe6632daa76bc7f9ec18e713
+          threadpoolctl @ https://files.pythonhosted.org/packages/32/d5/f9a850d79b0851d1d4ef6456097579a9005b31fea68726a4ae5f2d82ddd9/threadpoolctl-3.6.0-py3-none-any.whl --hash=sha256:43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb
+          LOCK
+              ;;
+            marble-native)
+              cat > "$PARALLEL_LOCK" <<'LOCK'
+          elephant @ https://files.pythonhosted.org/packages/94/a6/47c6b7fb636d71c35bc41d4681e2b2a119e6dbe28d12282e9f791f7c040e/elephant-1.1.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:3a5c60632425490a32c36fddd0063be286a6ebc5254f062be33ce50ab8353a2f
+          neo @ https://files.pythonhosted.org/packages/96/78/3e62ce6bb858d308b69d8c76dd800491dccc15443fdc7e21c9b95b09e430/neo-0.13.3-py3-none-any.whl --hash=sha256:4bbf19d6386708ca672d992c552aeffdf043c7f18b05fb34c541c07026e73489
+          quantities @ https://files.pythonhosted.org/packages/3a/aa/2d37dc5a180585b8b10aac671529625b72c8a6908b6b8b8bf0b1f8e35101/quantities-0.15.0-py3-none-any.whl --hash=sha256:589bdadcbbdc1c10950120c6d197f7e71ac145512a4b4ac5fd40d4946709d6ec
+          numpy @ https://files.pythonhosted.org/packages/5a/62/007b63f916aca1d27f5fede933fda3315d931ff9b2c28b9c2cf388cd8edb/numpy-1.26.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:f25e2811a9c932e43943a2615e65fc487a0b6b49218899e62e426e7f0a57eeda
+          scipy @ https://files.pythonhosted.org/packages/d4/b8/7169935f9a2ea9e274ad8c21d6133d492079e6ebc3fc69a915c2375616b0/scipy-1.12.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:8b8066bce124ee5531d12a74b617d9ac0ea59245246410e19bca549656d9a40a
+          scikit-learn @ https://files.pythonhosted.org/packages/46/c0/63d3a8da39a2ee051df229111aa93f6dca2b56f8080abd34993938166455/scikit_learn-1.5.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:118a8d229a41158c9f90093e46b3737120a165181a1b58c03461447aa4657415
+          packaging @ https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          six @ https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
+          tqdm @ https://files.pythonhosted.org/packages/a7/03/921a3d3c75785aca9ebfbfcabfbc3a1be12e2ab5265deb026d55a5a3f83e/tqdm-4.70.1-py3-none-any.whl --hash=sha256:c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73
           joblib @ https://files.pythonhosted.org/packages/7b/91/984aca2ec129e2757d1e4e3c81c3fcda9d0f85b74670a094cc443d9ee949/joblib-1.5.3-py3-none-any.whl --hash=sha256:5fc3c5039fc5ca8c0276333a188bbd59d6b7ab37fe6632daa76bc7f9ec18e713
           threadpoolctl @ https://files.pythonhosted.org/packages/32/d5/f9a850d79b0851d1d4ef6456097579a9005b31fea68726a4ae5f2d82ddd9/threadpoolctl-3.6.0-py3-none-any.whl --hash=sha256:43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb
           LOCK

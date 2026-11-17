@@ -419,6 +419,16 @@ def _current(original, contract, binding, source_id):
         current["holds"][1]["requirement"] = "Historical author decoder PCA precedes CV; retain this restriction for any author-parity baseline. The separately named prospective v2 decoder uses train-only fitting and still requires authentic competence qualification; it does not establish author Figure5 reproduction."
         current["holds"][7]["requirement"] = "The measured-target evaluator and generated negative/control source exist. Independently qualify scoring, complete-support failure handling and controls on authentic inputs under a protected target boundary and externally frozen protocol."
         current["next_implementation_action"][0] = "Provision and authenticate supported original/locked inputs, verify native grid/trial/ROI and separately recorded exposure provenance, then qualify complete-cohort reference/control execution under the adopted v2 processed-input condition."
+    if contract["task_id"] == "NEURAL-095":
+        routes = [item for item in contract["evidence"] if item.get("id") == "dmfc095-current-route-v1"
+                  and item.get("kind") == "local_source" and
+                  item.get("path") == "benchmarks/neural/NEURAL-095/current-operator-routes.v1.json" and
+                  item.get("sha256") == "b487d5c3c4cc04334cd55ddda054b44fb04e21a1c438827e1e6ce170908a813c"]
+        if routes:
+            current["operator_route"] = {"path": routes[0]["path"], "sha256": routes[0]["sha256"],
+                "launcher": "benchmarks/neural/NEURAL-095/operator.py",
+                "selection": "explicit_opt_in_source_route_only", "execution_authority": False}
+            current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
     return current
 
 

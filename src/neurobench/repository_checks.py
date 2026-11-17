@@ -458,7 +458,35 @@ def neural_revision_members(reader, row, document, previous_row):
     need(row["scientific_readiness"] == "unknown"
          and row["submission_readiness"] == "not_qualified_by_binding",
          "Neural source binding cannot grant scientific qualification")
-    return {previous["path"], contract_pin["path"]}
+    members = {previous["path"], contract_pin["path"]}
+    if "operator_route" in document:
+        route = document["operator_route"]
+        config = "benchmarks/neural/NEURAL-095/current-operator-routes.v1.json"
+        launcher = "benchmarks/neural/NEURAL-095/operator.py"
+        control = "benchmarks/neural/NEURAL-095/test_operator.py"
+        need(row["id"] == "NEURAL-095" and directory == "benchmarks/neural/NEURAL-095"
+             and type(route) is dict
+             and set(route) == {"path", "sha256", "launcher", "selection", "execution_authority"}
+             and route.get("path") == config and route.get("launcher") == launcher
+             and route.get("selection") == "explicit_opt_in_source_route_only"
+             and route.get("execution_authority") is False,
+             "Unsupported neural operator route")
+        evidence = contract.get("evidence")
+        need(type(evidence) is list, "Neural operator route requires pinned source evidence")
+        for identifier, path in (("dmfc095-current-route-v1", config),
+                                 ("dmfc095-current-launcher-v1", launcher)):
+            matches = [item for item in evidence if type(item) is dict and item.get("id") == identifier]
+            need(len(matches) == 1 and matches[0].get("kind") == "local_source"
+                 and matches[0].get("path") == path,
+                 "Neural operator route source evidence mismatch: " + identifier)
+            actual, _ = reader.file(path)
+            need(actual["sha256"] == matches[0].get("sha256")
+                 and (path != config or actual["sha256"] == route["sha256"]),
+                 "Neural operator route source pin mismatch: " + path)
+        # The accepted task-local controls are source, authenticated by the inventory.
+        reader.file(control)
+        members.update((config, launcher, control))
+    return members
 
 
 def check_namespace(root, prefix, boundaries, allowed_files):

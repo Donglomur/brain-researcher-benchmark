@@ -139,6 +139,128 @@ class RepositoryChecksTests(unittest.TestCase):
         (runtime / "not-source.bin").write_bytes(b"Local runtime output is not source.")
         self.assertEqual(self.check()["source_check"], "passed")
 
+    def revise_neural095(self):
+        row = self.registry["tasks"][2]
+        old_directory = row["task_directory"]
+        home = "benchmarks/neural/NEURAL-095"
+        (self.root / old_directory).rename(self.root / home)
+        relocations = json.loads((self.root / checks.RELOCATIONS).read_bytes())
+        for item in relocations["files"]:
+            if item["new"].startswith(old_directory + "/"):
+                item["new"] = home + item["new"][len(old_directory):]
+        write_json(self.root / checks.RELOCATIONS, relocations)
+        row.update(id="NEURAL-095", task_directory=home, specification_id="NEURAL-095")
+        old = json.loads((self.root / home / "task.json").read_bytes())
+        old["id"] = "NEURAL-095"
+        row["specification"] = write_json(self.root / home / "task.json", old)
+        row["specification"]["path"] = home + "/task.json"
+        self.registry["implementations"][1]["related_task_ids"] = ["NEURAL-095"]
+        for neural in self.registry["tasks"][2:]:
+            neural["original_specification"] = {**neural["specification"], "path": "former/" + neural["id"] + ".json"}
+        snapshot = write_json(self.root / checks.NEURAL_SNAPSHOT, self.registry)
+        snapshot["path"] = checks.NEURAL_SNAPSHOT
+        self.registry["neural_understanding"] = {"schema_version": checks.NEURAL_REVISION,
+            "objective": checks.NEURAL_OBJECTIVE, "coverage_required": True,
+            "registered_count": 2, "pre_understanding_registry": snapshot}
+        for neural in self.registry["tasks"][2:]:
+            directory = neural["task_directory"]
+            original = (self.root / neural["specification"]["path"]).read_bytes()
+            history = directory + "/" + checks.NEURAL_HISTORY
+            (self.root / history).parent.mkdir(parents=True)
+            (self.root / history).write_bytes(original)
+            prior = {**neural["specification"], "path": history}
+            document = {"schema_version": checks.NEURAL_REVISION, "task_id": neural["id"],
+                "objective": checks.NEURAL_OBJECTIVE, "evidence": []}
+            contract_path = directory + "/understanding.v1.json"
+            contract = write_json(self.root / contract_path, document)
+            contract["path"] = contract_path
+            neural["specification_revision"] = {"version": checks.NEURAL_REVISION,
+                "previous_specification": prior, "understanding_contract": contract}
+            neural["submission_readiness"] = "not_qualified_by_binding"
+            current = {"id": neural["id"], "track": "neural", "objective": checks.NEURAL_OBJECTIVE,
+                "evaluation": {"neural_understanding": {"schema_version": checks.NEURAL_REVISION,
+                    "objective": checks.NEURAL_OBJECTIVE, "contract_path": "understanding.v1.json",
+                    "contract_sha256": contract["sha256"], "original_definition_path": checks.NEURAL_HISTORY,
+                    "original_definition_sha256": prior["sha256"]}}}
+            pin = write_json(self.root / directory / "task.json", current)
+            pin["path"] = directory + "/task.json"
+            neural["specification"] = pin
+        self.route_row = row
+        self.route_contract = json.loads((self.root / home / "understanding.v1.json").read_bytes())
+        self.route_task = json.loads((self.root / home / "task.json").read_bytes())
+        for name in ("current-operator-routes.v1.json", "operator.py", "test_operator.py"):
+            (self.root / home / name).write_bytes(b"Source fixture only; never execute.\n")
+        self.route_task["operator_route"] = {"path": home + "/current-operator-routes.v1.json",
+            "sha256": hashlib.sha256((self.root / home / "current-operator-routes.v1.json").read_bytes()).hexdigest(),
+            "launcher": home + "/operator.py", "selection": "explicit_opt_in_source_route_only", "execution_authority": False}
+        for identifier, name in (("dmfc095-current-route-v1", "current-operator-routes.v1.json"),
+                                 ("dmfc095-current-launcher-v1", "operator.py")):
+            self.route_contract["evidence"].append({"id": identifier, "kind": "local_source", "path": home + "/" + name,
+                "sha256": hashlib.sha256((self.root / home / name).read_bytes()).hexdigest()})
+        self.save_neural095()
+        return home
+
+    def save_neural095(self):
+        home = self.route_row["task_directory"]
+        contract = write_json(self.root / home / "understanding.v1.json", self.route_contract)
+        contract["path"] = home + "/understanding.v1.json"
+        self.route_row["specification_revision"]["understanding_contract"] = contract
+        self.route_task["evaluation"]["neural_understanding"]["contract_sha256"] = contract["sha256"]
+        current = write_json(self.root / home / "task.json", self.route_task)
+        current["path"] = home + "/task.json"
+        self.route_row["specification"] = current
+        self.save_registry()
+
+    def test_neural095_current_sources_are_owned_and_control_drift_refuses(self):
+        home = self.revise_neural095()
+        self.build()
+        inventory = json.loads((self.root / checks.INVENTORY).read_bytes())
+        for name in ("current-operator-routes.v1.json", "operator.py", "test_operator.py"):
+            record = next(item for item in inventory["files"] if item["path"] == home + "/" + name)
+            self.assertEqual(record["owner"], "task:NEURAL-095")
+        self.assertEqual(self.check()["source_check"], "passed")
+        (self.root / home / "test_operator.py").write_bytes(b"Changed control source\n")
+        with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
+            self.check()
+
+    def test_neural095_route_evidence_and_fixed_paths_are_required(self):
+        self.revise_neural095()
+        task, contract = copy.deepcopy(self.route_task), copy.deepcopy(self.route_contract)
+        variants = [
+            lambda: self.route_task["operator_route"].update(execution_authority=True),
+            lambda: self.route_task["operator_route"].update(launcher="benchmarks/neural/NEURAL-095/other.py"),
+            lambda: self.route_task["operator_route"].update(extra_allowance=True),
+            lambda: self.route_task["operator_route"].update(sha256="0" * 64),
+            lambda: self.route_contract["evidence"][0].update(kind="local_review"),
+            lambda: self.route_contract["evidence"][1].update(sha256="0" * 64),
+            lambda: self.route_contract["evidence"].append(copy.deepcopy(self.route_contract["evidence"][0])),
+        ]
+        for index, change in enumerate(variants):
+            self.route_task, self.route_contract = copy.deepcopy(task), copy.deepcopy(contract)
+            change()
+            self.save_neural095()
+            with self.subTest(index=index), self.assertRaisesRegex(ValueError, "neural operator route|Neural operator route"):
+                self.build()
+
+    def test_neural095_root_admission_remains_closed_and_rejects_links(self):
+        home = self.revise_neural095()
+        extra = self.root / home / "extra.py"
+        extra.write_bytes(b"unowned\n")
+        with self.assertRaisesRegex(ValueError, "Orphan source file"):
+            self.build()
+        extra.unlink()
+        for name in ("current-operator-routes.v1.json", "operator.py", "test_operator.py"):
+            path = self.root / home / name
+            raw = path.read_bytes()
+            path.unlink()
+            target = self.root / "link-target"
+            target.write_bytes(raw)
+            path.symlink_to(target)
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "ordinary single-link file"):
+                self.build()
+            path.unlink()
+            path.write_bytes(raw)
+
     def test_parallel_control_sources_are_explicitly_owned_and_content_bound(self):
         self.build()
         inventory = json.loads((self.root / checks.INVENTORY).read_text())

@@ -168,8 +168,9 @@
   },
   "allowed_inputs": {
     "inputs": [
-      "One active-fold NPZ: train_windows(120,300,12), train_behavior(120,300), train_labels(120), query_windows(20,300,12), query_behavior(20,300), query_ids(20).",
-      "Windows are30 seconds at10Hz from12 selected accepted astrocytes; fluorescence has author-processed rather than physical spike-rate units. Behavior is a released binary-state proxy."
+      "Programme condition receives one active-fold NPZ: train_windows(120,300,12), train_behavior(120,300), train_labels(120), query_windows(20,300,12), query_behavior(20,300), query_ids(20). Typed-viewer condition receives only images from these same active-fold windows through restricted actions, with permitted training labels and no raw arrays.",
+      "Windows are30 seconds at10Hz from12 selected accepted astrocytes; fluorescence has author-processed rather than physical spike-rate units. Behavior is a released binary-state proxy.",
+      "The typed viewer retains original300samples/12traces and behavior at0.05..29.95s, with shared display gain and no added preprocessing. Every fold has all120training windows available and requires all20query probabilities; all seven folds close before collection."
     ],
     "forbidden_inputs": [
       "Held-fold context labels, mouse/context-coded filenames, saved answers and private comparator results.",
@@ -177,13 +178,13 @@
       "Persistent candidate state or source revisions between folds; no private feedback until all outputs close."
     ],
     "case_identity": "Exactly140 public pairs (fold integer0..6, opaque24-character query_id) listed in registered-runtime/public/cases.json;20 queries per fold. Per-fold programme outputs omit fold, and trusted assembly adds it for the scorer.",
-    "split": "Seven leave-one-mouse-out folds: six mice supply120 training windows and one mouse supplies20 queries (10 A,10 B). A fresh programme process/state for each fold is source-enforced; the same source is frozen before any fold.",
+    "split": "Seven leave-one-mouse-out folds: six mice supply120 training windows and one mouse supplies20 queries (10 A,10 B). A fresh programme process/state for each fold is source-enforced; the same source is frozen before any fold. The typed-viewer local process and empty read-only working directory are separately reset for every fold; remote provider conversation/cache reset remains an external requirement.",
     "coverage": "Complete selected seven paired mice and140 windows; not the11-mouse panel named in the original Figure3 source audit and not the entire author archive. Each access condition retains the same roster rather than creating new tasks."
   },
   "biological_unit": "Seven mice; windows and the two contexts are repeated observations within mouse.",
   "case_definition": "One30-second query window of300 samples×12 selected accepted cells;20 windows per held-mouse fold.",
   "split": {
-    "policy": "Seven leave-one-mouse-out folds: six mice supply120 training windows and one mouse supplies20 queries (10 A,10 B). A fresh programme process/state for each fold is source-enforced; the same source is frozen before any fold.",
+    "policy": "Seven leave-one-mouse-out folds: six mice supply120 training windows and one mouse supplies20 queries (10 A,10 B). A fresh programme process/state for each fold is source-enforced; the same source is frozen before any fold. The typed-viewer local process and empty read-only working directory are separately reset for every fold; remote provider conversation/cache reset remains an external requirement.",
     "coverage": "Complete selected seven paired mice and140 windows; not the11-mouse panel named in the original Figure3 source audit and not the entire author archive. Each access condition retains the same roster rather than creating new tasks."
   },
   "reference": {
@@ -219,14 +220,18 @@
       ]
     },
     "typed_viewer": {
-      "status": "not_delivered",
-      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
-      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "status": "source_available",
+      "representation": "Existing complete calcium-plus-behavior PNG viewer with restricted local typed training/query/inspect/gain/respond/finish transport; all120training windows and20queries in each of seven held-mouse folds.",
+      "boundary": "Participant sees image bytes and allowed labels only. Fresh process and empty read-only state per fold, no raw packets/other folds/private targets, immutable first responses and complete seven-fold restricted collection. Protocol-only diagnostics cannot collect as restricted transport.",
       "evidence_ids": [
-        "source_audit"
+        "active_fold_viewer",
+        "active_fold_renderer",
+        "restricted_viewer_transport",
+        "restricted_viewer_documentation"
       ],
       "missing": [
-        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+        "Complete authentic scripted transport validation under separately admitted resources; no inference result follows from that future software control.",
+        "Fresh external provider conversation/cache, genuine image content delivery, declared model/tool budget and scientific evaluation remain unqualified."
       ]
     },
     "tool_assisted": {
@@ -301,7 +306,7 @@
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "4a1a8dc467e5922e9bcd21c01a98ecccd9a027fa69a2451574c0315e7c46c363",
+      "contract_sha256": "4e781190a5b9d44ee2c71b519cffc278f78ae0b59e69c938171c86c9a4375f66",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "7bdc7239b804ff669547b7fa3818e7cc11ef2a2d5461a126aeec0bba116ba2aa"
     }

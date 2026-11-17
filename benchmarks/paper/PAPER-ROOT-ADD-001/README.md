@@ -78,6 +78,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Pre-scope reproduction source role](docs/provenance/reproduction.pre-scope.role.json)
 - [Preserved pre-scope reproduction declaration](docs/provenance/reproduction.pre-scope.v1.json)
+- [Original provided-author reference verification: README.md](docs/provenance/original-reference-20261117/README.md)
+- [Original provided-author reference verification: RECEIPT.json](docs/provenance/original-reference-20261117/RECEIPT.json)
+- [Original provided-author reference verification: REFERENCE.json](docs/provenance/original-reference-20261117/REFERENCE.json)
+- [Original provided-author reference verification: REVIEW.json](docs/provenance/original-reference-20261117/REVIEW.json)
 
 ## Implementation artifacts
 
