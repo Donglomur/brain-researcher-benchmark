@@ -12,6 +12,11 @@ from absence import absence
 
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'
 THREADS = ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'OMP_THREAD_LIMIT', 'MKL_NUM_THREADS', 'NUMBA_NUM_THREADS', 'NUMEXPR_NUM_THREADS')
+CURRENT_SOURCE_FILES = frozenset(('DIRECT_SIGNAL.md', 'README.md', 'SOURCE_FREEZE.json',
+                                 'absence.py', 'assets.json', 'manifest.json', 'metrics.py',
+                                 'score.py', 'test_adapter.py', 'validator.py', 'worker.py'))
+SOURCE_PREDECESSOR = {'path': 'SOURCE_FREEZE.json', 'bytes': 1128,
+                      'sha256': '2e5229e534d9efaee31c408bc0079e1cf8c90b722e5e536bd385815bee9d0839'}
 
 
 def require(ok, message):
@@ -31,6 +36,49 @@ def regular(path, cap, empty=False):
     s = path.stat()
     require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1 and (0 if empty else 1) <= s.st_size <= cap, 'Bounded regular file required')
     return path
+
+
+def verify_source(package=None):
+    """Authenticate the current source closure, retaining the historical freeze."""
+    package = HERE if package is None else Path(package)
+    path = regular(package / 'CURRENT_SOURCE.json', 32768)
+    body = path.read_bytes()
+    require(0 < len(body) <= 32768, 'Bounded current source descriptor required')
+
+    def unique_object(pairs):
+        value = {}
+        for key, item in pairs:
+            require(key not in value, 'Duplicate current source descriptor key')
+            value[key] = item
+        return value
+
+    current = json.loads(body, object_pairs_hook=unique_object)
+    require(isinstance(current, dict) and set(current) == {
+        'schema_version', 'kind', 'candidate_id', 'scope', 'change', 'predecessor', 'files'
+    }, 'Exact current source descriptor schema required')
+    require(type(current['schema_version']) is int and current['schema_version'] == 1
+            and current['kind'] == 'neural077_current_source'
+            and current['candidate_id'] == 'NEURAL-077', 'Wrong current source identity')
+    require(all(isinstance(current[k], str) and 0 < len(current[k]) <= 4096
+                for k in ('scope', 'change')), 'Current source provenance required')
+    require(current['predecessor'] == SOURCE_PREDECESSOR, 'Historical source predecessor changed')
+    files = current['files']
+    require(isinstance(files, dict) and set(files) == CURRENT_SOURCE_FILES,
+            'Exact current source file inventory required')
+    require({entry.name for entry in package.iterdir()} == CURRENT_SOURCE_FILES | {'CURRENT_SOURCE.json'},
+            'Missing or unexpected package source member')
+    require(files['SOURCE_FREEZE.json'] == {k: SOURCE_PREDECESSOR[k] for k in ('bytes', 'sha256')},
+            'Historical source freeze pin changed')
+    for relative, pin in files.items():
+        require(isinstance(pin, dict) and set(pin) == {'bytes', 'sha256'}
+                and type(pin['bytes']) is int and 0 < pin['bytes'] <= 1000000
+                and isinstance(pin['sha256'], str) and len(pin['sha256']) == 64
+                and all(c in '0123456789abcdef' for c in pin['sha256']), 'Invalid source member pin')
+        member = regular(package / relative, 1000000)
+        require(member.stat().st_size == pin['bytes'] and digest(member) == pin['sha256'],
+                'Current package source changed: ' + relative)
+    return {'path': path.name, 'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest(),
+            'predecessor': dict(SOURCE_PREDECESSOR)}
 
 
 def save(path, value):
@@ -81,11 +129,8 @@ def main():
     evidence = output.with_name(output.name + '.execution.json')
     ownership = output.with_name(output.name + '.ownership.json')
     require(not evidence.exists() and not ownership.exists(), 'Existing execution evidence')
+    source = verify_source()
     assets = json.loads((HERE / 'assets.json').read_text())
-    freeze = json.loads((HERE / 'SOURCE_FREEZE.json').read_text())
-    for relative, pin in freeze['files'].items():
-        path = regular(HERE / relative, 1000000)
-        require(path.stat().st_size == pin['bytes'] and digest(path) == pin['sha256'], 'Frozen package source changed: ' + relative)
     submission = None if args.action == 'prepare' else regular(args.submission, 1048576, empty=True)
     submission_sha256 = digest(submission) if submission else None
     mounts = {'/package': str(HERE)}
@@ -104,7 +149,8 @@ def main():
     env = dict(os.environ, DOCKER_CONFIG=str(ROOT / '.cache-build/docker-config'), DOCKER_HOST='unix:///Users/nicholas/.docker/run/docker.sock')
     docker = '/usr/local/bin/docker'; commands = []; attempted = False
     record = {'benchmark_id': 'NEURAL-077', 'action': args.action, 'container_name': name, 'new_fits': 0,
-              'source_freeze_sha256': digest(HERE / 'SOURCE_FREEZE.json'), 'requested_canonical_mounts': mounts,
+              'source_freeze_sha256': source['sha256'], 'source_freeze_path': source['path'],
+              'source_freeze_predecessor': source['predecessor'], 'requested_canonical_mounts': mounts,
               'submission_sha256_before_dispatch': submission_sha256}
     def run(argv, cleanup=False):
         deadline = final_deadline if cleanup else work_deadline
