@@ -1,0 +1,113 @@
+{
+  "protocol": "NEURAL024-causal-v1",
+  "candidate_id": "NEURAL-024",
+  "rounds": 22100,
+  "warmup_rounds": 10,
+  "scored_rounds": 22090,
+  "channels": 96,
+  "mean_unit": "count_per_bin",
+  "first_target_bin": 3000,
+  "last_target_bin": 25099,
+  "first_scored_target_bin": 3010,
+  "framing": {
+    "encoding": "ASCII JSON followed by newline",
+    "maximum_line_bytes_including_newline": 4096,
+    "duplicate_keys": "rejected",
+    "numbers": "finite float64-compatible real values; means strictly positive; booleans invalid; nonzero float underflow invalid"
+  },
+  "ready": {
+    "status": "ready"
+  },
+  "initialize": {
+    "protocol": "NEURAL024-causal-v1",
+    "status": "initialize",
+    "rounds": 22100,
+    "warmup_rounds": 10,
+    "scored_rounds": 22090,
+    "channels": 96,
+    "mean_unit": "count_per_bin"
+  },
+  "initialized": {
+    "status": "initialized",
+    "protocol": "NEURAL024-causal-v1"
+  },
+  "predict_keys": [
+    "protocol",
+    "status",
+    "sequence",
+    "target_bin",
+    "interval",
+    "scored",
+    "nonce",
+    "observation"
+  ],
+  "predict_field_types": {
+    "status": "predict",
+    "sequence": "integer0..22099",
+    "target_bin": "3000+sequence",
+    "interval": "two native target-session-relative finite seconds",
+    "scored": "boolean sequence>=10",
+    "nonce": "fresh32 lowercase hexadecimal characters",
+    "observation": "null first; thereafter previous target_bin and96 uint32 counts"
+  },
+  "reply_keys": [
+    "sequence",
+    "nonce",
+    "mean_counts"
+  ],
+  "reply_field_types": {
+    "sequence": "same exact integer",
+    "nonce": "same exact string",
+    "mean_counts": "all96 positive finite numeric means"
+  },
+  "stop_keys": [
+    "protocol",
+    "status",
+    "observation"
+  ],
+  "stop_observation": "last revealed target_bin25099 plus96 counts, after final committed vector",
+  "stopped": {
+    "status": "stopped"
+  },
+  "canonical_controller_encoding": {
+    "sort_keys": true,
+    "separators": [
+      ",",
+      ":"
+    ],
+    "ensure_ascii": true,
+    "allow_nan": false,
+    "trailing_newline": true,
+    "hashes_include_newline": true
+  },
+  "native_npz_clock_edges": "unchanged absolute seconds",
+  "wire_clock_intervals": "target native edges minus first calibration edge",
+  "source_npz_members": [
+    "counts",
+    "bin_edges_seconds"
+  ],
+  "public_shapes": {
+    "source_counts": [
+      18700,
+      96
+    ],
+    "calibration_counts": [
+      3000,
+      96
+    ]
+  },
+  "lawful_prefix_online_learning_allowed": true,
+  "arbitrary_in_memory_weights_freeze_enforced": false,
+  "scored_cells": 2120640,
+  "primary": "Poisson log-likelihood gain vs fixed calibration_rate divided by total scored spikes and ln(2)",
+  "reference_learning_policy": "six already executed fixed-parameter arms; no refit",
+  "candidate_wall_seconds": 600,
+  "whole_attempt_seconds": 780,
+  "candidate_cpu": 1.75,
+  "candidate_memory_bytes": 3221225472,
+  "candidate_tmpfs_bytes": 16777216,
+  "stderr_total_bytes_cap": 32768,
+  "stdout_is_protocol_only": true,
+  "ordinary_accuracy_floor": null,
+  "exposed_historical_development_support": true
+}
