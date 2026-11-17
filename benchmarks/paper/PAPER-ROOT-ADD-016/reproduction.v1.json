@@ -1,0 +1,548 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-016",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The restored primary is the original bounded Salzburg age–spectral-slope cardiac-confound result in Figure4—figure supplement4 A–C. Nine actual source scalar summaries can be declared, but original model/column/cohort identities, numerical targets, acceptance criteria and trusted native verification are unresolved. Structured native evidence is additionally schema-blocked. The genuine20-person Figure3 ECG/TRF result remains a separate empirical family and cannot establish primary success.",
+  "source_paper": {
+    "title": "Age-related changes in cortical 1/f dynamics are linked to cardiac activity",
+    "url": "https://doi.org/10.7554/eLife.100605.3"
+  },
+  "evidence": [
+    {
+      "id": "salzburg_primary",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Version of Record; Results s2-3; Figure4—figure supplement4 A–C (XML fig4s4)",
+      "supports": "Named Salzburg age–spectral-slope result across ECG retained, rejected and isolated-component conditions; age distribution and standardized beta comparison. Main Figure4 is not this primary population."
+    },
+    {
+      "id": "source_statistics",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Version of Record; Statistical inference, s4-3",
+      "supports": "Bayesian GLMs; standardized beta coefficients; original 94% posterior HDIs and ROPE -0.1 to0.1; source diagnostic statements. These source inferential rules are not reproduction equivalence tolerances."
+    },
+    {
+      "id": "salzburg_participants",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Version of Record; Participants; Salzburg replication paragraph and fig4s4 B",
+      "supports": "684 Salzburg recordings collected and655 analyzed after source exclusions/missing processing,423 younger than30; source age distribution is not age-diverse. No exact released-row identity manifest follows from these counts."
+    },
+    {
+      "id": "released_salzburg_table",
+      "kind": "author_data",
+      "url": "https://osf.io/download/a5tb3/",
+      "locator": "meg_slope_data_sbg.csv; retained source inventory/schema:655 rows, subject_id, age, ECG_components, ECG_not_rejected, ECG_rejected; file revision/content SHA not authenticated in this scope revision",
+      "supports": "Released processed participant-level observations support the bounded statistical reanalysis; the table is not an original Bayesian fit or a protected target bundle."
+    },
+    {
+      "id": "age_notebook_route",
+      "kind": "author_code",
+      "url": "https://github.com/schmidtfa/cardiac_1_f/blob/4562c0dc318930c46b77732b73d85504b2b471c4/notebooks/%20c_1_f_age_sbg.ipynb",
+      "locator": "Pinned Salzburg notebook route with literal leading-space filename; retained task evaluation.unresolved_grading.task_specific_gates names Bambi age models and brain_slope_avg/heart_slope_avg/no_ica_slope_avg",
+      "supports": "Identifies the original author analysis route and unresolved CSV-to-model bridge. A committed source route does not establish an executed or qualified CSV-entry interface, formula, priors or posterior-summary parity."
+    },
+    {
+      "id": "retained_primary",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-016/task.json",
+      "locator": "Exact retained local historical/task.pre-improvement.v1.json: primary_outputs; evaluation.observable_endpoints; task-specific gates; next_implementation_action. Remote registration URL retained, not refetched.",
+      "supports": "Original statistical age-confound scope from released participant measurements; excludes raw ICA/spectral preprocessing and full CamCAN replication; requires original age model, column map and eligibility."
+    },
+    {
+      "id": "separate_ecg_result",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Figure3 A–D and Methods s4-4-3",
+      "supports": "Genuine separate20-person concurrent M/EEG/ECG forward-TRF and backward-reconstruction result. Its four-fold temporal prediction task cannot establish the age-confound primary finding."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The original Salzburg statistical confound analysis represented by Figure 4—figure supplement 4: retain source-eligible participant identities and the ECG-retained, ECG-rejected and isolated cardiac-component conditions; reconstruct the source Bayesian age–slope models and the complete source-defined condition contrast. Bind the released measurements to source model columns and inferential outputs. This does not require raw ICA/spectral preprocessing or the separate full CamCAN analysis.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "retained_primary"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Use the released Salzburg participant-level measurements in meg_slope_data_sbg.csv (OSF a5tb3/jcekr), whose retained schema contains subject_id, age, ECG_components, ECG_not_rejected and ECG_rejected. Exact immutable table revision, bytes, row identities and mapping to the original analysis export remain unbound. This is the Salzburg statistical dataset, distinct from the20-person Figure3 recording subset and the main Figure4 CamCAN dataset.",
+      "evidence_ids": [
+        "released_salzburg_table",
+        "salzburg_participants",
+        "retained_primary"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preserve the source-eligible Salzburg participant observations. The paper reports684 collected and655 analyzed recordings, with423 participants younger than30; the released schema records655 rows. Counts do not authenticate participant identities, unique-person multiplicity, condition completeness or exclusion/missingness lineage. Do not admit all collected participants or generalize to an age-diverse population.",
+      "evidence_ids": [
+        "salzburg_participants",
+        "released_salzburg_table"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The primary is the original Bayesian association analysis on source-eligible participant measurements, not a prediction-holdout task. No new train/test split, cross-validation or20-person temporal decoding split is introduced. Source model estimation and any original selection rules must be reconstructed on their own support.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "retained_primary"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed participant age and spectral-slope measurements under all three source cardiac-component conditions, together with authentic participant/condition and missingness provenance. The released measurements are the bounded starting point; raw recordings, ICA refitting and full CamCAN replication are outside this primary task.",
+      "evidence_ids": [
+        "released_salzburg_table",
+        "retained_primary"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve the original released slope values and the source transformations used for the Salzburg Bayesian age models. Bind ECG_components/ECG_not_rejected/ECG_rejected to heart_slope_avg/no_ica_slope_avg/brain_slope_avg through actual exporter/model lineage rather than name inference; bind slope sign, source spectral units, age/slope standardization and missing-value handling. Their original sensor/frequency reductions and source model preprocessing remain unverified; do not borrow the CamCAN frequency/sensor grid or redo raw ICA.",
+      "evidence_ids": [
+        "age_notebook_route",
+        "released_salzburg_table",
+        "retained_primary",
+        "salzburg_primary"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "The original scientific quantities are the three standardized age–spectral-slope beta coefficients and their source94% posterior HDIs, together with the original condition comparison and age–slope relationships shown in Figure4—figure supplement4. They are descriptive/inferential biological findings, not predictive accuracy or quantities to maximize as a benchmark win.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Estimate each original condition model on its exact eligible participant support and reproduce the source standardized coefficient summary and94% HDI calculation. The original model direction/formula, families/links, priors, point-summary operator, standardization scope, posterior inference settings and complete condition-comparison recipe must be bound. Preserve participant dependence across conditions; do not replace source models with pooled cross-condition averaging, ordinary correlation/OLS, or a new paired effect.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Only the named Salzburg Figure4—figure supplement4 A–C primary is mandatory: A original age–slope relationships in each of the ECG-retained/rejected/isolated conditions; B source Salzburg age-distribution support; C all three standardized beta summaries/94% HDIs and the source comparison underlying the strongest-association-in-isolated-components finding. The nine scalar declarations are source-defined summaries, not complete evidence. Authentic participant/model/posterior and source plotting/contrast outputs remain to be bound and require structured representation. Main CamCAN Figure4, other cohorts, raw ICA/spectral preprocessing, digit-span controls and the separate Figure3 ECG/TRF experiment are not automatic primary obligations. No invented cross-family success rule is supplied.\n\nRetained source-specific qualifications:\nRecreate the Salzburg participant-level age–spectral-slope cardiac-confound finding in Figure4—figure supplement4: estimate the source age association under ECG-retained, ECG-rejected and isolated cardiac-component conditions, and reconstruct the original comparison of their standardized coefficients.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "salzburg_participants",
+        "retained_primary"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same admitted paper (including printed claims and figures), processed Salzburg participant table and necessary source identity metadata. Only paper+data+author-code adds the authenticated original author snapshot. Operator reference fits, graders, verification/preparation helpers and other-attempt histories are not the author-code addition. Printed answers and released plots are known inputs; genuine reproduction requires computation of the source Bayesian models and their granular outputs from the admitted measurements. Exact exposure and budget manifests remain unresolved.",
+      "evidence_ids": [
+        "released_salzburg_table",
+        "salzburg_primary",
+        "age_notebook_route",
+        "retained_primary"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "salzburg_ecg_retained_standardized_beta",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: original standardized age coefficient for the ECG components not rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components not rejected. The released column named ECG_not_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_retained_hdi94_lower",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: lower endpoint of the original94% posterior HDI for the ECG components not rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components not rejected. The released column named ECG_not_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_retained_hdi94_upper",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: upper endpoint of the original94% posterior HDI for the ECG components not rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components not rejected. The released column named ECG_not_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_rejected_standardized_beta",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: original standardized age coefficient for the ECG components rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components rejected. The released column named ECG_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_rejected_hdi94_lower",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: lower endpoint of the original94% posterior HDI for the ECG components rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components rejected. The released column named ECG_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_rejected_hdi94_upper",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: upper endpoint of the original94% posterior HDI for the ECG components rejected condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for ECG components rejected. The released column named ECG_rejected is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_components_standardized_beta",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: original standardized age coefficient for the isolated ECG components condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for isolated ECG components. The released column named ECG_components is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_components_hdi94_lower",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: lower endpoint of the original94% posterior HDI for the isolated ECG components condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for isolated ECG components. The released column named ECG_components is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    },
+    {
+      "id": "salzburg_ecg_components_hdi94_upper",
+      "kind": "scalar",
+      "description": "Figure4—figure supplement4: upper endpoint of the original94% posterior HDI for the isolated ECG components condition. The summary is a genuine source statistical quantity; its numeric target and exact source model/summary recipe remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless standardized beta coefficient",
+      "aggregation": "Original Salzburg participant-level Bayesian age–spectral-slope model for isolated ECG components. The released column named ECG_components is the source label to authenticate, not a verified bridge to notebook model variables. Bind exact eligible rows, model formula/orientation, family/link, priors, standardization, posterior draws and source summary before computing this scalar. Source94% HDI is retained as an original reported quantity; do not replace it with an ordinary confidence interval or use it as an invented reproduction equivalence band. Keep all three source conditions and required Fig4s4 companions.",
+      "evidence_ids": [
+        "salzburg_primary",
+        "source_statistics",
+        "released_salzburg_table",
+        "age_notebook_route",
+        "retained_primary"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference, source precision or justified stochastic-rerun equivalence rule is available. Original ROPE and94% HDI significance rules describe the paper analysis, not an acceptance tolerance for a new reconstruction.",
+        "evidence_ids": [
+          "source_statistics",
+          "salzburg_primary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct original Bayesian uncertainty and model diagnostics as source outputs; separately justify any reproduction acceptance uncertainty on the authentic original independent units. Source94% HDI and ROPE[-0.1,0.1] are not silently reused as benchmark acceptance criteria.",
+        "independent_unit": "Original eligible Salzburg participant, with same participant retained across the three component conditions; recording-to-participant uniqueness/multiplicity remains to be authenticated.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported655 analyzed recordings do not by themselves establish independent biological units, exact eligible support, effective posterior sample count or reproducibility of inferential decisions.",
+        "evidence_ids": [
+          "salzburg_participants",
+          "source_statistics",
+          "retained_primary"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "This is an external scope-corrected provisional declaration, not an enrolled replacement. It restores the retained primary under the explicit scope-adjudication ledger. Canonical task/improvement/history and prior sidecars are unchanged; final task identity is on HOLD.",
+    "The three original standardized coefficients and six94% HDI endpoints are genuine scalar estimands, but all nine numerical targets and exact source summary recipes are unresolved. No figure digitization, new effect threshold, arbitrary pairwise difference, stronger coefficient or smaller p value supplies reproduction or improvement success.",
+    "Authenticate the exact released Salzburg participant table revision, observed bytes, original participant identities, condition support, missingness/exclusion lineage and source export. The source reports655 analyzed from684 collected; do not infer identities or include all684 from counts.",
+    "The retained source names a Salzburg Bambi age notebook and the variables brain_slope_avg/heart_slope_avg/no_ica_slope_avg. The exact CSV-column bridge, model formula/orientation, family/link, priors, standardization, fit settings, posterior summary and condition-comparison computation remain unqualified. Do not substitute OLS/correlation, a CamCAN model or a new prediction endpoint.",
+    "Source original inference uses94% posterior HDIs and ROPE[-0.1,0.1], with diagnostic statements about no divergent transitions, Rhat<1.05 and effective sample size>400. Preserve these source checks after binding their exact model implementation; they are not independently justified reconstruction equivalence or superiority criteria.",
+    "Complete Figure4—figure supplement4 A–C requires source participant-level relationships, age-distribution support, original posterior/derived model outputs and full condition comparison. Structured arrays/distributions exceed scalar/categorical v1; see STRUCTURED_OUTPUT_PROPOSAL.scope-corrected.json. The schema limitation is separate from genuine source/identity/model/criteria/verifier gaps.",
+    "No admitted native CSV-to-original-model analysis interface, authentic model-output reference bundle or trusted independent data-to-design/posterior/summary verifier is pinned. Printed source findings and replotting the released table cannot alone establish computational reproduction.",
+    "Both information conditions must share authenticated primary data, observations and resources; author code is the only additional information. Input/exposure/evaluator/resource manifests and budgets remain unresolved. All four scientific outcome/access cells remain unknown.",
+    "The reviewed20-person Figure3 A–D ECG/TRF result and its source-recovery implementation remain useful separately. Better ECG reconstruction, matching120 public score rows or passing its software checks cannot establish this primary Salzburg age-confound finding.",
+    "No authenticated ordered same-question superiority criterion is established for the primary age analysis. Primary improvement remains unavailable pending a justified criterion; its lack does not invalidate first-class reproduction. Do not promote the existing decoder improvement contract as a primary age-analysis endpoint."
+  ]
+}

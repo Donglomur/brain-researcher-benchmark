@@ -1,0 +1,620 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-020",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Authorized restoration of the original biological wiring/common-input family. The source supports the genuine empirical summaries below, but exact native panels, identities, code/data parity, numerical references, verifier and agreement criteria remain incomplete. The structured-schema gap is distinct from these source gaps. This external provisional draft requires canonical owner adoption of the corrected scientific anchors; it is not bound to current RNN-primary improvement or a final task hash.",
+  "source_paper": {
+    "title": "Functional connectomics reveals general wiring rule in mouse visual cortex",
+    "url": "https://www.nature.com/articles/s41586-025-08840-3"
+  },
+  "evidence": [
+    {
+      "id": "biological-scope",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "PMC11981947 XML Par6-13, Par64-80 and Par95; Figures 1-2",
+      "supports": "Single reconstructed mouse; processed excitatory-neuron graph, source functional selection and anatomical controls; measured and digital-twin-derived quantities remain distinct. Intake counts do not define an authenticated eligible graph."
+    },
+    {
+      "id": "fig2-wiring",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Fig2, Par15-23; Methods Par96-142; Supplementary Tables 2-6",
+      "supports": "Connected-versus-ADP-versus-same-region mean comparisons, presynaptic-centered co-travel and synapse-density relationships, and co-travel-adjusted synaptic anatomy associations. Numeric coefficient and complete curve outputs are not recovered."
+    },
+    {
+      "id": "fig3-factorization",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Fig3, Par24-26; Methods Par82, Par109-142; Supplementary Tables 7-14",
+      "supports": "Source empirical distinction between feature-weight and RF-center effects at axonal and synaptic scales, preserving projection heterogeneity and co-travel controls."
+    },
+    {
+      "id": "fig4-stratification",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Fig4, Par27-28; Methods Par80, Par109-136; Supplementary Tables 15-20",
+      "supports": "Area/layer GLMM coefficients vary by functional metric and scale; inclusion thresholds and presynaptic grouping are source-defined, not a universal-effect requirement."
+    },
+    {
+      "id": "fig5-common-input",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Fig5, Par34-35, Par145-146; Supplementary Table 21; Extended Data Figure 14 referenced in Par35",
+      "supports": "Observed presynaptic-specific synapse-count-weighted postsynaptic similarity versus multi-feature pairwise-GLMM expectation; three of four projection types show higher similarity by the source signed-rank analysis. Exact per-neuron outputs and exact P values are unrecovered."
+    },
+    {
+      "id": "biological-robustness",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Par23, Par28, Par35; Extended Data Figure 3 and Figure 7; validation context Par6, Par14, Par24",
+      "supports": "Measured in-vivo reanalysis and model-quality sensitivity support the biological findings; distinct validation experiments support interpretation of model-derived features without adding digital-twin retraining."
+    },
+    {
+      "id": "biological-methods",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "XML Par64-82, Par95-142, Par145-146",
+      "supports": "Original selection, grouping, bootstrap visualizations, Tweedie and Poisson GLMMs, synaptic opportunity offset, multiplicity corrections and weighted common-input reductions. Source wording discrepancies are retained externally."
+    },
+    {
+      "id": "data-route",
+      "kind": "author_data",
+      "url": "https://s3.amazonaws.com/bossdb-open-data/iarpa_microns/minnie/functional_data/functional_connectomics/node_and_edge_properties/v1/readme_v1.md",
+      "locator": "Version-1 Node Data Columns and Edge Data Columns; retained historical task input_assets and route reconciliation; actual payloads not read",
+      "supports": "Pinned older pickle route and later Feather route are not assumed equivalent. Payload integrity, source identities, version parity and selected support remain unresolved."
+    },
+    {
+      "id": "biological-notebooks",
+      "kind": "author_code",
+      "url": "https://github.com/cajal/microns-funconn-2025/tree/bc9302a21443453b1f39819676f2388e91bd43a3/figures",
+      "locator": "figures/like2like.ipynb blob 500db78992bdda74d08d038dde8ee5fe319c69c9; figures/common_input.ipynb blob 6aba56cf4980e572db24ff15e6e03d63dbf1dfe1; complete previously authenticated code/markdown extracts reread",
+      "supports": "Actual notebooks load processed biological tables and precomputed presynaptic, GLMM/bootstrap and common-input result tables. They plot results and request run_analysis.py when results are missing; they are not an independent submitted-analysis verifier."
+    },
+    {
+      "id": "biological-compute-reference",
+      "kind": "author_code",
+      "url": "https://github.com/cajal/microns-funconn-2025/tree/bc9302a21443453b1f39819676f2388e91bd43a3/funconnect/compute",
+      "locator": "funconnect/compute/like2like.py run_like2like_analysis; common_inputs.py analyze_connectivity and perform_statistical_analysis; retained task/code locators, not a fresh full-module audit in this correction",
+      "supports": "Authentic analysis-module references retained for native source binding; executable data/version parity and independent verification remain unqualified."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Biological like-to-like wiring and common-input-versus-functional-similarity relationships from the single reconstructed mouse volume, retaining source anatomical/projection controls and GLMM/bootstrap comparisons; not an every-figure or whole-paper requirement.",
+      "evidence_ids": [
+        "biological-scope",
+        "fig2-wiring",
+        "fig5-common-input"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original MICrONS processed node/edge measurements and source-defined functional/anatomical attributes. Retain the documented BossDB node_and_edge_properties/v1 pickle route and its original code correspondence separately from later Feather inputs; content integrity, schema and publication-version parity remain unqualified. No new EM reconstruction or digital-twin retraining is included.",
+      "evidence_ids": [
+        "data-route",
+        "biological-scope",
+        "biological-notebooks"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "One reconstructed mouse volume, with source-selected proofread presynaptic neurons, functionally matched targets and anatomical controls. Preserve exact node/edge identities, presynaptic grouping, four area projection classes and relevant area/layer strata, including functional-quality and reporting eligibility. Counts in the article do not authenticate the selected graph, and dependent cells or edges are not independent mice.",
+      "evidence_ids": [
+        "biological-scope",
+        "fig4-stratification",
+        "biological-methods"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The original biological analyses use source-defined within-volume graph selections and controls, not an image-classification train/test split. Preserve original empirical support and the role of withheld digital-twin validation data in feature selection; do not invent held-out edges, animals or anatomical subdivisions as a substitute reproduction split. Matched exposure and any future same-primary improvement assessment remain unbound.",
+      "evidence_ids": [
+        "biological-scope",
+        "biological-methods",
+        "biological-robustness"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source neuron/edge identifiers, directed synapse counts, axon-dendrite co-travel opportunity, relevant synaptic anatomy, area/layer/projection and presynaptic quality attributes, measured responses/correlations and separately identified digital-twin-derived signal correlations, feature weights and RF centers. Preserve their source provenance and original availability; model-derived features are not relabeled measured neural responses.",
+      "evidence_ids": [
+        "data-route",
+        "biological-scope",
+        "fig2-wiring",
+        "fig3-factorization"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source functional matching and dual-quality selection, mutually exclusive connected/ADP/same-region controls, source anatomical distances and units, projection/layer assignments, presynaptic centering and original bootstrap/GLMM recipes. Retain original co-travel offsets, residualization and common-input weighting. Exact table/code parity and source wording discrepancies remain unresolved; no new raw reconstruction or model training is required.",
+      "evidence_ids": [
+        "biological-methods",
+        "biological-notebooks",
+        "data-route"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source biological quantities are presynaptic-group functional-similarity contrasts, original axonal/synaptic GLMM trends and bootstrap curves, co-travel-adjusted anatomical associations, and observed-versus-pairwise-expected common-input similarity. Preserve source units, tests and distinct projections; no classifier accuracy, newly invented edge-prediction score, larger association or smaller P is a same-primary improvement metric. A justified superiority estimand remains unresolved.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "fig3-factorization",
+        "fig4-stratification",
+        "fig5-common-input",
+        "biological-methods"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain per-presynaptic summaries, directed-pair support, original projection/area/layer grouping, source bootstrap resampling and GLMM dependence structure. Common-input similarity uses synapse-count-product weights over distinct downstream neuron pairs and paired observed/expected values per presynaptic neuron. Preserve heterogeneous projection results and source corrections; do not pool into a new scalar or claim independent-mouse replication from one graph.",
+      "evidence_ids": [
+        "biological-methods",
+        "fig4-stratification",
+        "fig5-common-input"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Bounded retained biological wiring/common-input family, not a mandate for every figure or release file. The source-supported summaries below cover connected/ADP/same-region contrasts, graded co-travel and synapse-density relationships, feature-versus-RF scale specificity, relevant area/layer heterogeneity, co-travel-adjusted synaptic anatomy and observed-versus-pairwise-expected common-input similarity. Retain indispensable measured-response, model-quality, anatomical-opportunity and pairwise-null fidelity controls. Exact original numeric subpanel membership and indispensable companion-to-output mapping were never frozen and remain unresolved. Native coefficient/curve/per-neuron arrays require the external structured proposal; categorical summaries do not stand in for them. Figure 6 is retained separately; no whole-paper expansion or mixed biological/RNN primary is adopted.\n\nRetained source-specific qualifications:\nOriginal biological like-to-like wiring and common-input-versus-functional-similarity findings from source neuron and edge measurements within one reconstructed MICrONS mouse volume, with anatomical/projection controls and original GLMM/bootstrap comparisons. Figure 6 artificial-network classification/generalization is a separately named modeling result and does not replace this primary.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "fig3-factorization",
+        "fig4-stratification",
+        "fig5-common-input",
+        "biological-robustness",
+        "biological-methods"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions may read the same original paper and authenticated source processed node/edge/feature data once bound. The author-code condition additionally receives the same approved official biological code snapshot, with matched noncode resources, exposure and cumulative budgets. Published summaries and cached fitted result tables are known answers, not proof of computation. Independent reproduction must derive eligible graph rows, functional/anatomical masks, presynaptic contrasts, fitted coefficients and bootstrap outputs, original pairwise predictions and weighted common-input quantities from the permitted inputs. No private targets, newly invented data split, EM reconstruction or digital-twin retraining is authorized by this draft.",
+      "evidence_ids": [
+        "biological-scope",
+        "data-route",
+        "biological-notebooks",
+        "biological-methods"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig2d_anatomically_controlled_signal_correlation_order",
+      "kind": "categorical",
+      "description": "The source reports connected neurons having higher mean signal correlation than ADP and same-region controls, and ADP-associated neurons higher than same-region controls, independently across the four projection types.",
+      "status": "verified",
+      "expected": "connected_above_adp_and_same_region_with_axonal_specificity",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Original per-presynaptic mean comparisons, separately V1→V1, HVA→HVA, V1→HVA and HVA→V1; paired t-tests and source multiple-comparison correction. This reported common ordering does not replace each numerical group contrast.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "biological-methods"
+      ],
+      "categories": [
+        "connected_above_adp_and_same_region_with_axonal_specificity"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig2-wiring",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig2e_graded_axonal_relationship",
+      "kind": "categorical",
+      "description": "Larger-than-presynaptic-average co-travel distance is associated with higher-than-average signal correlation across the original projection types.",
+      "status": "verified",
+      "expected": "positive_graded_axonal_association",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Original presynaptic-centered visualization and source axonal GLMM trends; retain source bins, bootstrap support, exclusions and all relevant projection outputs.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "biological-methods"
+      ],
+      "categories": [
+        "positive_graded_axonal_association"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig2-wiring",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig2f_graded_synaptic_relationship",
+      "kind": "categorical",
+      "description": "Higher synapse density per co-travel distance is associated with higher signal correlation after presynaptic centering.",
+      "status": "verified",
+      "expected": "positive_graded_synaptic_association",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Source synaptic-opportunity-normalized analysis separately by projection; preserve millimetre denominator, positive co-travel support, Poisson offset fit and bootstrap display.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "biological-methods"
+      ],
+      "categories": [
+        "positive_graded_synaptic_association"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig2-wiring",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig3a_feature_and_spatial_axonal_specificity",
+      "kind": "categorical",
+      "description": "At the axonal scale, co-travel distance increases with feature-weight similarity and with closer RF centers within and across cortical areas.",
+      "status": "verified",
+      "expected": "feature_similarity_and_closer_rf_associated_with_longer_cotravel",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Source projection-specific curves and GLMM coefficients for the two distinct functional metrics; no mixed metric or new joint scalar.",
+      "evidence_ids": [
+        "fig3-factorization",
+        "biological-methods"
+      ],
+      "categories": [
+        "feature_similarity_and_closer_rf_associated_with_longer_cotravel"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig3-factorization",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_feature_specific_synaptic_pattern",
+      "kind": "categorical",
+      "description": "The published Figure 3b summary reports synapse density increasing with feature similarity but not uniformly with RF distance, explicitly preserving its HVA→V1 exception and the Results description of heterogeneous RF effects.",
+      "status": "verified",
+      "expected": "feature_effect_with_heterogeneous_rf_effects",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Retain each projection and each metric separately. Fig3 caption and Par26 differ in how RF exceptions are described; exact coefficients/signs must resolve this before numerical admission, and absence of significance is not equivalence.",
+      "evidence_ids": [
+        "fig3-factorization",
+        "biological-methods"
+      ],
+      "categories": [
+        "feature_effect_with_heterogeneous_rf_effects"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig3-factorization",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig4_area_layer_scale_heterogeneity",
+      "kind": "categorical",
+      "description": "The source reports widespread but heterogeneous like-to-like effects across areas and layers, with feature/signal effects at axonal and synaptic scales and different RF-center specificity across scales.",
+      "status": "verified",
+      "expected": "widespread_heterogeneous_area_layer_and_scale_effects",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Original source-qualified area/layer coefficient matrices and masks, separately by quantity and functional metric. No all-cell-significance requirement or invented matrix-wide score.",
+      "evidence_ids": [
+        "fig4-stratification",
+        "biological-methods"
+      ],
+      "categories": [
+        "widespread_heterogeneous_area_layer_and_scale_effects"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig4-stratification",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig2_synaptic_anatomy_relationships",
+      "kind": "categorical",
+      "description": "Signal correlation is positively related to synaptic cleft volume and synapse multiplicity after the source adjustment for co-travel opportunity.",
+      "status": "verified",
+      "expected": "positive_cleft_and_multiplicity_relationships",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Separate original co-travel-adjusted unbinned regressions and displayed summaries for synapse size and multiplicity. They remain separate native outputs; no new combined effect magnitude.",
+      "evidence_ids": [
+        "fig2-wiring",
+        "biological-methods"
+      ],
+      "categories": [
+        "positive_cleft_and_multiplicity_relationships"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig2-wiring",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig3_synaptic_anatomy_feature_specificity",
+      "kind": "categorical",
+      "description": "The original source reports synapse multiplicity and cleft volume increasing with feature similarity, while analogous RF-center association was not reported as significant.",
+      "status": "verified",
+      "expected": "feature_association_without_reported_rf_association",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Separate source residualized regressions for multiplicity and cleft volume; do not treat nonsignificance for RF distance as proof of no effect or an equivalence criterion.",
+      "evidence_ids": [
+        "fig3-factorization",
+        "biological-methods"
+      ],
+      "categories": [
+        "feature_association_without_reported_rf_association"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "fig3-factorization",
+          "biological-methods"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "fig5c_reported_higher_similarity_projection_count",
+      "kind": "scalar",
+      "description": "Figure 5c reports that three of the four projection types showed significantly higher common-input postsynaptic similarity than predicted by the pairwise model. This is an actual reported scientific summary, not an intake count or substitute for the full four-group observed/expected arrays.",
+      "status": "verified",
+      "expected": 3,
+      "units": "projection types among the four source projection types",
+      "aggregation": "Source Figure 5c projection comparisons with two-sided Wilcoxon signed-rank tests; exact P values are in unrecovered Supplementary Table 21. Keep all four groups, including the heterogeneous fourth result. Do not infer its identity or exact coefficient from this count.",
+      "evidence_ids": [
+        "fig5-common-input"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed count is source evidence. No numerical or inferential reproduction tolerance is admitted without authentic per-presynaptic outputs and exact source comparisons; a matching count alone cannot establish reproduction.",
+        "evidence_ids": [
+          "fig5-common-input"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "measured_response_robustness",
+      "kind": "categorical",
+      "description": "The source reports that repeating analyses with measured in-vivo signal correlations replicated the axonal/synaptic and synaptic-anatomy like-to-like relationships; the common-input measured-response comparison is separately referenced.",
+      "status": "verified",
+      "expected": "reported_in_vivo_replication_of_biological_patterns",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Original measured-response control branch and its exact selected support, distinct from digital-twin-derived correlations; numeric companion mapping remains unresolved.",
+      "evidence_ids": [
+        "biological-robustness",
+        "fig5-common-input"
+      ],
+      "categories": [
+        "reported_in_vivo_replication_of_biological_patterns"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "biological-robustness",
+          "fig5-common-input"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    },
+    {
+      "id": "model_quality_sensitivity",
+      "kind": "categorical",
+      "description": "The source reports that varying inclusion across digital-twin prediction-accuracy quartiles did not substantially change the main wiring results.",
+      "status": "verified",
+      "expected": "reported_robustness_across_model_quality_quartiles",
+      "units": "source-reported empirical direction or pattern",
+      "aggregation": "Original model-quality sensitivity branch with its source masks and quantity-specific outputs; this source qualitative report does not define a new equivalence margin.",
+      "evidence_ids": [
+        "biological-robustness"
+      ],
+      "categories": [
+        "reported_robustness_across_model_quality_quartiles"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This exact category records a genuine published empirical summary only. It is neither a synthetic reduction of unknown arrays nor an adequate computational acceptance criterion.",
+        "evidence_ids": [
+          "biological-robustness"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recompute the original source comparison, grouping and multiplicity corrections, then establish an independently justified numerical and inferential reproduction rule. The printed claim, significance pattern or failure to reject a difference is not computational equivalence.",
+        "independent_unit": "One biological mouse; source paired presynaptic summaries and fitted graph observations remain dependent within the reconstructed volume. Reproduce the source analysis without promoting its within-volume samples to independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original native references, exact selected identities, source computation parity and agreement variability remain unresolved. No default tolerance, alpha, effect margin or new independence claim is supplied.",
+        "evidence_ids": [
+          "biological-methods"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Canonical primary correction is authorized but not yet adopted in task/improvement/outcomes. These proposed biological anchors intentionally differ from the old RNN descriptions; final task pins remain HOLD and no current mixed-primary outcomes bundle is admitted.",
+    "The retained biological family is source-supported, but exact original numerical subpanel membership and indispensable companion mapping were never frozen. This finite summary inventory does not establish complete panel coverage or require every figure/display/release file.",
+    "Native projection contrasts, coefficient matrices, bootstrap curves, residualized regression outputs and common-input per-neuron vectors are not represented by scalar placeholders. Structured-output support is needed separately from genuine source-reference/identity gaps.",
+    "Original processed table content integrity, eligible node/edge/feature identities, code/data version correspondence and older pickle-versus-later-Feather parity remain unqualified. No authentic payload was read or transformed here.",
+    "Exact original outputs, multiplicity families, source masking and computation provenance are unbound. Preserve heterogeneous projection results; do not infer missing coefficients or Supplementary Table values from paper claims.",
+    "Source text contains details requiring source/code reconciliation: visualization support and bootstrap wording, RF-effect exception descriptions, and notebook figure/quantity labels. Do not silently repair them or infer publication equivalence.",
+    "An independent submitted-analysis runner and granular verifier for biological graph derivations, fitted models/bootstrap samples and observed/pairwise-expected common-input arrays is absent. Plotting cached author results is not computational reproduction.",
+    "No source-grounded numerical agreement tolerance or independent same-primary superiority criterion is admitted. Bigger wiring effects, smaller P, a new edge predictor or greater RNN accuracy do not qualify biological improvement.",
+    "Single-volume graph dependence and measured-versus-model-derived properties remain explicit. No independent-mouse or whole-paper claim is established.",
+    "No new scientific execution or outcome exists; exposure-condition identity manifests, budgets and independent evaluation are unresolved. All four outcomes remain unknown."
+  ]
+}

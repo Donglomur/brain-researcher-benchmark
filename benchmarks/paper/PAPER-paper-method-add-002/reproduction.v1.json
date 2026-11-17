@@ -1,0 +1,809 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-add-002",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Preserve the registered Churchland decomposition/component, reconstruction-versus-rank/type and held-out decoding result family. The fourteen source-code-supported trajectory summaries are partial primary coverage. Exact primary-paper component interpretation, Churchland rank/comparator attribution, authentic identities/expected outputs, native-output representation, criteria and complete independent verification remain unresolved. Source-code functions, emitted factors or stronger trajectory R2 alone do not complete this family. IBL/Wagner and generic all-dataset/all-figure profiles are outside this bounded task.",
+  "source_paper": {
+    "title": "Dimensionality reduction beyond neural subspaces with slice tensor component analysis",
+    "url": "https://www.nature.com/articles/s41593-024-01626-2"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-024-01626-2",
+      "locator": "Original Nature Neuroscience article identifier; retained task associates the Churchland decomposition/model-comparison family with Fig.2. Exact component, rank and PCA panel attribution requires primary-paper authentication.",
+      "supports": "The retained task and author code support preserving the Churchland family. Full paper text was unavailable to independent scope reviewers; this evidence record does not claim fresh verification of the cohort, component meaning, physical window, OLS description or any Fig.3/Churchland mapping."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+      "locator": "data-loading cell; hyperparameter cell; decompose loop; saved KeyboardInterrupt output",
+      "supports": "Named straight/curved arrays and transforms; executed-source loop sets cross_validation=False despite earlier configuration, so displayed output is not a qualified held-out result."
+    },
+    {
+      "id": "decoder",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/hand_decoding/functions.py",
+      "locator": "decoding; velocity_decoding; trial_wise_r2; k_fold_cross_validated_r2",
+      "supports": "Velocity prediction integrates from true initial position; exact R2 and fold/seed mechanics; default regularization is 1."
+    },
+    {
+      "id": "figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/Fig2.py",
+      "locator": "import_decoding_r2; get_r2_all; plot_k_fold; wilcoxon",
+      "supports": "Original straight/curved scoring, five folds, twenty permutations and seed=0; source score array named decoding_r2.npy, not inspected as observations."
+    },
+    {
+      "id": "cv",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/run/cv_search.py",
+      "locator": "decompose_mp and cv_search_sample",
+      "supports": "CV output uses root error and seed/rank search; actual masks and source score need recovery."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json",
+      "locator": "scope, verification, scientific_limits",
+      "supports": "Inactive 200-case conditional-position pair is explicitly bounded and not a whole-paper result."
+    },
+    {
+      "id": "source-mask-error",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/run/run_tca.py",
+      "locator": "decompose: original cv_mask polarity, first/last-zero trimming and l_cv computation; return tuple",
+      "supports": "The source helper computes held-out root error as sqrt(SSE/retained masked-entry count); zero-filled training MSE is distinct. Its exact use in the original Churchland rank/type comparison remains unqualified; the helper does not authorize other datasets as mandatory coverage."
+    },
+    {
+      "id": "source-averaged-control",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/Fig2.py",
+      "locator": "get_movement_avg; get_r2; get_r2_all; plot_k_fold; import_models_data",
+      "supports": "Raw condition-average control uses condition means from a floor(n/2) training prefix and remaining test suffix, then reverses the full trial order and reapplies that same split, over twenty evolving source permutations. It is inserted alongside raw and model-specific fivefold scores, not scored as an ordinary 53/49-trial fold. Source documents raw, trial-slicing 1200, neuron-slicing 0120, mixed 1201, CP/TCA 12 and LFADS; exact model membership/order and complete artifacts remain unverified."
+    },
+    {
+      "id": "source-fold-split",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/hand_decoding/helper_functions.py",
+      "locator": "split; flatten_mid_dims, together with functions.k_fold_cross_validated_r2",
+      "supports": "Training concatenates all rows outside each equal-width test fold. For 265 straight trials test width is 53; for 246 curved trials it is 49 and one shuffled curved trial remains training-only in each repeat. Seed-zero legacy RandomState schedule is code-recovered, not authentic biological identity recovery."
+    },
+    {
+      "id": "source-endpoint-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-002/implementations/source-endpoints-v1/endpoints.py",
+      "locator": "source_schedule; source_windows; integrate_displacements; trajectory_r2; score_condition; source_trimmed_mask; reconstruction_error; CLI score-fig2 and score-reconstruction; integrated source commit d3a4d4ed420bbab19d253da5b44eefca1d73eb00, file SHA256 5e33cbf59c352951d53c0b4d544ab3ff0887c51b6a0e5eff171be43c6f62d049",
+      "supports": "Locally committed and independently reviewed source-compatible endpoint kernels exist; publication availability is not asserted. Generated controls support mathematical/scoring semantics only. CLI score-fig2 requires full movement[150,511,2], per-condition prediction tensors[20,5,80,53-or-49,2] and exact test indices, exporting per-trial R2 and occurrence counts. CLI score-reconstruction accepts target/prediction/source training mask and explicit cut bins for one original rank/type/mask cell. Neither authenticates a complete submitted analysis, condition-average control, reconstruction roster or scientific reproduction."
+    },
+    {
+      "id": "retained-churchland-scope",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-002/historical/task.pre-improvement.v1.json",
+      "locator": "primary_outputs lines14–16; source_contract_locators Churchland scope and separate IBL/Wagner expansion lines293–296; retained file SHA256 c895d422f3296568844e447ceb55e1f5b5dbd665ee6108e3da35c6f98756f06e. Authorized preservation is recorded in external METHOD032_ADD002_ACCEPTED.json SHA256 8a2eb2e790f6b9a936402fdef1d0095b2b2ab7164415057d517c209805c87062 and its independent review.",
+      "supports": "Restore recovered neuron/time/trial components, reconstruction versus rank/type and held-out model comparison within registered Churchland scope. Fourteen trajectory summaries are legitimate partial primary coverage; exact source comparator and component mapping remain unresolved. Historical PCA wording is not proof of paper attribution; no all-dataset widening is authorized."
+    },
+    {
+      "id": "source-component-views",
+      "kind": "author_code",
+      "url": "https://github.com/caycogajiclab/sliceTCA_paper/blob/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/Fig2.py",
+      "locator": "plot_correlation lines204–239; plot_lda and plot_target_decoding lines315–399; plot_component lines402 onward; source SHA256 f0b3e46231fceba39a47f380dfd116216ebae9f5d9cc93c195dafa7aec68483c.",
+      "supports": "Actual component/display routes use model1201 components, condition-sorted trial/neuron relationships, target/angle joins, and trial- or time-associated vectors and matrices. These source functions identify candidate native evidence interfaces, not an authenticated list of original paper component findings, a component-similarity criterion, or authority to grade every generated plot."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "The already registered Churchland straight/curved-reach decomposition/component and model-comparison family. Original component interpretation, Churchland reconstruction-versus-rank/type panel and exact comparator attribution remain source-mapping obligations, not verified claims. Preserve separately reported straight/curved decoding, source raw and condition-average controls, true-start conditioning, trial/fold identities, preprocessing/decomposition exposure and source-defined component relationships/gauge. No automatic all-dataset, every-figure, IBL or Wagner requirement.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Registered inputs are the Churchland straight/curved-reach tensors via author Figshare record24961917/v1; retained file IDs43957032/43957035 require authenticated content-to-source membership. Movement, target, condition, model/component and reference-output identities remain unbound. IBL/Wagner are separate expansion scope and cannot become mandatory through a generic source helper.",
+      "evidence_ids": [
+        "fit",
+        "figure",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The retained contract identifies monkey J, one session,182 neurons,511 trials with265 straight/center-out and246 curved/maze reaches and12 matched target positions. Author Fig2 code partitions trials0:265 and265:511. Exact cohort/condition/neuron identities and the retained paper-derived counts have not been independently authenticated from full paper text in this scope review; preserve the full registered Churchland support rather than replacing it with a subset or unseen-animal claim.",
+      "evidence_ids": [
+        "paper",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve source decoding separately by straight/curved condition: twenty seed0 legacy permutations and five equal-width folds of53/49 test trials, with each curved remainder training-only in that repeat. Raw condition-average control uses twenty evolving permutations, forward and reversed full trial orders with fixed floor(n/2) training-prefix split:132/133 train/test for both straight evaluations with shared middle test trial,123/123 for curved. Authenticate original ordering and decomposition exposure. Component relations and Churchland reconstruction/rank comparisons require their own source support and masks; decoder folds are not reconstruction masks. No replacement200-case split.",
+      "evidence_ids": [
+        "figure",
+        "decoder",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Use the registered Churchland neural tensors and source behavior/condition/target metadata with disclosed whole-session scaling and unsupervised decomposition exposure. Decoding additionally permits the true initial hand position. Preserve source neuron/time/trial/component identities and original target/condition relationships as required to reconstruct the authenticated component finding. Author-fitted factors, reference outputs and final movement targets have operator/candidate roles that must be frozen; emitting source factors alone does not establish the recovered-component result.",
+      "evidence_ids": [
+        "decoder",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Existing source records describe10ms bins,20ms Gaussian smoothing,whole-session neuronwise min-max scaling,no time warp and -1s to+0.5s relative to movement; these paper-derived descriptions are retained provenance, not newly verified full-text claims. Author Fig2 code slices neural[55:-15] against movement[65:-5], with10-bin lag; retained Methods physical-window/OLS descriptions still require reconciliation. Preserve raw component gauge and exact source display/sorting transforms as separate provenance; do not silently normalize, reorder or repair source component plots to manufacture matching scientific findings.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "figure",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source trajectory R2 pools squared errors across time and XY after centering each true coordinate over time; integrate predicted displacements from the true initial position. Source helper reconstruction root error is sqrt(SSE/retained held-out count), distinct from zero-filled training MSE; exact Churchland panel use remains unqualified. The original component interpretation and rank/comparator contrast require source-native definitions and outputs before a comparison rule can be specified. No factor-distance scalar, arbitrary gauge match, stronger decoding fit or generic curve norm substitutes for the recovered-component/model-comparison finding.",
+      "evidence_ids": [
+        "decoder",
+        "cv",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain separate straight/curved trajectory summaries over the source trial/fold/permutation or condition-average route. Fourteen trajectory estimands are partial primary coverage. Retain the authenticated Churchland component relationships and rank/type/comparator profile as distinct outputs with their original reductions, gauges, observation units and indispensable controls; no global scalar collapse. Source paper mapping, expected numerical vectors, complete original comparison roster and OLS-versus-default-ridge parity remain unresolved.",
+      "evidence_ids": [
+        "decoder",
+        "figure",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The required family is bounded to registered Churchland decomposition/component, reconstruction-versus-rank/type and held-out decoding findings. The fourteen declared scalar trajectory summaries cover only the decoding portion: raw, trial1200, neuron0120, mixed1201, CP12 and LFADS separately by straight/curved condition, plus the distinct raw condition-average controls. Preserve their source fold, initial-position and allowed-observation rules. Restore the recovered neuron/time/trial component-result obligation, with exact original component/condition meaning, gauges, source views and scientific relationships authenticated before admission; factor export is computational evidence, not completion. Restore only source-mapped Churchland reconstruction/rank/model-comparison outputs and indispensable controls. Historical PCA wording and generic blocked-error helper capabilities do not establish an original comparator or panel. No all-dataset, every-figure, IBL/Wagner, automatic Fig.3 or generic PCA census is required. Missing native component/rank representations are an engineering gap distinct from missing primary-paper mapping, authentic reference outputs and scientific criteria. Fourteen R2 matches, lower training error or more restarts cannot qualify the full family. No invented scalar or unresolved placeholder finding stands in for missing native findings.\n\nRetained source-specific qualifications:\nReproduce the original sliceTCA decomposition and model-comparison result on the registered Churchland straight/curved-reach tensors. Retain the declared recovered-component, reconstruction-versus-rank/type and held-out decoding findings as separately identified obligations, with each original source panel and its indispensable controls authenticated before admission. Higher trajectory R² alone does not establish completion of this retained result family. Assess improvement only on an explicitly identified original same-result comparison, preserving its required companion findings.",
+      "evidence_ids": [
+        "retained-churchland-scope",
+        "source-component-views",
+        "figure",
+        "decoder",
+        "source-averaged-control",
+        "source-fold-split",
+        "cv",
+        "source-mask-error"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both paper conditions may inspect the paper, including its printed claims/tables, and the same authenticated original neural observations, behavioral/condition metadata and declared training labels. The +author-code condition alone additionally receives a pinned author-code manifest. Original source whole-session neuronwise scaling and unsupervised decomposition exposure must be disclosed; no strict unseen-trial representation-learning claim is inferred. Decoder training uses the source fold training trajectories; held-out movement is operator-scored, with its TRUE INITIAL POSITION explicitly permitted to the decoder. Preserve the source 10-ms bins, preprocessing, lag and all relevant observations; do not silently replace ridge-alpha-1 plus penalized appended constant with paper OLS or replace the unresolved physical time window. Author-fitted models.npy, decoding_r2.npy, saved test trajectories, reference reconstruction targets/masks designated for scoring and historical private answers are not substitute candidate observations; their exact exposure/target roles must be frozen per source panel. The operator must independently execute the submitted analysis on authentic inputs and verify trial-identified predicted displacement/position trajectories, representation reconstructions/factors and fold masks, decoder coefficients/recipe, raw and condition-average controls, and every source-mapped Churchland component relationship and reconstruction/model-comparison output with original gauge/condition identities, mask/trim support, residual numerators/denominators and derived contrasts. Copying printed R2 values or source claims, or printing them from an executable, cannot satisfy reproduction. Authentic input, allowed-observation and output-identity manifests, participant transport and independent execution/verifier bindings are not yet frozen. This is bounded Churchland coverage: the paper itself is available in both intended conditions, but its unrecovered component/rank mapping cannot be inferred from code names. No IBL/Wagner or all-figure observation expansion is authorized.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "decoder",
+        "figure",
+        "cv",
+        "source-averaged-control",
+        "source-fold-split",
+        "source-mask-error",
+        "source-endpoint-component",
+        "retained-churchland-scope",
+        "source-component-views"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig2_raw_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for raw neural activity; raw observation control. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_raw_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for raw neural activity; raw observation control. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_trial12_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for trial-slicing NMF with 12 components (source key 1200); source model comparison. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_trial12_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for trial-slicing NMF with 12 components (source key 1200); source model comparison. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_neuron12_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for neuron-slicing NMF with 12 components (source key 0120); source model comparison. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_neuron12_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for neuron-slicing NMF with 12 components (source key 0120); source model comparison. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_mixed_trial12_time1_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for mixed 12 trial-slicing plus 1 time-slicing components (source key 1201); source model comparison. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_mixed_trial12_time1_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for mixed 12 trial-slicing plus 1 time-slicing components (source key 1201); source model comparison. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_cp12_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for 12-component CP/TCA (source key 12); source model comparison. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_cp12_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for 12-component CP/TCA (source key 12); source model comparison. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_lfads_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 straight-reach trajectory R2 for LFADS source comparison (source key lfads); source model comparison; no recovered baseline or permission to substitute precomputed fitted outputs. Recompute from all 265 source trials with the exact ordered twenty-permutation/fivefold route and 5300 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 53 trial scores in each of five folds across twenty source permutations, retaining the straight condition separately. Preserve all 5300 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_lfads_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 curved-reach trajectory R2 for LFADS source comparison (source key lfads); source model comparison; no recovered baseline or permission to substitute precomputed fitted outputs. Recompute from all 246 source trials with the exact ordered twenty-permutation/fivefold route and 4900 test occurrences. Require authentic row-to-trial identity provenance, reconstructed or raw neural input provenance, per-fold decoder fit/coefficients, predicted per-bin displacements and all 80 position samples including the true starting sample. The existing source-endpoints-v1 score_condition kernel verifies code-derived indices and computes the source statistic; it does not prove data use or authenticate biological identities. Expected original source scalar remains unrecovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless trajectory R2",
+      "aggregation": "For each held-out trial center true X and Y independently over time, then compute 1-SSE/SST with SSE/SST pooled across time and XY; retain negative R2. Average the 49 trial scores in each of five folds across twenty source permutations, retaining the curved condition separately. Preserve all 4900 occurrences and per-original-trial coverage; repeated folds are dependent. Curved remainder remains training-only in its repeat. No pooled straight/curved or best-seed/model scalar.",
+      "evidence_ids": [
+        "paper",
+        "decoder",
+        "figure",
+        "source-fold-split"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated source numerical vector, source reporting precision or independently calibrated rerun variability has been recovered for this model/condition. Formula parity and generated floating-point controls cannot justify a scientific equivalence tolerance; do not choose a default or reuse a historical grader threshold.",
+        "evidence_ids": [
+          "paper",
+          "figure",
+          "decoder"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved source-grounded deterministic replay criterion or paired trial-level equivalence interval preserving repeated-fold dependence.",
+        "independent_unit": "Original reaching trial within one monkey-J session; twenty permutations and five folds are dependent reuse, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source within-fold population SD is descriptive rather than a confidence interval. Historical source draws, expected values and an equivalence rule require independent recovery/freeze before candidate outputs; no confidence level, independent-unit minimum or threshold is invented.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_condition_average_straight_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 raw condition-averaged straight-reach control using all 265 source trials and all matched target groups. Recompute condition averages separately in source train/test halves, train displacement decoding on source training condition means, predict test condition-mean trajectories from their allowed initial position, reverse the full trial order and reuse the fixed floor(n/2) training-prefix split, and retain all twenty evolving source permutations. For 265 straight trials both evaluations train on 132 and test on 133 and share the middle test trial; for 246 curved trials both train and test on 123. Require exact original trial-to-target memberships, half assignments, condition sample counts, neural and movement condition means, decoder coefficients, condition-identified predicted displacement/position and underlying trial provenance. The ordinary fivefold score_condition interface does not evaluate this control; an independently verified source get_r2/get_r2_all-compatible interface is still missing.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless condition-average trajectory R2",
+      "aggregation": "Source get_r2/get_r2_all yields twenty evolving source permutations by forward/reversed full trial order at a fixed floor(n/2) training-prefix split by source target groups. For 265 straight trials both evaluations use 132 training and 133 test trials, with the middle trial tested in both; for 246 curved trials both use 123 training and 123 test trials. Apply the same coordinate-centered temporal/XY-pooled trajectory R2 to each held-out condition mean, preserving exact group coverage and the source aggregation; report straight/curved separately. The half sizes, evolving permutation state, all target groups and resulting numerical mean must be authenticated. Do not reinterpret this as ordinary fivefold trial decoding or as an independent-animal mean.",
+      "evidence_ids": [
+        "paper",
+        "figure",
+        "decoder",
+        "source-averaged-control"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Original condition-control numerical scores, exact target-group support, source rounding and variability are unrecovered; a tolerance for ordinary single-trial R2 cannot be transferred to this averaged control.",
+        "evidence_ids": [
+          "paper",
+          "source-averaged-control"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved paired equivalence/replay procedure preserving condition averaging and repeated-half dependence.",
+        "independent_unit": "Underlying reaching trials within one monkey-J session, nested in target groups and reused across shuffled halves.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Condition means, permutations and target groups do not create independent animals. Source support and a justified criterion must be frozen; no tolerance, interval level or sample minimum is inferred from the displayed figure.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    },
+    {
+      "id": "fig2_condition_average_curved_trajectory_r2",
+      "kind": "scalar",
+      "description": "Original Fig.2 raw condition-averaged curved-reach control using all 246 source trials and all matched target groups. Recompute condition averages separately in source train/test halves, train displacement decoding on source training condition means, predict test condition-mean trajectories from their allowed initial position, reverse the full trial order and reuse the fixed floor(n/2) training-prefix split, and retain all twenty evolving source permutations. For 265 straight trials both evaluations train on 132 and test on 133 and share the middle test trial; for 246 curved trials both train and test on 123. Require exact original trial-to-target memberships, half assignments, condition sample counts, neural and movement condition means, decoder coefficients, condition-identified predicted displacement/position and underlying trial provenance. The ordinary fivefold score_condition interface does not evaluate this control; an independently verified source get_r2/get_r2_all-compatible interface is still missing.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless condition-average trajectory R2",
+      "aggregation": "Source get_r2/get_r2_all yields twenty evolving source permutations by forward/reversed full trial order at a fixed floor(n/2) training-prefix split by source target groups. For 265 straight trials both evaluations use 132 training and 133 test trials, with the middle trial tested in both; for 246 curved trials both use 123 training and 123 test trials. Apply the same coordinate-centered temporal/XY-pooled trajectory R2 to each held-out condition mean, preserving exact group coverage and the source aggregation; report straight/curved separately. The half sizes, evolving permutation state, all target groups and resulting numerical mean must be authenticated. Do not reinterpret this as ordinary fivefold trial decoding or as an independent-animal mean.",
+      "evidence_ids": [
+        "paper",
+        "figure",
+        "decoder",
+        "source-averaged-control"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Original condition-control numerical scores, exact target-group support, source rounding and variability are unrecovered; a tolerance for ordinary single-trial R2 cannot be transferred to this averaged control.",
+        "evidence_ids": [
+          "paper",
+          "source-averaged-control"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Unresolved paired equivalence/replay procedure preserving condition averaging and repeated-half dependence.",
+        "independent_unit": "Underlying reaching trials within one monkey-J session, nested in target groups and reused across shuffled halves.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Condition means, permutations and target groups do not create independent animals. Source support and a justified criterion must be frozen; no tolerance, interval level or sample minimum is inferred from the displayed figure.",
+        "evidence_ids": [
+          "paper",
+          "decoder",
+          "figure"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the original Churchland recovered-component and model-comparison findings against primary paper text and corresponding source artifacts. Full paper text was unavailable to independent scope reviewers. Source code and retained wording preserve the obligation but do not verify exact component interpretation, original rank/type panel, comparator roster or PCA attribution.",
+    "Keep the registered Churchland scope bounded. IBL/Wagner, all-source-dataset profiles, every generated figure and the rejected200-case programme are not mandatory expansions. Do not replace the family with decoding only; the fourteen retained trajectory records are partial primary coverage.",
+    "Authenticate neural/movement/condition/target identities, full original trial/neuron/time support, model/factor/component identities and raw/reference output roles. Recover exact source component relationships and gauge/sorting transforms; emitted factors and matching labels do not prove the scientific finding.",
+    "Recover and source-map Churchland rank/type/model contrasts and original masks/trim/rank-selection support without importing a generic all-dataset roster. Source run_tca/cv_search formulas are not proof of the original published panel, and the Churchland notebook loop disables cross_validation despite earlier configuration.",
+    "Preserve code-derived straight/curved fold schedules and true-start decoding, plus raw condition-average forward/reversed fixed-floor splits. Authenticate source execution/order and expected vectors. Source ridge alpha1 with penalized constant versus retained paper OLS, physical time-window discrepancy and decomposition exposure remain unresolved.",
+    "Native component relationships and rank/comparison profiles need source-driven structured representation. The scalar/categorical API cannot establish those missing findings. Genuine missing primary-paper mapping, identity/reference outputs, original reductions and criteria independently justify source_unresolved; no placeholder scalar, factor-distance metric, figure-wide norm or success category may hide this gap.",
+    "A complete independently executed submitted-analysis and verification interface remains unbound. Reuse source-endpoints-v1 trajectory and single-cell reconstruction kernels; source component plotting routes are evidence interfaces, not a validated native scientific verifier. Derive original component relationships, trajectories and source-mapped reconstruction contrasts from authentic permitted observations.",
+    "Recover source-justified reproduction targets/tolerances/uncertainty separately from an explicit same-result improvement criterion. Stronger decoder R2, lower training error, extra restarts or a smaller p-value alone do not establish improvement of the complete retained family. No default threshold or scientific superiority rule is supplied here.",
+    "Both intended paper+data and paper+data+author-code conditions still need immutable common-input/exposure/runtime/verifier/budget manifests. No admission policy hashes, paired protocols, candidate results or scientific outcomes are created. Canonical owner must align task/improvement/reproduction anchors together and bind only the final actual task bytes; current pins remain held."
+  ]
+}
