@@ -6,7 +6,7 @@ The project targets four first-class outcomes: paper reproduction, paper improve
 
 Recorded public evidence covers **9 distinct task IDs**. The pilot reports **4 historical paper-calibration attempts** and **4 neural-programme attempts**; 3 authentic-input engineering reports, 3 paper and 1 neural source-preparation reports, and 16 native software controls are separate from model attempts. Separately, **2 author-model inference probes** record partial source-model execution; complete author calibration remains unqualified. [Read the published evidence](../../docs/status/README.md), or run `python3 scripts/neurobench.py evidence [TASK_ID]`. These records do not establish current runtime qualification or paper improvement.
 
-Outcome metadata covers **117/117 paper tasks**. This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. Reproduction eligibility: 1 continuous measurement, 1 design ready, 2 source declaration unavailable, 64 source unresolved, 49 unavailable. The two goals retain paper+data and paper+data+author-code condition labels; missing declarations do not establish paired protocols. These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.
+Outcome metadata covers **117/117 paper tasks**. This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. Reproduction eligibility: 1 continuous measurement, 1 design ready, 2 source declaration unavailable, 64 source unresolved, 49 unavailable. Each task retains its declared information conditions; SMC compares paper+data with paper+data+official-code-and-weights. These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.
 
 Complete primary-outcome pairing is unavailable for **41 tasks** with an explicit scientific scope mismatch. Their retained secondary improvement policies are not admitted as primary outcomes.
 
@@ -15,6 +15,8 @@ Complete primary-outcome pairing is unavailable for **8 tasks**. Their retained 
 Source-grounded reproduction declarations and matched paired protocols are not adopted for **2 tasks**. Their existing improvement contracts remain independently inspectable under their original criteria. Missing declarations do not imply scientific ineligibility, paired access, or completed outcomes.
 
 **1 task** declares continuous measurements for both paper outcomes, without binary eligibility or pass thresholds. Matched episode protocols remain uninstantiated and participant results are not attempted; an AI attempt is not required for benchmark construction.
+
+Only the assisted SMC condition receives the exact official source and pinned released-model assets. The earlier source-only condition remains a separate historical ablation.
 
 Current primary improvement dispositions: 1 continuous measurement, 16 design ready, 7 ineligible, 44 source unresolved, 49 unavailable. For the reviewed scope-policy selections, the current primary policy governs improvement; predecessor policies remain preserved with their original source scope. Runtime routes are not declared by those policy records. For SMC, the shared continuous policy governs both current outcomes; the original and temporal policies remain retained source history.
 
@@ -26,7 +28,7 @@ Browse **235 registered questions**: [117 paper tasks](paper.md) and [118 neural
 
 Browse the task folders in [paper research](../paper/README.md) and [neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.
 
-The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 640 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
+The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 644 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
 
 The [machine-readable catalog](catalog.json) includes exact specification pins and links to existing public files. External citations are copied from public specifications; their availability was not rechecked.
 

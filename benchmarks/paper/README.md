@@ -4,7 +4,7 @@
 
 Paper reproduction and paper improvement are separate first-class outcomes on the same scientific task. Reproduction assesses faithful recovery of the source result; improvement assesses superior performance. Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. Compare paper + data with paper + data + official code under fixed matched budgets; existing historical attempts retain their recorded scope and are not automatically qualified for either outcome.
 
-Outcome metadata covers **117/117 paper tasks**. This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. Reproduction eligibility: 1 continuous measurement, 1 design ready, 2 source declaration unavailable, 64 source unresolved, 49 unavailable. The two goals retain paper+data and paper+data+author-code condition labels; missing declarations do not establish paired protocols. These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.
+Outcome metadata covers **117/117 paper tasks**. This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. Reproduction eligibility: 1 continuous measurement, 1 design ready, 2 source declaration unavailable, 64 source unresolved, 49 unavailable. Each task retains its declared information conditions; SMC compares paper+data with paper+data+official-code-and-weights. These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.
 
 Complete primary-outcome pairing is unavailable for **41 tasks** with an explicit scientific scope mismatch. Their retained secondary improvement policies are not admitted as primary outcomes.
 
@@ -13,6 +13,8 @@ Complete primary-outcome pairing is unavailable for **8 tasks**. Their retained 
 Source-grounded reproduction declarations and matched paired protocols are not adopted for **2 tasks**. Their existing improvement contracts remain independently inspectable under their original criteria. Missing declarations do not imply scientific ineligibility, paired access, or completed outcomes.
 
 **1 task** declares continuous measurements for both paper outcomes, without binary eligibility or pass thresholds. Matched episode protocols remain uninstantiated and participant results are not attempted; an AI attempt is not required for benchmark construction.
+
+Only the assisted SMC condition receives the exact official source and pinned released-model assets. The earlier source-only condition remains a separate historical ablation.
 
 Current primary improvement dispositions: 1 continuous measurement, 16 design ready, 7 ineligible, 44 source unresolved, 49 unavailable. For the reviewed scope-policy selections, the current primary policy governs improvement; predecessor policies remain preserved with their original source scope. Runtime routes are not declared by those policy records. For SMC, the shared continuous policy governs both current outcomes; the original and temporal policies remain retained source history.
 
@@ -57,7 +59,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-REP-013](PAPER-FIND-REP-013/README.md) | Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum | source_unresolved | ineligible | 6 | [manifest](PAPER-FIND-REP-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-014](PAPER-FIND-REP-014/README.md) | Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior | unavailable | unavailable | 1 | not linked |
 | [PAPER-FIND-REP-015](PAPER-FIND-REP-015/README.md) | Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision | unavailable | unavailable | 2 | not linked |
-| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 4 | not linked |
+| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 5 | not linked |
 | [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-ROOT-ADD-003](PAPER-ROOT-ADD-003/README.md) | Driving and suppressing the human language network using large language models | unavailable | unavailable | 3 | [manifest](PAPER-ROOT-ADD-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-004](PAPER-ROOT-ADD-004/README.md) | Respiration shapes the neural dynamics of successful remembering in humans | source_unresolved | source_unresolved | 2 | not linked |
@@ -99,7 +101,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-047](PAPER-paper-method-047/README.md) | Spike inference from calcium imaging data acquired with GCaMP8 indicators | source_unresolved | source_unresolved | 2 | [manifest](PAPER-paper-method-047/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-050](PAPER-paper-method-050/README.md) | Density-based longitudinal neuron tracking in high-density electrophysiological recordings | source_unresolved | design_ready | 2 | not linked |
 | [PAPER-paper-method-add-001](PAPER-paper-method-add-001/README.md) | Stabilizing brain-computer interfaces through alignment of latent dynamics | source_unresolved | design_ready | 2 | not linked |
-| [PAPER-paper-method-add-002](PAPER-paper-method-add-002/README.md) | Dimensionality reduction beyond neural subspaces with slice tensor component analysis | source_unresolved | source_unresolved | 2 | [manifest](PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json) |
+| [PAPER-paper-method-add-002](PAPER-paper-method-add-002/README.md) | Dimensionality reduction beyond neural subspaces with slice tensor component analysis | source_unresolved | source_unresolved | 3 | [manifest](PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-add-003](PAPER-paper-method-add-003/README.md) | DREDge: robust motion correction for high-density extracellular recordings across species | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-paper-method-add-004](PAPER-paper-method-add-004/README.md) | iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings | unavailable | unavailable | 6 | not linked |
 | [PAPER-paper-method-add-005](PAPER-paper-method-add-005/README.md) | Generating realistic neurophysiological time series with denoising diffusion probabilistic models | source_unresolved | source_unresolved | 2 | not linked |
@@ -114,7 +116,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-replacement-011](PAPER-paper-method-replacement-011/README.md) | Brain Treebank: Large-scale intracranial recordings from naturalistic language stimuli | unavailable | unavailable | 3 | not linked |
 | [PAPER-paper-method-replacement-012](PAPER-paper-method-replacement-012/README.md) | Know Thyself by Knowing Others: Learning Neuron Identity from Population Context | source_unresolved | design_ready | 3 | not linked |
 | [PAPER-paper-method-replacement-013](PAPER-paper-method-replacement-013/README.md) | Neuroformer: Multimodal and Multitask Generative Pretraining for Brain Data | source_unresolved | source_unresolved | 3 | [manifest](PAPER-paper-method-replacement-013/implementations/registered-runtime/manifest.json) |
-| [PAPER-paper-method-replacement-015](PAPER-paper-method-replacement-015/README.md) | Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data | source_unresolved | source_unresolved | 3 | [manifest](PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json) |
+| [PAPER-paper-method-replacement-015](PAPER-paper-method-replacement-015/README.md) | Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data | source_unresolved | source_unresolved | 4 | [manifest](PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-replacement-016](PAPER-paper-method-replacement-016/README.md) | One Hundred Neural Networks and Brains Watching Videos: Lessons from Alignment | unavailable | unavailable | 4 | [manifest](PAPER-paper-method-replacement-016/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-signal-add-001](PAPER-paper-signal-add-001/README.md) | Control of working memory by phase–amplitude coupling of human hippocampal neurons | unavailable | unavailable | 2 | not linked |
 | [PAPER-paper-signal-add-004](PAPER-paper-signal-add-004/README.md) | osl-dynamics, a toolbox for modeling fast dynamic brain activity | source_unresolved | source_unresolved | 2 | not linked |
@@ -145,7 +147,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | unavailable | unavailable | 7 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | source_unresolved | 1 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | source_unresolved | 2 | not linked |
-| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce source findings and exceed the original offline MC\_Maze 20-ms endpoint | continuous_measurement | continuous_measurement | 4 | not linked |
+| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce and improve with paper/data versus official code and released models | continuous_measurement | continuous_measurement | 5 | not linked |
 | [paper-pcca-fa-bilateral-pfc-arousal-2026](paper-pcca-fa-bilateral-pfc-arousal-2026/README.md) | Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction | unavailable | unavailable | 2 | not linked |
 
 Generated with `python3 scripts/catalog.py` from the repository root. Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.

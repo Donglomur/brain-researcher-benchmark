@@ -462,3 +462,159 @@ def continuous_public_selection(authenticated):
                 "improvement": _pin("primary_improvement"), "outcomes": continuous_pin("retained_outcomes"),
                 "revision": captured["descriptor"]["retained_temporal_revision"]},
             "construction_requires_AI_attempt": False, "legacy_binary_admission": "not_applicable"}
+
+
+OFFICIAL_ASSETS_DESCRIPTOR = HOME + "/continuous-outcomes-binding.v2.json"
+OFFICIAL_ASSETS_ARCHIVE = HOME + "/docs/pre-official-assets-v2/task.json"
+OFFICIAL_ASSETS_PACKAGE = HOME + "/implementations/continuous-outcomes-v2/"
+OFFICIAL_ASSETS_ROOT = (3881, "14715871929256344174f04293bf7add2f72bb3b188416d0e0175a9f62fa76d4")
+_OFFICIAL_ASSETS_APPROVED = {
+    "retained_task": (OFFICIAL_ASSETS_ARCHIVE, 15092, "b3306fc5757863b295fd70d3915daee9e5535e7aa6dd92ce2173d25aed91f6e3", "6a18cd365b66147dddcd5633cf2ea1339516966abcf16899e046a582463e5b6e"),
+    "source_predecessor": (OFFICIAL_ASSETS_PACKAGE + "predecessor.task.json", 15092, "b3306fc5757863b295fd70d3915daee9e5535e7aa6dd92ce2173d25aed91f6e3", "6a18cd365b66147dddcd5633cf2ea1339516966abcf16899e046a582463e5b6e"),
+    "policy": (OFFICIAL_ASSETS_PACKAGE + "policy.json", 10030, "d15ef4c5410d96e7e6e61e7554d3d99e21cedceb4073b1c8ee641c35b011f328", "d888b434966c936345b1ebebf8453802f98d271b8cb4ad086238fa830c934aff"),
+    "asset_allowlist": (OFFICIAL_ASSETS_PACKAGE + "asset_allowlist.json", 7319, "e74a06f793d7fd116ede1af13e4dd656bdbd29ca454d53f5a9b9fa9a91af5b06", "a903c7d40abea917a51ee4d9417810df3ad5a5823f0259b42a89449b4fe6e687"),
+    "amendment": (OFFICIAL_ASSETS_PACKAGE + "TASK_AMENDMENT.json", 9660, "775b168a2bc3815faa9de1d788da42d8f6cf4834c76be74341072854bf034680", "aa94c201d4f7d2fb106d48c9964c380187a1e274fb7b93b29c01adc49995c373"),
+    "proposal": (OFFICIAL_ASSETS_PACKAGE + "proposed-task.json", 16782, "e99cf60035a156fdb7a0a3b61b539db387ae53b31f1d4be59da31f18d9346fbd", "34afe66d0a280d10006b240dda2d24901ae4da1eab9d943bf83f78b81c8b5fc4"),
+}
+_OFFICIAL_ASSETS_FIELDS = frozenset((
+    "/admission", "/continuous_outcomes_v2", "/evaluation/candidate_interface", "/evaluation/contracts",
+    "/evaluation/historical_optional_information_condition", "/evaluation/information_conditions",
+    "/evaluation/operator_entrypoint", "/evaluation/retained_continuous_v1_contracts", "/evaluation/scorer_ref",
+    "/holds", "/next_implementation_action", "/provenance/continuous_policy",
+    "/provenance/official_assets_policy_adoption_sha256", "/provenance/official_assets_predecessor",
+    "/resources/participant_access_budget", "/status_basis", "/success_criteria", "/title",
+))
+
+
+def official_assets_pin(name):
+    path, size, raw_hash, _ = _OFFICIAL_ASSETS_APPROVED[name]
+    return {"path": path, "bytes": size, "sha256": raw_hash}
+
+
+def retained_continuous_revision():
+    return {"path": CONTINUOUS_DESCRIPTOR, "bytes": 7370,
+            "sha256": "614d163254a964943af4cbbc31ef46fd9c001bb1c3a40bc4e750a27232719c84"}
+
+
+def official_assets_entrypoint():
+    return {"path": OFFICIAL_ASSETS_PACKAGE + "benchmark.py", "bytes": 43262,
+            "sha256": "a9ca90b9a62e706d5522fc8e52be0b6d2ab6fc01fb6b700c9cd00f8fff777fd5"}
+
+
+def official_assets_descriptor(root_decision_text):
+    _need(type(root_decision_text) is str, "official-assets root decision text required")
+    raw = root_decision_text.encode("utf-8")
+    _need((len(raw), hashlib.sha256(raw).hexdigest()) == OFFICIAL_ASSETS_ROOT,
+          "unreviewed official-assets root decision")
+    return {"schema_version": "smc-continuous-current-binding/v2", "task_id": TASK,
+            "source_commit": "5a51903c1b6ad0b579840bb9a4c2c6bad75c1123",
+            "root_decision": {"text": root_decision_text, "bytes": OFFICIAL_ASSETS_ROOT[0], "sha256": OFFICIAL_ASSETS_ROOT[1]},
+            "inputs": {name: official_assets_pin(name) for name in _OFFICIAL_ASSETS_APPROVED},
+            "retained_continuous_revision": retained_continuous_revision(),
+            "entrypoint": official_assets_entrypoint(), "paired_protocol": None,
+            "result_status": "not_attempted", "legacy_binary_admission": "not_applicable"}
+
+
+class _OfficialAssetsAuthenticated(_ContinuousAuthenticated):
+    __slots__ = ()
+
+    @property
+    def members(self):
+        return [self.snapshot()["descriptor_pin"], official_assets_pin("retained_task")]
+
+
+def authenticate_official_assets(*, revision_pin, continuous, continuous_task, read_pin):
+    _need(type(continuous) is _ContinuousAuthenticated and continuous._seal is _SEAL,
+          "authenticated retained continuous-v1 policy required")
+    _require_pin(revision_pin, OFFICIAL_ASSETS_DESCRIPTOR)
+    declaration = read_pin(copy.deepcopy(revision_pin), "SMC official-assets policy revision")
+    _need(type(declaration) is dict and type(declaration.get("root_decision")) is dict,
+          "official-assets descriptor required")
+    expected = official_assets_descriptor(declaration["root_decision"].get("text"))
+    _need(_canonical(declaration) == _canonical(expected), "unreviewed official-assets descriptor")
+    _need(continuous.snapshot()["descriptor_pin"] == retained_continuous_revision(),
+          "official-assets selection must preserve exact continuous-v1 revision")
+    documents = {}
+    for name, approved in _OFFICIAL_ASSETS_APPROVED.items():
+        document = read_pin(official_assets_pin(name), "SMC official-assets " + name)
+        _need(type(document) is dict and _digest(document) == approved[3],
+              "official-assets parsed identity mismatch: " + name)
+        documents[name] = document
+    _need(_canonical(continuous_task) == _canonical(documents["retained_task"])
+          == _canonical(documents["source_predecessor"]), "official-assets preimage differs from authenticated continuous-v1 projection")
+    _need(documents["policy"].get("schema") == "smc_continuous_official_assets_policy_v2"
+          and documents["policy"].get("task_id") == TASK
+          and documents["policy"].get("root_adoption_sha256") == OFFICIAL_ASSETS_ROOT[1]
+          and documents["policy"].get("conditions") == ["paper_data", "paper_data_author_code_and_weights"],
+          "official-assets policy identity mismatch")
+    return _OfficialAssetsAuthenticated(_canonical({"documents": documents, "descriptor_pin": revision_pin,
+        "descriptor": declaration, "retained_v1_selection": continuous_public_selection(continuous)}), _SEAL)
+
+
+def project_official_assets(continuous_task, authenticated):
+    _need(type(authenticated) is _OfficialAssetsAuthenticated and authenticated._seal is _SEAL,
+          "authenticated official-assets handle required")
+    documents = authenticated.snapshot()["documents"]
+    _need(_canonical(continuous_task) == _canonical(documents["retained_task"]),
+          "official-assets projection cannot replace its retained task")
+    amendment = documents["amendment"]
+    _need(amendment.get("schema") == "smc_official_assets_task_amendment_proposal_v2"
+          and set(amendment.get("set_by_json_pointer", {})) == _OFFICIAL_ASSETS_FIELDS
+          and amendment.get("delete_by_json_pointer") == ["/continuous_outcomes_v1"],
+          "unexpected official-assets amendment fields")
+    result = copy.deepcopy(continuous_task)
+    _need("continuous_outcomes_v1" in result and "continuous_outcomes_v2" not in result,
+          "official-assets projection requires its exact v1 active selector")
+    del result["continuous_outcomes_v1"]
+    for pointer, value in amendment["set_by_json_pointer"].items():
+        keys, target = pointer[1:].split("/"), result
+        for key in keys[:-1]:
+            _need(type(target.get(key)) is dict, "official-assets projection parent is absent")
+            target = target[key]
+        target[keys[-1]] = copy.deepcopy(value)
+    _need(_canonical(result) == _canonical(documents["proposal"]), "official-assets projection differs from accepted proposal")
+    raw = (json.dumps(result, sort_keys=True, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
+    approved = official_assets_pin("proposal")
+    _need(len(raw) == approved["bytes"] and hashlib.sha256(raw).hexdigest() == approved["sha256"],
+          "official-assets raw projection differs from accepted proposal")
+    return json.loads(raw)
+
+
+def official_assets_public_selection(authenticated):
+    _need(type(authenticated) is _OfficialAssetsAuthenticated and authenticated._seal is _SEAL,
+          "authenticated official-assets handle required")
+    captured = authenticated.snapshot()
+    evaluation = captured["documents"]["proposal"]["evaluation"]
+    retained = captured["retained_v1_selection"]
+    return {"policy": official_assets_pin("policy"), "entrypoint": official_assets_entrypoint(),
+            "revision": captured["descriptor_pin"], "asset_allowlist": official_assets_pin("asset_allowlist"),
+            "paired_protocol": None, "result_status": "not_attempted",
+            "outcomes": ["reproduction", "improvement"], "conditions": ["paper_data", "paper_data_author_code_and_weights"],
+            **{field: copy.deepcopy(evaluation[field]) for field in
+               ("continuous_assessment", "operator_entrypoint", "candidate_interface", "author_reproduction_routes")},
+            "historical_optional_information_condition": copy.deepcopy(evaluation["historical_optional_information_condition"]),
+            "retained_v1": {"role": "historical_source_only_policy_not_active_primary",
+                "task": official_assets_pin("retained_task"), "policy": retained["policy"],
+                "entrypoint": retained["entrypoint"], "revision": retained["revision"]},
+            "retained_temporal": retained["retained_temporal"],
+            "construction_requires_AI_attempt": False, "legacy_binary_admission": "not_applicable"}
+
+
+def current_continuous(*, revision_pin, temporal, temporal_task, read_pin):
+    """Authenticate either fixed current selection through its preserved lineage."""
+    _need(type(revision_pin) is dict and revision_pin.get("path") in (CONTINUOUS_DESCRIPTOR, OFFICIAL_ASSETS_DESCRIPTOR),
+          "unrecognized fixed SMC current revision")
+    official = revision_pin["path"] == OFFICIAL_ASSETS_DESCRIPTOR
+    retained = authenticate_continuous(revision_pin=retained_continuous_revision() if official else revision_pin,
+        temporal=temporal, temporal_task=temporal_task, read_pin=read_pin)
+    projected = project_continuous(temporal_task, retained)
+    if not official:
+        return {"projected": projected, "current": retained, "handles": [retained], "version": 1,
+                "selection": continuous_public_selection(retained),
+                "provenance": {"amendment": continuous_pin("amendment"), "policy": continuous_pin("policy")}}
+    selected = authenticate_official_assets(revision_pin=revision_pin, continuous=retained,
+        continuous_task=projected, read_pin=read_pin)
+    return {"projected": project_official_assets(projected, selected), "current": selected,
+            "handles": [retained, selected], "version": 2, "selection": official_assets_public_selection(selected),
+            "provenance": {"amendment": official_assets_pin("amendment"), "policy": official_assets_pin("policy"),
+                           "asset_allowlist": official_assets_pin("asset_allowlist")}}

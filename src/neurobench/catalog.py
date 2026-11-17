@@ -91,12 +91,21 @@ def paper_outcome_counts(tasks):
     return result
 
 
+def continuous_paper_selection(outcomes):
+    """Select one authenticated SMC continuous version; mixed claims refuse."""
+    selections = [outcomes[field] for field in ('continuous_outcomes_v1', 'continuous_outcomes_v2')
+                  if field in outcomes]
+    need(len(selections) <= 1 and all(type(value) is dict for value in selections),
+         'Expected exactly one current continuous policy version when declared')
+    return selections[0] if selections else None
+
+
 def primary_paper_disposition(row, outcome):
     """A retained secondary policy cannot make an unavailable primary eligible."""
     binding = row.get('paper_outcomes', {})
     if binding.get('availability') == 'unavailable':
         return 'unavailable'
-    if binding.get('continuous_outcomes_v1') is not None:
+    if continuous_paper_selection(binding) is not None:
         return 'continuous_measurement'
     if source_declaration_gap(binding):
         return ('source_declaration_unavailable' if outcome == 'reproduction'
@@ -593,7 +602,7 @@ def discover(root=ROOT):
                 task['runtime_lineage_note'] = (
                     'The current source interface measures both outcomes continuously; retained policies and author-source routes '
                     'preserve their original scopes. Participant results are not attempted.'
-                    if bound_outcomes.get('continuous_outcomes_v1') is not None else
+                    if continuous_paper_selection(task['paper_outcomes']) is not None else
                     'The selected offline candidate and retained author-source routes are separate source interfaces; '
                     'their metadata does not establish execution or scientific qualification.'
                     if bound_outcomes['candidate_interface'] is not None else
@@ -691,12 +700,16 @@ def source_links(catalog):
             if correction is not None:
                 yield correction['root_scope_decision']['path']
             outcomes = row['paper_outcomes']
-            continuous = outcomes.get('continuous_outcomes_v1')
+            continuous = continuous_paper_selection(outcomes)
             if continuous is not None:
                 for field in ('policy', 'entrypoint', 'revision'):
                     yield continuous[field]['path']
                 for field in ('task', 'reproduction', 'improvement', 'outcomes', 'revision'):
                     yield continuous['retained_temporal'][field]['path']
+                if 'continuous_outcomes_v2' in outcomes:
+                    yield continuous['asset_allowlist']['path']
+                    for field in ('task', 'policy', 'entrypoint', 'revision'):
+                        yield continuous['retained_v1'][field]['path']
             if outcomes.get('primary_policy_revision') is not None:
                 for field in ('improvement_contract', 'retained_improvement_contract', 'primary_policy_revision'):
                     yield outcomes[field]['path']
@@ -807,7 +820,7 @@ def validate(catalog, root=ROOT, *, _reader=None):
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
         outcomes = row.get('paper_outcomes')
-        successor_fields = ((set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) | {'continuous_outcomes_v1'}) & set(outcomes)
+        successor_fields = ((set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) | {'continuous_outcomes_v1', 'continuous_outcomes_v2'}) & set(outcomes)
                             if type(outcomes) is dict else set())
         if row['id'] in gap_ids:
             successor_fields.discard('improvement_disposition')
@@ -835,10 +848,12 @@ def validate(catalog, root=ROOT, *, _reader=None):
                  and outcomes.get('scientific_outcomes') == {'reproduction': 'unknown', 'improvement': 'unknown'},
                  'Paper outcome metadata cannot manufacture scientific results')
             cells = outcomes.get('cells')
+            conditions = (('paper_data', 'paper_data_author_code_and_weights')
+                          if 'continuous_outcomes_v2' in outcomes else ('paper_data', 'paper_data_author_code'))
             need(type(cells) is list and len(cells) == 4
                  and {(cell.get('outcome'), cell.get('condition')) for cell in cells if type(cell) is dict}
                  == {(outcome, condition) for outcome in ('reproduction', 'improvement')
-                     for condition in ('paper_data', 'paper_data_author_code')}
+                     for condition in conditions}
                  and all(type(cell) is dict and cell.get('scientific_outcome') == 'unknown'
                          and cell.get('receipt') is None for cell in cells),
                  'Paper catalog requires four unscored outcome conditions')
@@ -981,8 +996,9 @@ def paper_count_text(catalog):
     successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
     scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
                                 and row['paper_outcomes']['candidate_interface'] is None for row in catalog['tasks'])
-    continuous_count = sum(row.get('paper_outcomes', {}).get('continuous_outcomes_v1') is not None
+    continuous_count = sum(continuous_paper_selection(row.get('paper_outcomes', {})) is not None
                            for row in catalog['tasks'])
+    official_assets_count = sum('continuous_outcomes_v2' in row.get('paper_outcomes', {}) for row in catalog['tasks'])
     temporal_successor_count = successor_count - scope_successor_count - continuous_count
     dual_text = ''
     if outcomes['covered']:
@@ -991,7 +1007,9 @@ def paper_count_text(catalog):
         dual_text = (f"Outcome metadata covers **{outcomes['covered']}/{outcomes['registered']} paper tasks**. "
                      'This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. '
                      f"Reproduction eligibility: {eligibility}. "
-                     + ('The two goals retain paper+data and paper+data+author-code condition labels; missing declarations do not establish paired protocols. '
+                     + ('Each task retains its declared information conditions; SMC compares paper+data with paper+data+official-code-and-weights. '
+                        if official_assets_count else
+                        'The two goals retain paper+data and paper+data+author-code condition labels; missing declarations do not establish paired protocols. '
                         if outcomes.get('source_declaration_unavailable') else
                         'Reproduction and improvement are assessed separately under paper+data and paper+data+author-code conditions. ')
                      + 'These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.\n\n')
@@ -1010,6 +1028,9 @@ def paper_count_text(catalog):
             dual_text += (f"**{continuous_count} task** declares continuous measurements for both paper outcomes, without binary eligibility or pass thresholds. "
                           'Matched episode protocols remain uninstantiated and participant results are not attempted; '
                           'an AI attempt is not required for benchmark construction.\n\n')
+        if official_assets_count:
+            dual_text += ('Only the assisted SMC condition receives the exact official source and pinned released-model assets. '
+                          'The earlier source-only condition remains a separate historical ablation.\n\n')
         if successor_count:
             dispositions = ', '.join(f"{count} {status.replace('_', ' ')}"
                                       for status, count in outcomes['improvement_disposition'].items())
@@ -1306,7 +1327,7 @@ def render_tracks(catalog):
                 outcomes = row['paper_outcomes']
                 unavailable = outcomes.get('availability') == 'unavailable'
                 gap = source_declaration_gap(outcomes)
-                continuous = outcomes.get('continuous_outcomes_v1')
+                continuous = continuous_paper_selection(outcomes)
                 text += '## Separate paper outcomes\n\n'
                 if continuous is not None:
                     text += ('Both first-class outcomes use continuous fixed-panel measurements under the same typed policy. '
@@ -1314,6 +1335,12 @@ def render_tracks(catalog):
                              'with separate reference differences. No binary reproduction or improvement pass is assigned.\n\n'
                              '**Matched episode protocol:** Not instantiated. **Participant results:** Not attempted. '
                              'An AI attempt is not required for benchmark construction; actual bound materials and matched episode settings remain separate requirements.\n\n')
+                    if 'continuous_outcomes_v2' in outcomes:
+                        text += ('**Primary access pair:** `paper_data` versus `paper_data_author_code_and_weights`. '
+                                 'Both conditions receive identical permitted observations, paper, task and per-outcome resource settings. '
+                                 'Only the assisted condition receives the exact official code and ten pinned released-model assets. '
+                                 'Faithful released-model inference is allowed reproduction in that condition; it does not establish independent training. '
+                                 'Actual asset use and participant execution remain separately evidenced.\n\n')
                 elif gap:
                     text += ('Reproduction is a first-class goal, but its source-grounded declaration and matched paired protocols have not been adopted. '
                              'The unchanged improvement contract remains independently inspectable under its original criteria. '
@@ -1366,8 +1393,17 @@ def render_tracks(catalog):
                                  '- ' + markdown_link('Reviewed task amendment', outcomes['primary_policy_provenance']['amendment']['path'], task) + '\n'
                                  '- ' + markdown_link('Continuous operator entrypoint', continuous['entrypoint']['path'], task)
                                  + ': ' + ', '.join('`' + command + '`' for command in continuous['operator_entrypoint']['commands']) + '.\n\n'
-                                 + markdown_text(candidate['selection_limit']) + '\n\n'
-                                 '### Retained pre-continuous policies\n\n'
+                                 + markdown_text(candidate['selection_limit']) + '\n\n')
+                        if 'continuous_outcomes_v2' in outcomes:
+                            text += ('- ' + markdown_link('Exact official-asset allowlist', continuous['asset_allowlist']['path'], task) + '\n\n'
+                                     '### Retained source-only continuous policy\n\n'
+                                     'The historical `paper_data_author_code` condition remains a separate source-only ablation. '
+                                     'It is not pooled with the current code-and-weights pair.\n\n')
+                            for field, label in (('task', 'Preserved source-only task'), ('policy', 'Retained source-only policy'),
+                                                 ('entrypoint', 'Retained source-only entrypoint'), ('revision', 'Retained source-only revision')):
+                                text += '- ' + markdown_link(label, continuous['retained_v1'][field]['path'], task) + '\n'
+                            text += '\n'
+                        text += ('### Retained pre-continuous policies\n\n'
                                  'These policies and the archived task preserve their prior scope; they do not impose binary thresholds on current continuous measurements.\n\n')
                         retained = continuous['retained_temporal']
                         for field, label in (('task', 'Pre-continuous task'), ('reproduction', 'Retained reproduction policy'),
@@ -1447,7 +1483,7 @@ def render_tracks(catalog):
             if row.get('paper_improvement'):
                 improvement = row['paper_improvement']
                 if improvement.get('role') == RETAINED_POLICY_ROLE:
-                    if row['paper_outcomes'].get('continuous_outcomes_v1') is not None:
+                    if continuous_paper_selection(row['paper_outcomes']) is not None:
                         text += ('## Retained original registration policy\n\n'
                                  'This original contract preserves its registration scope. The shared continuous policy above governs both current outcomes; '
                                  'this retained audit does not set current measurement thresholds.\n\n')

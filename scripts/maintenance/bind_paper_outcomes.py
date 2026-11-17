@@ -306,15 +306,21 @@ def build_outputs(root=ROOT):
             # retained temporal sidecars keep their old task identity; never
             # infer activation merely because an additive component exists.
             continuous_pin = row["paper_outcomes"]["continuous_policy_revision"]
-            continuous = module.authenticate_continuous(
+            continuous = module.current_continuous(
                 revision_pin=continuous_pin, temporal=successor,
                 temporal_task=projected, read_pin=planned_read)
-            projected = module.project_continuous(projected, continuous)
+            projected = continuous["projected"]
+            updated_rows[identifier]["title"] = projected["title"]
             new_binding["continuous_policy_revision"] = copy.deepcopy(continuous_pin)
             immediate_raw, immediate_pin = raw(reader, module.CONTINUOUS_ARCHIVE)
             binding.need(immediate_pin == module.continuous_pin("retained_task"),
                          "Continuous SMC archive differs from its exact temporal preimage")
             outputs[module.CONTINUOUS_ARCHIVE] = immediate_raw
+            if continuous["version"] == 2:
+                official_raw, official_pin = raw(reader, module.OFFICIAL_ASSETS_ARCHIVE)
+                binding.need(official_pin == module.official_assets_pin("retained_task"),
+                             "Official-assets SMC archive differs from its exact continuous-v1 preimage")
+                outputs[module.OFFICIAL_ASSETS_ARCHIVE] = official_raw
         current_body = binding.encode(projected)
         current_pin = binding.pin(home + "/task.json", current_body)
         updated_rows[identifier]["specification"] = current_pin

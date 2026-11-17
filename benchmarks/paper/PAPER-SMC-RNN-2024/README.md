@@ -1,4 +1,4 @@
-# SMC-RNN: reproduce source findings and exceed the original offline MC\_Maze 20-ms endpoint
+# SMC-RNN: reproduce and improve with paper/data versus official code and released models
 
 [Paper research](../README.md) · [All benchmarks](../../README.md)
 
@@ -16,16 +16,29 @@ Both first-class outcomes use continuous fixed-panel measurements under the same
 
 **Matched episode protocol:** Not instantiated. **Participant results:** Not attempted. An AI attempt is not required for benchmark construction; actual bound materials and matched episode settings remain separate requirements.
 
+**Primary access pair:** `paper_data` versus `paper_data_author_code_and_weights`. Both conditions receive identical permitted observations, paper, task and per-outcome resource settings. Only the assisted condition receives the exact official code and ten pinned released-model assets. Faithful released-model inference is allowed reproduction in that condition; it does not establish independent training. Actual asset use and participant execution remain separately evidenced.
+
 ### Current continuous measurement policy
 
 **Disposition:** continuous\_measurement.
 
-- [Shared reproduction and improvement policy](implementations/continuous-outcomes-v1/policy.json)
-- [Authenticated continuous revision](continuous-outcomes-binding.v1.json)
-- [Reviewed task amendment](implementations/continuous-outcomes-v1/TASK_AMENDMENT.json)
-- [Continuous operator entrypoint](implementations/continuous-outcomes-v1/benchmark.py): `prepare`, `inspect`, `freeze`, `score`.
+- [Shared reproduction and improvement policy](implementations/continuous-outcomes-v2/policy.json)
+- [Authenticated continuous revision](continuous-outcomes-binding.v2.json)
+- [Reviewed task amendment](implementations/continuous-outcomes-v2/TASK_AMENDMENT.json)
+- [Continuous operator entrypoint](implementations/continuous-outcomes-v2/benchmark.py): `prepare`, `inspect`, `freeze`, `score`.
 
-The source route produces continuous fixed-panel measurements. Materials admission, runtime enforcement, participant authorship and scientific claims remain separately evidenced.
+Released-model inference is allowed in the assisted condition. Actual asset use, execution fidelity, independent training and scientific claims require separate evidence; no checkpoint is loaded by this operator interface.
+
+- [Exact official-asset allowlist](implementations/continuous-outcomes-v2/asset_allowlist.json)
+
+### Retained source-only continuous policy
+
+The historical `paper_data_author_code` condition remains a separate source-only ablation. It is not pooled with the current code-and-weights pair.
+
+- [Preserved source-only task](docs/pre-official-assets-v2/task.json)
+- [Retained source-only policy](implementations/continuous-outcomes-v1/policy.json)
+- [Retained source-only entrypoint](implementations/continuous-outcomes-v1/benchmark.py)
+- [Retained source-only revision](continuous-outcomes-binding.v1.json)
 
 ### Retained pre-continuous policies
 
@@ -52,9 +65,9 @@ causal-proposal, noncausal-proposal. Author calibration is not a qualified submi
 | Outcome | Information condition | Assessment | Episode protocol | Participant result |
 | --- | --- | --- | --- | --- |
 | Reproduction | Paper data | Continuous measurement | Not instantiated | Not attempted |
-| Reproduction | Paper data author code | Continuous measurement | Not instantiated | Not attempted |
+| Reproduction | Paper data author code and weights | Continuous measurement | Not instantiated | Not attempted |
 | Improvement | Paper data | Continuous measurement | Not instantiated | Not attempted |
-| Improvement | Paper data author code | Continuous measurement | Not instantiated | Not attempted |
+| Improvement | Paper data author code and weights | Continuous measurement | Not instantiated | Not attempted |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
@@ -82,7 +95,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 15092 bytes; SHA-256 `b3306fc5757863b295fd70d3915daee9e5535e7aa6dd92ce2173d25aed91f6e3`.
+- Specification identity: 16782 bytes; SHA-256 `e99cf60035a156fdb7a0a3b61b539db387ae53b31f1d4be59da31f18d9346fbd`.
 - [Registration and provenance](../../../docs/provenance/registrations/paper-initial/PAPER-SMC-RNN-2024.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
@@ -101,6 +114,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Source-matched MC\_Maze 20-ms preparation and paired paper/data versus paper/data/official-code exports, selected author-checkpoint inference and frozen-prediction scoring for both original proposal arms with all companion metrics. Complete author-score calibration, equal participant budgets, joint superiority admission and scientific qualification remain unestablished. Source delivery and engineering controls are not solver performance; original targets are publicly exposed.
 - [Continuous outcomes v1](implementations/continuous-outcomes-v1) — Reviewed continuous outcome source.
   Scope: Bounded paired-material preparation, outcome-specific CPU profiles and complete continuous reproduction/improvement measurement preserve the exact prior task and original evaluator. The proposed current task is not activated by artifact registration; exact context/CLI/binder adoption and separately admitted authentic export remain required. AI results are separate from construction readiness, and no binary reproduction or superiority claim is inferred.
+- [Continuous outcomes v2](implementations/continuous-outcomes-v2) — Reviewed continuous outcome source.
+  Scope: Reviewed source for the prospective paper-data versus paper-data-plus-official-code-and-weights condition, with exact ten-asset allowlist, typed use declarations and unchanged original reproduction and offline-improvement evaluators. Current SMC adoption is a separately authenticated successor; artifact registration does not activate it. Authentic export, episode isolation and actual model execution remain separate. Released-asset assistance is not independent training, and no binary success or scientific result is inferred.
 - [Paired reproduction v1](implementations/paired-reproduction-v1) — Joint original source method reproduction evaluation.
   Scope: Joint freeze and scoring interface for two complete original-method prediction sets and all eight source findings through the unchanged evaluator. This source component does not supply an agreement policy, establish original-method execution or qualify AI reproduction, historical source linkage, candidate isolation or scientific performance.
 
