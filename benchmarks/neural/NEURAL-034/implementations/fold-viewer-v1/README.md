@@ -30,7 +30,8 @@ interpolated the calcium onto sample centers at `0.05 + arange(300) * 0.1` secon
 within each 30-second window. This viewer adds no filtering, resampling,
 normalization or zero-centering. Source fluorescence units are retained. Twelve
 separate lanes share one gain, with positive values plotted upward; clipped lanes
-are flagged and the operator can increase the gain. Behavior is drawn as a binary
+are flagged. Increase `units_per_division` to display a larger amplitude range.
+Behavior is drawn as a binary
 step trace at the same sample centers. Its biological polarity remains unresolved.
 
 The fixed 1400 by 820 RGB raster uses authenticated existing EEG canvas/font/line
