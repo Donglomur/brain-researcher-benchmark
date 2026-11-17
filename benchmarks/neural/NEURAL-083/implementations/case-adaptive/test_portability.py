@@ -13,7 +13,8 @@ import time
 import unittest
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parent
-REPOSITORY=ROOT.parents[2]
+REPOSITORY=ROOT.parents[4]
+CURRENT=REPOSITORY/'benchmarks/integrity/current-closures/openbmi-case-adaptive'
 VIRTUAL_SERIALIZED_IO_PRECHARGE=65536
 SOURCE_READ_LIMIT=1048576
 FORBIDDEN={'numpy','scipy','sklearn','torch','jax'}
@@ -30,13 +31,16 @@ class DeniedSupervisor:
 class Portability(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.inventory=json.loads((ROOT/'PUBLIC_INVENTORY.json').read_bytes())
+        cls.inventory=json.loads((CURRENT/'PUBLIC_INVENTORY.json').read_bytes())
         cls.rows=cls.inventory['files']
         cls.pins={r['path']:{k:r[k] for k in ('bytes','sha256')} for r in cls.rows}
+        selected=cls.inventory['current_source_manifest']
+        cls.source_pin={k:selected[k] for k in ('bytes','sha256')}
+        cls.source_path=REPOSITORY/selected['path']
         spec=importlib.util.spec_from_file_location('openbmi_portable_trusted_entry',ROOT/'successor/trusted_entry.py')
         cls.entry=importlib.util.module_from_spec(spec);spec.loader.exec_module(cls.entry)
         with patch.object(subprocess,'Popen',forbidden),patch.object(socket,'create_connection',forbidden):
-            cls.source=cls.entry.capture(REPOSITORY,ROOT/'SOURCE_MANIFEST.json',cls.pins['SOURCE_MANIFEST.json'],deadline=time.monotonic()+30,read_limit=SOURCE_READ_LIMIT)
+            cls.source=cls.entry.capture(REPOSITORY,cls.source_path,cls.source_pin,deadline=time.monotonic()+30,read_limit=SOURCE_READ_LIMIT)
         cls.virtual_bytes=len(json.dumps({'incumbent':dict(cls.source.incumbent_pin),'source':dict(cls.source.source_pin)}).encode())
         assert cls.virtual_bytes<VIRTUAL_SERIALIZED_IO_PRECHARGE
     def test_ordinary_checkout_inventory(self):
@@ -52,8 +56,13 @@ class Portability(unittest.TestCase):
         self.assertEqual((len(self.source.old),len(self.source.new),len(self.source.dependencies),len(self.source.external)),(18,11,4,8))
         self.assertEqual(self.source.incumbent_pin,self.entry.INCUMBENT_PIN)
         expected=sum(len(b)+1 for group in [self.source.old,self.source.new,self.source.dependencies,self.source.external] for b in group.values())
-        expected+=self.pins['SOURCE_MANIFEST.json']['bytes']+1+self.pins['incumbent/SOURCE_MANIFEST.json']['bytes']+1
+        expected+=self.source_pin['bytes']+1+self.pins['incumbent/SOURCE_MANIFEST.json']['bytes']+1
         self.assertEqual(self.source.read_reservations,expected)
+        self.assertTrue(all(Path(p).is_relative_to(ROOT) for p in self.source.paths.values()))
+        for name in (self.entry.LEGACY_SOURCE_PREFIX+'../incumbent/SOURCE_MANIFEST.json',
+                     self.entry.CURRENT_SOURCE_PREFIX+'unknown.py', 'unbound/source.py'):
+            with self.assertRaises(ValueError):
+                self.entry._relative(REPOSITORY,dict(path=name,bytes=1,sha256='0'*64))
     def test_missing_token_capability_refuses(self):
         for bad in [None,False,{}]:
             with self.assertRaisesRegex(ValueError,'External TokenAdmission'):

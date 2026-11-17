@@ -28,6 +28,19 @@ NEW_NAMES = (
     "adaptive_entry.py", "openbmi_agent_tools.py", "agent_driver.py",
 )
 BROKER_NAMES = ("morse_protocol.py", "morse_broker.py", "morse_docker.py", "morse_bootstrap.py")
+# Frozen descriptors retain their original logical namespace. This source version
+# binds its exact member set to the current physical package without a fallback.
+LEGACY_SOURCE_PREFIX = "benchmarks/scientific_contracts/openbmi_case_adaptive/"
+CURRENT_SOURCE_PREFIX = "benchmarks/neural/NEURAL-083/implementations/case-adaptive/"
+SOURCE_MEMBERS = frozenset((
+    "incumbent/SOURCE_MANIFEST.json",
+    *("successor/" + name for name in NEW_NAMES),
+    *("successor/dependencies/" + name for name in BROKER_NAMES),
+    "bindings/reference_core.py", "bindings/scoring_sources/protocol.py",
+    "bindings/scoring_sources/scorer_core.py", "bindings/scientific_sources/TASK.md",
+    "bindings/scientific_sources/PROTOCOL.json", "bindings/scientific_sources/REFERENCE.md",
+    "bindings/scientific_sources/reference_program.py", "bindings/scientific_sources/prepare.py",
+))
 PANELS = ("frozen_program", "case_adaptive", "reference")
 _CAPTURED = object()
 _BUILT = object()
@@ -77,7 +90,14 @@ def _relative(repository, row):
     _need(type(name) is str and bool(name) and "\\" not in name and
           PurePosixPath(name).as_posix() == name and not PurePosixPath(name).is_absolute() and
           not any(p in ("", ".", "..") for p in name.split("/")), "Repository-relative source descriptor")
-    return _path(repository / name), _valid_pin({k: row[k] for k in ("bytes", "sha256")})
+    if name.startswith(LEGACY_SOURCE_PREFIX):
+        member = name[len(LEGACY_SOURCE_PREFIX):]
+    elif name.startswith(CURRENT_SOURCE_PREFIX):
+        member = name[len(CURRENT_SOURCE_PREFIX):]
+    else:
+        raise ValueError("Bound source namespace")
+    _need(member in SOURCE_MEMBERS, "Bound source member")
+    return _path(repository / CURRENT_SOURCE_PREFIX / member), _valid_pin({k: row[k] for k in ("bytes", "sha256")})
 
 
 def _stamp(info):
@@ -147,7 +167,7 @@ class CapturedSource:
 def capture(repository, manifest_path, manifest_pin, *, deadline, read_limit):
     """Capture every selected body, including original bindings, before compile.
 
-    Manifest shape: schema=neural083_paired_source_v1, incumbent repository-
+    Manifest shape: schema=neural083_paired_source_v2, incumbent repository-
     relative manifest descriptor, files exact NEW_NAMES descriptors, and
     broker_dependencies exact BROKER_NAMES descriptors. The trust-anchor source
     itself is selected as trusted_entry.py. Original scientific/reference
@@ -159,7 +179,7 @@ def capture(repository, manifest_path, manifest_pin, *, deadline, read_limit):
     raw = _capture(manifest_path, manifest_pin, meter)
     manifest = _parse(raw)
     _exact(manifest, ("schema", "incumbent", "files", "broker_dependencies"), "Closed paired source manifest")
-    _need(manifest["schema"] == "neural083_paired_source_v1", "Paired source schema")
+    _need(manifest["schema"] == "neural083_paired_source_v2", "Paired current source schema")
     old_path, old_pin = _relative(root, manifest["incumbent"])
     _need(old_pin == INCUMBENT_PIN, "Exact accepted predecessor source")
     old_manifest = _parse(_capture(old_path, old_pin, meter))

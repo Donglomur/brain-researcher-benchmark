@@ -11,7 +11,9 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parent
-DEPENDENCY = ROOT.parent / "sbind-whole-trial-preparation"
+DEPENDENCY = ROOT.parent / "whole-trial-preparation"
+CURRENT_SOURCE = Path("benchmarks/integrity/current-closures/sbind-continuous-normalization/SOURCE.json")
+ORIGINAL_SOURCE = (1871, "f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea")
 DEPENDENCY_SOURCE = (1452, "9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d")
 
 
@@ -22,6 +24,13 @@ def authenticate(root, expected=None):
     if not stat.S_ISREG(manifest.lstat().st_mode):
         raise RuntimeError("ordinary source manifest required")
     raw = manifest.read_bytes()
+    if root == ROOT:
+        if (len(raw), hashlib.sha256(raw).hexdigest()) != ORIGINAL_SOURCE:
+            raise RuntimeError("original source manifest changed")
+        current = ROOT.parents[4] / CURRENT_SOURCE
+        if not stat.S_ISREG(current.lstat().st_mode):
+            raise RuntimeError("ordinary current source manifest required")
+        raw = current.read_bytes()
     if expected is not None and (len(raw), hashlib.sha256(raw).hexdigest()) != expected:
         raise RuntimeError("selected dependency source manifest changed")
     source = json.loads(raw)
@@ -56,10 +65,14 @@ class DeliveryTests(unittest.TestCase):
     def test_relocated_shared_types_and_complete_grid_admission(self):
         authenticate(ROOT); authenticate(DEPENDENCY, DEPENDENCY_SOURCE)
         with tempfile.TemporaryDirectory(prefix="sbind normalization delivery ") as temporary:
-            base = Path(temporary); components = base / "relocated checkout" / "components"
+            base = Path(temporary); checkout = base / "relocated checkout"
+            components = checkout / "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations"
             components.mkdir(parents=True)
             copied = components / ROOT.name; inherited = components / DEPENDENCY.name
             shutil.copytree(ROOT, copied); shutil.copytree(DEPENDENCY, inherited)
+            relocated_descriptor = checkout / CURRENT_SOURCE
+            relocated_descriptor.parent.mkdir(parents=True)
+            shutil.copyfile(ROOT.parents[4] / CURRENT_SOURCE, relocated_descriptor)
             elsewhere = base / "unrelated cwd"; elsewhere.mkdir()
             script = """import hashlib, inspect, json, pathlib, sys, unittest
 root, dependency = (pathlib.Path(x).resolve() for x in sys.argv[1:3])
@@ -68,6 +81,10 @@ import numerical_preparation as subject
 import trial_preparation as inherited
 import test_trial_preparation as original_fixture
 import test_numerical_preparation as new_fixture
+import test_public_delivery as delivery
+delivery.authenticate(root)
+delivery.authenticate(dependency, delivery.DEPENDENCY_SOURCE)
+assert delivery.DEPENDENCY == dependency
 assert subject.trials is inherited and original_fixture.subject is inherited
 assert pathlib.Path(inherited.__file__).resolve() == dependency / 'trial_preparation.py'
 assert pathlib.Path(subject.__file__).resolve() == root / 'numerical_preparation.py'

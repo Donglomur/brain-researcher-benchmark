@@ -136,7 +136,8 @@ def main(argv=None):
     parser.parse_args(arguments)
     here = Path(__file__).absolute().parent
     legacy = here.parent
-    require(here.name == "production-wiring-v3" and legacy.name == "neural-002",
+    require(here.parts[-6:] == ("benchmarks", "neural", "NEURAL-002",
+                                "implementations", "registered-runtime", "production-wiring-v3"),
             "installed task-local source layout required")
     for root in (here, legacy):
         require(root.is_absolute() and not str(root).startswith("//") and ".." not in root.parts,

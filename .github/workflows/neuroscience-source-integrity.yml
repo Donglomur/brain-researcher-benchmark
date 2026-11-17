@@ -3528,7 +3528,7 @@ jobs:
           import hashlib, json, pathlib, stat, sys, unittest
           if sys.flags.optimize:
               raise RuntimeError('source controls require assertions enabled')
-          def authenticate(root, extent, digest):
+          def authenticate(root, extent, digest, current_manifest=None, current_extent=None, current_digest=None):
               if not stat.S_ISDIR(root.lstat().st_mode):
                   raise RuntimeError('ordinary component directory required')
               manifest = root / 'SOURCE.json'
@@ -3537,7 +3537,22 @@ jobs:
               raw = manifest.read_bytes()
               if len(raw) != extent or hashlib.sha256(raw).hexdigest() != digest:
                   raise RuntimeError('selected component manifest changed')
-              members = json.loads(raw)['files']
+              original = json.loads(raw)
+              selected = original
+              if current_manifest is not None:
+                  if any(p.is_symlink() for p in (current_manifest, *current_manifest.parents)) or not stat.S_ISREG(current_manifest.lstat().st_mode):
+                      raise RuntimeError('ordinary current source descriptor required')
+                  current_raw = current_manifest.read_bytes()
+                  if len(current_raw) != current_extent or hashlib.sha256(current_raw).hexdigest() != current_digest:
+                      raise RuntimeError('selected current component descriptor changed')
+                  selected = json.loads(current_raw)
+                  if {k: v for k, v in selected.items() if k != 'files'} != {k: v for k, v in original.items() if k != 'files'}:
+                      raise RuntimeError('original source metadata must be preserved')
+                  old_rows = {item['path']: item for item in original['files']}
+                  new_rows = {item['path']: item for item in selected['files']}
+                  if set(old_rows) != set(new_rows) or {name for name in old_rows if old_rows[name] != new_rows[name]} != {'test_public_delivery.py'}:
+                      raise RuntimeError('only the current delivery-test source pin may differ')
+              members = selected['files']
               names = [item['path'] for item in members]
               if len(names) != len(set(names)) or any(pathlib.PurePosixPath(name).name != name for name in names):
                   raise RuntimeError('flat unique source namespace required')
@@ -3552,7 +3567,9 @@ jobs:
                       raise RuntimeError('selected source changed before imports')
           root = pathlib.Path('benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/continuous-normalization')
           dependency = pathlib.Path('benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-preparation')
-          authenticate(root, 1871, 'f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea')
+          current_manifest = pathlib.Path('benchmarks/integrity/current-closures/sbind-continuous-normalization/SOURCE.json')
+          authenticate(root, 1871, 'f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea',
+              current_manifest, 1871, '0a126ace920578179e5406bc3fbdd9cfdd135f3360463454868e751200f1d490')
           authenticate(dependency, 1452, '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d')
           sys.path[:0] = [str(root.resolve()), str(dependency.resolve())]
           suite = unittest.defaultTestLoader.discover(str(root), pattern='test_*.py')
