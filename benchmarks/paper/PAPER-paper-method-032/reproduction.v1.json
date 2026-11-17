@@ -69,7 +69,7 @@
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Root-selected Option A: the original four-subject one-hour fMRI-to-image retrieval/reconstruction result in Tables 1/8 plus the one-hour point of the subject-1 pretrained-versus-from-scratch reconstruction contrast in Figure 5/Section 3.1.1. Preserve their separate test supports, complete named reconstruction metrics, normalization references, training and image-model exposure, original repeated presentations and source reductions. Apply the authoritative physical-direction correction unambiguously in the task and both access conditions while retaining original labels and correction provenance. Same target-subject data does not imply equal total pretraining data or compute.",
+      "description": "One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -78,7 +78,7 @@
     },
     "dataset": {
       "status": "unresolved",
-      "description": "Natural Scenes Dataset and source MindEyeV2 derivatives for the selected Tables1/8 one-hour absolute result and Figure5 subject-1 one-hour transfer comparison. Preserve original shared1000 test support and exact neural/image/checkpoint/reference identities separately for these results. The full NSD training partition is relevant to source normalization/pretraining; it does not make a forty-session performance panel a selected primary outcome. Exact artifact identities remain unqualified.",
+      "description": "Natural Scenes Dataset (NSD), full 40-session release used in the paper, with author MindEyeV2 derivatives. Exact paper-era neural, image, checkpoint and derivative file hashes are not yet authenticated.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -87,7 +87,7 @@
     },
     "cohort": {
       "status": "unresolved",
-      "description": "The absolute one-hour panel uses subjects1,2,5,7, each with the original model pretrained on the other seven subjects and target first-session adaptation. The Figure5 transfer contrast is subject1 only, comparing pretrained and from-scratch reconstruction at the same one-hour target-subject budget. Keep these supports distinct; the subject1 contrast neither replaces the four-subject result nor creates additional independent participants.",
+      "description": "Evaluate subjects 1, 2, 5 and 7; each target uses a shared model pretrained on the other seven NSD subjects. A single-subject or reduced-image result cannot substitute for this aggregate.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -96,7 +96,7 @@
     },
     "split": {
       "status": "unresolved",
-      "description": "Preserve original first-session adaptation excluding shared1000 test images, all original shared1000 test observations and repeated presentations, including source-supported first-session test repeats. The selected Figure5 one-hour arms retain the original same test support and target training allocation; authenticate their exact trial/model/reference joins separately. No prospective session-disjoint restriction, reduced-image set or other training-duration outcome replaces this selection.",
+      "description": "Adapt on the first scanning session, excluding shared1000 test images; retain the same 1,000 shared test images and their original repeat support for every training-duration condition. Do not replace this with the legacy prospective session-disjoint restriction.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -105,7 +105,7 @@
     },
     "inputs": {
       "status": "unresolved",
-      "description": "Use source single-trial nsdgeneral fMRI responses, paired training images and native image-model resources. The pretrained arms include leave-target-subject-out neural pretraining; the from-scratch subject1 arm intentionally differs in neural pretraining exposure. Same target-subject data does not mean equal total neural/image exposure or compute. Freeze those exposure roles; no test image identity or target image feature may enter a candidate brain query.",
+      "description": "Single-trial nsdgeneral fMRI responses and paired training images, seven-other-subject pretraining, and the source pretrained image-model resources. Match and record neural/image/checkpoint exposure; no test image identity or feature target may enter a candidate query.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -115,7 +115,7 @@
     },
     "preprocessing": {
       "status": "unresolved",
-      "description": "Preserve source GLMSingle normalized betas,1.8-mm native nsdgeneral voxels and full-training-partition voxel normalization before reducing target adaptation to one hour. Retain post-model repeated-presentation handling and source reconstruction preprocessing/refinement. Figure5 metric normalization uses its own original random-COCO zero and forty-session pretrained unit references; those reference identities and exact transform must be recovered, not replaced with four-subject table means or assumed Table8 outputs. First-session-only normalization is a labelled extension.",
+      "description": "GLMSingle normalized betas, 1.8-mm native-volume nsdgeneral voxels, voxel z-scoring from the full training partition before reducing to one session. The paper acknowledges this extra normalization exposure; a first-session-only normalization experiment is a separately labelled extension. Native repeat handling still requires parity verification.",
       "evidence_ids": [
         "paper",
         "source-selected-transfer",
@@ -125,7 +125,7 @@
     },
     "metric": {
       "status": "unresolved",
-      "description": "For each original300-item retrieval pool, flatten and L2-normalize full OpenCLIP token embeddings and score top1 in both physical directions: corrected Image retrieval is brain query to image candidates (original paper column Brain), corrected Brain retrieval is image query to brain candidates (original column Image). Preserve PixCorr,SSIM,AlexNet2,AlexNet5,Inception,CLIP,EffNet and SwAV reconstruction metrics. Figure5 retains its source per-metric normalized one-hour pretrained/from-scratch outputs and displayed median reductions; source ordinate/reference and native comparison criteria remain unresolved. Neither retrieval direction alone discharges reconstruction or transfer.",
+      "description": "For each 300-item draw, flatten and L2-normalize paired OpenCLIP ViT-bigG-14/laion2b_s39b_b160k token embeddings; score the fraction whose true image has greatest cosine similarity to the brain query. Preserve corrected orientation and qualify native ties/RNG behavior.",
       "evidence_ids": [
         "metric_code",
         "native-complete-metrics",
@@ -135,7 +135,7 @@
     },
     "aggregation": {
       "status": "unresolved",
-      "description": "Keep each subject and each selected metric separate; the Table1 absolute result equally averages subjects1,2,5,7 after source per-subject reductions. Retrieval averages30 original300-item draws within subject. These overlapping draws are Monte Carlo variation, not independent people or an improvement test. Report the one-hour subject1 Figure5 arm contrast on its own normalized metric support and original median reduction, without pooling it into the four-subject result or collapsing the complete comparison into an invented scalar. A qualified same-one-hour author comparator and justified joint decision remain required.",
+      "description": "Average retrieval accuracy over 30 sampled 300-image pools per subject, then equally across the four paper subjects. Keep reverse retrieval and all reconstruction metrics separate. Repeated pools are Monte Carlo variation, not independent people.",
       "evidence_ids": [
         "paper",
         "metric_code",
@@ -150,7 +150,7 @@
         "correction",
         "native-complete-metrics"
       ],
-      "description": "Mandatory selected primary coverage has two separate supports: Tables1/8 one-hour retrieval/reconstruction on subjects1,2,5,7, and the one-hour subject1 pretrained-versus-from-scratch reconstruction contrast of Figure5/Section3.1.1. The fifty scalar findings below preserve all actual one-hour table targets for the eight image metrics and two corrected retrieval directions. They are partial selected-primary coverage: exact Figure5 per-arm/per-metric ordinates, normalization references, source median reductions and native comparison outputs remain required and source-unresolved. No null grid, proxy contrast scalar or categorical success is invented. The forty-session model is needed only in its actual Figure5 normalization-reference role; no forty-session result panel, Table6 comparison, extra training duration, human preference, caption/GNet metric, architecture, ceiling, COCO retrieval or UMAP/ROI result becomes automatically mandatory. Preserve the prior429-value inventory as separate evidence. Complete reconstruction, native computation verification and the selected transfer comparison cannot be discharged by retrieval-only success."
+      "description": "Root-selected Option A: the original four-subject one-hour fMRI-to-image retrieval/reconstruction result in Tables 1/8 plus the one-hour point of the subject-1 pretrained-versus-from-scratch reconstruction contrast in Figure 5/Section 3.1.1. Preserve their separate test supports, complete named reconstruction metrics, normalization references, training and image-model exposure, original repeated presentations and source reductions. Apply the authoritative physical-direction correction unambiguously in the task and both access conditions while retaining original labels and correction provenance. Same target-subject data does not imply equal total pretraining data or compute. Mandatory selected primary coverage has two separate supports: Tables1/8 one-hour retrieval/reconstruction on subjects1,2,5,7, and the one-hour subject1 pretrained-versus-from-scratch reconstruction contrast of Figure5/Section3.1.1. The fifty scalar findings below preserve all actual one-hour table targets for the eight image metrics and two corrected retrieval directions. They are partial selected-primary coverage: exact Figure5 per-arm/per-metric ordinates, normalization references, source median reductions and native comparison outputs remain required and source-unresolved. No null grid, proxy contrast scalar or categorical success is invented. The forty-session model is needed only in its actual Figure5 normalization-reference role; no forty-session result panel, Table6 comparison, extra training duration, human preference, caption/GNet metric, architecture, ceiling, COCO retrieval or UMAP/ROI result becomes automatically mandatory. Preserve the prior429-value inventory as separate evidence. Complete reconstruction, native computation verification and the selected transfer comparison cannot be discharged by retrieval-only success. Scope of the eight inherited factual anchors: their target, cohort, inputs, first-direction metric and four-subject aggregation describe the original absolute one-hour panel. Their primary-ordered-endpoint language does not define complete Option A admission or demote the reverse direction, reconstruction or transfer comparison. The accepted Option A scope above controls mandatory full-panel coverage. The separately supported Figure5 subject1 from-scratch arm intentionally lacks the other-subject neural pretraining of the pretrained arm; neither the inherited cohort nor input wording can impose that pretraining on it. Same target-subject data does not imply equal total pretraining exposure or compute. The inherited split's every-training-duration statement records a source test-support invariant and does not enroll additional durations as mandatory outcomes. The candidate-query test-image exclusion applies to the brain-side candidate inference interface: the operator still computes both physical retrieval directions, including the source image-query/brain-candidate reverse metric using its authorized scoring image embeddings. Figure5 normalization references and source median/per-metric reductions retain their distinct native identities; a forty-session normalization reference is not an extra primary performance panel. Existing unresolved statuses, scientific criteria, native computation requirements and all four unknown outcome dispositions remain unchanged."
     },
     "permitted_observations": {
       "status": "unresolved",
@@ -2137,6 +2137,6 @@
     "Independent operator execution must bind submitted analysis, authentic inputs, checkpoints/runtime/exposure and granular outputs, then recompute every selected metric and Figure5 reduction. Require per-image reconstruction/metric evidence, full retrieval query outcomes and exact arm/reference joins; printed-value agreement is not reproduction.",
     "Freeze source-justified reproduction tolerances/uncertainty and a separate same-one-hour improvement decision with a qualified author comparator. Thirty overlapping retrieval pools cannot supply participant-level uncertainty or superiority. Single subject1 transfer support cannot be pooled as four-participant comparative evidence. No numerical margin or joint rule is inferred from printed precision.",
     "Forty-session performance, Table6, additional durations, human preference, captions/GNet, architecture, image-generation ceiling, COCO retrieval and UMAP/ROI analyses remain separate retained evidence; they are not mandatory selected task outcomes. The forty-session normalization reference is preserved only in its original selected Figure5 role.",
-    "Canonical owner must integrate the accepted target and coordinated factual anchors into task/improvement/reproduction and both access-condition descriptions, preserving predecessor bytes, then bind final actual task/registry/outcomes identities. This external draft intentionally differs from unchanged improvement anchors and must not be bound to the old outcome sidecar. Both paired protocols, budgets and all four scientific outcomes remain unresolved."
+    "Canonical owner must integrate accepted OptionA task/full-panel/access-condition wording coherently while retaining the accurate inherited eight-anchor descriptions and all source qualifications, preserving predecessor bytes, then bind final actual task/registry/outcomes identities. This external repair restores description equality to the retained improvement contract; it does not release the old outcome sidecar, admit a scalar-only result or qualify a source comparator. Both paired protocols, budgets and all four scientific outcomes remain unresolved."
   ]
 }
