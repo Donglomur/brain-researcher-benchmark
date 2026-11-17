@@ -32,8 +32,8 @@ The separate proposed profile is `voltron-six-subject-native-frame-events/v1`. I
 
 The private timing-resolution ceiling must match all available frame centers to reference events with the same one-to-one rule. Counting occupied frame bins is not equivalent. This ceiling is evaluated only after all candidate/comparator predictions are frozen.
 
-The older [seven-group component](../../benchmarks/neuroscience/voltron-complete-spike-events/README.md) remains a historical mathematical interface with invented controls. Its code is unchanged. The successor does not inherit authentic-data qualification from those tests.
+The older [seven-group component](../implementations/voltron-complete-spike-events/README.md) remains a historical mathematical interface with invented controls. Its code is unchanged. The successor does not inherit authentic-data qualification from those tests.
 
 Before authentic scoring, the project still needs complete signal custody and decoding, the deposited processing/clock relationship, independently justified patched-cell regions, optical-only extraction choices, electrical spike-label rules, valid-support masks, and matched training-only comparator outputs. None of the current metadata or source checks establishes neural understanding, improvement, SOTA, paper reproduction or submission readiness.
 
-The [native-frame scoring core](../../benchmarks/neuroscience/voltron-native-frame-events-v1/CONTRACT.md) now implements the six-subject event endpoint with exact timing, complete coverage and generated verification. Authentic inputs, electrical references, comparator producers and protected execution remain unqualified. This source addition does not increase the benchmark count.
+The [native-frame scoring core](../implementations/voltron-native-frame-events-v1/CONTRACT.md) now implements the six-subject event endpoint with exact timing, complete coverage and generated verification. Authentic inputs, electrical references, comparator producers and protected execution remain unqualified. This source addition does not increase the benchmark count.

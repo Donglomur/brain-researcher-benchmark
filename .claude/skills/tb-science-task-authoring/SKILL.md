@@ -32,7 +32,7 @@ Worked examples ship alongside this skill (the `*-001` task directories at the r
 
 Do not equate a famous paper, a rising topic, or an available dataset with a benchmark
 candidate. Start with a **primary empirical or benchmark paper**, not a review. Read
-`contracts/curation/README.md` and consume the shared
+`src/neurobench/curation/contracts/README.md` and consume the shared
 `curation-contracts-v1.schema.json#/$defs/PaperEvidencePacket` artifact supplied by the
 job. Do not recreate an incompatible local packet.
 

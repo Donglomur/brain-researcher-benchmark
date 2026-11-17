@@ -14,8 +14,8 @@ safe to publish.
 Use a definition by its JSON Pointer, for example:
 
 ```text
-contracts/curation/curation-contracts-v1.schema.json#/$defs/CurationJob
-contracts/curation/curation-contracts-v1.schema.json#/$defs/StageResult
+src/neurobench/curation/contracts/curation-contracts-v1.schema.json#/$defs/CurationJob
+src/neurobench/curation/contracts/curation-contracts-v1.schema.json#/$defs/StageResult
 ```
 
 Most draft artifact definitions allow `additionalProperties` so their scientific

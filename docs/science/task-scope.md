@@ -1,6 +1,6 @@
 # Scientific task scope and qualification
 
-Adopted prospectively on 2026-11-14. This protocol applies to new proposals. It does not change existing full-paper contracts, their holds, the original 200 tasks, or the current 217-draft count.
+Adopted prospectively on 2026-11-14. This protocol applies to new proposals. It does not change existing full-paper contracts, their holds, the original 200 tasks, or the 217-draft inventory recorded at adoption. See [current status](../status/README.md) for the later registry counts.
 
 ## What one task means
 

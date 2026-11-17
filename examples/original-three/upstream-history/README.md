@@ -1,29 +1,22 @@
-# Upstream planning and reported results
+# Original-example history
 
-These documents belong to the original **GRADIENT-001**, **SOCIALBRAIN-001** and
-**DEVCONN-001** programme. They are preserved as history beside the
-[worked examples](../README.md). The current neuroscience programme is described
-in the [main README](../../../README.md) and [task catalog](../../../benchmarks/README.md).
+These retained records describe the inherited examples and earlier project
+organization. They are historical snapshots, not the current neuroscience task
+tracker or a statement of current benchmark readiness.
 
-| Historical document | What it records |
-| --- | --- |
-| [Reported results](RESULTS.md) | The original tasks' oracle/agent outcomes and their stated limitations |
-| [Team operating guide](INTERN_GUIDE.md) | The original task-authoring workflow and difficulty criteria |
-| [Task board](TASK_BOARD.md) | An earlier snapshot of the three-task pipeline |
-| [Assignment queue](ASSIGNMENT_QUEUE.md) | Historical candidate lanes and references to an external landscape backlog |
+The original document bodies and provenance remain unchanged. Some links in those
+bodies describe their old source tree. Read them at the immutable pre-overhaul
+commit for working historical navigation:
 
-Dates, numerical claims and qualifications remain unchanged. These documents
-reflect different snapshots; an earlier board entry can differ from a later
-results report. They do not describe the status or performance of the 234 newer
-task drafts. Commands retain their original repository-root convention, and
-external backlog/runtime prerequisites remain external.
+- [Reported results](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/examples/original-three/upstream-history/RESULTS.md).
+- [Task board](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/examples/original-three/upstream-history/TASK_BOARD.md).
+- [Assignment queue](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/examples/original-three/upstream-history/ASSIGNMENT_QUEUE.md).
+- [Earlier authoring guide](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/examples/original-three/upstream-history/INTERN_GUIDE.md).
+- [Retired verification direction](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/verification/VERIFICATION_TRACK.md).
 
-The relocation adds history labels and repairs relative navigation only.
-[Exact source and edit provenance](ARCHIVE_PROVENANCE.json) records the original
-public commit and byte identities. The [preserving public snapshot](https://github.com/Donglomur/brain-researcher-benchmark/tree/cb245298db2096d15ba95cb67a498e6a6efe42b4)
-retains the documents at their former root paths. The inherited result artifacts remain under
-[`results/`](../../../results/); no scientific artifact or task source was moved.
+[ARCHIVE_PROVENANCE.json](ARCHIVE_PROVENANCE.json) records the earlier document
+relocation and its source identity. The later [whole-repository ledger](../../../docs/provenance/relocations/2026-11-16.json)
+records this reorganization separately. [Saved result files](../results/README.md)
+remain associated with the original examples.
 
-For current contributions, use [the fork workflow](../../../docs/DEVELOPMENT.md).
-The root `TOPIC_TRIAGE_CONTROLLER_PROMPT.md` is a current curation input used by
-`tools/validate_curation_contracts.py`; it is not part of this historical archive.
+Return to the [example guide](../README.md) or [current project status](../../../docs/status/README.md).

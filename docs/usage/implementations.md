@@ -1,111 +1,100 @@
-# Portable source packages
+# Using implementation source
 
-These packages supply reviewed source, generated correctness checks and operator
-interfaces. They do not supply a qualified native environment, authentic neural
-datasets or new agent results. The checks below run on POSIX systems such as
-Linux/macOS; Windows-native execution is not claimed. Hosted source CI uses Ubuntu.
+Start with a task page in the [paper](../../benchmarks/paper/README.md) or
+[neural](../../benchmarks/neural/README.md) track. Its definition and source bindings
+identify available implementations, shared programmes, current guidance and
+remaining limits. The [registry](../../benchmarks/registry.json) records these
+relationships; it is not a claim that every registered source package is ready to run.
+
+```sh
+python3 -I -S -B scripts/neurobench.py show NEURAL-030
+python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
+```
+
+Run these metadata commands from the repository root. A task may have retained
+predecessors, alternate scientific scopes or several implementation components.
+Use the package matching the selected task contract and access condition; ownership
+alone does not select a new scientifically preferred route. The
+[shared-source index](../../benchmarks/shared/README.md) distinguishes multi-task
+programmes, related-only sources and families without an assigned task owner;
+location in that directory does not create a task binding.
+
+## Portable programme sources
+
+The following published packages retain explicit complete-programme scopes and
+source-check interfaces. Their actual inputs, protected evaluation, native
+execution and scientific qualification have separate requirements.
 
 | Package | Preserved scope | Required beyond source checks |
 | --- | --- | --- |
-| [NEURAL-029](../../benchmarks/neuroscience/neural029-programme/README.md) | Complete registered GrC1s-to-2s calcium transfer: all required pairs, cells, query trials and 61 times, with the accepted frozen-program boundary | Complete admitted public/private packet, NumPy grader, qualified Docker environment, capacity and outside observation |
-| [NEURAL-030](../../benchmarks/neuroscience/neural030-four-cell/README.md) | All 16 cerebellar sessions, four input arms and two agent modes: 128 dispatches | Authentic MAT extraction and five-mouse/clock binding, complete public/private packets, adaptive agent and native environment qualification |
-| [NEURAL-078](../../benchmarks/neuroscience/neural078-deferred-grade/README.md) | Full eight-person EEG reconstruction, all 195 report fields and protected grading after producer closure | Admitted authentic collection/reference export, frozen programme, trusted outside observation and native grading qualification |
-| [NEURAL-061](../../benchmarks/neuroscience/neural061-persistent-state/README.md) | 423 source sessions, 29 evaluation sessions, six references, ten seeds and both BR/BC arms; persistent fitted state remains in its isolated child | Authentic inputs/targets, qualified native environment, provider/capture/allocation provenance and independent outside observation |
-| [CBraMod / PAPER-paper-method-024](../../benchmarks/neuroscience/cbramod-paired-program/README.md) | 12 datasets; 800 reproduction artifacts, 60 improvement cases and 420 comparator slots per condition | All 65 exact external official-code files, authentic data/reference lineage, native execution and 8GB output capacity qualification |
-| [PAPER-FIND-050](../../benchmarks/neuroscience/paper-find050-programme/README.md) | Critical initialization: 26 operations, 40 complete 10,000-mode spectra, 29 main sessions and a separate prospective memory endpoint | Exact external official source, authentic inputs and all 32 scientific/runtime gates, including live-issuer and full-capacity qualification |
+| [NEURAL-029](../../benchmarks/neural/NEURAL-029/implementations/neural029-programme/README.md) | Complete registered GrC1s-to-2s calcium transfer: all required pairs, cells, query trials and 61 times, with the accepted frozen-program boundary | Complete admitted public/private packet, NumPy grader, qualified Docker environment, capacity and outside observation |
+| [NEURAL-030](../../benchmarks/neural/NEURAL-030/implementations/neural030-four-cell/README.md) | All 16 cerebellar sessions, four input arms and two agent modes: 128 dispatches | Authentic MAT extraction and five-mouse/clock binding, complete public/private packets, adaptive agent and native environment qualification |
+| [NEURAL-078](../../benchmarks/neural/NEURAL-078/implementations/neural078-deferred-grade/README.md) | Full eight-person EEG reconstruction, all 195 report fields and protected grading after producer closure | Admitted authentic collection/reference export, frozen programme, trusted outside observation and native grading qualification |
+| [NEURAL-061](../../benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/README.md) | 423 source sessions, 29 evaluation sessions, six references, ten seeds and both BR/BC arms; persistent fitted state remains in its isolated child | Authentic inputs/targets, qualified native environment, provider/capture/allocation provenance and independent outside observation |
+| [CBraMod / PAPER-paper-method-024](../../benchmarks/paper/PAPER-paper-method-024/implementations/cbramod-paired-program/README.md) | 12 datasets; 800 reproduction artifacts, 60 improvement cases and 420 comparator slots per condition | All 65 exact external official-code files, authentic data/reference lineage, native execution and 8GB output capacity qualification |
+| [PAPER-FIND-050](../../benchmarks/paper/PAPER-FIND-050/implementations/paper-find050-programme/README.md) | Critical initialization: 26 operations, 40 complete 10,000-mode spectra, 29 main sessions and a separate prospective memory endpoint | Exact external official source, authentic inputs and all 32 scientific/runtime gates, including live-issuer and full-capacity qualification |
 
-The source checks preserve the complete declared populations using generated
-controls. They do not establish broad paper reproduction, neural understanding,
-scientific improvement or a higher finished-benchmark count.
+These source scopes preserve their declared populations and comparison conditions.
+They do not establish broad paper reproduction, neural understanding, improvement
+or an increased completed-benchmark count.
 
-## Run the generated source checks
+## Current package roots
 
-Use a reviewed checkout. The release's trusted verifier pins are:
+Some package READMEs preserve their original release text, including commands that
+use the former directory layout. From the repository root, select
+the matching current `PKG` assignment below before following the package's command
+sequence. The [current portable-source workflow](../../.github/workflows/portable-benchmark-source.yml)
+provides the selected verifier commands and source pins for this layout.
 
-| Verifier | Bytes | SHA-256 |
-| --- | ---: | --- |
-| NEURAL-029 verify_source.py | 7688 | 47cd1ecec5fcbf6d467ffe9d38ae1607596b8c978da46267976283ba97e5d83f |
-| NEURAL-061 verify_source.py | 13111 | caef56e76cee96dde96c960e414f49b9e9b36a9f6f381c1c5f8c31f9d35c6fd0 |
-| CBraMod verify_source.py | 10037 | 7cff2ade21783c057c68459d60f1a6453e2ba5ef3fe9e83612a763f32e680b77 |
-| PAPER-FIND-050 package_tools.py | 14177 | 6e53e633f6088a827d6e009d013873703c7c09a58da43674317efb20e38ecced |
+| Package | Current shell assignment |
+| --- | --- |
+| NEURAL-029 | `PKG=benchmarks/neural/NEURAL-029/implementations/neural029-programme` |
+| NEURAL-030 | `PKG=benchmarks/neural/NEURAL-030/implementations/neural030-four-cell` |
+| NEURAL-078 | `PKG=benchmarks/neural/NEURAL-078/implementations/neural078-deferred-grade` |
+| NEURAL-061 | `PKG=benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state` |
+| CBraMod / PAPER-paper-method-024 | `PKG=benchmarks/paper/PAPER-paper-method-024/implementations/cbramod-paired-program` |
+| PAPER-FIND-050 | `PKG=benchmarks/paper/PAPER-FIND-050/implementations/paper-find050-programme` |
 
-Authenticate the verifier against that independently trusted release before
-executing it; a verifier cannot authenticate its own bootstrap. The
-[CI workflow](../../.github/workflows/portable-benchmark-source.yml) authenticates
-and executes captured verifier bytes, then verifies the package before tests.
-From the repository root:
+These assignments select physical directories. Historical source prose remains
+bound to its original revision; embedded capsule names, manifest member names,
+logical identifiers and historical pins retain their declared meaning. Do not
+replace those identifiers merely because a directory moved. Use the current root
+and current CI binding for execution, and preserve the package's input, environment
+and admission requirements.
 
-```sh
-python3 -I -S -B benchmarks/neuroscience/neural029-programme/verify_source.py \
-  --manifest-bytes 3170 \
-  --manifest-sha256 9b8d4b1551f0114b3041b2fbe0ef1ab5c8eb9af4f934f3e0404a2560c6b30204 --check
+## Check source before execution
 
-python3 -I -S -B benchmarks/neuroscience/neural061-persistent-state/verify_source.py   --manifest-bytes 7808   --manifest-sha256 a9ad5d89c13cd5c9fb1789848329fc9ce7895a2f9b4765fb1e0f3fb042b6bcfb --check
+Use a trusted, reviewed revision. Each package's guide describes its own source
+inventory, verifier and control commands. Authenticate a verifier against the
+reviewed release or current CI binding before executing it; a verifier cannot
+establish trust in its own bootstrap. The
+[portable-source workflow](../../.github/workflows/portable-benchmark-source.yml)
+records its selected packages and commands. Per-package counts, pins and environments
+belong to that exact revision, rather than a duplicated checklist on this page.
 
-python3 -I -S -B benchmarks/neuroscience/cbramod-paired-program/verify_source.py check-package   --manifest-bytes 9771   --manifest-sha256 5f4414b4e7569e299edb718bbca49f21049947ac2fc514aded3aa04da71204dd
+The [repository ownership and source-integrity checks](../development/source-integrity.md)
+have distinct scopes: the first covers the declared ownership/layout of 286
+artifacts; the second verifies recorded source pins for four enrolled bundles. Passing either
+does not supply missing dependencies or native qualification. Generated source
+controls are software evidence, not authentic-data or model results.
 
-# Use a canonical absolute directory without symlink ancestors.
-FIND050_PACKAGE=/absolute/path/to/benchmarks/neuroscience/paper-find050-programme
-python3 -I -S -B "$FIND050_PACKAGE/package_tools.py" check --root "$FIND050_PACKAGE" \
-  --manifest-bytes 7199 \
-  --manifest-sha256 0afba4c97bfde7728ab84b0a8fc7aed9b55b679ee85d2c6518d9145a1cfe8163
-```
+## Prepare an actual run
 
-NEURAL-029 runs 18 generated methods plus its unchanged cache regression.
-PAPER-FIND-050 runs 47 generated methods, including the accepted author and peer
-transport controls. Its `describe` and `dependencies` commands inspect the full
-programme and external-source requirements without scientific execution.
+Read the implementation's required input schema, external code dependencies,
+interpreter/environment, resource envelope and producer/evaluator separation.
+Authentic recordings and protected references may be external. Some packages also
+retain unavailable source dependencies: the qualified-imports programme lacks its
+required DMFC engine; several registered neural scorer bridges require private
+inputs; NEURAL-035 lacks its historical manifest. Read the affected task's registry
+notes before selecting an implementation. A nearby implementation is not an
+interchangeable substitute. Package-local licenses and attribution notices
+continue to apply after relocation.
 
-NEURAL-061 runs 26 generated methods. CBraMod's public-only command runs eight
-packaging methods. Its full 24-method generated executor check additionally needs
-the pinned external official-code checkout and NumPy; see its package guide.
-The offline importer verifies all 65 official files before writing a fresh complete
-103-role runtime. It performs no automatic downloads. The official code remains
-external because file-level license headers differ from its top-level license.
-
-No dataset, Docker image or model is downloaded by these source-check commands.
-Failure or a missing prerequisite is not permission to bypass an admission check.
-
-## NEURAL-030 and NEURAL-078
-
-NEURAL-030's source manifest is 3,848 bytes, SHA-256
-`7edea739a129cfefd109d347171f0867d87898a2d95b7242fc98f1ac407cc815`.
-Its trusted `package.py` is 7,541 bytes, SHA-256
-`cf0014cec118accaaf2f075d1f0021032e9de30aa3abb7b4817a39dce5a7236b`.
-The generated-control profile uses Python 3.12.8 and NumPy 2.2.6. It does not
-select or qualify the numerical environment for authentic scientific execution.
-After authenticating the release, run from the repository root:
-
-```sh
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -I -B \
-  benchmarks/neuroscience/neural030-four-cell/package.py self-test \
-  --source-bytes 3848 \
-  --source-sha256 7edea739a129cfefd109d347171f0867d87898a2d95b7242fc98f1ac407cc815
-python -I -B benchmarks/neuroscience/neural030-four-cell/package_tests.py
-```
-
-These run 14 unchanged full-schedule controls and nine packaging methods.
-`check` and `inspect` need only the standard library. The package guide describes
-the separate `run` and `grade` input-admission requirements.
-
-NEURAL-078's trusted `verify_source.py` is 10,727 bytes, SHA-256
-`9b49f50406bc136f681a2f83125ade937452ab684831b4a408cdab38a5610946`.
-Its source manifest is 5,873 bytes, SHA-256
-`5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61`.
-Use Python 3.11 or later and a canonical absolute package path:
-
-```sh
-NEURAL078_PACKAGE=/absolute/path/to/benchmarks/neuroscience/neural078-deferred-grade
-python -I -S -B "$NEURAL078_PACKAGE/verify_source.py" verify \
-  --source-bytes 5873 \
-  --source-sha256 5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61
-python -I -S -B "$NEURAL078_PACKAGE/test_portable.py"
-python -I -S -B "$NEURAL078_PACKAGE/test_generated.py"
-python -I -S -B "$NEURAL078_PACKAGE/test_namespace_isolation.py"
-python -I -S -B "$NEURAL078_PACKAGE/test_publication_deadline.py"
-```
-
-The checks cover 15 portability methods, 11 complete-cohort grading methods,
-16 namespace cases and five publication-boundary cases using generated fixtures.
-The producer installer copies its complete 18-file authored source into a fresh
-operator root; it does not acquire data or create evidence of an actual run.
+For existing finished-submission routes, see [artifact grading](artifact-grading.md).
+For a controlled paper or neural comparison, use the [study-design guide](../science/study-design/README.md)
+and bind its complete endpoint and access conditions before collecting outcomes.
+The generic `run` and `score` commands retain their own admission checks. Campaign
+commands refuse execution without explicit `campaign_authority` and the required
+private inputs. A source binding or successful metadata query does not enable
+execution automatically. Delivery exports are local generated files under the
+ignored `.neurobench/exports/` directory.

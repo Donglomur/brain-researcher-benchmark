@@ -1,96 +1,77 @@
 # Neuroscience Research Benchmarks
 
-Evaluating whether AI agents can reproduce neuroscience findings, improve methods,
-and understand neural data.
+Can AI agents reproduce neuroscience findings, improve research methods, and
+understand neural data?
 
-**Under construction.** The catalogs describe task drafts and supporting source.
-Qualification across complete scientific contracts has not been established.
+This repository develops two benchmark tracks. **The tasks are under construction:**
+source code and software checks are available, while complete scientific and
+submission qualification remain unestablished.
 
-**[Paper track](benchmarks/paper/README.md) · [Neural-data track](benchmarks/neural/README.md) · [Source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) · [Evidence and status](docs/neuroscience-benchmarks/REPO_QUALITY_20261116.md)**
+**[Paper research](benchmarks/paper/README.md) · [Neural-data understanding](benchmarks/neural/README.md) · [Implementations](docs/usage/implementations.md) · [Current status](docs/status/README.md)**
 
 ## Two research tracks
 
-| Track | What we ask | Controlled comparison |
+| Track | Scientific question | Controlled comparison |
 | --- | --- | --- |
-| **Paper reproduction and improvement** | Given a neuroscience paper and its data, can an agent reproduce a defined result and improve it? | Paper + data versus paper + data + official code. Reproduction and prospective improvement have separate endpoints and matched budgets. |
-| **Neural-data understanding** | Can a general model infer useful structure or predictions from neural and behavioral observations? | A prediction program written in advance versus case-by-case investigation, with explicit tool, specialist-model and scientific-context access. |
+| **Paper reproduction and improvement** | Can an agent reproduce a defined result from a neuroscience paper and then improve it? | Paper + data versus paper + data + official code. Historical reproduction and prospective improvement have separate endpoints. |
+| **Neural-data understanding** | Can an agent interpret neural or behavioral observations and make useful predictions? | A prediction program written in advance versus case-by-case investigation, with explicit tool and scientific-context access. |
 
-## What is available
+Each track contains **100 original specifications**. Later expansion drafts bring
+the registered inventory to **116 paper and 118 neural tasks**. These are task
+registrations; conditions, participants, folds and implementation variants are not
+additional benchmarks.
 
-| Measure | Current coverage |
-| --- | --- |
-| Original specifications | **200** — 100 paper and 100 neural |
-| Registered task drafts, including expansions | **234** — 116 paper and 118 neural |
-| Linked runtime manifests | **95** |
-| Portable programme source packages | **6** — NEURAL-029/030/061/078, CBraMod and PAPER-FIND-050 |
-| Supporting source component collections | **73** |
-| Qualified across complete scientific contracts | **Not established** |
+## Explore a task
 
-These counts overlap and measure different kinds of source coverage. Some drafts
-share papers, datasets or specification aliases. Generated software checks and
-historical finite acceptances do not establish a finished-benchmark count or new
-agent results. See the [construction record](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md)
-and [historical execution evidence](docs/neuroscience-benchmarks/historical-evidence-v1/README.md).
-
-## Start here
+Open a task folder to find its question, authoritative `task.json`, available
+implementations, source citations and documented limits. The
+[shared-source index](benchmarks/shared/README.md) distinguishes multi-task
+programmes, related-only sources and families without an assigned task owner.
 
 ```sh
 git clone --branch publish/neuroscience-200 --single-branch https://github.com/Donglomur/brain-researcher-benchmark.git
 cd brain-researcher-benchmark
-python3 tools/neurobench.py list --track paper
-python3 tools/neurobench.py list --track neural
-python3 tools/neurobench.py show NEURAL-017
-python3 tools/neurobench.py status
-python3 tools/neurobench.py check
+python3 -I -S -B scripts/neurobench.py list --track paper
+python3 -I -S -B scripts/neurobench.py list --track neural
+python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py status
 ```
 
-These commands use Python's standard library to inspect the public catalog.
-They do not download data or run scientific evaluations.
+These commands inspect public metadata using Python 3.11 or later and the standard
+library. Running an implementation requires its own environment, inputs and
+admission checks; consult the [implementation guide](docs/usage/implementations.md).
+
+## Repository layout
+
+```text
+benchmarks/
+  paper/<task-id>/          # paper task definitions and implementations
+  neural/<task-id>/         # neural task definitions and implementations
+  shared/                  # multi-task, related-only and unassigned source
+  registry.json            # task, source and ownership relationships
+  catalog/                 # generated browsing views
+src/neurobench/             # common framework
+scripts/                   # public commands and maintenance entry points
+tests/                     # framework and maintenance checks
+docs/                      # usage, scientific design, development and provenance
+examples/original-three/    # inherited scientific-judgment examples
+archive/                   # explicitly inactive retained material
+```
 
 | Next step | Guide |
 | --- | --- |
-| Find a task and its sources | [Paper task folders](benchmarks/paper/README.md), [neural task folders](benchmarks/neural/README.md), [catalog format](benchmarks/catalog/README.md) |
-| Use a published implementation | [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) and [component index](benchmarks/catalog/components.md) |
-| Check source or grade an artifact | [Source integrity](docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) and [artifact grading](docs/neuroscience-benchmarks/ARTIFACT_GRADING.md) |
-| Design a matched comparison | [Paired-study reporting](docs/neuroscience-benchmarks/PAIRED_STUDY_REPORTING.md) and [study-description validator](components/study_binding_validator_v1/README.md) |
+| Use available source and understand its limits | [Implementations](docs/usage/implementations.md), [artifact grading](docs/usage/artifact-grading.md) |
+| Design a comparison | [Scientific design](docs/science/README.md), [study templates](docs/science/study-design/README.md) |
+| Check the source or contribute | [Source integrity](docs/development/source-integrity.md), [contributing](CONTRIBUTING.md) |
+| Interpret earlier reports and releases | [Provenance](docs/provenance/README.md), [current status](docs/status/README.md) |
 
-Each package documents its inputs, dependencies and commands. Authentic recordings,
-protected references and qualified runtimes are separate requirements; the generic
-`run` and `score` interfaces retain their own admission rules.
+## Development and upstream
 
-## Repository structure
+The default and integration branch of [this fork](https://github.com/Donglomur/brain-researcher-benchmark)
+is `publish/neuroscience-200`. Use a feature branch and a reviewed PR into it;
+see the [development guide](docs/DEVELOPMENT.md).
 
-| Directory | Contents |
-| --- | --- |
-| [`benchmarks/paper/`](benchmarks/paper/README.md) | Paper reproduction and improvement: one folder per task; 100 original specifications plus 16 expansion drafts |
-| [`benchmarks/neural/`](benchmarks/neural/README.md) | Neural-data understanding: one folder per task; 100 original specifications plus 18 expansion drafts |
-| [`benchmarks/catalog/`](benchmarks/catalog/README.md) | Shared machine-readable inventory and component index |
-| [`benchmarks/`](benchmarks/README.md) | Authoritative specifications, existing implementation packages and versioned registries |
-| [`components/`](components/) · [`benchmarks/scientific_components/`](benchmarks/scientific_components/) | Reusable preparation, scoring and execution source |
-| [`contracts/curation/`](contracts/curation/README.md) | Paper intake and evaluation-design contracts |
-| [`docs/`](docs/README.md) | Scientific scope, operator guides, evidence and development workflow |
-| [`tools/`](tools/) · [`tests/`](tests/) | Public catalog tools and software checks |
-| [`examples/original-three/`](examples/original-three/README.md) | Inherited worked examples and their archived planning/results documents |
-
-Each task folder has a guide linking its authoritative specification, source
-references and implementation, where available. These folders organize the same task
-inventory; they are not new standalone runnable packages. Scientific package paths
-remain stable so existing commands and saved verification records still apply.
-The root `TOPIC_TRIAGE_CONTROLLER_PROMPT.md` remains the active curation worker
-contract used by its validator.
-
-## Development
-
-The default and integration branch of **this fork** is **`publish/neuroscience-200`**.
-Open a short-lived feature branch and a PR into it. See [contributing](CONTRIBUTING.md)
-and the [fork workflow](docs/DEVELOPMENT.md) for review, CI and branch cleanup.
-
-## Upstream examples
-
-This programme builds on [brain-researcher/brain-researcher-benchmark](https://github.com/brain-researcher/brain-researcher-benchmark).
-Its **GRADIENT-001**, **SOCIALBRAIN-001** and **DEVCONN-001** are preserved as
-[exposed worked examples](examples/original-three/README.md), separate from the
-234 neuroscience task drafts. Their original planning and reported results live
-in [upstream history](examples/original-three/upstream-history/README.md).
-The [legacy recovery audit](docs/neuroscience-benchmarks/LEGACY_TASK_RECOVERY_20261116.md)
-explains reuse limits for the other preserved task branches.
+The original [brain-researcher/brain-researcher-benchmark](https://github.com/brain-researcher/brain-researcher-benchmark)
+examples—GRADIENT-001, SOCIALBRAIN-001 and DEVCONN-001—are preserved under
+[examples/original-three](examples/original-three/README.md), separately from the
+newer task inventory and its scientific claims.

@@ -1,11 +1,11 @@
 # Reporting paper and code access comparisons
 
-`tools/report_neuroscience_paired_study.py` produces a descriptive report from a prospectively assigned paper roster and trusted operator outcome records. It does not run a model, load neuroscience measurements, authenticate evidence, or adjudicate whether a reproduction is scientifically correct. It implements the reporting choices in this project's research experiment design: keep every assignment, report reproduction separately from improvement, and do not average incompatible scientific metrics.
+`scripts/report_paired_study.py` produces a descriptive report from a prospectively assigned paper roster and trusted operator outcome records. It does not run a model, load neuroscience measurements, authenticate evidence, or adjudicate whether a reproduction is scientifically correct. It implements the reporting choices in this project's research experiment design: keep every assignment, report reproduction separately from improvement, and do not average incompatible scientific metrics.
 
 ```sh
-python3 -I -S -B tools/report_neuroscience_paired_study.py \
+python3 -I -S -B scripts/report_paired_study.py \
   --plan study-plan.json --records operator-records.json > report.json
-python3 -I -S -B tools/tests/test_paired_study_report.py
+python3 -I -S -B -m unittest discover -s tests/framework -p test_paired_study.py -v
 ```
 
 Freeze the plan before seeing outcomes. The CLI cannot establish when a plan was created; a post hoc roster remains a post hoc analysis. Both JSON documents are limited to 8 MiB. Output is written to stdout; the caller manages its destination. This source package contains only invented engineering tests, not new agent-study results.

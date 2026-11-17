@@ -1,8 +1,14 @@
 # GCaMP8 recovery component: published source scope
 
+This guide records the source release preserved at pre-overhaul commit
+[`8a07b93`](https://github.com/Donglomur/brain-researcher-benchmark/blob/8a07b93da68e8b9cf193cdba7d09faa17bf56a43/docs/neuroscience-benchmarks/components/gcamp8-transitive-recovery.md).
+Its reported source sizes, original bindings and control counts describe that
+release. Links below identify the relocated source; current bindings and any later
+source changes require their own reviewed evidence.
+
 This source component implements process and container cleanup around the GCaMP8 paper-reproduction programme. It encloses the complete controller and its host descendants in an owned Linux cgroup, records each resource before creation, waits for the controller to stop, and recovers only the exact remaining resources. A successful cleanup cannot turn a failed scientific run into a successful one.
 
-The public copy is **source-only and inactive**. It does not make the GCaMP8 assignment a standalone runnable benchmark, supply a scientific result, or add a task. Its 37 component files are unchanged from the reviewed implementation. The separate discovery sidecar also leaves the registered entry unchanged.
+The recorded public copy is **source-only and inactive**. It does not make the GCaMP8 assignment a standalone runnable benchmark, supply a scientific result, or add a task. Its 37 component files are unchanged from the reviewed implementation. The separate discovery sidecar also leaves the registered entry unchanged.
 
 ## What is implemented
 
@@ -10,13 +16,13 @@ The declared programme uses all 117 released neuron files, two tracks (pooled an
 
 The surviving parent owns 2,808 resource identities and the fixed 12,169-event lifecycle. It retains attempted creation even if acknowledgement is lost, checks original returned resource identities, and refuses further work after uncertain ownership. Recovery closes containers before volumes and remains under the original deadline. Failed native commands preserve their original stream prefixes and later cleanup failures. Missing observations remain unavailable.
 
-The implementation entry is [operator.py](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/operator.py). The [component README](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/README.md), [resource API](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/REGISTRY_API.md), and [candidate interface](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/controller/CANDIDATE_ABI.md) describe the exact future invocation and boundaries. Do not invoke it as a smoke test: its real route can launch scientific and native work after the external gates are satisfied.
+The implementation entry is [operator.py](../implementations/registered-runtime/transitive-recovery/operator.py). The [component README](../implementations/registered-runtime/transitive-recovery/README.md), [resource API](../implementations/registered-runtime/transitive-recovery/REGISTRY_API.md), and [candidate interface](../implementations/registered-runtime/transitive-recovery/controller/CANDIDATE_ABI.md) describe the exact future invocation and boundaries. Do not invoke it as a smoke test: its real route can launch scientific and native work after the external gates are satisfied.
 
 ## Dependency boundary
 
-The public component includes its controller, native ownership machinery, resource protocol, recovery worker, failure evidence support, backend, and inherited adapter. The [source manifest](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/SOURCE_MANIFEST.json) authenticates 36 payloads; with the manifest, the component totals 37 files and 340,571 bytes.
+The public component includes its controller, native ownership machinery, resource protocol, recovery worker, failure evidence support, backend, and inherited adapter. At the recorded release, the [source manifest](../implementations/registered-runtime/transitive-recovery/SOURCE_MANIFEST.json) authenticated 36 payloads; with the manifest, the component comprised 37 files and 340,571 bytes.
 
-The component is not the complete scientific dependency closure. Its unchanged [controller bindings](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/controller/BINDINGS.json) and [adapter bindings](../../../benchmarks/neuroscience/gcamp8/transitive-recovery/legacy/BINDINGS.json) still describe original repository-relative operands:
+The component is not the complete scientific dependency closure. Its recorded [controller bindings](../implementations/registered-runtime/transitive-recovery/controller/BINDINGS.json) and [adapter bindings](../implementations/registered-runtime/transitive-recovery/legacy/BINDINGS.json) record original repository-relative operands. The source links point to relocated files; the table below describes the recorded external dependency roles:
 
 | Required outside these 37 files | Role in the actual caller |
 | --- | --- |

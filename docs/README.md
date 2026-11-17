@@ -1,28 +1,32 @@
 # Documentation
 
-## Scientific design and evidence
+## Start here
 
-- [The two research tracks](../README.md) and [task catalog](../benchmarks/catalog/README.md).
-- [Scientific scope](scientific-scope/SCIENTIFIC_SCOPE.md).
-- [Study-design templates](neuroscience-benchmarks/study-design-v1/README.md) and [paired-study reporting](neuroscience-benchmarks/PAIRED_STUDY_REPORTING.md).
-- [Construction status](neuroscience-benchmarks/CONSTRUCTION_STATUS.md), [repository quality](neuroscience-benchmarks/REPO_QUALITY_20261116.md) and [historical execution evidence](neuroscience-benchmarks/historical-evidence-v1/README.md).
+- [Browse the two tracks](../benchmarks/README.md).
+- [Current inventory and qualification status](status/README.md).
+- [Use an implementation](usage/implementations.md) or [grade a finished artifact](usage/artifact-grading.md).
 
-## Use and verify source
+## Scientific design
 
-- [Portable source packages](neuroscience-benchmarks/PORTABLE_COMPONENTS.md).
-- [Artifact grading routes](neuroscience-benchmarks/ARTIFACT_GRADING.md).
-- [Source integrity checks](neuroscience-benchmarks/SOURCE_INTEGRITY.md).
-- [DMFC provisioning](../benchmarks/neuroscience/neural-095-four-cell/PROVISIONING.md).
-- [PFC provisioning](../benchmarks/neuroscience/pfc-conditional-portable-profile-v1/PROVISIONING.md).
-- [Findlay complete preparation](../components/findlay-complete-preparation/README.md).
+- [Scientific design overview](science/README.md).
+- [Task scope and qualification](science/task-scope.md).
+- [Paper scope assessment](science/paper-scope/SCIENTIFIC_SCOPE.md).
+- [Paired study templates](science/study-design/README.md) and [reporting](science/paired-study-reporting.md).
 
-Package guides specify their data, runtime and operator requirements. Source checks
-and historical receipts retain their stated scope; they do not automatically
-qualify a complete scientific task.
+## Development
 
-## Development and history
+- [Contribution and PR workflow](DEVELOPMENT.md).
+- [Source organization and checks](development/README.md).
+- [Source-integrity coverage](development/source-integrity.md).
+- [Curation contracts and worker instructions](curation/README.md).
 
-- [Current fork, branch and PR workflow](DEVELOPMENT.md).
-- [Original examples](../examples/original-three/README.md), [their historical planning/results](../examples/original-three/upstream-history/README.md) and [original contribution process](original-examples-contributing.md).
-- [Legacy task recovery](neuroscience-benchmarks/LEGACY_TASK_RECOVERY_20261116.md) and [branch archive](history/BRANCH_ARCHIVE_20261116.md).
-- [Source component release notes through 16 November 2026](history/SOURCE_COMPONENTS_20261116.md).
+## Evidence and history
+
+[Provenance](provenance/README.md) explains earlier release manifests, status
+snapshots, reported execution evidence and the physical relocation ledger.
+Historical records retain their original scope and source identities; the current
+registry describes today's task-to-source relationships.
+
+The inherited examples have their own [guide](../examples/original-three/README.md),
+[results](../examples/original-three/results/README.md) and
+[history](../examples/original-three/upstream-history/README.md).

@@ -2,9 +2,9 @@
 
 Use the [paper template](paper.template.json) to plan paper-plus-data versus paper-plus-data-plus-code comparisons, or the [neural template](neural.template.json) to plan frozen-program versus live-investigation comparisons with explicit tool access. Copy a template into a new study directory and bind it to the complete scientific task contract. Preserve this source template unchanged.
 
-These templates remain unbound planning documents. A [companion description validator](../../../components/study_binding_validator_v1/README.md) now checks a normalized binding format with an exported schema, complete assignments, matched budget declarations and endpoint-specific denominators. It accepts the companion format, not these raw templates, and never opens referenced artifacts. Neither the templates nor a passing description check supply data, measured budgets, statistical defaults, scientific qualification or execution authority.
+These templates remain unbound planning documents. A [companion description validator](../../../src/neurobench/study_binding_validator/README.md) now checks a normalized binding format with an exported schema, complete assignments, matched budget declarations and endpoint-specific denominators. It accepts the companion format, not these raw templates, and never opens referenced artifacts. Neither the templates nor a passing description check supply data, measured budgets, statistical defaults, scientific qualification or execution authority.
 
-The [scientific task-scope policy](../SCIENTIFIC_TASK_SCOPE_V1.md) defines task granularity and qualification. The [current construction status](../CONSTRUCTION_STATUS.md) reports programme readiness and counts; historical counts in the scope document do not override it. Conditions and comparisons do not add benchmark registrations.
+The [scientific task-scope policy](../task-scope.md) defines task granularity and qualification. The [current construction status](../../provenance/status-snapshots/CONSTRUCTION_STATUS_20261115.md) reports programme readiness and counts; historical counts in the scope document do not override it. Conditions and comparisons do not add benchmark registrations.
 
 ## Bind before evaluation
 

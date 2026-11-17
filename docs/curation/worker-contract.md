@@ -24,14 +24,14 @@ JOB (immutable)
 - skill_sha: [PINNED_SKILL_SHA256]
 - actor: [ACTOR]
 - required_output_schema:
-  contracts/curation/curation-contracts-v1.schema.json#/$defs/StageResult
+  src/neurobench/curation/contracts/curation-contracts-v1.schema.json#/$defs/StageResult
 
 Read before working:
 
-1. contracts/curation/README.md
+1. src/neurobench/curation/contracts/README.md
 2. the skill pinned for this stage
 3. for FAMILY_DRAFT or CALIBRATE_FAMILY,
-   contracts/curation/evolvable-rubric-v1.md
+   src/neurobench/curation/contracts/evolvable-rubric-v1.md
 
 SOURCE OF TRUTH
 

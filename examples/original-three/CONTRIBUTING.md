@@ -2,7 +2,7 @@
 
 Preserved from the upstream-oriented contribution guide. Its task criteria and
 authentication notes are historical guidance for the three original examples.
-Use [the fork workflow](DEVELOPMENT.md) for current branch and PR targets.
+Use [the fork workflow](../../docs/DEVELOPMENT.md) for current branch and PR targets.
 Commands below assume the repository root.
 
 # Contributing a task
@@ -12,14 +12,14 @@ This repo holds worked examples + the authoring skill. New tasks are welcome by
 
 ## Flow
 
-1. The following is the original upstream workflow for `brain-researcher/brain-researcher-benchmark`. For this fork, use [the current development workflow](DEVELOPMENT.md).
+1. The following is the original upstream workflow for `brain-researcher/brain-researcher-benchmark`. For this fork, use [the current development workflow](../../docs/DEVELOPMENT.md).
 2. **Install the skill** and read the process guide:
    ```bash
    mkdir -p ~/.claude/skills/tb-science-task-authoring
    cp .claude/skills/tb-science-task-authoring/SKILL.md ~/.claude/skills/tb-science-task-authoring/
    ```
-   Read the archived [team guide](../examples/original-three/upstream-history/INTERN_GUIDE.md)
-   and [assignment queue](../examples/original-three/upstream-history/ASSIGNMENT_QUEUE.md). In Claude Code, invoke `/tb-science-task-authoring`.
+   Read the archived [team guide](upstream-history/INTERN_GUIDE.md)
+   and [assignment queue](upstream-history/ASSIGNMENT_QUEUE.md). In Claude Code, invoke `/tb-science-task-authoring`.
 3. **Branch** per task: `git checkout -b task/<SHORTNAME>-001`.
 4. **Author** the task with the skill — copy a shipped `examples/original-three/*-001/` dir as the template.
 5. **Open a PR** into `master`. One task per PR. Fold any new lesson into the skill by a
@@ -30,12 +30,12 @@ This repo holds worked examples + the authoring skill. New tasks are welcome by
 - **Oracle solves it:** `harbor run -p <TASK> -a oracle …` → reward **1.0**, in-container.
 - **≥2 frontier families fail it** (k≥3 each), **hand re-scored** — the failure is the
   *un-cued judgement* gap, not a format/computation bug. Record the runs in the task's
-  `proposal.md` (see the [historical results](../examples/original-three/upstream-history/RESULTS.md) for the expected shape and honesty notes).
+  `proposal.md` (see the [historical results](upstream-history/RESULTS.md) for the expected shape and honesty notes).
 - **`instruction.md` never names the failure axis** — the whole point is that the judgement
   is un-cued. No mention of the specific confound / lever / robustness check.
 - **The verifier requires the insight *linked to the result*,** not a keyword match — a check
   that passes an agent which merely *names* the confound is broken (see the verifier
-  false-positive lessons in the skill and [historical results](../examples/original-three/upstream-history/RESULTS.md)).
+  false-positive lessons in the skill and [historical results](upstream-history/RESULTS.md)).
 - **Environment is self-contained and public:** `FROM ubuntu:24.04` (or similar public base)
   with **pinned** dependencies; data fetched from a public source (e.g. OpenNeuro) at runtime.
 - **One new axis or data/modality preferred** over a 4th task on the same axis+dataset —
@@ -71,7 +71,7 @@ not a task FAIL** (always check `exception_stats` in `result.json` before scorin
 Two fixes: either `export CLAUDE_CODE_OAUTH_TOKEN=…`, or run once:
 
 ```bash
-python tools/patch_harbor_oauth.py
+python examples/original-three/scripts/patch_harbor_oauth.py
 ```
 
 which idempotently patches Harbor's agent to fall back to your logged-in session token

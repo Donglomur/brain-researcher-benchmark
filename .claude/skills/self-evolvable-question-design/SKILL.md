@@ -27,7 +27,7 @@ target, dataset, measurement oracle, baseline, or difficulty axis. The investabl
 question family that can generate new scored instances and raise its frontier without
 rewriting the answer key by hand.
 
-When starting from a paper, read `contracts/curation/README.md` and consume the shared
+When starting from a paper, read `src/neurobench/curation/contracts/README.md` and consume the shared
 `curation-contracts-v1.schema.json#/$defs/PaperEvidencePacket` artifact supplied by the
 job. Use the unchanged artifact if the paper is also assessed by
 `tb-science-task-authoring`; do not recreate an incompatible local packet.
@@ -60,7 +60,7 @@ freshness evidence means **insufficient evidence** unless it is converted into a
 ## The gate — C1–C10 and F0
 
 Read and apply every definition in
-`contracts/curation/evolvable-rubric-v1.md`. That file is the single source of truth.
+`src/neurobench/curation/contracts/evolvable-rubric-v1.md`. That file is the single source of truth.
 Do not replace C3 with generic parameterized generation, C4 with generic contamination
 resistance, or C5 with an uncommitted freshness idea. C2 measurement, the C4 falsification
 test, and the F0 freshness probe must actually run before a `pass`.
