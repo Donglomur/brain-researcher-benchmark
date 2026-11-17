@@ -5,17 +5,24 @@
 - **Task ID:** `NEURAL-071`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-071.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 12990 bytes; SHA-256 `f19b5081130f76f0a66fe032e459c891b2a759931f2ebc69cbe99d17797f6cc7`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Narratives programme](implementations/narratives-programme) — Complete programme source.
+  Scope: Explicit package README identifies Narratives071 source and its full scientific contract; scientific qualification remains open. Internal source and canonical scope retained.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

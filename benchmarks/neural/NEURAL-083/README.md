@@ -5,17 +5,30 @@
 - **Task ID:** `NEURAL-083`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-083.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 15266 bytes; SHA-256 `2c53be3d09bbaaac7b70684043af78627af0a20b9c4fee199622977da6bcd6d6`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Calibrated classification](implementations/calibrated-classification) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Probability reference](contracts/probability-reference) — Task contract.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Neural 083](implementations/neural-083) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Case adaptive](implementations/case-adaptive) — Case adaptive.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

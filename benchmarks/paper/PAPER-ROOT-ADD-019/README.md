@@ -5,19 +5,30 @@
 - **Task ID:** `PAPER-ROOT-ADD-019`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/paper/PAPER-ROOT-ADD-019.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 18816 bytes; SHA-256 `40ab45f8c238492b3e10c12547ced32fc62545d896e54008f660f95d486f6c5f`.
-- [Linked runtime manifest](../../neuroscience/paper-root-add-019/manifest.json)
-- [Existing implementation folder](../../neuroscience/paper-root-add-019)
+- [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
+- [Legacy declaration package](implementations/registered-runtime)
 
-A linked runtime manifest does not establish a qualified run; follow its source and prerequisite documentation.
+This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
+
+## Implementation artifacts
+
+- [Investigation and improvement](implementations/investigation-and-improvement) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 1 source or input dependency absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task.
+- [Historical timing summary](implementations/historical-timing-summary) — Historical timing summary.
+  Scope: README explicitly identifies historical saved-answer timing endpoint, distinct from the current37-main-figure programme; do not relabel as full current task coverage.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

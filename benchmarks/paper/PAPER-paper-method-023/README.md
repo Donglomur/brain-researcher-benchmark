@@ -5,17 +5,24 @@
 - **Task ID:** `PAPER-paper-method-023`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/paper/PAPER-paper-method-023.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 19314 bytes; SHA-256 `8e2b7edffa105c95ac0cffdbbc3e2b4aa184d45c9236295a6084fca53ff1cd25`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Paper paper method 023](implementations/paper-paper-method-023) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

@@ -5,19 +5,26 @@
 - **Task ID:** `NEURAL-002`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-002.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 10964 bytes; SHA-256 `1f8038574d9193933f1a081dc449a08f25d23ae6ece69972d561e70a039be3a8`.
-- [Linked runtime manifest](../../neuroscience/neural-002/manifest.json)
-- [Existing implementation folder](../../neuroscience/neural-002)
+- [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
+- [Legacy declaration package](implementations/registered-runtime)
 
-A linked runtime manifest does not establish a qualified run; follow its source and prerequisite documentation.
+This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
+
+## Implementation artifacts
+
+- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

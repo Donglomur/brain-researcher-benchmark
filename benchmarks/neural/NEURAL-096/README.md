@@ -5,19 +5,32 @@
 - **Task ID:** `NEURAL-096`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-096.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 14451 bytes; SHA-256 `17fa124837743a439f2270151072edc4f9441677a3d97e7d15aac2ce3edee169`.
-- [Linked runtime manifest](../../neuroscience/neural-096/manifest.json)
-- [Existing implementation folder](../../neuroscience/neural-096)
+- [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
+- [Legacy declaration package](implementations/registered-runtime)
 
-A linked runtime manifest does not establish a qualified run; follow its source and prerequisite documentation.
+This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
+
+## Task documentation
+
+- [Selected-counts scope](docs/selected-counts-task.md)
+
+## Implementation artifacts
+
+- [Delivery contracts](../../shared/dmfc/delivery-contracts) — Shared scientific family.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
+  Scope: Retained historical scoring registration; newer program source is separately mapped. Repository-depth locator corrected after relocation; 1 local scorer dependency is absent from the public source baseline and relocation ledger. Historical dependency names/pins remain unchanged. This bridge has not been made runnable or newly qualified by the reorganization. Other task artifacts are outside this finding.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

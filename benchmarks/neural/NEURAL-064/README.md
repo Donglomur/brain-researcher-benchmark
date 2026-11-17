@@ -5,17 +5,24 @@
 - **Task ID:** `NEURAL-064`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-064.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 12047 bytes; SHA-256 `28cd94440bd140ac8d4787abaa7eee5b7c26252ff9a94e74357118f816b5d1aa`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Neural 064](implementations/neural-064) — Inactive source snapshot.
+  Scope: README explicitly labels this an inactive partial source snapshot.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

@@ -14,7 +14,7 @@ import re
 import stat
 from urllib.parse import quote, urlsplit
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = 'benchmarks/catalog'
 COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'input_assets', 'evaluation', 'resources', 'holds',
@@ -31,6 +31,8 @@ def public_path(root, relative):
     """Resolve repository navigation links, never arbitrary evidence locators."""
     need(isinstance(relative, str) and relative and not Path(relative).is_absolute()
          and '\\' not in relative, 'Expected a relative public source path')
+    need(posixpath.normpath(relative) == relative and relative != '.' and '..' not in Path(relative).parts,
+         'Expected a normalized public source path')
     path = root / relative
     resolved = path.resolve()
     need(resolved.is_relative_to(root.resolve()), 'Public source link escapes repository')
@@ -71,14 +73,6 @@ def counts(tasks):
     result = Counter(row['track'] for row in tasks)
     return {'paper': result['paper'], 'neural': result['neural'], 'total': len(tasks)}
 
-
-def registered_counts(value):
-    # The first public registry predates the later `total` field. Its separate
-    # scientific-readiness counters are deliberately not catalog evidence.
-    total = value['total'] if 'total' in value else value['registered_contracts_and_drafts']
-    result = {'paper': value['paper'], 'neural': value['neural'], 'total': total}
-    need(all(type(number) is int and number >= 0 for number in result.values()), 'Invalid registration counts')
-    return result
 
 
 def external_links(doc):
@@ -138,123 +132,184 @@ def task_row(identifier, title, track, pin, stage, registry, doc):
             'external_links': external_links(doc)}
 
 
+REGISTRY = 'benchmarks/registry.json'
+
+
+def checked_pin(reader, pin, label):
+    need(isinstance(pin, dict) and type(pin.get('bytes')) is int and pin['bytes'] >= 0
+         and isinstance(pin.get('sha256'), str) and re.fullmatch(r'[0-9a-f]{64}', pin['sha256']),
+         'Invalid ' + label + ' pin')
+    path = public_path(reader.root, pin['path'])
+    doc, actual = reader.read(path)
+    need(all(pin[key] == actual[key] for key in ('path', 'bytes', 'sha256')),
+         label + ' pin mismatch')
+    return doc
+
+
+def checked_implementations(records, by_id, root):
+    need(isinstance(records, list), 'Implementation inventory must be a list')
+    seen_ids, seen_paths = set(), set()
+    for record in records:
+        need(isinstance(record, dict), 'Implementation record must be an object')
+        identifier, owners = record.get('id'), record.get('owner_ids')
+        need(isinstance(identifier, str) and identifier and identifier not in seen_ids,
+             'Duplicate or missing implementation ID')
+        seen_ids.add(identifier)
+        need(isinstance(owners, list) and all(isinstance(owner, str) for owner in owners)
+             and len(set(owners)) == len(owners), 'Implementation owner IDs must be unique strings')
+        need(set(owners) <= set(by_id), 'Unknown implementation owner')
+        related = record.get('related_task_ids', [])
+        need(isinstance(related, list) and all(isinstance(identifier, str) for identifier in related)
+             and len(set(related)) == len(related), 'Related task IDs must be unique strings')
+        need(set(related) <= set(by_id), 'Unknown related task ID')
+        need(not set(related).intersection(owners), 'Related task IDs must be distinct from implementation owners')
+        scope = record.get('scope')
+        need(scope in ('task', 'shared', 'unresolved'), 'Unknown implementation scope')
+        need(scope != 'task' or len(owners) == 1, 'Task implementation must have exactly one owner')
+        need(scope != 'unresolved' or not owners, 'Unresolved implementation must not claim task owners')
+        for field in ('role', 'scope_notes', 'original_path'):
+            need(isinstance(record.get(field), str) and record[field].strip(),
+                 'Implementation requires explicit ' + field)
+        need(isinstance(record.get('source_commit'), str)
+             and re.fullmatch(r'[0-9a-f]{40}', record['source_commit']), 'Implementation requires a source commit')
+        path = public_path(root, record['path'])
+        need(record['path'].casefold() not in seen_paths, 'Duplicate implementation artifact path')
+        seen_paths.add(record['path'].casefold())
+        need(path.is_dir() or path.is_file(), 'Implementation artifact must be a file or directory')
+    return records
+
+
+def checked_documentation(records, directory, root):
+    need(isinstance(records, list), 'Task documentation must be a list')
+    seen = set()
+    for record in records:
+        need(isinstance(record, dict) and isinstance(record.get('label'), str)
+             and record['label'].strip(), 'Task documentation needs a label')
+        relative = record.get('path')
+        need(isinstance(relative, str) and relative.startswith(directory + '/'),
+             'Task documentation must be inside its exact task folder')
+        need(relative not in seen, 'Duplicate task documentation path')
+        seen.add(relative)
+        public_path(root, relative)
+    return records
+
+
 def discover(root=ROOT):
+    """Read the current registry; never infer task ownership from legacy paths."""
     root = Path(root).resolve()
     reader = Reader(root)
-    # Resolve the append-only registry chain before reading the larger canonical
-    # specifications. Held reserves and shared condition files are not task rows.
-    registry_docs = {}
-    for path in sorted(root.glob('benchmarks/neuroscience/expansion*/registry.json')):
-        doc, pin = reader.read(path)
-        predecessor = doc.get('predecessor')
-        previous = public_path(root, (path.parent / predecessor).relative_to(root).as_posix()) if predecessor else None
-        registry_docs[path] = (doc, pin, previous)
-    ordered, remaining, previous = [], dict(registry_docs), None
-    while remaining:
-        choices = [path for path, (_, _, parent) in remaining.items() if parent == previous]
-        need(len(choices) == 1, 'Expansion registries must form one complete unbranched chain')
-        path = choices[0]
-        doc, pin, _ = remaining.pop(path)
-        if previous is not None:
-            predecessor_pin = registry_docs[previous][1]
-            for key, field in [('predecessor_bytes', 'bytes'), ('predecessor_sha256', 'sha256')]:
-                if key in doc:
-                    need(doc[key] == predecessor_pin[field], 'Expansion predecessor pin mismatch')
-        ordered.append((path, doc, pin))
-        previous = path
-
-    expansion = []
-    shared = []
-    for path, registry, registry_pin in ordered:
-        for row in registry['tasks']:
-            relative = row.get('specification', row.get('path'))
-            spec_path = public_path(root, (path.parent / relative).relative_to(root).as_posix())
-            doc, pin = reader.read(spec_path)
-            expected_sha = row.get('specification_sha256', row.get('sha256'))
-            expected_size = row.get('specification_bytes', row.get('bytes'))
-            need(expected_sha == pin['sha256'], 'Expansion task specification digest mismatch')
-            if expected_size is not None:
-                need(expected_size == pin['bytes'], 'Expansion task specification size mismatch')
-            identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
-            need(identity in (row['id'], row.get('contract_candidate_id')) and identity is not None,
-                 'Expansion row/specification identity mismatch')
-            need(doc.get('track') is None or doc['track'] == row['track'], 'Expansion track mismatch')
-            expansion.append(task_row(row['id'], row['title'], row['track'], pin,
-                                      row.get('stage', 'registered_construction_draft'), registry_pin['path'], doc))
-        for field in ('mandatory_shared_contract', 'mandatory_interpretation'):
-            if field in registry:
-                linked = public_path(root, (path.parent / registry[field]).relative_to(root).as_posix())
-                shared.append({'kind': field, 'path': linked.relative_to(root).as_posix()})
-
+    registry, registry_pin = reader.read(root / REGISTRY)
+    need(registry.get('schema_version') == 1
+         and registry.get('kind') == 'neuroscience_benchmark_registry', 'Unsupported benchmark registry')
+    need(isinstance(registry.get('source_commit'), str)
+         and re.fullmatch(r'[0-9a-f]{40}', registry['source_commit']), 'Registry requires its source commit')
+    rows = registry['tasks']
+    need(isinstance(rows, list) and all(isinstance(row, dict) for row in rows), 'Registry tasks must be objects')
+    need(len({row['id'] for row in rows}) == len(rows), 'Duplicate registered task ID')
+    historical = registry['historical_registries']
+    need(isinstance(historical, list), 'Historical registries must be a list')
+    historical_paths = set()
+    for pin in historical:
+        need(pin['path'] not in historical_paths, 'Duplicate historical registry')
+        historical_paths.add(pin['path'])
+        # Authenticate the preserved JSON body, but do not traverse its old locators.
+        checked_pin(reader, pin, 'Historical registry')
     tasks = []
-    for path in sorted(root.glob('benchmarks/manifests/*/*.json')):
-        doc, pin = reader.read(path)
-        need(COMMON.issubset(doc), 'Incomplete delivery schema: ' + pin['path'])
-        need(doc['id'] == path.stem and doc['track'] == path.parent.name,
-             'Misnamed or wrong-track canonical specification')
-        need(doc['schema_version'] == 1 and isinstance(doc['status'], str) and doc['status'],
-             'Unsupported canonical source schema or missing declared status: ' + pin['path'])
-        # A browse index reports declared source status. It does not adopt source
-        # admission flags or require every held draft to contain a usable endpoint.
-        tasks.append(task_row(doc['id'], doc['title'], doc['track'], pin,
-                              'canonical_source_specification', None, doc))
-    need(counts(tasks) == {'paper': 100, 'neural': 100, 'total': 200},
-         'Expected exactly 200 canonical specifications: 100 per track')
-    cumulative = list(tasks)
-    index = 0
-    for _, registry, _ in ordered:
-        before = counts(cumulative)
-        expected_before = registry.get('predecessor_registered_drafts', registry.get('baseline_registered_contracts'))
-        if isinstance(expected_before, dict):
-            need(before == registered_counts(expected_before), 'Expansion predecessor task counts disagree')
-        number = len(registry['tasks'])
-        cumulative.extend(expansion[index:index + number])
-        index += number
-        expected_after = registry.get('registered_draft_totals', registry.get('programme_totals'))
-        if isinstance(expected_after, dict):
-            need(counts(cumulative) == registered_counts(expected_after), 'Expansion cumulative task counts disagree')
-    tasks = sorted(cumulative, key=lambda row: row['id'])
-    need(len({row['id'] for row in tasks}) == len(tasks), 'Duplicate registered task ID')
-    by_id = {row['id']: row for row in tasks}
-
-    runtime_seen, unmapped = set(), []
-    for path in sorted(root.glob('benchmarks/neuroscience/*/manifest.json')):
-        doc, pin = reader.read(path)
-        identifier = doc['id']
-        need(identifier not in runtime_seen, 'Duplicate runtime manifest task ID')
-        runtime_seen.add(identifier)
-        if identifier in by_id:
-            by_id[identifier].update(runtime_manifest=pin, runtime_package=path.parent.relative_to(root).as_posix(),
-                                     runtime_manifest_status=doc.get('status'))
+    classes = {'canonical': [], 'expansion': []}
+    for row in rows:
+        identifier, track = row['id'], row['track']
+        directory = task_directory(identifier, track)
+        need(row.get('task_directory') == directory, 'Task directory does not match its track and ID')
+        need(row['specification']['path'] == directory + '/task.json', 'Authoritative task definition must be task.json in its task folder')
+        doc = checked_pin(reader, row['specification'], 'Task specification')
+        original = row['original_specification']
+        need(isinstance(original, dict) and isinstance(original.get('path'), str)
+             and all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
+             'Task definition differs from its preserved original identity')
+        identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
+        need(isinstance(identity, str) and identity == row['specification_id'], 'Task specification identity mismatch')
+        need(type(row['specification_alias']) is bool and row['specification_alias'] == (identity != identifier),
+             'Task specification alias must be explicit')
+        need(doc.get('track') is None or doc['track'] == track, 'Task specification track mismatch')
+        classification = row['registration_class']
+        need(classification in classes, 'Unknown registration class')
+        if classification == 'canonical':
+            need(COMMON.issubset(doc) and doc['schema_version'] == 1 and identity == identifier
+                 and row['registry'] is None and row['track_source'] == 'canonical_specification',
+                 'Canonical task lineage mismatch')
         else:
-            unmapped.append({'id': identifier, 'manifest': pin,
-                             'classification': 'unmapped_runtime_source_not_an_additional_registered_task'})
-
-    components = []
-    for prefix, kind in [('components', 'source_component'),
-                         ('benchmarks/scientific_components', 'scientific_source_component'),
-                         ('benchmarks/scientific_contracts', 'scientific_contract_collection')]:
-        for path in sorted((root / prefix).glob('*')):
-            if path.is_dir():
-                public_path(root, path.relative_to(root).as_posix())
-                components.append({'name': path.name, 'kind': kind, 'path': path.relative_to(root).as_posix()})
+            need(row['registry'] in historical_paths and row['track_source'] == 'registry',
+                 'Expansion task lineage mismatch')
+        need(row['declared_specification_status'] == doc.get('status', doc.get('state')),
+             'Declared specification status differs from task.json')
+        task = task_row(identifier, row['title'], track, row['specification'],
+                        row['registration_stage'], row['registry'], doc)
+        task.update(original_specification=original, registration_class=classification,
+                    runtime_manifest=row.get('runtime_manifest'), runtime_package=row.get('runtime_package'),
+                    runtime_manifest_status=row.get('runtime_manifest_status'),
+                    runtime_lineage_note='Preserved declaration lineage; not current execution qualification.',
+                    implementation_ids=[], related_implementation_ids=[],
+                    documentation=checked_documentation(row.get('documentation', []), directory, root))
+        if task['runtime_manifest']:
+            runtime = checked_pin(reader, task['runtime_manifest'], 'Runtime declaration')
+            need(runtime.get('id') == identifier, 'Runtime declaration task ID mismatch')
+            need(task['runtime_package'] == str(Path(task['runtime_manifest']['path']).parent),
+                 'Runtime declaration package mismatch')
+            need(task['runtime_manifest_status'] == runtime.get('status'), 'Runtime declaration status mismatch')
+        else:
+            need(task['runtime_package'] is None and task['runtime_manifest_status'] is None,
+                 'Orphan runtime declaration fields')
+        tasks.append(task)
+        classes[classification].append(task)
+    tasks.sort(key=lambda row: row['id'])
+    need(counts(classes['canonical']) == {'paper': 100, 'neural': 100, 'total': 200},
+         'Expected exactly 200 canonical specifications: 100 per track')
+    source_counts = registry['source_counts']
+    need(all(source_counts.get(key) == value for key, value in counts(tasks).items()), 'Registry source task counts disagree')
+    need(source_counts.get('canonical_specifications') == 200
+         and source_counts.get('expansion_drafts') == len(classes['expansion']), 'Registry source classification counts disagree')
+    by_id = {row['id']: row for row in tasks}
+    implementations = checked_implementations(registry['implementations'], by_id, root)
+    for implementation in implementations:
+        for owner in implementation['owner_ids']:
+            by_id[owner]['implementation_ids'].append(implementation['id'])
+        for related in implementation.get('related_task_ids', []):
+            by_id[related]['related_implementation_ids'].append(implementation['id'])
+    for row in tasks:
+        row['implementation_ids'].sort()
+        row['related_implementation_ids'].sort()
+    components = registry.get('components', [])
+    shared = registry.get('shared_contracts', [])
+    need(isinstance(components, list) and isinstance(shared, list), 'Source collections and shared contracts must be lists')
+    need(len(components) == source_counts['source_components'], 'Source component lineage count mismatch')
+    runtime_count = sum(row['runtime_manifest'] is not None for row in tasks)
+    need(runtime_count == source_counts['linked_runtime_manifests'] == source_counts['runtime_manifests'],
+         'Runtime declaration lineage count mismatch')
     result = {'schema_version': 1, 'kind': 'public_neuroscience_source_catalog',
-              'counts': {**counts(tasks), 'canonical_specifications': 200,
-                         'expansion_drafts': len(expansion), 'runtime_manifests': len(runtime_seen),
-                         'linked_runtime_manifests': len(runtime_seen) - len(unmapped),
-                         'source_components': len(components)},
+              'registry': registry_pin, 'source_commit': registry['source_commit'],
+              'source_counts': source_counts,
+              'counts': {**source_counts, 'implementation_artifacts': len(implementations),
+                         'tasks_with_implementation_artifacts': sum(bool(row['implementation_ids']) for row in tasks),
+                         'tasks_with_related_scientific_sources': sum(bool(row['related_implementation_ids']) for row in tasks),
+                         'unresolved_implementation_artifacts': sum(row['scope'] == 'unresolved' for row in implementations)},
               'scientific_readiness': 'unknown', 'submission_readiness': 'unknown',
-              'counting_note': 'Registered questions, runtime manifests, source components and subcases are distinct. '
-                               'No receipts, data, candidate code or private construction ledger were followed. '
-                               'Readiness is not assessed by this catalog.',
-              'registry_chain': [pin for _, _, pin in ordered], 'shared_contracts': shared,
-              'tasks': tasks, 'unmapped_runtime_sources': unmapped, 'components': components}
+              'counting_note': 'Registered task definitions, implementation artifacts and legacy runtime declarations are distinct. '
+                               'An ownership link is not equivalence to the complete registered scientific contract or execution qualification. '
+                               'No receipts, data, candidate code or private construction ledger were followed.',
+              'registry_chain': historical, 'shared_contracts': shared, 'tasks': tasks,
+              'unmapped_runtime_sources': [], 'components': components,
+              'implementations': sorted(implementations, key=lambda record: record['id'])}
     validate(result, root)
     return result
 
 
 def source_links(catalog):
+    yield catalog['registry']['path']
+    for implementation in catalog['implementations']:
+        yield implementation['path']
     for row in catalog['tasks']:
+        for document in row.get('documentation', []):
+            yield document['path']
         yield row['specification']['path']
         if row['registry']:
             yield row['registry']
@@ -281,19 +336,37 @@ def validate(catalog, root=ROOT):
         need(row.get('task_directory', directory) == directory, 'Task directory does not match its track and ID')
         need(directory.casefold() not in directories, 'Ambiguous task directory ID')
         directories.add(directory.casefold())
+        checked_documentation(row.get('documentation', []), directory, Path(root))
         need(row['scientific_readiness'] == row['submission_readiness'] == 'unknown'
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
+    implementations = checked_implementations(catalog['implementations'], {row['id']: row for row in tasks}, Path(root))
+    owners = {row['id']: [] for row in tasks}
+    related_tasks = {row['id']: [] for row in tasks}
+    for implementation in implementations:
+        for owner in implementation['owner_ids']:
+            owners[owner].append(implementation['id'])
+        for related in implementation.get('related_task_ids', []):
+            related_tasks[related].append(implementation['id'])
+    for row in tasks:
+        need(row['implementation_ids'] == sorted(owners[row['id']]), 'Orphan or mismatched task implementation reference')
+        need(row['related_implementation_ids'] == sorted(related_tasks[row['id']]), 'Orphan or mismatched related source reference')
+    need(catalog['counts']['implementation_artifacts'] == len(implementations), 'Implementation artifact count mismatch')
+    need(catalog['counts']['tasks_with_implementation_artifacts'] == sum(bool(ids) for ids in owners.values()),
+         'Task implementation coverage count mismatch')
+    need(catalog['counts']['tasks_with_related_scientific_sources'] == sum(bool(ids) for ids in related_tasks.values()),
+         'Related scientific source coverage count mismatch')
+    need(catalog['counts']['unresolved_implementation_artifacts'] == sum(row['scope'] == 'unresolved' for row in implementations),
+         'Unresolved implementation count mismatch')
     for relative in source_links(catalog):
         public_path(Path(root), relative)
     return catalog
 
 
 def load(root=ROOT):
-    path = Path(root) / OUTPUT / 'catalog.json'
-    if not path.is_file():
-        return discover(root)
-    return validate(json.loads(path.read_text()), root)
+    # The checked-in registry is authoritative. A generated catalog is a view,
+    # so stale cached metadata must not hide changed task definitions or owners.
+    return discover(root)
 
 
 def markdown_link(label, path, base=OUTPUT):
@@ -315,27 +388,30 @@ def render(catalog):
         'Browse the task folders in [paper research](../paper/README.md) and '
         '[neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.\n\n'
         f"The checkout also contains {c['runtime_manifests']} one-level runtime manifests and "
-        f"{c['source_components']} [supporting source components/collections](components.md). "
+        f"{c['source_components']} historical [source component collections](components.md). "
+        f"The current registry assigns {c['implementation_artifacts']} implementation artifacts, including "
+        f"{c['unresolved_implementation_artifacts']} with unresolved ownership. "
         'Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.\n\n'
         'The [machine-readable catalog](catalog.json) includes exact specification pins and links to existing public files. '
         'External citations are copied from public specifications; their availability was not rechecked.\n\n'
-        'Regenerate with `python3 tools/build_public_catalog.py`; verify with '
-        '`python3 tools/build_public_catalog.py --check`, from the repository root.\n\n'
-        'Expansion registries are cumulative overlays, in this order:\n\n' +
+        'The authoritative [registry](../registry.json) assigns implementations explicitly. Ownership does not establish equivalence to the full registered scientific contract.\n\n'
+        'Regenerate with `python3 scripts/catalog.py`; verify with '
+        '`python3 scripts/catalog.py --check`, from the repository root.\n\n'
+        'Preserved historical registration snapshots (their old task locators are not current discovery inputs):\n\n' +
         ''.join('- ' + markdown_link(row['path'].split('/')[-2], row['path']) + '\n' for row in catalog['registry_chain']) +
         '\nShared scope and interpretation documents:\n\n' +
         ''.join('- ' + markdown_link(row['kind'], row['path']) + '\n' for row in catalog['shared_contracts'])).encode()
     for track in ('paper', 'neural'):
         rows = [row for row in catalog['tasks'] if row['track'] == track]
         text = f'# {track.title()} tasks ({len(rows)})\n\n[Catalog](README.md)\n\n' + intro
-        text += '| ID | Scientific question / title | Source stage | Included runtime source |\n| --- | --- | --- | --- |\n'
+        text += '| ID | Scientific question / title | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n'
         for row in rows:
             title = row['title'].replace('\\', '\\\\').replace('[', '\\[').replace(']', '\\]').replace('|', '\\|').replace('\n', ' ').replace('\r', ' ')
             identifier = row['id'].replace('|', '\\|')
             runtime = markdown_link('manifest', row['runtime_manifest']['path']) if row['runtime_manifest'] else 'not included'
-            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + row['registration_stage'] + ' | ' + runtime + ' |\n'
+            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + row['registration_stage'] + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n'
         files[track + '.md'] = text.encode()
-    text = '# Supporting source components\n\n[Catalog](README.md)\n\n' + intro
+    text = '# Supporting source components\n\n[Catalog](README.md) · [Shared scientific families](../shared/README.md)\n\n' + intro
     text += 'These packages and shared contracts are not additional registered benchmark IDs. No task association is inferred from a folder name.\n\n'
     text += '| Component | Classification |\n| --- | --- |\n'
     for row in catalog['components']:
@@ -344,6 +420,13 @@ def render(catalog):
         text += '\nRuntime sources without a registered ID match:\n\n'
         for row in catalog['unmapped_runtime_sources']:
             text += '- ' + markdown_link(row['id'], row['manifest']['path']) + '\n'
+    text += '\n## Current implementation artifacts\n\n'
+    text += 'These are explicitly registered artifacts, not extra benchmark definitions. Scope notes describe their relationship to registered tasks.\n\n'
+    text += '| Artifact | Scope | Task owners | Related tasks | Role and scope notes |\n| --- | --- | --- | --- | --- |\n'
+    for record in catalog['implementations']:
+        owners = ', '.join(record['owner_ids']) or 'none assigned'
+        text += ('| ' + markdown_link(markdown_text(artifact_label(record)), record['path']) + ' | ' + record['scope']
+                 + ' | ' + markdown_text(owners) + ' | ' + markdown_text(', '.join(record.get('related_task_ids', [])) or 'none') + ' | ' + markdown_text(readable_label(record['role']) + ': ' + record['scope_notes']) + ' |\n')
     files['components.md'] = text.encode()
     return files
 
@@ -355,9 +438,105 @@ def markdown_text(value):
     return text
 
 
+def readable_label(value):
+    """Display-only formatting; labels never assign scientific ownership."""
+    text = re.sub(r'[-_]+', ' ', value).strip()
+    family_labels = {'abr': 'ABR', 'dmfc': 'DMFC', 'tms': 'TMS', 'nider': 'NIDER',
+                     'zapbench': 'ZAPBench', 'zuco2': 'ZuCo2', 'graspbox': 'GraspBox',
+                     'sleep eog': 'Sleep EOG'}
+    return family_labels.get(text.casefold(), text[:1].upper() + text[1:])
+
+
+def status_summary(value):
+    if isinstance(value, dict):
+        for field in ('stage', 'state', 'status'):
+            if isinstance(value.get(field), str) and value[field].strip():
+                return readable_label(value[field])
+        return 'Structured declaration (see fields below)'
+    if isinstance(value, list):
+        return 'Structured declaration (see fields below)'
+    if value is None or value == '':
+        return 'Not declared'
+    return readable_label(str(value))
+
+
+def declared_status_fields(value, prefix=()):
+    """Flatten source declarations for display without adopting their claims."""
+    if isinstance(value, dict) and value:
+        for field, child in value.items():
+            yield from declared_status_fields(child, (*prefix, readable_label(field)))
+    elif isinstance(value, list) and value:
+        for index, child in enumerate(value, 1):
+            yield from declared_status_fields(child, (*prefix, f'Item {index}'))
+    else:
+        if value is True:
+            shown = 'Yes'
+        elif value is False:
+            shown = 'No'
+        elif value is None or value == '':
+            shown = 'Not declared'
+        elif value == {} or value == []:
+            shown = 'No fields declared'
+        else:
+            shown = readable_label(str(value))
+        yield ' / '.join(prefix) or 'Status', shown
+
+
+def artifact_label(record):
+    return readable_label(posixpath.basename(record['path']))
+
+
+def render_shared(catalog):
+    base = 'benchmarks/shared'
+    by_id = {row['id']: row for row in catalog['tasks']}
+    records = [record for record in catalog['implementations']
+               if record['scope'] in ('shared', 'unresolved') or record['path'].startswith(base + '/')]
+    families = sorted({base + '/' + record['path'].split('/')[2] for record in records
+                       if record['path'].startswith(base + '/')})
+    text = '# Shared scientific sources\n\n[All benchmarks](../README.md) · [Paper research](../paper/README.md) · [Neural-data understanding](../neural/README.md)\n\n'
+    text += ('These families retain scientific source used by, related to, or not yet assigned to registered tasks. '
+             'A shared folder does not establish task ownership or a completed benchmark. '
+             'The authoritative registry records owners, related tasks and scientific scope separately.\n\n'
+             '- **Assigned source:** explicit registered task owners; the scope note still governs whether source is partial or alternative.\n'
+             '- **Related source only:** a scientific relationship without an assigned implementation, such as ABR background classification versus threshold transfer.\n'
+             '- **Unbound scientific family:** no registered task owner or related-task assignment; preserved source remains available without inventing a benchmark association.\n'
+             '- **Unresolved ownership:** an explicit unresolved status; no task implementation is claimed.\n\n'
+             'Scientific and submission readiness remain **unknown**. Stable artifact IDs and original paths remain in '
+             + markdown_link('catalog metadata', OUTPUT + '/catalog.json', base) + '.\n\n')
+    text += f'## Family folders ({len(families)})\n\n'
+    text += 'These links group current physical locations for browsing; folder names do not assign scientific ownership.\n\n'
+    for family in families:
+        text += '- ' + markdown_link(readable_label(posixpath.basename(family)), family, base) + '\n'
+    groups = [
+        ('Assigned source', lambda row: row['scope'] != 'unresolved' and bool(row['owner_ids'])),
+        ('Related source only', lambda row: row['scope'] != 'unresolved' and not row['owner_ids'] and bool(row.get('related_task_ids', []))),
+        ('Unbound scientific families', lambda row: row['scope'] != 'unresolved' and not row['owner_ids'] and not row.get('related_task_ids', [])),
+        ('Unresolved ownership', lambda row: row['scope'] == 'unresolved'),
+    ]
+    def task_links(identifiers):
+        return ', '.join(markdown_link(identifier, by_id[identifier]['task_directory'] + '/README.md', base)
+                         for identifier in identifiers) or 'None assigned'
+    for title, selected in groups:
+        group = [row for row in records if selected(row)]
+        unit = 'artifact' if len(group) == 1 else 'artifacts'
+        text += f'\n## {title} ({len(group)} {unit})\n\n'
+        if not group:
+            text += 'No artifacts in this category.\n'
+            continue
+        text += '| Scientific source | Explicit task owners | Related tasks | Role and scientific scope |\n| --- | --- | --- | --- |\n'
+        for record in group:
+            text += ('| ' + markdown_link(markdown_text(artifact_label(record)), record['path'], base)
+                     + ' | ' + task_links(record['owner_ids'])
+                     + ' | ' + task_links(record.get('related_task_ids', []))
+                     + ' | ' + markdown_text(readable_label(record['role']) + ': ' + record['scope_notes']) + ' |\n')
+    text += '\nGenerated from `benchmarks/registry.json` with `python3 scripts/catalog.py`; edit the registry and regenerate.\n'
+    return {base + '/README.md': text.encode()}
+
+
 def render_tracks(catalog):
     """Render browse entries without copying or relocating scientific sources."""
     files = {}
+    artifacts = {record['id']: record for record in catalog['implementations']}
     descriptions = {
         'paper': ('Paper research', 'Reproduce a defined neuroscience result, then evaluate prospective improvement. '
                   'Compare paper + data with paper + data + official code under matched budgets.'),
@@ -367,39 +546,47 @@ def render_tracks(catalog):
     for track, (title, description) in descriptions.items():
         base = f'benchmarks/{track}'
         rows = [row for row in catalog['tasks'] if row['track'] == track]
-        groups = [('Original canonical specifications', [row for row in rows if row['registry'] is None]),
-                  ('Expansion drafts', [row for row in rows if row['registry'] is not None])]
+        groups = [('Original canonical specifications', [row for row in rows if row['registration_class'] == 'canonical']),
+                  ('Expansion drafts', [row for row in rows if row['registration_class'] == 'expansion'])]
         text = f'# {title}\n\n[All benchmarks](../README.md) · [Other track](../' + ('neural' if track == 'paper' else 'paper') + '/README.md)\n\n'
         text += description + '\n\n'
         text += (f"**{len(rows)} registered task drafts: {len(groups[0][1])} original specifications + "
                  f"{len(groups[1][1])} expansion drafts.** Scientific and submission readiness remain **unknown**.\n\n"
-                 'Each task has a browse folder below. These pages link to authoritative specifications and existing '
-                 'source; they are not newly self-contained runnable packages. Scientific code, pinned source paths '
-                 'and shared components stay in their existing locations. Conditions, aliases and source components '
-                 'do not add independent benchmarks.\n\n')
+                 'Each task folder contains its authoritative `task.json` and explicitly assigned source artifacts or links to shared families. '
+                 'Implementation scope notes distinguish complete definitions from narrower or alternative source. '
+                 'A folder and its source do not establish a qualified runnable benchmark. Conditions, aliases and '
+                 'implementation artifacts do not add independent benchmarks.\n\n')
         for heading, group in groups:
             text += f'## {heading} ({len(group)})\n\n'
-            text += '| Task | Scientific question / title | Linked runtime source |\n| --- | --- | --- |\n'
+            text += '| Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- |\n'
             for row in group:
                 task = task_directory(row['id'], track)
                 runtime = markdown_link('manifest', row['runtime_manifest']['path'], base) if row['runtime_manifest'] else 'not linked'
                 text += ('| ' + markdown_link(row['id'], task + '/README.md', base) + ' | '
-                         + markdown_text(row['title']) + ' | ' + runtime + ' |\n')
-        text += ('\nGenerated with `python3 tools/build_public_catalog.py` from the repository root. '
+                         + markdown_text(row['title']) + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n')
+        text += ('\nGenerated with `python3 scripts/catalog.py` from the repository root. '
                  'Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.\n')
         files[base + '/README.md'] = text.encode()
         for row in rows:
             task = task_directory(row['id'], track)
             pin = row['specification']
-            group = 'Original canonical specification' if row['registry'] is None else 'Expansion draft'
+            group = 'Original canonical specification' if row['registration_class'] == 'canonical' else 'Expansion draft'
             text = '# ' + markdown_text(row['title']) + '\n\n'
             text += markdown_link(title, base + '/README.md', task) + ' · ' + markdown_link('All benchmarks', 'benchmarks/README.md', task) + '\n\n'
             text += (f"- **Task ID:** `{row['id']}`\n- **Track:** {title}\n"
                      f"- **Registration:** {group}\n"
-                     f"- **Declared specification status:** {markdown_text(row['declared_specification_status'] or 'Not declared')}\n"
+                     f"- **Declared specification status:** {markdown_text(status_summary(row['declared_specification_status']))}\n"
                      "- **Scientific and submission readiness:** Unknown\n\n"
-                     'This is a task browse entry. It is not a new self-contained runnable package or evidence of '
-                     'successful execution. The linked specification defines the scientific scope and admission rules.\n\n')
+                     'The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are '
+                     'assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. '
+                     'Source presence is not evidence of successful execution or complete scientific qualification.\n\n')
+            if isinstance(row['declared_specification_status'], (dict, list)):
+                text += ('## Declared status fields\n\n'
+                         'These values are copied from the task definition. They do not establish current execution or scientific qualification.\n\n'
+                         '| Field | Declared value |\n| --- | --- |\n')
+                for field, value in declared_status_fields(row['declared_specification_status']):
+                    text += '| ' + markdown_text(field) + ' | ' + markdown_text(value) + ' |\n'
+                text += '\n'
             if row['specification_alias']:
                 text += ('**Specification alias:** This registered ID refers to specification '
                          + markdown_text(row['specification_id'])
@@ -410,11 +597,31 @@ def render_tracks(catalog):
             if row['registry']:
                 text += '- ' + markdown_link('Registration and provenance', row['registry'], task) + '\n'
             if row['runtime_manifest']:
-                text += '- ' + markdown_link('Linked runtime manifest', row['runtime_manifest']['path'], task) + '\n'
-                text += '- ' + markdown_link('Existing implementation folder', row['runtime_package'], task) + '\n'
-                text += '\nA linked runtime manifest does not establish a qualified run; follow its source and prerequisite documentation.\n'
+                text += '- ' + markdown_link('Preserved legacy runtime declaration', row['runtime_manifest']['path'], task) + '\n'
+                text += '- ' + markdown_link('Legacy declaration package', row['runtime_package'], task) + '\n'
+                text += '\nThis preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.\n'
             else:
-                text += '\nNo runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.\n'
+                text += '\nNo legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.\n'
+            if row.get('documentation'):
+                text += '\n## Task documentation\n\n'
+                for document in row['documentation']:
+                    text += '- ' + markdown_link(markdown_text(document['label']), document['path'], task) + '\n'
+            text += '\n## Implementation artifacts\n\n'
+            if row['implementation_ids']:
+                for artifact_id in row['implementation_ids']:
+                    artifact = artifacts[artifact_id]
+                    text += '- ' + markdown_link(markdown_text(artifact_label(artifact)), artifact['path'], task) + ' — ' + markdown_text(readable_label(artifact['role'])) + '.\n'
+                    text += '  Scope: ' + markdown_text(artifact['scope_notes']) + '\n'
+            else:
+                text += 'No implementation artifact is explicitly assigned to this task in the current registry.\n'
+            if row['related_implementation_ids']:
+                text += '\n## Related scientific source (different or narrower scope)\n\n'
+                text += 'These artifacts provide related scientific context; they are not assigned implementations of this task.\n\n'
+                for artifact_id in row['related_implementation_ids']:
+                    artifact = artifacts[artifact_id]
+                    text += '- ' + markdown_link(markdown_text(artifact_label(artifact)), artifact['path'], task) + ' — ' + markdown_text(readable_label(artifact['role'])) + '.\n'
+                    text += '  Scope: ' + markdown_text(artifact['scope_notes']) + '\n'
+            text += '\nPackage-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.\n'
             text += '\n## Public source citations\n\n'
             if row['external_links']:
                 for link in row['external_links']:
@@ -454,6 +661,7 @@ def generate(root=ROOT, check=False, catalog=None):
     catalog_contents = render(result)
     contents = {OUTPUT + '/' + name: raw for name, raw in catalog_contents.items()}
     contents.update(render_tracks(result))
+    contents.update(render_shared(result))
     paths = {name: output_path(root, name) for name in contents}
     memberships = {OUTPUT: set(catalog_contents)}
     for track in ('paper', 'neural'):

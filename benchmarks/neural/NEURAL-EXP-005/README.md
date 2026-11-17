@@ -5,18 +5,36 @@
 - **Task ID:** `NEURAL-EXP-005`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** {'stage': 'registered\_construction\_draft', 'runnable': False, 'reference\_results\_qualified': False, 'scientifically\_qualified': False, 'submission\_ready': False}
+- **Declared specification status:** Registered construction draft
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
+
+## Declared status fields
+
+These values are copied from the task definition. They do not establish current execution or scientific qualification.
+
+| Field | Declared value |
+| --- | --- |
+| Stage | Registered construction draft |
+| Runnable | No |
+| Reference results qualified | No |
+| Scientifically qualified | No |
+| Submission ready | No |
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../neuroscience/expansion-20261113/tasks/helsinki-neonatal-eeg.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 11104 bytes; SHA-256 `adde2ccdd1e6366bbd83c53a31fb2d94a2df41faa9df5a878c18df702a8a93bd`.
-- [Registration and provenance](../../neuroscience/expansion-20261113/registry.json)
+- [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+No implementation artifact is explicitly assigned to this task in the current registry.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

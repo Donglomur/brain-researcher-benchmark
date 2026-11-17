@@ -5,17 +5,23 @@
 - **Task ID:** `PAPER-paper-signal-add-001`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/paper/PAPER-paper-signal-add-001.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 21335 bytes; SHA-256 `af6f2bf29ed18bc720632f05388a77aab696879bcf83c01ef20872a1e5022aca`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+No implementation artifact is explicitly assigned to this task in the current registry.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

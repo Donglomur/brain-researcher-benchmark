@@ -5,17 +5,26 @@
 - **Task ID:** `NEURAL-061`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-061.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 11233 bytes; SHA-256 `eb8c653eeea3e72ef301e1b53c8f171b73f7277833a159f84bf051e82dfcec8f`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Neural061 persistent state](implementations/neural061-persistent-state) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Planning](implementations/planning) — Planning.
+  Scope: Seven-module planning subset remains packaged here; complete persistent-state programme already includes the same planning modules. This is not proof that either copy is safe to delete.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

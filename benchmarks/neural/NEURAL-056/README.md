@@ -5,17 +5,24 @@
 - **Task ID:** `NEURAL-056`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-056.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 11694 bytes; SHA-256 `14a26973e5f16978c205b6cb7358dbb07f47d4d167be2c793751963c60dd8f2b`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Four programmes source v1](../../shared/four-programmes/_four_programmes_source_v1) — Shared source distribution.
+  Scope: NEURAL-056 is a documented dependency, not a new primary runtime registration. CriticalInit is named in the notice, but its exact registered-ID relationship is not inferred here. Keep combined-distribution license and provenance records attached to the closed source tree.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

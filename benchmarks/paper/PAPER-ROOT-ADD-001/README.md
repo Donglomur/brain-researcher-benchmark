@@ -5,17 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-001`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/paper/PAPER-ROOT-ADD-001.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 21555 bytes; SHA-256 `e0603a695d896be326045d6c734ce21cd185b6c408bd5bc06846ff3afd6ff254`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Language programme](implementations/language-programme) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Delivery source](implementations/delivery-source) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

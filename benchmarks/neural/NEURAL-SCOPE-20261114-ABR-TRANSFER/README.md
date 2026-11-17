@@ -8,15 +8,28 @@
 - **Declared specification status:** Not declared
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../neuroscience/expansion-20261114/tasks/abr-transfer.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 28166 bytes; SHA-256 `3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86`.
-- [Registration and provenance](../../neuroscience/expansion-20261114/registry.json)
+- [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+No implementation artifact is explicitly assigned to this task in the current registry.
+
+## Related scientific source (different or narrower scope)
+
+These artifacts provide related scientific context; they are not assigned implementations of this task.
+
+- [Background classification runner](../../shared/abr/background-classification-runner) — Alternative released background classification diagnostic.
+  Scope: 104-animal background classification is not the registered primary cross-laboratory threshold-transfer endpoint; shared cohort establishes relatedness only.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

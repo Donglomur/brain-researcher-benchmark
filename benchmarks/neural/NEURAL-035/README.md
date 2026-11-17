@@ -5,17 +5,28 @@
 - **Task ID:** `NEURAL-035`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** specification\_only
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../manifests/neural/NEURAL-035.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 17727 bytes; SHA-256 `31e1c48c7da9407e83ebdddc5668615db5c7351fd13d6eb9ec95f69887b74056`.
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Astrocyte programme](implementations/astrocyte-programme) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. The retained registration/test\_routes\_ram.py requires a registration source manifest and proposed registration manifest absent from the public source baseline and relocation ledger. Its repository-root depth remains correct; this incomplete historical test was preserved without re-pinning, execution or a current qualification claim. This finding does not assert that other astrocyte-programme tests or task artifacts are incomplete.
+- [Delivery source](implementations/delivery-source) — Task implementation.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Paired grading](implementations/paired-grading) — Paired grading.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 

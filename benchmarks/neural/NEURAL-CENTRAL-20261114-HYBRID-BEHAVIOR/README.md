@@ -5,18 +5,31 @@
 - **Task ID:** `NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** REGISTERED\_CONSTRUCTION\_DRAFT
+- **Declared specification status:** REGISTERED CONSTRUCTION DRAFT
 - **Scientific and submission readiness:** Unknown
 
-This is a task browse entry. It is not a new self-contained runnable package or evidence of successful execution. The linked specification defines the scientific scope and admission rules.
+The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
 ## Specification and implementation
 
-- [Authoritative task specification](../../neuroscience/expansion-20261114-v12/tasks/NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR.json)
+- [Authoritative task specification](task.json)
 - Specification identity: 18795 bytes; SHA-256 `af5cce92dda44b37ea1b81621c7344a10a49b902fc9e04ab4f9b8bc59e990816`.
-- [Registration and provenance](../../neuroscience/expansion-20261114-v12/registry.json)
+- [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v12/registry.json)
 
-No runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.
+No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
+
+## Implementation artifacts
+
+- [Hybrid artifact provisioning](implementations/hybrid-artifact-provisioning) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Hybrid causal controls v1](implementations/hybrid-causal-controls-v1) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Hybrid complete replay](implementations/hybrid-complete-replay) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Hybrid frozen model candidate](implementations/hybrid-frozen-model-candidate) — Task implementation source.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+
+Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations
 
