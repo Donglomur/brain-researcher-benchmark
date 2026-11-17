@@ -1,0 +1,13 @@
+# Actual input-join addendum
+
+The admitted input join completed for all **79 response files and five variable files**, totaling **93,563,258 application bytes**. It preserved all 79 electrode identities, each with 72 ordered conditions and 819 finite response samples, and passed the strict variable checks. This closes the actual ordered-row, variable-schema and producer-plan composition gap.
+
+The check used the unchanged producer at commit `3e7055b07782b7853ec53bcc04397b32f6b4e0ca`. [ACTUAL_INPUT_JOIN.json](ACTUAL_INPUT_JOIN.json) records its exact source identities, saved-result and independent-review digests, counts and measured resource use. The saved result is 413,478 bytes, SHA256 `3b1117a124229e5f7d91a02cd2ac8c1ae4ec196fb2df3f8fac7db3eeae39613a`; the accepted review is 10,126 bytes, SHA256 `49eb9b1d7d87c09d859092b43e64d3336791564d38a869eb59b636defdfca61e`.
+
+Two metadata plans were produced separately: `source_positional_cv` and `named_response_columns`. Each retains 2,054 DN-none/S coordinates: 158 full-data fits and 1,896 CV fits, with 66 training conditions and six disjoint queries per fold. The 158 named full-data coordinates are shared across the branches. The prospective seed is 0; it does not recover the author's unrecorded random or scheduling state. The old 948 prediction targets are still distinct from these source-CV folds.
+
+**No job was dispatched, no authentic model was fitted, no score was computed, and no response or result array was exported.** The observed admitted run took 2.928051 seconds wall time and 2.543650 seconds total child CPU, with 210,124,800 bytes peak RSS. These are measured execution observations; application bytes are not physical kernel I/O, and measured/checkpoint RSS is not an instantaneous OS-enforced memory limit.
+
+The original probe remains `failed_preserved`. Original historical RNG/runtime parity, exact Figure 4–9 caller recipes and normalization/AUC/FWHM/log choices, the original 26 category-selective electrode/category lineage, and all authentic fitting and scientific-result comparisons remain unresolved. This input join grants no scientific qualification and changes no registered selector.
+
+The original [SOURCE.json](SOURCE.json) and README remain byte-identical. Their no-authentic-array-read statements describe construction of that earlier source component. This later receipt records a separately admitted actual-input read. `SOURCE.json` still binds exactly its nine original members; it does not claim to pin these two additive evidence documents. The addendum contains neither local filesystem paths nor numeric response values or historical fitted outputs.
