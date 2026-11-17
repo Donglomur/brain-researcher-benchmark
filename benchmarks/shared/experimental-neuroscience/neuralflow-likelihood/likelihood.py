@@ -135,10 +135,11 @@ def _poly(c, x):
 
 def _minimum(c, width):
     # Scale x to [0,1] before solving the derivative to avoid small-bin ratios.
-    try:
-        b, cc, d = c[1] * width, c[2] * width ** 2, c[3] * width ** 3
-    except OverflowError as exc:
-        raise ContractError("unrepresentable cubic segment") from exc
+    # Multiply coefficients first: width**2 or width**3 can underflow/overflow
+    # even when the scaled coefficient is finite and nonzero.
+    b = c[1] * width
+    cc = (c[2] * width) * width
+    d = ((c[3] * width) * width) * width
     if not all(math.isfinite(x) for x in (b, cc, d)):
         raise ContractError("unrepresentable cubic segment")
     candidates = [0.0, 1.0]
