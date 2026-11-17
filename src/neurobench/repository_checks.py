@@ -31,6 +31,10 @@ RETIRED_ROOTS = ("authoring", "components", "artifacts-build", "verification", "
 # Runtime outputs are not source. This checker never traverses this directory.
 RUNTIME_ROOTS = (".neurobench",)
 PAPER_REVISION = "paper-improvement/v1"
+PAPER_INITIAL_REVISION = "paper-improvement/initial-v1"
+# Initial registrations extend this particular preserved migration roster.
+# This does not cap current paper registrations or their implementation count.
+PAPER_PRE_IMPROVEMENT_COUNT = 116
 PAPER_OBJECTIVE = "surpass_source_paper_same_task"
 PAPER_DISPOSITIONS = {"improvement_ready", "design_ready", "source_unresolved", "ineligible"}
 NEURAL_REVISION = "neural-understanding/v1"
@@ -206,6 +210,142 @@ def paper_revision_members(reader, row, document):
     return {previous["path"], contract_pin["path"]}
 
 
+def paper_initial_registry(reader, registry, tasks):
+    """Only newly added paper IDs may use the explicit no-predecessor profile.
+
+    Earlier paper rows still bind the exact pre-improvement registration. An
+    initial registration cannot replace a historical task by rehashing its own
+    snapshot, task and contract together.
+    """
+    initial = [row for row in tasks if row.get("track") == "paper"
+               and type(row.get("specification_revision")) is dict
+               and row["specification_revision"].get("version") == PAPER_INITIAL_REVISION]
+    if not initial:
+        return None, None
+    metadata = registry.get("paper_improvement")
+    need(type(metadata) is dict
+         and set(metadata) == {"schema_version", "objective", "coverage_required", "registered_count",
+                               "pre_improvement_registry"}
+         and metadata["schema_version"] == PAPER_REVISION
+         and metadata["objective"] == PAPER_OBJECTIVE and metadata["coverage_required"] is True
+         and type(metadata["registered_count"]) is int
+         and metadata["registered_count"] == sum(row.get("track") == "paper" for row in tasks),
+         "Initial paper registration requires complete paper coverage metadata")
+    history_pin = metadata["pre_improvement_registry"]
+    previous = metadata_pin(reader, history_pin,
+                            "docs/provenance/registrations/paper-pre-improvement-v1.json",
+                            "Pre-improvement registry")
+    prior_rows = previous.get("tasks")
+    need(type(previous.get("schema_version")) is int and previous["schema_version"] == 1
+         and previous.get("kind") == "neuroscience_benchmark_registry"
+         and type(prior_rows) is list and 0 < len(prior_rows) <= 1000
+         and all(type(row) is dict and type(row.get("id")) is str for row in prior_rows),
+         "Invalid pre-improvement registration roster")
+    prior = {row["id"]: row for row in prior_rows}
+    current = {row["id"]: row for row in tasks}
+    need(len(prior) == len(prior_rows) and len(current) == len(tasks)
+         and set(prior) <= set(current), "Initial paper registration cannot replace the original registration roster")
+    need(all(row.get("track") in ("paper", "neural")
+             and row.get("registration_class") in ("canonical", "expansion") for row in prior_rows),
+         "Invalid pre-improvement track or registration class")
+    prior_counts = previous.get("source_counts")
+    expected_counts = {"paper": sum(row["track"] == "paper" for row in prior_rows),
+                       "neural": sum(row["track"] == "neural" for row in prior_rows), "total": len(prior_rows),
+                       "canonical_specifications": sum(row["registration_class"] == "canonical" for row in prior_rows),
+                       "expansion_drafts": sum(row["registration_class"] == "expansion" for row in prior_rows)}
+    need(type(prior_counts) is dict and all(type(prior_counts.get(key)) is int and prior_counts[key] == value
+                                          for key, value in expected_counts.items()),
+         "Pre-improvement registration roster counts disagree")
+    old_paper = {identifier for identifier, row in prior.items() if row.get("track") == "paper"}
+    need(len(old_paper) == PAPER_PRE_IMPROVEMENT_COUNT,
+         "Initial paper registration must preserve the original paper roster count")
+    current_paper = {row["id"] for row in tasks if row.get("track") == "paper"}
+    initial_ids = {row["id"] for row in initial}
+    need(not initial_ids.intersection(prior) and initial_ids == current_paper - old_paper,
+         "Initial paper profile is restricted to new task identities")
+    for identifier in old_paper:
+        old, row = prior[identifier], current[identifier]
+        revision = row.get("specification_revision")
+        need(type(revision) is dict and revision.get("version") == PAPER_REVISION,
+             "Historical paper task cannot become an initial registration")
+        previous_pin = revision.get("previous_specification")
+        need(type(previous_pin) is dict
+             and all(previous_pin.get(key) == old.get("specification", {}).get(key)
+                     for key in ("bytes", "sha256"))
+             and row.get("original_specification") == old.get("original_specification")
+             and row.get("specification_id") == old.get("specification_id")
+             and row.get("specification_alias") == old.get("specification_alias")
+             and row.get("registration_class") == old.get("registration_class"),
+             "Initial paper registration changed historical paper lineage")
+    enrolled = registry.get("historical_registries")
+    need(type(enrolled) is list, "Initial registration requires a provenance inventory")
+    for row in initial:
+        pin = row["specification_revision"].get("initial_registration")
+        need(type(pin) is dict
+             and sum(type(item) is dict and item.get("path") == pin.get("path") for item in enrolled) == 1
+             and pin in enrolled, "Initial paper registration snapshot is not exactly enrolled")
+    return history_pin, previous
+
+
+def paper_initial_members(reader, row, document):
+    """Authenticate a first paper definition without manufacturing older bytes."""
+    revision = row.get("specification_revision")
+    need(row["track"] == "paper" and type(revision) is dict
+         and set(revision) == {"version", "improvement_contract", "initial_registration"}
+         and revision["version"] == PAPER_INITIAL_REVISION,
+         "Unsupported initial paper specification profile")
+    identifier, directory = row["id"], row["task_directory"]
+    need(row.get("registration_class") == "expansion"
+         and row.get("specification_id") == identifier and row.get("specification_alias") is False,
+         "Initial paper registration requires a new expansion identity without an alias")
+    specification = row.get("specification")
+    need(type(specification) is dict and set(specification) == {"path", "bytes", "sha256"}
+         and row.get("original_specification") == specification,
+         "Initial paper specification must preserve its exact first definition")
+    actual_document = metadata_pin(reader, specification, directory + "/task.json", "Initial paper specification")
+    need(actual_document == document, "Initial paper document changed during capture")
+    registration_pin = revision["initial_registration"]
+    registration_path = "docs/provenance/registrations/paper-initial/" + identifier + ".json"
+    registration = metadata_pin(reader, registration_pin, registration_path, "Initial paper registration")
+    need(row.get("registry") == registration_path
+         and type(registration) is dict
+         and set(registration) == {"schema_version", "task_id", "source_commit", "specification", "improvement_contract"}
+         and registration["schema_version"] == PAPER_INITIAL_REVISION
+         and registration["task_id"] == identifier
+         and type(registration["source_commit"]) is str
+         and re.fullmatch(r"[0-9a-f]{40}", registration["source_commit"])
+         and registration["specification"] == specification
+         and registration["improvement_contract"] == revision["improvement_contract"],
+         "Initial paper registration identity or first-definition binding mismatch")
+    contract_pin = revision["improvement_contract"]
+    contract = metadata_pin(reader, contract_pin, directory + "/improvement.v1.json", "Paper improvement contract")
+    need(contract.get("schema_version") == PAPER_REVISION and contract.get("task_id") == identifier
+         and contract.get("objective") == PAPER_OBJECTIVE
+         and type(contract.get("disposition")) is str and contract["disposition"] in PAPER_DISPOSITIONS,
+         "Initial paper contract identity or disposition mismatch")
+    legacy = contract.get("legacy")
+    need(type(legacy) is dict and set(legacy) == {"role", "original_task", "notes"}
+         and legacy["role"] == "no_predecessor" and legacy["original_task"] is None
+         and type(legacy["notes"]) is str and bool(legacy["notes"].strip()),
+         "Initial paper contract must declare no predecessor")
+    need(document.get("id") == identifier and document.get("track") == "paper"
+         and document.get("objective") == PAPER_OBJECTIVE and document.get("status") == contract["disposition"]
+         and document.get("evaluation") == {"objective": PAPER_OBJECTIVE, "contract": contract_pin,
+                                               "disposition": contract["disposition"], "reproduction_role": "not_applicable"},
+         "Initial paper definition is not bound to its improvement contract")
+    admission = document.get("admission")
+    need(type(admission) is dict and admission.get("runnable") is False
+         and admission.get("research_qualified") is False
+         and admission.get("submission_ready", False) is False,
+         "Initial paper source registration cannot grant execution or scientific admission")
+    need(row.get("scientific_readiness") == contract["disposition"]
+         and row.get("submission_readiness") == "not_qualified_by_binding",
+         "Initial paper source binding cannot grant scientific qualification")
+    # The immutable initial snapshot is owned by historical_registries, outside
+    # the task directory. No historical task file is created or permitted here.
+    return {contract_pin["path"]}
+
+
 def neural_revision_registry(reader, registry, tasks):
     """Authenticate the original neural roster without following old locators."""
     for row in tasks:
@@ -365,6 +505,7 @@ def prepare(reader):
     need(isinstance(tasks, list) and 0 < len(tasks) <= 1000
          and all(type(row) is dict for row in tasks), "Invalid task inventory")
     neural_history_pin, neural_previous = neural_revision_registry(reader, registry, tasks)
+    initial_paper_history_pin, _ = paper_initial_registry(reader, registry, tasks)
     by_id, task_paths, members, expected_pins = {}, {}, {}, {}
     classes = {"canonical": Counter(), "expansion": Counter()}
     allowed_files = {"paper": {"benchmarks/paper/README.md"}, "neural": {"benchmarks/neural/README.md"}}
@@ -391,7 +532,11 @@ def prepare(reader):
         need(document.get("track", track) == track, "Task specification track mismatch")
         if "specification_revision" in row:
             if track == "paper":
-                revision_members = paper_revision_members(reader, row, document)
+                revision = row["specification_revision"]
+                if type(revision) is dict and revision.get("version") == PAPER_INITIAL_REVISION:
+                    revision_members = paper_initial_members(reader, row, document)
+                else:
+                    revision_members = paper_revision_members(reader, row, document)
             else:
                 revision_members = neural_revision_members(reader, row, document, neural_previous.get(identifier))
             for path in revision_members:
@@ -510,7 +655,11 @@ def prepare(reader):
              "Invalid paper improvement coverage metadata")
         history_pin = improvement["pre_improvement_registry"]
         history_path = "docs/provenance/registrations/paper-pre-improvement-v1.json"
-        metadata_pin(reader, history_pin, history_path, "Pre-improvement registry")
+        if initial_paper_history_pin is None:
+            metadata_pin(reader, history_pin, history_path, "Pre-improvement registry")
+        else:
+            need(history_pin == initial_paper_history_pin,
+                 "Paper coverage metadata changed during source inventory")
         need(history_path not in members, "Duplicate paper registry provenance")
         members[history_path] = "registration-provenance"
         expected_pins[history_path] = history_pin
