@@ -24,7 +24,7 @@ Browse **235 registered questions**: [117 paper tasks](paper.md) and [118 neural
 
 Browse the task folders in [paper research](../paper/README.md) and [neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.
 
-The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 619 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
+The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 620 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
 
 The [machine-readable catalog](catalog.json) includes exact specification pins and links to existing public files. External citations are copied from public specifications; their availability was not rechecked.
 
