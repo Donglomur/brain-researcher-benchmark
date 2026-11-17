@@ -394,6 +394,19 @@ def _current(original, contract, binding, source_id):
                     "evaluation": {**copy.deepcopy(contract["evaluation"]), "neural_understanding": binding},
                     "admission": {"runnable": False, "research_qualified": False, "submission_ready": False,
                         "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."}})
+    # This adopted DoSEI condition supersedes five inherited dense/pre-onset
+    # descriptions. Its original provenance and earlier projection stay intact.
+    if contract["task_id"] == "clinical-dosei-responsiveness" and any(
+            item.get("id") == "dosei-native-condition-v1"
+            and item.get("kind") == "local_review"
+            and item.get("path") == "benchmarks/neural/clinical-dosei-responsiveness/implementations/source-native-intake-v1/SOURCE_CONDITION_AMENDMENT.json"
+            and item.get("sha256") == "d2c2514d9376948ed44234b59a553fa6ba043facfd534c1e3359c129de487719"
+            for item in contract["evidence"]):
+        current["participant_inputs"] = " ".join(observations["inputs"] + observations["forbidden_inputs"])
+        current["complete_scope"]["input"] = current["participant_inputs"]
+        current["complete_scope"]["complete_compact_representation"] = " ".join(observations["inputs"]) + " " + observations["coverage"]
+        current["machine_output"]["coverage"] = observations["coverage"]
+        current["resources_and_remaining_gates"]["planning"] = contract["access_modes"]["direct_observation"]["boundary"]
     return current
 
 

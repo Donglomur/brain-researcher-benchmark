@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective fixed-target MindBridge feature evaluator with source Pearson identification/correlation metrics, explicit paired calibration budgets, exposure/image/session declarations and neural controls. Target, primary metric and budget policy remain unfrozen; actual feature extraction/generation, NSD/weight/pretraining provenance, receipt authentication, protected replay, rights and scientific qualification remain held. Fixed candidate selection deliberately differs from the paper’s target-aware best-of-eight selection, so published-score reproduction is not claimed. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original panel v1](implementations/original-panel-v1) — Reviewed source component.
+  Scope: Complete original Table 2 scoring and offline metric transforms across six conditions and all 48 findings. Authentic population/image/weight identities, target-last custody, historical SSIM/SwAV identity, competent reference and scientific acceptance remain unqualified; the modern SSIM backend has a separately declared engineering condition.
 - [Source protocol v2](implementations/source-protocol-v2) — Reviewed source component.
   Scope: MindBridge source calibration and reconstruction selection. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -1,18 +1,18 @@
 {
   "id": "clinical-dosei-responsiveness",
   "track": "neural",
-  "title": "Observed bedside responsiveness from causal pre-assessment EEG",
+  "title": "Recorded bedside responsiveness from native marker-relative EEG",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "How accurately can immediately preceding EEG estimate the recorded bedside responsiveness category at each authentic assessment?",
-  "participant_inputs": "Complete two-channel125Hz waveform for30seconds (7,500 values when fully sampled), units, time offsets and artifact/missingness masks. No MOAA/S/SoC columns, dose, clinical event codes, procedure-progress features or patient-identifying metadata in the neural-only main arm.",
+  "scientific_question": "How accurately can the complete native EEG window preceding a recorded marker estimate its associated five-level bedside responsiveness category retrospectively?",
+  "participant_inputs": "Complete native_marker_relative_30s_v1 projection: exact relative native timestamps and both Intellivue/EEG_1 and Intellivue/EEG_2 channels in microvolts for every table row in [marker - 30000 ms, marker), preserving source blanks as null and per-channel observation masks. The source table has 4 ms rows and sparse EEG observations: a complete 30-second grid has 7500 rows with two channel positions, not a dense 2x3750 signal or a fixed count of observed EEG values. Do not crop rows, choose an alternating phase, interpolate, resample, zero fill, treat 300 as signal or infer clinical onset. Processing-dependent pEEG tools and released offline artifact masks are separate declared conditions; they cannot silently enter this native observation. Direct, viewer, tool and frozen-program conditions receive the same complete native projection. Participant inputs exclude source recording/person identifiers, absolute clinical timestamps, EVENT, MOAAS, SOC, drug dose, procedure progress and other clinical/target columns. Released offline artifact masks and information outside the declared marker-relative window are excluded from the native condition; derived tools require separately declared exposure and authorized training evidence.",
   "known_answer": "The recorded MOAA/S response category under its authentic released scale and assessment protocol. This is behavioral responsiveness, not direct proof of consciousness or an anesthetic dose recommendation.",
   "complete_scope": {
     "question": "Estimate the observed bedside responsiveness category at each documented MOAA/S assessment from the immediately preceding EEG.",
     "one_target": "The recorded MOAA/S response category under its authentic released scale and assessment protocol. This is behavioral responsiveness, not direct proof of consciousness or an anesthetic dose recommendation.",
     "unit": "Every documented assessment in every recording; the main packet is the fixed30-second EEG interval ending before the assessment begins. Exact assessment onset/offset and scale levels require the original dictionary.",
-    "input": "Complete two-channel125Hz waveform for30seconds (7,500 values when fully sampled), units, time offsets and artifact/missingness masks. No MOAA/S/SoC columns, dose, clinical event codes, procedure-progress features or patient-identifying metadata in the neural-only main arm.",
-    "complete_compact_representation": "The complete declared30-second raw waveform is already finite; do not truncate it or omit difficult assessments for context fit. A separately labelled40-pEEG common-table analysis may cover the identical preceding window, but requires audited causal preprocessing and cannot claim raw/native equivalence. All171 recordings and all7,328 reported assessment slots must reconcile before final counts.",
+    "input": "Complete native_marker_relative_30s_v1 projection: exact relative native timestamps and both Intellivue/EEG_1 and Intellivue/EEG_2 channels in microvolts for every table row in [marker - 30000 ms, marker), preserving source blanks as null and per-channel observation masks. The source table has 4 ms rows and sparse EEG observations: a complete 30-second grid has 7500 rows with two channel positions, not a dense 2x3750 signal or a fixed count of observed EEG values. Do not crop rows, choose an alternating phase, interpolate, resample, zero fill, treat 300 as signal or infer clinical onset. Processing-dependent pEEG tools and released offline artifact masks are separate declared conditions; they cannot silently enter this native observation. Direct, viewer, tool and frozen-program conditions receive the same complete native projection. Participant inputs exclude source recording/person identifiers, absolute clinical timestamps, EVENT, MOAAS, SOC, drug dose, procedure progress and other clinical/target columns. Released offline artifact masks and information outside the declared marker-relative window are excluded from the native condition; derived tools require separately declared exposure and authorized training evidence.",
+    "complete_compact_representation": "Complete native_marker_relative_30s_v1 projection: exact relative native timestamps and both Intellivue/EEG_1 and Intellivue/EEG_2 channels in microvolts for every table row in [marker - 30000 ms, marker), preserving source blanks as null and per-channel observation masks. The source table has 4 ms rows and sparse EEG observations: a complete 30-second grid has 7500 rows with two channel positions, not a dense 2x3750 signal or a fixed count of observed EEG values. Do not crop rows, choose an alternating phase, interpolate, resample, zero fill, treat 300 as signal or infer clinical onset. Processing-dependent pEEG tools and released offline artifact masks are separate declared conditions; they cannot silently enter this native observation. Direct, viewer, tool and frozen-program conditions receive the same complete native projection. Retain the complete 171 released recording IDs and all actual events, nullable labels, source versions and exclusion explanations. Authenticated metadata totals 7345 assessments and 1132 SOC transitions are summary counts, not scoring denominators. Original-EVENT census, biological-person crosswalk and successor scorer population remain unverified; never truncate events to inherited totals or treat recording IDs as independent people.",
     "measurement_grid_and_missingness": "Assessment is clinically/event driven, not an unbiased uniform sample of time. Preserve every assessment time, repeated measurements, ambiguous/missing ratings, incomplete history and artifact status. Do not forward-fill target labels, invent unobserved consciousness states or interpolate responsiveness continuously. Define evaluable/missing denominators before model outcomes.",
     "heldout": "Group by authentic person identity across all repeated recordings/procedures. Do not equate171 recordings with171 independent people. Use outer grouped folds with all temporally overlapping windows in one group, inner group tuning, and report procedure type/assessment-density strata without selecting successful strata.",
     "baseline": "Training-prior ordinal predictor; causal EEG spectral/entropy ordinal regression; a train-only random forest aligned with the published feature-family baseline. Specialist tools may compute audited causal pEEG features or return train-only model predictions from the identical input window.",
@@ -110,7 +110,7 @@
     }
   },
   "resources_and_remaining_gates": {
-    "planning": "For a complete30-second case, direct input is7,500 EEG values before masks/formatting, so context feasibility must be measured. Streaming CPU feature extraction and small ordinal/RF baselines are plausible without a GPU; archive storage and peak RAM remain unmeasured. Repeated windows may be referenced rather than duplicated. A full LLM campaign could be large and is not selected.",
+    "planning": "No execution. Measure context capacity on exact serialized native timestamps, sparse channel values and observation masks, never an assumed dense-value count. Complete native preparation, storage, peak memory and full-campaign cost remain unqualified.",
     "must_resolve": [
       "Exact data license, fixed record/version, content hashes and resolved official code repository/commit/license.",
       "Authentic unique-person mapping and all171 recording/assessment joins.",
@@ -137,7 +137,7 @@
   "machine_output": {
     "predictions": "Ordered-category probability vector for each original MOAA/S assessment slot from its complete preceding30s two-channel125Hz EEG; incomplete cases typed, not replaced.",
     "score_rows": "For authenticatedK ordered categories, RPS=sum overk=1..K−1 of(predictedCDF(k)−indicator(y≤k))²/(K−1), averaged within person then equally across people. Scale/category mapping and numerical policies must be bound before execution; report ordinalMAE/calibration/coverage.",
-    "coverage": "Reconcile171recordings/7328assessment slots/1129reportedtransitions and all repeated-procedure person IDs. No forward-filled targets or assumption171independentpeople."
+    "coverage": "Retain the complete 171 released recording IDs and all actual events, nullable labels, source versions and exclusion explanations. Authenticated metadata totals 7345 assessments and 1132 SOC transitions are summary counts, not scoring denominators. Original-EVENT census, biological-person crosswalk and successor scorer population remain unverified; never truncate events to inherited totals or treat recording IDs as independent people."
   },
   "bibliographic_hold": "Author project AIME2026/2026 report versus indexed2027 chapter remains unresolved; do not call this verified2026 peer-reviewed clinical validation.",
   "code_hold": "Exact repositoryURL/commit/license remain unresolved; retain author project#code entrypoint, no invented URL.",
@@ -161,48 +161,54 @@
     "Released ordered MOAAS categories 1,2,3,4,5, with source-reported merging of original 0/1 and 5/6; missing/ambiguous ratings stay null."
   ],
   "biological_unit": "Biological person across repeated recordings/procedures;171 recordings are not 171 proven people.",
-  "case_definition": "Every original assessment slot, using complete 30 seconds of EEG ending before assessment begins; evaluable status is precommitted.",
+  "case_definition": "Every authentic assessment event associated with a recorded source marker, using all native table rows in [marker - 30000 ms, marker). Complete EVENT identity and precommitted evaluability remain to be established.",
   "allowed_inputs": {
     "inputs": [
-      "Complete two-channel 125 Hz EEG for the 30 second causal pre-assessment interval:7,500 values at full sampling, units and artifact/missingness masks.",
-      "A 40-pEEG table is an optional distinct representation only after its complete filter/lookback causality is verified."
+      "Complete native_marker_relative_30s_v1 projection: exact relative native timestamps and both Intellivue/EEG_1 and Intellivue/EEG_2 channels in microvolts for every table row in [marker - 30000 ms, marker), preserving source blanks as null and per-channel observation masks.",
+      "The source table has 4 ms rows and sparse EEG observations: a complete 30-second grid has 7500 rows with two channel positions, not a dense 2x3750 signal or a fixed count of observed EEG values. Do not crop rows, choose an alternating phase, interpolate, resample, zero fill, treat 300 as signal or infer clinical onset.",
+      "Processing-dependent pEEG tools and released offline artifact masks are separate declared conditions; they cannot silently enter this native observation. Direct, viewer, tool and frozen-program conditions receive the same complete native projection."
     ],
     "forbidden_inputs": [
-      "MOAAS/SoC labels, drug dose, clinical event codes, procedure progress, identifying metadata and future EEG/centered pEEG features."
+      "Participant inputs exclude source recording/person identifiers, absolute clinical timestamps, EVENT, MOAAS, SOC, drug dose, procedure progress and other clinical/target columns.",
+      "Released offline artifact masks and information outside the declared marker-relative window are excluded from the native condition; derived tools require separately declared exposure and authorized training evidence."
     ],
-    "case_identity": "Scorer binds every assessment_id to recording_id, authentic person_id, outer fold and precommitted eligibility; no authentic full mapping or signal packet is published.",
+    "case_identity": "A fresh opaque case ID must bind privately to authenticated source version, original EVENT/MOAAS row, recording, verified biological person, fold and eligibility. candidate_window verifies coded-row presence in the supplied file only; it does not authenticate release membership, unique assessment identity, complete EVENT grammar or challenge onset.",
     "split": "Outer folds group authentic people across repeated procedures; overlapping windows and every person’s recordings remain together. All choices and clinical-QC decisions use training evidence only.",
-    "coverage": "Logical policy requires 171 recordings,7,328 assessment slots and 1,129 separate SoC transitions; these source-reported counts are not an independently authenticated native census. Every slot remains in coverage, including missing/history/artifact cases."
+    "coverage": "Retain the complete 171 released recording IDs and all actual events, nullable labels, source versions and exclusion explanations. Authenticated metadata totals 7345 assessments and 1132 SOC transitions are summary counts, not scoring denominators. Original-EVENT census, biological-person crosswalk and successor scorer population remain unverified; never truncate events to inherited totals or treat recording IDs as independent people."
   },
   "split": {
     "policy": "Outer folds group authentic people across repeated procedures; overlapping windows and every person’s recordings remain together. All choices and clinical-QC decisions use training evidence only.",
-    "coverage": "Logical policy requires 171 recordings,7,328 assessment slots and 1,129 separate SoC transitions; these source-reported counts are not an independently authenticated native census. Every slot remains in coverage, including missing/history/artifact cases."
+    "coverage": "Retain the complete 171 released recording IDs and all actual events, nullable labels, source versions and exclusion explanations. Authenticated metadata totals 7345 assessments and 1132 SOC transitions are summary counts, not scoring denominators. Original-EVENT census, biological-person crosswalk and successor scorer population remain unverified; never truncate events to inherited totals or treat recording IDs as independent people."
   },
   "controls": [
     "Dose/procedure-time-only auxiliary comparator measures schedule shortcuts without entering neural-only input.",
-    "Audit every feature/filter for future samples and embedded clinical/label columns.",
+    "Audit every feature/filter for exposure outside the declared native window and embedded clinical/label columns; released offline artifact masks remain a separate condition.",
     "Retain event-driven assessment density and artifact strata; transformed control maps require target-free physical provenance, same masks and within-person support."
   ],
   "access_conditions": {
     "direct_observation": {
       "status": "not_delivered",
-      "representation": "Complete 7,500 value causal two-channel EEG or an explicitly matched waveform rendering.",
-      "boundary": "No execution; exact full observation and mask/capacity policy required.",
+      "representation": "The same complete native marker-relative timestamps, two-channel sparse observations and masks, without analysis execution; an exactly matched rendering must preserve every row.",
+      "boundary": "No execution. Measure context capacity on exact serialized native timestamps, sparse channel values and observation masks, never an assumed dense-value count. Complete native preparation, storage, peak memory and full-campaign cost remain unqualified.",
       "evidence_ids": [
         "dosei-primary",
-        "dosei-secondary"
+        "dosei-secondary",
+        "dosei-native-condition-v1",
+        "dosei-native-intake-v1"
       ],
       "missing": [
-        "Complete authentic packet and no-tools transport."
+        "Authenticated complete native packet, measured capacity and no-tools serialization transport."
       ]
     },
     "typed_viewer": {
       "status": "not_delivered",
-      "representation": "Potential calibrated two-channel 30 second waveform display with typed time/scale actions.",
-      "boundary": "No clinical timestamps/labels or dose overlays; cannot silently crop to salient segments.",
+      "representation": "The same complete native marker-relative projection through calibrated time/voltage navigation, preserving access to every row and all missingness.",
+      "boundary": "No clinical identifiers, absolute timestamps, labels, dose or offline artifact overlays; navigation cannot hide rows or select salient segments. Transport remains unavailable.",
       "evidence_ids": [
         "dosei-primary",
-        "dosei-secondary"
+        "dosei-secondary",
+        "dosei-native-condition-v1",
+        "dosei-native-intake-v1"
       ],
       "missing": [
         "Restricted viewer and response-capture implementation."
@@ -210,23 +216,27 @@
     },
     "tool_assisted": {
       "status": "not_delivered",
-      "representation": "Same pre-assessment waveform plus causal spectral/entropy tools.",
-      "boundary": "No centered/future-aware features; train-only fitted tools and fixed case budget.",
+      "representation": "The same complete native marker-relative projection plus separately declared tools restricted to that observation and authorized training evidence.",
+      "boundary": "No information outside the declared marker-relative window or silent future-aware artifact/processed features; fitted tools use authorized training evidence and fixed case budgets.",
       "evidence_ids": [
         "dosei-primary",
-        "dosei-secondary"
+        "dosei-secondary",
+        "dosei-native-condition-v1",
+        "dosei-native-intake-v1"
       ],
       "missing": [
-        "Audited physiological tools and protected input path."
+        "Audited native-window tools with explicit preprocessing exposure and protected input path."
       ]
     },
     "frozen_program": {
       "status": "not_delivered",
-      "representation": "Precommitted ordinal predictor with fixed train-only fitting recipe.",
-      "boundary": "Group all recordings per person; scorer schema does not enforce fit custody.",
+      "representation": "The same complete native marker-relative projection with precommitted fitting using verified biological-person groups and authorized training evidence.",
+      "boundary": "Group all recordings for each verified biological person. No inferred study-ID uniqueness, future-aware preprocessing or claim that scorer schema enforces fitting custody.",
       "evidence_ids": [
         "dosei-primary",
-        "dosei-secondary"
+        "dosei-secondary",
+        "dosei-native-condition-v1",
+        "dosei-native-intake-v1"
       ],
       "missing": [
         "Frozen execution lifecycle and authentic baseline."
@@ -252,28 +262,28 @@
         "procedure": "Freeze each fold prior before held assessments; preserve five categories."
       },
       {
-        "name": "Causal spectral/entropy ordinal model",
-        "inputs": "Exactly the same 30 second EEG and training labels",
-        "procedure": "Proposed train-only causal feature/normalization recipe and nested person-group tuning."
+        "name": "Native-window spectral/entropy ordinal model",
+        "inputs": "Exactly the same complete native marker-relative window and authorized training labels",
+        "procedure": "Proposed train-only feature/normalization recipe restricted to the declared native window, with nested verified-person-group tuning; no pre-challenge prediction claim."
       },
       {
         "name": "Train-only random forest",
-        "inputs": "Same audited causal packet/features and label budget",
+        "inputs": "Same complete native-window packet, separately audited features and label budget",
         "procedure": "Proposed competent nonlinear comparator; published binarySoC performance is not the ordinal baseline."
       }
     ],
     "nuisance_controls": [
       "Dose/procedure-time-only auxiliary comparator measures schedule shortcuts without entering neural-only input.",
-      "Audit every feature/filter for future samples and embedded clinical/label columns.",
+      "Audit every feature/filter for exposure outside the declared native window and embedded clinical/label columns; released offline artifact masks remain a separate condition.",
       "Retain event-driven assessment density and artifact strata; transformed control maps require target-free physical provenance, same masks and within-person support."
     ],
     "uncertainty": "Secondary implementation offers fixed-prediction biological-person paired bootstrap. It is conditional descriptive uncertainty with shared cross-fit training dependence, not validated new-patient/refitting confidence. Native person identity is a prerequisite.",
-    "failure_policy": "All 7,328 slots required; evaluable cases need exact normalized five-category decimal probabilities, nonevaluable cases explicit null. Any missing failed evaluable prediction refuses aggregate; no target access before complete arm admission.",
+    "failure_policy": "Legacy scorer projection remains refused until the complete source EVENT/person population and successor denominator are independently bound. Metadata totals cannot define eligibility or score support. Within a future reviewed population, every evaluable case requires exact normalized five-category decimal probabilities and every nonevaluable case an explicit null; missing evaluable predictions refuse aggregation. No target access before complete arm admission.",
     "neural_understanding": {
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "62332fb6bcdb6a7327ac838d1479ac5873ffe0bd6b0fadd1d0f9e4c5efce2330",
+      "contract_sha256": "39f76c57b0103c45b6afc7252d0279cff8fba645b353b03b3936ab6099c466b2",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "745b4798914bfbdd763c0e4cf81bac1d894fc4448c99fa422e50b96921a6f1e8"
     }

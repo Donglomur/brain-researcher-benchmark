@@ -40,6 +40,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Complete support evaluator](implementations/complete-support-evaluator) — Complete support evaluator.
   Scope: Complete normalized 79-infant probability endpoint, exact causal EEG packets and equal-infant Brier comparisons. Generated controls and source review do not verify authentic EDF/annotation alignment, input quality flags, reference competence, protected execution or scientific qualification.
+- [Source admission v1](implementations/source-admission-v1) — Reviewed source component.
+  Scope: Original 79-recording, three-rater source bridge with calibrated lazy native windows, complete quality census and the current evaluator projection on the authenticated exported record grid. Full source custody, authentic preparation, competent train-only references and protected participant transport remain open; clinical continuity and source quality flags are not inferred acquisition-pause truth.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
