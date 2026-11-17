@@ -61,7 +61,12 @@ class EvaluatorTests(unittest.TestCase):
         self.assertAlmostEqual(methods["raw"]["synthetic_image_error"]["mse"], expected)
         self.assertAlmostEqual(methods["raw"]["synthetic_image_error"]["psnr_db"], 10*np.log10(40**2/expected))
         self.assertEqual(methods["fast"]["synthetic_image_error"]["psnr_status"], "positive_infinity_exact_match")
-        self.assertEqual(methods["fast"]["traces"]["zero_lag_pearson_by_roi"], [1., 1.])
+        # Eight-frame float64 dot/norm arithmetic can round self-correlation below 1.
+        # Allow 16 machine epsilons of absolute error, with no relative tolerance.
+        perfect_r = methods["fast"]["traces"]["zero_lag_pearson_by_roi"]
+        self.assertEqual(np.shape(perfect_r), (2,))
+        np.testing.assert_allclose(perfect_r, [1., 1.],
+                                   rtol=0., atol=16 * np.finfo(np.float64).eps)
         self.assertFalse(report["qualification"]["scientific"])
         json.dumps(report, allow_nan=False)
         a = np.array([0., 1., 0., -1.])
