@@ -13,12 +13,22 @@ python3 -I -S -B scripts/neurobench.py status
 python3 -I -S -B scripts/neurobench.py evidence
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
 python3 -I -S -B scripts/neurobench.py implementations NEURAL-007
+python3 -I -S -B scripts/neurobench.py operator routes
 ```
 
 `status` derives inventory and contract counts from the current registry and counts
 records within an explicit set of public reports. `evidence TASK_ID` returns the
 reported condition, scope, metrics, comparators, limitations and source hashes.
 Neither command opens private inputs or reruns an experiment.
+
+The [common operator route](../operator-routes.md) verifies current source for
+NEURAL-077's 400 EEG trials and NEURAL-007's 5,450 sleep epochs. With the exact
+external assets provisioned, its `inspect` command authenticates the public inputs;
+`prepare`, `validate` and `grade` connect to the task's existing implementations.
+Discovery through `operator routes` reports source availability only. These routes
+use two previously exposed development people per task; software controls or
+finished-submission scores do not become new solver attempts or unseen-population
+evidence.
 
 ## What has been observed
 
@@ -27,14 +37,22 @@ Neither command opens private inputs or reruns an experiment.
 | [Difficulty pilot](../science/difficulty-pilot-20261117.md) | Eight scored attempts on four task IDs: four historical paper-calibration attempts and four neural prediction-programme attempts | Outcomes for the exact reported development endpoints and conditions, with baseline comparisons; no whole-task qualification or paper improvement |
 | [NEURAL-077 waveform preparation](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json) | All 400 query waveforms and four demonstrations compared with pinned raw samples | Authentic-input materialization; no model execution or scoring |
 | [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |
+| [Native EEG/sleep operator controls](operator-controls-20261116.json) | Eight fixed-output controls covering the complete 400-trial EEG and 5,450-epoch sleep development panels | Input preparation, validation, grading, incomplete-submission rejection and target-pin failure; no new solver attempts, model calls or fits |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
 These reports overlap. Together they reference **five distinct registered task
-IDs**; the three historical profiles and two engineering reports are not five
+IDs**; historical profiles, engineering reports and native controls are not
 additional benchmarks or agent attempts. Within the selected reports, there are
 **no direct-interpretation or viewer-interpretation model attempts**. The neural
 pilot evaluated programmes on exposed development people, so its results do not
 measure unseen-population generalization or direct reading of neural signals.
+
+The native controls retained failures as well as accepted fixed-output scores.
+Incomplete submissions were refused before private-stage dispatch, with zero
+target-loader attempts; deliberately wrong target bytes failed the existing pin
+check. Cleanup verified that all 12 owned containers were absent. These controls
+establish the reported software behavior at the captured source and environment,
+not the quality or provenance of an independently authored candidate.
 
 The reports and their original limits remain available even when a task definition
 or runtime changes. Source hashes identify the published report being read; they

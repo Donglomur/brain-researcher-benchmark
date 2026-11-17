@@ -34,6 +34,39 @@ alone does not select a new scientifically preferred route. The
 programmes, related-only sources and families without an assigned task owner;
 location in that directory does not create a task binding.
 
+## Inspect EEG and sleep inputs
+
+The [common operator route](../operator-routes.md) supports NEURAL-077's complete
+400-trial EEG development panel and NEURAL-007's complete 5,450-epoch sleep
+development panel, each from two previously exposed people. Start with source
+discovery:
+
+```sh
+python3 -I -S -B scripts/neurobench.py operator routes
+```
+
+For input inspection, set `EXTERNAL_DATA_ROOT` to the provisioned asset root and
+`EXTERNAL_EVIDENCE_ROOT` to an existing operator-controlled directory outside the
+checkout. The example creates a new `inspect-eeg` directory:
+
+```sh
+python3 -I -S -B scripts/neurobench.py operator inspect NEURAL-077 \
+  --data-root "$EXTERNAL_DATA_ROOT" \
+  --output "$EXTERNAL_EVIDENCE_ROOT/inspect-eeg"
+```
+
+Use `NEURAL-007` and a fresh output directory for sleep. For an existing lifecycle
+packet, point the data root at its `inputs/` directory and add `--layout prepared`.
+Inspection authenticates the complete public allowlist against the packaged pins;
+it does not open development targets or run a model. It does not download missing
+data or accept arbitrary recordings from the same study.
+
+The operator guide gives the preparation, frozen-programme and Docker grading
+commands. Grading requires explicit artifact locations, the preinstalled native
+image and a mandatory purpose (`development-control` or `model-evaluation`). A
+purpose label does not replace method provenance, protected evaluation or scientific
+qualification. Preserve both successful and failed outputs outside the checkout.
+
 ## Separate the question from the access condition
 
 For paper tasks, inspect `paper-contract TASK_ID` before selecting a scorer.

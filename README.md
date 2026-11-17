@@ -22,6 +22,7 @@ python3 -I -S -B scripts/neurobench.py show NEURAL-077
 python3 -I -S -B scripts/neurobench.py implementations NEURAL-077
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
 python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py operator routes
 ```
 
 These commands use Python 3.11 or later and the standard library; they require no
@@ -30,9 +31,20 @@ record's condition, endpoint, metrics, source hash and limitations. It keeps old
 execution reports separate from current runtime qualification. Use `list --track
 paper` or `list --track neural` to browse the registered tasks.
 
-The [implementation guide](docs/usage/implementations.md) connects these definitions
-to available preparation and grading routes. Each runtime still requires its named
-inputs, dependencies and evaluation boundary.
+The [EEG and sleep operator guide](docs/operator-routes.md) provides a common path
+to inspect provisioned inputs, prepare packets and grade completed submissions for
+NEURAL-077 (400 EEG trials) and NEURAL-007 (5,450 sleep epochs). Each route uses its
+own two exposed development people. `operator routes` verifies the delivered source;
+it does not inspect local data or execute a grader. Follow the guide for the exact
+external inputs, fresh output directories and native dependencies.
+
+[Native operator controls](docs/status/operator-controls-20261116.json) exercised
+both complete development panels, including incomplete-submission rejection and
+target-pin failure. These are software checks using fixed outputs, with no new
+solver attempt or model call.
+
+The [implementation guide](docs/usage/implementations.md) connects other task
+definitions to their available preparation and grading routes.
 
 ## What each track measures
 
@@ -80,7 +92,8 @@ archive/                   # explicitly inactive retained material
 
 | Next step | Guide |
 | --- | --- |
-| Use an implementation or grade an existing submission | [Implementations](docs/usage/implementations.md), [artifact grading](docs/usage/artifact-grading.md) |
+| Inspect EEG/sleep inputs or grade an existing submission | [Operator routes](docs/operator-routes.md), [artifact grading](docs/usage/artifact-grading.md) |
+| Find other task implementations and their limits | [Implementations](docs/usage/implementations.md) |
 | Design a controlled comparison | [Scientific design](docs/science/README.md), [study templates](docs/science/study-design/README.md) |
 | Verify source or contribute | [Source integrity](docs/development/source-integrity.md), [contributing](CONTRIBUTING.md) |
 | Interpret reported results and earlier releases | [Evidence and status](docs/status/README.md), [provenance](docs/provenance/README.md) |

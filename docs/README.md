@@ -4,6 +4,7 @@
 
 - [Browse the paper and neural tracks](../benchmarks/README.md).
 - [Inspect recorded evidence and current status](status/README.md).
+- [Inspect EEG/sleep inputs, prepare packets and grade submissions](operator-routes.md).
 - [Find implementation routes](usage/implementations.md) or [grade a finished artifact](usage/artifact-grading.md).
 - [Use task-specific preparation, estimation and evaluation components](usage/construction-components.md).
 
@@ -20,6 +21,7 @@ current runtime qualification.
 - [Paper scope assessment](science/paper-scope/SCIENTIFIC_SCOPE.md).
 - [Paired study templates](science/study-design/README.md) and [reporting](science/paired-study-reporting.md).
 - [Difficulty pilot: eight scored development attempts](science/difficulty-pilot-20261117.md).
+- [Authentic EEG/sleep operator controls](status/operator-controls-20261116.json).
 
 Paper reconstruction is calibration evidence. Neural programme, investigation and
 interpretation conditions need separate access rules and controls; success in one
