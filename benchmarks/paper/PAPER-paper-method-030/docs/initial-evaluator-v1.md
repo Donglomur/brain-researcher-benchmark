@@ -34,11 +34,11 @@ CellMincer plus at least one matched `pmd` or `n2s` trace is mandatory. Their na
 
 ## Interface and commands
 
-Existing NumPy and SciPy are required; no packages were installed. Validation used Python 3.11, NumPy 2.4.6, and SciPy 1.17.1 via `/opt/homebrew/bin/python3.11`. The workspace's default `python3` lacks SciPy; select an existing suitable interpreter explicitly.
+Select an existing Python 3.11 environment with NumPy and SciPy available. Validation used Python 3.11, NumPy 2.4.6, and SciPy 1.17.1; no packages were installed. The commands below use `python3.11`; substitute the Python executable of your existing compatible environment if needed.
 
 ```sh
-/opt/homebrew/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests -v
-/opt/homebrew/bin/python3.11 benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/evaluator.py \
+python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests -v
+python3.11 benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/evaluator.py \
   --panel panel.json --private-reference protected-reference.json \
   --submission submission.json --output assessment.json
 ```

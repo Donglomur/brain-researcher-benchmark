@@ -5,8 +5,8 @@ Executable evaluation of prepared 500 Hz, 5,000-sample optical/electrical mV tra
 Requires an existing Python 3.11 environment with NumPy and SciPy. Validated with NumPy 2.4.6 and SciPy 1.17.1; no installation is performed. From the repository root:
 
 ```sh
-/opt/homebrew/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests -v
-/opt/homebrew/bin/python3.11 benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/evaluator.py \
+python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/tests -v
+python3.11 benchmarks/paper/PAPER-paper-method-030/implementations/initial-evaluator-v1/evaluator.py \
   --panel panel.json --private-reference protected-reference.json \
   --submission submission.json --output assessment.json
 ```
