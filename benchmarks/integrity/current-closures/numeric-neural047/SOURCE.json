@@ -1,0 +1,118 @@
+{
+  "schema": "neural047-clock-arithmetic-current-source-v1",
+  "task_id": "NEURAL-047",
+  "finding_id": "S15-NB-047-001",
+  "package_root": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3",
+  "scope": "Exact represented-value clock arithmetic; generated engineering controls and source authentication only.",
+  "current_files": [
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/history.py",
+      "bytes": 9230,
+      "sha256": "b038c5013ab01b7a3239493ddf8ebcd7969548fa9f02d9446d13b41aec228f22"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/CURRENT_RUNTIME_SOURCE_MANIFEST.json",
+      "bytes": 4274,
+      "sha256": "87501a1a940ba7e2fe6f832885ccaf3cc1435ae914a40d06de6551832526944f"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/README.md",
+      "bytes": 7055,
+      "sha256": "7d8db4076269f66ad61e7d0f1cecd4e9daf575f810e41f66d580faee97bfed4e"
+    },
+    {
+      "path": "tests/benchmarks/test_neural047_clock_arithmetic.py",
+      "bytes": 18731,
+      "sha256": "f088b4118506057c7f6ae6280e30aea5255b175c0948a05fe37e22d0e96ab47b"
+    }
+  ],
+  "preserved_files": [
+    {
+      "path": "benchmarks/neural/NEURAL-047/task.json",
+      "bytes": 10439,
+      "sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/RUNTIME_SOURCE_MANIFEST.json",
+      "bytes": 4274,
+      "sha256": "ede00b4d774ae4e6c163173f0c0de5219cf263c4eb785c9e596c8ddaa68aff25"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/SCIENTIFIC_CONTRACT.md",
+      "bytes": 4068,
+      "sha256": "18a32894edd0a59d5ccc1f81f5794eadd20df6b92fa90cb3ba1144023ac8a794"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/PROTOCOL.json",
+      "bytes": 3758,
+      "sha256": "0ce5e26a7592c5f9ec13a70014a2eda6dacec78ab98087eb95cfb6b03c6eeb4c"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/GATES.json",
+      "bytes": 2757,
+      "sha256": "5f246ff596c9b15dcdda50987c42a6af0cc3dbbf4950ab4b301970da97f83b72"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/DEPLOYMENT.json",
+      "bytes": 717,
+      "sha256": "3b1b15cb9e3baa0d7a971f537985915a3d5f0cbe49b049d5016a4d9987d09fd3"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/PROVENANCE.md",
+      "bytes": 1889,
+      "sha256": "0a10b4a1d7e1f232abd437d6f55393fed2d7f4b503c9023e82066cbf5694e726"
+    }
+  ],
+  "predecessor_history": {
+    "bytes": 8374,
+    "path": "program/legacy/history.py",
+    "sha256": "9652b41350c562792880ab27e18ef8929c79c27dee06633bb03be1bef1a70f78"
+  },
+  "runtime_closure": {
+    "current_manifest": "CURRENT_RUNTIME_SOURCE_MANIFEST.json",
+    "predecessor_manifest": "RUNTIME_SOURCE_MANIFEST.json",
+    "schema": "neural047-source-freeze-v1",
+    "member_count": 27,
+    "changed_members": [
+      "program/legacy/history.py"
+    ],
+    "all_other_members_unchanged": true,
+    "selection": "Existing programme_manifest_path plus independently admitted runtime_environment.source_manifest_pin and equal reference_numerics.source_manifest_pin. No implicit selector or guard bypass."
+  },
+  "arithmetic_policy": {
+    "history": "exact(time_i) - exact(landmark) >= -exact(existing HISTORY_SECONDS), through landmark inclusive",
+    "landmark": "First exact(time_i) - exact(onset) >= exact(existing LANDMARK_SECONDS), followed by unchanged reversal/end checks",
+    "history_constant_exact": "5404319552844595/1125899906842624",
+    "landmark_constant_exact": "5404319552844595/2251799813685248",
+    "offsets": "Exact supplied-value subtraction followed by one float conversion. Strict finite/range/order/final-zero validation; abort preparation if offsets are not representable.",
+    "intentional_corrections": [
+      "495.2 at landmark500 is excluded, not relabeled.",
+      "500 at onset497.6 is too early.",
+      "Coarse five-second histories and two-second landmarks are outside the existing bounds.",
+      "Mixed integer/float subtraction retains the integer value before conversion."
+    ],
+    "unchanged": [
+      "Duration constants and endpoint directions",
+      "Missing-frame, behavior, reversal, target and event exclusions",
+      "Complete animal/event/view support and all production metrics",
+      "Dependencies, WT source binding, source admission and deployment authorities"
+    ]
+  },
+  "current_source_identity_usable": true,
+  "native_manifest_selection": false,
+  "scientific_qualification": false,
+  "historical_qualification_transferred": false,
+  "qualification_limits": [
+    "Represented numeric consistency does not establish intended decimal/native timestamp recovery or physical precision.",
+    "Target WT row/frame linkage to authenticated native clock values and acquisition/processing provenance remains missing.",
+    "No authentic/native/model execution, reference fit, provider request, or performance evaluation was performed.",
+    "Deployment and all original scientific/biological/native/reference/resource qualification gates remain unresolved.",
+    "Global source ownership inventory and CI enrollment belong to the integration owner."
+  ],
+  "validation": {
+    "command": "python3 -I -S -B tests/benchmarks/test_neural047_clock_arithmetic.py -v",
+    "generated_only": true,
+    "dependencies": "Python standard library only; fractions adds no external dependency",
+    "source_authentication": "Both existing code_snapshot and runner.snapshot accept all27 current bodies and reject the unchanged historical manifest or mutated retained-pin source. Selected manifest-byte mutation fails exact authentication."
+  }
+}

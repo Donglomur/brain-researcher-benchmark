@@ -3,7 +3,7 @@
 The WB-field mapper requires an external verified physical clock/animal binding.
 No nominal frame rate or unidentified neuron is invented. Odor is not a047 predictor.
 """
-import bisect
+from fractions import Fraction
 import hashlib
 import math
 from .delivery_io import need, exact
@@ -71,22 +71,37 @@ def consecutive(frames):
     return all(b == a + 1 for a, b in zip(frames, frames[1:]))
 
 
+def first_at_or_after_elapsed(times, origin, delta):
+    """First timestamp satisfying the exact represented-value elapsed bound."""
+    origin = Fraction(origin)
+    lo, hi = 0, len(times)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if Fraction(times[mid]) - origin < delta:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo
+
+
 def extract(record):
     """Return all eligible landmark cases and reason-coded source exclusions."""
     validate_record(record)
+    history_interval = Fraction(HISTORY_SECONDS)
+    landmark_interval = Fraction(LANDMARK_SECONDS)
     times = record['time_seconds']; frames = record['native_frame0']; cases = []; excluded = []
     for event in record['events']:
         onset, end = event['onset_index0'], event['end_index0']
-        landmark = bisect.bisect_left(times, times[onset] + LANDMARK_SECONDS)
+        landmark = first_at_or_after_elapsed(times, times[onset], landmark_interval)
         reason = None
         if landmark >= len(times):
             reason = 'landmark_outside_recording'
         elif landmark > end or record['reversal_state'][landmark] != 1:
             reason = 'not_observed_reversing_at_landmark'
-        elif times[0] > times[landmark] - HISTORY_SECONDS:
+        elif Fraction(times[0]) - Fraction(times[landmark]) > -history_interval:
             reason = 'incomplete_pre_landmark_recording'
         else:
-            lo = bisect.bisect_left(times, times[landmark] - HISTORY_SECONDS)
+            lo = first_at_or_after_elapsed(times, times[landmark], -history_interval)
             indices = list(range(lo, landmark + 1))
             if len(indices) < 2 or not consecutive(frames[max(0, lo - 1):landmark + 1]):
                 reason = 'missing_native_history_frames'
@@ -103,7 +118,13 @@ def extract(record):
         if reason is not None:
             excluded.append({'event_id': event['event_id'], 'reason': reason})
             continue
-        times_view = {'time_offset_seconds': [times[i] - times[landmark] for i in indices]}
+        origin = Fraction(times[landmark])
+        offsets = [float(Fraction(times[i]) - origin) for i in indices]
+        need(all(finite(t) and -HISTORY_SECONDS <= t <= 0 for t in offsets)
+             and offsets[-1] == 0
+             and all(a < b for a, b in zip(offsets, offsets[1:])),
+             'Selected histories must have representable strictly ordered offsets')
+        times_view = {'time_offset_seconds': offsets}
         behavior = {**times_view, 'velocity': [record['velocity'][i] for i in indices],
                     'dv': [record['dv'][i] for i in indices]}
         neural = {**times_view, 'saav_history': [record['saav'][i] for i in indices]}
