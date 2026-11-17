@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Bind reviewed paper revisions without replacing historical calibration bytes.
+"""Bind reviewed task revisions without replacing historical source evidence.
 
-Run after bind_paper_improvement.py, before check_repository.py --write. Only
-current integrity metadata and exact workflow pins for changed descriptors are
-written. Implementation source, predecessor pins and historical inventories are
-never rewritten. The default is a read-only freshness check.
+Run after the paper or neural task binder, before check_repository.py --write.
+Only current integrity metadata and exact workflow pins for changed descriptors
+are written. Implementation source, predecessor pins and historical inventories
+are never rewritten. The default is a read-only freshness check. The historical
+script name remains compatible with existing paper maintenance commands.
 """
 from __future__ import annotations
 
@@ -29,6 +30,17 @@ CLOSURES = "benchmarks/integrity/current-closures"
 WORKFLOWS = (".github/workflows/construction-benchmark-components.yml",
              ".github/workflows/neuroscience-source-integrity.yml")
 REVISION_FIELD = "paper_specification_revisions"
+PROFILES = {
+    "paper": {"version": "paper-improvement/v1",
+              "history": "historical/task.pre-improvement.v1.json",
+              "field": REVISION_FIELD, "role": "calibration_only",
+              "contract": "improvement_contract"},
+    "neural": {"version": "neural-understanding/v1",
+               "history": "historical/task.pre-understanding.v1.json",
+               "field": "neural_specification_revisions",
+               "role": "historical_source_evidence_only",
+               "contract": "understanding_contract"},
+}
 
 
 def encoded(value):
@@ -41,7 +53,8 @@ def pin(path, body):
 
 def revision_pin(reader, row):
     """Authenticate both revisions against the existing registry original pin."""
-    integrity.require(row.get("track") == "paper", "Revision cannot change neural integrity bindings")
+    track = row.get("track")
+    integrity.require(track in PROFILES, "Unsupported specification revision track")
     specification, original = row["specification"], row["original_specification"]
     task_pin = {**specification, "original_path": original["path"],
                 "predecessor": {key: original[key] for key in ("bytes", "sha256")},
@@ -49,8 +62,15 @@ def revision_pin(reader, row):
     document = integrity.strict_json(reader.checked(specification["path"], specification))
     integrity.require(type(document) is dict
                       and document.get("id") == row.get("specification_id", row["id"])
-                      and document.get("track") == "paper", "Current paper task identity mismatch")
-    integrity.checked_paper_revision(reader, row["id"], task_pin, document, row)
+                      and document.get("track") == track, "Current task identity mismatch")
+    # Older checkouts can still maintain PAPER metadata. They must fail closed
+    # for NEURAL revisions until the semantic revision verifier is available.
+    check_revision = getattr(integrity, "checked_specification_revision", None)
+    integrity.require(check_revision is not None or track == "paper",
+                      "Neural specification revision verifier is unavailable")
+    if check_revision is None:
+        check_revision = integrity.checked_paper_revision
+    check_revision(reader, row["id"], task_pin, document, row)
     return task_pin
 
 
@@ -70,14 +90,20 @@ def refresh_workflow(body, path, old, new):
             + new["sha256"] + match["tail"] + text[match.end():]).encode("utf-8")
 
 
-def build_outputs(root):
+def build_outputs(root, *, update_workflows=True):
+    """Plan authenticated metadata changes; optionally leave CI to its pin planner.
+
+    ``update_workflows=False`` returns only current metadata and closure outputs,
+    plus exact old/new closure descriptors for the all-form workflow maintainer.
+    Neither mode changes a task definition or discovers new expected source hashes.
+    """
     reader = integrity.Reader(root)
     registered = integrity.task_registry(reader)
     validated = {}
 
     def revised(identifier):
         row = registered.get(identifier)
-        integrity.require(type(row) is dict, "Unregistered paper closure task: " + identifier)
+        integrity.require(type(row) is dict, "Unregistered closure task: " + identifier)
         if "specification_revision" not in row:
             return None
         if identifier not in validated:
@@ -88,8 +114,6 @@ def build_outputs(root):
     current = integrity.strict_json(old_current)
     updated = copy.deepcopy(current)
     for package in updated["packages"]:
-        if package["track"] != "paper":
-            continue
         task_pin = revised(package["task_id"])
         if task_pin is None:
             continue
@@ -103,7 +127,7 @@ def build_outputs(root):
         else:
             integrity.require(existing["specification_revision"]["previous_specification"]
                               == task_pin["specification_revision"]["previous_specification"],
-                              "Refusing to replace previously preserved paper history")
+                              "Refusing to replace previously preserved task history")
         package["registered_task"] = copy.deepcopy(task_pin)
     # This also authenticates every original implementation inventory and neural task.
     integrity.check_configuration(reader, updated)
@@ -124,56 +148,67 @@ def build_outputs(root):
         document = integrity.strict_json(original_body)
         integrity.require(type(document) is dict, "Closure metadata must be an object: " + name)
         result = copy.deepcopy(document)
-        lineage = {}
+        lineage = {track: {} for track in PROFILES}
 
         def visit(value):
             if type(value) is dict:
                 path = value.get("path")
-                if type(path) is str and path.startswith("benchmarks/paper/"):
+                if type(path) is str and path.startswith("benchmarks/"):
                     parts = path.split("/")
-                    if len(parts) >= 4 and "/".join(parts[3:]) in ("task.json", integrity.PAPER_HISTORY):
+                    profile = PROFILES.get(parts[1]) if len(parts) >= 4 else None
+                    if profile and "/".join(parts[3:]) in ("task.json", profile["history"]):
                         task_pin = revised(parts[2])
                         if task_pin is not None:
                             revision = task_pin["specification_revision"]
                             previous = revision["previous_specification"]
+                            integrity.require(registered[parts[2]]["track"] == parts[1]
+                                              and revision["version"] == profile["version"],
+                                              "Closure task track or revision mismatch: " + path)
                             integrity.descriptor(value)
                             integrity.require(integrity.same_pin(value, previous),
-                                              "Closure paper pin does not authenticate historical bytes: " + path)
+                                              "Closure task pin does not authenticate historical bytes: " + path)
                             value["path"] = previous["path"]
-                            lineage[parts[2]] = {"task_id": parts[2], "version": integrity.PAPER_REVISION,
-                                "role": "calibration_only", "historical_specification": previous,
+                            lineage[parts[1]][parts[2]] = {"task_id": parts[2], "version": profile["version"],
+                                "role": profile["role"], "historical_specification": previous,
                                 "current_specification": {key: task_pin[key] for key in ("path", "bytes", "sha256")},
-                                "improvement_contract": revision["improvement_contract"]}
+                                profile["contract"]: revision[profile["contract"]]}
                 for key, child in value.items():
-                    if key != REVISION_FIELD:
+                    if key not in {profile["field"] for profile in PROFILES.values()}:
                         visit(child)
             elif type(value) is list:
                 for child in value:
                     visit(child)
 
         visit(result)
-        if lineage:
-            expected = [lineage[key] for key in sorted(lineage)]
-            old_lineage = document.get(REVISION_FIELD)
+        for track, profile in PROFILES.items():
+            selected = lineage[track]
+            expected = [selected[key] for key in sorted(selected)]
+            old_lineage = document.get(profile["field"])
             if old_lineage is not None:
                 integrity.require(type(old_lineage) is list
-                                  and {item["task_id"] for item in old_lineage} == set(lineage),
-                                  "Unexpected existing paper closure revision roster")
+                                  and len(old_lineage) == len(selected)
+                                  and all(type(item) is dict for item in old_lineage)
+                                  and {item["task_id"] for item in old_lineage} == set(selected),
+                                  "Unexpected existing " + track + " closure revision roster")
                 for item in old_lineage:
-                    integrity.require(item["version"] == integrity.PAPER_REVISION
-                                      and item["role"] == "calibration_only"
-                                      and item["historical_specification"] == lineage[item["task_id"]]["historical_specification"],
+                    integrity.require(item["version"] == profile["version"]
+                                      and item["role"] == profile["role"]
+                                      and item["historical_specification"] == selected[item["task_id"]]["historical_specification"],
                                       "Refusing to replace existing closure history")
-            result[REVISION_FIELD] = expected
+            if selected:
+                result[profile["field"]] = expected
         if result != document:
             body = encoded(result)
             outputs[name] = body
-            changes.append({"path": name, "previous": pin(name, original_body), "current": pin(name, body),
-                            "paper_tasks": sorted(lineage)})
+            change = {"path": name, "previous": pin(name, original_body), "current": pin(name, body),
+                      "paper_tasks": sorted(lineage["paper"])}
+            if lineage["neural"]:
+                change["neural_tasks"] = sorted(lineage["neural"])
+            changes.append(change)
 
     # Only the two reviewed workflows embed pins for these closure descriptors.
     # Each replacement is keyed by its full path and authenticated old hash/size.
-    for name in WORKFLOWS:
+    for name in WORKFLOWS if update_workflows else ():
         path = Path(root) / name
         if not path.exists():
             continue
@@ -190,17 +225,19 @@ def build_outputs(root):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--metadata-only", action="store_true",
+                        help="Leave workflow updates to the all-form reviewed pin planner")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
     try:
-        outputs, changes = build_outputs(args.root)
+        outputs, changes = build_outputs(args.root, update_workflows=not args.metadata_only)
         if args.write:
             for name, body in outputs.items():
                 destination = args.root / name
                 mode = destination.stat().st_mode & 0o777
-                with tempfile.NamedTemporaryFile(dir=destination.parent, prefix=".paper-integrity-", delete=False) as handle:
+                with tempfile.NamedTemporaryFile(dir=destination.parent, prefix=".task-integrity-", delete=False) as handle:
                     temporary = Path(handle.name)
                     try:
                         handle.write(body)
@@ -219,7 +256,7 @@ def main():
         if outputs and not args.write:
             parser.exit(1)
     except (integrity.InvalidSource, OSError, UnicodeError, ValueError, TypeError, KeyError) as error:
-        parser.exit(1, "Paper integrity refresh failed: " + str(error) + "\n")
+        parser.exit(1, "Task integrity refresh failed: " + str(error) + "\n")
 
 
 if __name__ == "__main__":
