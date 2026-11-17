@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prepares the complete declared 826-trial/65-unit Area2 training-asset tensor packet, scores active/perturbed Poisson co-bps, and provides training-mean and source-derived smoothing controls. Native NWB conversion, mask/condition authenticity, prospective condition-transfer scope, authentic reference performance and protected scientific admission remain unqualified; portable byte-pinned upstream metric tests are engineering evidence only.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

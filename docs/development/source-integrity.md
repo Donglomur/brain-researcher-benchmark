@@ -9,7 +9,7 @@ scientific qualification.
 python3 -I -S -B scripts/check_repository.py
 ```
 
-This checker validates the declared ownership and current layout of all 298
+This checker validates the declared ownership and current layout of all 364
 implementation artifact records against
 [benchmarks/integrity/source-ownership.json](../../benchmarks/integrity/source-ownership.json)
 and the task registry. It checks the published source organization; it does not
@@ -41,7 +41,13 @@ job's commands define its tested scope. The additive
 [construction workflow](../../.github/workflows/construction-benchmark-components.yml)
 checks eight reviewed components and 95 unique source pins, then runs their 266
 generated test cases. These source and engineering checks preserve the stated
-authentic-data and scientific qualification limits.
+authentic-data and scientific qualification limits. Four expansion workflows
+([A](../../.github/workflows/construction-expansion-a.yml),
+[B](../../.github/workflows/construction-expansion-b.yml),
+[C](../../.github/workflows/construction-expansion-c.yml),
+[D](../../.github/workflows/construction-expansion-d.yml)) add 69 jobs covering
+66 further scoped packages and 1,161 generated test cases. Their commands and
+source pins define coverage; these checks do not run authentic-data campaigns.
 
 Run both commands from the repository root using Python 3.11 or later.
 

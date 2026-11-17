@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Binds exact stimulus/voxel identities for all three declared THINGS-fMRI participants and runs prospective nested grouped ridge comparisons across 66 dimensions, category and shape predictors, reporting signed held-out metrics and predictive commonality. Native 12-session encoding / 30-dimension residual partition, exact category/shape recipes, authentic grouping/arrays, protected execution, rights and full-cohort resource/scientific qualification remain unresolved.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

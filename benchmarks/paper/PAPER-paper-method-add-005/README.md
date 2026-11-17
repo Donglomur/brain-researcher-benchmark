@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective 12-participant by 15-mask AJILE12 reconstruction preparation, train-only mean/ridge baselines, one-case export, bound submission collection and private target scoring. Actual fresh process/container/state isolation is required because combined masks expose held channels, and remains unqualified. Native data conversion, diffusion/reference execution, temporal guard bands and published downstream/spectral endpoints remain held; scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

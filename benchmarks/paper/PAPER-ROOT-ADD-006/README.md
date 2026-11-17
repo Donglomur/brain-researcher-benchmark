@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Primitive numeric exports to three localizer-trained outcome decoders, response-time-censored probability/reward reactivation effects and a prospective nested participant-held-out behavioral-parameter comparison. Native MATLAB/MCOS extraction, authentic event/channel/participant joins, author scaling/solver and behavioral-fit equivalence, independent target-fit provenance, protected references, grading targets, rights and scientific qualification remain held.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

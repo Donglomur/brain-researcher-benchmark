@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Processed binary activity/coactivity derivation, explicit next-visit structural outcomes and fixed competing predictors fitted with leave-one-mouse-out transforms and calibration on a retrospectively adjudicated cohort. Native identity/fate conversion, complete source population, original mixed-effects/spatial/timing analyses and protected replay remain held. The endpoint is neither survival nor causal inference; scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

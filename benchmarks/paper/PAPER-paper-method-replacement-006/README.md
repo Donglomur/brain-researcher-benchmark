@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective paired PopT-versus-BrainBERT RMS prediction evaluation for seven subjects at nested electrode counts, with ROC-AUC, separately defined F1, temporal-block uncertainty, target-free interface export and native-array binding checks. Authentic population/row-order evidence, historical splits and ranking parity, BrainBERT weight identity/rights, pretraining exposure, model execution and protected grading remain held. Scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

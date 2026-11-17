@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prepared-artifact evaluator for the complete ten-session history-versus-interaction comparison, with source neural and latent loss components, matched identities/batches and prospective session-level gains. Target-conditioned latent reconstruction is not blind forecasting. Native Allen preprocessing and eligibility, author interface/layout discrepancies, missing anatomical/condition subpanels, authentic figure references, code/data rights, grouped improvement and protected qualification remain unresolved.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

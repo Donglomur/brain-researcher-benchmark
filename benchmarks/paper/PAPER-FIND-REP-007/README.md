@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Complete supplied-session all-cell stimulus selectivity, pinned-code sequence similarity, reward-predictive activity, reward-zone licking and longitudinal animal summaries. Authentic experiment-info-derived population/transforms, native preprocessing and parity, matched source controls, protected targets, rights/exposure and scientific qualification remain held; the sequence paper/code disagreement is explicit. Coding-direction and density-map endpoints remain outside this component, and shared source families with NEURAL-027/028 are not independent cohorts.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

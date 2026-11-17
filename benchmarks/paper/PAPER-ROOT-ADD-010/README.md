@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Processed-reference sensor-RSA path with run-crossvalidated dissimilarities, symbolic/CORnet-S covariance-weighted correlations, both smoothing branches and exact 20-participant/158-run structural coverage; optional cleaned-epoch export and source temporal-test adapters are included. Raw BIDS preprocessing, historical decoding, native dependency and model identity parity, reviewed-preprint-to-Version-of-Record reconciliation, noise ceiling, authentic references and protected qualification remain open.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -22,24 +22,24 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 2 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 1 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 1 | not linked |
-| [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 0 | not linked |
+| [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 1 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 1 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
 | [NEURAL-013](NEURAL-013/README.md) | Attempted-speech phoneme-sequence decoding | 1 | [manifest](NEURAL-013/implementations/registered-runtime/manifest.json) |
 | [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 2 | not linked |
-| [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 0 | not linked |
-| [NEURAL-016](NEURAL-016/README.md) | Linguistic effects beyond natural-movie covariates | 0 | not linked |
+| [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 1 | not linked |
+| [NEURAL-016](NEURAL-016/README.md) | Linguistic effects beyond natural-movie covariates | 1 | not linked |
 | [NEURAL-017](NEURAL-017/README.md) | Motor population co-smoothing | 2 | [manifest](NEURAL-017/implementations/registered-runtime/manifest.json) |
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 1 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
 | [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 1 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
-| [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 0 | not linked |
+| [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 1 | not linked |
 | [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 2 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 1 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 2 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 2 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
 | [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 1 | not linked |
 | [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 2 | not linked |
-| [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 0 | not linked |
-| [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 0 | not linked |
+| [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 1 | not linked |
+| [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 1 | not linked |
 | [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 2 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
 | [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 4 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
 | [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction | 1 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
@@ -51,7 +51,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-037](NEURAL-037/README.md) | Visual-opto sequence response generalization | 1 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
 | [NEURAL-038](NEURAL-038/README.md) | Sequence order and sensory-context interactions | 1 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
 | [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 1 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
-| [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 0 | not linked |
+| [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 1 | not linked |
 | [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 1 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
 | [NEURAL-042](NEURAL-042/README.md) | Load-dependent theta-gamma coupling | 3 | [manifest](NEURAL-042/implementations/registered-runtime/manifest.json) |
 | [NEURAL-043](NEURAL-043/README.md) | Tongue-reach direction decoding from ALM | 1 | [manifest](NEURAL-043/implementations/registered-runtime/manifest.json) |
@@ -59,9 +59,9 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-045](NEURAL-045/README.md) | Dopamine trajectories across reward spacing | 2 | [manifest](NEURAL-045/implementations/registered-runtime/manifest.json) |
 | [NEURAL-046](NEURAL-046/README.md) | Elapsed time versus count in dopamine adaptation | 2 | [manifest](NEURAL-046/implementations/registered-runtime/manifest.json) |
 | [NEURAL-047](NEURAL-047/README.md) | Post-reversal turn decoding in worms | 1 | not linked |
-| [NEURAL-048](NEURAL-048/README.md) | Neural history beyond worm locomotor state | 0 | not linked |
+| [NEURAL-048](NEURAL-048/README.md) | Neural history beyond worm locomotor state | 1 | not linked |
 | [NEURAL-049](NEURAL-049/README.md) | Natural wrist movement from ECoG | 2 | [manifest](NEURAL-049/implementations/registered-runtime/manifest.json) |
-| [NEURAL-050](NEURAL-050/README.md) | Motor gamma beyond behavior state | 0 | not linked |
+| [NEURAL-050](NEURAL-050/README.md) | Motor gamma beyond behavior state | 1 | not linked |
 | [NEURAL-051](NEURAL-051/README.md) | Viewed-object identification from fMRI | 1 | [manifest](NEURAL-051/implementations/registered-runtime/manifest.json) |
 | [NEURAL-052](NEURAL-052/README.md) | Object-property organization across visual ROIs | 1 | [manifest](NEURAL-052/implementations/registered-runtime/manifest.json) |
 | [NEURAL-053](NEURAL-053/README.md) | Object category decoding from MEG | 2 | not linked |
@@ -76,14 +76,14 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-062](NEURAL-062/README.md) | Visual image identity from optical physiology | 1 | [manifest](NEURAL-062/implementations/registered-runtime/manifest.json) |
 | [NEURAL-063](NEURAL-063/README.md) | Omission-evoked calcium response prediction | 1 | not linked |
 | [NEURAL-064](NEURAL-064/README.md) | Novelty effects beyond state and outcome | 1 | not linked |
-| [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 0 | not linked |
+| [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 1 | not linked |
 | [NEURAL-066](NEURAL-066/README.md) | Typing information versus language and motor shortcuts | 1 | not linked |
 | [NEURAL-067](NEURAL-067/README.md) | Seven-dimensional attempted reach/grasp decoding | 1 | [manifest](NEURAL-067/implementations/registered-runtime/manifest.json) |
 | [NEURAL-068](NEURAL-068/README.md) | Recalibration benefit under intracortical drift | 1 | [manifest](NEURAL-068/implementations/registered-runtime/manifest.json) |
 | [NEURAL-069](NEURAL-069/README.md) | Dynamic-video fMRI encoding | 1 | [manifest](NEURAL-069/implementations/registered-runtime/manifest.json) |
 | [NEURAL-070](NEURAL-070/README.md) | Action dynamics beyond static appearance | 1 | [manifest](NEURAL-070/implementations/registered-runtime/manifest.json) |
 | [NEURAL-071](NEURAL-071/README.md) | Story-to-brain language encoding | 1 | not linked |
-| [NEURAL-072](NEURAL-072/README.md) | Contextual linguistic information beyond acoustics | 0 | not linked |
+| [NEURAL-072](NEURAL-072/README.md) | Contextual linguistic information beyond acoustics | 1 | not linked |
 | [NEURAL-073](NEURAL-073/README.md) | Cognitive task identification from fMRI maps | 1 | [manifest](NEURAL-073/implementations/registered-runtime/manifest.json) |
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 1 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 2 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
@@ -102,7 +102,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-088](NEURAL-088/README.md) | Functional similarity and measured synaptic anatomy | 1 | [manifest](NEURAL-088/implementations/registered-runtime/manifest.json) |
 | [NEURAL-089](NEURAL-089/README.md) | Phoneme decoding from listening MEG | 2 | not linked |
 | [NEURAL-090](NEURAL-090/README.md) | Speech decoding beyond narrative and timing priors | 1 | not linked |
-| [NEURAL-091](NEURAL-091/README.md) | Visual tuning prediction in Neuropixels recordings | 0 | not linked |
+| [NEURAL-091](NEURAL-091/README.md) | Visual tuning prediction in Neuropixels recordings | 1 | not linked |
 | [NEURAL-092](NEURAL-092/README.md) | Within-session neural prediction and behavioral-state investigation across visual areas | 1 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |
 | [NEURAL-093](NEURAL-093/README.md) | Sensory evidence decoding during decisions | 1 | [manifest](NEURAL-093/implementations/registered-runtime/manifest.json) |
 | [NEURAL-094](NEURAL-094/README.md) | Decision correlates beyond movement | 2 | [manifest](NEURAL-094/implementations/registered-runtime/manifest.json) |
@@ -119,10 +119,10 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR](NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR/README.md) | Causal held-session prediction of human information-sampling and stopping decisions | 4 | not linked |
 | [NEURAL-DISC-20261114-VESTIBULAR-VO](NEURAL-DISC-20261114-VESTIBULAR-VO/README.md) | Continuous self-motion reconstruction from simultaneous vestibular spike trains | 1 | not linked |
 | [NEURAL-DISC-20261114-VOLTRON-SPIKES](NEURAL-DISC-20261114-VOLTRON-SPIKES/README.md) | Optical voltage trace to independently recorded spike timing across complete cell recordings | 2 | not linked |
-| [NEURAL-DISC-20261114-WORM-PROPAGATION](NEURAL-DISC-20261114-WORM-PROPAGATION/README.md) | Conditional downstream calcium-response reconstruction after identified-neuron perturbation | 0 | not linked |
+| [NEURAL-DISC-20261114-WORM-PROPAGATION](NEURAL-DISC-20261114-WORM-PROPAGATION/README.md) | Conditional downstream calcium-response reconstruction after identified-neuron perturbation | 1 | not linked |
 | [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Uncertainty-aware neonatal seizure evidence from held-infant EEG | 1 | not linked |
-| [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Reported attention-state decoding with explicit motor controls | 0 | not linked |
-| [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 0 | not linked |
+| [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Reported attention-state decoding with explicit motor controls | 1 | not linked |
+| [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 1 | not linked |
 | [NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY](NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/README.md) | Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics | 2 | not linked |
 | [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 4 | not linked |
 | [NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT](NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/README.md) | Predicting longitudinal state-selective calcium activity across identified neurons | 1 | not linked |

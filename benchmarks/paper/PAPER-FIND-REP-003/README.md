@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Scores normalized joint-angle predictions for all ten declared M1/S1 sessions using source variance explained and a separate train-only phase comparator, with five-mouse summaries; a separate component computes the two-mouse optogenetic cue-contact histogram. Native MAT/event-clock completeness, neural/PCA/ROI model parity, protected provisioning, intervention trajectories and authentic full-paper/scientific qualification remain open.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

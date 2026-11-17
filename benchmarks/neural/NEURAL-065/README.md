@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: V1 typed-button transcript evaluation with alias/session/template checks, sentence CER averaged within people and then across people, required neural-only and language-only arms, and paired person uncertainty. Typed-button targets differ from the paper intended-key endpoint. Authentic DTW/session mapping, cross-modality identity, decoder/checkpoint parity and protected execution remain held; V2 is excluded and scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Downstream beta-amplitude evaluation at pre-extracted source peaks, with all 53 participant dispositions and 51 included participants, code/paper normalization profiles, age/covariate models, uncertainty and matched-trial diagnostics. Native MEG preprocessing/peaks/band extraction, normalization parity, authentic cohort/covariates, event surrogates, rights and protected references remain held. Scientific qualification is unknown.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

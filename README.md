@@ -19,7 +19,9 @@ submission qualification remain unestablished.
 Each track contains **100 original specifications**. Later expansion drafts bring
 the registered inventory to **116 paper and 118 neural tasks**. These are task
 registrations; conditions, participants, folds and implementation variants are not
-additional benchmarks.
+additional benchmarks. All 234 registered tasks have assigned implementation
+source, with coverage and remaining requirements documented per package. Source
+ownership does not establish completion of the full scientific task.
 
 ## Explore a task
 

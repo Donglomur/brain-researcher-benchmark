@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Computes source-derived Figure 2 stage contrasts and serum-session dopamine AUC/correlation, retaining full declared rat/session and exclusion ledgers without selecting a cross-archive intersection. Native archive/MAT parity, exact empirical cohorts, singleton MATLAB-axis behavior, Figure 3 RPE/history endpoints, BestFits provenance, protected grouped assessment and scientific qualification remain open; stage associations are observational.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

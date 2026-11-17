@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Computes the fixed 40-participant CALC-CTRL map contrast, corrected primary and explicitly mixed-lineage original sensitivity, distinct source median reductions and descriptive paired-participant summaries. Authentic maps/masks/geometry, physiological correction, native PLS, figure parity, geometry-preserving spatial nulls, protected references and scientific qualification remain held; data CC0 and upstream code CC BY-NC-SA 4.0 terms remain distinct.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Deeprecon converter inference and complete five-subject/20-directed-pair/six-ROI pattern and profile correlation evaluation for content-loss versus brain-loss converters, with strict optional source noise-ceiling joins. Authentic neural/features/decoder/weight bundle and training lineage, trusted native H5 ingestion, independently accepted ceiling artifacts, matched refitting, figure targets/tolerances, protected improvement data, rights and scientific qualification remain held; fitting converters is outside this evaluator.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

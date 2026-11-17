@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Pinned 2024 example-recording numerical path to load-dependent LFP Tort comodulograms and phase-bin curves, source-style single-unit count/Poisson comparisons, and a separately prospective patient-grouped load contrast. Authentic recordings and full eligibility, explicit single-unit timing-repair acceptance, native MATLAB numerical/fit parity, figure targets, protected evaluation, component rights and scientific qualification remain held; archive file/participant counts do not establish eligible PAC populations.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

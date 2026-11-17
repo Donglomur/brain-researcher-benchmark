@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
+  Scope: Prospective normalized-epoch recipe for localizer-to-retrieval decoding, respiration at confidence maxima and exhalation-aligned confidence–alpha/beta coupling across the pinned 18-participant roster. Native MAT extraction and complete trial/channel admission, article/archive/source discrepancies, authentic reference agreement, timing and artifact controls, participant-held-out improvement, rights and protected assessment remain unresolved. Observational coupling does not establish a causal breathing effect.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
