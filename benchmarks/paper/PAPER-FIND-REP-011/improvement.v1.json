@@ -1,0 +1,175 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "objective": "surpass_source_paper_same_task",
+  "task_id": "PAPER-FIND-REP-011",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper explicitly selects mixed-effects terms using model log-likelihood, so an original evaluated fit-comparison route exists for activity/coactivity responses. Its original candidate model set, complexity constraints, likelihood definition, fitting mode, exact analysis rows and numeric results have not been recovered. This potential source-native route remains blocked; it is not predictive validation and cannot be replaced by the local elimination-fate Brier task.",
+  "source_paper": {
+    "title": "Local and global predictors of synapse elimination during motor learning",
+    "url": "https://doi.org/10.1126/sciadv.adk0540"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10942101/",
+      "locator": "Results and Figures 2-6; Methods: Spine structural classification; Co-activity analysis; Statistical analysis",
+      "supports": "The study compares structural and functional properties of stable/eliminated spines with shuffles and mixed-effects inference; predictive wording does not define held-out classifier accuracy."
+    },
+    {
+      "id": "cohort",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10942101/fullTextXML",
+      "locator": "Methods: Behavior; Spine structural classification; Statistical analysis, sample-size paragraphs",
+      "supports": "Repeated early/middle/late observations, baseline-existing spines, reappearance exclusions and outcome-conditioned dendritic inclusion define the retrospective source comparisons."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/10108836",
+      "locator": "Version v1, November 10, 2023; Description and Files",
+      "supports": "Author source-data/code archive Elim_Paper_Repository.zip, 19.7 GB, MD5 729d836b9f30a461b27e246efbde8872. Metadata alone does not authenticate a derived prediction cohort."
+    },
+    {
+      "id": "likelihood",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10942101/",
+      "locator": "Methods: Statistical analysis, opening paragraph and activity/coactivity mixed-effects model formula paragraphs",
+      "supports": "Terms are hypothesis-based and selected by comparing model log-likelihood; models use MATLAB fitlme. Activity-response models include stability and animal effects; coactivity models additionally include distance and interactions. Numeric likelihood/model-selection details are not provided in the reviewed text."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Recover the original model-log-likelihood comparison for observed activity/coactivity responses with source stability, distance and related covariates. The exact fitted response/comparator set to bind is unresolved; elimination fate is not silently made the response.",
+      "evidence_ids": [
+        "likelihood"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo record 10108836 v1 source-data/code deposit; no archive payload was downloaded in this review.",
+      "evidence_ids": [
+        "archive"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain each original sensor cohort and response-specific retrospective analysis population, including the source longitudinal and elimination-containing-dendrite selection. Exact likelihood-fit rows, mouse/dendrite/spine memberships and repeated observations are not bound.",
+      "evidence_ids": [
+        "cohort",
+        "likelihood"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The reported likelihood-based term comparison fits the source response data; no held-out predictive split is specified. Leave-one-mouse-out fate prediction is an extension, not this source fit comparison.",
+      "evidence_ids": [
+        "likelihood",
+        "cohort"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Observed activity/coactivity responses, structural stability categories, interspine distances and source session/area terms as applicable, with animal grouping. Preserve the paper response and model-specific covariates.",
+      "evidence_ids": [
+        "likelihood"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source alignment, fluorescence event thresholds and normalized coactivity define responses before fitting; exact native transformations, missing-value handling and model-specific analysis-row exclusions remain unverified.",
+      "evidence_ids": [
+        "paper",
+        "cohort",
+        "likelihood"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source criterion is model log-likelihood. Its exact marginal/conditional or restricted definition, MATLAB fitlme ML-versus-REML setting, retained constants, response transform and parameterization are unresolved.",
+      "evidence_ids": [
+        "likelihood"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source groups repeated measurements by animal, with different response models. The exact likelihood computation over observations/clusters and comparison across model variants is unrecovered; do not invent a pooled likelihood across response families.",
+      "evidence_ids": [
+        "likelihood",
+        "cohort"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original activity/coactivity-response model log-likelihood comparison, pending exact source model-set and likelihood qualification",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The source states that model terms were chosen by log-likelihood comparison, but numerical likelihoods, complete candidate/final model set and exact scoring conventions were not recovered. Published effect sizes and p-values do not fill this baseline.",
+      "evidence_ids": [
+        "likelihood"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author MATLAB fitlme analyses are documented and source code/data are deposited at Zenodo 10108836; exact model-selection implementation, fitting mode and authentic rerun likelihoods remain unrecovered. The local fate-prediction logistic models are not author baselines.",
+      "evidence_ids": [
+        "likelihood",
+        "archive"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Recover the original admissible model set and complexity policy before defining a meaningful fit improvement. Increasing unpenalized likelihood by adding unconstrained parameters is not sufficient; no new penalty or universal margin is invented.",
+      "evidence_ids": [
+        "likelihood"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "After recovering the original likelihood and fitted model comparison, predeclare a valid matched comparison rule accounting for nesting, parameter counts, random-effect structure and animal dependence. No likelihood-ratio calibration or superiority threshold is asserted here.",
+      "independent_unit": "Mouse; dendrites, paired spines and repeated session observations remain grouped.",
+      "rationale": "Dependence and model complexity affect interpretation of likelihood gains; the source significance contrasts are not candidate-superiority tests or held-out validation.",
+      "evidence_ids": [
+        "likelihood",
+        "cohort"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact original activity/coactivity response, candidate/final model formulas, fixed/random effects, analysis rows, transforms and source model-comparison procedure.",
+      "Recover numeric source likelihoods and an author replay under the same ML-versus-REML setting, likelihood definition, optimization conventions and admissible complexity; reject incomparable likelihoods.",
+      "Preserve the original response and data population. Do not substitute elimination-fate prediction, new held-out folds or a pooled response-family metric.",
+      "Freeze the candidate and comparison rule before final evaluation; justify a meaningful likelihood gain with valid uncertainty and complexity safeguards under fixed access/resource budgets.",
+      "Do not count stronger p-values, larger biological contrasts, numerical reconstruction, unconstrained parameter addition or beating the local Brier models as paper superiority."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA fit or prediction comparison is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending recovery of the original source likelihood-model comparison. A later admitted episode must distinguish source same-sample fit selection from any predictive validation extension.",
+    "candidate_freeze": "Freeze source response/model-set bindings, admissible complexity, likelihood/fit convention, analysis population and candidate method before a final comparison; access and resource budgets must also be fixed.",
+    "final_evaluation": "Unavailable until numeric source baseline, author replay and a same-task likelihood evaluator are qualified. Evaluation must preserve source model-comparison conditions and make no held-out predictive claim.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published likelihood results, reproduced author fitlme results and candidate scores must be separate. Preserve existing descriptive reconstructions and local elimination-fate Brier evaluator as calibration/extension only."
+  },
+  "blocking_issues": [
+    "Original candidate/final response-model set, selection procedure, parameter counts and admissible complexity are not recovered.",
+    "MATLAB fitlme ML-versus-REML choice, exact likelihood definition/normalization and response-specific aggregation remain unresolved.",
+    "Numeric original likelihoods, complete analysis-row bindings and competent author replay are missing.",
+    "No qualified source likelihood evaluator, meaningful-effect/uncertainty rule or fixed episode budgets is established.",
+    "The local next-visit elimination Brier task changes the response and risk set and cannot fill these source-baseline gaps."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 and generated controls. Its equal-mouse elimination-fate Brier comparison is a locally authored prediction extension, not the paper's activity/coactivity-response likelihood comparison, reproduced author baseline or paper-win grader."
+  }
+}

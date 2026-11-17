@@ -1,0 +1,208 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-018",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper combines descriptive OFC/state-inference results with native neural-model comparisons. The registered complete-paper design identifies a genuine held-neuron conditional-prediction branch, but its exact native split, score, author producer and numerical baseline are unresolved. The existing 60/20/20 future-time prediction policy is explicitly a prospective extension and cannot be used to claim surpassing the paper on its original task.",
+  "source_paper": {
+    "title": "The orbitofrontal cortex updates beliefs for state inference",
+    "url": "https://doi.org/10.1016/j.neuron.2025.10.024"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0896627325008050",
+      "locator": "Published article indexed abstract and Figure2 text; DOI10.1016/j.neuron.2025.10.024",
+      "supports": "Rat temporal-wagering state-inference and OFC-inactivation biological scope; no recovered native prediction score."
+    },
+    {
+      "id": "preprint",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11565993/",
+      "locator": "Preprint version history; Abstract; Results",
+      "supports": "Related author manuscript describes latent-dynamics study; fetched versions differ in title/content, so it cannot silently replace final journal protocol."
+    },
+    {
+      "id": "deposit",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/16997337",
+      "locator": "Versionv1 Description and Files",
+      "supports": "Behavior, inactivation and multi-region electrophysiology in expert/naive rats; MAT/CSV archive and author code route."
+    },
+    {
+      "id": "tensor",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/OFC_cognitiveStrategies/analysis/Electrophysiology/makeTensor_TCA.m",
+      "locator": "makeTensor_TCA and sessTensor, static retained original source",
+      "supports": "Loads SU/S, excludes violation trials, requires at least five units/four block transitions, z-scores and averages event/block tensor; this is a descriptive tensor producer, not held-neuron prediction."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-018/task.json",
+      "locator": "primary_outputs; evaluation; improvement",
+      "supports": "Registered expert/naive OFC state-inference, behavior and TCA scope; held-out-session decoding was a proposal."
+    },
+    {
+      "id": "design",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-018/implementations/registered-runtime/design/SCIENTIFIC_DESIGN.md",
+      "locator": "Native reproduction and methods conformance; Prospective improvement design choices; Qualification gates",
+      "supports": "Current complete-paper design distinguishes native conditional reconstruction from proposed60/20/20 prediction; native hLDS producer/folds and numeric qualification missing."
+    },
+    {
+      "id": "discrepancies",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-018/implementations/registered-runtime/design/SOURCE_DISCREPANCIES.json",
+      "locator": "D13,D14,D15,D17,D25",
+      "supports": "Explicit source holes, cohort mappings and native model-comparison uncertainty; these are audit claims, not independently verified paper scores."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Preserve original expert/naive OFC state inference, latent dynamics and behavioral evidence. Native held-neuron conditional reconstruction is a possible ordered comparison in the paper, but its final-article scoring contract is not directly recovered; it cannot be replaced by future-time forecasting.",
+      "evidence_ids": [
+        "paper",
+        "preprint",
+        "registration",
+        "design"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo16997337 v1 OFC_cognitiveStrategies.zip (author-reported md5a51c7736589b12343d41ac4360b60996), containing behavior/inactivation MAT/CSV and expert/naive multi-area recordings.",
+      "evidence_ids": [
+        "deposit"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Expert/naive and brain-area roles must retain original animal/session/unit mapping; complete-paper audit records separate behavior, muscimol, TCA and latent-session denominators, including a neuronal-count discrepancy. Dataset metadata verifies these roles but not a full native scoring roster.",
+      "evidence_ids": [
+        "deposit",
+        "discrepancies",
+        "design"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Exact original held-time/held-neuron partition and decoder folds remain unavailable. The existing chronological60/20/20 policy is new benchmark design, not the paper split; target neurons may have training observations in native conditional reconstruction.",
+      "evidence_ids": [
+        "design",
+        "discrepancies"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Author deposit supplies session-level sorted neural observations and task/behavior structures; original tensor code loads SU and S. Saved DecoderOutput, ATI or latent/model products must not be substituted for independently regenerated predictions.",
+      "evidence_ids": [
+        "deposit",
+        "tensor",
+        "design"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "TCA source preprocessing is directly inspected, including all-trial z-scoring and event/block averaging; hLDS square-root count transforms, timing, smoothing/filtering and exact source dependencies require separate native binding. TCA semantics cannot substitute for prediction-model semantics.",
+      "evidence_ids": [
+        "tensor",
+        "design",
+        "discrepancies"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Recover the native held-neuron prediction loss and complete normalization/support. Prospective MSE of square-root50ms counts in the repository is not independently verified as the paper score; MI, ATI, TCA fit and p-values are distinct endpoints.",
+      "evidence_ids": [
+        "design",
+        "discrepancies"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original neuron/session/animal score aggregation and cohort inclusion are not recovered. Prospective bins→neurons→sessions→rats equal weighting must not be represented as the source aggregation.",
+      "evidence_ids": [
+        "design",
+        "discrepancies"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Native hLDS held-neuron conditional-prediction metric unresolved; prospective future-time MSE is not an admissible substitute.",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No numeric final-paper native prediction baseline recovered. Behavioral and inactivation effects, MI and ATI values cannot stand in for prediction performance.",
+      "evidence_ids": [
+        "paper",
+        "design",
+        "discrepancies"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The retained original tensor loader does not implement the missing hLDS/held-neuron evaluation. No qualified author prediction rerun is available.",
+      "evidence_ids": [
+        "tensor",
+        "design",
+        "discrepancies"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Source prediction metric, scale and variance must be recovered before a scientifically meaningful gain is fixed.",
+      "evidence_ids": [
+        "design",
+        "discrepancies"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Once original comparison is recovered, predeclare paired inference respecting animal/session dependence and every native evaluation unit; no significance threshold is assumed.",
+      "independent_unit": "Animal, with repeated sessions/neuron/time bins nested; native role mapping still unresolved.",
+      "rationale": "Many neurons or bins do not supply independent biological replication; new rat-weighted aggregation cannot silently replace the original score.",
+      "evidence_ids": [
+        "deposit",
+        "design"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and authenticate the final-paper native prediction producer, original split, exact inputs/cohorts, metric and numerical baseline.",
+      "Keep descriptive belief/TCA/MI/ATI and intervention reproduction separate from prediction performance.",
+      "Compare candidate with the qualified author method under identical original information availability, target support and aggregation.",
+      "The repository60/20/20 prospective protocol, forecasting, new animal holdouts or different ordinary-LDS dimensionality are separately reported extensions.",
+      "Freeze a meaningful gain, uncertainty rule and budgets before evaluation; no paper win while source anchors remain unresolved."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is established by the descriptive paper, source design or prospective benchmark policy.",
+      "evidence_ids": [
+        "design"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Source-recovery stage only. Future iteration needs the original prediction-task contract and train/validation access; proposed prospective branches remain extensions until independently admitted.",
+    "candidate_freeze": "After native recovery, freeze fitted program, model selection, latent convention, information cutoff, cohort and aggregation before original final evaluation.",
+    "final_evaluation": "Run source-comparable native scoring with a qualified author comparator on complete original support. No prospective60/20/20 score can authorize a same-task paper claim.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Separate printed source results, source-faithful author rerun and newly authored prospective hLDS/LDS controls. Neither TCA reconstruction nor a local mean baseline is the paper-performance comparator."
+  },
+  "blocking_issues": [
+    "Native prediction target, folds, complete scoring recipe and numeric baseline not recovered.",
+    "Final article/preprint version and missing hLDS/held-neuron producers remain unresolved.",
+    "Animal/session/role mapping and original aggregation unqualified.",
+    "Working same-task evaluator, meaningful effect, valid uncertainty and concrete episode budgets absent."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve original author tensor source, complete-paper runtime design and prospective prediction machinery. Their reproduction/calibration outputs and new-split extension gains are not paper-win evidence."
+  }
+}

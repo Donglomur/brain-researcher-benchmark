@@ -1,0 +1,174 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-017",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The registration scopes recorded offline decoding, which is ordered, but its exact source-paper offline baseline and original folds/session mapping are unrecovered. The published online fine-tuned human-control headline is incompatible with replay scoring and cannot be the offline victory threshold.",
+  "source_paper": {
+    "title": "EEG-based brain-computer interface enables real-time robotic hand control at individual finger level",
+    "url": "https://www.nature.com/articles/s41467-025-61064-x"
+  },
+  "evidence": [
+    {
+      "id": "finger-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-61064-x",
+      "locator": "Figure 2A; Methods: Offline analysis and Online decoding; Discussion",
+      "supports": "Offline versus online comparisons, selected participant cohort and online headline result."
+    },
+    {
+      "id": "finger-functions",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/Functions.py",
+      "locator": "generate_paths, load_and_filter_data, train_models",
+      "supports": "Original source-folder selection, trial-first 80/20 validation, EEG preprocessing and native EEGNet training/fine-tuning route."
+    },
+    {
+      "id": "finger-params",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/main_model_training.py",
+      "locator": "lines 21\u201358, params and modeltype routing",
+      "supports": "Subject/session, MI/ME, two-/three-class separation and window/resampling/filter parameters."
+    },
+    {
+      "id": "finger-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-017/docs/initial-evaluator-v1.md",
+      "locator": "Implemented scope and prospective decisions; Evidence and retained limits",
+      "supports": "The local same-Finetune-trial spectral replay differs from the original online Base-versus-Finetune human-adapting design; participant-macro hard voting and bootstrap policies are prospective construction choices."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-params"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Published Finger-BCI Figshare data are identified; complete source-member-to-MAT-to-evaluation provenance and original offline analysis membership remain unqualified.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The final source cohort is 21 selected BCI responders, not all 49 recruits. Preserve the original MI/ME and binary/ternary participant/session scope.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-params"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper offline analyses include five-fold decoding and retrospective session-model comparisons. Native training uses trial-first 80/20 validation; these are distinct splits. Exact figure-specific folds and source-session mappings remain unbound.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions",
+        "finger-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "128-channel EEG and permitted training/calibration labels, with source task condition. Evaluation targets and recorded online predictions/probabilities are excluded from candidate input.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Native code uses CAR, 1-second windows at 128-sample stride from 1024 Hz, resampling to 100 Hz, causal fourth-order 4\u201340 Hz Butterworth filtering and per-window channel z-scoring. Binary fine-tuning draws both Base class folders before retaining thumb/pinky.",
+      "evidence_ids": [
+        "finger-functions",
+        "finger-params"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source offline classification accuracy needs its figure-specific window/trial rule recovered. Online cumulative finger decisions and a local hard-vote replay score are not interchangeable.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions",
+        "finger-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original fold/session/participant weighting for the chosen offline panel is not yet joined to published numbers; the local participant-macro paired replay aggregation is prospective.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original figure-specific offline finger-classification accuracy",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The published 80.56% binary MI and 60.61% ternary MI headline values concern online fine-tuned control. They are not an offline replay baseline. No exact matching numeric source offline comparator is recovered; value is null.",
+      "evidence_ids": [
+        "finger-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified rerun of the original author comparison is established. Public source and construction code are a recovery route, not a measured comparator.",
+      "evidence_ids": [
+        "finger-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect must be justified for this original endpoint after recovering its numerical baseline and measurement variability; no generic percentage or significance-only victory is admitted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for the complete original panel after recovering source-level dependence and replication; no final decision rule is yet qualified.",
+      "independent_unit": "Participants, preserving all dependent runs, sessions and overlapping windows within participant; exact original repeated-measures comparison still requires recovery.",
+      "rationale": "Changing the evaluation partition to simplify inference would define a separate extension.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Recover a complete original offline paper panel, exact folds/session membership, decision rule and numeric EEGNet baseline before enabling same-task comparison.",
+      "Match imagery/execution, class roster, complete original participants, chronological training and source-prescribed calibration inputs; keep every trial\u2019s overlapping windows together.",
+      "Compare against the source EEGNet training and fine-tuning procedure under identical allowed input and tuning budgets; nearest-centroid spectral references are calibration only.",
+      "Do not call improved replay accuracy a gain over the online human-adapting Base-versus-Finetune experiment.",
+      "Resolve S07 session-5 missing events without silently shrinking the original panel; predeclare task-specific effect and participant-level uncertainty. New participant-transfer splits are extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Surpassing this source paper is distinct from current SOTA; no contemporary competitor survey or SOTA result is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After recovering the chosen original offline figure panel, iterate on its permitted participant/session training data and trial-grouped validation feedback. Respect MI/ME and binary/ternary source routes, including the two Base-folder route for binary fine-tuning. Keep overlapping windows within their original trial and log any preprocessing, EEGNet or calibration change without using final-session labels.",
+    "candidate_freeze": "Freeze the exact offline figure estimand, original participant/session/run roster and exclusions, source MAT conversion, original folds, source-folder calibration access, EEG preprocessing, window-to-trial rule, EEGNet selection/fine-tuning recipe, aggregation and budgets before final scoring. Resolve missing S07 events before freezing the denominator.",
+    "final_evaluation": "Evaluate the frozen candidate and recovered native EEGNet baseline on the same complete original offline panel, retaining every condition and participant result. A same-Finetune-trial replay gain, participant-transfer split or changed calibration allowance is a separate extension. No offline output can establish improvement over the online human-control headline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use the figure-matched original offline EEGNet result and qualified rerun as distinct comparators. Keep the online binary/ternary headline scores, local nearest-centroid spectral reference, calibration-augmented replay reference and prospective participant-macro/bootstrap diagnostics separately labeled; none substitutes for the missing original offline baseline."
+  },
+  "blocking_issues": [
+    "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
+    "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
+    "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
+    "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
+    "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The initial evaluator\u2019s spectral nearest-centroid and calibration-augmented references use a prospective paired replay protocol. Hard voting, participant means, Brier diagnostics and construction bootstrap intervals cannot certify an original-paper improvement; historical materials remain intact."
+  }
+}

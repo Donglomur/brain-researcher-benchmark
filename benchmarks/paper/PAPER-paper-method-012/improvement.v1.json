@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-012",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "MINT contains original ordered synthetic-estimator and held-out population-decoder comparisons, so the paper is not categorically ineligible. The current CA1 direct-information reference is descriptive calibration only. The exact original improvement branch, numeric author baseline, binning and fold correspondence must be recovered before admission; larger empirical direct MI or stronger significance cannot substitute for that recovery.",
+  "source_paper": {
+    "title": "MINT: A toolbox for the analysis of multivariate neural information coding and transmission",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934"
+  },
+  "evidence": [
+    {
+      "id": "mint-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "Design and implementation; Results: Computing the role of interactions between neurons in information encoding; Figure 2C caption; Data availability and S1 Data",
+      "supports": "Identifies direct pair information, information decompositions and separate population-decoder information; CA1 has 11 sessions, 43–104 neurons and 36,158 simultaneous pairs; S1 Data is the empirical source."
+    },
+    {
+      "id": "ca1-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/panzerilab/MINT_figures/a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m",
+      "locator": "Options lines 1–25; pair loop lines 33–64; population decoder lines 66–123",
+      "supports": "Uses Position and R_neuron_binned, fixed labels, response cap 4 and 30 shuffle corrections; the direct MI call is commented out. Population SVM folds are a separate computation, not a truth target for direct MI."
+    },
+    {
+      "id": "mint-mi",
+      "kind": "author_code",
+      "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/src/MI.m",
+      "locator": "MI function and requested outputs",
+      "supports": "Author implementation route for mutual information and bias correction; source availability does not establish true information in empirical CA1 data."
+    },
+    {
+      "id": "local-reference",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-012/docs/initial-evaluator-v1.md",
+      "locator": "Computational contract; Primary source reconciliation; Validation and remaining work",
+      "supports": "Local implementation computes fixed-bin MI, QE and null diagnostics and explicitly disclaims native equivalence, empirical reproduction and inferential calibration."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Select and recover an original source performance branch: information recovered by a population decoder from held-out CA1 responses (Figure 2C), or estimator accuracy against source-defined known truth in the original simulations. Do not optimize the descriptive direct-pair MI value. These source branches remain distinct and no scalar mixture or new endpoint is selected here.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original Figure 2C CA1 calcium recordings are supplied as S1 Data, DOI 10.1371/journal.pcbi.1012934.s002. Source Figure 2A/B separately uses simulated 20-neuron responses to two stimuli under defined correlation structures. The selected performance branch and complete source-version/generator binding are unresolved; no replacement dataset is introduced.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 2C has 11 recording sessions with 43–104 neurons and 36,158 pairs. Figure 2A/B instead concerns source simulations of 20 neurons responding to two stimuli, with simulation repeats. Exact animal/session identity or simulation-case selection must follow the eventual original performance branch; neuron pairs are not independent animals.",
+      "evidence_ids": [
+        "mint-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original Figure 2C population decoding reports five trial folds, while the pinned CA1 figure wrapper specifies twofold SVM and optimization options. Resolve this discrepancy and recover exact trial partitions before a same-task comparison. Direct MI uses empirical observations without a supervised split; those descriptive outputs cannot stand in for held-out decoder performance.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "For the original decoder branch use the same CA1 neural responses and spatial-position labels with source training/test access. Synthetic estimator comparisons must retain the exact author generator, stimulus/response distributions and sample counts, exposing only source-allowed sampled observations to the estimator. Protected evaluation truths are not estimator inputs.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Freeze original calcium discretization, spatial bins and observation ordering. The inspected source disables rebinning, caps response labels at four and uses shuffSub with 30 shuffles; the local record documents unresolved binning/source-schema correspondence.",
+      "evidence_ids": [
+        "ca1-figure",
+        "local-reference"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "The source population branch computes information in the held-out SVM confusion matrix, I(S;S_hat) in bits; this lower bound is distinct from direct empirical pair MI. A source simulation accuracy branch needs its original known-truth target and error definition. Recover a single branch-specific ordered metric and numeric author comparator rather than treating larger direct MI as accuracy.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure",
+        "mint-mi"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 2C population information is summarized across 11 sessions and five trial folds, separately from 36,158 pairwise direct-information estimates; source simulations have their own repetition/fold reductions. Exact per-fold outputs and selected branch aggregate are not recovered. No pair/fold count is promoted to independent-animal uncertainty.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original source held-out population-decoder information or known-truth estimator error; branch and exact baseline unresolved",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper presents original SVM population-information and simulated estimator comparisons, but an exact numeric author performance value with selected branch/fold/generator provenance is not recovered. CA1 direct MI estimates remain descriptive, not scores to maximize.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No source-matched population-decoder or original known-truth performance rerun is established. The local fixed-bin MI/QE/null code is an independent calibration reference; the author direct-MI call is commented out and the population-fold choices differ from the paper.",
+      "evidence_ids": [
+        "ca1-figure",
+        "local-reference"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful gain must be justified for the selected original held-out decoder information or estimator-error target after recovery of source score variability. No margin can be assigned to raising an unknown empirical direct-MI estimate.",
+      "evidence_ids": [
+        "mint-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "After branch recovery, predeclare paired candidate/author contrasts on identical source folds or independent original simulation draws, with session/animal clustering and original temporal dependence preserved. No confidence threshold is yet admitted.",
+      "independent_unit": "Biological animal/session clusters for CA1; genuinely independent source simulation repetitions for simulation claims. Overlapping neuron pairs, folds, sampled time points and shuffles are not automatically independent.",
+      "rationale": "Source descriptive pair/fold summaries do not resolve valid superiority uncertainty. Synthetic known truth and empirical information lower bounds answer separate questions.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure",
+        "local-reference"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and freeze an original paper performance branch, its complete source data/generator, preprocessing, split, ordered metric, reduction and numeric author baseline.",
+      "For Figure 2C decoding, retain the original spatial-decoding task and neural population, resolve paper fivefold versus wrapper twofold options, and compare held-out confusion-matrix information on identical folds.",
+      "For a source simulation estimator branch, retain its exact original distributions, sample sizes and known-truth target; new simulation families are extensions, not source-paper wins.",
+      "Require meaningful gain and valid uncertainty against the reproduced author performance; do not replace it with the local direct-MI/QE/null reference.",
+      "Larger direct empirical MI, stronger p-values, lower variance or reconstruction agreement alone cannot establish a paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim; surpassing this source paper and surpassing later methods are separate source-verified comparisons.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending selection and recovery of the original source performance branch. Thereafter allow training/validation feedback for the source decoder or estimator while keeping CA1 descriptive MI and null reconstruction separate.",
+    "candidate_freeze": "Freeze branch identity, method, binning, source folds/generator, tuning rule and complete evaluation denominator before final held-out labels or simulation truths are opened.",
+    "final_evaluation": "Evaluate candidate and reproduced author method on identical original held-out decoder folds or original known-truth simulation cases, reporting the selected source metric and uncertainty. Keep all direct-MI reconstruction outputs calibration-only.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Native MINT source performance must be separately reconstructed for the selected original branch; local independent direct-MI values and repaired source calls cannot supply a paper-win baseline."
+  },
+  "blocking_issues": [
+    "Original source performance branch and exact numeric author baseline not frozen or recovered.",
+    "Paper Figure 2C fivefold population decoding conflicts with pinned source twofold settings; original trial identities and optimization recipe unresolved.",
+    "Original binning, CA1 payload identity and complete animal/session mapping remain unresolved; simulation branch would instead require original generator and known-truth/error correspondence.",
+    "Local implementation covers descriptive direct MI/QE/null diagnostics, not a qualified source-native performance comparator.",
+    "Task-specific meaningful effect, valid uncertainty, concrete budgets and a working source-matched evaluator remain unqualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain MI/QE/null estimator, MAT preparation, source discrepancies and historical reproduction materials. Their numerical and shuffle checks are not a paper-win evaluator."
+  }
+}

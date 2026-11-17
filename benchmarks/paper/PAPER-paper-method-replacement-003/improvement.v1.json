@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The C4 classification task is ordered, but the complete original confidence/coverage baseline and authenticated original panel are not recovered. The implemented animal-grouped target-blind successor changes the historical comparison and cannot establish a same-task win.",
+  "source_paper": {
+    "title": "A deep learning strategy to identify cell types across species from high-density extracellular recordings",
+    "url": "https://doi.org/10.1016/j.cell.2025.01.041"
+  },
+  "evidence": [
+    {
+      "id": "c4-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12191827/",
+      "locator": "Figures 5C\u2013F and 6; STAR Methods, Cell-type classification",
+      "supports": "Original LOO classification, confidence/coverage, external expert-label comparison and paper/source identity."
+    },
+    {
+      "id": "c4-deep",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_deep_classifier.py",
+      "locator": "cross_validate, lines 685\u2013826; ensemble_prediction",
+      "supports": "LOO versus five-fold choices, ten runs, probability averaging and training-only oversampling."
+    },
+    {
+      "id": "c4-dataset",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/dataset_init.py",
+      "locator": "LABELLING; WAVEFORM_SAMPLES; prepare_classification_dataset",
+      "supports": "Class ontology and waveform/ACG preparation route; current loader is not a verified original data manifest."
+    },
+    {
+      "id": "c4-features",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/feat.py",
+      "locator": "h5_feature_extraction, lines 1528\u20131537",
+      "supports": "Engineered-feature baseline reads the target class and applies a 10 ms refractory edit specifically to PkC_cs; this requires separate calibration labeling."
+    },
+    {
+      "id": "c4-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/TARGET_BLIND_PROTOCOL.md",
+      "locator": "Scope and preserved estimands; Why the literal baseline remains separate; Evidence and qualification",
+      "supports": "The local source explicitly preserves literal unit-LOO reconstruction separately from its inactive grouped target-blind successor and leaves original scientific qualification unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Five-class cerebellar cell-type prediction; external mouse and macaque expert-label agreement remains a separate panel.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Public C4 HDF5 release is identified, but exact paper unit/source and checkpoint membership are not authenticated here.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset",
+        "c4-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "202 ground-truth classifier units; three granule cells are excluded from classification. Preserve full external mouse/macaque panels and distinguish optogenetic truth from expert labels.",
+      "evidence_ids": [
+        "c4-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original classifier uses leave-one-unit-out with ten initializations per unit; external predictions average all 2020 members. Animal-held-out nesting is a separate extension.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Waveform, 3D autocorrelogram and cerebellar layer; no-layer ablation is a distinct original condition.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover exact QC, alignment, VAE exposure and original checkpoint/configuration lineage. The label-conditioned engineered feature route cannot be presented as target-blind prediction.",
+      "evidence_ids": [
+        "c4-dataset",
+        "c4-features",
+        "c4-registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-class correct predictions among retained units, together with retained fraction. Confidence is the largest mean class probability divided by the second largest; original threshold is 2 and threshold-0 results are also reported.",
+      "evidence_ids": [
+        "c4-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve all classwise confusion/coverage and external population results; a single macro-score and ordered joint acceptance rule have not been source-recovered.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original classwise accuracy at matched retained coverage, with full external-validation panel",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The text reports greater-than-95% headline accuracy and selected classwise values, but not an authenticated complete numeric Fig. 5/6 baseline suitable for one scalar threshold. Do not substitute 0.95 for the full published comparator.",
+      "evidence_ids": [
+        "c4-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified rerun of the original author comparison is established. Public source and construction code are a recovery route, not a measured comparator.",
+      "evidence_ids": [
+        "c4-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect must be justified for this original endpoint after recovering its numerical baseline and measurement variability; no generic percentage or significance-only victory is admitted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for the complete original panel after recovering source-level dependence and replication; no final decision rule is yet qualified.",
+      "independent_unit": "Biological animal/recording groups must be recovered; unit-LOO predictions and ten model initializations are dependent. External mouse and macaque cohorts require separate treatment.",
+      "rationale": "Changing the evaluation partition to simplify inference would define a separate extension.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Recover the complete original class/confidence/coverage outputs and their denominators; define an ordered comparison before candidate results are observed.",
+      "Retain the original LOO and external population regimes with matched input and VAE exposure; compare accuracy without obtaining a gain by discarding more units.",
+      "Use the full released author comparator, preserving disclosure of label-conditioned engineered-feature preprocessing; do not replace it with the local grouped reference.",
+      "Report descriptive behavioral analyses separately; changed animal/laboratory splits or a target-blind preprocessing successor cannot count as surpassing the original result.",
+      "Require a task-justified improvement and valid biological-dependence uncertainty, not repeated-seed significance."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Surpassing this source paper is distinct from current SOTA; no contemporary competitor survey or SOTA result is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Once the original C4 panel and exposure policy are recovered, iterate using only each original LOO fit\u2019s training units and separately declared development feedback. Keep all observations of the left-out unit out of fitting and preserve the permitted unlabeled VAE corpus. Log classifier, probability calibration and confidence-rule changes without feeding external mouse/macaque evaluation labels into selection.",
+    "candidate_freeze": "Before final LOO and transfer scoring, freeze the five-class ontology, complete unit roster, original QC and input conditions, VAE membership and initialization, per-fold fit recipe, ten-member probability reduction, confidence/coverage comparison, and budgets. The confidence threshold cannot be changed after seeing final labels to discard errors.",
+    "final_evaluation": "Produce the complete original 202-unit LOO and external expert-population outputs with the recovered source recipe; report every class\u2019s accuracy and retained fraction at the original confidence conditions. Admit victory only under a predeclared ordered comparison that prevents selective coverage gains. Grouped animal-held-out results are a separately named extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Calibrate against the released author deep-classifier and its full confidence/coverage results. Preserve any label-conditioned engineered-feature baseline as a disclosed literal reconstruction; the local target-blind grouped successor cannot replace the paper comparator. Published figures, author reruns and prospective grouped references retain separate identities."
+  },
+  "blocking_issues": [
+    "Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound.",
+    "Full original QC/preprocessing and current-source-to-paper equivalence require qualification.",
+    "Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted.",
+    "No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The existing C4 source contains literal LOO reconstruction and an inactive prospective grouped target-blind route. Both remain intact; source checks and probability-capture engineering do not demonstrate improved classification."
+  }
+}

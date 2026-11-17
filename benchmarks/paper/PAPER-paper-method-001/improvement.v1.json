@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper supplies an estimator-comparison problem, but the final-paper numeric risk baseline, complete source panel correspondence and original resampling recipe are not recovered. The existing one-session relative-RMSE grader measures reconstruction of authored reference outputs, not estimator improvement. Biological full-data participation ratio is itself an estimate; increased dimensionality or reduced variation alone cannot establish improved accuracy.",
+  "source_paper": {
+    "title": "Estimating Dimensionality of Neural Representations from Finite Samples",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/9768645621c2cd6c5b851a06205b92cf-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "final-paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/9768645621c2cd6c5b851a06205b92cf-Paper-Conference.pdf",
+      "locator": "Sections 2, 4.2.1, 4.2.4, 4.3–4.4; Figures 1–2; Appendix C.1 and Figure S1",
+      "supports": "Defines participation ratio, noise and finite-population assumptions, known-truth linear simulation, biological convergence comparison, and separate mean-of-ratios versus ratio-of-means reductions."
+    },
+    {
+      "id": "stringer-source",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/badooki/dimensionality/f18de35818502744329f7c92bb17a80af8f48549/legacy/biology/on_Stringer.ipynb",
+      "locator": "Data loading/normalization cell; Q and P sweep cells; plotting cells",
+      "supports": "Lists seven Stringer sessions, selects natImgFN[3], removes blank images and 32 spontaneous PCs, centers neurons, uses paired repeat trials and 100 subsampling iterations; emitted summary choices must be reconciled with final-paper 50 Stringer draws."
+    },
+    {
+      "id": "legacy-runtime",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-001/implementations/registered-runtime/manifest.json",
+      "locator": "scope, grading, limits, program_execution.scope",
+      "supports": "The existing grader is one exposed session, 19 panels and 76 estimator records; full_ratio_relative_RMSE is reconstruction error with no scientific success threshold."
+    },
+    {
+      "id": "full-programme",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-001/implementations/dimensionality-programme/programme/README.md",
+      "locator": "Complete dimensionality programme; Released Majaj branch; qualification limits",
+      "supports": "Preserves all four biological branches, seven Stringer sessions and synthetic/theoretical obligations. Its BUILD_ONLY programme is not qualified and cannot be narrowed to the local reconstruction checkpoint."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate the participation ratio gamma=(tr K)^2/tr(K^2) of the specified neural representation under finite stimulus and neuron sampling, including the source two-repeat noise correction. Preserve the original estimator regimes and biological panels; reproducing A, B or gamma numerically is calibration.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Final Figure 2 uses Stringer mouse V1 calcium, Majaj macaque IT spiking, Papale/TVSD macaque V4 LFP and Hebart/THINGS human IT fMRI. Source-to-version/file/ROI correspondence for every final panel remains unresolved; the legacy Stringer notebook is only one pinned route.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source",
+        "full-programme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The pinned Stringer notebook lists seven sessions and selects index 3; it does not establish that this is the displayed final Figure 2 session. Preserve all registered biological cohorts and do not infer cross-animal evidence from the one-session grader.",
+      "evidence_ids": [
+        "stringer-source",
+        "legacy-runtime",
+        "full-programme"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The original experiment subsamples stimulus rows and neuron columns of the same recording, with paired repeat-trial rows, rather than a new prediction train/test split. Final Appendix C.1 specifies 50 Stringer, 500 Majaj, 250 TVSD and 50 THINGS draws; the pinned Stringer notebook uses 100. Exact panel grids and source-version correspondence must be recovered before comparison.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Candidate receives the same finite P-by-Q response observations and allowed repeat trials as the author estimator; no unobserved full-population responses or known simulation truth may enter the estimator. The source noise correction uses two trial matrices with identical stimulus/neuron identities.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Stringer source excludes blank stimuli, scales responses using spontaneous mean and standard deviation plus 1e-6, removes 32 spontaneous PCs, and centers each neuron before repeat alignment. Exact historical projector/native-backend and final-panel correspondence, plus other modality preprocessing, remain unresolved.",
+      "evidence_ids": [
+        "stringer-source",
+        "full-programme"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source simulations assess proximity to known PR (Figure 1: d=50, additive-noise variance 0.2; P sweep at Q=100 and Q sweep at P=200). Biological Figure 2 assesses convergence to full-data estimates, explicitly not known biological truth. A source-matched numeric estimator-loss criterion and baseline have not been recovered; local reference-output relative RMSE is not that criterion.",
+      "evidence_ids": [
+        "final-paper",
+        "legacy-runtime"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Appendix C.1 and Figure S1 distinguish average of A/B from ratio of averaged A and B; their bias differs. The legacy code mixes nanmedian/nanmean and standard-deviation display choices. Freeze original per-panel reduction and retain nonfinite/failure denominators before any improvement claim.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Source-matched finite-sample participation-ratio estimation loss; exact numeric final-paper reduction unresolved",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The truth gamma=50 in Figure 1 is a target, not the source estimator performance score. Final Figures 1–2 provide curves; no verified numeric author loss with exact panel/reduction provenance has been recovered. Biological plateau values cannot be relabeled true PR.",
+      "evidence_ids": [
+        "final-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The local 19-panel/76-record Stringer reference reconstructs a pinned computation. It is neither a rerun of every final source panel nor a calibrated estimation-risk baseline against independently known truth.",
+      "evidence_ids": [
+        "legacy-runtime",
+        "full-programme"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful reduction in estimator error must be defined for the recovered original loss and sampling/noise regimes, with bias/variance and nonfinite behavior protected. No universal PR increment, curve-flatness target or relative-RMSE reconstruction margin is justified.",
+      "evidence_ids": [
+        "final-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired estimator contrasts over the original simulation/resampling design after recovering its exact draw counts and final reductions; retain biological-session clustering and all failures. No interval or significance threshold is yet admitted.",
+      "independent_unit": "Independent generated populations/draws for known-truth simulations; recording/animal clusters for biological conclusions, not reused cells or overlapping subsamples.",
+      "rationale": "Resampling a fixed recording quantifies conditional variability, not additional animals; ratio uncertainty and shared repeat trials must remain explicit.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover final-paper source baseline and exact P/Q/noise grids; compare candidate and author estimator with identical observed matrices and preprocessing.",
+      "Demonstrate a predeclared meaningful improvement in original estimator accuracy with valid uncertainty; agreement with the local author-formula outputs is only reproduction.",
+      "Retain all originally claimed biological branches and required controls. A single Stringer session or selected P/Q point cannot establish the full-paper claim.",
+      "Do not treat full-data biological PR as known truth, or a constant/biased estimator as superior because it is less sample-sensitive.",
+      "New noise families, new datasets or newly selected splits must be labeled extensions and cannot substitute for the original comparison."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim; surpassing this source paper and surpassing later methods are separate source-verified comparisons.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source resolution. Once admitted, allow estimator development and diagnostics on the declared original development regimes, with paired author/candidate feedback; source curves remain exposed historical evidence.",
+    "candidate_freeze": "Seal estimator code, numerical precision, all preprocessing, tuning choices, failure policy and source-compatible evaluation plan before evaluator-only target calculations or final assessment.",
+    "final_evaluation": "Evaluate the frozen candidate and recovered author estimator on the complete original claim-specific grid and cohorts; report known-truth estimation error separately from empirical convergence diagnostics and reconstruction checks.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author final-paper baseline and native-route replay must be recorded separately from existing authored reconstruction references. Retain legacy grader and full BUILD_ONLY programme as calibration/design assets; neither confers improvement readiness."
+  },
+  "blocking_issues": [
+    "No recovered numeric final-paper estimation-loss baseline and exact scalar reduction.",
+    "Final Figure 2 panel/session identity and full source-data/version correspondence unresolved.",
+    "Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved.",
+    "Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it.",
+    "Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve one-session reconstruction scorer and every full-programme source obligation unchanged. Their reference-output errors establish implementation agreement only, not superiority to the source estimator."
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-031",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality.",
+  "source_paper": {
+    "title": "Real-time self-supervised denoising for high-speed fluorescence neural imaging",
+    "url": "https://www.nature.com/articles/s41467-025-64681-8"
+  },
+  "evidence": [
+    {
+      "id": "fast-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "locator": "Figure 3b,d–f and voltage-imaging Results; Figure 1d; Methods: Training and inference",
+      "supports": "Defines synthetic spike-width controls, real 1000-Hz QuasAr6a electrophysiology comparison, pixel-level correlations and source same-stack training; separately reports hardware-bound throughput."
+    },
+    {
+      "id": "fast-readme",
+      "kind": "author_code",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/README.md",
+      "locator": "Quick Start; Configuration; Training and inference guide",
+      "supports": "Pinned executable author route and configuration: model/checkpoint workflow, 100 epochs, seed 123, and code configuration values requiring reconciliation with paper Methods."
+    },
+    {
+      "id": "fast-inference",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test.py",
+      "locator": "goTesting, temporal output accumulation and image saving",
+      "supports": "Author temporal-window inference and output handling must be preserved and audited against original frame support."
+    },
+    {
+      "id": "prospective-evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-031/docs/initial-evaluator-v1.md",
+      "locator": "Scientific basis and prospective choices; Provenance and preserved discrepancies",
+      "supports": "Existing evaluator declares new ROI/F0/group-split rules, uses synthetic-only image error, and explicitly excludes native test-stack adaptation; it is an extension and measurement component."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source raw data are deposited at Zenodo 15872025; Figure 3d–f uses a QuasAr6a-expressing cortical neuron and simultaneous patch clamp, while the registered scope also retains real calcium imaging. Exact archive files/version, full collection inclusion and native export manifest remain unresolved.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 3d describes 4,982 frames from the 1,000-Hz mouse L2/3 example, 1,000 displayed pixel traces and a separate n=100-pixel correlation comparison in Figure 3f. Their exact pixel identities and independence are not recovered; this is not 100 independent neurons or animals. Calcium collection identity also remains to be bound.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Methods treat the full input stack as a sample for self-supervised temporal-window training (default 100 epochs). Preserve the source allowance for unlabeled same-stack adaptation and protect electrophysiology/reference labels. The local recording-disjoint split disallowing test-stack adaptation is a separate extension.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Same raw fluorescence stack, imaging frame rate/exposure and permitted spatiotemporal context as source FAST; synchronized electrophysiology is an evaluator comparator, not a candidate training target. Synthetic clean traces belong only to the source simulation controls.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover original ROI/pixel selection, fluorescence baseline definition, electrophysiology synchronization, temporal context, overlap handling, clipping and full-frame support. The local fixed-ROI/F0 rules are explicit prospective choices; paper weight decay 1e-4 and pinned README 0.9 are not silently interchangeable.",
+      "evidence_ids": [
+        "fast-paper",
+        "fast-readme",
+        "fast-inference",
+        "prospective-evaluator"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Figure 3f uses Pearson correlation r=sum((x-xbar)(y-ybar))/sqrt(sum((x-xbar)^2)sum((y-ybar)^2)) between single-pixel ΔF/F and synchronized electrophysiology. Figure 3b analogously compares simulated traces with clean truth; image PSNR/SSIM and throughput are distinct outcomes.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Exact pixel-level source summaries and baseline numeric correlation are not recovered. Report source strata separately; pixel/frame correlations cannot justify animal-level confidence, and prospective ROI/recording/group means cannot be substituted for the paper reduction.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 3f denoised-fluorescence/electrophysiology Pearson correlation, with source fidelity and speed constraints; exact aggregate unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Main text reports increased correlation and P<0.001 but no verified numeric FAST Figure 3f correlation aggregate was recovered. Figure 1d reports 1100.45 FPS for a 512×192×5000 stack on RTX A6000; that auxiliary throughput is not a denoising-quality score.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned training/inference code supplies a source route, but no source-matched FAST output/trace/score has been executed or qualified here. The prospective evaluator does not establish native same-stack parity.",
+      "evidence_ids": [
+        "fast-readme",
+        "fast-inference",
+        "prospective-evaluator"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful correlation/fidelity gain must exceed source-measurement and replay variability while retaining spike timing/amplitude and declared real-time constraints. No numeric gain or allowable fidelity regression has yet been justified.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover original sampling units and predeclare paired source-recording contrasts with temporal dependence retained. A source-compatible descriptive pixel comparison can be reported, but an improvement uncertainty rule must not count correlated pixels/frames as independent biological repetitions.",
+      "independent_unit": "Independent recordings/biological preparations where available; temporally dependent observations and pixels within one recording remain clustered.",
+      "rationale": "The source n=100 pixel comparison supports a within-recording summary, not 100 independent biological samples; repeat runs alone quantify algorithm variability.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact real-recording author baseline, original pixel/ROI roster, preprocessing, correlation aggregation and permitted same-stack training protocol.",
+      "Compare candidate and FAST on identical original recordings and label access, with predeclared meaningful temporal-fidelity gain and valid uncertainty.",
+      "Preserve original real calcium and voltage scope; synthetic controls or a favorable selected pixel/recording cannot replace it.",
+      "Retain spike fidelity, matched temporal context and hardware-bound end-to-end resource measurements; faster inference or smoother traces alone are insufficient.",
+      "Treat the existing group-disjoint evaluator as an extension unless exact source equivalence is independently established; changed splits never count as original-task victory."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim; surpassing this source paper and surpassing later methods are separate source-verified comparisons.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source comparison is recovered. Development may tune denoising with source-permitted raw-stack self-supervision and declared validation feedback; electrophysiology and clean synthetic final targets remain evaluator-owned.",
+    "candidate_freeze": "Seal denoiser/training code, all context windows, source-allowed adaptation rule, checkpoint selection, ROI/baseline recipe and timing boundary before final target comparison.",
+    "final_evaluation": "Replay the author and frozen candidate on identical complete original-recording support and source preprocessing, reporting real voltage, calcium and synthetic controls separately. Measure matched-hardware latency/throughput without substituting it for fidelity.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source-paper FAST values, newly reproduced FAST values and local prospective evaluator outputs remain separate. No raw-input baseline or group-disjoint extension can replace the source FAST comparator."
+  },
+  "blocking_issues": [
+    "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
+    "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
+    "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
+    "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
+    "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve trace/fidelity/latency evaluator and its prospective-v1 split honestly as measurement/calibration and extension material. Its engineering tests and new split cannot award a source-paper win."
+  }
+}

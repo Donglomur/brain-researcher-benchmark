@@ -1,0 +1,183 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-ADD-015",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source includes an original IO-function estimation and Ricciardi-versus-alternative-function comparison (Methods and Supplementary Figure S11), so descriptive attenuation alone does not justify categorical ineligibility. However, its exact ordered model-comparison criterion, complete original fitting protocol and numeric baseline are unrecovered. The existing local artifact scorer measures numerical reconstruction and cannot supply that comparator. A new held-out response-prediction task would remain an extension.",
+  "source_paper": {
+    "title": "Cellular-resolution optogenetics reveals attenuation-by-suppression in visual cortical neurons",
+    "url": "https://doi.org/10.1073/pnas.2318837121"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11551350/",
+      "locator": "Results Figures 2–5; Methods: Analysis of Stimulus-Evoked Responses, IO Function Estimation, Analysis of IO Variability",
+      "supports": "Original attenuation measurements, animal/cell counts, curve estimation and descriptive mixed-effects analysis; no protected predictive benchmark."
+    },
+    {
+      "id": "deposit",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/13851356",
+      "locator": "Version v1, Description and Files",
+      "supports": "Author deposit for main-figure data and code; IOfunction-PNAS-2024.zip, md5 70c3f4becfa1df05dd1f1d9412d5ddf0."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-015/task.json",
+      "locator": "primary_outputs; evaluation; improvement",
+      "supports": "Registered attenuation/heterogeneity scope and proposed response-model extension."
+    },
+    {
+      "id": "calibration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-015/implementations/registered-runtime/instructions.md",
+      "locator": "Fixed-control calculation; Submission and score; Limits",
+      "supports": "Existing equal-experiment delta RMSE is distance to reconstructed local outputs; processed traces and animal linkage limitations."
+    },
+    {
+      "id": "central",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-015/implementations/central-artifact-scoring/README.md",
+      "locator": "Evidence and scope; complete optogenetics central-panel artifact scoring",
+      "supports": "Broader historical artifact matching remains a finite numerical reconstruction; published p-value discrepancies remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate the original empirical IO function from optogenetic response changes and compare the source Ricciardi, threshold-linear, power-law, logistic and stretched-exponential function fits. Retain attenuation and cell variability as descriptive outcomes.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo 13851356 v1, IOfunction-PNAS-2024.zip; main-figure processed cell traces plus notebooks. Raw optical preprocessing is outside the legacy packet.",
+      "evidence_ids": [
+        "deposit",
+        "calibration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 2: 364 cells, 11 experiments, seven mice. Figure 3 visual-condition analysis: six cells/two mice; power comparison: 52 cells/three mice. Cell-to-animal joins still need admission for grouped analyses.",
+      "evidence_ids": [
+        "paper",
+        "calibration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The source smooths/integrates all-cell response changes and fits candidate functions. Exact Supplementary Figure S11 fitting/evaluation partitions, resampling and comparison protocol are unrecovered; no new animal/trial split may substitute for this original estimation task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed calcium traces for opto-only, visual-only and paired stimulation, stimulus timing and experiment/cell identities. Preserve the separate multi-opto and multi-visual conditions.",
+      "evidence_ids": [
+        "deposit",
+        "paper",
+        "calibration"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source response windows are ten frames (about 0.33 s) before/after optogenetic onset. Preserve visual subtraction, optical/cell selection provenance, and distinct notebook baseline conventions. LOESS/integrated IO fits are derived outputs.",
+      "evidence_ids": [
+        "paper",
+        "calibration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Methods specify least-squares Ricciardi fitting and alternative function families, but the exact Supplementary Figure S11 comparison criterion, normalization and numerical result are not recovered. Reconstruction RMSE against local vectors is not that source criterion.",
+      "evidence_ids": [
+        "paper",
+        "calibration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "The original IO curve derives from 364 pooled-cell response changes with bootstrap LOESS estimates. Exact across-curve/model comparison weighting and complexity treatment are unresolved; equal-experiment artifact RMSE is a separate local convention.",
+      "evidence_ids": [
+        "paper",
+        "calibration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original IO-function estimation/model-comparison criterion in Supplementary Figure S11; exact formula and aggregation unresolved.",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No exact Supplementary Figure S11 model-comparison score recovered. Attenuation percentages and inferential tests are biological estimates, and fitted curve pictures are not numeric performance comparators.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The main-figure code archive is identified, but complete original IO-fit comparison and native numeric baseline are not qualified. Existing 42-field and central artifact matches do not execute or grade the full Ricciardi/alternative model comparison.",
+      "evidence_ids": [
+        "deposit",
+        "calibration",
+        "central"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Recover the original fit criterion and source model complexity before justifying meaningful estimation improvement; arbitrary extra flexibility, larger attenuation or smaller p-values cannot define success.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover source bootstrap/model-comparison protocol, then predeclare paired improvement inference respecting cells nested within experiments/animals and estimator complexity. No superiority rule is yet admitted.",
+      "independent_unit": "Animal/experiment dependence must be retained; original cell bootstrap samples do not establish independent-animal replication.",
+      "rationale": "An in-sample curve fit needs source-matched comparison and defensible uncertainty; absence of external IO truth is an unresolved inference limitation, not a fabricated predictive target.",
+      "evidence_ids": [
+        "paper",
+        "calibration"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact original Supplementary Figure S11 estimation target, ordered model-comparison criterion, parameters/constraints, input support and numeric baseline.",
+      "Qualify the source-author fit route and compare candidate estimates under identical original observations, normalization, complexity/access policy and aggregation.",
+      "Require a predeclared meaningful improvement and valid dependence-aware uncertainty; larger attenuation, stronger significance or exact intermediate reconstruction cannot win.",
+      "Keep historical artifact scorers calibration-only; new held-out animal/trial response prediction is a separately labelled extension."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately verified current-SOTA comparison exists for the original IO-estimation task.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Source recovery only until Supplementary Figure S11 comparison is bound. Subsequent iteration must use declared development feedback for the same original IO-estimation target and model-comparison protocol.",
+    "candidate_freeze": "Freeze estimator family, parameter constraints, fitting/selection procedure, original curve support, uncertainty rule and complexity/access budgets before final source-comparable evaluation.",
+    "final_evaluation": "Use recovered original IO-estimation comparison with a qualified author baseline; existing finite artifact reconstruction and newly invented predictive splits cannot yield a paper win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep source fitted-model performance, any source-author rerun, local reconstructed vectors and descriptive attenuation estimates separately identified."
+  },
+  "blocking_issues": [
+    "Exact Supplementary Figure S11 comparison criterion, fitted-model scores and original fitting/evaluation protocol not recovered.",
+    "Source matched complexity/regularization and valid estimation-uncertainty policy unresolved.",
+    "Verified per-cell animal mapping and complete native fit comparison route not admitted.",
+    "Working original-task evaluator, meaningful effect, access and resource budgets remain unqualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve 42-field NPZ scorer, central artifact scorer and all historical candidate evidence. Their continuous error measures and successful reconstruction are calibration only."
+  }
+}
