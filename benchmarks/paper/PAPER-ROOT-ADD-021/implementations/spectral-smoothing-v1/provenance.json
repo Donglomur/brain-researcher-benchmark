@@ -1,0 +1,57 @@
+{
+  "task_id": "PAPER-ROOT-ADD-021",
+  "component": "paired_native_spectral_smoothing_v1",
+  "role": "source_preprocessing_calibration_and_explicit_grouped_sensitivity",
+  "source_commit": "218f87e81d4aa8ac3658467f4a4c85ad1dc4128d",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/jtmiles/PAF_INT_neurodev/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/spect_aper_fitting.ipynb",
+      "bytes": 30917,
+      "sha256": "30ef3d9091ad53568d071dc15e21d28e23d55d8606946440f97f7ccc1cc9f629",
+      "locator": "Spectral-table loading cell: smoothspect = unifilt(spectra, [5,3], mode=nearest); comment says should technically split by region/id; subsequent interpolate_spectra call",
+      "supports": "Exact linear-power uniform-filter configuration and whole-table source ordering; interpolation is a separate following operation."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jtmiles/PAF_INT_neurodev/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/load_ephys_save_spect.ipynb",
+      "bytes": 57645,
+      "sha256": "043fbc795d366d42130ce96752ba7802429c94a6f5704f0a4aad9fb6e3fbe291",
+      "locator": "Processing parameters and participant/region loop; multitaper_spectrogram call; final all_spect.to_csv",
+      "supports": "ID/age/region/time metadata, 0.25-second offsets, one-second windows, nfft=2*1024, 0.5–100 Hz grid, normalized bipolar signal origin and linear saved spectra."
+    }
+  ],
+  "source_recovery": "Existing pinned source cache inspected statically and SHA-256 independently recomputed; no network requests or source downloads.",
+  "source_equivalent_operations": [
+    "float64 uniform_filter over original CSV order, size=(5,3), mode=nearest",
+    "retain original native spectral grid and participant/region/time observation units",
+    "retain every row and both paired outputs"
+  ],
+  "prospective_repairs": [
+    "separate participant/region smoothing with time sorting and original output-position restoration",
+    "explicit table hash, complete operator-declared participant/group/window coverage, input validation",
+    "paired literal companion and full neighboring-row lineage"
+  ],
+  "not_implemented_or_claimed": [
+    "raw ECoG filtering/resampling/multitaper generation",
+    "post-smoothing 58.5–61.5 Hz interpolation with author buffer=5",
+    "custom FOOOF fitting or peak/timescale extraction",
+    "historical fitter version reconciliation",
+    "authentic thirteen-participant source coverage verification",
+    "native scientific execution, paper reproduction, improvement, SOTA or research qualification"
+  ],
+  "endpoint_disposition": "Faithful reproduction of the original descriptive developmental findings is a valid first-class outcome, still incomplete because authentic preparation and estimator reconciliation are unresolved. Exceeding the paper is a separate outcome: maximizing those associations has no justified ordered superiority metric. No substitute prediction task or scoring metric is introduced.",
+  "rights": {
+    "author_analysis_code_license": null,
+    "source_data_license": "CC-BY-NC-4.0",
+    "author_code_redistributed": false,
+    "authentic_data_redistributed": false,
+    "implementation": "Independently written interface, validation and paired filtering orchestration."
+  },
+  "resource_scope": {
+    "new_download_bytes": 0,
+    "native_preparation_runs": 0,
+    "model_runs": 0,
+    "dependency_installs": 0,
+    "tests": "Generated fixtures only, through the reviewed shared one-thread test pool; actual receipts are recorded in the handoff.",
+    "native_envelope": "Unmeasured. Implementation holds the supplied table and both outputs in memory."
+  }
+}

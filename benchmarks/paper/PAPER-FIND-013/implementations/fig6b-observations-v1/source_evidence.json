@@ -1,0 +1,73 @@
+{
+  "schema": "find013-source-observation-evidence/v1",
+  "task_id": "PAPER-FIND-013",
+  "source_revision": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+  "paper_url": "https://www.nature.com/articles/s41593-025-01894-6",
+  "source_files": [
+    {
+      "path": "COMtraj/Main/CanDataAnalysis.m",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis.m",
+      "sha256": "0d3cd80eb927e0e2f755e327c96ff01c2291fa82f9032228c6cf70bba9a537b7",
+      "bytes": 116382,
+      "locators": {
+        "positional_animal_mapping": "lines 7-12",
+        "COM_units_full_support_and_clocks": "lines 61-96",
+        "active_two_parameter_fit": "lines 97-116",
+        "span_eligibility_and_table_membership": "lines 129-143 and 217-218",
+        "unadjusted_and_adjusted_fit_outputs": "lines 182-186",
+        "raw_and_zero_clipped_plotting_branches": "lines 1668-1697"
+      }
+    },
+    {
+      "path": "COMtraj/Main/CanDataAnalysis_LinRegBootstrapStats.m",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis_LinRegBootstrapStats.m",
+      "sha256": "dcf5ada87e97e8e08750c3f8c0fcb762aa80ba4af7a59456fbdf2b8e70aae4cf",
+      "bytes": 38293,
+      "locators": {
+        "COM_support_and_interpolation": "lines 74-107",
+        "compressed_nonlinear_clock": "lines 110-111",
+        "active_three_parameter_bounded_fit": "lines 113-125",
+        "fit_outputs": "lines 223-224"
+      }
+    }
+  ],
+  "existing_public_payload_receipt": {
+    "revision": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+    "role": "prior authenticated public input acquisition; no new payload read here",
+    "inputs": [
+      {
+        "path": "COMtraj/Main/data/CA1_COM_withPFs.mat",
+        "bytes": 4429731,
+        "sha256": "c565dcef738683fb398880a63e30031fda3170870b4a4e254c9bc5dac028c5b9"
+      },
+      {
+        "path": "COMtraj/Main/data/CA3_COM_withPFs.mat",
+        "bytes": 1121031,
+        "sha256": "ec8a31ae5d2c73dbed089d6d4c3c0aa56599336342e6918470216d49416da9fc"
+      }
+    ]
+  },
+  "prior_source_schema_evidence": {
+    "interpretation_sha256": "074bc1205397321f7ce97eaa2f8234bdeba451f1756ebda3cf86bb6c8a08a956",
+    "CA1_schema_sha256": "bda8920e137a55ac708da6a45e10d045953f87a1a6af19f07e4e500038f43732",
+    "CA3_schema_sha256": "e45e44fdb4fa5e143ed830983558dbf737a3876a2e1ee539e051b7de8539d796",
+    "source_rows": 2657,
+    "Tok_rows": 2649,
+    "short_rows": 8,
+    "condition_plane_entries": 92,
+    "empty_planes": 4,
+    "eligible_but_fewer_than_15_observed_values": 43,
+    "eligible_post_onset_segments_longer_than_15": 2647,
+    "claim_scope": "readback of prior schema metadata, not a fresh empirical preparation"
+  },
+  "conflicts_requiring_resolution": [
+    "Main script active two-parameter model differs from final paper and active three-parameter LinRegBootstrapStats model.",
+    "Both inspected nonlinear fits compress missing laps after NaN deletion; linear fit retains source lap gaps.",
+    "Main script contains raw and zero-clipped nonlinear R2 plotting branches; exact final Fig6b branch/vector is not authenticated."
+  ],
+  "qualification": "software_component_only_no_authentic_preparation_or_author_calibration",
+  "new_download_bytes": 0,
+  "native_data_or_model_runs": 0,
+  "new_model_trials": 0,
+  "private_targets_read": false
+}

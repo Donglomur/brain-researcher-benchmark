@@ -1,0 +1,51 @@
+{
+  "task_id": "PAPER-paper-method-009",
+  "component": "pala-source-adapter-v2",
+  "qualification": "source_unit_repair_with_generated_controls_only",
+  "source_unit_evidence": {
+    "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Analysis.m/content",
+    "bytes": 42821,
+    "sha256": "03d3cc4ff3f49692e5f9eff69520d174c3e1ad2afd670b6213e75f2339878ef2",
+    "recorded_md5": "7f8fec83affc4c95c973a9b5346a126e",
+    "locators": {
+      "source_fields": "lines 24-26 and 32-56",
+      "volts_to_millivolts": "lines 146-147: voltage mean and SD multiplied by 1000 for mV",
+      "source_threshold": "line 150: thresh_AP = -0.03; comment identifies -30 mV"
+    },
+    "retrieval": "reused previously acquired pinned local source; no new download",
+    "rights": "Source read for interface and unit evidence; MATLAB source not redistributed."
+  },
+  "paper_evidence": {
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12484930/fullTextXML",
+    "sha256": "004fb8825cc1329c69f4e175aae5c6188964c91d8910ad847c7c33957cf0d4fa",
+    "locator": "Methods: Intracellular voltage recordings",
+    "role": "20 kHz acquisition, -30 mV crossing and -3/+5 ms interpolation requirements; empirical Figure 3 scope"
+  },
+  "predecessor": {
+    "path": "../initial-evaluator-v1/evaluator.py",
+    "sha256": "4d7ec918f40b1607841ccbd0e6da8036b105a9491460983e67f8fe0f06d2cfcb",
+    "preserved": true,
+    "finding": "decode_pala stores the source voltage vector as voltage_mv without the source-required factor of 1000.",
+    "role": "Generated interoperability controls only; its prospective analysis remains an extension, not the original paper endpoint."
+  },
+  "original_author_estimator": {
+    "repository": "https://github.com/engellab/DSRP",
+    "revision": "ba0490d064ea299c975e12bb94f3d922468f6b50",
+    "neuron_stat_sha256": "24d9bff22d4eab46891101faed1e082e6483f326469f395850848b9139cf2a2a",
+    "changed": false
+  },
+  "source_data": {
+    "url": "https://zenodo.org/api/records/1304771/files/data.mat/content",
+    "recorded_bytes": 1310739375,
+    "recorded_md5": "dc333d3d03b79460f2ec1d36122206c8",
+    "rights": "CC BY 4.0",
+    "acquired_by_this_component": false,
+    "authentic_payload_schema_verified": false
+  },
+  "retained_scientific_limits": [
+    "Exact eight-neuron/five-mouse source identities and twenty-segment mapping are unrecovered.",
+    "25/50 ms voltage-bin conflict and voltage-spline choices are unresolved.",
+    "The reported 23% discrepancy has no recovered executable formula/aggregation.",
+    "No authentic source preparation, author calibration, candidate evaluation, or paper superiority result."
+  ]
+}

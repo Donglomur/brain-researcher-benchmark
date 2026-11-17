@@ -1,0 +1,50 @@
+{
+  "schema": "pcca-fig3-source-evidence-v1",
+  "scope": "Source-grounded output arithmetic and full-panel software controls, without authentic simulation preparation or model fitting",
+  "sources": [
+    {
+      "role": "Figure 3 endpoint and aggregation",
+      "url": "https://api.github.com/repos/meganmcd13/figures-dual-pfc/git/blobs/886e2dc9012b531e917a789973080f83b953bcf7",
+      "path": "plot_figure3.ipynb",
+      "git_blob": "886e2dc9012b531e917a789973080f83b953bcf7",
+      "sha256": "ea7b2077e1d3aac9f5e6c3571a6bd087ccfdbc6f6533c5957c62e66aa7a1491d",
+      "bytes": 15969,
+      "locator": "zero-based cell 6: estimated-minus-ground-truth errors, both areas concatenated, np.mean and np.std; cells 7-8: signed-error curves, pCCA across only",
+      "verification": "Decoded API blob recomputes to the listed Git SHA1; notebook contains no cached output"
+    },
+    {
+      "role": "Complete simulation panel and source fitting driver",
+      "url": "https://api.github.com/repos/meganmcd13/figures-dual-pfc/git/blobs/226056a02e8cbcdc30c5f7b66265e5d297c5f6e5",
+      "path": "main_analyses/create_fig3_dataset_varyN.py",
+      "git_blob": "226056a02e8cbcdc30c5f7b66265e5d297c5f6e5",
+      "sha256": "06dd541ccdbdc6ebb60ee5f74828fb5f03e2c8d0a2ee7e6d20e12670979c4b02",
+      "bytes": 2366,
+      "locator": "n_boots=30; n_trials=[100,150,300,600,1000,1500]; draw-major loop; both reference models share observations; five folds, candidates 0..14, no warmstart",
+      "verification": "Decoded API blob recomputes to the listed Git SHA1; no source execution"
+    },
+    {
+      "role": "pCCA-FA metric arithmetic",
+      "url": "https://raw.githubusercontent.com/SmithLabNeuro/pcca_fa/d13882eca2eee8cdb5e6ee4b0047b32b01f08754/pcca_fa_mdl.py",
+      "git_blob": "b97779372137b4e0334a5f4f662369984dad5f93",
+      "sha256": "3c37c6a543d5de74aec72d07e5a7a7bf004c083f4bd1b8396a12cc1ca927d198",
+      "bytes": 46374,
+      "locator": "compute_dshared lines 792-861 and compute_psv lines 908-958",
+      "verification": "Existing retained source and prior receipt; source arithmetic inspected, not imported or fitted"
+    },
+    {
+      "role": "Original publication",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13247044/",
+      "locator": "Figure 3e/f and simulation fitting Methods",
+      "verification": "Existing local publication XML/text and caption extraction inspected"
+    }
+  ],
+  "release_binding": {
+    "tag": "v1.0",
+    "commit": "2d749c185b0f0e9944ce2baf9820b6da13c1d75b",
+    "commit_url": "https://api.github.com/repos/meganmcd13/figures-dual-pfc/git/commits/2d749c185b0f0e9944ce2baf9820b6da13c1d75b",
+    "actual_commit_tree": "0147b6481b4b43f82d5a4b805ad70966994c1794",
+    "status": "incomplete",
+    "reason": "The old cached recursive tree response lists these blobs but reports the commit ID as its tree SHA. The newly retrieved commit identifies a different actual tree. The exact-tree request returned an API rate-limit error. Blob content identity is verified; full commit-to-blob association is not newly established."
+  },
+  "integration_proposal": "Preserve source_unresolved and existing historical definitions. Amend aggregation evidence to source signed errors over 60 area values per 30 datasets with population SD; pCCA controls are across-area only. Enroll this component as output arithmetic for separate reproduction and improvement outcomes after independent review, without changing ready-benchmark counts."
+}

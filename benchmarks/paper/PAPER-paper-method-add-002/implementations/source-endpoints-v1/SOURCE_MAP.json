@@ -1,0 +1,66 @@
+{
+  "task_id": "PAPER-paper-method-add-002",
+  "component": "source-endpoints-v1",
+  "repository": "https://github.com/caycogajiclab/sliceTCA_paper",
+  "revision": "62b0ca1267fe9d615111a193080577eda601687e",
+  "source_acquisition": "Reused existing local source-scope-v1 cache and its SOURCE_REQUESTS.json; no new network requests or data reads.",
+  "sources": [
+    {
+      "repository_path": "figures/Fig2/code/hand_decoding/functions.py",
+      "cache_basename": "sliceTCA_paper__figures__Fig2__code__hand_decoding__functions.py",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/hand_decoding/functions.py",
+      "bytes": 6144,
+      "sha256": "c30074a17a78f408c47bf9b5358f7c04fdaa456c1cfb62fd5eafae7b59cab3f9",
+      "locators": ["decoding", "velocity_decoding", "trial_wise_r2", "k_fold_cross_validated_r2"],
+      "role": "Source displacement integration, coordinate-centered trajectory R2, equal fold widths, legacy RandomState seed semantics and SD aggregation."
+    },
+    {
+      "repository_path": "figures/Fig2/code/hand_decoding/helper_functions.py",
+      "cache_basename": "sliceTCA_paper__figures__Fig2__code__hand_decoding__helper_functions.py",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/hand_decoding/helper_functions.py",
+      "bytes": 709,
+      "sha256": "af1c37e92b1a755802f049af78097aad786880472ab627925a1b4a27810f818d",
+      "locators": ["flatten_mid_dims", "split"],
+      "role": "Author split removes only the tested block; curved leftover remains in training."
+    },
+    {
+      "repository_path": "figures/Fig2/code/Fig2.py",
+      "cache_basename": "sliceTCA_paper__figures__Fig2__code__Fig2.py",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/Fig2.py",
+      "bytes": 21447,
+      "sha256": "f0b3e46231fceba39a47f380dfd116216ebae9f5d9cc93c195dafa7aec68483c",
+      "locators": ["import_decoding_r2", "get_r2_all", "plot_k_fold"],
+      "role": "Original straight rows 0:265 and curved rows 265:511; neural[55:-15], movement[65:-5]; 20 repeats, 5 folds, seed 0 reset for every model/condition. Condition-average control follows a separate route and is not substituted by this component."
+    },
+    {
+      "repository_path": "run_sliceTCA/run/run_tca.py",
+      "cache_basename": "sliceTCA_paper__run_sliceTCA__run__run_tca.py",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/run/run_tca.py",
+      "bytes": 6532,
+      "sha256": "a4693c5bf7ad40836baafeff113af1c6b819a0bc9720e6cd127369b432237377",
+      "locators": ["decompose: all_losses", "decompose: if cross_validation block after training"],
+      "role": "Binary training mask polarity, first/last-zero boundary trimming, source zero-filled training loss and held-out root error."
+    },
+    {
+      "repository_path": "run_sliceTCA/run/cv_search.py",
+      "cache_basename": "sliceTCA_paper__run_sliceTCA__run__cv_search.py",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/run/cv_search.py",
+      "bytes": 10198,
+      "sha256": "ec9a28befb40075899c3ba252d3842c74de9f39808c7d0c79d748ca897a956e7",
+      "locators": ["decompose_mp zero-rank branch", "cv_search_sample"],
+      "role": "Same root-error convention for zero-rank baseline; original masks and rank/seed roster are external requirements, not generated here."
+    }
+  ],
+  "contract_basis": "../../improvement.v1.json",
+  "paper": "https://www.nature.com/articles/s41593-024-01626-2",
+  "paper_evidence_scope": "Current task improvement contract and prior source decisions were inspected; no new independent full-paper review is claimed.",
+  "prior_implementation_difference": "The prior external whole-graph functional.trialwise_r2 pooled policy centers time and XY together, while uniform_outputs averages coordinate R2. Neither is this source metric. Its integrated decoder omits the prepended source initial-position sample. No predecessor files are changed.",
+  "units": {
+    "trajectory_metric": "dimensionless R2; same source position units in truth and predictions",
+    "decoder_fitted_target": "position displacement per 10-ms bin, not velocity divided by seconds",
+    "reconstruction": "RMSE in source tensor units; MSE in squared source tensor units",
+    "neural_layout": "trial x neuron x time for reconstruction; time x trial x neuron for Fig2",
+    "independent_unit": "reaching trial in one monkey J session; repeated folds are dependent"
+  },
+  "qualification": "Executable source-code-compatible endpoint components with generated controls only; no authentic preparation, author inference, published-score reproduction, combined task admission, candidate comparison, or paper improvement."
+}

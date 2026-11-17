@@ -1,0 +1,110 @@
+{
+  "task_id": "PAPER-ROOT-ADD-005",
+  "component": "source-session-scorer-v1",
+  "policy": "source-ordered-session-mean-pearson-v1",
+  "role": "original_endpoint_software_component",
+  "source_revision": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+  "source_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+  "source_mappings": [
+    {
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/glm.py",
+      "lines_one_based": [
+        1097,
+        1203
+      ],
+      "semantics": "Default unshuffled 12-fold KFold, intercept OLS, signed per-fold Pearson then arithmetic fold mean. This component scores supplied predictions; it does not run author inference or permutations."
+    },
+    {
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_linregcv.py",
+      "lines_one_based": [
+        41,
+        80
+      ],
+      "semantics": "66-dimension row join and global feature standardization feed original single-trial response encoding; no image-repeat averaging."
+    },
+    {
+      "url": "https://api.github.com/repos/ViCCo-Group/dimension_encoding/contents/dimension_encoding/utils.py?ref=b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+      "bytes": 10128,
+      "sha256": "be7cb9cfc0ce008f8da17df35de144fe083c8505fac5e9c7df73fcb9b12a61d1",
+      "lines_one_based": [
+        29,
+        50
+      ],
+      "semantics": "Source Pearson uses centered dot product divided by centered norms, suppresses divide warnings and returns NaN for zero-variance columns without replacement."
+    }
+  ],
+  "cached_source_evidence": [
+    {
+      "name": "glm-browser-excerpt.json",
+      "bytes": 29923,
+      "sha256": "3bea7a24ee72a4b83ecc95ccbf51b23d2bb577fcd3a33db2ed9e056b4ddcd794"
+    },
+    {
+      "name": "primary-browser-excerpts.json",
+      "bytes": 29453,
+      "sha256": "1d496ab8e6ca10302a59892b97b2f2121ebbd4462426a2f2724508169af289c9"
+    },
+    {
+      "name": "reference-report.json",
+      "bytes": 6674,
+      "sha256": "4de319b6c1673f8d40a12a653d8f0c6d3c52a24c87aae6b142815b5baae24fad"
+    }
+  ],
+  "cached_evidence_hash_scope": "Hashes identify prior rendered source evidence and its report, not raw upstream source bytes.",
+  "implemented": [
+    "All three original participants required; each reported separately.",
+    "Original contiguous 12-fold positions must coincide exactly with twelve complete source sessions.",
+    "Independent trial/voxel identity ordering for reference and paired predictions; exact source stimulus/session mappings.",
+    "Every declared repeated-image trial and voxel retained without averaging or population intersection.",
+    "Signed within-session Pearson and equal-fold mean; per-voxel paired candidate-minus-author delta.",
+    "Safe NPZ read, input SHA256 binding and existing output preservation."
+  ],
+  "qualification": {
+    "authentic_inputs_prepared": false,
+    "author_inference_executed": false,
+    "candidate_experiments_executed": false,
+    "native_reproduction": false,
+    "improvement_ready": false,
+    "scientific_qualified": false,
+    "paper_win_claimed": false,
+    "disposition_proposal": "Keep canonical source_unresolved; add scorer component only.",
+    "reproduction_is_first_class": true,
+    "reproduction_qualified": false
+  },
+  "remaining_gaps": [
+    "Authentic complete source response/stimulus/session/voxel-mask alignment, artifact versions and hashes.",
+    "Source-author heldout predictions and numerical agreement with Figure 2 maps.",
+    "Figure 2 noise-ceiling conversion and any justified scalar/ROI aggregation.",
+    "Protected candidate execution, access/resource budgets, meaningful effect and paired uncertainty.",
+    "Full-cohort native HDF preparation and memory/runtime qualification; scorer currently loads arrays into memory.",
+    "Figure 6 residual-response variance partition and shape controls remain a separate source analysis.",
+    "Paired paper+data and paper+data+author-code delivery and separate reproduction/improvement scoring are not qualified."
+  ],
+  "history": "Canonical task, improvement contract, predecessor evaluator, prior source evidence and historical numerical outputs are unchanged.",
+  "verification": {
+    "qualification": "generated_engineering_controls_only",
+    "pytest_passed": 21,
+    "pytest_seconds": 0.28,
+    "pool_run_id": "paper04-add005-source-parity-tests03",
+    "pool_record_sha256": "d5002ec8dcd0a0714acf20e1a8b60b8fbf2c0248f582f5d2a91220b4d7106bd5",
+    "pool_log_sha256": "73bd0b3889def3229cc360b75222dca0715c2aabf89e1b5dba30e23377c4dfec",
+    "source_parity": {
+      "author_function": "pearsonr_nd",
+      "result": "passed",
+      "source_sha256": "be7cb9cfc0ce008f8da17df35de144fe083c8505fac5e9c7df73fcb9b12a61d1",
+      "max_finite_absolute_difference": 2.220446049250313e-16,
+      "receipt_sha256": "07aca98b05626075cdcdfea6cc64c0810b598efc1f3bdcedefd5949c275b379c"
+    },
+    "cpu_seconds": 0.662758,
+    "peak_child_rss_bytes": 65486848,
+    "authentic_arrays_read": false,
+    "scientific_runs": 0
+  },
+  "acquisition": {
+    "new_source_body_bytes": 10128,
+    "data_array_bytes": 0,
+    "failed_response_body_bytes": 0,
+    "dependency_installations": 0,
+    "receipt_sha256": "72616f0038b30cd2ea3797e3f98f5e9e363751e19ab928da2db69feabfc4a3a3"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "source-component-provenance-v1",
+  "task_id": "PAPER-paper-method-add-005",
+  "source_repository": "https://github.com/mackelab/neural_timeseries_diffusion",
+  "source_revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+  "source_acquisition": "Existing historical public author-code cache; only source/config/version metadata read. No native observations, private targets or predictions read. No network acquisition.",
+  "cached_source_version_manifest_sha256": "aa2a7cb66e9428d89230775f15b2d85b7be05ed5923de47e925f3e3985ea7f31",
+  "sources": [
+    {
+      "path": "ntd/ajile_imputation_experiment.py",
+      "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+      "git_blob_sha1": "9f84b5e7d506dc6f597e617a909ae2eccbb05250",
+      "sha256": "17280ce42d3c39172bba568bf9fe5fc6e4126e88333d819f2446187a9f8915fa",
+      "bytes": 6924,
+      "local_copy": "source/ajile_imputation_experiment.py",
+      "role": "Exact unchanged MIT source oracle for mask, RF partitions, decoder parameters, inverse normalization, accuracy and replicate mean. The test extracts only the experiment function and replaces diffusion sampling with supplied generated arrays."
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "40dcc8803792d58569159a6a7effee256d73193cc97af09237bdecc167565a76",
+      "bytes": 1069,
+      "local_copy": "source/LICENSE",
+      "role": "MIT attribution for vendored source"
+    },
+    {
+      "path": "ntd/datasets.py",
+      "git_blob_sha1": "d5d77495c4a9b2607800e83783d94efc1b9ac61c",
+      "sha256": "9d80110050a71f6a941db69b22b5f578529e04dd52e5131e8bda82ab16afdbb8",
+      "bytes": 15392,
+      "role": "AJILE_LFP float32 signal/statistics conversion; load_ajile_data sorted-day training row concatenation and latest-day holdout; all rows and binary labels retained. Native normalization execution is not supplied by this component."
+    },
+    {
+      "path": "conf/experiments/ajile_experiment/ajile_experiment.yaml",
+      "git_blob_sha1": "3c10c7cddd534bc9effdeb92a0a8e3a01f1a0036",
+      "sha256": "5de97460e40e188f1630dac0e82cc05ae12c19cad9fc8da2aaf90b5c92036566",
+      "bytes": 199,
+      "role": "All three dropout levels, five repeats, three folds, 240 trees/depth9, mask_seed0 and rf_seed0."
+    },
+    {
+      "path": "scripts/ajile_script.sh",
+      "git_blob_sha1": "b9dad9f024c84a75134a756a97444a37fcb0518e",
+      "sha256": "6f91064d6148e193e58e3f95cd0be4f02fd80ab07bea3f218e7901505331999b",
+      "bytes": 5622,
+      "role": "All EC01-EC12 participants and their original channel counts."
+    },
+    {
+      "path": "notebooks/ajile_plots.ipynb",
+      "git_blob_sha1": "9f5e4371eda50a7551561a8fe226650bd5092555",
+      "canonical_notebook_bytes": 15669,
+      "inspected_representation": "Cached notebook code-cell projection notebooks/ajile_plots.source.py; not the raw notebook bytes",
+      "projection_sha256": "2b453062dc212f00ee35fe1702400ec03d756302199ec72b33f9b5e964f52224",
+      "projection_bytes": 10839,
+      "locator": "Original code cells 9 and 10; comp_ajile_plot and result_dict construction; projection lines286-383",
+      "role": "Mean of five fold-averaged replicates; original errorbar np.std(arr[:,2]-arr[:,1]) paired over imputation and mean-imputation, ddof0. This corrects the canonical contract's marginal-SD interpretation, proposed for integration only."
+    }
+  ],
+  "implementation_scope": "Executable source RF endpoint and complete source-panel aggregation; prepared standardized arrays and frozen imputation outputs required.",
+  "canonical_change_proposal": "Update improvement.v1.json same_task.aggregation and source plotting evidence: retain per-arm replicate SD as diagnostic, but the original Fig.3E errorbar is population SD of paired imputation-minus-mean accuracy, after averaging RF folds. Record sorted-day source training row order. No canonical files modified.",
+  "qualification": "software_component_only",
+  "supported_future_outcomes": ["source_paper_reproduction", "same_task_improvement"],
+  "data_preparation": "none",
+  "authentic_model_runs": 0,
+  "downloads_bytes": 0,
+  "dependency_installs": 0,
+  "remaining_limits": [
+    "No authentic prepared inputs or original event/day roster certified; latest available source day has not been reconciled with paper day7.",
+    "Previous reconstruction exports omit labels and apply observed quality masking, so they cannot be silently reused for the source decoder.",
+    "Author DDPM and deterministic-neural-network outputs/checkpoints not qualified; generated parity is not author-performance calibration.",
+    "Published full Fig.3E numeric vector and original source software environment unresolved.",
+    "No secondary spectral/correlation execution, protected candidate runner, paired participant inference, meaningful improvement margin or paper win established."
+  ]
+}

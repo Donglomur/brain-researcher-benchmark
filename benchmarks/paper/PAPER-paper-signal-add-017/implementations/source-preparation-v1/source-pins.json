@@ -1,0 +1,46 @@
+{
+  "task_id": "PAPER-paper-signal-add-017",
+  "scope": "original MAT to source EEGNet training input; generated-fixture qualification only",
+  "source_revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+  "sources": [
+    {
+      "name": "Functions.py",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/Functions.py",
+      "bytes": 10131,
+      "sha256": "53dbd4f587673b562d3558fbf5f85307e0e78ed45a64a298c10d24ad8149a223",
+      "locators": ["load_and_filter_data", "filter_and_relabel", "segment_data", "generate_paths", "train_models before EEGNet portion"],
+      "role": "original MAT loader, class selection, window order, trial split and numerical preprocessing"
+    },
+    {
+      "name": "main_model_training.py",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/main_model_training.py",
+      "bytes": 2154,
+      "sha256": "351d9cd3ce9da34076c010f1c55adf8fceeb32cc78d7de00b60e9f8188ac64dc",
+      "role": "5-second trial cap, 1-second window, 100 Hz resampling, 4-40 Hz bandpass and route parameters"
+    },
+    {
+      "name": "data-README.txt",
+      "url": "https://doi.org/10.1184/R1/29104040.v2",
+      "bytes": 10319,
+      "sha256": "298f12bd7b22b77019b651778796cc2d22e66cd8a409bd75b3c4f77b733d4039",
+      "role": "original four-finger offline trials, run/participant layout, 128 channels at 1024 Hz, missing S07 events"
+    },
+    {
+      "name": "paper.html",
+      "url": "https://www.nature.com/articles/s41467-025-61064-x",
+      "bytes": 642246,
+      "sha256": "d515db75b178dc6fd9cc7cc5250eb72e6f2266016f5c749270e91069ddd30a2a",
+      "role": "original four-finger offline task; Figure 6 and five-fold decoding distinct from author training's 80/20 validation"
+    }
+  ],
+  "historical_incompatibility": {
+    "implementation": "initial-evaluator-v1/finger017.py",
+    "sha256": "a933cbadfe31bcbc281aab91e6dc097eae8a236aa86ae468cadb395814843936",
+    "finding": "validate_protocol admits only nclass 2/3 and extract_trials rejects original offline label 3; intact original four-finger runs cannot pass",
+    "resolution": "additive source-preparation-v1; historical implementation and task/contracts unchanged"
+  },
+  "acquisition": "reuse of previously pinned source cache; zero new downloads",
+  "authentic_data_prepared": false,
+  "model_runs": 0,
+  "qualification": "software component only; original-panel benchmark remains source_unresolved"
+}

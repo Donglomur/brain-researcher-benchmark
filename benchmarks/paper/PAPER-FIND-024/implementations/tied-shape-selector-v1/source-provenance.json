@@ -1,0 +1,43 @@
+{
+  "task_id": "PAPER-FIND-024",
+  "component": "tied-shape-selector-v1",
+  "purpose": "Select tied-shape integration-width predictor from precomputed predictor-side loss grids for one source split",
+  "contract_sha256": "3c484ec88a17f9a9f4bcb35767f6ea0e4739f2e91969a55bbc65e8861a738f4e",
+  "contract_file": "benchmarks/paper/PAPER-FIND-024/improvement.v1.json",
+  "source_repository": "https://github.com/snormanhaignere/time-vs-structure",
+  "source_revision": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+  "acquisition": "Previously cached public author source only; zero new downloads; no empirical or private-target files opened",
+  "sources": [
+    {
+      "path": "matlab-code/tie_shape.m",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/tie_shape.m",
+      "cached_bytes_sha256": "2dfb9e6bdf2f8e496d0023869a1e5908ed34a4b289959e9f72e8fc5229af9034",
+      "prior_sha256_lf_normalized_rawLines_plus_final_newline": "0222c8ccf4c6da061e1051df851cc62db7534ce517de4e699bd2e34e1ba7fa1d",
+      "supports": "Five loss axes, min-then-sum shared-shape selection, separate rate-specific nuisance parameters, common parameter-coordinate assertions"
+    },
+    {
+      "path": "matlab-code/demo_model_fits.m",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/demo_model_fits.m",
+      "cached_bytes_sha256": "de40ef4cae8b02704b0c86116390a4f956c7b96bc66e10f11edc6ba98fc2e966",
+      "prior_sha256_lf_normalized_rawLines_plus_final_newline": "a49cb39ed69fa3f21dfb1fd769ada06e99e74fa65c3da4663d734e693a7d6c22",
+      "supports": "Main experiment rate order, source gamma-fit settings and tied-shape call"
+    }
+  ],
+  "supported_domain": "Finite float64 grids with unique best shared shape and unique nuisance minimum at that shape for both rates",
+  "unresolved_native_behavior": [
+    "myminall tie and NaN behavior",
+    "modelwin_convert_delay median-delay conversion",
+    "TCI prediction and unbiased-sqerr generation and original dependency closure"
+  ],
+  "boundary": {
+    "source_cohort_or_split_changed": false,
+    "candidate_methods_constrained_to_author_algorithm": false,
+    "fixed_targets_read_or_redefined": false,
+    "median_delay_computed": false,
+    "loss_grid_generation_performed": false,
+    "native_matlab_parity_executed": false,
+    "authentic_data_processed": false,
+    "scientific_runs": 0
+  },
+  "qualification": "Source-grounded selection component; empirical baseline and full same-task endpoint remain unqualified"
+}

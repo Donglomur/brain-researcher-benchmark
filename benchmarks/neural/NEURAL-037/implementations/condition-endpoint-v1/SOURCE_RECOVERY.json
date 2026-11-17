@@ -1,0 +1,94 @@
+{
+  "schema": "neural037-endpoint-source-recovery-v1",
+  "task_id": "NEURAL-037",
+  "public_source": {
+    "record": "https://zenodo.org/records/18726362",
+    "archive": "sequenceFiltering.zip",
+    "archive_bytes": 7365221563,
+    "archive_md5": "35b86a22f10b600dbd98f23db3f9343d",
+    "selected_member": "figure2_data.npz",
+    "selected_member_bytes": 481579348,
+    "selected_member_sha256": "652bddde5091218819a0fd4be2e1e7bed03d2cca67a631bb7d135ce7b314b5e6"
+  },
+  "recovered_authored_source": [
+    {
+      "source_role": "prepare.py",
+      "bytes": 9651,
+      "sha256": "4f0a19c8b4208cd5186568c434b87ff5704b3294c69426addfd39a2a51279a57"
+    },
+    {
+      "source_role": "preparation_core.py",
+      "bytes": 2412,
+      "sha256": "b97694c9699e68ad74c8d11a5be5a0c6894dcb4c8a15299b156052263963b7a5"
+    },
+    {
+      "source_role": "scorer_core.py",
+      "bytes": 8191,
+      "sha256": "286f03f7ec459041d97161b3031c8cb69cadbf29b3602208715a3594638ecd99"
+    },
+    {
+      "source_role": "delivery_io.py",
+      "bytes": 4396,
+      "sha256": "9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7"
+    },
+    {
+      "source_role": "array_io.py",
+      "bytes": 949,
+      "sha256": "75cca888607d3db57a51feef2d8ead98df2201f4471fab5fecf9ff198df117cb"
+    },
+    {
+      "source_role": "score.py",
+      "bytes": 2282,
+      "sha256": "34594617cbe28152484130912e8be4b5796876970711ba83bfa41c0560b249af"
+    },
+    {
+      "source_role": "input.schema.json",
+      "bytes": 3766,
+      "sha256": "fcec230d7e25927e89bc01ec30974234d2167715d1b7c7e5db68d463069073f7"
+    },
+    {
+      "source_role": "prediction.schema.json",
+      "bytes": 2622,
+      "sha256": "57b6dfe79e067cc776f1df9dcd3861d71e01e43eb697fe8f279b733df9bf31fb"
+    },
+    {
+      "source_role": "requirements.txt",
+      "bytes": 13,
+      "sha256": "a23aaf94250a9f53031a592980142245a848e2372b6c6c3093e8260b129265b8"
+    },
+    {
+      "source_role": "SOURCE_MEMBERS.json",
+      "bytes": 7777,
+      "sha256": "6efe1220fcfd1c041375d0bb7c4a0b0fb0a11ee842f45b68beb593efefd3fa5c"
+    },
+    {
+      "source_role": "TASK.md",
+      "bytes": 8303,
+      "sha256": "5a5f7d9f5fa1b6d976233e88abc8d56bc7e0d66e2dfb060b4a6d62a9a02cdbd9"
+    },
+    {
+      "source_role": "SUPPORT_AMENDMENT.json",
+      "bytes": 3190,
+      "sha256": "28de5948103f94b8fb0c7e58ea96a7cd0dd19a1c468b7c3dc346e7a7702a7ccc"
+    }
+  ],
+  "changes": [
+    "Restore original source-authenticated full12 preparation and delayed-private-read scorer in a portable task-local directory.",
+    "Require exact six acquisition ROI/frame shapes at public admission.",
+    "Require all twelve distinct acquisition/order source conditions before holdout.",
+    "Reject duplicate source-member declarations before decoding.",
+    "Use magnitude-scaled RMS over observed frame residuals and then over observed cells; normalize with the unchanged context-constant training scale. Scale equal-order/context means too. This repairs both premature-square overflow and the reviewer-reproduced subnormal false-zero regression while preserving the endpoint hierarchy. Unrepresentable required per-cell MSE diagnostics or residual/RMS arithmetic fail the whole panel with numeric_error.",
+    "Report descriptive per-acquisition means of its two order RMSEs in addition to all original per-context results.",
+    "Remove local artifact paths from source metadata; retain sizes, hashes and all twelve member declarations."
+  ],
+  "source_only_recovery": true,
+  "original_data_read": false,
+  "historical_private_targets_read": false,
+  "scientific_qualification": false,
+  "access_modes": {
+    "direct_observation": "not_delivered",
+    "typed_viewer": "not_delivered",
+    "tool_assisted": "not_delivered",
+    "frozen_program": "preparation_and_scoring_components_only_no_isolated_execution"
+  }
+}

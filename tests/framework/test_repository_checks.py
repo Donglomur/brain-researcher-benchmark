@@ -467,6 +467,29 @@ class RepositoryChecksTests(unittest.TestCase):
         (self.root / ".neurobench/result.bin").write_bytes(b"generated runtime output")
         self.assertEqual(self.check()["source_check"], "passed")
 
+    def test_cumulative_reader_limit_is_inclusive_and_cache_preserves_budget(self):
+        for name, raw in (("first.py", b"abc"), ("second.py", b"de"), ("third.py", b"f")):
+            (self.root / name).write_bytes(raw)
+        with patch.object(checks, "MAX_READ_BYTES", 5):
+            reader = checks.Reader(self.root)
+            first, _ = reader.file("first.py")
+            second, _ = reader.file("second.py")
+            self.assertEqual((first["bytes"], second["bytes"], reader.bytes_read), (3, 2, 5))
+            cached, _ = reader.file("first.py")
+            self.assertEqual(cached, first)
+            self.assertEqual(reader.bytes_read, 5)
+            with self.assertRaisesRegex(ValueError, "Source read budget exceeded"):
+                reader.file("third.py")
+            self.assertEqual(reader.bytes_read, 5)
+
+    def test_member_limit_remains_independent_of_cumulative_budget(self):
+        (self.root / "member.py").write_bytes(b"abc")
+        with patch.object(checks, "MAX_READ_BYTES", 5), patch.object(checks, "MAX_FILE_BYTES", 2):
+            reader = checks.Reader(self.root)
+            with self.assertRaisesRegex(ValueError, "Source member exceeds byte limit"):
+                reader.file("member.py")
+            self.assertEqual(reader.bytes_read, 0)
+
     def test_byte_limits_and_non_source_payloads_refuse(self):
         with patch.object(checks, "MAX_READ_BYTES", 1), self.assertRaisesRegex(ValueError, "budget"):
             self.build()

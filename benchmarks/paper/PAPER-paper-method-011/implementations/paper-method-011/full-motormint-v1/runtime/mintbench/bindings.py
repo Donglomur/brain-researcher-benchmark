@@ -1,6 +1,6 @@
 """Scientific meaning joins, beyond content hashes and output-name coverage."""
 from . import catalog
-from .validation import exact, need, ident, sha, integer, digest
+from .validation import exact, need, ident, sha, integer, digest, finite
 
 PREDICTIVE = {'network_ground_truth','primary_behavior','hyperparameter_sensitivity',
               'factorial_ablations','threshold_crossings','averaged_training_control',
@@ -114,6 +114,22 @@ def validate_recipe(case, recipe):
         validate_identity(case,item)
         need(rule['kind']==item['kind'] and rule['value_selector']==item['selector'], 'metric kind and selector are scientific identity')
         if rule['kind']=='behavior' and case['mode']!='neural_acausal':
+            # Phase is an original circular endpoint, not a configurable choice
+            # of loss. Linear-readout Cycle cells omit phase from their declared
+            # dimensions; every other source behavior dimension remains linear.
+            # This binds column semantics only. The source units and numerical
+            # period still need independent native-policy authentication.
+            circular=rule['parameters']['circular_columns']
+            expected=[j for j,dimension in enumerate(case['output_dimensions'])
+                      if dimension.startswith('phase:')]
+            need(type(circular) is list and all(type(j) is int for j in circular)
+                 and circular==expected, 'circular columns must exactly match original phase dimensions')
+            period=rule['parameters']['phase_period']
+            if expected:
+                finite(period)
+                need(period>0, 'positive source phase period in original units')
+            else:
+                need(period is None, 'linear behavior has no phase period')
             groups=rule['parameters']['groups']
             for name,columns in groups.items():
                 need([case['output_dimensions'][j] for j in columns]==[d for d in case['output_dimensions'] if d.startswith(name+':')], 'source behavioral group maps exactly to produced columns')

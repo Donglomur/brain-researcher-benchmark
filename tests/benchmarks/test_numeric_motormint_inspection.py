@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = Path('benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1')
 BINDING = Path('benchmarks/integrity/current-closures/numeric-motormint/CURRENT_INSPECTION.json')
 SCORING = 'runtime/mintbench/scoring.py'
+RECIPE = 'runtime/mintbench/bindings.py'
 
 
 def pin(body):
@@ -81,12 +82,15 @@ class MotorMintCurrentInspectionTests(unittest.TestCase):
         self.assertEqual(report['source_kind'], 'current_inspection_binding')
         self.assertEqual(report['current_source_selection'], 'explicit_inspection_only')
         binding = json.loads(self.binding_body)
+        self.assertEqual(len(binding['overrides']), 4)
+        self.assertEqual({row['path'] for row in binding['overrides']},
+                         {'run.py', 'central_sources.py', SCORING, RECIPE})
         self.assertEqual(report['historical_source_manifest'],
                          {key: binding['historical_manifest'][key] for key in ('bytes', 'sha256')})
         self.assertEqual(report['historical_runtime_manifest'],
                          pin((self.source / 'RUNTIME_MANIFEST.json').read_bytes()))
         self.assertEqual(report['current_runtime_overrides'],
-                         [row for row in binding['overrides'] if row['path'] == SCORING])
+                         [row for row in binding['overrides'] if row['path'] in (SCORING, RECIPE)])
         self.assertEqual(len(report['deferred_dependency_descriptors']), 10)
         for key in ('execution_authority', 'scientific_execution', 'qualified', 'deferred_bodies_opened'):
             self.assertFalse(report[key])
@@ -122,11 +126,14 @@ runpy.run_path(entry, run_name='__main__')
 
     def test_same_size_source_tamper_is_refused_before_runtime_execution(self):
         self.copied_source()
-        source = self.source / SCORING
-        body = source.read_bytes()
-        source.write_bytes(b'#' + body[1:])
-        self.assertEqual(source.stat().st_size, len(body))
-        self.assert_refused(self.invoke(), 'changed bootstrap content')
+        for name in (SCORING, RECIPE):
+            with self.subTest(source=name):
+                source = self.source / name
+                body = source.read_bytes()
+                source.write_bytes(b'#' + body[1:])
+                self.assertEqual(source.stat().st_size, len(body))
+                self.assert_refused(self.invoke(), 'changed bootstrap content')
+                source.write_bytes(body)
 
     def test_same_size_descriptor_tamper_is_refused_by_selected_pin(self):
         self.copied_source()
@@ -159,6 +166,43 @@ runpy.run_path(entry, run_name='__main__')
         wrong['overrides'][0]['historical']['sha256'] = '0' * 64
         self.rewrite_binding(wrong)
         self.assert_refused(self.invoke(), 'historical replacement identity')
+
+    def test_missing_or_extra_replacement_is_refused(self):
+        self.copied_source()
+        original = json.loads(self.binding_body)
+        missing = json.loads(json.dumps(original))
+        missing['overrides'] = [row for row in missing['overrides'] if row['path'] != RECIPE]
+        extra = json.loads(json.dumps(original))
+        extra['overrides'].append(dict(extra['overrides'][-1], path='runtime/mintbench/catalog.py'))
+        for value in (missing, extra):
+            with self.subTest(count=len(value['overrides'])):
+                self.rewrite_binding(value)
+                self.assert_refused(self.invoke(), 'exact current inspection replacement members')
+
+    def test_wrong_task_and_stale_recipe_pin_are_refused(self):
+        self.copied_source()
+        original = json.loads(self.binding_body)
+        wrong_task = json.loads(json.dumps(original))
+        wrong_task['task'] = 'PAPER-paper-method-012'
+        self.rewrite_binding(wrong_task)
+        self.assert_refused(self.invoke(), 'explicit current inspection identity')
+        stale = json.loads(json.dumps(original))
+        recipe = next(row for row in stale['overrides'] if row['path'] == RECIPE)
+        recipe['current']['sha256'] = recipe['historical']['sha256']
+        self.rewrite_binding(stale)
+        self.assert_refused(self.invoke(), 'changed bootstrap content')
+
+    def test_current_inspection_does_not_execute_runtime_modules(self):
+        guard = '''import runpy, sys
+entry = sys.argv[1]
+def reject_runtime_compile(event, args):
+    if event == 'compile' and '/runtime/mintbench/' in str(args[1]):
+        raise AssertionError('runtime module was executed')
+sys.addaudithook(reject_runtime_compile)
+sys.argv = sys.argv[1:]
+runpy.run_path(entry, run_name='__main__')
+'''
+        self.assert_report(self.invoke(guard=guard))
 
     def test_symlinked_binding_and_runtime_source_are_refused(self):
         self.copied_source()

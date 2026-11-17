@@ -1,0 +1,32 @@
+{
+  "task_id": "PAPER-paper-method-033",
+  "component": "source_calibration_and_best_of_eight_selection",
+  "author_repository": "https://github.com/littlepure2333/MindBridge",
+  "author_revision": "2a3943ff5b619db6f85f16a5e7ff1331d25def55",
+  "retrieval": "Existing original public-source cache and CODE_PROVENANCE.json; no new network acquisition or target access",
+  "sources": [
+    {"path": "src/data.py", "bytes": 6199, "sha256": "cbae812311894ce24cdb22bfcccda05674c0016fdadb7138c5777f441a25719f", "git_blob": "052142b8b9f8e19e3c5a1115bde5eedc4617cdbd", "locator": "NSDDataset.__init__, _load_samples and get_dls", "supports": "Group at first period, sort sample key strings, take prefix before loader shuffling; training/validation directories remain separate"},
+    {"path": "src/recon.py", "bytes": 8757, "sha256": "25d51784be7fcdda765df60ec30c11ba7ea272162be129cf98a21705b07deb5c", "git_blob": "9b4077c4c72629ba7b1837a4a4c9d491a5f317c6", "locator": "prepare_CLIP lines 92-99 and reconstruction lines 208-230", "supports": "Hidden-state normalized Clipper features select a single reconstruction before saving for evaluation"},
+    {"path": "src/models.py", "bytes": 18341, "sha256": "5f2481b82fdcb547a9b9ce1902290930312de3301a0e17a7dca721ca82873e13", "git_blob": "43546ca8b30ab7b495a9ba9a2726f9dbf4a90621", "locator": "Clipper lines 35-126", "supports": "Bicubic/crop hidden-state selection transforms, post-layernorm/projection and CLS-token normalization"},
+    {"path": "src/utils.py", "bytes": 12029, "sha256": "cdf5f71c5a0c8d30b3dc3deb16e43f0b019f7abbda524bff4825c2c840021a99", "git_blob": "30f49002f9b12e89d5a3ec1a55573633c986cbe1", "locator": "batchwise_cosine_similarity lines 62-68; reconstruction lines 249-266", "supports": "Flatten and normalize target/candidate token embeddings, cosine similarity, first nanargmax"},
+    {"path": "src/eval.py", "bytes": 9654, "sha256": "bde3c051c6f1c3be47c7075986ba2854a16561ff8702b3cbbf412edfcdf5c180", "git_blob": "7d50b16eb7d77952019153c682f1020b117b9d3b", "locator": "two_way_identification and CLIP metric", "supports": "Final projected CLIP encode_image features with bilinear resize and Pearson identification differ from selection features; all metrics consume same selected reconstruction"},
+    {"path": "scripts/adapt_bridge.sh", "bytes": 831, "sha256": "5219d2306d780bbad48ff3ce351fee50d732077d653141f076d5da073aea9293", "git_blob": "1a274d73bfc86d1a21bd2bf155e72ad3973f3a63", "locator": "subj_source, subj_target and length", "supports": "Source subjects 1/2/5; target 7; checked-in length 4000"},
+    {"path": "scripts/inference.sh", "bytes": 600, "sha256": "74029abee7295dc6d0d07e98791a23bea79c388bdb35a60a79255f64e53df238", "git_blob": "2d300614959a51db8cd9d5883ef1fb52d15b68df", "locator": "recons_per_sample", "supports": "Eight reconstructions"}
+  ],
+  "source_papers": [
+    {"url": "https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.pdf", "bytes": 3500425, "sha256": "9b7fea052a0f24479c33bbe622545ee6f31be6cfed6066cf65db0c61bd4e4f9b", "locator": "Section 3.1 and Table 2", "supports": "982 images; target-7 source cohort; all three budgets and eight metrics"},
+    {"url": "https://openaccess.thecvf.com/content/CVPR2024/supplemental/Wang_MindBridge_A_Cross-Subject_CVPR_2024_supplemental.pdf", "bytes": 2307983, "sha256": "9f2abee1c9ebfc60cefb4f0e854e1d941a78c5850f082196193eef38f381a0cd", "locator": "Section B", "supports": "Eight reconstructions; highest stimulus CLIP similarity selects final result"}
+  ],
+  "cached_split_metadata": {
+    "dataset": "pscotti/naturalscenesdataset",
+    "revision": "421fb80ea4ca5600c7364ed400f9a5941380c387",
+    "git_blob": "27d061ba9685f98f34264d46c55febdb7f9e199e",
+    "cached_file": "metadata_subj01.json",
+    "bytes": 88,
+    "sha256": "84dc6d92bee107b80788c355e3a5165dfb3bfc8418dfea4b7db6bded3c9db7f7",
+    "reported_counts": {"train": 8559, "val": 300, "test": 982},
+    "limit": "Count metadata only; exact original target-7 training/test and calibration image identities remain unauthenticated"
+  },
+  "qualification": "Independent source-informed software component only; no authentic feature extraction, native replay or scientific improvement",
+  "redistribution": "No upstream source code or paper content copied into this implementation; source/model/data rights remain separate"
+}

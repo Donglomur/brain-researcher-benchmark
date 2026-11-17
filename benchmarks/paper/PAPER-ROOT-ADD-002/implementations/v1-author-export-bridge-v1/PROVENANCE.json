@@ -1,0 +1,61 @@
+{
+  "schema": "typing-v1-author-export-bridge-provenance-v1",
+  "task_id": "PAPER-ROOT-ADD-002",
+  "official_code_commit": "5f9889621d0df391c5aab37c996683d308e6e926",
+  "data_revision": "88f9096c6ce3a3fb17cc7b8e3131ff7f96da5684",
+  "source_pins": [
+    {
+      "path": "brain2qwerty_v1/callbacks.py",
+      "sha256": "78e3faf3018e1f8cc9d5296c539bddfbd1b5b6b5f979f3d7d519545289306550",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/callbacks.py",
+      "supports": "Source callback keys, first-index argmax, per-observation append order, presented reference source and rank-zero-only output."
+    },
+    {
+      "path": "brain2qwerty_v1/utils.py",
+      "sha256": "e296caa5ab77ba5c25a69167923221047282b5375a9eeca49ec2ee4939a3f437",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/utils.py",
+      "supports": "SentenceGroupedDistributedSampler round-robin whole-sentence assignment and repeated-index padding of shorter nonempty ranks."
+    },
+    {
+      "path": "brain2qwerty_v1/transforms.py",
+      "sha256": "765651ef8a7351225058cdd59ad79a8e20ac529d01e0a134ee398f4f84fc7b82",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/transforms.py",
+      "supports": "Post-transform stable sentence_UID plus button_UID, chronologically ordered per sentence."
+    },
+    {
+      "path": "brain2qwerty_v1/scripts/extract_predictions.py",
+      "sha256": "83f18fd917d8b19592354c7a8d3e59fa2a3072141f2b15c9142f7771917b29bb",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/scripts/extract_predictions.py",
+      "supports": "Presented true reference, predicted class reconstruction and per-person mean sentence CER for MEG S<n> identifiers. Numeric EEG participant IDs are not recognized by the export's subject regex; raw EEG grouping parity is unresolved."
+    }
+  ],
+  "predecessor": {
+    "path": "../v1-transcript-evaluation-v1/evaluator.py",
+    "sha256": "55916e0c191c94d480f18aff1dd587faffe71802c5802a75a1a09153f75f1f92",
+    "source_contract_sha256": "36eafec00f096a5ef22c4e271e61429901369989e72248543643f28913c9e0b6"
+  },
+  "source_findings": [
+    "Rank-zero-only callback output cannot establish full distributed test-sentence coverage.",
+    "Shorter nonempty source sampler ranks repeat raw sample indices; callback appends those predictions, so an all-rank merge alone does not produce one class per physical keystroke.",
+    "Original callback JSON omits button_UID; its observed order cannot be authenticated by matching row counts or manufacturing IDs from the expected panel.",
+    "Author extract_subject searches S<n> in the sentence UID. Registered numeric EEG participant UIDs can therefore collapse to unknown, while the predecessor evaluator uses explicit panel EEG person identities. The bridge retains scientific panel grouping; exact raw author EEG export aggregation parity remains unresolved."
+  ],
+  "implementation_scope": "Independent standard-library capture sidecar, exact full-panel callback conversion, and source sampler count diagnostic. Existing evaluator is reused unchanged.",
+  "intentional_strictness": [
+    "Require actual observed button_UID trace and complete rank/sentence coverage.",
+    "Refuse duplicates and padding instead of selecting or deduplicating predictions.",
+    "Refuse nonfinite logits, inconsistent argmax, impossible classes and batch zip truncation."
+  ],
+  "new_download_bytes": 0,
+  "native_data_preparation": false,
+  "native_author_execution": false,
+  "candidate_or_model_trials": 0,
+  "qualification": "software_component_only",
+  "remaining_limits": [
+    "Generated objects exercise capture logic; actual Lightning/tensor/distributed integration remains unexecuted.",
+    "A source commit/run digest does not prove the supplied logits came from the author model.",
+    "The unchanged improvement contract still lacks original split/cohort authentication, exact neural-only published baseline and matched author calibration.",
+    "EEG conversion is supported against the registered panel schema but does not establish exact grouping parity with the raw author export's S<n>-only participant regex.",
+    "This component does not establish scientific improvement or current SOTA."
+  ]
+}

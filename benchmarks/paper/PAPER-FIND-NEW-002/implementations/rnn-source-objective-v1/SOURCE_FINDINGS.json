@@ -1,0 +1,195 @@
+{
+  "schema_version": "sequence-filtering-rnn-source-findings/v1",
+  "task_id": "PAPER-FIND-NEW-002",
+  "qualification": "source_objective_recovered; notebook_recipe_not_reconciled; arithmetic_component_only",
+  "source": {
+    "url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
+    "version": "Zenodo 18726362 v1",
+    "archive_bytes": 7365221563,
+    "publisher_md5": "35b86a22f10b600dbd98f23db3f9343d",
+    "historical_archive_sha256": "22cabe7b22d075bb8393a9a51924813857221cf29a38cc778ca4f533fcf8f313",
+    "historical_full_archive_verification_receipt_sha256": "d9474d17c07b83e635dd777b3a61e9a4353b63f43b169c06f3d4ed56915b9a8c",
+    "current_inspection": "Only two source members read and independently SHA-256 hashed; full archive checksum is historical evidence, not newly recomputed.",
+    "members": [
+      {
+        "path": "sequenceFiltering/code/RNN_seqmodel.ipynb",
+        "bytes": 249260,
+        "sha256": "31b0c0068f3835e3c10db3f839b0bcbc5b67183baf56521bff1132ceda2f276e",
+        "crc32": "062aae97"
+      },
+      {
+        "path": "sequenceFiltering/src/modules_simpleRNN.py",
+        "bytes": 13354,
+        "sha256": "1db27d131c6be6e41ad6f032df5612f653c97b5a187bf2b658cbc3e9f4d80a63",
+        "crc32": "9def6c31"
+      }
+    ]
+  },
+  "source_locators": {
+    "index_convention": "notebook cells zero-based; module lines one-based",
+    "module_definitions": {
+      "RNN": {
+        "first_line_one_based": 20,
+        "last_line_one_based": 77
+      },
+      "loss_mse": {
+        "first_line_one_based": 80,
+        "last_line_one_based": 94
+      },
+      "net_loss": {
+        "first_line_one_based": 101,
+        "last_line_one_based": 136
+      },
+      "train": {
+        "first_line_one_based": 138,
+        "last_line_one_based": 252
+      },
+      "set_plot": {
+        "first_line_one_based": 255,
+        "last_line_one_based": 284
+      },
+      "remove_axes": {
+        "first_line_one_based": 286,
+        "last_line_one_based": 291
+      },
+      "plotFn": {
+        "first_line_one_based": 293,
+        "last_line_one_based": 362
+      }
+    },
+    "notebook_parameters": 3,
+    "weights_and_amplitudes": 4,
+    "sequence_roster": 5,
+    "target_amplitude_mask": 6,
+    "training_inputs": 7,
+    "target_inputs": 8,
+    "target_temporal_alignment": 9,
+    "tensor_dtype_and_device": 10,
+    "effective_training_call": 11,
+    "final_forward_without_metric": 12,
+    "panel_L_inputs": [
+      14,
+      16
+    ],
+    "panel_L_plot": 18,
+    "panel_M_inputs": [
+      20,
+      21
+    ],
+    "panel_M_plot": 23
+  },
+  "recovered_metric": {
+    "name": "modules_simpleRNN.loss_mse",
+    "direction": "lower",
+    "formula": "mean_r(sum_t(mean_d((m[r,t,d]*(target[r,t,d]-output[r,t,d]))**2))/sum_t(m[r,t,0]))",
+    "axes": [
+      "sequence_row",
+      "integration_timestep",
+      "output_unit"
+    ],
+    "notebook_shape": [
+      32,
+      1000,
+      500
+    ],
+    "notebook_mask": "ones_like(output_train), all entries one",
+    "trial_weighting": "equal after per-trial denominator; all 32 rows retained",
+    "published_exact_baseline": null,
+    "mathematical_reducer_implementation": "rnn_loss.py",
+    "implementation_accumulation": "float64; author casts tensors to torch.FloatTensor"
+  },
+  "notebook_recipe": {
+    "neurons": 500,
+    "input_patterns": 18,
+    "units_per_disjoint_pattern": 20,
+    "pattern_amplitude_distribution": "descending sorted exponential, scale 0.05",
+    "readout": "fixed identity500",
+    "initial_recurrent_gain": 0.8,
+    "membrane_time_constant_ms": 60,
+    "integration_step_ms": 1,
+    "trial_duration_ms": 1000,
+    "stimulus_start_ms": 200,
+    "pattern_duration_ms": 120,
+    "target_scaling": [
+      {
+        "first_units": 7,
+        "scale": 2.0
+      },
+      {
+        "remaining_units": 13,
+        "scale": 0.5
+      }
+    ],
+    "natural_sequence_rows": 14,
+    "natural_sequence_definition": "row r consists of [r,r+1,r+2,r+3,r+4], r=0..13",
+    "remaining_sequence_rows": 18,
+    "remaining_sequence_list_generation": "np.random.choice(range(18), 5, replace=False), repeated 18 times",
+    "remaining_sequence_actual_exposure": "Both input_train and input_target remain zero on all 18 rows",
+    "target_alignment": "output_train[:,0,:] derives from input_target[:,0,:]; output_train[:,i+1,:] derives from input_target[:,i,:]",
+    "training_epochs_effective": 600,
+    "unused_n_ep": 100,
+    "learning_rate": 0.01,
+    "optimizer": "Adam",
+    "gradient_clip_norm": 2.0,
+    "default_batch_size": 32,
+    "optimizer_steps_per_epoch": 1,
+    "trainable_parameters": "recurrent weights; input/output weights and initial state fixed",
+    "forward_noise_std": 0.0005,
+    "random_seed_or_rng_state_frozen": false
+  },
+  "required_companion_demonstrations": {
+    "panel_L": {
+      "trained": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "untrained": [
+        13,
+        5,
+        16,
+        14,
+        2
+      ],
+      "endpoint": "plot mean output over each sequence stimulated units"
+    },
+    "panel_M": {
+      "matched": [
+        5,
+        6
+      ],
+      "unmatched": [
+        2,
+        6
+      ],
+      "endpoint": "plot mean output over units stimulated by pattern 6"
+    },
+    "fit_score_computed_for_these_panels": false
+  },
+  "remaining_limits": [
+    "Current final-paper contract records 500 epochs, notebook call uses 600; no reconciliation or recipe substitution performed.",
+    "All 18 random-list training rows are null inputs/targets in released code; complete paper-described control/scrambled exposure remains to be reconciled.",
+    "Source initialization, target amplitudes, random lists and forward noise are not seeded or frozen; native realization has not been prepared.",
+    "Stored logs have only three-decimal loss strings; none is an exact baseline, and no exact final post-update fit metric is recovered.",
+    "No author replay, candidate run, uncertainty/effect rule or final source-protocol comparison exists in this component.",
+    "No figure4_data.npz member was decoded; its ability to recover further source realization evidence remains unassessed."
+  ],
+  "costs_this_component": {
+    "new_source_download_bytes": 0,
+    "native_array_decodes": 0,
+    "model_execution_calls": 0,
+    "training_calls": 0,
+    "source_member_bytes_inspected": 262614
+  },
+  "integration_proposal": "Amend unresolved metric/aggregation fields using source code evidence after independent review. Retain source_unresolved until full original recipe, source realization and author comparison are bound; never promote this component to improvement_ready.",
+  "auxiliary_source_inventory": {
+    "path_in_source": "sequenceFiltering/README.md",
+    "bytes": 6461,
+    "sha256": "564c049cab6ce6eb4548e4360916fee7b3e0426f3866c041d572b7554c6c65ff",
+    "pin_role": "historical source-closure verification",
+    "locator": "Data File Contents / figure4_data.npz",
+    "finding": "README identifies 76 arrays for empirical AC, DE, F, HI, JK panels; it does not identify RNN weights, RNG states or target tensors. Numerical NPZ payload was not opened; inventory is not proof of absence."
+  }
+}

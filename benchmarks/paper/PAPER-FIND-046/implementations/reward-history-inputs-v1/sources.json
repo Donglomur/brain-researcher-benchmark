@@ -1,0 +1,63 @@
+{
+  "task_id": "PAPER-FIND-046",
+  "implementation": "reward-history-inputs-v1",
+  "qualification": "regression_input_construction_only",
+  "source_revision": "b7b68ca8c107d8ce4a061e16da214307f175c3e5",
+  "current_contract_pins": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-046/task.json",
+      "bytes": 15653,
+      "sha256": "d59a4d518279c33683f2e53aa1258f7a1903115a3695d57e23d4762c043d1955"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-046/improvement.v1.json",
+      "bytes": 8173,
+      "sha256": "9fcc4b60121dd28378d26ede07f43d972f8ba2e853bf29f4e099a4214acb63f1"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "EstrousRPEPaper/process/photometry/DARegressRewardHistory_estrous.m",
+      "bytes": 2320,
+      "sha256": "ebb3a7fdf9c7ef396f5665ff52e055051e8af15d72e1657fc2dd3c637dbbf29f",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/photometry/DARegressRewardHistory_estrous.m",
+      "role": "Exact AUC column indexing, day/trial padding, log2 reward lags, stage masks and robustfit input ordering"
+    },
+    {
+      "path": "EstrousRPEPaper/process/ProcessData_Figure3.m",
+      "bytes": 7714,
+      "sha256": "3256dfe1a5767e057854e6a66924d71d84c310de5a6643ab2a04466f34681adb",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/ProcessData_Figure3.m",
+      "role": "Figure 3k complete nine-rat ordered population, PstructCPIn input, seven prior rewards, 0 to 0.5 second endpoints, Proestrus/Diestrus ordering"
+    }
+  ],
+  "source_acquisition": "Reused preexisting external pinned source cache; both content hashes rechecked. No new remote requests or acquired bytes.",
+  "source_code_license": "MIT; existing notice retained at ../initial-evaluator-v1/SOURCE_LICENSE.txt",
+  "preserved_scientific_scope": {
+    "figure": "3k",
+    "native_call": "DARegressRewardHistory_estrous(NAcc_ratlist,PstructCPIn,Bstruct,0,0.5,7,{'Proestrus','Diestrus'})",
+    "ratlist": ["G008", "G016", "G021", "G022", "G024", "G036", "G037", "G051", "G127"],
+    "ordered_improvement_endpoint": null,
+    "coefficient_estimator": "Native MATLAB robustfit; not implemented or substituted",
+    "new_splits": false,
+    "data_subsets": false,
+    "companion_controls": "Existing Figure 2 stage/serum component remains separate; other Figure 3 RPE and supplied BestFits analyses remain unimplemented"
+  },
+  "prospective_export_validity_checks": [
+    "Require original behavior order to equal source constructed sorted day/trial order; reject duplicate identities instead of silent positional relabeling.",
+    "Reject nonpositive or missing current rewards instead of creating nonfinite/complex log2 values or silently deleting rows before the original stage mask.",
+    "Require finite signal or explicit null, rectangular CPIn and a clock resolving both AUC endpoints.",
+    "Require all nine source rats; never select a reduced cohort to pass checks.",
+    "Require at least seven padded trial positions per rat; shorter support fails the source MATLAB lag assignment."
+  ],
+  "preserved_source_discrepancies": [
+    "Unshifted pstruct column indices and rectangular sum*dt differ from Figure 2's stripped, baseline-subtracted trapezoid calculation.",
+    "Lagging follows day concatenation and may cross sessions.",
+    "Executable stage-only mask differs from mixed-block/nonviolation comments."
+  ],
+  "new_download_bytes": 0,
+  "native_data_preparations": 0,
+  "model_fits": 0,
+  "scientific_runs": 0,
+  "dependency_installs": 0
+}

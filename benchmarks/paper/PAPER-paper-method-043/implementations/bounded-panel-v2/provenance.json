@@ -1,0 +1,78 @@
+{
+  "schema": "neuropictor-bounded-panel-provenance/v1",
+  "task_id": "PAPER-paper-method-043",
+  "component": "bounded-panel-v2",
+  "qualification": "generated-software-controls-only",
+  "change": "Replace eager full-population pixel/feature materialization with identity-aligned individual NPY reads, one image and sixteen feature rows at a time; preserve all subject distractors and all eight metric outputs.",
+  "predecessor": {
+    "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
+    "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615",
+    "role": "Retained imported arithmetic and protocol validation; no historical file edits."
+  },
+  "source": {
+    "paper": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+    "repository": "https://github.com/jingyanghuo/neuropictor",
+    "commit": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+    "release_metadata_revision": "04ead78eaf0b54a5acfb535aedb87ed27895816b",
+    "metric_locator": "eval_metrics.py lines 101-266",
+    "population_locator": "Paper sections 4.1-4.2; dataset/dataset.py lines 60-79",
+    "source_retrieval_this_component": false,
+    "basis": "Existing task contract, predecessor implementation and prior independent source/final review; exact upstream bytes were not newly acquired or independently hashed in this component."
+  },
+  "preserved_semantics": [
+    "Four-subject paper scope is 1,2,5,7, each with the same982 stimulus IDs; exact authentic membership remains unresolved.",
+    "Full N-1 distractors within each subject; per-prediction column comparison; strict ties fail.",
+    "Paired pixel Pearson r and paired EfficientNet/SwAV correlation distances.",
+    "AlexNet2,AlexNet5,Inception,CLIP two-way identification fractions; all eight metric families remain separate.",
+    "Existing explicit 2D Gaussian SSIM is still prospective, never certified historical SSIM.",
+    "Equal-weight subject means, one output per subject-stimulus, unchanged sample/session identity and extraction binding.",
+    "Pretrained,target-only,neural-free controls with matched encoder initialization, target data, priors and budgets."
+  ],
+  "software_validation": {
+    "pool_attempts": [
+      {"id": "paper_02-method043-bounded-check01", "status": "busy", "launched": false},
+      {"id": "paper_02-method043-bounded-check02", "status": "succeeded", "tests": 9,
+       "unittest_seconds": 2.615, "child_cpu_seconds": 2.157353,
+       "child_peak_rss_bytes": 353796096, "thread_environment": 1,
+       "declared_ram_bytes": 1073741824, "timeout_seconds": 180}
+    ],
+    "controls": [
+      "All982 generated distractors with duplicated correct feature at final index; strict tie and complete denominator.",
+      "Independent scalar Pearson oracle on35x9 asymmetric features across16-row block boundaries.",
+      "All-eight-metric predecessor parity, reordered identities across unequal generated subject cohorts, equal-weight subject aggregation.",
+      "Bounded image/feature reads and closing every data mapping after its copied block.",
+      "Population,hash,identity,extraction,matched-comparator and late file mutation refusal.",
+      "End-to-end CLI and exclusive output creation."
+    ],
+    "fixture_scope": "Generated software inputs only; no authentic NSD labels/images/fMRI or predictions.",
+    "peak_rss_scope": "Maximum child RSS from RUSAGE_CHILDREN, not simultaneous process-tree memory; not native full-population memory."
+  },
+  "resource_scope": {
+    "downloads_bytes": 0,
+    "dependency_installs": 0,
+    "scientific_runs": 0,
+    "model_calls": 0,
+    "authentic_preparation": false,
+    "native_full_population_runtime_measured": false,
+    "float64_complete3928_pixel_tensor_bytes": 17027880000,
+    "feature_block_rows": 16,
+    "max_feature_width": 1000000,
+    "pixel_rows_per_read": 1,
+    "note": "The complete tensor byte count is dimensional arithmetic, not a runtime measurement. Blocks trade repeated I/O for bounded array allocations; no native speed or resource qualification claim."
+  },
+  "outcomes": {
+    "paper_reproduction": "first-class outcome; not established",
+    "paper_improvement": "first-class outcome; not established",
+    "paired_paper_data_vs_author_code_delivery": "not implemented",
+    "native_metric_parity": false,
+    "research_qualified": false,
+    "current_sota": "not claimed"
+  },
+  "remaining_gaps": [
+    "Original stimulus/session and all-eight-subject pretraining membership and exposure.",
+    "Native image transforms, feature extraction and weight pins; historical grayscale multichannel SSIM semantics.",
+    "Released model and encoder ancestry, component rights, trusted operator preparation.",
+    "Authentic complete author reproduction, paired participant delivery and separately frozen reproduction/improvement decision rules.",
+    "Full-population native memory, I/O, wall-time and resource approval protocol."
+  ]
+}

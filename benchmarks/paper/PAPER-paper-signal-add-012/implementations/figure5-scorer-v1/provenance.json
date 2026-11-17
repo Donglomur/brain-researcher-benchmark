@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "PAPER-paper-signal-add-012",
+  "component": "figure5-scorer-v1",
+  "purpose": "Operator-side complete-roster paired prediction metrics for the original Dataset-1 Figure 5 panel",
+  "outcome_separation": "Reproduction offsets from rounded source anchors and candidate-minus-author improvement differences reported separately; neither emits an outcome verdict",
+  "access_conditions": ["author_reference", "paper_data", "paper_data_author_code"],
+  "implementation": "New standard-library Python; no copied author code or native classifier execution",
+  "source_paper": {
+    "doi": "10.1038/s41467-024-53299-x",
+    "pmcid": "PMC11502666",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11502666/",
+    "xml_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11502666/fullTextXML",
+    "locators": ["Figure 5b,c caption", "Integration and segregation as predictors of states of consciousness", "Training and evaluation of machine learning models"],
+    "inspection": "Existing public primary-article XML and plain-text cache from prior scientific review; no new request"
+  },
+  "author_source_reference": {
+    "repository": "https://github.com/janghw4/multilevel-integration-segregation-balance",
+    "revision": "fba91ec089cb5d582c183bbdc6599c706a38f437",
+    "role": "Existing upstream ISD implementation, not a recovered Figure 5 classifier; not invoked by this scorer"
+  },
+  "frozen_scientific_scope": {
+    "dataset": "Dataset-1",
+    "panel": "Figure 5b,c original LOSO result",
+    "participants": 19,
+    "positive_class": "awake",
+    "negative_class": "loss of responsiveness",
+    "primary_metric": "balanced accuracy per participant, equal-participant mean",
+    "companion_metric": "ROC AUC per participant and macro mean; displayed source ROC curve aggregation still requires reconciliation",
+    "published_rounded_anchors": {"balanced_accuracy": 0.93, "roc_auc": 0.984},
+    "uncertainty": "Descriptive subject SEM only; no inferential or paper-win decision"
+  },
+  "source_recipe_facts_not_executed": {
+    "features": 18,
+    "feature_scope": "Integration and segregation for whole brain and eight networks",
+    "training_states": ["Baseline", "Deep LOR excluding first and last five minutes", "Recovery"],
+    "training_samples_per_class": 20000,
+    "random_forest_trees": 100,
+    "features_per_split": 5,
+    "tree_stopping": "Pure leaves"
+  },
+  "remaining_scientific_gaps": [
+    "Authentic original 19-person roster and behavioral label/time binding",
+    "Original evaluation window coverage and source preparation",
+    "Original random sample protocol, author classifier replay and stochastic calibration",
+    "Original feature/network assignment and dependency/diagonal parity",
+    "Source ROC aggregation, exact source precision and required source controls",
+    "Predeclared effect threshold and justified paired uncertainty with overlapping LOSO fits"
+  ],
+  "qualification": "Useful metric implementation; no authentic preparation, author calibration, candidate performance or paper improvement established",
+  "resources": {
+    "new_download_bytes": 0,
+    "authentic_data_runs": 0,
+    "training_or_model_runs": 0,
+    "dependency_installs": 0,
+    "test_kind": "Generated controls only; actual outcomes recorded externally"
+  }
+}
