@@ -18,7 +18,7 @@ from unittest.mock import patch
 HERE = Path(__file__).resolve().parent
 BEHAVIOR = None
 PINS = {
-    "portable_regions.py": (10505, "b7b919c277340ed73953bd8b921f2bb2570008997565c91a41d3eac994089b93"),
+    "portable_regions.py": (10629, "696b567168bc951ac7cd2748ec5e8895b2c2a44c8520daef1913e3af3d18ec80"),
     "projection_verify.py": (20338, "c98bdf711e9245202c5f4cbd498e5bc22f65b0387d31367650a4ab8e453b201d"),
     "behavior_reference.py": (14692, "f3c724074660dda8f692831eecd6082fd4c7e1750714aa3e3fb8d15a7d4d9109"),
 }
@@ -30,7 +30,7 @@ def load(path, name):
         raise ValueError("wrong delivery source: " + str(path))
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(raw, spec.origin, "exec", dont_inherit=True), module.__dict__)
     return module
 
 

@@ -33,7 +33,8 @@ def pinned_module(path, pin, name):
         raise ValueError("wrong immutable source: " + str(path))
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the authenticated snapshot, never a cache or a second file read.
+    exec(compile(body, spec.origin, "exec", dont_inherit=True), module.__dict__)
     return module
 
 
