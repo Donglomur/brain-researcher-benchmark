@@ -84,6 +84,27 @@ class DeliveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'cannot promote'):
             module.specifications(self.root)
 
+    def test_paper_legacy_adapters_cannot_dispatch_as_active_success(self):
+        paper = {'id': 'PAPER-example', 'track': 'paper'}
+        with patch.object(module, 'specifications', return_value=({}, {'PAPER-example': paper})), \
+             patch.object(module, 'runtime_manifests', side_effect=AssertionError('Must refuse before reading a legacy adapter')):
+            for command in (module.score_command, module.run_command):
+                with self.subTest(command=command.__name__), self.assertRaisesRegex(ValueError, 'calibration only'):
+                    command('PAPER-example', 'candidate', 'output', self.root)
+
+    def test_explicit_paper_calibration_dry_run_is_labeled_and_executes_nothing(self):
+        stdout = io.StringIO()
+        with patch.object(module, 'score_command', return_value=(['python3', 'historical.py'], self.root)) as dispatch, \
+             patch.object(module.subprocess, 'run', side_effect=AssertionError('No candidate execution')), \
+             redirect_stdout(stdout):
+            self.assertEqual(module.main(['score', 'PAPER-example', '--submission', 'candidate.json',
+                                         '--output', 'result', '--calibration', '--dry-run']), 0)
+        self.assertTrue(dispatch.call_args.kwargs['calibration'])
+        result = json.loads(stdout.getvalue())
+        self.assertEqual(result['evaluation_role'], 'calibration_only')
+        self.assertIs(result['paper_win'], False)
+        self.assertIs(result['executed'], False)
+
     def test_inconsistent_declared_roster_rejected(self):
         self.registry['source_counts']['total'] = 200
         self.save_registry()

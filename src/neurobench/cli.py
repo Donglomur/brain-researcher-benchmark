@@ -55,6 +55,7 @@ def public_summary(catalog):
             'full_candidate_contracts_completed': None, 'research_qualified': None,
             'submission_ready': None, 'scientific_readiness': 'unknown',
             'submission_readiness': 'unknown',
+            'paper_improvement': catalog['paper_improvement_counts'],
             'count_basis': 'Current benchmark registry and its pinned task definitions. '
                            'Runtime receipts, candidate code, data and private construction ledgers are not inspected.',
             'counting_note': catalog['counting_note']}
@@ -76,6 +77,8 @@ def public_implementations(catalog, task):
 
     return {**{key: task[key] for key in ('id', 'title', 'track', 'task_directory',
                                          'scientific_readiness', 'submission_readiness')},
+            'paper_improvement': task.get('paper_improvement'),
+            'evaluation_role': 'calibration_only' if task['track'] == 'paper' else 'declared_source',
             'implementations': sources(task['implementation_ids']),
             'related_sources': sources(task['related_implementation_ids']),
             'documentation': task.get('documentation', []),
@@ -93,11 +96,12 @@ def public_metadata_command(action, root, *, track=None, task_id=None):
             result.update(metadata_check='passed', check_scope='Deterministic public metadata/catalog consistency only')
         return result
     if action == 'list':
-        return [{key: row[key] for key in ('id', 'title', 'track', 'source_specification',
+        return [{**{key: row[key] for key in ('id', 'title', 'track', 'source_specification',
                   'registration_stage', 'specification', 'runtime_manifest',
                   'implementation_ids', 'related_implementation_ids',
                   'scientific_readiness', 'submission_readiness',
-                  'local_scoring_adapter_verified', 'local_program_runner_verified')}
+                  'local_scoring_adapter_verified', 'local_program_runner_verified')},
+                 'paper_improvement': row.get('paper_improvement')}
                 for row in catalog['tasks'] if track is None or row['track'] == track]
     row = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
     if row is None:
@@ -166,6 +170,8 @@ def _current_registry(root):
 
 def specifications(root=ROOT, complete=False):
     registry = _current_registry(root)
+    if registry.get('paper_improvement', {}).get('coverage_required'):
+        public_catalog_module().load(root)
     docs, expected = {}, {}
     for row in registry['tasks']:
         pin = _object(row.get('specification'), 'Task specification pin')
@@ -180,7 +186,10 @@ def specifications(root=ROOT, complete=False):
             raise ValueError('Incomplete canonical delivery schema')
         if row.get('registration_class') == 'canonical':
             admission = _object(doc.get('admission'), 'Canonical source admission')
-            if (doc.get('status') not in {'specification_only', 'source_only_inactive', 'source_implemented_inactive'}
+            allowed = {'specification_only', 'source_only_inactive', 'source_implemented_inactive'}
+            if row.get('specification_revision', {}).get('version') == 'paper-improvement/v1':
+                allowed |= {'improvement_ready', 'design_ready', 'source_unresolved', 'ineligible'}
+            if (doc.get('status') not in allowed
                     or admission.get('runnable') is not False
                     or admission.get('research_qualified') is not False):
                 raise ValueError('Source specifications cannot promote runtime or research admission')
@@ -381,10 +390,51 @@ def summary(root=ROOT):
     return public_metadata_command('status', root)
 
 
-def score_command(task_id, submission, output, root=ROOT, *, review=None, other_reserve_bytes=None):
+def paper_contract(task_id, root=ROOT):
+    """Read the current pinned public contract, never an implementation's claims."""
+    builder = public_catalog_module()
+    catalog = builder.load(root)
+    task = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
+    if task is None or task['track'] != 'paper':
+        raise ValueError('Expected a registered paper task')
+    improvement = task.get('paper_improvement')
+    if not improvement:
+        raise ValueError('No current paper improvement contract is bound for ' + task_id)
+    pin = improvement['contract']
+    path = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'])
+    return read(path)
+
+
+def compare_paper(task_id, result_path, root=ROOT):
+    contract = paper_contract(task_id, root)
+    # Result evidence is public aggregate metadata, not prediction or target data.
+    path = Path(result_path)
+    if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= 2 * 1024 * 1024:
+        raise ValueError('Comparison result must be bounded ordinary JSON metadata')
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('Duplicate comparison evidence key')
+            result[key] = value
+        return result
+    doc = json.loads(path.read_text(), object_pairs_hook=pairs,
+                     parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite comparison evidence')))
+    return public_catalog_module().improvement_module().compare(contract, doc)
+
+
+def require_paper_role(row, calibration):
+    if row['track'] == 'paper' and not calibration:
+        raise ValueError('Paper success requires same-task source-paper superiority under its improvement contract. '
+                         'Historical score/run adapters are calibration only; use --calibration explicitly, '
+                         'or paper-contract and compare-paper for the current objective.')
+
+
+def score_command(task_id, submission, output, root=ROOT, *, review=None, other_reserve_bytes=None, calibration=False):
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    require_paper_role(canonical[task_id], calibration)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local scoring adapter is registered for this command and task: ' + task_id
@@ -436,11 +486,12 @@ def score_command(task_id, submission, output, root=ROOT, *, review=None, other_
     return command, cwd
 
 
-def run_command(task_id, program, output, root=ROOT, *, review=None, other_reserve_bytes=None):
+def run_command(task_id, program, output, root=ROOT, *, review=None, other_reserve_bytes=None, calibration=False):
     """Construct one wrapper call. Never import or inspect candidate source text."""
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    require_paper_role(canonical[task_id], calibration)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is registered for this command and task: ' + task_id
@@ -489,17 +540,29 @@ def main(argv=None, root=None):
     p = subs.add_parser('show'); p.add_argument('id')
     p = subs.add_parser('implementations', help='Show current source paths, roles and limits for a task')
     p.add_argument('id')
+    p = subs.add_parser('paper-contract', help='Inspect the current source-grounded improvement contract')
+    p.add_argument('id')
+    p = subs.add_parser('compare-paper', help='Check aggregate comparison evidence against the frozen same-task contract')
+    p.add_argument('id'); p.add_argument('--result', required=True)
     p = subs.add_parser('score'); p.add_argument('id'); p.add_argument('--submission', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
+    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration adapter; cannot establish paper success')
     p = subs.add_parser('run'); p.add_argument('id'); p.add_argument('--program', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
+    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration program; cannot establish paper success')
     args = parser.parse_args(argv)
-    if args.action in ('status', 'check', 'list', 'show', 'implementations') and public_metadata_mode(root):
+    if args.action == 'paper-contract':
+        result = paper_contract(args.id, root)
+    elif args.action == 'compare-paper':
+        result = compare_paper(args.id, args.result, root)
+    elif args.action in ('status', 'check', 'list', 'show', 'implementations') and public_metadata_mode(root):
         result = public_metadata_command(args.action, root, track=getattr(args, 'track', None),
                                          task_id=getattr(args, 'id', None))
     else:
+        if args.calibration:
+            dispatch_options['calibration'] = True
         if args.action == 'run':
             command, cwd = run_command(args.id, args.program, args.output, **dispatch_options,
                                        review=args.review, other_reserve_bytes=args.other_reserve_bytes)
@@ -507,8 +570,12 @@ def main(argv=None, root=None):
             command, cwd = score_command(args.id, args.submission, args.output, **dispatch_options,
                                          review=args.review, other_reserve_bytes=args.other_reserve_bytes)
         if not args.dry_run:
+            if args.calibration:
+                print(json.dumps({'evaluation_role': 'calibration_only', 'paper_win': False}), file=sys.stderr)
             return subprocess.run(command, cwd=cwd, check=False).returncode
         result = {'argv': command, 'working_directory': str(cwd), 'executed': False}
+        if args.calibration:
+            result.update(evaluation_role='calibration_only', paper_win=False)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

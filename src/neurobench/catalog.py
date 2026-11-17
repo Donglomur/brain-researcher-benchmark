@@ -7,6 +7,7 @@ candidate entrypoints. Catalog membership is not execution qualification.
 import argparse
 from collections import Counter
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import posixpath
@@ -20,6 +21,24 @@ COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'input_assets', 'evaluation', 'resources', 'holds',
           'next_implementation_action', 'provenance', 'admission'}
 READ_LIMIT = 24 * 1024 * 1024
+
+
+def improvement_module():
+    spec = importlib.util.spec_from_file_location('neurobench_paper_improvement',
+                                                 Path(__file__).with_name('paper_improvement.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def improvement_counts(tasks):
+    papers = [row for row in tasks if row['track'] == 'paper']
+    dispositions = Counter(row.get('paper_improvement', {}).get('disposition', 'not_audited') for row in papers)
+    return {'registered': len(papers), 'covered': len(papers) - dispositions['not_audited'],
+            'eligible': dispositions['improvement_ready'] + dispositions['design_ready'],
+            'improvement_ready': dispositions['improvement_ready'],
+            'design_ready': dispositions['design_ready'], 'source_unresolved': dispositions['source_unresolved'],
+            'ineligible': dispositions['ineligible'], 'not_audited': dispositions['not_audited']}
 
 
 def need(value, message):
@@ -225,9 +244,35 @@ def discover(root=ROOT):
         need(row['specification']['path'] == directory + '/task.json', 'Authoritative task definition must be task.json in its task folder')
         doc = checked_pin(reader, row['specification'], 'Task specification')
         original = row['original_specification']
-        need(isinstance(original, dict) and isinstance(original.get('path'), str)
-             and all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
-             'Task definition differs from its preserved original identity')
+        need(isinstance(original, dict) and isinstance(original.get('path'), str), 'Missing original task identity')
+        revision = row.get('specification_revision')
+        if track == 'paper' and registry.get('paper_improvement', {}).get('coverage_required'):
+            need(revision is not None, 'Active paper improvement registry requires every paper contract')
+        improvement = None
+        if revision is None:
+            need(all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
+                 'Task definition differs from its preserved original identity')
+        else:
+            need(track == 'paper' and revision.get('version') == 'paper-improvement/v1',
+                 'Unsupported task specification revision')
+            previous = revision['previous_specification']
+            need(previous['path'] == directory + '/historical/task.pre-improvement.v1.json'
+                 and all(previous.get(key) == original.get(key) for key in ('bytes', 'sha256')),
+                 'Revised task does not preserve its original identity')
+            checked_pin(reader, previous, 'Historical paper specification')
+            pin = revision['improvement_contract']
+            need(pin['path'] == directory + '/improvement.v1.json', 'Improvement contract is outside its task')
+            contract = checked_pin(reader, pin, 'Paper improvement contract')
+            engine = improvement_module()
+            errors = engine.validate_contract(contract, task_id=identifier)
+            need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
+            need(doc.get('objective') == 'surpass_source_paper_same_task'
+                 and doc.get('evaluation', {}).get('contract') == pin
+                 and doc.get('evaluation', {}).get('reproduction_role') == 'calibration_only'
+                 and doc.get('status') == contract['disposition'],
+                 'Current paper definition is not bound to its improvement contract')
+            improvement = {**engine.summary(contract), 'contract': pin,
+                           'historical_specification': previous}
         identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
         need(isinstance(identity, str) and identity == row['specification_id'], 'Task specification identity mismatch')
         need(type(row['specification_alias']) is bool and row['specification_alias'] == (identity != identifier),
@@ -259,6 +304,10 @@ def discover(root=ROOT):
                     runtime_lineage_note='Preserved declaration lineage; not current execution qualification.',
                     implementation_ids=[], related_implementation_ids=[],
                     documentation=checked_documentation(row.get('documentation', []), directory, root))
+        if improvement is not None:
+            task['paper_improvement'] = improvement
+            task['specification_revision'] = revision
+            task['runtime_lineage_note'] = 'Historical paper implementations are calibration components; they cannot establish same-task paper improvement.'
         if task['runtime_manifest']:
             runtime = checked_pin(reader, task['runtime_manifest'], 'Runtime declaration')
             need(runtime.get('id') == identifier, 'Runtime declaration task ID mismatch')
@@ -301,6 +350,7 @@ def discover(root=ROOT):
                          'tasks_with_implementation_artifacts': sum(bool(row['implementation_ids']) for row in tasks),
                          'tasks_with_related_scientific_sources': sum(bool(row['related_implementation_ids']) for row in tasks),
                          'unresolved_implementation_artifacts': sum(row['scope'] == 'unresolved' for row in implementations)},
+              'paper_improvement_counts': improvement_counts(tasks),
               'scientific_readiness': 'unknown', 'submission_readiness': 'unknown',
               'counting_note': 'Registered task definitions, implementation artifacts and legacy runtime declarations are distinct. '
                                'An ownership link is not equivalence to the complete registered scientific contract or execution qualification. '
@@ -320,6 +370,9 @@ def source_links(catalog):
         for document in row.get('documentation', []):
             yield document['path']
         yield row['specification']['path']
+        if row.get('paper_improvement'):
+            yield row['paper_improvement']['contract']['path']
+            yield row['paper_improvement']['historical_specification']['path']
         if row['registry']:
             yield row['registry']
         if row['runtime_manifest']:
@@ -337,6 +390,7 @@ def validate(catalog, root=ROOT):
     tasks = catalog['tasks']
     need(len({row['id'] for row in tasks}) == len(tasks), 'Duplicate catalog task ID')
     need(all(catalog['counts'][key] == value for key, value in counts(tasks).items()), 'Catalog task totals disagree')
+    need(catalog.get('paper_improvement_counts') == improvement_counts(tasks), 'Paper improvement counts disagree')
     need(catalog['scientific_readiness'] == catalog['submission_readiness'] == 'unknown',
          'Catalog must not manufacture readiness')
     directories = set()
@@ -383,6 +437,16 @@ def markdown_link(label, path, base=OUTPUT):
     return '[' + label + '](' + quote(relative, safe='/.-_') + ')'
 
 
+def paper_count_text(catalog):
+    counts = catalog['paper_improvement_counts']
+    return (f"Paper improvement audit: **{counts['covered']}/{counts['registered']} covered**; "
+            f"**{counts['improvement_ready']} improvement-ready**, **{counts['design_ready']} source-grounded designs**, "
+            f"**{counts['source_unresolved']} source-unresolved**, **{counts['ineligible']} ineligible**, "
+            f"**{counts['not_audited']} not audited**. Eligibility means an ordered source task was identified; "
+            'it does not establish an executable or scientifically qualified comparison. '
+            'Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.\n\n')
+
+
 def render(catalog):
     c = catalog['counts']
     files = {'catalog.json': (json.dumps(catalog, indent=2, ensure_ascii=False) + '\n').encode()}
@@ -390,7 +454,7 @@ def render(catalog):
              'Scientific and submission readiness are **unknown here**. Runtime manifests '
              'and source components do not establish successful execution. Registered IDs '
              'may alias earlier contract identifiers; they do not count independent studies or datasets.\n\n')
-    files['README.md'] = (f'# Neuroscience task catalog\n\n{intro}'
+    files['README.md'] = (f'# Neuroscience task catalog\n\n{intro}' + paper_count_text(catalog) +
         f"Browse **{c['total']} registered questions**: [{c['paper']} paper tasks](paper.md) and "
         f"[{c['neural']} neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications "
         f"with {c['expansion_drafts']} expansion drafts.\n\n"
@@ -413,12 +477,16 @@ def render(catalog):
     for track in ('paper', 'neural'):
         rows = [row for row in catalog['tasks'] if row['track'] == track]
         text = f'# {track.title()} tasks ({len(rows)})\n\n[Catalog](README.md)\n\n' + intro
-        text += '| ID | Scientific question / title | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n'
+        if track == 'paper':
+            text += paper_count_text(catalog)
+        text += ('| ID | Scientific question / title | Current improvement disposition | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- | --- |\n' if track == 'paper' else
+                 '| ID | Scientific question / title | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n')
         for row in rows:
             title = row['title'].replace('\\', '\\\\').replace('[', '\\[').replace(']', '\\]').replace('|', '\\|').replace('\n', ' ').replace('\r', ' ')
             identifier = row['id'].replace('|', '\\|')
             runtime = markdown_link('manifest', row['runtime_manifest']['path']) if row['runtime_manifest'] else 'not included'
-            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + row['registration_stage'] + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n'
+            disposition = row.get('paper_improvement', {}).get('disposition', 'not audited' if track == 'paper' else 'not applicable')
+            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + (disposition + ' | ' if track == 'paper' else '') + row['registration_stage'] + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n'
         files[track + '.md'] = text.encode()
     text = '# Supporting source components\n\n[Catalog](README.md) · [Shared scientific families](../shared/README.md)\n\n' + intro
     text += 'These packages and shared contracts are not additional registered benchmark IDs. No task association is inferred from a folder name.\n\n'
@@ -547,8 +615,10 @@ def render_tracks(catalog):
     files = {}
     artifacts = {record['id']: record for record in catalog['implementations']}
     descriptions = {
-        'paper': ('Paper research', 'Reproduce a defined neuroscience result, then evaluate prospective improvement. '
-                  'Compare paper + data with paper + data + official code under matched budgets.'),
+        'paper': ('Paper research', 'Success requires surpassing the source paper on the same original scientific task. '
+                  'Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. '
+                  'Compare paper + data with paper + data + official code under fixed matched budgets; '
+                  'historical reproduction is calibration only.'),
         'neural': ('Neural-data understanding', 'Interpret neural and behavioral observations and make predictions. '
                    'Compare a prediction program written in advance with case-by-case investigation.'),
     }
@@ -559,6 +629,8 @@ def render_tracks(catalog):
                   ('Expansion drafts', [row for row in rows if row['registration_class'] == 'expansion'])]
         text = f'# {title}\n\n[All benchmarks](../README.md) · [Other track](../' + ('neural' if track == 'paper' else 'paper') + '/README.md)\n\n'
         text += description + '\n\n'
+        if track == 'paper':
+            text += paper_count_text(catalog)
         text += (f"**{len(rows)} registered task drafts: {len(groups[0][1])} original specifications + "
                  f"{len(groups[1][1])} expansion drafts.** Scientific and submission readiness remain **unknown**.\n\n"
                  'Each task folder contains its authoritative `task.json` and explicitly assigned source artifacts or links to shared families. '
@@ -567,12 +639,15 @@ def render_tracks(catalog):
                  'implementation artifacts do not add independent benchmarks.\n\n')
         for heading, group in groups:
             text += f'## {heading} ({len(group)})\n\n'
-            text += '| Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- |\n'
+            text += ('| Task | Scientific question / title | Improvement disposition | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n' if track == 'paper' else
+                     '| Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- |\n')
             for row in group:
                 task = task_directory(row['id'], track)
                 runtime = markdown_link('manifest', row['runtime_manifest']['path'], base) if row['runtime_manifest'] else 'not linked'
                 text += ('| ' + markdown_link(row['id'], task + '/README.md', base) + ' | '
-                         + markdown_text(row['title']) + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n')
+                         + markdown_text(row['title']) + ' | '
+                         + (row.get('paper_improvement', {}).get('disposition', 'not audited') + ' | ' if track == 'paper' else '')
+                         + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n')
         text += ('\nGenerated with `python3 scripts/catalog.py` from the repository root. '
                  'Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.\n')
         files[base + '/README.md'] = text.encode()
@@ -589,6 +664,17 @@ def render_tracks(catalog):
                      'The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are '
                      'assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. '
                      'Source presence is not evidence of successful execution or complete scientific qualification.\n\n')
+            if row.get('paper_improvement'):
+                improvement = row['paper_improvement']
+                text += ('## Current paper-improvement objective\n\n'
+                         '**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.\n\n'
+                         '**Disposition:** ' + markdown_text(improvement['disposition']) + '. '
+                         + markdown_text(improvement.get('disposition_reason', '')) + '\n\n'
+                         '- ' + markdown_link('Source-grounded improvement contract', improvement['contract']['path'], task) + '\n'
+                         '- ' + markdown_link('Preserved historical task definition (calibration only)', improvement['historical_specification']['path'], task) + '\n\n'
+                         'Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. '
+                         'Published paper results, reproduced author baselines, and verified current SOTA are separate claims. '
+                         'A new split, easier inputs, smaller cohort or changed metric is an extension.\n\n')
             if isinstance(row['declared_specification_status'], (dict, list)):
                 text += ('## Declared status fields\n\n'
                          'These values are copied from the task definition. They do not establish current execution or scientific qualification.\n\n'

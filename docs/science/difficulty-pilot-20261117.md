@@ -1,5 +1,10 @@
 # Development difficulty pilot — November 17, 2026 UTC
 
+**Historical calibration:** the four paper attempts below measure numerical
+reconstruction. They do not satisfy the current same-task source-paper improvement
+objective and establish no paper-improvement or current-SOTA success. The original
+results and scope remain unchanged as calibration evidence.
+
 Eight fresh agents completed and scored authentic-data attempts. Both paper
 endpoints were reconstructed in under four minutes with detailed method assistance.
 The neural programmes improved the primary metrics over fixed references, with
