@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "NEURAL-091",
+  "component": "initial-evaluator-v1",
+  "status": "construction_component_only",
+  "contract": {
+    "path": "benchmarks/neural/NEURAL-091/task.json",
+    "sha256": "b42c6803c1aede42efe4f65e422494247b355b2dd2799e5817ef61d759cc2445"
+  },
+  "entrypoints": {
+    "adapter": "evaluator.py:prepare",
+    "controls": "evaluator.py:fit_controls",
+    "scorer": "evaluator.py:score",
+    "cli": "evaluator.py"
+  },
+  "runtime": {"language": "Python", "minimum_version": "3.9", "dependencies": "standard library only"},
+  "official_sdk": {
+    "tag": "v2.16.2",
+    "commit": "a9b5c685396126d9748f1ccecf7c00f440569f69",
+    "resolution": "git ls-remote official AllenInstitute/AllenSDK tag; independently confirmed",
+    "local_source_bytes_verified": false,
+    "native_sdk_executed": false,
+    "inspection_limit": "Immutable source paths inspected through rendered web source; raw terminal source fetches failed TLS or API rate limits. Independent reviewer additionally checked latest official generated docs, not misrepresented as pinned bytes."
+  },
+  "source_mapping": [
+    {
+      "url": "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a9b5c685396126d9748f1ccecf7c00f440569f69/allensdk/brain_observatory/ecephys/ecephys_session.py",
+      "supports": ["master-clock stimulus times", "session-local condition identity", "native closed spike histogram boundaries", "invalid-interval warning without spike filtering", "closed-overlap invalid-stimulus masking"],
+      "implementation": ["prepare", "subtract", "half-open bisect_left counts"]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a9b5c685396126d9748f1ccecf7c00f440569f69/allensdk/brain_observatory/ecephys/__init__.py",
+      "supports": ["official numeric quality defaults"],
+      "implementation": ["documented upstream eligibility gate; no response-driven filtering"]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a9b5c685396126d9748f1ccecf7c00f440569f69/allensdk/brain_observatory/ecephys/probes.py",
+      "supports": ["quality, channel-validity and structure filtering semantics"],
+      "implementation": ["explicit selected-unit roster and quality policy; native checks remain held"]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a9b5c685396126d9748f1ccecf7c00f440569f69/allensdk/brain_observatory/ecephys/ecephys_session_api/ecephys_nwb_session_api.py",
+      "supports": ["NWB compatibility is version-dependent", "running and stimulus table interfaces"],
+      "implementation": ["export interface documented; native-schema verification held"]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a9b5c685396126d9748f1ccecf7c00f440569f69/LICENSE.txt",
+      "supports": ["Allen Institute Software License includes noncommercial redistribution restriction"],
+      "implementation": ["no SDK, data or stimulus vendoring; separate rights holds"]
+    }
+  ],
+  "prospective_policies": [
+    "Half-open spike and exposure intervals; SDK histogram endpoint behavior is not silently inherited.",
+    "Closed-overlap stimulus invalidation; union-subtracted probe-specific or all-probe exposure.",
+    "Exact frozen complete exported presentation table and mouse/session/unit roster.",
+    "Family holdout with session-scoped repeated-condition exclusion and symmetric temporal calibration purge.",
+    "Pre-onset state history only; completed running samples; causal pupil hold with maximum age and explicit missingness.",
+    "Exposure-weighted train-rate comparator and train-only median-cell state nuisance control.",
+    "Pool Poisson likelihood gains and spike counts within each mouse, then macro-average mice.",
+    "No epsilon or dropping zero-spike mice; explicit undefined and negative-infinity statuses.",
+    "Mouse-level percentile bootstrap only for finite multi-mouse estimands."
+  ],
+  "preserved_gates": [
+    "actual native recording hashes/sizes, eligibility and full population audit",
+    "raw pinned SDK source bytes and installed environment compatibility",
+    "native NWB/header/clock/stimulus/invalid-interval/pupil and repeat alignment",
+    "data/stimulus/code/checkpoint access and redistribution terms",
+    "protected execution and full permitted stimulus inputs",
+    "competent signal-derived stimulus-transfer predictive reference",
+    "authentic matched controls, independent replication and scientific qualification"
+  ],
+  "claims": {"canonical_admission_changed": false, "authentic_data_executed": false, "research_qualified": false, "submission_ready": false},
+  "verification": {"generated_engineering_controls_only": true, "independent_test_file": "test_independent.py", "lead_test_file": "test_evaluator.py", "independent_final_review": "external evidence; exact final file pins outside source"}
+}
