@@ -109,6 +109,7 @@ def write(p, raw, cap=1000000):
             n = os.write(fd, view)
             need(n > 0, 'complete write')
             view = view[n:]
+        os.fchmod(fd, 0o444)
         os.fsync(fd)
     finally:
         os.close(fd)
