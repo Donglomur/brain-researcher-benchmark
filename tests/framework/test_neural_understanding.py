@@ -282,6 +282,52 @@ class UnderstandingBindingTests(unittest.TestCase):
         unrelated["task_id"] = "NEURAL-UNRELATED"
         self.assertEqual(engine._current(original, unrelated, {}, "NEURAL-UNRELATED")["holds"], original["holds"])
 
+    def test_neural077_waveform_pair_successor_preserves_history_and_requires_exact_receipt(self):
+        home = ROOT / "benchmarks/neural/NEURAL-077"
+        original_body = (home / engine.HISTORY).read_bytes()
+        original = json.loads(original_body)
+        saved = copy.deepcopy(original)
+        prior = home / "docs/understanding-pre-waveform-pair-v1"
+        old_body = (prior / engine.CONTRACT).read_bytes()
+        old_contract = json.loads(old_body)
+        old = engine._current(original, old_contract,
+            engine._binding(old_body, original_body), "NEURAL-077")
+        self.assertEqual(engine._bytes(old), (prior / "task.json").read_bytes())
+        body = (home / engine.CONTRACT).read_bytes()
+        contract = json.loads(body)
+        current = engine._current(original, contract,
+            engine._binding(body, original_body), "NEURAL-077")
+        self.assertEqual(engine._bytes(current), (home / "task.json").read_bytes())
+        self.assertIn("accepted complete local adapter/transport", current["holds"][6]["requirement"])
+        self.assertIn("completed finite local numerical pair", current["next_implementation_action"][0])
+        self.assertEqual(current["admission"], old["admission"])
+        self.assertEqual(current["status"], "specification_only")
+        self.assertEqual(len(current["holds"]), len(old["holds"]))
+        for index, hold in enumerate(old["holds"]):
+            if index != 6:
+                self.assertEqual(current["holds"][index], hold)
+        self.assertEqual(current["next_implementation_action"][1:], old["next_implementation_action"][1:])
+        self.assertEqual(contract["scientific_target"], old_contract["scientific_target"])
+        self.assertEqual(contract["evaluation"]["primary"], old_contract["evaluation"]["primary"])
+        self.assertEqual(contract["access_modes"]["typed_viewer"], old_contract["access_modes"]["typed_viewer"])
+        for mode in engine.MODES:
+            self.assertEqual(contract["access_modes"][mode]["status"], old_contract["access_modes"][mode]["status"])
+        self.assertEqual(contract["evidence"][:len(old_contract["evidence"])], old_contract["evidence"])
+        for field, wrong in (("id", "unselected-control"), ("kind", "local_source"),
+                             ("path", "benchmarks/neural/NEURAL-077/other.json"), ("sha256", "0" * 64)):
+            changed = copy.deepcopy(contract)
+            receipt = next(item for item in changed["evidence"] if item["id"] == "waveform-pair-control")
+            receipt[field] = wrong
+            unchanged = engine._current(original, changed, {}, "NEURAL-077")
+            self.assertEqual(unchanged["holds"], original["holds"])
+            self.assertEqual(unchanged["next_implementation_action"], original["next_implementation_action"])
+        unrelated = copy.deepcopy(contract)
+        unrelated["task_id"] = "NEURAL-UNRELATED"
+        unchanged = engine._current(original, unrelated, {}, "NEURAL-UNRELATED")
+        self.assertEqual(unchanged["holds"], original["holds"])
+        self.assertEqual(unchanged["next_implementation_action"], original["next_implementation_action"])
+        self.assertEqual(original, saved)
+
     def test_neural095_selected_routes_preserve_history_and_require_exact_evidence(self):
         home = ROOT / "benchmarks/neural/NEURAL-095"
         original_body = (home / engine.HISTORY).read_bytes()

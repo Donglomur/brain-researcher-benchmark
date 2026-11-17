@@ -419,6 +419,16 @@ def _current(original, contract, binding, source_id):
         current["holds"][1]["requirement"] = "Historical author decoder PCA precedes CV; retain this restriction for any author-parity baseline. The separately named prospective v2 decoder uses train-only fitting and still requires authentic competence qualification; it does not establish author Figure5 reproduction."
         current["holds"][7]["requirement"] = "The measured-target evaluator and generated negative/control source exist. Independently qualify scoring, complete-support failure handling and controls on authentic inputs under a protected target boundary and externally frozen protocol."
         current["next_implementation_action"][0] = "Provision and authenticate supported original/locked inputs, verify native grid/trial/ROI and separately recorded exposure provenance, then qualify complete-cohort reference/control execution under the adopted v2 processed-input condition."
+    # The accepted complete numerical-pair control updates only the inherited
+    # construction wording; optional modes and scientific limits remain separate.
+    if contract["task_id"] == "NEURAL-077" and any(
+            item.get("id") == "waveform-pair-control"
+            and item.get("kind") == "local_review"
+            and item.get("path") == "benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/AUTHENTIC_CONTROL.json"
+            and item.get("sha256") == "1cb4eecc13a9eb6aba9936ba52128ea0f68b7a668538bb7bbcda1ff6bd852611"
+            for item in contract["evidence"]):
+        current["holds"][6]["requirement"] = "The selected400-case numerical pair has accepted complete local adapter/transport, frozen participant delivery and protected paired fixed-control evaluation against all six existing references. Preserve that scoped engineering result. New candidate/model results, alternative runtimes, author-pipeline or unseen-person claims require separately frozen prospective qualification; fixed0.5 controls are not scientific performance."
+        current["next_implementation_action"][0] = "Use benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/pair.py and its pinned PROVISIONING.md for the completed finite local numerical pair. For a later study, freeze the candidate/model/provider policy and full-prompt capacity, then evaluate new400-case predictions under the same protected scorer. Keep optional adaptive/visual conditions and unseen-person science separately scoped."
     if contract["task_id"] == "NEURAL-095":
         routes = [item for item in contract["evidence"] if item.get("id") == "dmfc095-current-route-v1"
                   and item.get("kind") == "local_source" and
