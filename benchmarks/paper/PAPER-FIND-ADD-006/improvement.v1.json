@@ -3,7 +3,7 @@
   "task_id": "PAPER-FIND-ADD-006",
   "objective": "surpass_source_paper_same_task",
   "disposition": "source_unresolved",
-  "disposition_reason": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention, original resampling and speed-equalized input route are unrecovered; the existing implementation only reconstructs descriptive Ward-tree curves.",
+  "disposition_reason": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention and executable source-conformant resampling/speed-equalized input route are unresolved; the existing implementation only reconstructs descriptive Ward-tree curves. Recovery of historical random draw identities is not required for an otherwise documented calibrated rerun of the original protocol.",
   "source_paper": {
     "title": "Learning reshapes the hippocampal representation hierarchy",
     "url": "https://doi.org/10.1073/pnas.2417025122"
@@ -63,7 +63,7 @@
     },
     "split": {
       "status": "unresolved",
-      "description": "Methods specify 100 stratified 70/30 population-vector splits, followed by stratified bootstrap resampling within partitions, with matched draws across comparison methods. Original draw identities/seeds are not recovered; arbitrary new animal/day/trial holdouts would change the task.",
+      "description": "Methods specify 100 stratified 70/30 population-vector splits followed by stratified bootstrap resampling within partitions, with matched draws across methods. Historical draw identities/seeds are unavailable, but documented new draws under this same original protocol and population are admissible with recorded seeds/provenance, paired candidate-author draws and predeclared justified calibration tolerance. Changing to animal/day/whole-trial holdouts changes the task.",
       "evidence_ids": [
         "hierarchy-paper",
         "hierarchy-decoder"
@@ -116,7 +116,7 @@
     "reproduced_author_baseline": {
       "status": "unresolved",
       "value": null,
-      "description": "No author rerun exists here. A verified route must use correct speed-equalized inputs and recompute the reconciled metric from exported predictions; SVM_conditional's unassigned zero accuracy array is not an author performance baseline.",
+      "description": "No author rerun exists here. A verified route must use correct speed-equalized inputs and the reconciled prediction-derived metric; SVM_conditional's unassigned zero array is not a baseline. The original 100-repeat stratified 70/30 plus within-partition bootstrap protocol can be rerun with recorded seeds, matched candidate-author draws and a predeclared justified calibration tolerance; historical random membership is not mandatory.",
       "evidence_ids": [
         "hierarchy-example",
         "hierarchy-decoder"
@@ -142,7 +142,7 @@
     },
     "paper_win_requires": [
       "Recover exact Figure 4D numeric score, metric transformation and original aggregation.",
-      "Bind the source speed-equalized inputs, all 25 sessions, decoder configuration and original draw schedule or a fully documented author-rerun protocol; do not silently compare a new split to the published figure.",
+      "Bind the source speed-equalized inputs, all 25 sessions, decoder configuration and original 100-repeat stratified 70/30 plus within-partition-bootstrap protocol. Recovered or regenerated draws are admissible when candidate and author share them and seed/environment provenance plus a justified calibration tolerance are declared in advance.",
       "Resolve the author conditional-score output defect by independently verifying prediction-derived scoring, without treating zeros as the baseline to beat.",
       "Freeze candidate and comparison rules before final evaluation; show meaningful performance gain under valid uncertainty on the identical original endpoint.",
       "Keep hierarchy-curve reconstruction, alternate clustering, larger context separation and new held-animal/day/trial decoding as calibration or extensions, not paper wins."
@@ -154,18 +154,18 @@
     }
   },
   "episode": {
-    "improvement_loop": "Not admitted pending baseline and metric recovery. Once recovered, use training-only internal validation within the source partitions for iterative model/decoder choices.",
-    "candidate_freeze": "Freeze the candidate, speed-equalization route, source-compatible resampling protocol, metric direction, aggregate and budget before protected final predictions.",
-    "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on the original support and protocol; all other variants receive separate extension labels.",
+    "improvement_loop": "Not admitted pending baseline, metric and executable source-protocol recovery. Once recovered, use training-only internal validation within the historical or documented regenerated source partitions for iterative decoder choices.",
+    "candidate_freeze": "Freeze the candidate, speed-equalization route, original resampling protocol, paired draw ledger and seeds, metric direction, aggregate, calibration tolerance and budget before protected final predictions.",
+    "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on all original support and the original stochastic protocol. Paired regenerated draws with recorded provenance and predeclared calibration tolerance retain the same task; altered animal/day/trial split schemes are extensions.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Numeric paper baseline and independently scored author rerun must remain distinct; matching the local Ward curves or beating an unassigned zero return is not improvement."
+    "baseline_policy": "Numeric paper baseline and independently scored source-conformant author rerun remain distinct. Historical random identities are not mandatory if the original stochastic protocol is rerun transparently, paired across candidate/author and calibrated within a predeclared justified tolerance. Matching Ward curves or beating an unassigned zero return is not improvement."
   },
   "blocking_issues": [
     "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
     "Paper accuracy/error wording and author score implementation require reconciliation.",
     "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
-    "Exact speed-equalization configuration, original resampling identities and source-authorized rerun comparison remain unresolved.",
+    "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
     "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
   ],
   "legacy": {

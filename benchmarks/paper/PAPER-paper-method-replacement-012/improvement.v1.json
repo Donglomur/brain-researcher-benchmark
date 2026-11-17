@@ -3,7 +3,7 @@
   "task_id": "PAPER-paper-method-replacement-012",
   "objective": "surpass_source_paper_same_task",
   "disposition": "design_ready",
-  "disposition_reason": "The original conference paper supplies ordered macro-F1 targets for the full nine-panel Bugeon scope, and pinned author code defines the readout and split regimes. Exact paper-era artifact equivalence, native reference execution, meaningful-effect/uncertainty policy and concrete budgets remain unresolved, so this is a source-grounded design rather than an admitted task.",
+  "disposition_reason": "The original conference paper supplies ordered macro-F1 targets for nine distinct Bugeon label/exposure panels, and pinned author code defines their readout and split regimes. A complete original panel may support a predeclared, precisely scoped paper comparison. Exact paper-era artifact equivalence, native reference execution, meaningful-effect/uncertainty policy and concrete budgets remain unresolved, so this is a source-grounded design rather than an admitted task.",
   "source_paper": {
     "title": "Know Thyself by Knowing Others: Learning Neuron Identity from Population Context",
     "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf"
@@ -62,7 +62,7 @@
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Predict Bugeon neuron E/I, five-subclass and eleven-class identity from population-context representations, retaining transductive, transductive-zero-shot and inductive-zero-shot panels.",
+      "description": "Predict Bugeon neuron identity in one or more complete, predeclared original label/exposure panels: E/I, five-subclass or eleven-class labels crossed with transductive, transductive-zero-shot or inductive-zero-shot evaluation. Claim scope must name the selected original panel; unrelated panels are not universally required.",
       "evidence_ids": [
         "conference_scores",
         "split_routes"
@@ -78,7 +78,7 @@
     },
     "cohort": {
       "status": "verified",
-      "description": "Seventeen sessions across four mice; preserve all source-eligible neurons and stimulus-specific subrecordings. Repeated-cell linkage and label-map joins remain execution holds.",
+      "description": "Source data comprise seventeen sessions across four mice. For the selected original label level and exposure regime, preserve the complete source-eligible neuron population, stimulus subrecordings and training/test subject structure. Repeated-cell linkage and label-map joins remain execution holds.",
       "evidence_ids": [
         "conference_protocol",
         "preparation"
@@ -86,7 +86,7 @@
     },
     "split": {
       "status": "unresolved",
-      "description": "Source protocol: neuron-wise transductive split; four-subject leave-one-out transductive zero-shot; SB028 held out for inductive zero-shot, with three-subject CV. Four development sessions never enter final tests. Exact distributed split equivalence to conference results is not verified.",
+      "description": "Source protocols are neuron-wise transductive, four-subject leave-one-out transductive zero-shot, and SB028-held-out inductive zero-shot with three-subject CV. Preserve the exact released split for the selected panel, including development-session exclusions. Conference-equivalent split bytes are not verified; stochastic training reruns do not authorize regenerated or changed fixed splits.",
       "evidence_ids": [
         "conference_protocol",
         "inductive_sessions",
@@ -130,11 +130,11 @@
     }
   },
   "comparison": {
-    "primary_metric": "Panel-specific macro-F1 across all nine registered Bugeon tasks; five-subclass inductive-zero-shot value is the scalar provenance anchor, not a suite aggregate",
+    "primary_metric": "Macro-F1 for a complete predeclared original Bugeon label/exposure panel; the stored five-subclass inductive-zero-shot scalar is a provenance anchor applicable only to that panel",
     "direction": "higher",
     "published_baseline": {
       "status": "verified",
-      "description": "Anchor: NuCLR five-subclass inductive 0.3938 \u00b1 0.0556. Remaining NuCLR means (transductive/transductive-zero-shot/inductive): EI 0.8110/0.6826/0.6738; five-subclass 0.6101/0.4014/0.3938; eleven-class 0.4056/0.2333/0.1990. For EI inductive, the paper also reports stronger LOLCAT 0.7463 \u00b1 0.0095; beating 0.6738 alone does not surpass that source-paper result.",
+      "description": "Anchor: NuCLR five-subclass inductive 0.3938 ± 0.0556. Remaining NuCLR means (transductive/transductive-zero-shot/inductive): EI 0.8110/0.6826/0.6738; five-subclass 0.6101/0.4014/0.3938; eleven-class 0.4056/0.2333/0.1990. For EI inductive, the paper also reports stronger LOLCAT 0.7463 ± 0.0095; beating 0.6738 alone does not surpass that source-paper result. The stored scalar applies only to the five-subclass inductive panel. Before admission, bind the matching table entry and source comparators for the selected original panel; this inventory does not select an easier panel after results.",
       "evidence_ids": [
         "conference_scores"
       ],
@@ -142,7 +142,7 @@
     },
     "reproduced_author_baseline": {
       "status": "unresolved",
-      "description": "Pinned author preprocessing, training and readout provide a recovery route, but no authentic reference run on verified conference-equivalent splits has been established.",
+      "description": "Pinned author preprocessing, training and readout provide a recovery route, but no authentic reference run on verified conference-equivalent splits has been established. Source-conformant stochastic training reruns may be used only with documented seed/protocol provenance, a predeclared calibration tolerance and paired author/candidate comparison; the selected panel’s fixed released splits must still be recovered.",
       "evidence_ids": [
         "preparation",
         "readout",
@@ -160,19 +160,20 @@
     },
     "uncertainty": {
       "status": "unresolved",
-      "method": "Predeclare paired method comparisons across training seeds and the original subject structure, with multiplicity across the nine panels; quantify conditional-on-cohort and population-generalization uncertainty separately.",
+      "method": "Predeclare paired method comparisons across source-conformant training seeds and the original subject structure for the selected panel. Address multiplicity only for the endpoint family actually selected; quantify conditional-on-cohort and population-generalization uncertainty separately.",
       "independent_unit": "Mouse for biological generalization; independently trained seed for optimization variability. Repeated neuron observations and CV folds are not independent mice.",
-      "rationale": "The inductive panel has one test mouse (SB028), so a mouse-population confidence claim cannot be created by treating its neurons or seeds as independent animals. Repeated-cell identities require reconciliation.",
+      "rationale": "If the inductive panel is selected, its one test mouse (SB028) cannot support a mouse-population confidence claim by treating neurons or seeds as independent animals. Repeated-cell identities require reconciliation; source-conformant stochastic replicates measure optimization variability without changing the fixed split.",
       "evidence_ids": [
         "conference_protocol",
         "preparation"
       ]
     },
     "paper_win_requires": [
-      "Recover the exact conference-equivalent data, eligible neurons, split files, source readout and all nine panel conditions; any changed split is a separately labeled extension.",
-      "Compare each retained panel to its matching published source result and independently rerun author method; preserve stronger source comparators, including EI inductive LOLCAT 0.7463.",
-      "Freeze the primary panel decision, protected remaining panels, meaningful effects and joint uncertainty rule before candidate selection; no selecting a favorable label level or exposure regime after results.",
-      "Report the complete nine-panel result vector. The scalar baseline field cannot authorize a narrowed one-panel or smaller-cohort paper win.",
+      "Predeclare a complete endpoint/panel actually evaluated in the original paper before candidate development or result-based selection. Retain its original label level, exposure regime, complete eligible cohort, fixed split files, readout, metric and aggregation.",
+      "Surpass that panel’s matching published source result and calibrated author rerun by the predeclared meaningful amount under valid uncertainty, retaining required source controls and companion quality metrics. If EI inductive is selected, retain the stronger original LOLCAT0.7463 comparator; beating NuCLR0.6738 alone does not surpass that stronger source result. A weaker rerun cannot lower the published target.",
+      "Freeze the selected endpoint family, meaningful effects and uncertainty rule before candidate selection. Unrelated Bugeon panels need not all improve, but no favorable label level, easier exposure regime or neuron subset may be selected after results.",
+      "Report the complete selected panel, its required controls/companion metrics and the exact scoped claim. Do not describe a panel-specific result as improvement across all nine panels or the whole paper.",
+      "For stochastic steps actually present in the original protocol, permit a source-conformant rerun only with recorded seeds/provenance, predeclared calibration tolerance and paired author/candidate evaluation. This does not relax recovery of fixed released split artifacts.",
       "Complete native reference qualification, final-evaluation protection and concrete common access/compute budgets before admitting an improvement episode."
     ],
     "current_sota": {
@@ -182,19 +183,19 @@
     }
   },
   "episode": {
-    "improvement_loop": "After admission, iterate on representations using only the exact source training/development information and author CV feedback, preserving all nine exposure/label panels. Hold source test labels owner-side.",
-    "candidate_freeze": "Freeze method/code, inputs, context policy, hyperparameters, allowed checkpoint-selection rule, seeds, split/label digests and panel-wise success rule before final test scoring.",
-    "final_evaluation": "Run the frozen candidate and qualified source methods on the unchanged paper tests; publish complete panel results and predeclared uncertainty. A new subject split can be an extension but never substitutes for the source task.",
+    "improvement_loop": "After admission, iterate on representations using only the selected original panel’s source training/development information and author CV feedback, preserving its full cohort, label level and exposure regime. Hold source test labels owner-side and record all declared endpoint selection before candidate development.",
+    "candidate_freeze": "Freeze method/code, inputs, context policy, hyperparameters, source-conformant stochastic protocol, seeds/provenance, calibration tolerance, allowed checkpoint-selection rule, fixed split/label digests, selected endpoint and required companion success rules before final scoring.",
+    "final_evaluation": "Run the frozen candidate and qualified source comparators on the complete selected original panel with unchanged fixed splits. Publish the scoped endpoint result, required source controls/companion metrics and predeclared uncertainty. Source-conformant stochastic reruns preserve original task conditions; a new subject split is an extension.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Published table values, authentic rerun values and current SOTA remain separate. A supplied-embedding local readout or context-ablation improvement alone cannot be a paper win."
+    "baseline_policy": "Keep published table values, calibrated stochastic author reruns and current SOTA separate. Match the source baseline to the predeclared panel and disclose rerun provenance/tolerance. A supplied-embedding local readout or context-ablation improvement alone cannot be a paper win."
   },
   "blocking_issues": [
     "Paper-era split bytes and exact source archive/metadata identity are not validated; the current split download cannot silently substitute for them.",
     "Session-local neuron IDs do not establish repeated-cell linkage; label-map and fluorescence-column joins require audit.",
-    "No authentic NuCLR or stronger EI-inductive source-comparator rerun is established.",
-    "The one-mouse inductive test cannot support a general population uncertainty claim by neuron-level resampling.",
-    "Primary-versus-protected panel decision, meaningful effects, multiple-panel inference, protected scorer and concrete episode budgets are not fixed."
+    "No authentic NuCLR rerun or required matching source-comparator rerun for the selected panel is established; EI-inductive selection additionally requires the stronger LOLCAT comparator.",
+    "If the inductive panel is selected, its one-mouse test cannot support a general population uncertainty claim by neuron-level resampling.",
+    "Selected original endpoint, required controls/companion metrics, meaningful effect, uncertainty, stochastic-rerun calibration tolerance, protected scorer and concrete episode budgets are not fixed."
   ],
   "legacy": {
     "role": "calibration_only",

@@ -3,7 +3,7 @@
   "task_id": "PAPER-paper-signal-add-012",
   "objective": "surpass_source_paper_same_task",
   "disposition": "design_ready",
-  "disposition_reason": "The paper contains an ordered consciousness-state prediction task in Figure 5, with a published random-forest balanced-accuracy baseline. This can support a source-grounded improvement design. The local state-contrast evaluator does not implement that task, and original responsiveness timing, exact train/evaluation samples and full Figure 5 comparisons remain unresolved.",
+  "disposition_reason": "The paper contains an ordered consciousness-state prediction task in Figure 5 with a published random-forest baseline. This design scopes the comparison to the complete original Dataset-1 leave-one-subject-out result in Figure 5b,c, including all 19 subjects and its required source controls/companion metrics. Original label/timing bindings, classifier replay and calibrated sampling remain unresolved; the local state-contrast evaluator does not implement this task. No readiness is claimed.",
   "source_paper": {
     "title": "Measuring the dynamic balance of integration and segregation underlying consciousness, anesthesia, and sleep in humans",
     "url": "https://doi.org/10.1038/s41467-024-53299-x"
@@ -48,14 +48,14 @@
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Predict behaviorally assessed awake versus loss-of-responsiveness states, retaining original within-dataset, transition-period and cross-dataset Figure 5 comparisons.",
+      "description": "Predict behaviorally assessed awake versus loss-of-responsiveness states for the complete original Figure 5b,c Dataset-1 leave-one-subject-out result. This is an explicitly scoped paper result; transition-only and cross-dataset panels are separate original results and need not all be surpassed to claim this scope.",
       "evidence_ids": [
         "paper"
       ]
     },
     "dataset": {
       "status": "verified",
-      "description": "Original Dataset-1 and Dataset-2 paired GSR/noGSR regional BOLD arrays from Figshare 26367193 version 1; Dataset-3/4/5 static state contrasts do not substitute for the Figure 5 prediction task.",
+      "description": "Use original Dataset-1 paired GSR/noGSR regional BOLD arrays from Figshare 26367193 version 1 for the declared Figure 5b,c result. Dataset-2 is required only for a separately predeclared source panel that uses it; Dataset-3/4/5 static contrasts do not substitute.",
       "evidence_ids": [
         "data",
         "paper"
@@ -63,7 +63,7 @@
     },
     "cohort": {
       "status": "verified",
-      "description": "Retain all original analyzed Dataset-1 (19) and Dataset-2 (26) participants. The full original classifier population and both transfer directions are required; no easier cohort subset is admitted.",
+      "description": "Retain all 19 original analyzed Dataset-1 subjects for the declared full LOSO panel. No easier subject/state/window subset may be selected after outcomes. A separately declared transfer or Dataset-2 panel must retain its complete original population, including all 26 Dataset-2 subjects where applicable.",
       "evidence_ids": [
         "data",
         "paper"
@@ -71,14 +71,14 @@
     },
     "split": {
       "status": "unresolved",
-      "description": "Paper specifies leave-one-subject-out validation, stable-state training and tests across datasets. Exact sample/seed manifests and transition exclusions are unbound. Methods lists Dataset-2 training periods that appear to omit Rest2/Music2 despite sampling both awake and LOR classes; this requires source reconciliation.",
+      "description": "Preserve original Dataset-1 leave-one-subject-out validation, stable-state training, transition exclusions and sample-selection protocol. Recover historical samples/seeds or document source-conformant stochastic reruns with provenance, predeclared calibration tolerance and paired candidate-author evaluation. A new nested, held-animal or pooled-window protocol is an extension. Dataset-2 training-state ambiguity must be resolved if a panel using Dataset-2 is separately declared.",
       "evidence_ids": [
         "paper_methods"
       ]
     },
     "inputs": {
       "status": "unresolved",
-      "description": "Original classifier uses integration and segregation from whole brain plus eight networks (18 features). Per-participant awake/LOR labels and loss/return-of-responsiveness times must be joined to the released arrays; public metadata alone does not establish this mapping.",
+      "description": "Original classifier uses integration and segregation from whole brain plus eight networks (18 features). For every subject in the declared complete panel, bind awake/LOR labels and the responsiveness times needed for original training/evaluation exclusions to released arrays; metadata alone does not establish this mapping.",
       "evidence_ids": [
         "paper_methods",
         "data"
@@ -102,19 +102,19 @@
     },
     "aggregation": {
       "status": "verified",
-      "description": "Figure 5 reports mean and SEM across subjects for subject-out evaluations; preserve each within-dataset and cross-dataset result separately. Time windows within a participant do not create independent participants.",
+      "description": "For the declared complete Dataset-1 LOSO result, preserve source mean across all 19 subjects and report ROC AUC separately from balanced accuracy. Other original panels retain their own aggregation if prospectively declared. Time windows within a participant do not create independent subjects.",
       "evidence_ids": [
         "paper"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "Figure 5 Dataset-1 leave-one-subject-out awake/LOR balanced accuracy, with original transition and cross-dataset comparisons retained",
+    "primary_metric": "Figure 5b,c complete Dataset-1 leave-one-subject-out awake/LOR balanced accuracy across all 19 subjects, with ROC AUC and required source controls retained",
     "direction": "higher",
     "published_baseline": {
       "status": "verified",
       "value": 0.93,
-      "description": "Reported Dataset-1 random-forest balanced accuracy is 93%; AUC is 0.984. This rounded anchor is not the approximately 75% cross-dataset result or 87% transition result. Exact source-data precision and all secondary Figure 5 scores must be recovered before admission.",
+      "description": "For the declared Dataset-1 Figure 5b,c result, reported random-forest balanced accuracy is 93% and companion AUC is 0.984. Recover available source precision or justify stochastic replay calibration against these rounded anchors. The approximately 75% cross-dataset and 87% transition results are distinct scopes, not interchangeable baselines or universal prerequisites.",
       "evidence_ids": [
         "paper"
       ]
@@ -122,7 +122,7 @@
     "reproduced_author_baseline": {
       "status": "unresolved",
       "value": null,
-      "description": "No Figure 5 author-classifier replay is established. Methods gives a 100-tree random forest and five randomly considered features per split, but the available network-measure kernel and local ISD evaluator do not reproduce classifier predictions.",
+      "description": "No source-author classifier replay for the declared complete panel is established. Methods gives 100 trees and five randomly considered features per split. Historical stochastic draws may be recovered or rerun under the original protocol/population with seed/sample provenance, predeclared calibration tolerance and paired candidate-author evaluation; the local ISD kernel is not this baseline.",
       "evidence_ids": [
         "paper_methods",
         "code_scope"
@@ -138,7 +138,7 @@
     },
     "uncertainty": {
       "status": "unresolved",
-      "method": "Predeclare paired candidate-minus-author uncertainty over original subject-level predictions, respecting within-subject temporal dependence and separate dataset/transfer comparisons. The source SEM is not a candidate-comparison decision rule.",
+      "method": "Predeclare paired candidate-minus-author uncertainty across all original subjects in the declared complete panel, respecting within-subject temporal dependence, overlapping LOSO fits and any documented source-conformant stochastic sampling. Source SEM is not itself a candidate-comparison decision rule; unrelated panels are separate scopes.",
       "independent_unit": "Participant, with all time windows kept together; datasets remain separate",
       "rationale": "Highly overlapping BOLD windows cannot be treated as independent samples, and LOSO fit overlap requires an explicitly justified comparison procedure.",
       "evidence_ids": [
@@ -147,11 +147,12 @@
       ]
     },
     "paper_win_requires": [
-      "Recover and reproduce the original Figure 5 state-label/time mapping, sample policy, feature definitions, subject folds and random-forest baseline before comparing candidates.",
-      "Exceed the exact underlying Dataset-1 balanced-accuracy baseline, not merely the rounded 0.93, with a predeclared meaningful effect and valid subject-level uncertainty rule.",
-      "Retain original Dataset-1 and Dataset-2 cohorts, original transition windows and both transfer directions; predeclare their comparison requirements before candidate evaluation rather than selecting the easiest Figure 5 panel.",
-      "Do not claim a win from stronger ISD state separation, smaller p-values, a Dataset-3/4/5-only classifier, pooled random windows, or a new split; those are descriptive results or separately labelled extensions.",
-      "Keep AUC, balanced accuracy and static ISD distinct, and report source-paper, reproduced-author and candidate scores separately."
+      "Before candidate outcomes are examined, bind the complete original Figure 5b,c Dataset-1 LOSO panel as the claimed scope, including all 19 subjects, source state/window definitions, required original controls and companion ROC AUC. Report exactly which source result is surpassed.",
+      "Recover and reproduce the original state-label/time mapping, feature definitions, LOSO and sample-selection protocol and author random forest. Historical draws may be unavailable: documented source-conformant stochastic reruns are admissible with provenance, predeclared calibration tolerance and paired candidate-author evaluation on the same draws.",
+      "The candidate must surpass the source-paper balanced-accuracy result itself for the declared complete panel (reported 93%) at recovered source precision under a predeclared justified stochastic-calibration tolerance, as well as improve meaningfully over the calibrated author rerun with valid paired subject-level uncertainty. A weaker author rerun cannot lower the source target or make a candidate below the source result a paper win. Satisfy the panel's predeclared source controls and companion-metric requirements; merely reporting the candidate's relation to 93% is insufficient.",
+      "A different complete original Figure 5 panel can define a separately scoped comparison only when declared before candidate outcomes and retaining all its original participants, conditions, controls and metrics. Do not select an easier subject/window/state subset or favorable panel after seeing results; unrelated transition/transfer panels are not universal prerequisites.",
+      "Do not claim a win from stronger ISD state separation, smaller p-values, a Dataset-3/4/5-only classifier, pooled random windows or a changed nested/held-animal split protocol. Documented random redraws within the original protocol differ from these extensions.",
+      "Keep AUC, balanced accuracy and static ISD distinct and report source-paper, calibrated author-rerun and candidate scores separately."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -160,19 +161,19 @@
     }
   },
   "episode": {
-    "improvement_loop": "After source recovery and admission, iterate only on original training/development participants and allowed feedback under a declared total fitting/search budget; preserve the original evaluation cases.",
-    "candidate_freeze": "Freeze feature extraction, model, hyperparameters, seed policy, code and all preprocessing before the original held-subject/transfer assessment. Resolve how historical public results and hyperparameter selection are handled before access.",
-    "final_evaluation": "Owner executes the frozen candidate and recovered author classifier on matched original Figure 5 folds and transfer tests; evaluates subject-level predictions and separate transition outcomes without returning iterative held-out feedback.",
+    "improvement_loop": "After source recovery and admission, iterate using only permitted training/development feedback under a declared total search budget. Bind the complete original panel, controls, companion metrics, original stochastic sampling procedure and cumulative access before candidate outcomes; no posthoc panel narrowing.",
+    "candidate_freeze": "Freeze the declared complete source panel, feature extraction, model, hyperparameters, sampling/seed policy, calibration tolerance, code and preprocessing before assessment. Resolve historical public-result exposure and original hyperparameter-selection handling; do not replace LOSO with a new nested or held-animal protocol.",
+    "final_evaluation": "Owner runs the frozen candidate and recovered author classifier on all subjects/folds of the predeclared original panel. Use historical samples or documented source-conformant stochastic draws, paired across candidate and author; report subject-level outcomes, required controls and companion metrics without iterative assessment feedback. Claim only this scoped source result.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Published rounded Figure 5 scores, an exact reproduced author classifier, and current SOTA are distinct. The existing local state-contrast evaluator is calibration only; refitting both methods on a new partition creates an extension."
+    "baseline_policy": "Published panel-specific scores, a calibrated source-conformant author rerun and current SOTA are distinct. Exact historical stochastic membership is not mandatory when original protocol/population, provenance and predeclared calibration tolerance are preserved. The local state-contrast evaluator remains calibration only; changed split protocols are extensions."
   },
   "blocking_issues": [
-    "Authentic per-participant responsiveness labels and induction/emergence times are not bound to released Dataset-1/2 arrays.",
-    "Resolve Dataset-2 stable-state training list versus awake/LOR class sampling in Methods and recover exact sampled points/seed policy.",
-    "Recover source-data precision for the 93% baseline and all original Figure 5 transition/transfer scores; no held-label file was read during this audit.",
-    "Build and validate the original classifier/evaluator rather than treating the source-as-written ISD kernel as a prediction benchmark.",
-    "Qualify participant-level uncertainty, meaningful effect, equal access and concrete cumulative resource/search budgets before activation."
+    "Bind authentic responsiveness labels and times for every subject/state/window needed by the predeclared full Dataset-1 LOSO panel; do not select only readily mapped subjects.",
+    "Recover the original sampling procedure and either historical draws or a documented source-conformant stochastic rerun policy with provenance and predeclared calibration tolerance. Resolve Dataset-2 training-state ambiguity only if a separate declared panel uses it.",
+    "Recover available precision for the scoped 93% balanced-accuracy and 0.984 AUC anchors and bind the panel's required source controls/companion metrics. Other transition/transfer scores are necessary only for claims scoped to those results.",
+    "Build and validate the original classifier/evaluator for the complete declared panel rather than treating the ISD kernel as a prediction benchmark.",
+    "Qualify paired participant-level uncertainty, meaningful effect, calibrated baseline agreement, equal access and concrete cumulative resource/search budgets before activation."
   ],
   "legacy": {
     "role": "calibration_only",

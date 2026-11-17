@@ -71,7 +71,7 @@
     },
     "split": {
       "status": "unresolved",
-      "description": "Author code specifies within-session StratifiedKFold(5, shuffle=True, random_state=622), each original HW row held out once. Exact rows, source package-version effects and historical assignment parity need authenticated inputs; preserve these source folds rather than substituting animal/episode holdouts.",
+      "description": "Author code specifies within-session StratifiedKFold(5, shuffle=True, random_state=622), each original HW row held out once. Preserve seed 622, source row ordering and the original stratification protocol. Authenticate inputs and record package/version provenance when regenerating folds; a documented source-conformant rerun with paired candidate-author folds and predeclared justified calibration tolerance does not require an archived historical membership file. Animal/episode/time-based holdouts change the task.",
       "evidence_ids": [
         "foraging-classifier"
       ]
@@ -125,7 +125,7 @@
     "reproduced_author_baseline": {
       "status": "unresolved",
       "value": null,
-      "description": "Source-authorized route is the pinned EventClassifier HW branch with all 40 sessions and original source folds. No numeric author rerun has been established by this audit; the local probability reference remains a calibration implementation.",
+      "description": "Source-authorized route is the pinned EventClassifier HW branch with all 40 sessions and source-specified fivefold stratification/seed 622. Regenerate folds from authenticated source rows with recorded environment provenance and shared candidate-author membership; calibrate the rerun to the published result under a predeclared justified tolerance. No numeric author rerun is established here; the local probability reference remains calibration.",
       "evidence_ids": [
         "foraging-classifier"
       ]
@@ -148,11 +148,11 @@
       ]
     },
     "paper_win_requires": [
-      "Authenticate all 40 original sessions, exact source folds and input preprocessing; no easier subset, changed time window or altered population.",
-      "Establish a reproduced author BernoulliNB result and reconcile it with published 0.7271 before judging candidate performance.",
+      "Authenticate all 40 original sessions, source preprocessing and source-protocol folds regenerated with random_state=622 or recovered historical membership; no easier subset, changed time window or altered population.",
+      "Establish a source-conformant author BernoulliNB rerun, document seed 622 and environment/fold provenance, and reconcile it with published 0.7271 under a predeclared justified calibration tolerance before judging candidate performance.",
       "Exceed the source result on the original balanced-accuracy endpoint with predeclared meaningful effect and valid paired uncertainty; a fit-to-reference score is not success.",
-      "Freeze the candidate before final original-fold scoring, protect labels and prevent class-block row order or original indices from leaking the target.",
-      "Treat nested logistic controls as separate competence checks, and any whole-animal, episode or new-split result as an extension rather than the paper win."
+      "Freeze the candidate before final scoring on the same source-protocol folds as the author baseline, protect labels and prevent class-block row order or original indices from leaking the target.",
+      "Treat nested logistic controls as separate competence checks. A documented rerun of the source protocol retains the same task; whole-animal, episode, time-based or otherwise changed split schemes are extensions."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -162,15 +162,15 @@
   },
   "episode": {
     "improvement_loop": "Once admitted, let candidates iterate using training data and internal validation confined to each original outer training partition; final outer-fold labels and other folds' fitted state remain unavailable.",
-    "candidate_freeze": "Commit code, feature handling, hyperparameter-selection rule, probability threshold, all budgets and uncertainty rule before original outer-test feedback. Persist exact authenticated fold identities.",
-    "final_evaluation": "Evaluate every original HW row once out of fold and all 40 session scores against the source-authorized BernoulliNB rerun and published 0.7271. Report calibration and other comparator results separately.",
+    "candidate_freeze": "Commit code, feature handling, hyperparameter-selection rule, probability threshold, all budgets, calibration tolerance and uncertainty rule before source-protocol outer-test feedback. Persist regenerated or recovered fold identities with source seed 622 and environment provenance.",
+    "final_evaluation": "Evaluate every original HW row once out of fold and all 40 session scores against the source-conformant BernoulliNB rerun on identical source-seed-622 folds and the separately reported published 0.7271. Calibrate using the predeclared tolerance; report other comparator results separately.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Paper score, rerun author BNB, unseeded historical shuffle, any deterministic new shuffle and local logistic reference are separately named. A changed split cannot validate a claim against 0.7271."
+    "baseline_policy": "Paper score, source-conformant author BNB rerun, unseeded historical shuffle, any documented newly seeded shuffle and local logistic reference are separately named. Regenerating source-protocol folds with seed 622 is admissible with paired membership and calibrated provenance; a changed split scheme cannot validate the same-task claim."
   },
   "blocking_issues": [
     "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
-    "Recover or validate exact original fold assignments and source environment; run and independently audit the author baseline.",
+    "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
     "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
     "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
   ],

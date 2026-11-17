@@ -13,7 +13,7 @@
       "id": "simulation_paper",
       "kind": "paper",
       "url": "https://journal-symfony7.elifesciences.org/articles/110588/figures",
-      "locator": "Version-of-record Figure 7 and Figure 7\u2014figure supplement 1 captions, publisher-indexed text",
+      "locator": "Version-of-record Figure 7 and Figure 7—figure supplement 1 captions, publisher-indexed text",
       "supports": "Original end-to-end accuracy-versus-SNR, ordered unit accuracy, runtime and unit-error-count panels for static and motion-corrected synthetic recordings."
     },
     {
@@ -85,7 +85,7 @@
     },
     "cohort": {
       "status": "verified",
-      "description": "Main study: five 500-unit realizations, each with matched static and drifting recordings and all four source sorters. Retain supplement cases cambridgeneurotech#ASSY-158-H5_140_1800.s, Neuropixels2-128_250_1800.s, sinaps-128_250_1800s and tetrode_10_1800.s at seed 2205; source omits drifting tetrode.",
+      "description": "For the complete original main Figure7 panel: five500-unit realizations, each with matched static and drifting recordings and all four source sorters. The original supplement supplies separately claimable probe panels: cambridgeneurotech#ASSY-158-H5_140_1800.s, Neuropixels2-128_250_1800.s, sinaps-128_250_1800s and tetrode_10_1800.s at seed2205; source omits drifting tetrode. Predeclare the complete original panel and its required controls before candidate selection; a main-panel result does not imply success on every supplementary probe.",
       "evidence_ids": [
         "simulation_study",
         "other_probes"
@@ -102,7 +102,7 @@
     },
     "inputs": {
       "status": "verified",
-      "description": "Candidates receive the original simulated extracellular traces, probe geometry and the source-allowed metadata. True spike assignments/templates are evaluator-side for the end-to-end task; the paper\u2019s component benchmarks with perfect templates or true peak times do not grant those oracle inputs here.",
+      "description": "Candidates receive the original simulated extracellular traces, probe geometry and the source-allowed metadata. True spike assignments/templates are evaluator-side for the end-to-end task; the paper’s component benchmarks with perfect templates or true peak times do not grant those oracle inputs here.",
       "evidence_ids": [
         "simulation_study",
         "generator",
@@ -111,7 +111,7 @@
     },
     "preprocessing": {
       "status": "unresolved",
-      "description": "Source study applies 150\u20139000 Hz Bessel bandpass, float32 and 35 ms margin before sorting. Correction is enabled only for drifting cases; Lupin uses wobble matching. Exact source library/sorter versions, remaining defaults and generated trace equivalence must be reconciled before replay.",
+      "description": "Source study applies 150–9000 Hz Bessel bandpass, float32 and 35 ms margin before sorting. Correction is enabled only for drifting cases; Lupin uses wobble matching. Exact source library/sorter versions, remaining defaults and generated trace equivalence must be reconciled before replay.",
       "evidence_ids": [
         "simulation_study",
         "generator"
@@ -119,7 +119,7 @@
     },
     "metric": {
       "status": "unresolved",
-      "description": "Corrected per-ground-truth-unit spike accuracy is TPij/(Ni+Nj\u2212TPij), higher is better. Source figure also reports well-detected, false-positive, redundant and overmerged counts. Exact native matching tolerance, assignment/default thresholds and their publication-version binding still require recovery; the erroneous first-preprint denominator must not be used.",
+      "description": "Corrected per-ground-truth-unit spike accuracy is TPij/(Ni+Nj−TPij), higher is better. Source figure also reports well-detected, false-positive, redundant and overmerged counts. Exact native matching tolerance, assignment/default thresholds and their publication-version binding still require recovery; the erroneous first-preprint denominator must not be used.",
       "evidence_ids": [
         "metric_correction",
         "simulation_figure_code"
@@ -127,7 +127,7 @@
     },
     "aggregation": {
       "status": "unresolved",
-      "description": "Source plots SNR-bin average accuracy and ordered unit accuracies grouped by sorter and static/drifting condition, plus unit-error counts and runtime. Exact figure result arrays, bin boundaries and weighting must be recovered; no source-authorized scalar across conditions/probes has been installed.",
+      "description": "Source main panels plot SNR-bin average accuracy and ordered unit accuracies grouped by sorter and static/drifting condition, with companion unit-error counts and runtime. Recover the exact arrays, bins and weighting for the predeclared complete source panel. No invented scalar may pool unrelated main/supplement conditions; any narrower claim must name its original panel and retain its complete population and required controls.",
       "evidence_ids": [
         "simulation_paper",
         "simulation_figure_code"
@@ -135,11 +135,11 @@
     }
   },
   "comparison": {
-    "primary_metric": "Original Figure 7 and supplement ground-truth unit-accuracy panels; exact scalar or joint panel superiority rule unresolved",
+    "primary_metric": "Original main Figure7 ground-truth unit-accuracy panel with paired static/drifting conditions and companion unit-error counts; exact scalar or joint panel rule unresolved",
     "direction": "higher",
     "published_baseline": {
       "status": "unresolved",
-      "description": "Published per-sorter accuracy curves and error-count arrays are not recovered as exact numerical artifacts. Approximate graph readings and relative prose such as the reported drift losses are not a numeric baseline. Preserve Lupin and all source comparators, including Kilosort4, for the matching condition.",
+      "description": "Published main Figure7 per-sorter accuracy curves and companion error-count arrays are not recovered as exact numerical artifacts. Approximate graph readings and relative drift-loss prose are not numeric baselines. Preserve Lupin and all required source comparators, including Kilosort4, for the predeclared panel; supplementary-probe scores are separate source results.",
       "evidence_ids": [
         "simulation_paper",
         "simulation_figure_code"
@@ -175,9 +175,9 @@
       ]
     },
     "paper_win_requires": [
-      "Recover the exact publication-compatible generator and native evaluator dependencies, complete original seed/probe/condition manifest and published score arrays before admission.",
-      "Compare a frozen end-to-end method with the original source methods, including Lupin and the strongest matching comparator, on the same complete recordings with identical scoring and permitted inputs.",
-      "Predeclare meaningful effects, protected error-count outcomes, condition/probe aggregation and dependence-aware uncertainty; no favorable SNR, unit, seed or motion-condition subset may define victory after results.",
+      "Recover the exact publication-compatible generator and native evaluator dependencies, full original seed/probe/condition manifest for the predeclared complete source panel, and its published score arrays before admission.",
+      "Compare a frozen end-to-end method with the original source methods, including Lupin and the strongest matching comparator, on all recordings of the predeclared original panel with identical scoring and permitted inputs.",
+      "Predeclare the exact source-panel claim, meaningful effects, required companion error-count outcomes, aggregation and dependence-aware uncertainty. Retain every source condition within that panel; no favorable SNR, unit, seed or motion subset may define victory after results. A complete main-panel win need not cover unrelated supplementary probes, but must not claim them.",
       "Keep true spike assignments and other oracle component inputs out of end-to-end candidate inference. A perfect-template or true-peak component benchmark cannot replace end-to-end sorting.",
       "Original public-seed performance and any newly protected-seed extension must be reported separately; the extension cannot become a same-task paper win.",
       "The legacy Figure 8 curation/yield/raster implementation remains calibration only and cannot establish simulation accuracy."
@@ -190,8 +190,8 @@
   },
   "episode": {
     "improvement_loop": "After source recovery and admission, use a predeclared development process for full sorter improvements under a common information and compute budget. Original public benchmark exposure must be recorded; newly generated development seeds cannot redefine the final source comparison.",
-    "candidate_freeze": "Freeze algorithm, code/dependencies, effective parameters, seeds/probe/condition manifest, preprocessing, oracle-access exclusions, source comparator, metric aggregation and uncertainty rule before final scoring.",
-    "final_evaluation": "Score the fixed candidate and qualified author replay against the original complete simulation ground truth; report numerical source reproduction separately from meaningful superiority, with all original panels retained.",
+    "candidate_freeze": "Freeze the original source panel and complete within-panel manifest, algorithm, code/dependencies, effective parameters, preprocessing, oracle-access exclusions, source comparators, metric aggregation and uncertainty rule before candidate selection/final scoring.",
+    "final_evaluation": "Score the fixed candidate and qualified author replay against the predeclared complete original panel ground truth; retain its required controls and companion outcomes. Report numerical source reproduction separately from meaningful superiority and name exactly which source result is surpassed; unrelated supplemental panels are separate claims.",
     "access_budget": null,
     "resource_budget": null,
     "baseline_policy": "Published simulation results, rerun author sorter results and current SOTA remain separate. Real-recording quality proxies and local generated controls cannot replace the simulation source baseline."
