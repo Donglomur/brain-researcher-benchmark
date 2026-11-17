@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-EXP-20261113-005",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The registered Figure 4 endpoint is descriptive mapping of spontaneous firing categories, regional enrichment and hierarchy correlations. Larger enrichment or correlation is not intrinsically a better scientific result. The existing held-animal energy-score proposal changes both target and split, and the fixed-map conditional scorer reconstructs supplied categories; neither can count as surpassing the original paper.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Source-native rebinding can use the original ordered SOM reconstruction endpoint in Extended Data Figure2c,d: lower quantization error means better representation of the original unit feature vectors. Exact published region-wise errors, source map capacity/topology and complete source-to-unit joins remain unrecovered. Figure4 enrichment and hierarchy findings remain descriptive calibration; the local held-animal energy-score task is a different task.",
   "source_paper": {
     "title": "A prefrontal cortex map based on single-neuron activity",
     "url": "https://www.nature.com/articles/s41593-025-02190-z"
@@ -13,8 +13,8 @@
       "id": "pfc-paper",
       "kind": "paper",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12971490/",
-      "locator": "Figures 1-2 and 4; Methods: Data analysis and Statistics; Data/code availability",
-      "supports": "Original single-unit metrics, SOM/category map, regional enrichment and hierarchy analysis."
+      "locator": "Extended Data Figure2c,d; Methods: SOM feature vectors, architecture and initialization, SOM training; Figures1-2 and4",
+      "supports": "Original quantization-error definition and region-wise median/IQR reporting, full unit population and feature standardization, fixed SOM capacity/topology, PCA initialization and200-iteration batch training; Figure4 descriptive mapping remains separate."
     },
     {
       "id": "pfc-code",
@@ -41,7 +41,7 @@
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Figure 4 maps spontaneous-activity category enrichment across PFC ROIs and relates it to anatomical hierarchy. It is not prospective unit-feature forecasting.",
+      "description": "Represent each original KI wide-waveform unit's standardized [log10 firing rate, burstiness, memory] vector by its best-matching SOM prototype, assessed by the original Extended Data Figure2c,d quantization-error panel. Preserve original map capacity and topology; descriptive regional enrichment/hierarchy correlations are not optimization targets.",
       "evidence_ids": [
         "pfc-paper",
         "pfc-code"
@@ -58,14 +58,14 @@
     },
     "cohort": {
       "status": "verified",
-      "description": "The SOM uses 19,186 wide-waveform units across the original brain-wide pool. Figure 4 retains its PFC layer/ROI eligibility; do not refit only on a convenient PFC subset.",
+      "description": "Original SOM pool:19,186 wide-waveform KI units from all source brain regions/layers and99 recording probes. Extended Data Figure2c reports the10,413 PFC units by subregion;2d reports PFC overall and other regions. Preserve all source-eligible units and region membership.",
       "evidence_ids": [
         "pfc-paper"
       ]
     },
     "split": {
       "status": "not_applicable",
-      "description": "The selected Figure 4 analysis fits a descriptive map to the eligible cohort. It has no source held-animal forecasting train/test split.",
+      "description": "The original QError panel measures representation of the same KI unit population used to fit the SOM, not held-animal generalization. Preserve this in-sample reconstruction condition transparently. A new held-out split can be useful but cannot be compared to original QError as same-task victory.",
       "evidence_ids": [
         "pfc-paper",
         "pfc-code"
@@ -73,15 +73,15 @@
     },
     "inputs": {
       "status": "verified",
-      "description": "Spontaneous spike-derived firing rate, burstiness and memory, anatomical assignments and hierarchy measurements; original categories are fitted analysis outputs.",
+      "description": "Original spontaneous firing metrics per eligible wide-waveform unit. Brain-region labels define the fixed reporting groups; they must not permit dropping difficult units or adding predictive variables. Freeze original node count, rectangular/hexagonal grid geometry and representation dimensionality before fitting.",
       "evidence_ids": [
         "pfc-paper",
         "pfc-code"
       ]
     },
     "preprocessing": {
-      "status": "verified",
-      "description": "Source analysis uses eligible spontaneous epochs, unit waveform classification, metric standardization, SOM fitting and hierarchical categories before ROI enrichment.",
+      "status": "unresolved",
+      "description": "The source extracts firing metrics from eligible3-second spontaneous epochs, averages them per unit, log10-transforms firing rate and standardizes each of the three features over all included units. SOM node count is manually chosen; map proportions/initialization use PCA and batch training runs200 iterations with a decreasing Gaussian neighborhood. Exact original feature values, unit masks, node count/dimensions and schedule must be authenticated.",
       "evidence_ids": [
         "pfc-paper",
         "pfc-code"
@@ -89,14 +89,14 @@
     },
     "metric": {
       "status": "verified",
-      "description": "Original outputs are category enrichments relative to group-controlled shuffles and Pearson hierarchy correlations; their sign/magnitude are descriptive measurements, not a loss to optimize.",
+      "description": "For unit j with standardized feature vector z_j and its nearest source-map prototype w_BMN(j), QError_j=||z_j-w_BMN(j)||_2. Lower is better. Compute in the same fixed standardized coordinates and original-capacity SOM; shrinking feature scales, adding nodes or replacing the output with per-unit memorization does not improve the same task.",
       "evidence_ids": [
         "pfc-paper"
       ]
     },
     "aggregation": {
       "status": "verified",
-      "description": "Units form category-by-ROI counts; hierarchy correlation uses eligible GaoROIs. The source pools units for map construction, rather than averaging held-animal energy scores.",
+      "description": "Extended Data Figure2c reports median and25th/75th percentiles of unit QError for each PFC subregion;2d reports the same for PFC overall and other brain regions. Preserve the full panel rather than selecting a favorable group or inventing a pooled scalar.",
       "evidence_ids": [
         "pfc-paper",
         "pfc-code"
@@ -104,49 +104,48 @@
     }
   },
   "comparison": {
-    "primary_metric": "No ordered same-task improvement endpoint established",
-    "direction": "unresolved",
+    "primary_metric": "Original Extended Data Figure2c,d quantization-error medians across the complete fixed region panel",
+    "direction": "lower",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Figure 4 has no paper forecasting score or ordered benchmark-performance baseline. Its enrichment/correlation values are scientific findings, not targets to maximize.",
+      "description": "The primary paper explicitly defines and plots region-wise QError medians and IQRs, but exact numerical source values and the complete panel have not been recovered. Enrichment correlations, category counts and held-animal energy scores are not substitutes.",
       "evidence_ids": [
-        "pfc-paper",
-        "pfc-code"
+        "pfc-paper"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "A reconstructed descriptive result is a calibration reference, not an improvement comparator.",
+      "description": "The author SOM workflow and source-data figure route exist; no authenticated original-capacity map replay, per-unit QError vector or exact published-panel agreement is established. The local conditional scorer receives fitted categories and is not a SOM-learning baseline.",
       "evidence_ids": [
-        "pfc-paper",
-        "pfc-code"
+        "pfc-code",
+        "pfc-implementation"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "No scientifically justified scalar improvement direction exists for this registered finding; a larger effect or smaller p-value is not automatically better.",
+      "rationale": "A meaningful reduction must be justified in the original standardized feature space after recovering reference variability and the complete region panel. Do not choose a generic error margin, increase codebook capacity or trade away required map neighborhood constraints.",
       "evidence_ids": [
-        "pfc-paper",
-        "pfc-code"
+        "pfc-paper"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No improvement hypothesis is admitted. Preserve the source inferential analysis for reproduction.",
-      "independent_unit": "Mouse for biological replication; probes and units are nested. ROI correlations are spatially dependent descriptive summaries.",
-      "rationale": "Valid uncertainty does not turn confirmation of a descriptive or null claim into an ordered performance contest.",
+      "status": "unresolved",
+      "method": "Predeclare paired per-region QError comparisons with units nested within probes/mice, original region aggregation retained and stochastic optimization variability separate. Resolve a full-panel multiplicity/decision rule without presenting an in-sample reconstruction gain as held-out biological generalization.",
+      "independent_unit": "Mouse for biological replication, with probes/units nested; independently initialized fits for algorithmic variability on the fixed original dataset.",
+      "rationale": "Thousands of units are dependent biological observations, and the original error is measured on training-population features. Both dependence and the limited in-sample claim must remain explicit.",
       "evidence_ids": [
-        "pfc-paper",
-        "pfc-code"
+        "pfc-paper"
       ]
     },
     "paper_win_requires": [
-      "No same-task performance win is admitted for this descriptive Figure 4 registration.",
-      "Do not count exact rational conditional moments, reference correlation agreement, stronger enrichment significance or animal-deletion stability as surpassing the paper.",
-      "Retain held-animal multivariate energy scoring, if pursued separately, as a new predictive extension with its own baseline and evaluation; its adapted SOM comparator is not a published forecasting result."
+      "Recover exact original unit features, masks, standardization, source map node count/topology and Extended Data Figure2c,d QError values for every original region.",
+      "Reproduce the original-capacity author SOM and its complete region-wise QError panel before comparing candidate methods.",
+      "Freeze candidate map-learning method, original capacity/output constraints, allowed feature access, full-panel decision, meaningful effect, uncertainty and resource budgets before scoring.",
+      "Show a justified reduction of original QError under the full fixed-panel rule without changing node count, feature scale, population, representation constraints or source in-sample evaluation condition.",
+      "Retain Figure4 descriptive maps as calibration. Conditional-moment agreement, stronger hierarchy correlations or performance on a new held-animal energy-score split cannot satisfy this source-task win."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -155,22 +154,23 @@
     }
   },
   "episode": {
-    "improvement_loop": "Inactive: The source endpoint has no justified performance ordering. Preserve full-cohort map reproduction and descriptive sensitivity analyses.",
-    "candidate_freeze": "No candidate improvement episode is admitted. Preserve frozen historical reconstruction outputs separately.",
-    "final_evaluation": "Do not award surpass-source-paper success for this disposition. A separately approved replacement must supply its own original task and source baseline.",
+    "improvement_loop": "Blocked on source recovery. Once qualified, improve the original fixed-capacity SOM representation using declared access to the original training-population features; explicitly label all feedback as in-sample and preserve every original region.",
+    "candidate_freeze": "Freeze map-learning procedure, original unit/feature manifests, standardization, node capacity/topology, source error panel, uncertainty and budgets before final artifact scoring; output cannot encode one prototype per unit.",
+    "final_evaluation": "Compute the source QError formula for candidate and authenticated author prototypes on the exact original population, with every source region median/IQR reported. Any held-animal generalization evaluation is a separate extension.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Historical reference agreement remains calibration only. Authored extensions and local analytical baselines cannot substitute for the source-paper result."
+    "baseline_policy": "The original fixed-capacity author SOM and its published QError panel define the baseline. Local fitted-category/conditional-moment graders and adapted held-animal distribution baselines remain separate calibration or extension artifacts."
   },
   "blocking_issues": [
-    "No defensible ordered improvement endpoint is identified in the selected original Figure 4 task.",
-    "Held-animal feature-distribution prediction changes the paper target, split and aggregation.",
-    "A fixed-map conditional scorer receives learned categories and therefore cannot establish improved map learning.",
-    "Any replacement requires a source paper that reports the same ordered predictive task, not a relabelled local comparator."
+    "Original per-region numerical QError panel and per-unit prototype/feature lineage remain unrecovered.",
+    "Exact original SOM node count, grid geometry, neighborhood schedule, standardized feature matrices and complete unit/region joins are not authenticated.",
+    "No original-capacity native author replay or working same-task map-learning evaluator is qualified.",
+    "Meaningful reconstruction-error effect, full-panel multiplicity, dependence-aware uncertainty and concrete access/resource budgets remain unspecified.",
+    "The original score is in-sample reconstruction; held-animal forecasting and unrestricted codebook-capacity changes are different tasks."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Retain complete original-map reproduction, conditional enrichment reconstruction, numerical graders and animal-deletion sensitivity. The fair 64-draw energy-score design is an extension, not original-paper victory."
+    "notes": "Retain complete map reproduction, conditional enrichment reconstruction, numerical graders and animal-deletion sensitivity as calibration. Source-native QError improvement must bind original fixed-capacity map learning; the held-animal64-draw energy-score design is an extension."
   }
 }
