@@ -50,9 +50,18 @@ Negative gains and the zero-target-spike undefined result remain valid outcomes.
 ## Runtime and source boundaries
 
 `transport/` is a task-local copy of the accepted NEURAL-007 concrete provider.
-Six module bodies are unchanged. Only `provider.py` changes the holder limit to
+Four module bodies are unchanged. `provider.py` changes the holder limit to
 256 MiB, holder CPU to 0.25 CPU, and the numerical environment to two threads.
 Creation checks, admission checks and receipts all use those same constants.
+`holder.py` checks that same 256 MiB memory limit and a positive CPU quota/period
+ratio of exactly one quarter. This repairs the copied startup guard at commit
+`368000e383375733bd4f62350c6519d3acc1e14e`, which still required 128 MiB and
+one CPU despite the declared profile. Other holder guards are unchanged.
+The two publication helpers in `common.py` and `transport/bounds.py` finalize
+explicitly requested public mode 0444 on the owned descriptor after complete
+writes, so program source and REQUEST/POLICY metadata remain readable with
+umask 077. Private defaults (0400 and 0600), parent mode 0700 and the umask stay
+unchanged. This corrects file modes; it does not establish native mount access.
 The candidate remains 3 GiB, 1.75 CPU, 64 processes, 64 MiB private scratch and
 20 seconds of work. The generic output envelope adds bounded RESULT/OUTPUTS
 metadata around the opaque archive inside the original 40 MiB output volume.
@@ -150,3 +159,14 @@ history plus a required new cumulative amendment. The scripted transport is not
 a native isolation trial. No authentic packet, private target, fitted reference,
 candidate model, Docker daemon or provider was invoked. The test process prints
 its actual interpreter/library versions and cumulative generated file writes.
+
+The holder repair adds four controls through actual `holder.main`, policy parsing,
+and resource guards using generated cgroup files and simulated kernel identity and
+mount metadata. They accept equivalent positive quarter-CPU ratios with 256 MiB,
+and refuse the old profile, independent CPU/memory mismatches, unlimited,
+nonpositive and malformed values before readiness publication. Readiness itself
+is intercepted; these controls do not launch or qualify a container. Historical
+results above remain historical. Two further controls use the actual program
+commit and transport publishers under umask 077, check complete bytes before
+permission finalization, and verify public 0444, private defaults, parent 0700,
+and unchanged umask. The default suite now contains 25 test methods.

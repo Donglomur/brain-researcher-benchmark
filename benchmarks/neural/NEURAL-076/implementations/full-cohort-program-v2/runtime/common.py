@@ -57,6 +57,7 @@ def write(p,b,cap):
     try:
         off=0
         while off<len(b):n=os.write(fd,b[off:]);need(n>0,'short write');off+=n
+        os.fchmod(fd,0o444)
         os.fsync(fd)
     finally:os.close(fd)
     syncdir(p.parent);return short(b)
