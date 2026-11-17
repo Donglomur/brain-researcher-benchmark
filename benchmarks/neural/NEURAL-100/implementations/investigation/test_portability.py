@@ -14,10 +14,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parent
 PACKAGE = ROOT / 'investigation/package'
 MIRROR = ROOT / 'source_repository'
-SOURCE_PIN = {
-    'bytes': 2374,
-    'sha256': '5ef0b78934bfc72977b032b3a1cdd43d197f59c90a772411f02f69517b5da9eb',
-}
+SOURCE_PIN = {'bytes': 2374, 'sha256': '62ea2bdd00d4ebb1eb4d35532251f71bd63e9aca5bc46af96298e81535e70e39'}
 EXPORT_SHA = '69b11de087b77dd3214ceb1d240182cc26908fb1eff16b5ca4eca7bcaea8efb8'
 GUARD_PIN = {
     'bytes': 12383,

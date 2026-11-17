@@ -113,6 +113,8 @@ def write_new(path, body):
     with os.fdopen(fd, "wb") as stream:
         stream.write(body)
         stream.flush()
+        # Newly owned public files are later mounted for a different UID.
+        os.fchmod(stream.fileno(), 0o444)
         os.fsync(stream.fileno())
 
 

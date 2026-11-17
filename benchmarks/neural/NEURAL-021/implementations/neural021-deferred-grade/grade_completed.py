@@ -22,8 +22,8 @@ import stat
 import sys
 import types
 
-PRODUCER = {'bytes': 1799, 'sha256': '2e0965b8eaa9c24501d2cdc6f71e7f458744c1261f14315818c2dbbd807e8fc3'}
-COMMON = {'bytes': 7046, 'sha256': '7c029200804d3b9b95b8458b10a0f2f0f512c380f51dc411aa73c0f19f697bb8'}
+PRODUCER = {'bytes': 1799, 'sha256': 'df2bb2080cb2112b159fe93b05ff288bf2cf8dee6ab701f89a3ff03168ef0e35'}
+COMMON = {'bytes': 7829, 'sha256': 'fbeddddac17fe9c4e55344858222c4a55b0fa1c12bc4902b35a3922b2db2c654'}
 SCORER = {'bytes': 3290, 'sha256': '4438468f22511986c71fda03621b207cf82c523ee910e8bc6760c174cb16bcf4'}
 INTERFACE = {'bytes': 3533, 'sha256': 'c748bdb0386713d505e1d5d79bec51645263b859471011df81f205168a6e61e2'}
 SCOPE = {'training_trials': 272, 'query_trials': 92, 'active_queries': 52,

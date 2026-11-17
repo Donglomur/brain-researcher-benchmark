@@ -50,7 +50,7 @@ def prepare(package, public, root, budget):
     files, dirs, used = c.inventory(current, 23000000, 70)
     c.need(set(files) == set(expected), 'Only54 public members')
     for directory in sorted(dirs, key=lambda p: len(p.parts), reverse=True):
-        c.sync_dir(directory, budget.tick)
+        c.public_directory(directory, budget.tick)
     c.sync_dir(root, budget.tick)
     for name, (path, _) in files.items():
         c.capture(path, 23000000, expected[name], budget.tick, budget.read)
@@ -138,8 +138,9 @@ def run(s, sources, *, phase=None, np=None):
     c.readable(here / 'SOURCE_MANIFEST.json', budget.tick)
     frozen = c.save(here / 'program.py', program, 131072, budget.tick, budget.write)
     c.readable(here / 'program.py', budget.tick)
-    os.chmod(here, 0o755)
-    c.sync_dir(here, budget.tick)
+    _, source_dirs, _ = c.inventory(here, c.RETAIN, 2000)
+    for directory in sorted(source_dirs, key=lambda p: len(p.parts), reverse=True):
+        c.public_directory(directory, budget.tick)
     commitment = write(root / 'COMMITMENT.json', {'schema': 'neural100_investigation_commitment_v1',
         'source': sources.identity, 'program': frozen, 'scope': grading.SCOPE,
         'method_review': c.only_pin(s['method_review']), 'before_any_public_signal_view': True,

@@ -37,7 +37,7 @@ def prepare(package,public,root,budget):
         expected[rel.as_posix()]=c.save(target,raw,2000000,budget.tick,budget.write);c.readable(target,budget.tick)
     files,dirs,used=c.inventory(current,2000000,70)
     c.need(set(files)==set(expected),'only25 public members')
-    for d in sorted(dirs,key=lambda p:len(p.parts),reverse=True):c.sync_dir(d,budget.tick)
+    for d in sorted(dirs,key=lambda p:len(p.parts),reverse=True):c.public_directory(d,budget.tick)
     c.sync_dir(root,budget.tick)
     for name,(p,_) in files.items():c.capture(p,2000000,expected[name],budget.tick,budget.read)
     prepared=write(root/'VIEW_PREPARED.json',dict(schema='neural038_full140_public_view_v1',files=expected,member_count=25,primitive_files=18,allocated_bytes=used,decoded=False),32768,budget)

@@ -37,7 +37,7 @@ def prepare(package,rows,root,budget,label,current_name='current'):
         expected[rel.as_posix()]=c.save(target,raw,1000000,budget.tick,budget.write);c.readable(target,budget.tick)
     files,dirs,used=c.inventory(current,1000000,32);c.need(set(files)==set(expected),'exact public view inventory')
     for name,(path,_) in files.items():c.capture(path,1000000,expected[name],budget.tick,budget.read)
-    for directory in sorted(dirs,key=lambda p:len(p.parts),reverse=True):c.sync_dir(directory,budget.tick)
+    for directory in sorted(dirs,key=lambda p:len(p.parts),reverse=True):c.public_directory(directory,budget.tick)
     c.sync_dir(root,budget.tick)
     receipt=write(root/('VIEW_'+label+'_PREPARED.json'),dict(schema='neural021_phase_view_v1',phase=label,files=expected,member_count=len(expected),allocated_bytes=used,decoded=False),32768,budget)
     return current,expected,receipt
