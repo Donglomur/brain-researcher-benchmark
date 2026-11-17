@@ -13,7 +13,13 @@ from pathlib import Path
 import re
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 ROSTER = 'docs/neuroscience-benchmarks/build/paper_100.json'
 AUDIT = 'docs/neuroscience-benchmarks/build/paper_construction_audit.json'
 DESTINATION = 'benchmarks/manifests/paper'
@@ -299,26 +305,30 @@ def validate_document(doc):
     require(bool(doc['next_implementation_action'].get('action')), 'task-specific next action')
 
 
-def write_or_check(root=ROOT, check=False):
+def write_or_check(root=ROOT, check=False, *, output_directory=None):
+    require(output_directory is not None, 'An explicit staging output directory is required')
+    output_root = Path(output_directory)
     docs = build_documents(root)
-    directory = root / DESTINATION
+    directory = output_root / 'paper'
     expected = {identifier + '.json' for identifier in docs}
     if directory.exists():
         extra = {p.name for p in directory.iterdir()} - expected
         require(not extra, 'unexpected output entries; do not delete automatically: ' + str(sorted(extra)))
-    outputs = {DESTINATION + '/' + identifier + '.json': encode(doc) for identifier, doc in docs.items()}
+    outputs = {'paper/' + identifier + '.json': encode(doc) for identifier, doc in docs.items()}
     index = {'schema_version': 1, 'track': 'paper', 'status': 'specification_only', 'count': len(docs),
         'runnable_count': 0, 'research_qualified_count': 0,
         'meaning': '100 canonical source/asset/reproduction specifications; not 100 executable benchmarks.',
-        'generator': file_pin(root, 'tools/build_paper_delivery_manifests.py'),
-        'documents': [{'id': identifier, 'path': DESTINATION + '/' + identifier + '.json',
-                       'bytes': len(outputs[DESTINATION + '/' + identifier + '.json']),
-                       'sha256': hashlib.sha256(outputs[DESTINATION + '/' + identifier + '.json']).hexdigest()}
+        'generator': construction.generator(__file__),
+        'construction_generator': file_pin(root, 'tools/build_paper_delivery_manifests.py'),
+        'input_layout': 'external_original_construction_layout',
+        'documents': [{'id': identifier, 'path': 'paper/' + identifier + '.json',
+                       'bytes': len(outputs['paper/' + identifier + '.json']),
+                       'sha256': hashlib.sha256(outputs['paper/' + identifier + '.json']).hexdigest()}
                       for identifier in docs]}
-    outputs[INDEX] = encode(index)
+    outputs['paper_index.json'] = encode(index)
     stale = []
     for name, body in outputs.items():
-        path = root / name
+        path = output_root / name
         if check:
             if not path.is_file() or path.read_bytes() != body: stale.append(name)
         else:
@@ -332,9 +342,11 @@ def write_or_check(root=ROOT, check=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    construction.arguments(parser)
     args = parser.parse_args()
+    source, output = construction.paths(args, parser)
     try:
-        print(json.dumps(write_or_check(check=args.check), indent=2))
+        print(json.dumps(write_or_check(source, check=args.check, output_directory=output), indent=2))
     except (ValueError, KeyError, TypeError, OSError) as error:
         print('paper delivery validation failed: ' + str(error), file=sys.stderr)
         raise SystemExit(1)

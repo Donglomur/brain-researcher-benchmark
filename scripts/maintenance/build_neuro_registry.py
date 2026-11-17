@@ -13,7 +13,13 @@ import hashlib
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 DOCS = ROOT / "docs/neuroscience-benchmarks"
 
 
@@ -82,10 +88,13 @@ def write_json(path: Path, data):
 
 
 def main():
+    global ROOT, DOCS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--paper-only", action="store_true")
+    construction.arguments(parser)
     args = parser.parse_args()
-    out = DOCS / "build"
+    ROOT, out = construction.paths(args, parser)
+    DOCS = ROOT / "docs/neuroscience-benchmarks"
     papers = paper_roster()
     write_json(out / "paper_100.json", {
         "schema_version": 1,
@@ -96,7 +105,7 @@ def main():
     if args.paper_only:
         print(json.dumps({"paper_construction_candidates": len(papers)}))
         return
-    neural_doc = read(out / "neural_100.json")
+    neural_doc = read(DOCS / "build/neural_100.json")
     neural = neural_doc["tasks"]
     unique(neural, "id")
     for item in neural:
@@ -106,6 +115,8 @@ def main():
     unique(combined, "id")
     counts = Counter(row["status"] for row in combined)
     summary = {
+        "generator": construction.generator(__file__),
+        "input_layout": "external_original_construction_layout",
         "target_distinct_assignments": 200,
         "paper_candidate_projects": len(papers),
         "neural_candidate_assignments": len(neural),
@@ -123,7 +134,7 @@ def main():
         "independence": "Assignments can share cohorts, stimuli, participants and model tools; counts are not independent biological replications",
         "paper_conditions_counted_separately": False,
         "source_files_sha256": {
-            name: hashlib.sha256((out / name).read_bytes()).hexdigest()
+            name: hashlib.sha256(((out if name == "paper_100.json" else DOCS / "build") / name).read_bytes()).hexdigest()
             for name in ("paper_100.json", "neural_100.json")
         },
     }
@@ -143,7 +154,7 @@ def main():
         "- [Cross-suite exposure audit](EXPOSURE_AUDIT.md): typed reuse and source/stimulus-family links to review before evaluation or RL splits.",
         "- [Research quality standard](../RESEARCH_QUALITY_STANDARD.md): actual PR-review lessons and scientific admission gates.",
         "- [Live build status](../BUILD_STATUS.md) and [Terminal-Bench standard](../TERMINAL_BENCH_STANDARD.md).", "",
-        "Regenerate with `python3 tools/build_neuro_registry.py`. This operation joins metadata only; it performs no scientific execution and cannot promote a benchmark to research-qualified status.", "",
+        "Regenerate with `python3 scripts/maintenance/build_neuro_registry.py --construction-root <input-tree> --output-directory <staging-directory>`. This operation joins metadata only; it performs no scientific execution and cannot promote a benchmark to research-qualified status.", "",
     ]
     (out / "README.md").write_text("\n".join(lines))
     print(json.dumps(summary, indent=2))

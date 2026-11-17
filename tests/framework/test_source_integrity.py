@@ -1,4 +1,5 @@
 """Invented source-only controls; no benchmark modules or scientific inputs."""
+import copy
 import hashlib
 import importlib.util
 import json
@@ -9,7 +10,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-CHECKER = Path(__file__).absolute().parents[1] / "check_neuroscience_source_integrity.py"
+CHECKER = Path(__file__).absolute().parents[2] / "src/neurobench/source_integrity.py"
 spec = importlib.util.spec_from_file_location("source_integrity_checker", CHECKER)
 checker = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(checker)
@@ -23,24 +24,70 @@ def descriptor(path, body):
     return {"path": path, "bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}
 
 
+def current_registry(root, legacy):
+    """Invented predecessor/current metadata; never execute fixture source."""
+    packages = []
+    for old in legacy["packages"]:
+        task_id = old["id"]
+        track = old["track"]
+        home = f"benchmarks/{track}/{task_id}"
+        registered_path = home + "/task.json"
+        registered_body = (root / registered_path).read_bytes()
+        task_pin = descriptor(registered_path, registered_body)
+        task_pin.update(original_path=f"benchmarks/manifests/{track}/{task_id}.json",
+                        predecessor={k: task_pin[k] for k in ("bytes", "sha256")})
+        package = root / old["root"]
+        rows = []
+        for path in sorted(package.rglob("*")):
+            if path.is_file():
+                name = path.relative_to(package).as_posix()
+                row = descriptor(name, path.read_bytes())
+                row["git_mode"] = "100755" if path.stat().st_mode & 0o111 else "100644"
+                row["predecessor"] = copy.deepcopy(old.get("_predecessors", {}).get(
+                    name, {k: row[k] for k in ("bytes", "sha256", "git_mode")}))
+                rows.append(row)
+        history = descriptor(old["inventory"], (package / old["inventory"]).read_bytes())
+        history.update(path_style=old["inventory_paths"], supplemental_files=old["supplemental_files"])
+        item = {"implementation_id": old.get("implementation_id", old["root"].replace("/", "-")),
+                "task_id": task_id, "track": track, "root": old["root"],
+                "original_root": old["original_root"], "registered_task": task_pin,
+                "historical_inventory": history, "files": rows}
+        if "complete_inventory" in old:
+            item["complete_inventory"] = old["complete_inventory"]
+        packages.append(item)
+    return {"schema_version": 2, "scope": "invented predecessor/current engineering fixtures",
+            "predecessor_commit": "0" * 40, "packages": packages}
+
+
+def write_current(root, legacy):
+    path = root / "benchmarks/integrity/current.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    result = current_registry(root, legacy)
+    path.write_bytes(encoded(result))
+    return result
+
+
 class SourceIntegrityTests(unittest.TestCase):
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(prefix="invented-source-integrity-")).resolve()
-        self.prefix = "benchmarks/neuroscience/invented"
+        self.prefix = "benchmarks/neural/NEURAL-INVENTED/implementations/registered-runtime"
+        self.original_prefix = "benchmarks/neuroscience/invented"
         self.package = self.root / self.prefix
         self.package.mkdir(parents=True)
-        self.canonical_path = "benchmarks/manifests/neural/NEURAL-INVENTED.json"
-        self.canonical = {"id": "NEURAL-INVENTED"}
+        self.canonical_path = "benchmarks/neural/NEURAL-INVENTED/task.json"
+        self.original_canonical_path = "benchmarks/manifests/neural/NEURAL-INVENTED.json"
+        self.canonical = {"id": "NEURAL-INVENTED", "track": "neural"}
         self.source = b'raise RuntimeError("candidate source must never execute")\n'
         (self.package / "source.py").write_bytes(self.source)
         self.inventory = {"files": [descriptor("source.py", self.source)]}
         canonical_body = encoded(self.canonical)
         p = self.root / self.canonical_path
-        p.parent.mkdir(parents=True)
+        p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(canonical_body)
         self.manifest = {"id": "NEURAL-INVENTED",
-                         "canonical_specification": descriptor(self.canonical_path, canonical_body)}
-        self.enrollment = {"id": "NEURAL-INVENTED", "root": self.prefix,
+                         "canonical_specification": descriptor(self.original_canonical_path, canonical_body)}
+        self.enrollment = {"id": "NEURAL-INVENTED", "track": "neural", "root": self.prefix,
+                           "original_root": self.original_prefix, "implementation_id": "invented-source",
                            "inventory": "INVENTORY.json", "inventory_paths": "package",
                            "supplemental_files": []}
         self.registry = {"schema_version": 1, "scope": "invented engineering fixture",
@@ -56,7 +103,7 @@ class SourceIntegrityTests(unittest.TestCase):
             shutil.rmtree(self.root)
 
     def sync_registry(self):
-        (self.root / "benchmarks/source_integrity.json").write_bytes(encoded(self.registry))
+        write_current(self.root, self.registry)
 
     def sync_manifest(self):
         body = encoded(self.manifest)
@@ -76,12 +123,13 @@ class SourceIntegrityTests(unittest.TestCase):
 
     def test_valid_bundle_is_checked_without_execution(self):
         result = checker.check(self.root)
-        self.assertEqual(result["packages"], [{"id": "NEURAL-INVENTED", "source_files": 3, "python_files": 1}])
+        self.assertEqual(result["packages"], [{"implementation_id": "invented-source", "id": "NEURAL-INVENTED",
+                                              "source_files": 3, "python_files": 1, "changed_files": 0}])
         self.assertFalse(result["benchmark_execution"])
         self.assertFalse(result["scientific_qualification_assessed"])
 
     def test_repository_relative_inventory(self):
-        self.inventory["files"][0]["path"] = self.prefix + "/source.py"
+        self.inventory["files"][0]["path"] = self.original_prefix + "/source.py"
         self.inventory["files"][0]["runtime_path"] = "source.py"
         self.enrollment["inventory_paths"] = "repository"
         self.sync_inventory()
@@ -137,11 +185,11 @@ class SourceIntegrityTests(unittest.TestCase):
         self.reject("Invalid source digest")
 
     def test_duplicate_json_key(self):
-        (self.root / "benchmarks/source_integrity.json").write_text('{"packages":[],"packages":[]}\n')
+        (self.root / "benchmarks/integrity/current.json").write_text('{"packages":[],"packages":[]}\n')
         self.reject("Duplicate JSON key")
 
     def test_nonfinite_json(self):
-        (self.root / "benchmarks/source_integrity.json").write_text('{"value":NaN}\n')
+        (self.root / "benchmarks/integrity/current.json").write_text('{"value":NaN}\n')
         self.reject("Nonfinite JSON")
 
     def test_empty_enrollment_is_not_success(self):
@@ -152,7 +200,7 @@ class SourceIntegrityTests(unittest.TestCase):
     def test_duplicate_enrollment(self):
         self.registry["packages"].append(dict(self.enrollment))
         self.sync_registry()
-        self.reject("Duplicate or invalid task")
+        self.reject("Duplicate or invalid implementation")
 
     def test_manifest_identity(self):
         self.manifest["id"] = "WRONG"
@@ -223,17 +271,97 @@ class SourceIntegrityTests(unittest.TestCase):
             reader.read(self.prefix + "/source.py")
 
 
+    def test_task_home_metadata_is_outside_the_closed_package(self):
+        home = self.package.parent.parent
+        (home / "README.md").write_text("Task navigation, outside the implementation closure.\n")
+        self.assertEqual(checker.check(self.root)["packages"][0]["source_files"], 3)
+
+    def test_two_implementations_can_share_a_task_owner(self):
+        other = self.package.parent / "alternative"
+        shutil.copytree(self.package, other)
+        second = copy.deepcopy(self.enrollment)
+        second.update(root=other.relative_to(self.root).as_posix(), implementation_id="invented-alternative",
+                      original_root="benchmarks/neuroscience/invented-alternative")
+        self.registry["packages"].append(second)
+        self.sync_registry()
+        result = checker.check(self.root)
+        self.assertEqual(len(result["packages"]), 2)
+        self.assertEqual({row["id"] for row in result["packages"]}, {"NEURAL-INVENTED"})
+
+    def test_current_change_requires_current_and_predecessor_pins(self):
+        old = json.loads((self.root / "benchmarks/integrity/current.json").read_text())
+        self.enrollment["_predecessors"] = {row["path"]: row["predecessor"] for row in old["packages"][0]["files"]}
+        (self.package / "source.py").write_text('raise RuntimeError("changed source must still never execute")\n')
+        self.sync_registry()
+        read = checker.Reader.read
+        def guarded(reader, name):
+            self.assertFalse(name.startswith(self.original_prefix + "/"))
+            self.assertNotEqual(name, self.original_canonical_path)
+            return read(reader, name)
+        with mock.patch.object(checker.Reader, "read", guarded):
+            self.assertEqual(checker.check(self.root)["packages"][0]["changed_files"], 1)
+        self.enrollment["_predecessors"]["source.py"]["sha256"] = "0" * 64
+        self.sync_registry()
+        self.reject("Historical source hash or length mismatch")
+
+    def test_owner_track_and_old_runtime_root_mismatches_refuse(self):
+        path = self.root / "benchmarks/integrity/current.json"
+        original = json.loads(path.read_text())
+        for field, value in (("task_id", "NEURAL-OTHER"), ("track", "paper"),
+                             ("root", self.original_prefix)):
+            with self.subTest(field=field):
+                changed = copy.deepcopy(original)
+                changed["packages"][0][field] = value
+                path.write_bytes(encoded(changed))
+                self.reject("root must match")
+        path.write_bytes(encoded(original))
+
+    def test_registered_scientific_field_cannot_change_with_only_a_new_current_pin(self):
+        path = self.root / "benchmarks/integrity/current.json"
+        current = json.loads(path.read_text())
+        body = encoded({**self.canonical, "evaluation": {"primary_metric": "changed scientific endpoint"}})
+        (self.root / self.canonical_path).write_bytes(body)
+        task_pin = current["packages"][0]["registered_task"]
+        original_predecessor = copy.deepcopy(task_pin["predecessor"])
+        task_pin.update(descriptor(self.canonical_path, body))
+        self.assertEqual(task_pin["predecessor"], original_predecessor)
+        path.write_bytes(encoded(current))
+        self.reject("Registered scientific task definition changed")
+
+    def test_distinct_package_local_contract_is_preserved(self):
+        local = encoded({"id": "NEURAL-INVENTED", "scope": "a distinct package-local contract"})
+        (self.package / "CANONICAL_SPEC.json").write_bytes(local)
+        self.inventory["files"].append(descriptor("CANONICAL_SPEC.json", local))
+        self.manifest["canonical_specification"] = descriptor("CANONICAL_SPEC.json", local)
+        self.sync_inventory()
+        self.assertEqual(checker.check(self.root)["packages"][0]["source_files"], 4)
+        old = json.loads((self.root / "benchmarks/integrity/current.json").read_text())
+        self.enrollment["_predecessors"] = {row["path"]: row["predecessor"] for row in old["packages"][0]["files"]}
+        (self.package / "CANONICAL_SPEC.json").write_bytes(local + b" ")
+        self.sync_registry()
+        self.reject("Package-local scientific contract changed")
+
+    def test_duplicate_root_with_different_implementation_id_refuses(self):
+        second = copy.deepcopy(self.enrollment)
+        second["implementation_id"] = "different-identity-same-root"
+        self.registry["packages"].append(second)
+        self.sync_registry()
+        self.reject("Duplicate package root")
+
+
 class CompleteInventoryTests(unittest.TestCase):
     """Full 102+1 invented metadata; fixed profile never imports factory code."""
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(prefix="invented-factory-integrity-")).resolve()
-        self.prefix = "benchmarks/neuroscience/paper-paper-method-replacement-013"
+        self.prefix = "benchmarks/paper/PAPER-paper-method-replacement-013/implementations/registered-runtime"
+        self.original_prefix = "benchmarks/neuroscience/paper-paper-method-replacement-013"
         self.package = self.root / self.prefix
         self.package.mkdir(parents=True)
         task = "PAPER-paper-method-replacement-013"
-        canonical_name = "benchmarks/manifests/paper/INVENTED.json"
-        canonical = encoded({"id": task})
-        (self.root / canonical_name).parent.mkdir(parents=True)
+        canonical_name = "benchmarks/paper/" + task + "/task.json"
+        original_canonical = "benchmarks/manifests/paper/" + task + ".json"
+        canonical = encoded({"id": task, "track": "paper"})
+        (self.root / canonical_name).parent.mkdir(parents=True, exist_ok=True)
         (self.root / canonical_name).write_bytes(canonical)
         old = []
         for i in range(95):
@@ -243,7 +371,7 @@ class CompleteInventoryTests(unittest.TestCase):
             old.append(descriptor(name, body))
         inventory = encoded({"files": old})
         (self.package / "TASK_SOURCE_FREEZE.json").write_bytes(inventory)
-        manifest = encoded({"id": task, "canonical_specification": descriptor(canonical_name, canonical),
+        manifest = encoded({"id": task, "canonical_specification": descriptor(original_canonical, canonical),
                             "source_freeze": descriptor("TASK_SOURCE_FREEZE.json", inventory)})
         (self.package / "manifest.json").write_bytes(manifest)
         for name in ("native_factory.py", "native_factory_v2.py"):
@@ -268,7 +396,8 @@ class CompleteInventoryTests(unittest.TestCase):
                                          "self_excluded": "NATIVE_FACTORY_API.json",
                                          "total_bytes": sum(row["bytes"] for row in rows),
                                          "unchanged_predecessors": 97}}
-        self.enrollment = {"id": task, "root": self.prefix, "inventory": "TASK_SOURCE_FREEZE.json",
+        self.enrollment = {"id": task, "track": "paper", "root": self.prefix,
+                           "original_root": self.original_prefix, "inventory": "TASK_SOURCE_FREEZE.json",
                            "inventory_paths": "package", "supplemental_files": [],
                            "complete_inventory": {"profile": "neuroformer_factory_v2", "path": "NATIVE_FACTORY_API.json"}}
         self.registry = {"schema_version": 1, "scope": "invented", "packages": [self.enrollment]}
@@ -286,7 +415,7 @@ class CompleteInventoryTests(unittest.TestCase):
         names = ("manifest.json", "NATIVE_FACTORY.md", "NATIVE_FACTORY_API.json", "NATIVE_FACTORY_PREDECESSOR.json",
                  "native_factory.py", "native_factory_runtime.py", "native_factory_v2.py")
         self.enrollment["supplemental_files"] = [descriptor(name, (self.package / name).read_bytes()) for name in names]
-        (self.root / "benchmarks/source_integrity.json").write_bytes(encoded(self.registry))
+        write_current(self.root, self.registry)
 
     def reject(self, pattern):
         with self.assertRaisesRegex(checker.InvalidSource, pattern):

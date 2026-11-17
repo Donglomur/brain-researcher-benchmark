@@ -8,11 +8,11 @@ import re
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
-CONTRACT_DIR = ROOT / "contracts" / "curation"
+ROOT = Path(__file__).resolve().parents[3]
+CONTRACT_DIR = Path(__file__).resolve().parent / "contracts"
 SCHEMA_PATH = CONTRACT_DIR / "curation-contracts-v1.schema.json"
 RUBRIC_PATH = CONTRACT_DIR / "evolvable-rubric-v1.md"
-PROMPT_PATH = ROOT / "TOPIC_TRIAGE_CONTROLLER_PROMPT.md"
+PROMPT_PATH = ROOT / "docs/curation/worker-contract.md"
 EVOLVABLE_SKILL_PATH = (
     ROOT / ".claude" / "skills" / "self-evolvable-question-design" / "SKILL.md"
 )

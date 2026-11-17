@@ -5,9 +5,9 @@ import sys
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from record_neuro_trial import capture
-from validate_neuro_tasks import Audit
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+from neurobench.trials import capture
+from neurobench.task_validation import Audit
 
 
 @pytest.fixture

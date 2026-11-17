@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Integrate saved paper construction reviews; never execute scientific sources.
 
-Usage: python3 tools/build_paper_construction_audit.py [--check | --self-test]
+Usage: python3 scripts/maintenance/build_paper_construction_audit.py --construction-root <input-tree> --output-directory <staging-directory> [--check | --self-test]
 The two known historical exposure pins are retained, not silently re-signed.
 All other stale pins, unknown status values and reordered/missing IDs fail closed.
 """
@@ -17,7 +17,13 @@ import sys
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 BUILD = "docs/neuroscience-benchmarks/build"
 AUDITS = "authoring/paper-construction-audit"
 ROSTER = f"{BUILD}/paper_100.json"
@@ -456,7 +462,7 @@ def render(report):
               "Shared IBL, Allen, Stringer, COGITATE, BrainTreebank and MICrONS sources require explicit overlap and exposure handling. Manuscript, software, recordings, stimuli and model licenses have different scopes; source records with conflicting license notes remain unresolved rather than being assigned blanket clearance.", "",
               "## Rebuild and validation", "",
               f"The integration covers 100 ordered task IDs, {report['validation']['evidence_record_checks']} evidence locators, {report['validation']['declared_pin_occurrences']} original pin declarations and {report['validation']['unique_current_evidence_pins']} unique current evidence files. Two historical prose locators have explicit resolutions; their original wording is preserved.", "",
-              "Run `python3 tools/build_paper_construction_audit.py --self-test`, then `python3 tools/build_paper_construction_audit.py --check`. A normal invocation regenerates only this JSON and Markdown. Validation checks the exact ordered 100 IDs, required fields, evidence records, original pin declarations, current hashes and explicit status mapping. The generator pins its own source and avoids volatile BUILD_STATUS.md.", ""]
+              "Run `python3 scripts/maintenance/build_paper_construction_audit.py --construction-root <input-tree> --output-directory <staging-directory> --self-test`, then `python3 scripts/maintenance/build_paper_construction_audit.py --construction-root <input-tree> --output-directory <staging-directory> --check`. A normal invocation regenerates only this JSON and Markdown. Validation checks the exact ordered 100 IDs, required fields, evidence records, original pin declarations, current hashes and explicit status mapping. The generator pins its own source and avoids volatile BUILD_STATUS.md.", ""]
     return "\n".join(lines)
 
 
@@ -545,17 +551,22 @@ def main():
     options = parser.add_mutually_exclusive_group()
     options.add_argument("--check", action="store_true", help="Verify current outputs match regenerated metadata")
     options.add_argument("--self-test", action="store_true", help="Run generated metadata-only validation cases")
+    construction.arguments(parser)
     args = parser.parse_args()
     if args.self_test:
         result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(Tests))
         return 0 if result.wasSuccessful() else 1
     try:
-        report = build(ROOT)
-        outputs = {ROOT / BUILD / "paper_construction_audit.json": json.dumps(report, indent=2, ensure_ascii=False) + "\n",
-                   ROOT / BUILD / "PAPER_CONSTRUCTION_AUDIT.md": render(report)}
+        source, output = construction.paths(args, parser)
+        report = build(source)
+        report["generator"] = construction.generator(__file__)
+        report["input_layout"] = "external_original_construction_layout"
+        outputs = {output / "paper_construction_audit.json": json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+                   output / "PAPER_CONSTRUCTION_AUDIT.md": render(report)}
         if args.check:
             require(all(p.exists() and p.read_text() == text for p, text in outputs.items()), "Generated outputs differ; inspect source changes before regeneration")
         else:
+            output.mkdir(parents=True, exist_ok=True)
             for p, text in outputs.items():
                 tmp = p.with_name(p.name + ".tmp")
                 tmp.write_text(text)

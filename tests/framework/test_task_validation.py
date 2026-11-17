@@ -9,7 +9,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPT = Path(__file__).resolve().parents[1] / "validate_neuro_tasks.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "src/neurobench/task_validation.py"
 SPEC = importlib.util.spec_from_file_location("validate_neuro_tasks", SCRIPT)
 v = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(v)

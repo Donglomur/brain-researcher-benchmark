@@ -5,7 +5,13 @@ import hashlib
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 BASE = ROOT / 'docs/neuroscience-benchmarks'
 ROSTER = BASE / 'build/neural_100.json'
 AUDITS = BASE / 'build/construction_audit_index.json'
@@ -119,7 +125,8 @@ def generate():
             'source_audit_overlays': audits,
             'provenance': {'canonical_record_sha256': record_hash(task),
                            'source_files': list({p['path']: p for p in evidence}.values()),
-                           'builder': pin(Path(__file__).resolve()),
+                           'builder': construction.generator(__file__),
+                           'input_layout': 'external_original_construction_layout',
                            'new_payload_reads': 0, 'scientific_execution': False},
             'admission': {'runnable': False, 'research_qualified': False,
                           'submission_ready': False,
@@ -128,9 +135,16 @@ def generate():
 
 
 def main():
+    global ROOT, BASE, ROSTER, AUDITS, OUT
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    construction.arguments(parser)
     args = parser.parse_args()
+    ROOT, OUT = construction.paths(args, parser)
+    BASE = ROOT / 'docs/neuroscience-benchmarks'
+    ROSTER = BASE / 'build/neural_100.json'
+    AUDITS = BASE / 'build/construction_audit_index.json'
+    OUT = OUT / 'neural'
     docs = generate()
     if args.check:
         if {p.stem for p in OUT.glob('*.json')} != set(docs):

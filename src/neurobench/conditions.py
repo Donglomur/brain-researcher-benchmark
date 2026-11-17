@@ -12,8 +12,8 @@ import stat
 import subprocess
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('neurobench_base', ROOT / 'tools/neurobench.py')
+ROOT = Path(__file__).resolve().parents[2]
+spec = importlib.util.spec_from_file_location('neurobench_base', ROOT / 'src/neurobench/cli.py')
 base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(base)
 

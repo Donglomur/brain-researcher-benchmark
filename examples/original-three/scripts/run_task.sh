@@ -3,10 +3,10 @@
 # all the auth / cache gotchas baked in. Prints the commands by default; pass
 # --run to execute them.
 #
-#   ./tools/run_task.sh DEVCONN-001                 # print oracle+gpt-5.5+claude cmds
-#   ./tools/run_task.sh DEVCONN-001 oracle          # just the oracle command
-#   ./tools/run_task.sh DEVCONN-001 gpt-5.5 --run   # run GPT-5.5 (k=3)
-#   ./tools/run_task.sh DEVCONN-001 all --run       # run all three
+#   ./examples/original-three/scripts/run_task.sh DEVCONN-001                 # print oracle+gpt-5.5+claude cmds
+#   ./examples/original-three/scripts/run_task.sh DEVCONN-001 oracle          # just the oracle command
+#   ./examples/original-three/scripts/run_task.sh DEVCONN-001 gpt-5.5 --run   # run GPT-5.5 (k=3)
+#   ./examples/original-three/scripts/run_task.sh DEVCONN-001 all --run       # run all three
 #
 # agent: oracle | gpt-5.5 | claude | all (default: all)
 # Reads a warm ~/nilearn_data cache if present (skips the ~30-min ds000228 fetch).
@@ -15,8 +15,8 @@ set -euo pipefail
 TASK="${1:?usage: run_task.sh <TASK_ID_OR_DIR> [oracle|gpt-5.5|claude|all] [--run]}"
 case "$TASK" in
   GRADIENT-001|SOCIALBRAIN-001|DEVCONN-001)
-    REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    TASK="$REPO_DIR/examples/original-three/$TASK"
+    EXAMPLES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    TASK="$EXAMPLES_DIR/$TASK"
     ;;
 esac
 AGENT="${2:-all}"; [[ "${2:-}" == --run ]] && AGENT="all"
@@ -34,7 +34,7 @@ cmd_oracle="harbor run -p $TASK_ARG -a oracle -k 1 -o $OUT $MNT -y"
 # with an OPENAI_API_KEY exported you can drop that --ae.
 cmd_gpt="harbor run -p $TASK_ARG -a codex -m gpt-5.5 --ak reasoning_effort=xhigh -k 3 -o $OUT $MNT --ae CODEX_FORCE_AUTH_JSON=1 -y"
 # claude-code reads CLAUDE_CODE_OAUTH_TOKEN from host env; if unset, run
-# `python tools/patch_harbor_oauth.py` once to fall back to your ~/.claude login.
+# `python examples/original-three/scripts/patch_harbor_oauth.py` once to fall back to your ~/.claude login.
 cmd_claude="harbor run -p $TASK_ARG -a claude-code -m claude-opus-4-8 -k 3 -o $OUT $MNT -y"
 
 emit(){ # $1 label  $2 command

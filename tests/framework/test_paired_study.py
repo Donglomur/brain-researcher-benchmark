@@ -5,7 +5,7 @@ from pathlib import Path
 import unittest
 
 SPEC = importlib.util.spec_from_file_location(
-    "paired_report", Path(__file__).resolve().parents[1] / "report_neuroscience_paired_study.py")
+    "paired_report", Path(__file__).resolve().parents[2] / "src/neurobench/paired_study.py")
 REPORT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(REPORT)
 

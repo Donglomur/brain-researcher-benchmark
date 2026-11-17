@@ -15,11 +15,11 @@ import stat
 import subprocess
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
-BASE_PIN = {'bytes': 26686, 'sha256': 'b17b4317427f83ce28ab7ea5a4fbc42b689870ef2a7144a7e094ecb0bef9e59e'}
+ROOT = Path(__file__).resolve().parents[2]
+BASE_PIN = {'bytes': 27022, 'sha256': '8b74ece69c98ee2c9feb11f99c95b2930ed25886769aa8684cb4406f9dbdd4a0'}
 
 def _base():
-    path = ROOT / 'tools/neurobench_campaign.py'
+    path = ROOT / 'src/neurobench/campaign.py'
     if any(x.is_symlink() for x in (path, *path.parents)):
         raise ValueError('Linked base dispatcher')
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)

@@ -9,8 +9,8 @@ Use Python 3.11 and its standard library; no package installation is needed. Obt
 From the repository root:
 
 ```sh
-python3.11 -I -S -B tools/neuroscience_components/tms_behavior/behavior_reference.py inputs/behavioralData_allsubs.csv reference.json
-python3.11 -I -S -B tools/neuroscience_components/tms_behavior/score_behavior.py reference.json candidate.json
+python3.11 -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/behavioral-reference/behavior_reference.py inputs/behavioralData_allsubs.csv reference.json
+python3.11 -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/behavioral-reference/score_behavior.py reference.json candidate.json
 ```
 
 The first command creates a new reference file and refuses to overwrite it. Its fixed defaults are seed `20261114`, 2,000 bootstrap draws, and no optional global-shuffle diagnostic. The second prints JSON. **Read its `accepted` field:** numerical mismatch is reported in JSON and does not make the process exit nonzero. Malformed JSON, duplicate keys and nonfinite JSON constants raise errors.
@@ -45,7 +45,7 @@ Sign-flip inference assumes joint sign exchangeability of paired differences. Bo
 The seven included tests passed during independent source review. They use explicitly invented arithmetic and schema fixtures, including missing-cohort refusals, signed-versus-absolute means, participant weighting, scale-sensitive sign-flip ties, zero-variance statistics and scorer mismatches. They are not observations from neuroscience data. To run them from the repository root:
 
 ```sh
-python3.11 -I -S -B tools/neuroscience_components/tms_behavior/test_behavior_reference.py
+python3.11 -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/behavioral-reference/test_behavior_reference.py
 ```
 
 An authentic run still requires full input-schema, condition, preprocessing and missingness checks. Full task qualification additionally requires the paired EEG analyses, competent references, protected evaluation, contamination controls and complete end-to-end evidence. Paper+data and paper+data+official-code arms must use matched inputs and budgets; evaluator corrections and answers must not be silently supplied to either arm. This public evaluator implementation and public paper may be familiar to a model, so a fresh context alone is not a contamination control.
@@ -54,4 +54,4 @@ An authentic run still requires full input-schema, condition, preprocessing and 
 
 These files are a benchmark implementation of the documented figure predicates and statistical formulas, with separately specified participant-level inference. Sources are the [published article](https://www.nature.com/articles/s41467-025-57882-8), [official figure repository at the inspected revision](https://github.com/clayspacelab/Dake_Curtis_TMSV1_2025/tree/1e2c149e6e61f85b45acb8486c0fb31dc38d2dfa), and the linked [author analysis repository at the inspected revision](https://github.com/mindemory/mgs_stimul/tree/57c4aeac3028c02f4b886eb4fd05435e126a80fe). Inspected code choices are not proof of the exact historical publication execution.
 
-The benchmark implementation is covered by this repository's [MIT license](../../../LICENSE). No third-party source files, article text or data are redistributed in this directory. The code license does not grant rights to redistribute the OSF data; consult the source's applicable terms independently.
+The benchmark implementation is covered by this repository's [MIT license](../../../../../LICENSE). No third-party source files, article text or data are redistributed in this directory. The code license does not grant rights to redistribute the OSF data; consult the source's applicable terms independently.

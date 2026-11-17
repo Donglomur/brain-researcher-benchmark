@@ -10,7 +10,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SOURCE = Path(__file__).resolve().parents[1] / 'neurobench.py'
+SOURCE = Path(__file__).resolve().parents[2] / 'src/neurobench/cli.py'
 spec = importlib.util.spec_from_file_location('neurobench_delivery', SOURCE)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -21,15 +21,16 @@ class DeliveryTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        self.build = self.root / 'docs/neuroscience-benchmarks/build'
+        self.build = self.root / 'reviews'
         self.build.mkdir(parents=True)
-        for name, ident in [('paper_100.json', 'PAPER-X'), ('neural_100.json', 'NEURAL-001')]:
-            self.write(self.build / name, {'tasks': [{'id': ident}]})
-        self.write(self.build / 'implementation_status.json', {'packages': [], 'full_candidate_contracts_completed': 0,
-                                                              'research_qualified': 0, 'submission_ready': 0,
-                                                              'current_delivery': {'bounded_reference_ids': [],
-                                                                                   'bounded_reference_candidate_ids': 0}})
-        self.path = self.root / 'benchmarks/manifests/neural/NEURAL-001.json'
+        self.path = self.root / 'benchmarks/neural/NEURAL-001/task.json'
+        self.registry = {'schema_version': 1, 'kind': 'neuroscience_benchmark_registry',
+                         'source_counts': {'paper': 0, 'neural': 1, 'total': 1},
+                         'tasks': [{'id': 'NEURAL-001', 'track': 'neural',
+                                    'task_directory': 'benchmarks/neural/NEURAL-001',
+                                    'specification_id': 'NEURAL-001', 'specification_alias': False,
+                                    'registration_class': 'canonical', 'runtime_manifest': None,
+                                    'runtime_package': None}]}
         self.doc = {k: {} for k in module.COMMON}
         self.doc.update(schema_version=1, id='NEURAL-001', track='neural', title='Measured signal task',
                         status='specification_only', primary_outputs=['Finite aligned neural predictions'],
@@ -39,9 +40,22 @@ class DeliveryTests(unittest.TestCase):
     def write(self, path, obj):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(obj))
+        if path == self.path or path == getattr(self, 'runtime_path', None):
+            row = self.registry['tasks'][0]
+            key = 'specification' if path == self.path else 'runtime_manifest'
+            row[key] = {'path': path.relative_to(self.root).as_posix(),
+                        'bytes': path.stat().st_size, 'sha256': module.digest(path)}
+            if key == 'runtime_manifest':
+                row['runtime_package'] = path.parent.relative_to(self.root).as_posix()
+            self.save_registry()
+
+    def save_registry(self):
+        path = self.root / 'benchmarks/registry.json'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(self.registry))
 
     def runtime(self):
-        package = self.root / 'benchmarks/neuroscience/neural-001'
+        package = self.path.parent / 'implementations/fixture-runtime'
         package.mkdir(parents=True)
         script = package / 'score.py'; script.write_text('# Fixture only: never executed.\n')
         receipt = package / 'receipt.json'; self.write(receipt, {'status': 'passed'})
@@ -58,9 +72,10 @@ class DeliveryTests(unittest.TestCase):
         return script, receipt
 
     def test_specification_alone_does_not_become_a_benchmark(self):
-        result = module.summary(self.root)
-        self.assertEqual(result['delivery_specifications'], 1)
-        self.assertEqual(result['local_score_adapters_verified'], 0)
+        specifications, registered = module.specifications(self.root, complete=True)
+        self.assertEqual(set(specifications), {'NEURAL-001'})
+        self.assertEqual(set(registered), {'NEURAL-001'})
+        self.assertEqual(module.runtime_manifests(self.root), {})
         with self.assertRaisesRegex(ValueError, 'No local scoring adapter'):
             module.score_command('NEURAL-001', 'x', 'y', self.root)
 
@@ -69,15 +84,39 @@ class DeliveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'cannot promote'):
             module.specifications(self.root)
 
-    def test_missing_full_roster_rejected(self):
-        with self.assertRaisesRegex(ValueError, 'exactly 200'):
+    def test_inconsistent_declared_roster_rejected(self):
+        self.registry['source_counts']['total'] = 200
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, 'totals disagree'):
             module.specifications(self.root, complete=True)
 
-    def test_unknown_and_duplicate_ids_rejected(self):
-        other = copy.deepcopy(self.doc); other['id'] = 'NEURAL-999'
-        self.write(self.path.with_name('NEURAL-999.json'), other)
-        with self.assertRaisesRegex(ValueError, 'Unknown'):
+    def test_duplicate_registered_ids_rejected(self):
+        self.registry['tasks'].append(copy.deepcopy(self.registry['tasks'][0]))
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, 'duplicate'):
             module.specifications(self.root)
+
+    def test_registered_specification_identity_mismatch_rejected(self):
+        self.doc['id'] = 'NEURAL-999'
+        self.write(self.path, self.doc)
+        with self.assertRaisesRegex(ValueError, 'identity differs'):
+            module.specifications(self.root)
+
+    def test_unregistered_files_do_not_create_tasks(self):
+        other = copy.deepcopy(self.doc); other['id'] = 'NEURAL-999'
+        self.write(self.path.with_name('unregistered.json'), other)
+        self.assertEqual(set(module.specifications(self.root)[0]), {'NEURAL-001'})
+
+    def test_task_definition_drift_is_not_implicitly_re_pinned(self):
+        self.path.write_text(self.path.read_text() + '\n')
+        with self.assertRaisesRegex(ValueError, 'source/evidence|size differs'):
+            module.specifications(self.root)
+
+    def test_runtime_declaration_drift_is_not_implicitly_re_pinned(self):
+        self.runtime()
+        self.runtime_path.write_text(self.runtime_path.read_text() + '\n')
+        with self.assertRaisesRegex(ValueError, 'source/evidence|size differs'):
+            module.runtime_manifests(self.root)
 
     def test_valid_dispatch_preserves_literal_argument_boundaries(self):
         self.runtime()
@@ -196,10 +235,10 @@ class DeliveryTests(unittest.TestCase):
             self.assertEqual(module.main(), 17)
         execute.assert_called_once_with(command, cwd=self.root, check=False)
 
-    def test_receipt_drift_blocks_status_and_dispatch(self):
+    def test_receipt_drift_blocks_dispatch(self):
         _, receipt = self.runtime(); receipt.write_text('{}')
         with self.assertRaisesRegex(ValueError, 'verification receipt'):
-            module.summary(self.root)
+            module.score_command('NEURAL-001', self.submission, self.output, self.root)
 
     def test_entrypoint_drift_blocks_status_and_dispatch(self):
         script, _ = self.runtime(); script.write_text('# changed')

@@ -3,12 +3,12 @@
 
 Reads metadata only. It does not run candidates, open scientific arrays, grant
 execution, or infer acceptance from the presence of three implementation pieces.
-The older neurobench CLI stays byte-identical for its frozen consumers.
+Current source registration does not establish acceptance or execution authority.
 """
 import json
 from pathlib import Path
 
-from neurobench import ROOT, digest, read, specifications, summary, within
+from neurobench.cli import ROOT, digest, read, specifications, summary, within
 
 
 def pinned_json(root, descriptor):
@@ -25,7 +25,14 @@ def pinned_json(root, descriptor):
 
 def accepted_tasks(root=ROOT):
     _, canonical = specifications(root)
-    ledger = read(root / "docs/neuroscience-benchmarks/build/implementation_status.json")
+    registry = read(root / "benchmarks/registry.json")
+    evidence = registry.get("acceptance_evidence")
+    if evidence is None:
+        return {"accepted_local_bounded_tasks": None,
+                "currently_dispatch_ready_bounded_tasks": None,
+                "task_acceptance_basis": "No current acceptance-evidence descriptor is registered.",
+                "acceptance_status": "unknown", "execution_authority": False}
+    ledger = pinned_json(root, evidence)
     admissions = ledger.get("bounded_task_admissions", {"schema_version": 1,
                                                        "records": {}, "accepted_ids": []})
     records = admissions["records"]

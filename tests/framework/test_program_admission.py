@@ -12,7 +12,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SOURCE = Path(__file__).resolve().parents[1] / 'neurobench.py'
+SOURCE = Path(__file__).resolve().parents[2] / 'src/neurobench/cli.py'
 spec = importlib.util.spec_from_file_location('neurobench_program_dispatch', SOURCE)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -23,21 +23,26 @@ class ProgramMetadataTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        build = self.root / 'docs/neuroscience-benchmarks/build'
-        for name, ident in [('paper_100.json', 'PAPER-X'), ('neural_100.json', 'NEURAL-095')]:
-            self.write(build / name, {'tasks': [{'id': ident}]})
-        self.write(build / 'implementation_status.json', {
-            'packages': [], 'full_candidate_contracts_completed': 0,
-            'research_qualified': 0, 'submission_ready': 0,
-            'current_delivery': {'bounded_reference_ids': [], 'bounded_reference_candidate_ids': 0}})
+        self.registry = {'schema_version': 1, 'kind': 'neuroscience_benchmark_registry',
+                         'source_counts': {'paper': 1, 'neural': 1, 'total': 2}, 'tasks': []}
         delivery = {key: {} for key in module.COMMON}
         delivery.update(schema_version=1, id='NEURAL-095', track='neural',
                         title='Synthetic metadata fixture', status='specification_only',
                         primary_outputs=['Synthetic fixture only'],
                         admission={'runnable': False, 'research_qualified': False})
-        self.write(self.root / 'benchmarks/manifests/neural/NEURAL-095.json', delivery)
-        self.manifest = self.root / 'benchmarks/neuroscience/neural-095/manifest.json'
-        self.wrapper = self.root / 'authoring/fixture/execute_program.py'
+        for ident, track in [('NEURAL-095', 'neural'), ('PAPER-X', 'paper')]:
+            specification = copy.deepcopy(delivery)
+            specification.update(id=ident, track=track)
+            path = self.root / 'benchmarks' / track / ident / 'task.json'
+            self.write(path, specification)
+            self.registry['tasks'].append({
+                'id': ident, 'track': track, 'task_directory': self.rel(path.parent),
+                'specification_id': ident, 'specification_alias': False,
+                'registration_class': 'canonical',
+                'specification': {'path': self.rel(path), **self.pin(path)},
+                'runtime_manifest': None, 'runtime_package': None})
+        self.manifest = self.root / 'benchmarks/neural/NEURAL-095/implementations/fixture-runtime/manifest.json'
+        self.wrapper = self.manifest.with_name('execute_program.py')
         self.wrapper.parent.mkdir(parents=True)
         self.wrapper.write_text('raise AssertionError("fixture wrapper must never run")\n')
         self.helper = self.wrapper.with_name('helper.py')
@@ -90,6 +95,10 @@ class ProgramMetadataTests(unittest.TestCase):
 
     def save(self):
         self.write(self.manifest, self.doc)
+        self.registry['tasks'][0].update(
+            runtime_manifest={'path': self.rel(self.manifest), **self.pin(self.manifest)},
+            runtime_package=self.rel(self.manifest.parent))
+        self.write(self.root / 'benchmarks/registry.json', self.registry)
 
     def refresh_evidence_pin(self, kind, path):
         self.meta['verification'][kind + '_sha256'] = self.sha(path)
@@ -106,13 +115,13 @@ class ProgramMetadataTests(unittest.TestCase):
         self.assertEqual(cwd, self.root)
         self.assertFalse(self.output.exists())
 
-    def test_program_count_is_separate_from_score_and_research_counts(self):
-        result = module.summary(self.root)
-        self.assertEqual(result['local_program_runners_verified'], 1)
-        self.assertEqual(result['program_runner_ids'], ['NEURAL-095'])
-        self.assertEqual(result['local_score_adapters_verified'], 0)
-        self.assertEqual(result['full_candidate_contracts_completed'], 0)
-        self.assertEqual(result['research_qualified'], 0)
+    def test_program_qualification_is_separate_from_score_and_source_admission(self):
+        path, declaration = module.runtime_manifests(self.root)['NEURAL-095']
+        self.assertTrue(module.verified_program_runtime(path, declaration, self.root))
+        self.assertFalse(module.verified_runtime(path, declaration, self.root))
+        specifications, _ = module.specifications(self.root, complete=True)
+        self.assertFalse(specifications['NEURAL-095']['admission']['runnable'])
+        self.assertFalse(specifications['NEURAL-095']['admission']['research_qualified'])
 
     def reviewed_entry(self):
         self.meta['entrypoint']['argv'] += ['--review', '{review}', '--other-reserve-bytes', '{other_reserve_bytes}']

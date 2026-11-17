@@ -12,7 +12,7 @@ import stat
 import sys
 import types
 
-CONTRACT = 'authoring/delivery-20261105/common/campaign-exposure-contract-v1'
+CONTRACT = 'benchmarks/shared/study-exposure/campaign-contract-v1'
 CONTRACT_MANIFEST_SHA = '4b3ba488a6e808558f83fa38486ef52dd773260ce5198726e063e1c836915757'
 VALIDATOR = {'bytes': 15638, 'sha256': 'dc9fc898bcb94a2e15a510bd206a3caeb03d29aed434541e70973a16ccf056bb'}
 REQUEST_CAP = 131072
@@ -70,9 +70,23 @@ def context(task_id, action, condition):
     return {'task_id': task_id, 'action': action, 'condition': condition}
 
 
+def require_current_authority(repo):
+    """No historical campaign lock authorizes execution after source relocation."""
+    registry = metadata(capture(Path(repo) / 'benchmarks/registry.json', 4 * 1024 * 1024))
+    need(type(registry) is dict and registry.get('kind') == 'neuroscience_benchmark_registry',
+         'current benchmark registry required for campaign dispatch')
+    # A new authority protocol must be implemented and independently reviewed before
+    # publishing an admission descriptor. Merely inserting a field cannot enable it.
+    need(registry.get('campaign_authority') is None,
+         'unsupported current campaign authority; no execution')
+    raise ValueError('Current campaign execution authority is not published. The preserved '
+                     'campaign contract and historical WORK pins do not authorize this source version.')
+
+
 def admit(repo, task_id, action, condition, request_path, request_sha256, work_sha256):
     """Called before command construction and again directly before dispatch."""
     dispatch = context(task_id, action, condition)
+    require_current_authority(repo)
     need(request_path is not None, 'explicit operator campaign request required')
     for value in (request_sha256, work_sha256):
         need(type(value) is str and re.fullmatch('[a-f0-9]{64}', value) is not None, 'explicit current request and WORK hashes required')
@@ -133,8 +147,8 @@ def finish(first, second, command, cwd):
     return receipt
 
 
-WORK = 'authoring/delivery-20261105/WORK_ASSIGNMENTS.json'
-PREFERENCE_READ_CAP = 2000000
+WORK = '.neurobench/operator/WORK_ASSIGNMENTS.json'
+PREFERENCE_READ_CAP = 8 * 1024 * 1024
 
 
 def metadata(raw):
@@ -270,9 +284,26 @@ def preferred_route(repo, task_id, action, condition, work_sha256, registered=No
     need(isinstance(registered, tuple) and len(registered) == 2, message)
     registration, supplied = registered
     registration = Path(registration).absolute()
-    need(registration.parent.parent == repo / 'benchmarks/neuroscience'
-         and registration.name == 'manifest.json', 'central registration location')
-    registration_raw = read(registration, 131072)
+    registry_raw = read(repo / 'benchmarks/registry.json', 4 * 1024 * 1024)
+    registry = metadata(registry_raw)
+    need(type(registry) is dict and registry.get('schema_version') == 1
+         and registry.get('kind') == 'neuroscience_benchmark_registry', 'current registration schema')
+    rows = registry.get('tasks')
+    need(type(rows) is list and len(rows) <= 4096, 'bounded current registration roster')
+    matches = [row for row in rows if type(row) is dict and row.get('id') == task_id]
+    need(len(matches) == 1, 'one current registered task identity')
+    task = matches[0]
+    track = task.get('track')
+    need(track in ('paper', 'neural'), 'current task track')
+    home = 'benchmarks/' + track + '/' + task_id
+    need(task.get('task_directory') == home, 'current task home')
+    current_pin = task.get('runtime_manifest')
+    expected = descriptor(current_pin)
+    need(registration == relative_file(repo, current_pin['path'])
+         and registration.parent == relative_file(repo, task.get('runtime_package'))
+         and registration.is_relative_to(repo / home / 'implementations')
+         and registration.name == 'manifest.json', 'current registered implementation location')
+    registration_raw = read(registration, 131072, expected)
     doc = metadata(registration_raw)
     need(doc == supplied and doc.get('id') == task_id, 'captured actual central registration')
     meta = doc.get('program_execution')

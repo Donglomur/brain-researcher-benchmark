@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-PATH = Path(__file__).resolve().parents[1] / 'build_paper_delivery_manifests.py'
+PATH = Path(__file__).resolve().parents[2] / 'scripts/maintenance/build_paper_delivery_manifests.py'
 spec = importlib.util.spec_from_file_location('paper_delivery_builder', PATH)
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
@@ -133,19 +133,38 @@ class MetadataTests(unittest.TestCase):
         doc = self.build(); doc['evaluation']['executor_ref'] = 'some-script.py'
         with self.assertRaisesRegex(ValueError, 'unqualified executor'): builder.validate_document(doc)
 
-    def test_deterministic_and_all_actual_canonical_ids(self):
-        one = builder.build_documents()
-        two = builder.build_documents()
+    def test_deterministic_full_roster_with_generated_source_metadata(self):
+        # Invented rows exercise the full-size builder without requiring private
+        # construction ledgers or treating old native results as current evidence.
+        ids = ['PAPER-paper-signal-add-020', 'PAPER-ROOT-ADD-013', 'PAPER-FIND-020']
+        ids += ['PAPER-fixture-' + str(index).zfill(3) for index in range(97)]
+        rows, auditrows = [], []
+        for identifier in ids:
+            row = copy.deepcopy(self.row); row['id'] = identifier; rows.append(row)
+            auditrow = copy.deepcopy(self.auditrow); auditrow['id'] = identifier
+            auditrows.append(auditrow)
+        put(self.root, builder.ROSTER, {'tasks': rows})
+        put(self.root, builder.AUDIT, {
+            'tasks': auditrows,
+            'current_reference_summary': {
+                'bounded_empirical_reference_ids': ['PAPER-paper-signal-add-020']},
+            'current_construction_holds': [
+                {'id': 'PAPER-ROOT-ADD-013', 'remaining_gates': ['Invented unresolved contrast']}],
+            'conflicts_and_reconciliations': [
+                {'id': 'PAPER-FIND-020', 'type': 'fixture_reconciliation', 'path': self.source,
+                 'detail': {'conclusion': 'Invented comparison of different pinned source formats'}}]})
+        one = builder.build_documents(self.root)
+        two = builder.build_documents(self.root)
         self.assertEqual(builder.encode(one), builder.encode(two))
-        ids = [x['id'] for x in builder.load(builder.ROOT, builder.ROSTER)['tasks']]
         self.assertEqual(list(one), ids)
         self.assertEqual(len(one), 100)
-        self.assertTrue(all(d['evaluation']['executor_ref'] is None and not d['admission']['runnable'] for d in one.values()))
+        self.assertTrue(all(d['evaluation']['executor_ref'] is None and not d['admission']['runnable']
+                            for d in one.values()))
         self.assertIn('row-ordered', one['PAPER-paper-signal-add-020']['next_implementation_action']['action'])
         self.assertTrue(one['PAPER-ROOT-ADD-013']['holds']['current_construction_holds'])
-        microns = one['PAPER-FIND-020']['reproduction_evidence']['reconciliations']
-        self.assertTrue(microns)
-        self.assertIn('different pinned source formats', microns[0]['conclusion'])
+        reconciliations = one['PAPER-FIND-020']['reproduction_evidence']['reconciliations']
+        self.assertTrue(reconciliations)
+        self.assertIn('different pinned source formats', reconciliations[0]['conclusion'])
 
 
 if __name__ == '__main__': unittest.main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply an explicitly reviewed source-backed wording amendment, with provenance.
+"""Stage an explicitly reviewed source-backed wording amendment, with provenance.
 
 This cannot promote readiness or edit an implemented/frozen benchmark package.
 """
@@ -10,7 +10,13 @@ import hashlib
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 ROSTER = ROOT / 'docs/neuroscience-benchmarks/build/neural_100.json'
 ALLOWED = {'biological_unit', 'controls', 'primary_metric.definition',
            'reference.role', 'scientific_question', 'split.policy',
@@ -22,13 +28,15 @@ def sha(body):
 
 
 def main():
+    global ROOT, ROSTER
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--proposal', required=True)
-    parser.add_argument('--record-directory', required=True)
+    construction.arguments(parser)
     args = parser.parse_args()
+    ROOT, record = construction.paths(args, parser)
+    ROSTER = ROOT / 'docs/neuroscience-benchmarks/build/neural_100.json'
     proposal_path = (ROOT / args.proposal).resolve()
-    record = (ROOT / args.record_directory).resolve()
-    if not proposal_path.is_relative_to(ROOT) or not record.is_relative_to(ROOT):
+    if not proposal_path.is_relative_to(ROOT):
         raise ValueError('Repository paths only')
     proposal_body = proposal_path.read_bytes()
     proposal = json.loads(proposal_body)
@@ -88,7 +96,7 @@ def main():
         'proposal_sha256': sha(proposal_body), 'prior_roster_sha256': sha(before),
         'assignments': 32, 'field_replacements': count,
         'dispositions': proposal['disposition_counts'], 'readiness_promotions': 0,
-        'record': str(record.relative_to(ROOT)),
+        'record': 'receipt.json',
     })
     after = (json.dumps(changed, indent=2, ensure_ascii=False) + '\n').encode()
     record.mkdir(parents=True, exist_ok=False)
@@ -100,11 +108,13 @@ def main():
         'before_roles': original['summary']['by_neural_role'],
         'after_roles': changed['summary']['by_neural_role']}
     (record / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
-    temporary = ROSTER.with_name('neural_100.amendment.tmp')
+    temporary = record / 'neural_100.amendment.tmp'
     with temporary.open('xb') as f:
         f.write(after)
-    temporary.replace(ROSTER)
-    receipt['status'] = 'applied'
+    temporary.replace(record / 'neural_100.json')
+    receipt['status'] = 'staged_for_review'
+    receipt['source_roster_modified'] = False
+    receipt['generator'] = construction.generator(__file__)
     (record / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(json.dumps(receipt))
 

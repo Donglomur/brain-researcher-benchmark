@@ -14,7 +14,7 @@ from pathlib import Path
 import re
 import shutil
 
-from validate_neuro_tasks import Audit
+from neurobench.task_validation import Audit
 
 
 def digest(path: Path) -> str:

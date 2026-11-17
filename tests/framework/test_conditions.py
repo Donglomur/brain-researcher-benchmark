@@ -5,15 +5,18 @@ import json
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-from tools.tests.test_neurobench_programs import ProgramMetadataTests
+fixture_spec = importlib.util.spec_from_file_location(
+    'program_admission_fixture', Path(__file__).with_name('test_program_admission.py'))
+fixture_module = importlib.util.module_from_spec(fixture_spec)
+fixture_spec.loader.exec_module(fixture_module)
 
-spec = importlib.util.spec_from_file_location('condition_dispatch', Path(__file__).resolve().parents[1] / 'neurobench_condition.py')
+spec = importlib.util.spec_from_file_location('condition_dispatch', Path(__file__).resolve().parents[2] / 'src/neurobench/conditions.py')
 module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
 
 
 class ConditionTests(unittest.TestCase):
     def setUp(self):
-        self.fixture = ProgramMetadataTests(methodName='test_valid_command_is_literal_argv_and_executes_nothing')
+        self.fixture = fixture_module.ProgramMetadataTests(methodName='test_valid_command_is_literal_argv_and_executes_nothing')
         self.fixture.setUp()
         self.addCleanup(self.fixture.doCleanups)
         f = self.fixture
@@ -43,7 +46,8 @@ class ConditionTests(unittest.TestCase):
         self.assertEqual(raw[1], str(self.alternate))
         self.assertIn(str(self.fixture.program), raw)
         self.assertFalse(self.fixture.output.exists())
-        self.assertEqual(module.base.summary(self.fixture.root)['local_program_runners_verified'], 1)
+        path, declaration = module.base.runtime_manifests(self.fixture.root)['NEURAL-095']
+        self.assertTrue(module.base.verified_program_runtime(path, declaration, self.fixture.root))
         self.assertTrue(all(not row['additional_task'] for row in module.list_conditions(self.fixture.root)))
 
     def test_changed_alternative_rejects_and_does_not_fall_back(self):

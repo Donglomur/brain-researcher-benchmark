@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """Join bounded source audits without changing candidate or execution status."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 OUT = ROOT / 'docs/neuroscience-benchmarks/build'
 AUDITS = ROOT / 'authoring/neural-source-audits'
 
@@ -34,13 +41,20 @@ SOURCES = {
 
 
 def main():
+    global ROOT, OUT, AUDITS
+    parser = argparse.ArgumentParser(description=__doc__)
+    construction.arguments(parser)
+    args = parser.parse_args()
+    ROOT, output = construction.paths(args, parser)
+    OUT = ROOT / 'docs/neuroscience-benchmarks/build'
+    AUDITS = ROOT / 'authoring/neural-source-audits'
     roster_path = OUT / 'neural_100.json'
     roster = read(roster_path)['tasks']
     legacy_path = OUT / 'discovery_audit_four.json'
     legacy = read(legacy_path)
     entries = []
     pins = {str(p.relative_to(ROOT)): pin(p) for p in (
-        roster_path, legacy_path, OUT / 'DISCOVERY_AUDIT_FOUR.md', Path(__file__).resolve())}
+        roster_path, legacy_path, OUT / 'DISCOVERY_AUDIT_FOUR.md')}
     for row in legacy['collections']:
         entries.append({
             'source_id': row['source_id'], 'name': row['name'],
@@ -188,6 +202,8 @@ def main():
         raise ValueError('Audit coverage must be exactly the 32 existing discovery assignments')
     result = {
         'schema_version': 2, 'updated_on': '2026-10-30',
+        'generator': construction.generator(__file__),
+        'input_layout': 'external_original_construction_layout',
         'purpose': 'Current construction evidence overlay, not an execution or admission promotion.',
         'original_roster': str(roster_path.relative_to(ROOT)),
         'audited_source_collections': 16, 'existing_discovery_assignments_covered': 32,
@@ -197,7 +213,8 @@ def main():
         'new_audit_recording_or_model_bytes': 0, 'new_audit_scientific_executions': 0,
         'roster_statuses_changed': False, 'collections': entries, 'source_pins': pins,
     }
-    (OUT / 'construction_audit_index.json').write_text(json.dumps(result, indent=2) + '\n')
+    output.mkdir(parents=True, exist_ok=True)
+    (output / 'construction_audit_index.json').write_text(json.dumps(result, indent=2) + '\n')
     lines = ['# Source audits for the 32 discovery assignments', '',
         '**16 collections now have bounded construction audits covering all 32 existing discovery assignments.** The roster remains 100 paper projects plus 100 neural assignments. These audits do not create new tasks or establish runnable references.', '',
         'The earlier four-source pass included selected real headers and tiny event/QC arrays. The twelve additional audits inspected code and metadata only: no recordings, model weights, fitting or candidate execution. Their explicit response bodies total ' + f'**{byte_total:,} bytes across {attempts} attempts**. Each collection stayed within its separate 2 MB source allowance; this is not total network traffic.', '',
@@ -215,7 +232,7 @@ def main():
         'ERP CORE and the Garcia recording components offer subsequent bounded input inspections once their time bases, event definitions and subject identities are frozen. IBC needs map-version and invalid-flag resolution first. The larger fMRI/MEG collections need compact, provenance-preserving exports or additional storage; a small file alone is not an adequate scientific cohort.', '',
         'For every task, freeze the allowed observations, unit of generalization, reference and nuisance controls, signed metric, private scoring boundary and resource allowance before fitting. Public historical test labels do not become an unseen assessment merely because a local packet omits them. Preserve null, undefined and failed outcomes.', '',
         '[Machine-readable gates and source pins](construction_audit_index.json) · [Exposure review](EXPOSURE_AUDIT.md) · [Live build status](../BUILD_STATUS.md)', '']
-    (OUT / 'CONSTRUCTION_SOURCE_AUDITS.md').write_text('\n'.join(lines))
+    (output / 'CONSTRUCTION_SOURCE_AUDITS.md').write_text('\n'.join(lines))
     print(json.dumps({k: result[k] for k in ('audited_source_collections', 'existing_discovery_assignments_covered', 'new_audit_response_body_bytes', 'new_audit_request_attempts')}))
 
 

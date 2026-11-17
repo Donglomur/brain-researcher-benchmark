@@ -8,6 +8,7 @@ command never starts an LLM. Metadata commands and --dry-run execute no candidat
 """
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 import types
@@ -16,12 +17,12 @@ import stat
 import subprocess
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
-CAMPAIGN_HELPER = {'bytes': 16326, 'sha256': '11723f00691ef58e7c96b29030c810c98969e0be8411ec48b5bbc56a7874f61d'}
+ROOT = Path(__file__).resolve().parents[2]
+CAMPAIGN_HELPER = {'bytes': 18273, 'sha256': 'c2233b392627a38395692823e06e960d50df17e7ab5061694c06cfe8aa2a0de9'}
 
 def _campaign_module(root=ROOT):
     """Compile exactly the reviewed helper bytes; no scriptdir/PYTHONPATH import."""
-    path = _program_repo_file(root, 'tools/neurobench_campaign_gate.py')
+    path = _program_repo_file(root, 'src/neurobench/campaign_gate.py')
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         before = os.fstat(fd)
@@ -61,41 +62,90 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _current_registry(root):
+    """Read the current ownership registry without traversing historical locators."""
+    path = _program_repo_file(root, 'benchmarks/registry.json')
+    if not 0 < path.stat().st_size <= 4 * 1024 * 1024:
+        raise ValueError('Current registry must be bounded metadata')
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('Duplicate current registry key')
+            result[key] = value
+        return result
+    value = json.loads(path.read_text(), object_pairs_hook=pairs,
+                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite registry metadata')))
+    if (not isinstance(value, dict) or value.get('schema_version') != 1
+            or value.get('kind') != 'neuroscience_benchmark_registry'):
+        raise ValueError('Unsupported current benchmark registry')
+    rows = value.get('tasks')
+    if not isinstance(rows, list) or not 0 < len(rows) <= 4096:
+        raise ValueError('Current registry requires a bounded task roster')
+    identities = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError('Current registry task must be an object')
+        identifier, track = row.get('id'), row.get('track')
+        if (not isinstance(identifier, str) or not 0 < len(identifier) <= 200
+                or not identifier[0].isalnum()
+                or any(character not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-' for character in identifier)
+                or track not in ('paper', 'neural') or identifier.casefold() in identities):
+            raise ValueError('Unsafe, duplicate or wrong-track current task identity')
+        identities.add(identifier.casefold())
+        directory = 'benchmarks/' + track + '/' + identifier
+        if (row.get('task_directory') != directory or not isinstance(row.get('specification'), dict)
+                or row['specification'].get('path') != directory + '/task.json'):
+            raise ValueError('Task definition must belong to its current task directory')
+    return value
+
+
 def specifications(root=ROOT, complete=False):
-    expected = {}
-    for name in ('paper_100.json', 'neural_100.json'):
-        for task in read(root / 'docs/neuroscience-benchmarks/build' / name)['tasks']:
-            if task['id'] in expected:
-                raise ValueError('Duplicate canonical task ID')
-            expected[task['id']] = task
-    docs = {}
-    for path in sorted((root / 'benchmarks/manifests').glob('*/*.json')):
-        doc = read(path)
-        if not isinstance(doc, dict) or not COMMON.issubset(doc):
-            raise ValueError('Incomplete delivery schema: ' + str(path))
-        task_id = doc['id']
-        if task_id not in expected or task_id in docs or path.stem != task_id:
-            raise ValueError('Unknown, duplicated, or misnamed task specification: ' + str(task_id))
-        if doc['schema_version'] != 1 or doc['status'] != 'specification_only':
-            raise ValueError('Specifications cannot claim runtime completion')
-        if doc['track'] != path.parent.name or not doc['primary_outputs']:
-            raise ValueError('Wrong track or missing task-specific scientific output')
-        if doc['admission'].get('runnable') is not False or doc['admission'].get('research_qualified') is not False:
-            raise ValueError('Source metadata cannot promote scientific or runtime admission')
-        docs[task_id] = doc
-    if complete and (len(expected) != 200 or set(docs) != set(expected)):
-        raise ValueError(f'Expected exactly 200 specifications; found {len(docs)}')
+    registry = _current_registry(root)
+    docs, expected = {}, {}
+    for row in registry['tasks']:
+        pin = _object(row.get('specification'), 'Task specification pin')
+        path = _program_pin(root, pin.get('path'), pin.get('sha256'), pin.get('bytes'))
+        doc = _object(read(path), 'Task specification')
+        identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
+        if (identity != row.get('specification_id')
+                or row.get('specification_alias') != (identity != row['id'])
+                or doc.get('track', row['track']) != row['track']):
+            raise ValueError('Current task/specification identity differs')
+        if row.get('registration_class') == 'canonical' and (not COMMON.issubset(doc) or doc.get('schema_version') != 1):
+            raise ValueError('Incomplete canonical delivery schema')
+        if row.get('registration_class') == 'canonical':
+            admission = _object(doc.get('admission'), 'Canonical source admission')
+            if (doc.get('status') not in {'specification_only', 'source_only_inactive', 'source_implemented_inactive'}
+                    or admission.get('runnable') is not False
+                    or admission.get('research_qualified') is not False):
+                raise ValueError('Source specifications cannot promote runtime or research admission')
+        docs[row['id']], expected[row['id']] = doc, row
+    if complete:
+        totals = registry.get('source_counts', {})
+        actual = {'paper': sum(row['track'] == 'paper' for row in expected.values()),
+                  'neural': sum(row['track'] == 'neural' for row in expected.values()), 'total': len(expected)}
+        if any(totals.get(key) != number for key, number in actual.items()):
+            raise ValueError('Current registry task totals disagree')
     return docs, expected
 
 
 def runtime_manifests(root=ROOT):
+    """Use explicitly registered declarations, never scan old package locations."""
     docs = {}
-    for path in sorted((root / 'benchmarks/neuroscience').glob('*/manifest.json')):
-        doc = read(path)
-        task_id = doc['id']
-        if task_id in docs:
-            raise ValueError('Duplicate runtime for ' + task_id)
-        docs[task_id] = (path, doc)
+    for row in _current_registry(root)['tasks']:
+        pin = row.get('runtime_manifest')
+        if pin is None:
+            continue
+        pin = _object(pin, 'Runtime declaration pin')
+        path = _program_pin(root, pin.get('path'), pin.get('sha256'), pin.get('bytes'))
+        if (path.parent != within(root, row.get('runtime_package'))
+                or not path.is_relative_to(within(root, row['task_directory']) / 'implementations')):
+            raise ValueError('Runtime declaration is outside its registered task implementation')
+        doc = _object(read(path), 'Runtime declaration')
+        if doc.get('id') != row['id']:
+            raise ValueError('Runtime declaration task identity differs')
+        docs[row['id']] = (path, doc)
     return docs
 
 
@@ -260,35 +310,18 @@ def verified_program_runtime(path, doc, root=ROOT):
     return True
 
 
+def public_metadata_command(action, root, **options):
+    # Current metadata shares the sole registry/catalog reader with the public CLI.
+    spec = importlib.util.spec_from_file_location('neurobench_current_cli',
+                                                 Path(__file__).with_name('cli.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.public_metadata_mode(root)
+    return module.public_metadata_command(action, root, **options)
+
+
 def summary(root=ROOT):
-    docs, canonical = specifications(root)
-    runtime = runtime_manifests(root)
-    if set(runtime) - set(canonical):
-        raise ValueError('Runtime references an unknown candidate ID')
-    verified = [k for k, (p, d) in runtime.items() if verified_runtime(p, d, root)]
-    programs = [k for k, (p, d) in runtime.items() if verified_program_runtime(p, d, root)]
-    legacy = read(root / 'docs/neuroscience-benchmarks/build/implementation_status.json')
-    native = [p for p in legacy['packages'] if p.get('native_harbor_oracle') == 1 and p.get('native_harbor_nop') == 0]
-    delivery = legacy['current_delivery']
-    references = delivery['bounded_reference_ids']
-    if (len(references) != len(set(references)) or set(references) - set(canonical)
-            or len(references) != delivery['bounded_reference_candidate_ids']):
-        raise ValueError('Reference-run inventory is inconsistent with the canonical roster')
-    return {'target_assignments': len(canonical), 'delivery_specifications': len(docs),
-            'paper_specifications': sum(d['track'] == 'paper' for d in docs.values()),
-            'neural_specifications': sum(d['track'] == 'neural' for d in docs.values()),
-            'local_score_adapters_verified': len(verified), 'score_adapter_ids': sorted(verified),
-            'local_program_runners_verified': len(programs), 'program_runner_ids': sorted(programs),
-            'program_count_basis': 'Separate passed program qualification and pinned source closure; no candidate is run by metadata commands.',
-            'bounded_reference_runs_recorded': len(references),
-            'bounded_reference_ids': sorted(references),
-            'distinct_ids_with_reference_or_score_adapter': len(set(references) | set(verified)),
-            'reference_count_basis': 'Recorded scientific runs in the live construction ledger; this metadata command does not rerun them.',
-            'historical_native_development_packages': len(native),
-            'distinct_ids_with_native_package_or_scoring_adapter': len(set(verified) | {p['candidate_id'] for p in native}),
-            'full_candidate_contracts_completed': legacy['full_candidate_contracts_completed'],
-            'research_qualified': legacy['research_qualified'], 'submission_ready': legacy['submission_ready'],
-            'counting_note': 'Reference and adapter counts overlap. Source specs and partial development components are not completed research tasks. No new model run is implied.'}
+    return public_metadata_command('status', root)
 
 
 def score_command(task_id, submission, output, root=ROOT, *, review=None, other_reserve_bytes=None):
@@ -412,25 +445,9 @@ def main():
     p.add_argument('--campaign-request-sha256', required=True)
     p.add_argument('--work-sha256', required=True)
     args = parser.parse_args()
-    if args.action == 'status':
-        result = summary()
-    elif args.action == 'check':
-        specifications(complete=True)
-        result = {'metadata_check': 'passed', **summary()}
-    elif args.action == 'list':
-        docs, _ = specifications()
-        runtime = runtime_manifests()
-        result = [{'id': d['id'], 'title': d['title'], 'track': d['track'],
-                   'source_specification': True,
-                   'local_scoring_adapter_verified': d['id'] in runtime and verified_runtime(*runtime[d['id']]),
-                   'local_program_runner_verified': d['id'] in runtime and verified_program_runtime(*runtime[d['id']])}
-                  for d in docs.values() if args.track is None or d['track'] == args.track]
-    elif args.action == 'show':
-        docs, _ = specifications()
-        if args.id not in docs:
-            raise ValueError('Specification not yet built for ' + args.id)
-        result = {'specification': docs[args.id],
-                  'runtime': runtime_manifests().get(args.id, (None, None))[1]}
+    if args.action in ('status', 'check', 'list', 'show'):
+        result = public_metadata_command(args.action, ROOT, track=getattr(args, 'track', None),
+                                         task_id=getattr(args, 'id', None))
     else:
         gate = _campaign_module(ROOT)
         first = gate.admit(ROOT, args.id, args.action, None, args.campaign_request,

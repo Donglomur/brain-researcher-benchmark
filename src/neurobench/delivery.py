@@ -11,9 +11,9 @@ from pathlib import Path, PurePosixPath
 import stat
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
-DELIVERY = "authoring/delivery-20261105"
-REGISTRY = "docs/neuroscience-benchmarks/build/registry.json"
+ROOT = Path(__file__).resolve().parents[2]
+DELIVERY = ".neurobench/exports"
+REGISTRY = "benchmarks/registry.json"
 COMPONENTS = ("task_contract", "submission_schema", "scorer", "data", "dependencies")
 MANIFEST = "DELIVERY_MANIFEST.json"
 DEFAULT_CAP = 64 * 1024 * 1024

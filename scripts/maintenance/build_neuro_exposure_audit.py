@@ -8,10 +8,17 @@ from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
+import argparse
 import hashlib
 import json
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+# Load this sibling explicitly so the maintained command also works with Python -I -S.
+import importlib.util as _importlib_util
+_construction_spec = _importlib_util.spec_from_file_location('_neurobench_construction', Path(__file__).with_name('_construction.py'))
+construction = _importlib_util.module_from_spec(_construction_spec)
+_construction_spec.loader.exec_module(construction)
+
 DOCS = ROOT / "docs/neuroscience-benchmarks"
 OUT = DOCS / "build"
 
@@ -31,6 +38,13 @@ def locator(value):
 
 
 def main():
+    global ROOT, DOCS, OUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    construction.arguments(parser)
+    args = parser.parse_args()
+    ROOT, output = construction.paths(args, parser)
+    DOCS = ROOT / "docs/neuroscience-benchmarks"
+    OUT = DOCS / "build"
     inputs = [OUT / "paper_100.json", OUT / "neural_100.json"] + [
         DOCS / "catalog" / name for name in (
             "datasets_paper_linked.json", "datasets_fmri_eeg.json",
@@ -123,7 +137,6 @@ def main():
 
     # Pin alias rationale as well as the directly joined fields and generator.
     inputs.extend(ROOT / p for p in aliases.get("supporting_evidence_paths", []))
-    inputs.append(Path(__file__).resolve())
 
     rows = [links[k] for k in sorted(links)]
     cross_pairs = sorted({tuple(r["tasks"]) for r in rows if r["cross_suite"]})
@@ -131,6 +144,8 @@ def main():
     linked_neural = {i for pair in cross_pairs for i in pair if i in neural_ids}
     result = {
         "schema_version": 1, "status": "declared_metadata_links_only",
+        "generator": construction.generator(__file__),
+        "input_layout": "external_original_construction_layout",
         "candidate_tasks": len(tasks), "typed_evidence_edges": len(rows),
         "unique_linked_task_pairs": len({tuple(r["tasks"]) for r in rows}),
         "cross_suite_linked_task_pairs": len(cross_pairs),
@@ -154,7 +169,8 @@ def main():
             "No RL train/assessment allocation or source restriction is changed by this audit.",
         ],
     }
-    (OUT / "exposure_audit.json").write_text(json.dumps(result, indent=2) + "\n")
+    output.mkdir(parents=True, exist_ok=True)
+    (output / "exposure_audit.json").write_text(json.dumps(result, indent=2) + "\n")
     lines = ["# Declared exposure across the 200 candidates", "",
         "This metadata audit makes known reuse visible before any RL or model-evaluation split. "
         "It reads existing rosters and catalogs only; no recording, target or model is accessed.", "",
@@ -177,9 +193,9 @@ def main():
         "derived archives and undocumented reuse. This graph neither certifies independence nor "
         "automatically assigns an RL training/test split. Connected components of mixed relation "
         "types would not have a defensible biological interpretation.", "",
-        "Regenerate with `python3 tools/build_neuro_exposure_audit.py`. This operation does not "
+        "Regenerate with `python3 scripts/maintenance/build_neuro_exposure_audit.py --construction-root <input-tree> --output-directory <staging-directory>`. This operation does not "
         "promote readiness or run a scientific model.", ""]
-    (OUT / "EXPOSURE_AUDIT.md").write_text("\n".join(lines))
+    (output / "EXPOSURE_AUDIT.md").write_text("\n".join(lines))
     print(json.dumps({k: result[k] for k in (
         "candidate_tasks", "typed_evidence_edges", "unique_linked_task_pairs",
         "cross_suite_linked_task_pairs", "cross_suite_linked_paper_tasks",

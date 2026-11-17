@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SPEC = importlib.util.spec_from_file_location("delivery", Path(__file__).resolve().parents[1] / "neurobench_delivery.py")
+SPEC = importlib.util.spec_from_file_location("delivery", Path(__file__).resolve().parents[2] / "src/neurobench/delivery.py")
 tool = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(tool)
 
