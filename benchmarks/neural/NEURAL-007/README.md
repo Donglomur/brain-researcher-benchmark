@@ -69,7 +69,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Finite probability diagnostics v1](implementations/finite-probability-diagnostics-v1) — Reviewed source component.
   Scope: Finite sleep probability diagnostics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Viewer transport v1](implementations/viewer-transport-v1) — Complete person waveform participant transport.
-  Scope: Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. Generated controls only; authentic full-panel throughput, sandbox/provider delivery, model interpretation and scientific qualification remain unestablished.
+  Scope: Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. The accepted f1-source scripted software control completed all 5450 epochs; its earlier failed attempt and declared versus observed resources are retained. This is not model interpretation or provider-delivery qualification, and scientific qualification remains unestablished.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

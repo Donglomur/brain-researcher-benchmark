@@ -31,6 +31,7 @@ SCOPE_POLICY_SUCCESSOR_TASKS = frozenset((
     "PAPER-paper-signal-add-004", "PAPER-paper-method-replacement-008",
     "PAPER-paper-method-replacement-013", "PAPER-paper-method-add-010",
 ))
+REFERENCE_SUCCESSOR_TASKS = frozenset(("PAPER-ROOT-ADD-001",))
 PRIMARY_SUCCESSOR_FIELDS = frozenset(("primary_policy_revision", "primary_improvement_contract"))
 SOURCE_DECLARATION_GAP_IDS = frozenset(("PAPER-paper-method-011", "PAPER-paper-method-replacement-009"))
 SOURCE_DECLARATION_GAP_PATH = "docs/provenance/paper-outcome-source-declaration-gaps.v1.json"
@@ -128,6 +129,8 @@ def primary_successor_module(task_id=PRIMARY_SUCCESSOR_TASK):
     """Load only the fixed reviewed metadata selector for the declared task."""
     if task_id == PRIMARY_SUCCESSOR_TASK:
         filename = "paper_primary_successor.py"
+    elif task_id in REFERENCE_SUCCESSOR_TASKS:
+        filename = "paper_language_reference.py"
     elif task_id in SCOPE_POLICY_SUCCESSOR_TASKS:
         filename = "paper_scope_policy_successor.py"
     else:
@@ -156,7 +159,7 @@ def has_primary_successor(row):
     if declared is None:
         return False
     need(type(declared) is dict, "Paper outcome binding must be an object")
-    if row.get("id") in SCOPE_POLICY_SUCCESSOR_TASKS:
+    if row.get("id") in SCOPE_POLICY_SUCCESSOR_TASKS | REFERENCE_SUCCESSOR_TASKS:
         return primary_successor_module(row["id"]).has_primary_successor(row)
     selected = PRIMARY_SUCCESSOR_FIELDS & set(declared)
     if row.get("id") != PRIMARY_SUCCESSOR_TASK:
@@ -691,6 +694,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                 "projection": successor_members[successor_module.PROJECTION],
                 "scientific_contract": successor_members[home + "/docs/scientific-contract.temporal-scope.v1.json"],
             }
+        elif identifier in REFERENCE_SUCCESSOR_TASKS:
+            successor_provenance = successor.public_provenance
         else:
             successor_provenance = {"scope_decision": copy.deepcopy(previous_rows.scope_pin)}
         for member in successor.members:

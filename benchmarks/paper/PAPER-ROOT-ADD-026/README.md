@@ -63,6 +63,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Source cv replay v1](implementations/source-cv-replay-v1) — Reviewed source component.
   Scope: Source condition-CV replay and training packet projection. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Source model producer v1](implementations/source-model-producer-v1) — Reviewed source component.
+  Scope: Exact source numerical core and a complete 2054-coordinate dispatcher retain all fit observations, predictions, internal components and failures. Regional biological summaries and the separate 26-electrode preferred/nonpreferred pool are prospective reconstructions with explicit recipes. Original Figure 4-9 caller policies, selected identities, historical runtime/RNG, authentic fitting and scientific figure comparison remain unresolved; no selector or policy activation is inferred.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

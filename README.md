@@ -86,9 +86,12 @@ The [whole-night sleep viewer](benchmarks/neural/NEURAL-007/implementations/whol
 provides observations for all 5,450 development epochs. Its [historical scripted
 preparation, delivery and replay](docs/science/sleep007-viewer-delivery-20261117.md)
 completed under the original renderer with fixed uniform responses, without an AI
-participant or scientific score. The later renderer correction has generated-only
-evidence and does not inherit that execution proof. Provider image delivery,
-participant isolation and model performance remain unqualified; the canonical
+participant or scientific score. A separate [current-source scripted transport
+control](benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/SCRIPTED_CONTROL.json)
+completed all 5,450 epochs, 21,800 required render calls and six local macOS boundary
+assertions using the corrected renderer. Its earlier interpreter-startup failure
+remains recorded. Provider image delivery, remote-context isolation and model
+performance remain unqualified; the canonical
 unsupported direct/viewer status is unchanged. This
 zero-shot waveform viewer and the feature programme that can learn from six
 training people's labels use different information budgets. Shared task and query
@@ -128,7 +131,10 @@ over the SMC method reference remain distinct from the paper's LFADS/NDT compari
 Its access conditions compare paper and data with the same materials plus official
 code and ten pinned released model/configuration/history files. This measures their
 combined assistance; the source-only v1 condition remains preserved separately.
-Fresh current material preparation and operator-path validation remain required. The retained
+The [complete current material pair](benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json)
+was prepared and independently verified across all 71 files. Participant execution
+boundaries remain unqualified; no participant model or scoring run was performed.
+The retained
 [source-matched author routes](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
 serve author reproduction and calibration. The [completed author calibration](docs/science/smc-author-calibration-20261117.md)
 records both full MC_Maze 20-ms prediction runs at the original 192 particles ×
