@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Exact reviewed local paired scorer; copied byte-for-byte into its package."""
+"""Relocated bridge to the pinned historical local paired scorer."""
 from pathlib import Path
 import hashlib
 import runpy
 import stat
 import sys
 sys.dont_write_bytecode = True
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[5]
 TARGET = ROOT / 'authoring/sleep-eog/investigation-scorer-v2/run_outer.py'
 EXPECTED = 'd824ef00c39f84db32481f24102ea128a1f3c2ec2f14766a25061678ef381395'
 info = TARGET.lstat()

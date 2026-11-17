@@ -33,7 +33,9 @@ RECEIPT_CAP = 65536
 MAX_CHILDREN = 8
 MAX_CENSUS = 128
 MAX_ERRORS = 96
-PACKAGE_ROOT = 'benchmarks/neuroscience/neural-083/adaptive-investigation-v1/package'
+# The source selector retains its historical namespace; the checkout locator is current.
+SOURCE_ROOT = 'benchmarks/neuroscience/neural-083/adaptive-investigation-v1/package'
+PACKAGE_ROOT = 'benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package'
 ROSTER = (
     'real_natural_adaptive_owner.py',
     'real_natural_inherited/process_owner.py',
@@ -635,7 +637,7 @@ def execute(args, state):
          'fixed sibling harness and selector')
     selected = parse(state.source(selection,args.selection_bytes,args.selection_sha256,SELECTION_CAP))
     need(type(selected) is dict and set(selected) == {'root','files'}
-         and selected['root'] == PACKAGE_ROOT and type(selected['files']) is dict
+         and selected['root'] == SOURCE_ROOT and type(selected['files']) is dict
          and set(selected['files']) == set(SOURCE_NAMES), 'fixed repository-relative ten-source selector')
     package = exact_path(str((Path.cwd()/PACKAGE_ROOT).absolute()))
     need(package == tests.parent/'package', 'selected checkout root joins actual sibling package')

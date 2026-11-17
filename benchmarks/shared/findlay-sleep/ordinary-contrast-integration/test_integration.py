@@ -13,8 +13,8 @@ import unittest
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[4]
-SEM = HERE.parent / "findlay-identity-contrast-semantics-source-20261115-v1"
+REPO = HERE.parents[3]
+SEM = HERE.parent / "identity-contrast"
 
 
 def load(name, path):
@@ -232,7 +232,7 @@ class CompositionTests(unittest.TestCase):
             self.assertFalse(result["scientific_qualification"])
 
     def test_complete_source_graph_pins_new_and_accepted_dependencies(self):
-        lock = json.loads((REPO / "components/findlay-complete-preparation/SOURCE_MANIFEST.json").read_text())
+        lock = json.loads((REPO / "benchmarks/integrity/current-closures/findlay-sleep/source-manifest.json").read_text())
         self.assertEqual(len(lock["files"]), 14)
         for path, pin in lock["files"].items():
             body = (REPO / path).read_bytes()

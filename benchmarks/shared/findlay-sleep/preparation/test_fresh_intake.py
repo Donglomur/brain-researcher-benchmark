@@ -17,8 +17,8 @@ import zipfile
 import zlib
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-MANIFEST = json.loads((HERE / "SOURCE_MANIFEST.json").read_text())
+ROOT = HERE.parents[3]
+MANIFEST = json.loads((ROOT / "benchmarks/integrity/current-closures/findlay-sleep/source-manifest.json").read_text())
 PREFIX = MANIFEST["worker"]["path"].rsplit("/", 1)[0]
 WAVE = Path(PREFIX).parent
 
@@ -33,8 +33,8 @@ def load(name, path):
 
 FRESH = load("fresh_test_source", ROOT / PREFIX / "fresh_intake.py")
 CONTRACT = load("fresh_test_contract", ROOT / PREFIX / "external_contract.py")
-INTAKE = load("fresh_test_intake", ROOT / WAVE / "findlay-complete-intake-census-source-20261115-v1/intake.py")
-CENSUS = load("fresh_test_census", ROOT / WAVE / "findlay-identity-contrast-semantics-source-20261115-v1/identity/census.py")
+INTAKE = load("fresh_test_intake", ROOT / WAVE / "intake-census/intake.py")
+CENSUS = load("fresh_test_census", ROOT / WAVE / "identity-contrast/identity/census.py")
 WORKER = load("fresh_test_worker", ROOT / MANIFEST["worker"]["path"])
 INTEGRATION = load("fresh_existing_invented_fixture", ROOT / PREFIX / "test_integration.py")
 OWNER = load("fresh_test_owner", ROOT / MANIFEST["entrypoint"]["path"])

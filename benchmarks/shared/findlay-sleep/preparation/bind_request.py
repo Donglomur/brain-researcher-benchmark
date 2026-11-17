@@ -13,7 +13,8 @@ from pathlib import Path
 import re
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
+ROOT = HERE.parents[3]
+CURRENT_MANIFEST = ROOT / "benchmarks/integrity/current-closures/findlay-sleep/source-manifest.json"
 
 
 def need(ok, message):
@@ -70,7 +71,7 @@ def load(name, path, body):
 
 def build(arguments):
     root = ROOT
-    manifest_body = capture(HERE / "SOURCE_MANIFEST.json", 65536)
+    manifest_body = capture(CURRENT_MANIFEST, 65536)
     need(len(manifest_body) <= 65536, "Finite software manifest")
     manifest = decode(manifest_body)
     need(set(manifest) == {"schema", "execution_authority", "entrypoint", "worker", "files"}

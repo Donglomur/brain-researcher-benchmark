@@ -15,7 +15,7 @@ import types
 import unittest
 
 HERE = Path(__file__).resolve().parent
-DONOR = HERE.parents[1] / 'authoring/delivery-20261105/common/remaining-builds-wave17/neural014-complete-program'
+DONOR = HERE.parent / 'speech-programme'
 
 
 def module(path, **bindings):

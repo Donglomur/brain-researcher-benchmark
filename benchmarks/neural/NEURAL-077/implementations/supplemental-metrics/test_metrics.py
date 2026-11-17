@@ -63,7 +63,7 @@ def canonical_directory():
         return Path(override)
     if (HERE / "canonical" / "metrics.py").is_file():
         return HERE / "canonical"
-    return HERE.parents[4] / "benchmarks/neuroscience/neural-077"
+    return HERE.parent / "registered-runtime"
 
 
 def canonical_scalar_source():

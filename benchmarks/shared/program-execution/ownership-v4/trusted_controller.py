@@ -5,15 +5,15 @@ closure and the actual controller. A descriptor is identity, not authorization.
 """
 from pathlib import Path
 import hashlib,re,stat,sys
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(__file__).resolve().parents[4]
 
 
 def validate_controller(value,argv,check_bytes=True):
     if type(value)is not dict or set(value)!={'path','bytes','sha256'}:
         raise ValueError('Exact trusted controller descriptor')
     rel=value['path'];size=value['bytes'];sha=value['sha256']
-    if type(rel)is not str or not re.fullmatch(r'authoring/[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*\.py',rel)or any(x in('.', '..')for x in Path(rel).parts):
-        raise ValueError('Canonical authoring Python controller only')
+    if type(rel)is not str or not re.fullmatch(r'benchmarks/(?:paper|neural|shared)/[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*\.py',rel)or any(x in('.', '..')for x in Path(rel).parts):
+        raise ValueError('Canonical benchmark Python controller only')
     if type(size)is not int or not 1<=size<=262144 or type(sha)is not str or not re.fullmatch('[a-f0-9]{64}',sha):
         raise ValueError('Bounded exact source identity')
     path=ROOT/rel

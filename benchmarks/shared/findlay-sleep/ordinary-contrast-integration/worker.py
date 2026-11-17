@@ -10,9 +10,9 @@ import time
 import types
 
 ROOT = Path(__file__).resolve().parent
-REPOSITORY = ROOT.parents[4]
+REPOSITORY = ROOT.parents[3]
 PREFIX = ROOT.relative_to(REPOSITORY).as_posix()
-OLD = PREFIX.rsplit("/", 1)[0] + "/findlay-complete-intake-census-source-20261115-v1"
+OLD = PREFIX.rsplit("/", 1)[0] + "/intake-census"
 DOSSIER = PREFIX.rsplit("/", 1)[0] + "/findlay-sleep-complete-contract-source-20261115-v1"
 
 
@@ -209,16 +209,16 @@ def main():
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS",
                  "VECLIB_MAXIMUM_THREADS", "NUMEXPR_NUM_THREADS", "ARROW_IO_THREADS"):
         os.environ[name] = "1"
-    sys.path.insert(0, str(REPOSITORY / "authoring/delivery-20261105/common/remaining-builds-wave40/findlay-complete-census-continuation-source-20261115-v1/owner"))
+    sys.path.insert(0, str(REPOSITORY / "benchmarks/shared/findlay-sleep/census-continuation/owner"))
     import run as owner
     admission = owner.worker_admission(args.request, args.request_sha256)
     need(Path(admission["request"]["execution"]["repository_root"]) == REPOSITORY, "Exact worker repository")
     intake = captured("findlay_tail_intake", OLD + "/intake.py", admission)
-    census = captured("findlay_tail_original_census", "authoring/delivery-20261105/common/remaining-builds-wave40/findlay-identity-contrast-semantics-source-20261115-v1/identity/census.py", admission)
-    rules = captured("findlay_tail_original_rules", "authoring/delivery-20261105/common/remaining-builds-wave40/findlay-identity-contrast-semantics-source-20261115-v1/identity/family_rules.py", admission)
+    census = captured("findlay_tail_original_census", "benchmarks/shared/findlay-sleep/identity-contrast/identity/census.py", admission)
+    rules = captured("findlay_tail_original_rules", "benchmarks/shared/findlay-sleep/identity-contrast/identity/family_rules.py", admission)
     tail = captured("findlay_tail_census", PREFIX + "/census_tail.py", admission)
     ordinary = captured("findlay_ordinary_reconciliation", PREFIX + "/ordinary_reconciliation.py", admission)
-    policy = captured("findlay_ordinary_policy", "authoring/delivery-20261105/common/remaining-builds-wave40/findlay-identity-contrast-semantics-source-20261115-v1/contrast/ordinary_contrast_policy.py", admission)
+    policy = captured("findlay_ordinary_policy", "benchmarks/shared/findlay-sleep/identity-contrast/contrast/ordinary_contrast_policy.py", admission)
     contract = captured("findlay_private_contract", PREFIX + "/external_contract.py", admission)
     private = contract.authenticate("private_policy", admission["source_capture"][
         admission["request"]["task"]["private_policy"]["path"]])

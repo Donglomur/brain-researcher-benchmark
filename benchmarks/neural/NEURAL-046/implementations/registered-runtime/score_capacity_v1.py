@@ -2,7 +2,7 @@
 """Pinned local NEURAL-046 capacity successor; source-only until root installation."""
 import hashlib
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[5]
 TARGET=ROOT/'authoring/task-capacity-successors-20261102/neural046/score.py'
 EXPECTED='de28139e91167517032a84c8176f776aad907454b2fb0fc4d8cee197804a2f0a'
 if TARGET.is_symlink() or any(p.is_symlink() for p in TARGET.parents):

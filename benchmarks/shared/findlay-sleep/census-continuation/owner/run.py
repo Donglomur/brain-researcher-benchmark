@@ -21,11 +21,11 @@ sys.dont_write_bytecode = True
 PROFILE = {"work_seconds": 180, "recovery_seconds": 60, "whole_seconds": 240,
            "worker_cpu": [160, 165], "host_memory_planning_bytes": 536870912,
            "runtime_read_cap": 201326592}
-OWNER_ROOT = "authoring/shared-program-ownership-v4/"
+OWNER_ROOT = "benchmarks/shared/program-execution/ownership-v4/"
 OWNER_PINS = {
     "process_owner.py": {"bytes": 6707, "sha256": "b9e8f366f4b639a87e6c7c580e4bceff228c031cd767a4a3bebe37ea85d496ea"},
     "group_bootstrap.py": {"bytes": 2351, "sha256": "b435ddb3e88c94f98413c69d7f378df348f5d827b585be2c1b47adf754b53778"},
-    "trusted_controller.py": {"bytes": 2094, "sha256": "ce6ac7b5ce554c51d34cc43551e491f32583d83c9d6ce3a6f512e9fbad715c57"},
+    "trusted_controller.py": {"bytes": 2119, "sha256": "c6b144d400f2e5fff154753d1e2e16ee2fb3e216186ac4dfb2f7fd24a3269234"},
 }
 META_CAP = 8 * 1024 * 1024
 SOURCE_CAP = 2 * 1024 * 1024

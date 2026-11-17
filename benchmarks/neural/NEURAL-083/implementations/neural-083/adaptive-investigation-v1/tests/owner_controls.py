@@ -112,7 +112,9 @@ def main():
         selected = json.loads(capture(args.selection,args.selection_bytes,args.selection_sha256))
         if set(selected) != {'root','files'} or set(selected['files']) != set(NAMES):
             raise ValueError('closed ten-body candidate source selection')
-        root = Path(selected['root']).absolute()
+        if selected['root'] != 'benchmarks/neuroscience/neural-083/adaptive-investigation-v1/package':
+            raise ValueError('fixed historical source selector namespace')
+        root = Path(__file__).absolute().parent.parent/'package'
         bodies = {}
         for name in NAMES:
             descriptor = selected['files'][name]

@@ -2,7 +2,7 @@
 """Pinned local NEURAL046 artifact-scoring bridge; no shell or candidate code."""
 import hashlib
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[5]
 TARGET=ROOT/'authoring/reward-dopamine-adaptation-v1/released-fluorescence-cli-v1/score.py'
 EXPECTED='968b3091c0432f9e8051aabab362d02e0ad26d2de92fe658c9a7f2d047908036'
 if TARGET.is_symlink() or any(p.is_symlink() for p in TARGET.parents):

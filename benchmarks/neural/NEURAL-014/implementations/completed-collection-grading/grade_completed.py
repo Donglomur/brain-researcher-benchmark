@@ -17,7 +17,7 @@ import signal
 import sys
 import types
 
-PRODUCER_ROOT = Path(__file__).absolute().parents[2] / 'authoring/delivery-20261105/common/remaining-builds-wave17/neural014-complete-program'
+PRODUCER_ROOT = Path(__file__).absolute().parent.parent / 'speech-programme'
 PRODUCER = {'bytes': 3665, 'sha256': '2b30df42c6a15511f302a0acdc29a49708a8741e6c71edb16ce89e8724cfa8ea'}
 BOOT = {'bytes': 1734, 'sha256': '3ea5f30575fec2df46e7b815329c572f1738bada1475b5bdaca30f252eb6476c'}
 REQUEST_CAP = 65536

@@ -14,8 +14,9 @@ import unittest
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-MANIFEST = json.loads((HERE / "SOURCE_MANIFEST.json").read_text())
+ROOT = HERE.parents[3]
+MANIFEST_PATH = "benchmarks/integrity/current-closures/findlay-sleep/source-manifest.json"
+MANIFEST = json.loads((ROOT / MANIFEST_PATH).read_text())
 PREFIX = MANIFEST["worker"]["path"].rsplit("/", 1)[0]
 
 
@@ -107,10 +108,12 @@ class RelocationTests(unittest.TestCase):
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, target)
-        self.component = self.root / "components/findlay-complete-preparation"
+        self.component = self.root / "benchmarks/shared/findlay-sleep/preparation"
         self.component.mkdir(parents=True)
-        for name in ("SOURCE_MANIFEST.json", "bind_request.py"):
-            shutil.copyfile(HERE / name, self.component / name)
+        shutil.copyfile(HERE / "bind_request.py", self.component / "bind_request.py")
+        manifest_target = self.root / MANIFEST_PATH
+        manifest_target.parent.mkdir(parents=True)
+        shutil.copyfile(ROOT / MANIFEST_PATH, manifest_target)
         self.owner = load("portable_relocated_owner", self.root / MANIFEST["entrypoint"]["path"])
         self.binder = load("portable_relocated_binder", self.component / "bind_request.py")
         self.private = Path(self.temp.name).resolve() / "private"
@@ -242,6 +245,26 @@ class BootstrapTests(unittest.TestCase):
 
 
 class SourceTests(unittest.TestCase):
+    def test_current_controller_accepts_relocated_exact_source(self):
+        controller = load("relocated_trusted_controller_test", ROOT /
+            "benchmarks/shared/program-execution/ownership-v4/trusted_controller.py")
+        pin = MANIFEST["entrypoint"]
+        path = ROOT / pin["path"]
+        self.assertEqual(controller.ROOT, ROOT)
+        self.assertEqual(controller.validate_controller(pin, [sys.executable, str(path)]), path)
+        changed = {**pin, "sha256": "0" * 64}
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            controller.validate_controller(changed, [sys.executable, str(path)])
+
+    def test_current_controller_refuses_old_or_escaping_paths(self):
+        controller = load("relocated_trusted_controller_negative_test", ROOT /
+            "benchmarks/shared/program-execution/ownership-v4/trusted_controller.py")
+        for relative in ("authoring/frozen/controller.py", "benchmarks/shared/../controller.py",
+                         "/benchmarks/shared/controller.py", "docs/controller.py"):
+            with self.subTest(relative=relative), self.assertRaises(ValueError):
+                controller.validate_controller({**MANIFEST["entrypoint"], "path": relative},
+                    [sys.executable, str(ROOT / relative)], check_bytes=False)
+
     def test_private_output_root_is_ignored(self):
         self.assertIn("/artifacts-build/", (ROOT / ".gitignore").read_text().splitlines())
 
@@ -249,7 +272,7 @@ class SourceTests(unittest.TestCase):
         pins = {
             PREFIX + "/ordinary_reconciliation.py": "5f0097505103558f6bdcae564f8c3ea4dd509e2c5016d14cb0c83f665c5a9133",
             PREFIX + "/census_tail.py": "3c58c6cbd22ac5389c1695ca40d7fdb90585a5d7ab497cba1bdb626a0c74a86f",
-            "authoring/shared-program-ownership-v4/process_owner.py": "b9e8f366f4b639a87e6c7c580e4bceff228c031cd767a4a3bebe37ea85d496ea"}
+            "benchmarks/shared/program-execution/ownership-v4/process_owner.py": "b9e8f366f4b639a87e6c7c580e4bceff228c031cd767a4a3bebe37ea85d496ea"}
         for relative, digest in pins.items():
             self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), digest)
 
