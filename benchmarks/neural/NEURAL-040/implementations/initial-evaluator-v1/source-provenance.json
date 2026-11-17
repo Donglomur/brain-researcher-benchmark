@@ -1,0 +1,208 @@
+{
+  "task_id": "NEURAL-040",
+  "implementation": "initial-evaluator-v1",
+  "construction_scope": "Prospective matched fixed-rank encoder and OOD-style independent correlation-difference evaluator over precomputed features and separately held targets.",
+  "canonical_contract": {
+    "path": "benchmarks/neural/NEURAL-040/task.json",
+    "bytes": 16626,
+    "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
+  },
+  "primary_source_mapping": [
+    {
+      "requirements": [
+        "biological units",
+        "parcel universe",
+        "TR and alignment",
+        "repeated movie runs"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/README.md",
+      "evidence": "Four people sub-01, sub-02, sub-03, sub-05; per-segment HDF5 arrays are samples by 1000 parcels; TR and transcript windows 1.49 s. Friends episode and Movie10 film subdivisions are not independent films; Life and Hidden Figures have repeated viewings."
+    },
+    {
+      "requirements": [
+        "ID versus OOD Pearson estimators",
+        "equal-person aggregation"
+      ],
+      "source": "https://algonautsproject.com/2025/challenge.html",
+      "evidence": "ID Friends season 7: concatenate episodes before per-parcel/person Pearson (line 72). OOD: independent Pearson per film/parcel/person, then means across parcels, films and persons (line 147). Neither specifies Fisher-z transformation or sample-weighted person pooling."
+    },
+    {
+      "requirements": [
+        "source-exact ID segment trimming",
+        "native ID scoring code"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/code/challenge_baseline_model/03_encoding_model_testing/01_test_encoding.py",
+      "lines_1_based": [
+        99,
+        112
+      ],
+      "evidence": "ID Friends season 7 only: trim each segment prediction and target [5:-5], concatenate all episodes on sample axis, and compute scipy.stats.pearsonr per parcel. This is not the OOD estimator."
+    },
+    {
+      "requirements": [
+        "native fitter provenance",
+        "prospective deviations"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/code/challenge_baseline_model/02_encoding_model_training/train_encoding_utils.py",
+      "lines_1_based": [
+        227,
+        232
+      ],
+      "evidence": "Native RidgeCV uses 15 alpha values from 1e6 to 1e-5, cv=None and alpha_per_target=True. This does not establish whole-film cross-validation or matched-capacity ablation qualification."
+    },
+    {
+      "requirements": [
+        "native lag/window defaults"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/code/challenge_baseline_model/02_encoding_model_training/train_encoding.py",
+      "lines_1_based": [
+        68,
+        74
+      ],
+      "evidence": "Default edge trims 5/5, hrf_delay 3, stimulus_window 5. A stricter chosen guard is a prospective recipe and must be named as such."
+    },
+    {
+      "requirements": [
+        "code/data rights gate"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/LICENSE",
+      "evidence": "Pinned repository LICENSE is CC0 1.0 Universal. This is not blanket clearance of original movie media or gated model assets."
+    },
+    {
+      "requirements": [
+        "paper identity"
+      ],
+      "source": "https://arxiv.org/abs/2501.00504",
+      "evidence": "Gifford et al., The Algonauts Project 2025 Challenge: How the Human Brain Makes Sense of Multimodal Movies; v2 January 6 2025. Primary abstract identifies multimodal encoding and out-of-distribution generalization."
+    },
+    {
+      "requirements": [
+        "loader orientation and grouping"
+      ],
+      "source": "https://raw.githubusercontent.com/facebookresearch/algonauts-2025/8de2dbeae79a5a5ec5a2a78d51d692464de1dead/data_utils/data_utils/studies/algonauts2025.py",
+      "evidence": "Loader transposes HDF5 sample-by-parcel data, identifies Friends season/episode/chunk and Movie10 movie/chunk/run, and uses 1.49-second acquisition cadence."
+    },
+    {
+      "requirements": [
+        "native OOD within-film estimator",
+        "source-exact OOD segment trimming"
+      ],
+      "source": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/code/challenge_baseline_model/03_encoding_model_testing/01_test_encoding_ood.py",
+      "lines_1_based": [
+        106,
+        133
+      ],
+      "evidence": "Loop separately over each OOD film. Trim both constituent segments [5:-5], concatenate these two segments, then compute Pearson per parcel for that film. Source-specific Chaplin language handling exists; this review does not qualify multimodal OOD access or reproduction."
+    }
+  ],
+  "exact_source_pins": {
+    "repository_commit": "96750e7017b30cb02f011c11561a3df897695853",
+    "method": "GitHub recursive git tree inspected over HTTPS. Contents read through web primary-source opens. SHA256 byte fetch failed SSL and blob API was rate limited; no fabricated SHA256 values.",
+    "files": [
+      {
+        "path": "LICENSE",
+        "bytes": 7048,
+        "git_blob_sha1": "0e259d42c996742e9e3cba14c677129b2c1b6311"
+      },
+      {
+        "path": "code/challenge_baseline_model/02_encoding_model_training/train_encoding.py",
+        "bytes": 5954,
+        "git_blob_sha1": "5398db459569ba6bacff40a1202a48ea52f9f6c1"
+      },
+      {
+        "path": "code/challenge_baseline_model/02_encoding_model_training/train_encoding_utils.py",
+        "bytes": 9463,
+        "git_blob_sha1": "639231b336c607b2fff835ceea189e9669294e1f"
+      },
+      {
+        "path": "code/challenge_baseline_model/03_encoding_model_testing/01_test_encoding.py",
+        "bytes": 6636,
+        "git_blob_sha1": "f90167d8cef224aa01acb02b376c168e4ceeea83"
+      },
+      {
+        "path": "code/challenge_baseline_model/03_encoding_model_testing/test_encoding_utils.py",
+        "bytes": 6500,
+        "git_blob_sha1": "472306b9eaa0040afbed4ff89b8e194f08c22753"
+      },
+      {
+        "path": "code/challenge_baseline_model/01_stimulus_feature_extraction/02_pca.py",
+        "bytes": 8181,
+        "git_blob_sha1": "a9acc43058cab68d87bf640dbe96b7a19344b3d8"
+      },
+      {
+        "path": "code/challenge_baseline_model/03_encoding_model_testing/01_test_encoding_ood.py",
+        "bytes": 7303,
+        "git_blob_sha1": "93c49e94fa58edbf981e7fb1228c9108937f51af"
+      }
+    ]
+  },
+  "newly_authored": true,
+  "third_party_code_vendored": false,
+  "rights_status": "No organizer code/data/media/weights copied. CC0 repository license identified; media, feature/model assets and packet redistribution remain unqualified.",
+  "prospective_choices": [
+    "Whole-film identity shared over repeated viewings and across people; fixed explicit symmetric guards and causal lags.",
+    "Equal-film Pearson aligned to OOD source; repeated segments pooled within each film.",
+    "Train-only standardization and PCA whitening with common fixed rank and ridge alpha across four ablation arms.",
+    "Unpenalized intercept and analytic whitening ridge, unlike native per-target RidgeCV.",
+    "Reject any constant/nonfinite scored target or prediction parcel; no selective parcel deletion.",
+    "Descriptive finite frozen within-segment paired circular shifts; synchronized across matching stimulus/run/length.",
+    "All 256 four-person bootstrap resamples; descriptive percentile interval only.",
+    "Numerical claim verification of group mean full-minus-without-family Pearson delta at absolute tolerance 1e-8."
+  ],
+  "preserved_canonical_holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Qualify accessible feature assets and parcel alignment; four people limit population claims."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Verify anonymous annex payload access and actual HDF5/transcript schema on a bounded sample before source-supported promotion. Public file pointers and loader documentation alone do not establish retrieval."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Pin exact organizer baseline files/license, and freeze permitted pretrained feature/model versions; full TRIBE includes a gated language model."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Current server-scored targets and submission policy are not assumed usable for our final assessment. Four people limit population claims."
+    },
+    {
+      "id": "source_4",
+      "requirement": "Large public media assets have separate rights; task packaging, compute and numerical reference remain unqualified."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "admission": {
+    "authentic_reference_executed": false,
+    "scientific_qualification": false,
+    "submission_ready": false,
+    "data_scope": "public_development_only"
+  },
+  "resources": {
+    "datasets_or_archives_downloaded": 0,
+    "dependency_installs": 0,
+    "model_runs": 0,
+    "authentic_scientific_runs": 0,
+    "control_data": "bounded generated matrices only",
+    "external_reads": "primary paper/site and pinned code or git-tree metadata only"
+  }
+}
