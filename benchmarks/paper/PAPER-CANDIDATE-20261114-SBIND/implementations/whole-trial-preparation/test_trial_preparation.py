@@ -171,6 +171,34 @@ class PreparationTests(unittest.TestCase):
         bad = subject.TrialView([(1,)], (subject.Span("invented", 0, 1, 0),))
         with self.assertRaises(subject.AdmissionError): bad[0]
 
+    def test_in_range_backing_failure_cannot_silently_end_a_role(self):
+        c, s, pins = bind(self.census, self.split)
+        protocol = subject.compile_protocol(c, s, **pins)
+        assay = protocol.assays[0]
+        selected = assay.folds[0]
+        first_indices = {getattr(selected, role)[0].source_start
+                         for role in ("train", "validation", "test")}
+        class IncompleteRows(InventedRows):
+            def __getitem__(self, index):
+                if index not in first_indices:
+                    raise IndexError(index)
+                return super().__getitem__(index)
+        rows = IncompleteRows(assay.total_frames)
+        views = subject.prepare_fold(c, s, **pins, assay_id="WFCI1", fold=0,
+            source_loader=lambda a: subject.SourceRows(a.source_sha256,
+                a.representation_sha256, subject.SHAPE, a.channels, rows))
+        for role, view in views.items():
+            with self.subTest(role=role):
+                iterator = iter(view)
+                self.assertEqual(next(iterator).source_index, view.spans[0].source_start)
+                with self.assertRaisesRegex(subject.AdmissionError, "source row missing") as error:
+                    next(iterator)
+                self.assertIsInstance(error.exception.__cause__, IndexError)
+                # The view itself still implements ordinary Sequence bounds.
+                for index in (len(view), -len(view)-1):
+                    with self.assertRaises(IndexError):
+                        view[index]
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

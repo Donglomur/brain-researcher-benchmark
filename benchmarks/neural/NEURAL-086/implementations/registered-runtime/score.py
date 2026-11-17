@@ -5,7 +5,10 @@ TASK='NEURAL-086'
 SOURCE_BYTES=4348
 SOURCE_SHA256='8c4c93b8905711da7b13b34200f68a1c1e7acad5695477c93560a35f7e38f58b'
 def main(argv=None):
-    root=Path(__file__).absolute().parent.parent/'zuco2-neural085-086-complete-v1'
+    here=Path(__file__).absolute()
+    installed=Path('benchmarks/neural')/TASK/'implementations/registered-runtime/score.py'
+    if here.parts[-len(installed.parts):]!=installed.parts or here.is_symlink() or any(p.is_symlink() for p in here.parents):raise ValueError('exact ordinary installed ZuCo entry required')
+    root=here.parents[len(installed.parts)-1]/'benchmarks/shared/zuco2/zuco2-neural085-086-complete-v1'
     path=root/'score_campaign.py'
     if path.is_symlink() or any(p.is_symlink() for p in path.parents):raise ValueError('ordinary shared score source required')
     before=path.stat()

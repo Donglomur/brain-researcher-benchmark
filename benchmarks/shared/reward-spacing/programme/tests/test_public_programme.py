@@ -28,7 +28,7 @@ class PublicProgrammeControls(unittest.TestCase):
             "reward_example_builder", cls.package / "examples/make_engineering_request.py")
         cls.builder = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.builder)
-        cls.lock = cls.builder.pin(cls.package / "SOURCE_LOCK.json")
+        cls.lock = cls.builder.pin(cls.package / "CURRENT_SOURCE_LOCK.json")
 
     @classmethod
     def tearDownClass(cls):
@@ -117,6 +117,69 @@ class PublicProgrammeControls(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("source bytes changed", result.stderr.decode())
 
+    def test_historical_source_pin_does_not_admit_changed_current_source(self):
+        old = self.builder.pin(self.package / "SOURCE_LOCK.json")
+        command = self.source_command("NEURAL-045", old["sha256"])
+        command[command.index("--source-bytes") + 1] = str(old["bytes"])
+        result = self.cli(command)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("ordinary source pin", result.stderr.decode())
+
+    def test_same_size_current_source_tamper_refused_before_import(self):
+        for member in ("central/comparisons.py", "central/source.py"):
+            with self.subTest(member=member):
+                path = self.package / member
+                original = path.read_bytes()
+                marker = self.workspace / "must-not-execute"
+                payload = ("open(" + repr(str(marker)) + ", 'w').write('executed')\n").encode()
+                try:
+                    path.write_bytes(payload + b" " * (len(original) - len(payload)))
+                    result = self.cli(self.source_command("NEURAL-045"))
+                    self.assertEqual(result.returncode, 2)
+                    self.assertIn("source bytes changed", result.stderr.decode())
+                    self.assertFalse(marker.exists())
+                finally:
+                    path.write_bytes(original)
+
+    def test_incomplete_current_lock_refused_even_with_matching_outer_pin(self):
+        path = self.package / "CURRENT_SOURCE_LOCK.json"
+        original = path.read_bytes()
+        try:
+            value = json.loads(original)
+            value["files"] = [row for row in value["files"]
+                              if row["path"] != "central/comparisons.py"]
+            path.write_bytes(self.builder.encode(value))
+            pin = self.builder.pin(path)
+            command = self.source_command("NEURAL-045", pin["sha256"])
+            command[command.index("--source-bytes") + 1] = str(pin["bytes"])
+            result = self.cli(command)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("current source closure membership", result.stderr.decode())
+        finally:
+            path.write_bytes(original)
+
+    def test_paper_registration_binds_current_scoring_lock(self):
+        from central.execute import run
+        from central.io import Refusal
+        from central.source import configuration, paper
+        role = next(iter(paper("pipeline").source_roles(configuration())["roles"].values()))
+        common = {"actor_lineage": "invented", "context_id": "invented-A",
+                  "paper_pins": [], "data_pins": [], "tool_contract": {},
+                  "budget": {}, "prompt_sha256": "0" * 64, "ordinary_author_code": []}
+        other = dict(common, context_id="invented-B", ordinary_author_code=[role["pin"]])
+        setup = {"task": "PAPER-FIND-044", "condition": "invented-empty-binding-control",
+                 "binding": {"synthetic": True}, "slots": []}
+        request = {"mode": "engineering", "jobs": {}, "evaluation_banks": {},
+                   "paired_access": {"paper_data": common, "paper_data_author_code": other},
+                   "scoring_source_lock_sha256": self.lock["sha256"]}
+        result = run(setup, request, self.workspace, None, None)
+        self.assertEqual(result["available_slots"], 0)
+        self.assertFalse(result["full_scientific_completion"])
+        self.assertFalse(result["scientific_qualification"])
+        request["scoring_source_lock_sha256"] = self.builder.pin(self.package / "SOURCE_LOCK.json")["sha256"]
+        with self.assertRaisesRegex(Refusal, "actual registered scoring source"):
+            run(setup, request, self.workspace, None, None)
+
     def test_all_route_and_external_role_obligations_survive_relocation(self):
         from central.source import TASKS, FULL, configuration, paper, neural
         from central.plan import construct, conditions
@@ -152,14 +215,18 @@ class PublicProgrammeControls(unittest.TestCase):
         self.assertEqual(hashlib.sha256(
             (self.package / "neural/neuro/scoring.py").read_bytes()).hexdigest(), expected)
         distribution = json.loads((self.package / "SOURCE.json").read_bytes())
-        for member in distribution["files"]:
-            body = (self.package / member["path"]).read_bytes()
-            self.assertEqual(len(body), member["bytes"])
-            self.assertEqual(hashlib.sha256(body).hexdigest(), member["sha256"])
         self.assertFalse(distribution["authentic_execution_available"])
         self.assertFalse(distribution["scientific_qualification"])
-        lock = json.loads((self.package / "SOURCE_LOCK.json").read_bytes())
-        self.assertEqual(len(lock["files"]), 61)
+        lock = json.loads((self.package / "CURRENT_SOURCE_LOCK.json").read_bytes())
+        self.assertEqual(lock["schema"], "reward_complete_central_current_source_lock_v1")
+        self.assertEqual({row["path"] for row in lock["files"]},
+                         ({row["path"] for row in distribution["files"]} | {"SOURCE.json"}) - {"README.md"})
+        self.assertFalse(lock["scientific_qualification"])
+        self.assertFalse(lock["authentic_execution_available"])
+        for field in ("predecessor_source_lock", "predecessor_distribution"):
+            row = lock[field]
+            self.assertEqual(self.builder.pin(self.package / row["path"]),
+                             {k: row[k] for k in ("bytes", "sha256")})
         for row in lock["files"]:
             raw = (self.package / row["path"]).read_bytes()
             self.assertEqual(len(raw), row["bytes"])
@@ -167,8 +234,10 @@ class PublicProgrammeControls(unittest.TestCase):
             self.assertTrue(raw.endswith(b"\n"))
             self.assertFalse(raw.endswith(b"\n\n"))
             self.assertTrue(all(line.rstrip(b" \t") == line for line in raw.splitlines()))
-            self.assertNotIn(b"/Users/", raw)
-            self.assertNotIn(b"authoring/", raw)
+            if row["path"] in {member["path"] for member in
+                               json.loads((self.package / "SOURCE_LOCK.json").read_bytes())["files"]}:
+                self.assertNotIn(b"/Users/", raw)
+                self.assertNotIn(b"authoring/", raw)
 
 
 if __name__ == "__main__":

@@ -3,6 +3,8 @@
 The caller selects this ordinary inspector and the standalone entry. This checks
 matching source identities, not a self-authenticating signature or qualification.
 No local module, data, numerical library, model or native operation is imported.
+Current numerical repairs are selected by the explicit repository descriptor;
+the preserved historical manifest and native entry are not rewritten.
 """
 import sys
 sys.dont_write_bytecode = True
@@ -89,8 +91,37 @@ def inspect_source(root):
         raise ValueError("complete original scope required")
     if manifest["source_only"] is not True or manifest["native_qualified"] is not False or manifest["scientific_qualified"] is not False:
         raise ValueError("source-only qualification boundary required")
+    package_name = "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator"
+    current_name = "benchmarks/integrity/current-closures/numeric-nlb/SOURCE_PINS.json"
+    current_raw = read(root.parents[5] / current_name, 65536)
+    current = decode(current_raw)
+    historical_pin = {"path": package_name + "/SOURCE_MANIFEST.json", "bytes": len(manifest_raw),
+                      "sha256": hashlib.sha256(manifest_raw).hexdigest()}
+    changed = {"README.md", "source_inspection.py", "nlb/metric_core.py", "nlb/scoring.py"}
+    added = {"test_metric_core.py"}
+    inherited = {"nlb/__init__.py", "nlb/arrays.py", "nlb/contracts.py", "nlb/programme.py"}
+    if (current.get("schema") != "numeric_nlb_current_source_v1"
+            or current.get("package") != package_name or current.get("predecessor") != historical_pin
+            or current.get("changed_members") != sorted(changed)
+            or current.get("added_members") != sorted(added)
+            or set(current.get("members", {})) != changed | added | inherited):
+        raise ValueError("exact current numerical source selection required")
+    if (current.get("source_only") is not True or current.get("execution_selected") is not False
+            or current.get("native_qualified") is not False or current.get("scientific_qualification") is not False):
+        raise ValueError("current source-only qualification boundary required")
+    original_rows = {row["path"]: row for row in manifest["files"]}
+    if current.get("historical_replaced_members") != [original_rows[name] for name in sorted(changed)]:
+        raise ValueError("exact historical replaced-member lineage required")
+    for name, pin in current["members"].items():
+        if (type(pin) is not dict or set(pin) != {"bytes", "sha256"}
+                or type(pin["bytes"]) is not int or not 0 < pin["bytes"] <= MEMBER_CAP
+                or type(pin["sha256"]) is not str or len(pin["sha256"]) != 64
+                or any(c not in "0123456789abcdef" for c in pin["sha256"])):
+            raise ValueError("bounded current payload descriptor required")
+        if name in inherited and pin != {key: original_rows[name][key] for key in ("bytes", "sha256")}:
+            raise ValueError("unchanged numerical dependency identity required")
     bodies = {}
-    for row in manifest["files"]:
+    for row in manifest["files"] + [{"path": name, **current["members"][name]} for name in sorted(added)]:
         if type(row) is not dict or set(row) != {"path", "bytes", "sha256"}:
             raise ValueError("closed payload descriptor")
         name = row["path"]
@@ -98,7 +129,8 @@ def inspect_source(root):
         if type(name) is not str or p.is_absolute() or str(p) != name or any(z in ("", ".", "..") for z in p.parts) or name in bodies:
             raise ValueError("canonical unique payload path")
         raw = read(root.joinpath(*p.parts))
-        if len(raw) != row["bytes"] or hashlib.sha256(raw).hexdigest() != row["sha256"]:
+        pin = current["members"].get(name, row)
+        if len(raw) != pin["bytes"] or hashlib.sha256(raw).hexdigest() != pin["sha256"]:
             raise ValueError("payload identity mismatch: " + name)
         bodies[name] = raw
     for name in ("source_inspection.py", "THIRD_PARTY_NOTICES.md", "nlb/operator_compiler.py", "nlb/scientific/GPFA_SOURCE_CONTRACT.json"):
@@ -146,10 +178,13 @@ def inspect_source(root):
         raise ValueError("source-discovery manifest join")
     if selected[0]["inspection"] != {"argv": ["{python}", "complete-operator/source_inspection.py", "--inspect"]}:
         raise ValueError("actual bounded inspection route required")
-    return {"schema": "NLB017_public_source_consistency_v1", "status": "source_consistency_passed",
-            "source_bodies": 75, "payload_bodies": 73, "python_bodies": sum(name.endswith(".py") for name in bodies) + 1,
+    return {"schema": "NLB017_public_current_source_consistency_v1", "status": "source_consistency_passed",
+            "source_bodies": len(bodies) + 2, "payload_bodies": len(bodies), "python_bodies": sum(name.endswith(".py") for name in bodies) + 1,
             "groups": 100, "query_cases": 574, "scientific_roles": 28844,
             "manifest_sha256": pin["sha256"], "entry_sha256": hashlib.sha256(entry).hexdigest(),
+            "current_binding": {"path": current_name, "bytes": len(current_raw), "sha256": hashlib.sha256(current_raw).hexdigest()},
+            "current_changed_members": sorted(changed), "current_added_members": sorted(added),
+            "historical_native_entry_held": True,
             "logical_source_bytes_read": charged, "self_authentication_claim": False,
             "local_module_execution": False, "native_qualified": False, "scientific_qualified": False,
             "data_or_model_execution": False}

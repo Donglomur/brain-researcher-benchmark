@@ -158,7 +158,11 @@ class ObjectStore:
                 os.close(directory)
                 directory = nxt
             fd = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW, dir_fd=directory)
-            require(stat.S_ISREG(os.fstat(fd).st_mode), "not-regular-file", rel)
+            try:
+                require(stat.S_ISREG(os.fstat(fd).st_mode), "not-regular-file", rel)
+            except BaseException:
+                os.close(fd)
+                raise
             return fd
         finally:
             os.close(directory)

@@ -19,6 +19,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
+## Task documentation
+
+- [Executor role separation and current source](docs/executor-role-separation.md)
+
 ## Implementation artifacts
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.

@@ -215,7 +215,13 @@ class TrialView(Sequence):
         span = self.spans[bisect_right(self._starts, index) - 1]
         offset = index - span.local_start
         source_index = span.source_start + offset
-        row = self._rows[source_index]
+        try:
+            row = self._rows[source_index]
+        except IndexError as exc:
+            # Sequence iteration interprets IndexError as normal exhaustion.
+            # This index is within the admitted view: missing backing data is
+            # an incomplete source, not the end of the selected trial support.
+            raise AdmissionError("source row missing within admitted frame extent") from exc
         _require(isinstance(row, (tuple, list)) and len(row) == 2, "source row must contain neural and behavior")
         return Frame(source_index, span.trial_id, offset, offset == 0, row[0], row[1])
 

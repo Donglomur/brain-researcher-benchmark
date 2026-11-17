@@ -4,6 +4,7 @@ No private bank is opened here. Exact common byte commitments are checked before
 release and the committed bank is authenticated only after producer closure.
 """
 import copy,math
+from statistics import mean
 from .io import need,digest
 from .source import paper,neural,configuration
 
@@ -123,8 +124,10 @@ def reference_summary(candidate,closed,links,ids,obligations):
             paired={a:{'candidate_mse':cc['animals'][a]['mse'],'reference_mse':rr['animals'][a]['mse'],
                        'difference':cc['animals'][a]['mse']-rr['animals'][a]['mse']} for a in cc['animals']}
             zero=[a for a in paired if paired[a]['reference_mse']==0]
+            # mean accumulates finite float skills exactly before division, so
+            # a representable equal-animal mean cannot overflow in the sum.
             row.update(paired_animals=paired,undefined_reference_animals=zero,
-                reference_relative_skill=None if zero else sum(1-v['candidate_mse']/v['reference_mse'] for v in paired.values())/len(paired))
+                reference_relative_skill=None if zero else mean(1-v['candidate_mse']/v['reference_mse'] for v in paired.values()))
         rows[family]=row
     required_missing=any(r['status']=='required_unscorable' for r in rows.values())
     primary=rows['R0']

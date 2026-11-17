@@ -29,24 +29,25 @@ No old private verification directory, hidden answer archive, author workstation
 
 ## Prepare and invoke
 
-Use the complete [field-by-field configuration guide](CONFIGURATION.md) and [four closed operand templates](CONFIGURATION_TEMPLATES.json). They include both native capacity ledgers, all132 input slots and all43 source rows. Unknown real paths, pins, resources and clocks are intentionally null; unfilled templates are rejected, not runnable examples. No private helper state is required.
+Use the complete [field-by-field configuration guide](CONFIGURATION.md) and [four closed operand templates](CONFIGURATION_TEMPLATES.json). They include both native capacity ledgers, all132 input slots and all43 source rows. The templates preserve the historical source pins; replace their complete runtime source map with the [current source graph](../../../../../integrity/current-closures/numeric-find032/SOURCE_GRAPH.json) as described below. Unknown real paths, pins, resources and clocks are intentionally null; unfilled templates are rejected, not runnable examples. No private helper state is required.
 
 
 1. Select the complete authentic protocol, host and resource envelope. No cheap subset or default compute request is supplied: the full reference has source-derived counts of111,672 fits and293,139 batch predictions before group work, not measured timing. Reserve candidate plus holder resources and both host input views as specified by the API.
-2. Select a trusted control directory outside source/data/participant/reference roots. Create a root-bound map from all43 [SOURCE_GRAPH](SOURCE_GRAPH.json) rows. This example only prepares ordinary source metadata; it does not run the benchmark or issue trust:
+2. Select a trusted control directory outside source/data/participant/reference roots. Authenticate the [current source binding](../../../../../integrity/current-closures/numeric-find032/SOURCE_BINDINGS.json) and its complete43-module [source graph](../../../../../integrity/current-closures/numeric-find032/SOURCE_GRAPH.json). The package-local SOURCE_GRAPH.json is preserved history and does not admit the repaired numerical comparison. This example only prepares ordinary source metadata; it does not run the benchmark or issue trust:
 
 ```bash
-python3.11 -I -S -B - /absolute/path/to/full-participant-executor-v2 /selected/control/runtime-sources.json <<'PY'
+python3.11 -I -S -B - /absolute/path/to/full-participant-executor-v2 /absolute/path/to/repository/benchmarks/integrity/current-closures/numeric-find032/SOURCE_GRAPH.json /selected/control/runtime-sources.json <<'PY'
 import hashlib, json, sys
 from pathlib import Path
 component = Path(sys.argv[1]).resolve(strict=True)
-graph = json.loads((component / 'SOURCE_GRAPH.json').read_text())
+graph = json.loads(Path(sys.argv[2]).resolve(strict=True).read_text())
+assert graph['schema'] == 'find032_fixed_python_source_graph_v1'
 assert graph['count'] == len(graph['files']) == 43
-assert graph['bytes'] == sum(r['bytes'] for r in graph['files'].values()) == 431588
+assert graph['bytes'] == sum(r['bytes'] for r in graph['files'].values())
 selection = {'schema': 'find032_captured_runtime_sources_v1',
              'root': str(component / 'source'), 'files': graph['files']}
 body = (json.dumps(selection, sort_keys=True, indent=2) + '\n').encode()
-with open(sys.argv[2], 'xb') as stream:
+with open(sys.argv[3], 'xb') as stream:
     stream.write(body)
 print(json.dumps({'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()}))
 PY
@@ -70,6 +71,6 @@ Preserve original streams, failures and terminal evidence; do not renew clocks o
 
 ## Source and rights
 
-The original54 files remain exact:53 manifest payloads plus SOURCE_MANIFEST.json. All43 Python bodies, locks and contracts are unchanged. This README, CONFIGURATION.md and CONFIGURATION_TEMPLATES.json are three supplementary public files, outside that preserved manifest; no source loader imports them. The repository [MIT LICENSE](../../../../LICENSE) covers the project source. No article, official-code body, recording, protected reference, model weight or private installation proof is distributed here.
+The original source manifests, locks, source graphs, reference descriptors and configuration templates remain exact historical records. The current arithmetic repair changes only `source/find032/artifacts.py` among the43 runtime Python bodies; the [current binding](../../../../../integrity/current-closures/numeric-find032/SOURCE_BINDINGS.json) records the full current graph and preserved predecessors. It promotes numerical products before subtraction and refuses nonfinite differences, with generated complete-product controls. Scientific populations, tolerances, diagnostic schema and all qualification holds remain unchanged. This README and the generated tests are outside the preserved original manifest; no source loader imports them. The repository [MIT LICENSE](../../../../../../LICENSE) covers the project source. No article, official-code body, recording, protected reference, model weight or private installation proof is distributed here.
 
 The upstream README's BSD-3-Clause statement has not been established as complete redistribution/dependency clearance. Separately establish rights for the article, data, official code and external dependencies; the project MIT notice does not grant them. The dormant inherited `CompositeCapacity`/`charged_directory` API references an absent supervision module and is unsupported; the selected concrete owner uses packaged Capacity and does not call it.

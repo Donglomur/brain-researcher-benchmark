@@ -1,6 +1,8 @@
 """Independent generated transport controls; no fork, cgroups, native kernels or data."""
 import base64
+from fractions import Fraction
 import importlib.util
+import math
 from pathlib import Path
 import socket
 import struct
@@ -16,6 +18,7 @@ from critical.core import Costs, Refusal, encode, decode
 from critical.native_worker import NativeWorker, NativeWorkerLease, RemoteWorkerFailure
 from critical.worker_transport import ParentChannel, RemoteCostPrefix, wire_receive
 from critical.programme import contract, catalogue
+from critical import tensors
 
 class PeerControls(unittest.TestCase):
     def setUp(self):
@@ -205,9 +208,107 @@ class PeerControls(unittest.TestCase):
         self.assertTrue(all(x["state"]=="open" for x in gates["gates"]))
         self.assertFalse(gates["source_construction_closes_scientific_gates"])
 
+    def tensor_pair(self, candidate, reference):
+        # Only the scalar loader is replaced; execute the actual scorer with
+        # one-shot iterators, without any reference, native or data campaign.
+        left, right = iter(candidate), iter(reference)
+        with patch.object(tensors, "values", side_effect=[left, right]) as loader:
+            result = tensors.pair_error(None, None, None, None, None, None)
+        self.assertEqual(loader.call_count, 2)
+        return result
+
+    def assert_tensor_oracle(self, candidate, reference):
+        residuals = [abs(x-y) for x,y in zip(candidate, reference)]
+        expected = float(sum(map(Fraction, residuals), Fraction()) / len(residuals))
+        result = self.tensor_pair(candidate, reference)
+        self.assertEqual(result, {"mae": expected, "max_error": max(residuals),
+                                  "count": len(residuals)})
+        self.assertTrue(math.isfinite(result["mae"]))
+
+    def test_tensor_large_repeated_finite_mean(self):
+        for value in (1e308, sys.float_info.max):
+            for count in (2, 3, 17):
+                with self.subTest(value=value, count=count):
+                    self.assertEqual(self.tensor_pair([value]*count, [0.]*count),
+                                     {"mae": value, "max_error": value, "count": count})
+
+    def test_tensor_signed_ordinary_values_preserve_mae(self):
+        self.assert_tensor_oracle([-7., 0., 5., -2., 0.125],
+                                  [-3., 1., -5., -3., -0.125])
+        self.assert_tensor_oracle([1., 2., 3.], [0., 0., 0.])
+
+    def test_tensor_integer_residuals_preserve_precision(self):
+        self.assert_tensor_oracle([2**60+1, 2**60+3], [2**60, 2**60])
+        self.assert_tensor_oracle([-10**308, 10**308], [0, 0])
+
+    def test_tensor_subnormal_mean_rounds_after_accumulation(self):
+        tiny = math.ulp(0.)
+        for values in ([tiny]*17, [tiny, tiny, 0.], [tiny, tiny*2, tiny*3]):
+            with self.subTest(values=values):
+                self.assert_tensor_oracle(values, [0.]*len(values))
+
+    def test_tensor_positive_underflow_refuses_but_exact_zero_is_valid(self):
+        tiny = math.ulp(0.)
+        for values in ([tiny, 0.], [tiny, 0., 0.]):
+            with self.subTest(values=values), self.assertRaisesRegex(Refusal, "representable tensor mean"):
+                self.tensor_pair(values, [0.]*len(values))
+        self.assertEqual(self.tensor_pair([-0., 1., -1.], [0., 1., -1.]),
+                         {"mae": 0., "max_error": 0., "count": 3})
+
+    def test_tensor_dynamic_range_and_order_agree_with_exact_oracle(self):
+        values = [sys.float_info.max, math.ulp(0.), 1., sys.float_info.max, 1e-100]
+        for ordered in (values, list(reversed(values)), sorted(values)):
+            self.assert_tensor_oracle(ordered, [0.]*len(ordered))
+        # Deterministic generated controls span the full binary64 exponent
+        # range. Fraction is an independent exact arithmetic mean oracle.
+        import random
+        rng = random.Random(50050)
+        for _ in range(80):
+            values = [math.ldexp(rng.uniform(-1., 1.), rng.randrange(-1073, 1024))
+                      for _ in range(rng.randrange(2, 33))]
+            self.assert_tensor_oracle(values, [0.]*len(values))
+
+    def test_tensor_nonfinite_or_unrepresentable_residual_refuses(self):
+        for candidate, reference in ((sys.float_info.max, -sys.float_info.max),
+                                     (2**1023, -2**1023), (math.inf, 0.), (math.nan, 0.)):
+            with self.subTest(candidate=candidate), self.assertRaisesRegex(Refusal, "finite residual"):
+                self.tensor_pair([candidate], [reference])
+
+    def test_tensor_complete_support_is_required(self):
+        for left, right in (([1., 2.], [1.]), ([1.], [1., 2.])):
+            with self.assertRaisesRegex(Refusal, "same complete tensor support"):
+                self.tensor_pair(left, right)
+        with self.assertRaisesRegex(Refusal, "nonempty complete tensor support"):
+            self.tensor_pair([], [])
+
+    def test_tensor_actual_generated_shards_keep_counts_and_io_cost(self):
+        from critical.core import pin
+        total_bytes = 0
+        def descriptor(name, chunks):
+            nonlocal total_bytes
+            rows = []
+            start = 0
+            for index, values in enumerate(chunks):
+                body = encode(values)
+                path = "tensors/"+name+"/"+str(index)+".json"
+                target = self.root/path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(body)
+                rows.append({"path": path, **pin(body), "start": start, "count": len(values)})
+                start += len(values)
+                total_bytes += len(body)
+            return {"schema": "critical_init_scalar_shards_v1", "shape": [start], "chunks": rows}
+        candidate = descriptor("candidate", [[1e308], [1e308, 1e308]])
+        reference = descriptor("reference", [[0., 0.], [0.]])
+        costs = Costs(total_bytes, 0)
+        result = tensors.pair_error(candidate, reference, {"shape": [3]}, self.root, self.root, costs)
+        self.assertEqual(result, {"mae": 1e308, "max_error": 1e308, "count": 3})
+        self.assertEqual((costs.read, costs.write, costs.reserved_read), (total_bytes, 0, 0))
+        self.assertEqual(len(costs.operations), 4)
+
 if __name__=="__main__":
     suites=[unittest.defaultTestLoader.loadTestsFromTestCase(author.TransportTests),
             unittest.defaultTestLoader.loadTestsFromTestCase(PeerControls)]
     result=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(suites))
-    if result.testsRun!=25 or not result.wasSuccessful() or result.skipped or result.expectedFailures or result.unexpectedSuccesses:
+    if result.testsRun!=34 or not result.wasSuccessful() or result.skipped or result.expectedFailures or result.unexpectedSuccesses:
         raise SystemExit(1)

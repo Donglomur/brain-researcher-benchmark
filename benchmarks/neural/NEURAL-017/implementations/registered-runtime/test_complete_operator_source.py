@@ -6,10 +6,12 @@ are never invoked. Source consistency is not scientific or deployment authority.
 import argparse
 import ast
 import collections
+import contextlib
 import hashlib
 import importlib
 import importlib.abc
 import itertools
+import io
 import json
 import os
 from pathlib import Path
@@ -100,7 +102,10 @@ def run_checks(task_root, work_parent=None):
     manifest_raw = read(component / "SOURCE_MANIFEST.json")
     manifest = json.loads(manifest_raw)
     entry_raw = read(component / "nlb_entry.py")
-    capture_extent = len(manifest_raw) + sum(row["bytes"] for row in manifest["files"])
+    binding_name = "benchmarks/integrity/current-closures/numeric-nlb/SOURCE_PINS.json"
+    binding_raw = read(root.parents[4] / binding_name, 65536)
+    binding = json.loads(binding_raw)
+    capture_extent = len(manifest_raw) + sum(binding['members'].get(row['path'], row)["bytes"] for row in manifest["files"])
     check(capture_extent < 2**20 and len(manifest["files"]) == 73, "complete_bounded_payload")
     sidecar = json.loads(read(root / "SOURCE_COMPONENTS.json", 65536))
     check(set(sidecar) == {"schema_version", "task_id", "components"} and sidecar["schema_version"] == 1 and sidecar["task_id"] == "NEURAL-017", "existing_discovery_schema")
@@ -108,31 +113,47 @@ def run_checks(task_root, work_parent=None):
     check(len(sidecar["components"]) == 1 and set(declaration) == {"id", "title", "root", "source_manifest", "readme", "inspection", "scope", "status", "holds"}, "closed_source_component_declaration")
     check(declaration["inspection"] == {"argv": ["{python}", "complete-operator/source_inspection.py", "--inspect"]}, "real_existing_discovery_argv_shape")
     check(declaration["source_manifest"] == {"path": "complete-operator/SOURCE_MANIFEST.json", "bytes": len(manifest_raw), "sha256": hashlib.sha256(manifest_raw).hexdigest()}, "sidecar_actual_manifest_pin")
-    inspector = child([sys.executable, "-I", "-S", "-B", str(component / "source_inspection.py"), "--inspect"], True, capture_extent + len(entry_raw) + 65536)
+    inspector = child([sys.executable, "-I", "-S", "-B", str(component / "source_inspection.py"), "--inspect"], True, capture_extent + len(entry_raw) + len(binding_raw) + binding['members']['test_metric_core.py']['bytes'] + 65536)
     observed = json.loads(inspector["stdout"])
-    check(observed["source_bodies"] == 75 and observed["python_bodies"] == 55 and observed["groups"] == 100 and observed["query_cases"] == 574 and observed["scientific_roles"] == 28844, "actual_complete_source_inspector_scope")
-    check(observed["local_module_execution"] is False and observed["self_authentication_claim"] is False and observed["scientific_qualified"] is False, "inspection_is_not_execution_or_authority")
+    check(observed["source_bodies"] == 76 and observed["python_bodies"] == 56 and observed["groups"] == 100 and observed["query_cases"] == 574 and observed["scientific_roles"] == 28844, "actual_complete_current_source_inspector_scope")
+    check(observed['current_binding'] == {'path': binding_name, 'bytes': len(binding_raw), 'sha256': hashlib.sha256(binding_raw).hexdigest()}, 'exact_current_overlay_inspected')
+    check(observed["local_module_execution"] is False and observed["self_authentication_claim"] is False and observed["scientific_qualified"] is False and observed['native_qualified'] is False and observed['historical_native_entry_held'] is True, "inspection_is_not_execution_or_authority")
     for route in ("prepare", "campaign"):
         prefix = work / (route + "-cache")
-        result = child([sys.executable, "-I", "-S", "-B", "-X", "pycache_prefix=" + str(prefix), str(component / "nlb_entry.py"), route, "--help"], True, capture_extent + len(entry_raw))
-        check("usage:" in result["stdout"] and not result["stderr"], "actual_" + route + "_help")
+        result = child([sys.executable, "-I", "-S", "-B", "-X", "pycache_prefix=" + str(prefix), str(component / "nlb_entry.py"), route, "--help"], False, capture_extent + len(entry_raw))
+        check("exact regular single-link source" in result["stderr"] and not result["stdout"], "historical_" + route + "_entry_refuses_current_bytes")
         check(prefix.is_dir() and stat.S_IMODE(prefix.stat().st_mode) == 0o700 and not list(prefix.iterdir()), route + "_owned_empty_prefix")
     prefix = work / "describe-cache"
-    described = child([sys.executable, "-I", "-S", "-B", "-X", "pycache_prefix=" + str(prefix), str(component / "nlb_entry.py"), "campaign", "describe"], True, capture_extent + len(entry_raw))
-    description = json.loads(described["stdout"])
-    check(description["groups"] == 100 and description["F_programmes"] == 50 and description["I_cases"] == 28700 and description["references"] == ["R" + str(i) for i in range(9)] and description["open_scientific_gates"] == 24, "actual_full_campaign_description")
-    check(description["authentic_execution_performed"] is False and description["default_deployment_enabled"] is False, "actual_description_keeps_holds")
+    described = child([sys.executable, "-I", "-S", "-B", "-X", "pycache_prefix=" + str(prefix), str(component / "nlb_entry.py"), "campaign", "describe"], False, capture_extent + len(entry_raw))
+    check("exact regular single-link source" in described["stderr"] and not described["stdout"], "historical_description_entry_refuses_current_bytes")
 
     # Reuse only the actual trusted entry definitions, without executing main.
-    # Actual direct startup is exercised above. This separate step reaches the
-    # real finite programme constructor, not a reconstructed roster algorithm.
+    # Historical direct startup is held above. Current metadata-only help,
+    # description and constructors use exact current captured bytes below.
     marker = b'if __name__ != "__main__":'
     check(entry_raw.count(marker) == 1, "exact_entry_definition_boundary")
     namespace = {"__name__": "selected_source_definitions", "__file__": str(component / "nlb_entry.py")}
     exec(compile(entry_raw.split(marker)[0], str(component / "nlb_entry.py"), "exec", dont_inherit=True), namespace)
-    captured, charged = namespace["capture_source"](str(component))
-    transfer["source_read_bytes"] += charged
-    check(charged == capture_extent and len(captured) == 53, "actual_complete_captured_nlb_source")
+    historical_refused = False
+    try:
+        namespace["capture_source"](str(component))
+    except ValueError as error:
+        historical_refused = str(error) == 'exact regular single-link source'
+    transfer['source_read_bytes'] += capture_extent  # Conservative full-capture charge.
+    check(historical_refused, 'actual_historical_capture_refuses_current_payload')
+    captured = {}
+    for row in manifest['files']:
+        name = row['path']
+        if not name.startswith('nlb/') or not name.endswith('.py'):
+            continue
+        raw = read(component / name)
+        pin = binding['members'].get(name, row)
+        check(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'],
+              'current_captured_source_pin:' + name)
+        parts = name[:-3].split('/')
+        package = parts[-1] == '__init__'
+        captured['.'.join(parts[:-1] if package else parts)] = (raw, str(component / name), package)
+    check(len(captured) == 53, 'complete_current_captured_nlb_source')
 
     class NoScientificImports(importlib.abc.MetaPathFinder):
         def find_spec(self, fullname, path=None, target=None):
@@ -145,6 +166,23 @@ def run_checks(task_root, work_parent=None):
     loader = namespace["install_captured"](captured)
     sys.meta_path.insert(0, blocker)
     try:
+        for route, module_name in (('prepare', 'nlb.operator_driver'), ('campaign', 'nlb.cli')):
+            selected = importlib.import_module(module_name)
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                try:
+                    selected.main(['--help'])
+                except SystemExit as error:
+                    check(error.code == 0, 'current_' + route + '_help_exit')
+                else:
+                    raise AssertionError('help must exit without lifecycle work')
+            check('usage:' in output.getvalue(), 'actual_current_' + route + '_help')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            check(importlib.import_module('nlb.cli').main(['describe']) == 0, 'current_describe_exit')
+        description = json.loads(output.getvalue())
+        check(description["groups"] == 100 and description["F_programmes"] == 50 and description["I_cases"] == 28700 and description["references"] == ["R" + str(i) for i in range(9)] and description["open_scientific_gates"] == 24, "actual_full_campaign_description")
+        check(description["authentic_execution_performed"] is False and description["default_deployment_enabled"] is False, "actual_description_keeps_holds")
         programme = importlib.import_module("nlb.programme")
         groups = programme.expected_groups()
         expected = set(itertools.product(programme.CONDITIONS, ("F", "I"), ("A", "B"), range(1, 6)))

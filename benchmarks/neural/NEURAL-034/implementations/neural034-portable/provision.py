@@ -5,6 +5,7 @@ import argparse,hashlib,json,os,stat,time
 ROOT=Path(__file__).resolve().parent
 MAX_SOURCE=1048576
 MAX_INPUT=4371604
+CURRENT_CHANGES={'check_result.py','provision.py','tests/test_relocation.py'}
 
 def need(ok,message):
     if not ok:raise ValueError(message)
@@ -64,7 +65,22 @@ def bounded_bytes(path,cap):
 
 def bounded_json(path,cap):return decode(bounded_bytes(path,cap))
 
-def provision(source,workspace,inputs,deadline,manifest_sha256):
+def selected_source(manifest,manifest_bytes,current_source_manifest,current_source_manifest_sha256):
+    """Select an explicitly pinned successor without rewriting its predecessor."""
+    need((current_source_manifest is None)==(current_source_manifest_sha256 is None),'current source descriptor and independent hash must be paired')
+    if current_source_manifest is None:return manifest['files'],None
+    body=bounded_bytes(current_source_manifest,65536)
+    need(hashlib.sha256(body).hexdigest()==current_source_manifest_sha256,'explicit current source identity')
+    current=decode(body)
+    need(set(current)=={'schema','task_id','execution_authority','native_qualification','historical_manifest','changed_members','files'},'exact current source descriptor')
+    need(current['schema']=='neural034-current-source/v1'and current['task_id']=='NEURAL-034'and current['execution_authority']is False and current['native_qualification']is False,'source-only current descriptor')
+    need(current['historical_manifest']=={'path':'SOURCE_MANIFEST.json','bytes':len(manifest_bytes),'sha256':hashlib.sha256(manifest_bytes).hexdigest()},'current source binds historical manifest')
+    files=current['files'];need(type(files)is dict and set(files)==set(manifest['files']),'same complete source member set')
+    changed=sorted(name for name in files if files[name]!=manifest['files'][name])
+    need(current['changed_members']==changed and changed and set(changed)<=CURRENT_CHANGES,'only reviewed inspection and provisioning changes')
+    return files,body
+
+def provision(source,workspace,inputs,deadline,manifest_sha256,current_source_manifest=None,current_source_manifest_sha256=None):
     source=plain(source);workspace=plain(workspace)
     need(not workspace.exists()and workspace.parent.is_dir()and source!=workspace and source not in workspace.parents and workspace not in source.parents,'fresh separate workspace')
     manifest_bytes=bounded_bytes(source/'SOURCE_MANIFEST.json',65536)
@@ -73,6 +89,8 @@ def provision(source,workspace,inputs,deadline,manifest_sha256):
     need(manifest['task_id']=='NEURAL-034'and manifest['execution_authority']is False,'source-only task manifest')
     files=manifest['files'];need(type(files)is dict and 1<=len(files)<=64,'bounded complete source inventory')
     need('SOURCE_MANIFEST.json'not in files and 'INPUTS.json'in files,'nonrecursive complete source manifest')
+    need('CURRENT_SOURCE_MANIFEST.json'not in files,'reserved current documentary copy')
+    files,current_bytes=selected_source(manifest,manifest_bytes,current_source_manifest,current_source_manifest_sha256)
     for name,pin in files.items():
         relative(name);stable(source/name,pin,MAX_SOURCE,deadline=deadline)
     input_body=bounded_bytes(source/'INPUTS.json',16384)
@@ -82,7 +100,8 @@ def provision(source,workspace,inputs,deadline,manifest_sha256):
     need(type(inputs)is dict and set(inputs)=={r['role']for r in rows},'exact ten input locators')
     # No original body was opened before complete source/descriptor admission.
     workspace.mkdir(mode=0o700)
-    receipt={'task_id':'NEURAL-034','status':'partial','execution_authority':False,'runtime_qualified':False,'source':[],'inputs':[],'candidate_must_not_receive_workspace':True}
+    receipt={'task_id':'NEURAL-034','status':'partial','execution_authority':False,'runtime_qualified':False,'source':[],'inputs':[],'candidate_must_not_receive_workspace':True,
+             'historical_manifest_sha256':manifest_sha256,'current_source_manifest_sha256':current_source_manifest_sha256}
     try:
         for name,pin in sorted(files.items()):
             need(time.monotonic()<deadline,'whole provisioning deadline')
@@ -90,6 +109,7 @@ def provision(source,workspace,inputs,deadline,manifest_sha256):
         # The manifest is a small documentary copy; its own external release pin
         # must be authenticated by the invoking operator before this tool.
         (workspace/'SOURCE_MANIFEST.json').write_bytes(manifest_bytes)
+        if current_bytes is not None:(workspace/'CURRENT_SOURCE_MANIFEST.json').write_bytes(current_bytes)
         for row in rows:
             need(time.monotonic()<deadline,'whole provisioning deadline')
             relative(row['path']);stable(inputs[row['role']],row,MAX_INPUT,workspace/row['path'],deadline)
@@ -112,9 +132,10 @@ def provision(source,workspace,inputs,deadline,manifest_sha256):
     return receipt
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--workspace',required=True);p.add_argument('--inputs',required=True);p.add_argument('--manifest-sha256',required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--workspace',required=True);p.add_argument('--inputs',required=True);p.add_argument('--manifest-sha256',required=True)
+    p.add_argument('--current-source-manifest');p.add_argument('--current-source-manifest-sha256');a=p.parse_args()
     deadline=time.monotonic()+120
-    result=provision(ROOT,a.workspace,bounded_json(a.inputs,16384),deadline,a.manifest_sha256)
+    result=provision(ROOT,a.workspace,bounded_json(a.inputs,16384),deadline,a.manifest_sha256,a.current_source_manifest,a.current_source_manifest_sha256)
     print(json.dumps({'status':result['status'],'files':len(result['inputs']),'execution_authority':False,'terminal_exit_still_required':True}),flush=True)
     need(time.monotonic()<deadline,'terminal acknowledgment before deadline')
 if __name__=='__main__':main()

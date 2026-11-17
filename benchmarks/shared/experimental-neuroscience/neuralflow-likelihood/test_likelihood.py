@@ -61,6 +61,59 @@ class LikelihoodTests(unittest.TestCase):
     def test_positive_endpoints_negative_interior_rejected(self):
         with self.assertRaises(m.ContractError):m.curve_log_density([],1,curve([[.01,-1.,1.,0.]]),'closed')
 
+    def test_tiny_interval_negative_interior_regression(self):
+        width = 1e-200
+        coefficients = [2e-93, -1e108, 1e308, 0.]
+        self.assertGreater(m._poly(coefficients, 0.), 0.)
+        self.assertGreater(m._poly(coefficients, width), 0.)
+        self.assertLess(m._poly(coefficients, width / 2), 0.)
+        with self.assertRaisesRegex(m.ContractError, 'negative cubic intensity between knots'):
+            m.curve_log_density([], width,
+                curve([coefficients], [0., width], [0., width]), 'closed')
+
+    def test_generated_extreme_width_quadratics(self):
+        # A*(3/16-u+u**2) has positive endpoints and minimum -A/16.
+        # Raising its constant to 5*A/16 gives minimum A/16 and integral 7*A*w/48.
+        for width_exponent, coefficient_exponent in (
+                (0, 0), (-100, 100), (-500, 1000), (-540, 1000),
+                (-600, 1000), (-660, 1000), (600, -1000)):
+            width = math.ldexp(1., width_exponent)
+            amplitude = math.ldexp(1., coefficient_exponent + 2 * width_exponent)
+            coefficients = [3 * amplitude / 16,
+                -math.ldexp(1., coefficient_exponent + width_exponent),
+                math.ldexp(1., coefficient_exponent), 0.]
+            with self.subTest(width_exponent=width_exponent):
+                with self.assertRaisesRegex(m.ContractError, 'negative cubic intensity between knots'):
+                    m.curve_log_density([], width,
+                        curve([coefficients], [0., width], [0., width]), 'closed')
+                coefficients[0] = 5 * amplitude / 16
+                score = m.curve_log_density([], width,
+                    curve([coefficients], [0., width], [0., width]), 'closed')
+                self.assertTrue(math.isclose(score['integrated_intensity'],
+                    7 * amplitude * width / 48, rel_tol=1e-14))
+                self.assertFalse(score['zero_event_density'])
+
+    def test_generated_extreme_width_cubics(self):
+        # A*(3/16-3*u/4+u**3) has its interior minimum -A/16 at u=1/2.
+        # Raising its constant to 5*A/16 gives minimum A/16 and integral 3*A*w/16.
+        for width_exponent, coefficient_exponent in (
+                (0, 0), (-100, 100), (-350, 1000), (-360, 1000),
+                (-400, 1000), (-500, 1000), (400, -1000)):
+            width = math.ldexp(1., width_exponent)
+            amplitude = math.ldexp(1., coefficient_exponent + 3 * width_exponent)
+            coefficients = [3 * amplitude / 16,
+                -.75 * math.ldexp(1., coefficient_exponent + 2 * width_exponent),
+                0., math.ldexp(1., coefficient_exponent)]
+            with self.subTest(width_exponent=width_exponent):
+                with self.assertRaisesRegex(m.ContractError, 'negative cubic intensity between knots'):
+                    m.curve_log_density([], width,
+                        curve([coefficients], [0., width], [0., width]), 'closed')
+                coefficients[0] = 5 * amplitude / 16
+                score = m.curve_log_density([], width,
+                    curve([coefficients], [0., width], [0., width]), 'closed')
+                self.assertEqual(score['integrated_intensity'], 3 * amplitude * width / 16)
+                self.assertFalse(score['zero_event_density'])
+
     def test_finite_cubic_derivative_overflow_regression(self):
         with self.assertRaises(m.ContractError):
             m.curve_log_density([],1,curve([[5e307,-1.5e308,0.,1e308]]),'closed')

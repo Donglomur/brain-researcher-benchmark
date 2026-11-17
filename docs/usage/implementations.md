@@ -79,8 +79,9 @@ records its selected packages and commands. Per-package counts, pins and environ
 belong to that exact revision, rather than a duplicated checklist on this page.
 
 The [repository ownership and source-integrity checks](../development/source-integrity.md)
-have distinct scopes: the first covers the declared ownership/layout of 286
-artifacts; the second verifies recorded source pins for four enrolled bundles. Passing either
+have distinct scopes: the first covers the artifact ownership and layout declared
+in the [current registry](../../benchmarks/registry.json); the second verifies recorded
+source pins for four enrolled bundles. Passing either
 does not supply missing dependencies or native qualification. Generated source
 controls are software evidence, not authentic-data or model results.
 

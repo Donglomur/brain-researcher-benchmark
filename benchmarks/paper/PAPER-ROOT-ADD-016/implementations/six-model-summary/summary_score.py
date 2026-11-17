@@ -137,10 +137,10 @@ def _compute(candidate, reference):
             results[name]["reference_hdi_rope_disposition"] = rope(reference["models"][name]["summary"]["beta"])
         else:
             c, r = candidate["models"][name]["summary"], reference["models"][name]["summary"]
-            results[name]["location_mean_rmse_age18_through73_response_units"] = math.hypot(*[
+            results[name]["location_mean_rmse_age18_through73_response_units"] = ratio(math.hypot(*[
                 (c["alpha"]["mean"]-r["alpha"]["mean"]) + age*(c["beta"]["mean"]-r["beta"]["mean"])
-                for age in range(18, 74)]) / math.sqrt(56)
-    return {"status": "valid_summary_continuously_scored", "primary_beta_mean_rmse_reference_sd": math.hypot(*primary)/math.sqrt(6),
+                for age in range(18, 74)]), math.sqrt(56))
+    return {"status": "valid_summary_continuously_scored", "primary_beta_mean_rmse_reference_sd": ratio(math.hypot(*primary), math.sqrt(6)),
             "primary_direction": "lower", "models": results, "scientific_pass": None,
             "limitations": ["No calibrated scientific acceptance threshold; schema validity is not inference correctness.",
                 "Candidate diagnostics/MCSE are self-reported unless separately audited against supplied draws.",

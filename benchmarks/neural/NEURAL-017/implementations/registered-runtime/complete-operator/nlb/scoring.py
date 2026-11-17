@@ -32,12 +32,13 @@ def grade(predictions,targets,support,contrasts,failure_owners):
  import numpy as np,math
  from .contracts import need
  from .programme import expected_groups,group_id,group_key,CONDITIONS,allowed_references,bank_id
- from .metric_core import poisson_bits_per_spike
+ from .metric_core import poisson_bits_per_spike,valid_spike_counts
  from .arrays import prediction
  expected={group_id(g)for g in expected_groups()}|{bank_id(c,r)for c in CONDITIONS for r in allowed_references(c)}|{'TOOL_ONLY_BATCH','TOOL_ONLY_CASE'}
  need(set(predictions)==expected,'entire fixed assessment union');need(len(contrasts['contrasts'])==65,'fixed contrast union')
- y=np.asarray(targets['counts_heldout'],dtype=np.float64);mask=np.asarray(targets['valid_mask']);need(y.shape==(574,140,45)and mask.shape==y.shape and mask.dtype==np.bool_ and mask.all(),'complete fixed target support')
- need(np.isfinite(y).all()and (y>=0).all()and (y==np.floor(y)).all()and(y<=2**53).all(),'valid original count targets')
+ y=np.asarray(targets['counts_heldout']);mask=np.asarray(targets['valid_mask']);need(y.shape==(574,140,45)and mask.shape==y.shape and mask.dtype==np.bool_ and mask.all(),'complete fixed target support')
+ # Protected target errors must fail before candidate scoring or float rounding.
+ need(valid_spike_counts(y),'valid original count targets');y=y.astype(np.float64,copy=False)
  need(np.array_equal(targets['trial_ids'],support['eval_trial_ids'])and np.array_equal(targets['unit_ids'],support['heldout_unit_ids']),'target axes')
  need(str(targets['panel_fingerprint'].item())==support['panel_fingerprint'],'sealed target fingerprint')
  spikes=y.sum(axis=(1,2));total=float(spikes.sum());need(math.isfinite(total),'target sum overflow')

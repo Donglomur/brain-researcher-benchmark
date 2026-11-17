@@ -25,14 +25,22 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11'
-      - name: Verify all 30 experimental source files
+      - name: Verify all 30 experimental source files and current NeuralFlow binding
         run: |
           python -I -S -B - <<'PY'
           import hashlib
           import json
           from pathlib import Path, PurePosixPath
           import stat
-          root = Path('benchmarks/shared/experimental-neuroscience').absolute()
+          repository = Path('.').absolute()
+          package = 'benchmarks/shared/experimental-neuroscience'
+          root = repository / package
+          lock_pin = {'path': package + '/SOURCE_LOCK.json', 'bytes': 5760,
+                      'sha256': '32e84964d0e082877eccfcbe1aeb96950f146179589c858566a3684a6db4efb5'}
+          binding_path = 'benchmarks/integrity/current-closures/numeric-neuralflow/SOURCE_BINDINGS.json'
+          binding_bytes = 4826
+          binding_sha256 = '2d251362178a00a86661f8b0dabfbc3748abb9cad61d320c7fcc617c7b5a98f6'
+          changed = {'neuralflow-likelihood/likelihood.py', 'neuralflow-likelihood/test_likelihood.py'}
           def captured(path, length, digest):
               assert type(length) is int and 0 <= length <= 262144
               assert not any(p.is_symlink() for p in (path, *path.parents))
@@ -48,23 +56,52 @@ jobs:
               body.decode('utf-8')
               assert b'\0' not in body
               return body
-          lock = json.loads(captured(root / 'SOURCE_LOCK.json', 5760,
-              '32e84964d0e082877eccfcbe1aeb96950f146179589c858566a3684a6db4efb5'))
+          lock = json.loads(captured(repository / lock_pin['path'], lock_pin['bytes'], lock_pin['sha256']))
           assert lock['schema'] == 'experimental-neuroscience-source-lock-v1'
           assert lock['status'] == 'NOT_READY'
           assert len(lock['files']) == lock['files_excluding_self'] == 29
+          binding = json.loads(captured(repository / binding_path, binding_bytes, binding_sha256))
+          assert binding['schema'] == 'numeric_neuralflow_current_bindings_v1'
+          assert binding['package'] == package + '/neuralflow-likelihood'
+          assert binding['historical_source_lock'] == lock_pin
+          assert binding['scientific_qualification'] is False and binding['execution_authority'] is False
+          assert binding['new_benchmark_ids'] == 0
+          expected_paths = {package + '/' + name for name in changed}
+          def selected_rows(rows):
+              assert type(rows) is list and len(rows) == 2
+              result = {}
+              for row in rows:
+                  assert type(row) is dict and set(row) == {'path', 'bytes', 'sha256'}
+                  assert row['path'] in expected_paths and row['path'] not in result
+                  result[row['path']] = row
+              assert set(result) == expected_paths
+              return result
+          current = selected_rows(binding['current_sources'])
+          predecessor = selected_rows(binding['predecessor_source_identities'])
           expected = {'SOURCE_LOCK.json'}
-          total = 0
+          historical_total = current_total = 0
+          observed_changed = set()
           for row in lock['files']:
               assert set(row) == {'path', 'bytes', 'sha256'}
               relative = PurePosixPath(row['path'])
               assert not relative.is_absolute() and str(relative) == row['path']
               assert all(part not in ('', '.', '..') for part in row['path'].split('/'))
               assert '\\' not in row['path'] and row['path'] not in expected
-              captured(root / row['path'], row['bytes'], row['sha256'])
+              source_path = package + '/' + row['path']
+              selected = row
+              if row['path'] in changed:
+                  historical_row = {**row, 'path': source_path}
+                  assert predecessor[source_path] == historical_row
+                  selected = current[source_path]
+                  assert (selected['bytes'], selected['sha256']) != (row['bytes'], row['sha256'])
+                  observed_changed.add(row['path'])
+              captured(root / row['path'], selected['bytes'], selected['sha256'])
               expected.add(row['path'])
-              total += row['bytes']
-          assert total == lock['bytes_excluding_self'] == 163319
+              historical_total += row['bytes']
+              current_total += selected['bytes']
+          assert observed_changed == changed
+          assert historical_total == lock['bytes_excluding_self'] == 163319
+          assert current_total == 166635
           actual = set()
           for path in root.rglob('*'):
               assert not path.is_symlink()
@@ -73,9 +110,11 @@ jobs:
               assert path.is_file()
               actual.add(path.relative_to(root).as_posix())
           assert actual == expected
-          print(json.dumps({'files': 30, 'bytes': total + 5760,
-                            'invented_controls_only': True,
-                            'authentic_inputs_read': False}))
+          print(json.dumps({'source_files': 30, 'current_package_bytes': current_total + lock_pin['bytes'],
+                            'binding_files': 1, 'binding_bytes': binding_bytes,
+                            'historical_locked_bytes_excluding_self': historical_total,
+                            'changed_source_members': sorted(observed_changed),
+                            'invented_controls_only': True, 'authentic_inputs_read': False}))
           PY
       - name: Test macaque scoring with invented data
         run: >-

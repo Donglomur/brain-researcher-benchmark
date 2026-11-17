@@ -111,7 +111,7 @@ def score_snapshot(candidate_body, candidate_pin, modules, target_path, referenc
     try:
         try:
             public = io.load_submission("/submission/predictions.npz", candidate_pin)
-        except io.InvalidSubmission as error:
+        except (io.InvalidSubmission, RecursionError) as error:
             return common | {"status": "invalid_submission", "reason": str(error), "primary_score": None}
         # No private/reference file, metadata or body is accessed before this boundary.
         ref_body, ref_pin = snapshot(reference_path, 150000, REFERENCE)

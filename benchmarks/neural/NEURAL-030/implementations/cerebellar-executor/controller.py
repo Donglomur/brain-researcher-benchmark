@@ -117,6 +117,47 @@ def file_mount(value, purpose="input"):
             "files": {Path(value["path"]).name: {k: value[k] for k in ("bytes", "sha256")}}}
 
 
+def validate_role_paths(request, request_path, authority_path):
+    """Reject overlapping operand roles before capturing candidate-visible bodies.
+
+    The request and authority must already have been authenticated to know the
+    declared roles. Filesystem metadata is inspected without opening operand
+    bodies. A shared source file may serve multiple phases, but no source or
+    other input may alias evaluator-private or execution-output locations.
+    """
+    closed(request["sources"], PHASES, "same three source roles")
+    closed(request["private_evaluation"], ("expected", "mouse_binding", "fixed_reference"),
+           "private evaluation operands")
+    roles = [("request", ordinary(request_path)), ("authority", ordinary(authority_path)),
+             ("root", ordinary(request["root"])),
+             ("native_binary", ordinary(request["native"]["docker_binary"])),
+             ("native_socket", ordinary(request["native"]["docker_socket"]))]
+    operands = [(name, request[name]) for name in ("commitment", "procedure", "public")]
+    operands += [("source:" + role, value) for role, value in request["sources"].items()]
+    operands += [("private:" + role, value) for role, value in request["private_evaluation"].items()]
+    for role, value in operands:
+        closed(value, ("path", "bytes", "sha256"), "exact role operand")
+        descriptor({k: value[k] for k in ("bytes", "sha256")})
+        roles.append((role, ordinary(value["path"])))
+    identified = []
+    for role, path in roles:
+        canonical = path.resolve(strict=False)
+        try:
+            info = path.stat()
+            identity = (info.st_dev, info.st_ino)
+        except FileNotFoundError:
+            # Private bodies remain unopened and may be provisioned separately;
+            # their declared paths still must not overlap any other role.
+            identity = None
+        for other_role, other_path, other_identity in identified:
+            same_source = role.startswith("source:") and other_role.startswith("source:")
+            alias = canonical == other_path or (identity is not None and identity == other_identity)
+            nested = canonical in other_path.parents or other_path in canonical.parents
+            need(not nested and (not alias or same_source),
+                 "disjoint operand roles required: " + other_role + " / " + role)
+        identified.append((role, canonical, identity))
+
+
 def preflight(request_path, request_pin, authority_path, authority_pin, source_pin):
     """Authority pins come from the trusted launcher, never candidate input.
 
@@ -165,6 +206,7 @@ def preflight(request_path, request_pin, authority_path, authority_pin, source_p
     descriptor({"bytes": 0, "sha256": native["image"][7:]})
     ordinary(native["docker_binary"]); ordinary(native["docker_socket"])
     root = ordinary(request["root"]); need(not root.exists(), "fresh execution root")
+    validate_role_paths(request, request_path, authority_path)
     meter = Meter(request["io"])
     meter.charge("read_bytes", request_pin["bytes"] + authority_pin["bytes"] + 2)
     commitment_body = operand(request["commitment"], META_CAP, meter)

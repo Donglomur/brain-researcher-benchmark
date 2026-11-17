@@ -97,20 +97,38 @@ class Context(importlib.abc.MetaPathFinder, importlib.abc.Loader):
             sys.modules.pop(name, None)
 
 
-def load(root, expected):
+def load(root, expected, manifest_path, historical_pin):
     root = Path(root)
-    raw = capture(root / "SOURCE_MANIFEST.json", expected)
+    # The retained manifest remains authenticated predecessor evidence. The
+    # separately pinned current descriptor changes only the reviewed members.
+    historical_raw = capture(root / "SOURCE_MANIFEST.json", historical_pin)
+    raw = capture(manifest_path, expected)
     def pairs(rows):
         result = {}
         for key, value in rows:
             if key in result: raise ValueError("duplicate source manifest key")
             result[key] = value
         return result
+    historical = json.loads(historical_raw, object_pairs_hook=pairs)
+    if (set(historical) != {"schema", "files", "scientific_qualification", "native_qualification"}
+            or historical["schema"] != "neural030_frozen_executor_source_v1"
+            or historical["scientific_qualification"] is not False
+            or historical["native_qualification"] is not False
+            or set(historical["files"]) != MEMBERS):
+        raise ValueError("historical source manifest schema")
     manifest = json.loads(raw, object_pairs_hook=pairs)
-    if set(manifest) != {"schema", "files", "scientific_qualification", "native_qualification"} or manifest["schema"] != "neural030_frozen_executor_source_v1":
-        raise ValueError("source manifest schema")
-    if manifest["scientific_qualification"] is not False or manifest["native_qualification"] is not False or set(manifest["files"]) != MEMBERS:
-        raise ValueError("exact inactive source closure")
+    if (set(manifest) != {"schema", "files", "scientific_qualification", "native_qualification",
+                         "predecessor", "changed_files"}
+            or manifest["schema"] != "neural030_current_executor_source_v1"):
+        raise ValueError("current source manifest schema")
+    if (manifest["predecessor"] != {"path": "SOURCE_MANIFEST.json", **historical_pin}
+            or manifest["scientific_qualification"] is not False
+            or manifest["native_qualification"] is not False
+            or set(manifest["files"]) != MEMBERS):
+        raise ValueError("exact inactive current source closure")
+    changed = sorted(name for name in MEMBERS if manifest["files"][name] != historical["files"][name])
+    if changed != ["captured_loader.py", "controller.py"] or manifest["changed_files"] != changed:
+        raise ValueError("only reviewed source repairs may differ from the predecessor")
     if sum(row["bytes"] for row in manifest["files"].values()) > 16777216:
         raise ValueError("whole captured source ceiling")
     bodies = {name: capture(root / name, manifest["files"][name]) for name in sorted(MEMBERS)}

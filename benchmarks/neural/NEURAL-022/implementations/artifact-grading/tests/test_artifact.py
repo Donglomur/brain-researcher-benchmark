@@ -1,7 +1,9 @@
 """Portable generated-only CLI, scientific invariants and file-boundary checks."""
 import copy
+from contextlib import redirect_stdout
 import hashlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -125,6 +127,67 @@ class GeneratedArtifact(unittest.TestCase):
         (self.package / 'private/operator_manifest.json').unlink()
         run, result = self.cli(); self.assertEqual(run.returncode, 2, run.stderr)
         self.assertEqual(result['status'], 'operator_error'); self.assertIsNone(result['score'])
+    def test_semantic_commitment_errors_do_not_depend_on_operator_availability(self):
+        invalid = [{}, [], dict(self.commit, extra=True)]
+        for key, value in [('bytes', True), ('bytes', 0), ('path', '../predictions.json'),
+                           ('path', 'absent.json'), ('sha256', '0' * 64)]:
+            changed = copy.deepcopy(self.commit); changed['file'][key] = value; invalid.append(changed)
+        operator = self.package / 'private/operator_manifest.json'
+        for availability in ('malformed', 'missing'):
+            if availability == 'malformed': operator.write_bytes(b'{')
+            else: operator.unlink()
+            for i, commit in enumerate(invalid):
+                with self.subTest(availability=availability, variant=i):
+                    run, result = self.cli(commit, f'{availability}-{i}.json')
+                    self.assertEqual(run.returncode, 0, run.stderr)
+                    self.assertEqual(result['status'], 'invalid_submission')
+                    self.assertIsNone(result['score'])
+                    self.assertEqual(result['target_loader_calls'], 0)
+    def test_invalid_commitment_never_reads_operator_manifest(self):
+        submission = self.root / 'bad-commitment.json'; submission.write_bytes(b'{}')
+        output = self.root / 'no-operator-read.json'; reads = []; original = s.read_json
+        def read_public_only(path, *args):
+            reads.append(Path(path))
+            self.assertEqual(Path(path), submission, 'Operator read before commitment admission')
+            return original(path, *args)
+        with patch.object(s, 'PACKAGE', self.package), patch.object(s, 'read_json', side_effect=read_public_only), \
+             patch.object(sys, 'argv', ['score.py', '--submission', str(submission), '--output', str(output)]), \
+             redirect_stdout(io.StringIO()):
+            self.assertEqual(s.main(), 0)
+        self.assertEqual(reads, [submission])
+        result = json.loads(output.read_bytes())
+        self.assertEqual(result['status'], 'invalid_submission')
+        self.assertEqual(result['target_loader_calls'], 0)
+    def test_valid_commitment_malformed_operator_remains_operator_error(self):
+        (self.package / 'private/operator_manifest.json').write_bytes(b'{')
+        run, result = self.cli()
+        self.assertEqual(run.returncode, 2, run.stderr)
+        self.assertEqual(result['status'], 'operator_error')
+        self.assertEqual(result['target_loader_calls'], 0)
+    def test_cli_scores_the_captured_bytes_without_reopening_candidate(self):
+        submission = self.root / 'captured-commitment.json'
+        submission.write_bytes(s.io.encoded_json(self.commit))
+        output = self.root / 'captured-result.json'; original = s.read_json; captures = []
+        locked = s.locked
+        def capture(root, row, maximum):
+            if Path(root) == self.root: captures.append(row['path'])
+            return locked(root, row, maximum)
+        def mutate_after_capture(path, *args):
+            if Path(path) == self.package / 'private/operator_manifest.json':
+                changed = copy.deepcopy(self.prediction)
+                for row in changed['predictions']: row['velocity'] = [0., 0.]
+                (self.root / self.commit['file']['path']).write_bytes(s.io.encoded_json(changed))
+            return original(path, *args)
+        with patch.object(s, 'PACKAGE', self.package), patch.object(s, 'read_json', side_effect=mutate_after_capture), \
+             patch.object(s, 'locked', side_effect=capture), \
+             patch.object(sys, 'argv', ['score.py', '--submission', str(submission), '--output', str(output)]), \
+             redirect_stdout(io.StringIO()):
+            self.assertEqual(s.main(), 0)
+        self.assertEqual(captures, [self.commit['file']['path']])
+        result = json.loads(output.read_bytes())
+        self.assertEqual(result['status'], 'scored_exposed_transfer_candidate')
+        self.assertEqual(result['score'], 5.)
+        self.assertEqual(result['target_loader_calls'], 1)
     def test_actual_cli_no_report_overwrite(self):
         out = self.root / 'result.json'; out.write_bytes(b'{"sentinel":true}')
         run, result = self.cli(); self.assertNotEqual(run.returncode, 0)

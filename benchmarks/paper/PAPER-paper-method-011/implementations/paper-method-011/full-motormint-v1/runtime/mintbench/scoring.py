@@ -166,6 +166,27 @@ def _assess_case(case, packet, predicted, reference, recipe, trusted_payloads):
             'scope_complete_for_case': True, 'scientifically_qualified': False}
 
 
+def _centered_unit_vector(values):
+    """Center without overflowing, then remove scale before taking products."""
+    low, high = min(values), max(values)
+    # A same-sign endpoint keeps differences finite and retains small changes
+    # around a large offset (including exact integer differences). Mixed signs
+    # already straddle zero, so do not subtract an endpoint from them.
+    origin = low if low >= 0 else high if high <= 0 else 0
+    if type(origin) is float and origin.is_integer():
+        origin = int(origin)  # Preserve nearby ints even with a mixed-type anchor.
+    shifted = [value - origin for value in values]
+    scale = max(abs(value) for value in shifted)
+    if scale == 0:
+        return None
+    exponent = math.frexp(scale)[1]
+    scaled = [math.ldexp(value, -exponent) for value in shifted]
+    mean = math.fsum(scaled) / len(scaled)
+    centered = [value - mean for value in scaled]
+    norm = math.sqrt(math.fsum(value * value for value in centered))
+    return [value / norm for value in centered]
+
+
 def behavior_diagnostics(payload):
     """Published trace MAE/Pearson ingredients; no circular Pearson invented."""
     truth, prediction = payload['truth'], payload['prediction']
@@ -179,9 +200,9 @@ def behavior_diagnostics(payload):
             correlation, reason = None, 'Circular correlation requires independently bound native policy'
         else:
             errors = [abs(a-b) for a,b in zip(y,p)]
-            my, mp = sum(y)/len(y), sum(p)/len(p)
-            sy = sum((v-my)**2 for v in y); sp = sum((v-mp)**2 for v in p)
-            correlation = sum((a-my)*(b-mp) for a,b in zip(y,p))/math.sqrt(sy*sp) if sy>0 and sp>0 else None
+            uy, up = _centered_unit_vector(y), _centered_unit_vector(p)
+            correlation = (max(-1.0, min(1.0, math.fsum(a*b for a,b in zip(uy,up))))
+                           if uy is not None and up is not None else None)
             reason = None if correlation is not None else 'Undefined constant truth/prediction variance'
         rows.append({'mean_absolute_error':sum(errors)/len(errors), 'pearson':correlation, 'undefined_reason':reason})
     return {'per_dimension':rows, 'original_units_preserved':True}

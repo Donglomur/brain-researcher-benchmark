@@ -2,16 +2,16 @@
 
 This component contains the complete campaign compiler, iterative pre-data F authoring, explicit OpenAI Responses transport, protected assessment and R0–R8 scientific source. It retains all 100 condition/mode/code-view/seed groups, 574 query trials per applicable group, 28,844 scientific and broker roles, original unit/time support and bits-per-spike methods.
 
-[OPERATOR.md](OPERATOR.md) describes the actual preparation and campaign entry, required inputs, original deadlines and qualification pauses. [Source provenance](#source-provenance) maps the included methods and external dependencies; [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) retains the NLB notice. `SOURCE_MANIFEST.json` pins all current payloads. The standalone entry is a separately pinned trust root. The adjacent source inspector reports source consistency only; caller-held identities remain necessary for independent authenticity.
+[OPERATOR.md](OPERATOR.md) describes the actual preparation and campaign entry, required inputs, original deadlines and qualification pauses. [Source provenance](#source-provenance) maps the included methods and external dependencies; [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) retains the NLB notice. `SOURCE_MANIFEST.json` and the standalone entry preserve their historical pins. Current target-count admission repairs and their tests are explicitly bound in [the current numerical descriptor](../../../../../integrity/current-closures/numeric-nlb/SOURCE_PINS.json). The adjacent source inspector verifies that overlay and the remaining historical payloads; it reports source consistency only, and caller-held identities remain necessary for independent authenticity.
 
-For source-only help, use a different absent cache prefix for each invocation beneath an owned nonsymlink parent without group/world write permission:
+For current source-only consistency inspection and generated numerical controls:
 
 ```sh
-python -I -B -X pycache_prefix=/absolute/owned/fresh-prepare-prefix /absolute/package/nlb_entry.py prepare --help
-python -I -B -X pycache_prefix=/absolute/owned/fresh-campaign-prefix /absolute/package/nlb_entry.py campaign --help
+python -B /absolute/package/source_inspection.py --inspect
+python -B /absolute/package/test_metric_core.py -v
 ```
 
-These help routes do not prepare data, choose a model, read credentials, contact a service, fit scientific models or grant execution authority. Normal Git source-file permissions are supported; native worker input/mount/image permissions retain their separate requirements.
+The inspector uses only the Python standard library; numerical controls require NumPy. These routes do not prepare data, choose a model, read credentials, contact a service, fit scientific models or grant execution authority. The unchanged historical `nlb_entry.py` deliberately refuses the repaired payloads, including its help routes. Native startup needs a separately admitted successor closure; the numerical descriptor does not supply one. Normal Git source-file permissions are supported; native worker input/mount/image permissions retain their separate requirements.
 
 This is an inactive source component. The full original release, protected inputs, exact external libraries, licensed participant contexts, qualified host/model deployment and independent evidence must be supplied separately. No scientific/model/native campaign, empirical performance, resource adequacy or benchmark qualification is claimed. Private histories, controls, acquired primary bodies, arrays, targets and model states are excluded.
 
@@ -23,7 +23,7 @@ Scientific source identities are the [Neural Latents Benchmark](https://arxiv.or
 
 ### Included source
 
-`SOURCE_MANIFEST.json` inventories all current payloads, including all 53 local `nlb` modules. The separately pinned `nlb_entry.py` captures and authenticates them before local imports. Normal Git file permissions are supported. Source hashes authenticate bytes; they do not confer scientific authority or prove a complete native deployment.
+`SOURCE_MANIFEST.json` preserves the historical inventory, including all 53 local `nlb` modules. The current numerical descriptor records the exact changed and added files while preserving all other payload identities. It fixes original-dtype target admission in both the independent metric and complete scoring entry: counts above `2**53` cannot round down into the permitted domain. The included generated controls retain the exact allowed boundary, observed-mask semantics and co-smoothing equation. The separately pinned historical `nlb_entry.py` remains held as described above. Source hashes authenticate bytes; they do not confer scientific authority or prove a complete native deployment.
 
 | Role | Included implementation |
 | --- | --- |

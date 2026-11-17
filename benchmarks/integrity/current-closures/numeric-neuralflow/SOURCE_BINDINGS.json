@@ -1,0 +1,101 @@
+{
+  "schema": "numeric_neuralflow_current_bindings_v1",
+  "component": "experimental-neuroscience/neuralflow-likelihood",
+  "package": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood",
+  "finding": "AUDIT14-NEURALFLOW-001",
+  "severity": "P3",
+  "change": "Scale quadratic and cubic coefficients by successive coefficient-first multiplication before solving the derivative, avoiding prematurely underflowed or overflowed interval powers.",
+  "current_sources": [
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/likelihood.py",
+      "bytes": 18340,
+      "sha256": "1eee061c1fb58d6b4bd696f4048c77b4c2abe398e288e1f7106cdd8a75fda9a3"
+    },
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/test_likelihood.py",
+      "bytes": 14763,
+      "sha256": "2a37b06713c6d9a460d3cbe0ebdadc32c2cf72890c729a8b2bee225f1d2eaf61"
+    }
+  ],
+  "predecessor_source_identities": [
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/likelihood.py",
+      "bytes": 18287,
+      "sha256": "68e9b11491fb115c9b22cfc74edd1409535576cd1665dc84804f9eb84621fa87"
+    },
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/test_likelihood.py",
+      "bytes": 11500,
+      "sha256": "d13a0c1ee40512180fa4a74d39807048a40eeeb2af5dd8b1f6f0b293d591f359"
+    }
+  ],
+  "historical_source_lock": {
+    "path": "benchmarks/shared/experimental-neuroscience/SOURCE_LOCK.json",
+    "bytes": 5760,
+    "sha256": "32e84964d0e082877eccfcbe1aeb96950f146179589c858566a3684a6db4efb5"
+  },
+  "preserved_package_files": [
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/README.md",
+      "bytes": 7174,
+      "sha256": "868d920f56fcaff4d2164b81f7a29918b67d4c38ccf238620bf75790e660bdf4"
+    },
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/neuralflow_adapter.py",
+      "bytes": 17678,
+      "sha256": "a250970aa909eddd06704c19de9bf1c8d9851ba1086aeb0627aa5cfa086992ca"
+    },
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/cli.py",
+      "bytes": 3852,
+      "sha256": "ed430aeb473f5d375bab275a69f86bc3d32654719cc57b2d63a29eeb25c1af8f"
+    },
+    {
+      "path": "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood/PROVENANCE.json",
+      "bytes": 937,
+      "sha256": "f8b566ad731a771003b18035c60ec10f6633c380cf16c53788418f31720f49af"
+    }
+  ],
+  "preserved_contracts": [
+    "Strictly positive finite duration; strictly increasing evaluator-bound full-window knots and quadrature; no new physical range cap.",
+    "Nonnegative intensity throughout the interval, including interior extrema; exact zero remains valid and a zero-rate observed event retains negative-infinite density status.",
+    "Unrepresentable scaled coefficients or evaluated intensity still refuse the whole component.",
+    "Existing explicit endpoint policy, analytic-form binary64 integral, diagnostic-only trapezoid, complete 30-population/four-condition scope and isolated LONO query requirements remain unchanged."
+  ],
+  "regression_scope": {
+    "kind": "generated standard-library mathematical/interface controls only",
+    "package_test_methods": 31,
+    "new_test_methods": 3,
+    "generated_polynomial_pairs": 14,
+    "evidence_reproducer": true,
+    "authentic_inputs_read": false,
+    "models_run": false,
+    "native_runtime_run": false
+  },
+  "commands": [
+    [
+      "python3",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "benchmarks/shared/experimental-neuroscience/neuralflow-likelihood",
+      "-p",
+      "test_likelihood.py",
+      "-v"
+    ]
+  ],
+  "historical_readme_note": "The unchanged package README describes the predecessor snapshot with 28 tests and historical source-review results; the current package has 31 test methods. This descriptor records the current repair and pins. The historical SOURCE_LOCK remains unmodified.",
+  "remaining_limits": [
+    "The reproducer requires an unrealistically tiny evaluator-owned grid. No physiological-grid failure, authentic benchmark exploitation, scientific score effect or numerical reproduction of NeuralFlow is demonstrated.",
+    "This is a local binary64 scaling repair, not an exhaustive proof for every floating-point polynomial or exact-real positivity certification.",
+    "No authentic data, fitted models, historical reference execution, matched protected reference, native/runtime parity, shared geometry, grouped uncertainty or protected runner qualification is supplied.",
+    "No registered benchmark ID or execution/scientific qualification is added."
+  ],
+  "scientific_qualification": false,
+  "execution_authority": false,
+  "new_benchmark_ids": 0
+}

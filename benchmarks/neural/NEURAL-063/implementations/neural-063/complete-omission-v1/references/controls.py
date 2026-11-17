@@ -4,18 +4,41 @@ from collections import defaultdict
 import hashlib
 import math
 from owner.io import ContractError
-from owner.scoring import hierarchy, stable_mean
+from owner.scoring import hierarchy, stable_mean, target
 from .schema import SEEDS, row_numeric, row_categories, object_hash
+
+
+def _weighted_sum(operands):
+    """Sum binary64 products exactly, then round the complete sum once.
+
+    Float ratios have power-of-two denominators, so a shared integer
+    denominator avoids both intermediate underflow and loss of small terms
+    when large opposite-signed terms cancel. Keep the supplied hierarchy
+    weights unchanged; do not renormalize them or clip the result.
+    """
+    numerator, denominator = 0, 1
+    for weight, value in operands:
+        wn, wd = weight.as_integer_ratio()
+        vn, vd = value.as_integer_ratio()
+        divisor = wd * vd
+        if divisor > denominator:
+            numerator *= divisor // denominator
+            denominator = divisor
+        numerator += wn * vn * (denominator // divisor)
+    try:
+        result = numerator / denominator
+    except OverflowError as exc:
+        raise ContractError("FIT mean control outside finite binary64 range") from exc
+    if numerator and result == 0:
+        raise ContractError("nonzero FIT mean control underflows binary64")
+    return result
 
 
 def fit_mean(rows):
     if any(r["split"] != "fit" for r in rows): raise ContractError("FIT-only mean control")
     weights, _ = hierarchy(rows, 73)
-    values = []
-    for k in range(3):
-        raw = [float(r["target"][k]) for r in rows]
-        scale = max(abs(v) for v in raw)
-        values.append(0.0 if scale == 0 else math.fsum(weights[r["id"]] * v / scale for r, v in zip(rows, raw)) * scale)
+    values = [_weighted_sum((weights[r["id"]], target(r)[k]) for r in rows)
+              for k in range(3)]
     if not all(math.isfinite(x) for x in values): raise ContractError("nonfinite FIT mean control")
     return {"schema": "neural063_fit_mean_control_v1", "values": values,
             "fit_mice": 73, "fit_ids_sha256": object_hash([r["id"] for r in rows]),

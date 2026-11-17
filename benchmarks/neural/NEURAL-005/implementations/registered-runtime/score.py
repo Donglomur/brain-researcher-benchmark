@@ -146,7 +146,7 @@ def verify(info, name, mounts, environment):
          and h['CapDrop'] == ['ALL'] and not h.get('CapAdd')
          and h['SecurityOpt'] == ['no-new-privileges:true'] and not h.get('Devices')
          and not h.get('DeviceRequests') and not h.get('DeviceCgroupRules')
-         and not h.get('PortBindings') and h['PidMode'] != 'host' and h['IpcMode'] != 'host'
+         and not h.get('PortBindings') and h['PidMode'] == '' and h['IpcMode'] == 'private'
          and h.get('RestartPolicy', {}).get('Name') in ('no', ''), 'offline nonroot isolation')
     need(h['Memory'] == h['MemorySwap'] == 4*1024**3 and h['NanoCpus'] == 2_000_000_000
          and h['PidsLimit'] == 32 and h['ShmSize'] == 1048576, 'exact resource limits')
@@ -210,7 +210,7 @@ def run_child(submission, run, name):
         need(base['Id'] == IMAGE, 'immutable image identity')
         env = dict(v.split('=', 1) for v in base['Config']['Env'])
         env.update({k: '2' for k in THREADS}, PYTHONDONTWRITEBYTECODE='1')
-        args = ['create', '--pull', 'never', '--name', name, '--network', 'none', '--read-only', '--user', '65534:65534',
+        args = ['create', '--pull', 'never', '--name', name, '--network', 'none', '--ipc', 'private', '--read-only', '--user', '65534:65534',
                 '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true', '--memory', str(4*1024**3),
                 '--memory-swap', str(4*1024**3), '--cpus', '2', '--pids-limit', '32', '--shm-size', '1048576',
                 '--log-driver', 'none', '--workdir', '/tmp', '--entrypoint', 'python',

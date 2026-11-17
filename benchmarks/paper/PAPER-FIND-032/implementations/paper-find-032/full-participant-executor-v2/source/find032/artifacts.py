@@ -107,9 +107,16 @@ def numerical_agreement(candidate, reference, *, absolute_tolerance, endpoint='c
         a, b = candidate[key], reference[key]
         if a.shape != b.shape or not np.isfinite(a).all() or not np.isfinite(b).all():
             raise Refusal('complete finite candidate/reference join required')
-        delta = float(np.max(np.abs(a-b)))
+        # Accepted integer products must be promoted before subtraction; uint
+        # subtraction otherwise wraps. Keep any wider floating input precision.
+        dtype = np.result_type(a.dtype, b.dtype, np.float64)
+        with np.errstate(over='ignore', invalid='ignore'):
+            maximum = np.max(np.abs(np.subtract(a, b, dtype=dtype)))
+        delta = float(maximum)
+        if not np.isfinite(maximum) or not np.isfinite(delta):
+            raise Refusal('finite candidate/reference difference required')
         rows.append({'key': [key.participant, key.stimulus, key.pipeline, key.condition, key.score],
-                     'maximum_absolute_error': delta, 'within_tolerance': delta <= absolute_tolerance})
+                     'maximum_absolute_error': delta, 'within_tolerance': bool(maximum <= absolute_tolerance)})
     return {'diagnostic_only': True, 'qualified_reward': None, 'all_cells_present': True, 'endpoint': endpoint,
             'tolerance': absolute_tolerance, 'products': rows,
             'scientific_conclusion': 'not inferred from significance or numerical agreement'}

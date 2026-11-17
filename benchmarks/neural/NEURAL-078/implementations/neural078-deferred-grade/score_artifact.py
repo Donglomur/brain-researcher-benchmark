@@ -5,11 +5,12 @@ import argparse,ast,hashlib,json,os,re,signal,stat,sys,types
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 SOURCE_SCHEMA='neural078_deferred_grade_source_v1'
+CURRENT_SOURCE_SCHEMA='neural078_deferred_grade_current_source_v1'
 PROGRAM_PIN={'bytes':1801,'sha256':'8a1b62ca449c5d3c089407fbe76345910fcc4684a3cbaf2811f6e043adb9dc6d'}
 ADAPTER_PIN={'bytes':472,'sha256':'a5912bbdb00ed898e67cd15e6e9f1fe75ddf1eb29c5807e78ef5ad8a50845e8f'}
 SECONDS=180
 
-def bootstrap(expected,here=HERE):
+def bootstrap(expected,here=HERE,*,manifest_path=None):
     def need(ok,message):
         if not ok:raise ValueError(message)
     def capture(p,cap):
@@ -27,9 +28,20 @@ def bootstrap(expected,here=HERE):
             for k,v in rows:need(k not in out,'Duplicate bootstrap JSON key');out[k]=v
             return out
         return json.loads(b,object_pairs_hook=pairs,parse_constant=lambda _:need(False,'Nonfinite bootstrap JSON'))
-    raw=capture(here/'SOURCE_MANIFEST.json',65536);need(pin(raw)==expected and type(expected['bytes'])is int,'Externally selected source manifest')
-    m=parse(raw);need(set(m)=={'schema','files'} and m['schema']==SOURCE_SCHEMA and type(m['files'])is list and 1<=len(m['files'])<=64,'Exact source closure format')
-    sources={};total=len(raw)
+    selected_manifest=here/'SOURCE_MANIFEST.json' if manifest_path is None else Path(manifest_path)
+    need(selected_manifest.is_absolute() and '..' not in selected_manifest.parts,'Literal absolute selected source manifest')
+    raw=capture(selected_manifest,65536);need(pin(raw)==expected and type(expected['bytes'])is int,'Externally selected source manifest')
+    m=parse(raw);historical_bytes=0
+    if type(m)is dict and m.get('schema')==CURRENT_SOURCE_SCHEMA:
+        need(manifest_path is not None and set(m)=={'schema','historical_manifest','files'},'Explicit current source manifest')
+        old_raw=capture(here/'SOURCE_MANIFEST.json',65536)
+        historical_bytes=len(old_raw)
+        need(type(m['historical_manifest'])is dict and set(m['historical_manifest'])=={'bytes','sha256'} and type(m['historical_manifest']['bytes'])is int and pin(old_raw)==m['historical_manifest'],'Unchanged historical source manifest')
+        old=parse(old_raw);need(type(old)is dict and set(old)=={'schema','files'} and old['schema']==SOURCE_SCHEMA and type(old['files'])is list,'Historical source format')
+        need(type(m['files'])is list and {row['path'] for row in m['files']}=={row['path'] for row in old['files']},'Current complete historical member set')
+        m={'schema':SOURCE_SCHEMA,'files':m['files']}
+    need(type(m)is dict and set(m)=={'schema','files'} and m['schema']==SOURCE_SCHEMA and type(m['files'])is list and 1<=len(m['files'])<=64,'Exact source closure format')
+    sources={};total=len(raw)+historical_bytes
     for row in m['files']:
         n=row['path'];p=Path(n);need(type(n)is str and not p.is_absolute() and '..' not in p.parts and str(p)==n and n not in sources,'Unique confined source member')
         b=capture(here/p,1000000);total+=len(b);need(total<=4000000 and type(row['bytes'])is int and pin(b)=={k:row[k] for k in ('bytes','sha256')},'Exact complete source body');sources[n]=b
@@ -130,10 +142,10 @@ def execute(request,source,*,context=None,clock=time.monotonic,check=None,call=N
     return result
 
 def main(argv=None):
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('mode',choices=['inspect','run']);p.add_argument('--source-bytes',type=int,required=True);p.add_argument('--source-sha256',required=True);p.add_argument('--request',type=Path);p.add_argument('--request-bytes',type=int);p.add_argument('--request-sha256');a=p.parse_args(argv)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('mode',choices=['inspect','run']);p.add_argument('--source-bytes',type=int,required=True);p.add_argument('--source-sha256',required=True);p.add_argument('--source-manifest',type=Path);p.add_argument('--request',type=Path);p.add_argument('--request-bytes',type=int);p.add_argument('--request-sha256');a=p.parse_args(argv)
     source=dict(bytes=a.source_bytes,sha256=a.source_sha256)
     if a.mode=='inspect':
-        bodies,_,_=bootstrap(source);print(json.dumps(dict(task_id='NEURAL-078',source_members=len(bodies),participants=8,required_fields=195,private_reads=0,runtime_qualified=False)));return 0
+        bodies,_,_=bootstrap(source,manifest_path=a.source_manifest);print(json.dumps(dict(task_id='NEURAL-078',source_members=len(bodies),participants=8,required_fields=195,private_reads=0,runtime_qualified=False)));return 0
     if not(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode):raise ValueError('Host requires -I -S -B')
     if any(x is None for x in (a.request,a.request_bytes,a.request_sha256)):raise ValueError('Explicit independently selected request operands')
     def stop(*_):raise TimeoutError('Original deferred-grade work deadline')
@@ -141,7 +153,7 @@ def main(argv=None):
     old={s:signal.signal(s,stop) for s in (signal.SIGALRM,signal.SIGTERM,signal.SIGINT)}
     signal.setitimer(signal.ITIMER_REAL,max(.001,165-(time.monotonic()-ORIGIN)))
     try:
-        context=bootstrap(source);io=context[1]['bound_io'];request=io.parse(io.capture(a.request,65536,context[1]['admission'].pin(dict(bytes=a.request_bytes,sha256=a.request_sha256),65536)));result=execute(request,source,context=context)
+        context=bootstrap(source,manifest_path=a.source_manifest);io=context[1]['bound_io'];request=io.parse(io.capture(a.request,65536,context[1]['admission'].pin(dict(bytes=a.request_bytes,sha256=a.request_sha256),65536)));result=execute(request,source,context=context)
     finally:
         signal.setitimer(signal.ITIMER_REAL,0)
         for s,handler in old.items():signal.signal(s,handler)

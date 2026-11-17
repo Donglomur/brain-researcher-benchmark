@@ -160,7 +160,7 @@ def run(operation,work,origin,operation_read_bytes=0):
                 manifest=strict(budget.read_file(inputroot/'TRAINING.json',entry['manifest'],cap));science['channels']=manifest['channels']
                 if action=='train_model':need(manifest['both_classes'] is True,'Training admission requires both classes; no fold/cohort rescue')
                 if role=='reference' and action=='train_model':
-                    science.update(operation='fit',training_path='/input/TRAINING.json')
+                    science.update(schema='h_native_request_v2',operation='fit',training_path='/input/TRAINING.json')
                     bridge={name.removeprefix('native/'):d for name,d in op['sources']['reference']['files'].items() if name.startswith('native/')}
                     v=materialize(phase/'bridge',Path(op['sources']['reference']['root'])/'native',bridge,budget);views.append(v);mounts['/bridge']=mount(v,'operator_reference')
             elif action=='evaluate_model':

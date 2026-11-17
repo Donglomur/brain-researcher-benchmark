@@ -9,6 +9,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+import zipfile
 from unittest.mock import patch
 import numpy as np
 
@@ -89,6 +90,45 @@ class RelocationChecks(unittest.TestCase):
                                           self.temp / "missing" / "target", self.temp / "missing" / "reference")
         self.assertEqual(receipt["status"], "invalid_submission")
         self.assertEqual(score["private_target_loads"], 0)
+
+    def test_deep_bounded_npy_header_is_invalid_before_private_inspection(self):
+        candidate = self.temp / "deep-header.npz"
+        header = (b"{'descr':'<i4','fortran_order':" + b"-" * 3500
+                  + b"1,'shape':(22091,)}")
+        self.assertLessEqual(len(header), 4096)
+        with zipfile.ZipFile(candidate, "w") as archive:
+            archive.writestr("case_id.npy", b"\x93NUMPY\x01\x00"
+                             + len(header).to_bytes(2, "little") + header)
+            archive.writestr("velocity_m_s.npy", b"unused")
+        self.assertLessEqual(candidate.stat().st_size, 1_000_000)
+        target = self.temp / "missing-deep-header-target"
+        reference = self.temp / "missing-deep-header-reference"
+        private_reads = []
+        original = self.a.snapshot
+
+        def guard(path, *args, **kwargs):
+            if Path(path) in (target, reference):
+                private_reads.append(str(path))
+                raise AssertionError("Invalid candidate must not inspect operator paths")
+            return original(path, *args, **kwargs)
+
+        with patch.object(self.a, "snapshot", side_effect=guard):
+            receipt, score = self.run_fixture(candidate, target, reference)
+        self.assertEqual(receipt["status"], "invalid_submission")
+        self.assertEqual(receipt["private_target_loads"], 0)
+        self.assertEqual(score["status"], "invalid_submission")
+        self.assertEqual(score["private_target_loads"], 0)
+        self.assertIsNone(score["primary_score"])
+        self.assertEqual(private_reads, [])
+
+    def test_deep_operator_reference_remains_operator_error(self):
+        reference = self.assets / "deep-reference.json"
+        reference.write_bytes(b"[" * 3000 + b"0" + b"]" * 3000)
+        with patch.object(self, "reference_pin", self.pin(reference)):
+            receipt, score = self.run_fixture(self.candidate(), reference=reference)
+        self.assertEqual(receipt["status"], "operator_error")
+        self.assertTrue(receipt["error"].startswith("RecursionError:"))
+        self.assertIsNone(score)
 
     def test_wrong_reference_identity(self):
         other = self.assets / "different-reference.json"

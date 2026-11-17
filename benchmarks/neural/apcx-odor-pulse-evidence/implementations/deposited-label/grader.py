@@ -93,14 +93,26 @@ def validate_owner(owner):
     return by_id,groups
 
 
+def _nonnegative_mean(values):
+    """Mean of a nonempty collection of finite, nonnegative metric terms.
+
+    Sum in units of the largest term and divide once before restoring units.
+    Dividing each original term first can overflow fsum through rounding at
+    the largest finite float, or erase repeated minimum-subnormal terms.
+    """
+    values=list(values)
+    scale=max(values)
+    return scale*(math.fsum(x/scale for x in values)/len(values)) if scale else 0.0
+
+
 def _metrics(cases,predictions):
     n=len(cases);ys=[float(c["count"]) for c in cases]
     ps=[max(0.0,float(predictions[c["case_id"]]["count"])) for c in cases]
     errors=[p-y for p,y in zip(ps,ys)]
     scale=max(map(abs,errors))
-    rmse=scale*math.sqrt(math.fsum((x/scale)**2/n for x in errors)) if scale else 0.0
-    mae=math.fsum(abs(x)/n for x in errors)
-    mean=math.fsum(y/n for y in ys)
+    rmse=scale*math.sqrt(math.fsum((x/scale)**2 for x in errors)/n) if scale else 0.0
+    mae=_nonnegative_mean(abs(x) for x in errors)
+    mean=_nonnegative_mean(ys)
     target_norm=math.hypot(*(y-mean for y in ys))
     r2=None;r2_status="UNDEFINED_CONSTANT_TARGET"
     if target_norm:
@@ -122,7 +134,7 @@ def _classification(cases,predictions):
     if counts[0] and counts[1]:
         balanced=(confusion["true_low_pred_low"]/counts[0]+confusion["true_high_pred_high"]/counts[1])/2
     return {"balanced_accuracy":balanced,"balanced_accuracy_status":"DEFINED" if balanced is not None else "UNDEFINED_SINGLE_CLASS",
-            "log_loss":math.fsum(x/len(cases) for x in losses),"log_probability_epsilon":LOG_EPS,
+            "log_loss":_nonnegative_mean(losses),"log_probability_epsilon":LOG_EPS,
             "class_counts":{"low":counts[0],"high":counts[1]},"confusion":confusion}
 
 
@@ -175,11 +187,11 @@ def grade_values(owner,submission):
         for a,cs in animals.items():am[a]["label_category"]=_classification(cs,predictions)
         for s,cs in groups.items():sm[s]["label_category"]=_classification(cs,predictions)
         pooled["label_category"]=_classification(list(expected.values()),predictions)
-    primary=math.fsum(x["rmse"]/3 for x in am.values())
+    primary=_nonnegative_mean(x["rmse"] for x in am.values())
     if not math.isfinite(primary):
         base["status"]="NUMERICAL_RANGE_NO_AGGREGATE_SCORE";return base
     base.update(status="COMPLETE_DEPOSITED_LABEL_SCORE_ONLY",primary_metric={"name":"animal_macro_rmse","value":primary},
-                animal_macro_mae=math.fsum(x["mae"]/3 for x in am.values()),
+                animal_macro_mae=_nonnegative_mean(x["mae"] for x in am.values()),
                 animal_metrics=am,session_metrics=sm,pooled_metrics=pooled,
                 clipping_policy="Finite negative counts clipped at0; no data-derived upper clip.",
                 inference_scope="Conditional within released sessions/animals, not original chronology, physical delivery or population generalization.")
@@ -213,7 +225,10 @@ def grade(owner, envelope):
 def _percentile(values,q):
     values=sorted(values);x=(len(values)-1)*q;i=math.floor(x);j=math.ceil(x)
     weight=x-i
-    return math.fsum((values[i]*(1-weight),values[j]*weight))
+    # Scale this signed weighted mean too: preweighting subnormal endpoints
+    # can erase a nonzero interval even when every bootstrap draw agrees.
+    scale=max(abs(values[i]),abs(values[j]))
+    return scale*math.fsum((values[i]/scale*(1-weight),values[j]/scale*weight)) if scale else 0.0
 
 
 def paired_conditional_bootstrap(owner,first,second,replicates=BOOTSTRAP_REPLICATES,seed=BOOTSTRAP_SEED):
@@ -237,8 +252,8 @@ def paired_conditional_bootstrap(owner,first,second,replicates=BOOTSTRAP_REPLICA
         for sid in sorted(groups):
             cases=sorted(groups[sid],key=lambda x:x["case_id"])
             for _ in cases:sampled[cases[0]["animal"]].append(cases[rng.randrange(len(cases))])
-        ra=math.fsum(_metrics(cs,pa)["rmse"]/3 for cs in sampled.values())
-        rb=math.fsum(_metrics(cs,pb)["rmse"]/3 for cs in sampled.values())
+        ra=_nonnegative_mean(_metrics(cs,pa)["rmse"] for cs in sampled.values())
+        rb=_nonnegative_mean(_metrics(cs,pb)["rmse"] for cs in sampled.values())
         differences.append(ra-rb)
     return {"status":"CONDITIONAL_RELEASE_TRIAL_BOOTSTRAP_ONLY","seed":seed,"replicates":replicates,
             "paired_metric":"first_minus_second_animal_macro_rmse",

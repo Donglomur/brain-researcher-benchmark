@@ -12,10 +12,22 @@ def require(ok, message):
         raise ValueError(message)
 
 
-def real_array(value, name):
+def real_array(value, name, *, preserve_dtype=False):
     array = np.asarray(value)
     require(array.dtype.kind in 'fiu', name+' must be real numeric, not bool/complex/object')
-    return array.astype(np.float64, copy=False)
+    return array if preserve_dtype else array.astype(np.float64, copy=False)
+
+
+def valid_spike_counts(array):
+    """Check the declared count domain before any floating-point conversion."""
+    if array.dtype.kind not in 'fiu':
+        return False
+    integral = array.dtype.kind in 'iu' or (array == np.floor(array)).all()
+    # Keep integer comparisons integer; the floating scalar also avoids
+    # overflowing the comparison bound when targets have dtype float16.
+    upper_bound = 2**53 if array.dtype.kind in 'iu' else np.float64(2**53)
+    return (np.isfinite(array).all() and (array >= 0).all() and integral
+            and (array <= upper_bound).all())
 
 
 def poisson_bits_per_spike(target_counts, expected_counts, valid_mask=None):
@@ -27,7 +39,9 @@ trainable baseline. Exactly-zero null means are replaced by1e-9 as in nlb_tools.
 Unlike upstream, zero/nonfinite predictions are rejected, never silently clipped.
 All-zero observed target totals return a documented undefined score, not NaN/0.
 """
-    y = real_array(target_counts, 'targets')
+    # Admit counts in their original dtype: float64 rounds uint64(2**53 + 1)
+    # down to the allowed boundary and can erase extended-precision fractions.
+    y = real_array(target_counts, 'targets', preserve_dtype=True)
     lam = real_array(expected_counts, 'expected counts')
     require(y.ndim == 3 and all(n > 0 for n in y.shape) and y.shape == lam.shape,
             'Expected matching nonempty trial x bin x heldout-unit arrays')
@@ -36,10 +50,11 @@ All-zero observed target totals return a documented undefined score, not NaN/0.
     require(mask.dtype == np.bool_ and mask.shape == y.shape, 'Mask must be fixed boolean target shape')
     require(np.any(mask) and np.all(mask.sum(axis=(0,1)) > 0), 'No valid targets for at least one unit')
     observed = y[mask]
-    require(np.isfinite(observed).all() and (observed >= 0).all() and
-            (observed == np.floor(observed)).all() and (observed <= 2**53).all(),
+    require(valid_spike_counts(observed),
             'Observed targets must be finite nonnegative integer spike counts')
-    safe = np.where(mask, y, 0.0)
+    observed = observed.astype(np.float64, copy=False)
+    safe = np.zeros(y.shape, dtype=np.float64)
+    safe[mask] = observed
     totals = safe.sum(axis=(0,1),dtype=np.float64)
     means = totals / mask.sum(axis=(0,1))
     means[means == 0] = 1e-9

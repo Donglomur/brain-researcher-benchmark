@@ -30,13 +30,22 @@ def validate(value,spec,root,cost):
  return n
 def pair_error(a,b,spec,aroot,broot,cost):
  import itertools
- sentinel=object();total=0.;correction=0.;maximum=0.;n=0
+ sentinel=object();total=0;maximum=0.;n=0
  for x,y in itertools.zip_longest(values(a,spec,aroot,cost),values(b,spec,broot,cost),fillvalue=sentinel):
   need(x is not sentinel and y is not sentinel,"same complete tensor support")
-  e=abs(x-y);need(math.isfinite(e),"finite residual")
-  # Compensated streamed sum; no whole-population allocation.
-  z=e-correction;t=total+z;correction=(t-total)-z;total=t;maximum=max(maximum,e);n+=1
- return {"mae":total/n,"max_error":maximum,"count":n}
+  try:e=abs(x-y);finite=math.isfinite(e)
+  except OverflowError:raise Refusal("finite residual") from None
+  need(finite,"finite residual")
+  # Exact sum in binary64's smallest subnormal units (2**-1074).
+  # The declared extent bounds this integer to 2132 bits, even when the
+  # floating-point sum overflows. No population is materialized or reread.
+  numerator,denominator=e.as_integer_ratio()
+  total+=numerator<<(1075-denominator.bit_length());maximum=max(maximum,e);n+=1
+ need(n>0,"nonempty complete tensor support")
+ # Integer division rounds the mean once, without converting the sum first.
+ mean=total/(n<<1074)
+ need(math.isfinite(mean) and (total==0 or mean>0),"representable tensor mean")
+ return {"mae":mean,"max_error":maximum,"count":n}
 def store_array(array,name,root,cost):
  # Native result serialization only; not called in construction controls.
  import numpy as np

@@ -58,7 +58,9 @@
   "$defs": {
     "Sha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
     },
     "ArtifactVisibility": {
       "type": "string",
@@ -71,7 +73,7 @@
       "properties": {
         "artifact_id": {
           "type": "string",
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}(?![\\s\\S])"
         },
         "uri": {"type": "string", "minLength": 1, "maxLength": 2048},
         "sha256": {"$ref": "#/$defs/Sha256"},

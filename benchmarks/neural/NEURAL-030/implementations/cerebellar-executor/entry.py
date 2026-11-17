@@ -6,10 +6,15 @@ from pathlib import Path
 import sys
 import types
 
-LOADER_PIN = {'bytes': 5549, 'sha256': 'a37a04ff1b0036810751512ccf2dcba45f8401e0a2ecf932bc636af454a8fb55'}
-SOURCE_PIN = {'bytes': 2295, 'sha256': 'b0cb8ef53c946ea9f4d0bddab5f6f1d7c4153a79d870a98bbb62021e7f665011'}
+LOADER_PIN = {'bytes': 6782, 'sha256': '591cb5ef7be0ac012db9abf2445c2153922c2efd870a97e20dda1bacce661fbb'}
+SOURCE_PIN = {'bytes': 2528, 'sha256': 'ac5b8698812400f0d860ff6eeb5970c68ad3b78329bb6bc7abd010d7d17daf7c'}
 
-def context():
+HISTORICAL_SOURCE_PIN = {'bytes': 2295, 'sha256': 'b0cb8ef53c946ea9f4d0bddab5f6f1d7c4153a79d870a98bbb62021e7f665011'}
+PACKAGE_RELATIVE = Path('benchmarks/neural/NEURAL-030/implementations/cerebellar-executor')
+CURRENT_RELATIVE = Path('benchmarks/integrity/current-closures/trust-cerebellar/SOURCE_MANIFEST.json')
+
+
+def context(current_manifest=None):
     root = Path(__file__).resolve().parent
     path = root / 'captured_loader.py'
     # This literal launcher and interpreter are the operator's trust anchor.
@@ -22,17 +27,22 @@ def context():
         raise ValueError('captured loader identity')
     module = types.ModuleType('_cerebellar_bootstrap')
     exec(compile(body, '<captured_loader>', 'exec'), module.__dict__)
-    return module.load(root, SOURCE_PIN)
+    if current_manifest is None:
+        if root.parts[-len(PACKAGE_RELATIVE.parts):] != PACKAGE_RELATIVE.parts:
+            raise ValueError('portable copies require the exact --current-manifest companion')
+        current_manifest = root.parents[len(PACKAGE_RELATIVE.parts) - 1] / CURRENT_RELATIVE
+    return module.load(root, SOURCE_PIN, Path(current_manifest), HISTORICAL_SOURCE_PIN)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('action', choices=('inspect','run'))
+    parser.add_argument('--current-manifest', help='Exact current source descriptor for a portable package copy')
     parser.add_argument('--request')
     parser.add_argument('--request-pin', type=json.loads)
     parser.add_argument('--authority')
     parser.add_argument('--authority-pin', type=json.loads)
     args = parser.parse_args()
-    ctx = context()
+    ctx = context(args.current_manifest)
     try:
         if args.action == 'inspect':
             if any(v is not None for v in (args.request,args.request_pin,args.authority,args.authority_pin)):

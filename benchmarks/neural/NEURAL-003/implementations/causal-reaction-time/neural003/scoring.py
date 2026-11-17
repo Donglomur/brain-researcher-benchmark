@@ -1,6 +1,10 @@
 """Protected participant-macro MAE; never invoked in BUILD ONLY."""
 import math
-from .prediction_schema import admit_predictions, ARMS
+from .prediction_schema import admit_predictions, ARMS, _admit_rt_seconds
+
+
+class InvalidTargetRT(ValueError):
+    """Operator target fault after candidate admission; no candidate score."""
 
 
 def _finite_mean(values):
@@ -47,10 +51,12 @@ def grade(outputs, expected, sealed_targets):
                 raise ValueError("private target fields")
             if row["trial_id"] != ident:
                 raise ValueError("private target join")
-            value = row["rt_seconds"]
-            if type(value) not in (int, float) or not math.isfinite(value) or value <= 0.1:
-                raise ValueError("unresolved missing/censored/early target; never impute3s")
-            vals.append(float(value))
+            try:
+                vals.append(_admit_rt_seconds(row["rt_seconds"]))
+            except ValueError as error:
+                raise InvalidTargetRT(
+                    f"invalid private target RT; operator target fault: {error}; "
+                    "never impute3s") from error
         targets[person] = tuple(vals)
     per_person = []
     for person in range(26):

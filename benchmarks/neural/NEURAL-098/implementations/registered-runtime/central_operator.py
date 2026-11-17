@@ -1,4 +1,8 @@
-"""Inactive fixed-task bridge to the complete ordinary Four source package."""
+"""Inactive fixed-task bridge to the complete ordinary Four source package.
+
+Modified 2026-11-16: resolve the relocated shared package from the exact current
+repository layout. Source identity checks and inactive execution scope remain.
+"""
 import hashlib
 import os
 from pathlib import Path
@@ -7,13 +11,21 @@ import sys
 from types import ModuleType
 
 TASK = 'NEURAL-098'
-SOURCE = (21412, '6f35ea43692f88eb8247f98c67fd350e4b78005c2fde63c2747e05ccf8b17f6f')
+SOURCE = (23781, '07b4b531a5378f9b6796cf255fc7b22cffc5fa6e4bcf3957f7fbda3cc755cc64')
 NAME = '_four_inactive_central_source_v1'
+INSTALLED = 'benchmarks/neural/NEURAL-098/implementations/registered-runtime/central_operator.py'
+SHARED = 'benchmarks/shared/four-programmes/_four_programmes_source_v1'
 
 def _load():
     if not (sys.flags.isolated and sys.dont_write_bytecode):
         raise RuntimeError('source entry requires a fresh python -I -B host')
-    root = Path(__file__).absolute().parent.parent / '_four_programmes_source_v1'
+    installed = Path(__file__).absolute()
+    suffix = Path(INSTALLED).parts
+    if (installed.parts[-len(suffix):] != suffix or installed.resolve() != installed
+            or any(p.is_symlink() for p in (installed, *installed.parents))):
+        raise RuntimeError('exact ordinary installed task entry')
+    repository = installed.parents[len(suffix) - 1]
+    root = repository / SHARED
     path = root / 'central_source.py'
     if any(p.is_symlink() for p in (path, *path.parents)):
         raise RuntimeError('ordinary installed source ancestry')

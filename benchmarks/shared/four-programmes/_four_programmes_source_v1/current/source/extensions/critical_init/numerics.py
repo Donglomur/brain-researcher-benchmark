@@ -73,6 +73,14 @@ def dmd(value,*,lag,ridge,components,block,valid_times=None,normalization):
     x=matrix(value);n,t=x.shape;integer(lag,1);integer(components,1);integer(block,1);real(ridge,0)
     need(t>lag and components<=n,'complete DMD geometry')
     need(normalization in ('held_source_blocks','conventional_pairs'),'declared ridge normalization')
+    valid=None
+    if valid_times is not None:
+        valid=set()
+        for k in valid_times:
+            need(isinstance(k,(int,np.integer)) and not isinstance(k,(bool,np.bool_)),
+                 'integer source time indices excluding bool')
+            valid.add(int(k))
+        need(all(0<=k<t for k in valid),'valid source time indices')
     if components<n:
         # A source-equivalent PCA subspace in exact arithmetic, not backend-bit parity.
         if n<t:
@@ -82,10 +90,6 @@ def dmd(value,*,lag,ridge,components,block,valid_times=None,normalization):
             cov=x.T@x/t;_,u=np.linalg.eigh(cov.T@cov)
             x=np.sqrt(((u.T@x.T)**2).sum(axis=1))[:,None]*u.T
             x=x[-components:]
-    valid=None
-    if valid_times is not None:
-        valid=set(int(k)for k in valid_times)
-        need(all(0<=k<t for k in valid),'valid source time indices')
     gxx=np.zeros((x.shape[0],x.shape[0]));gxy=gxx.copy();total=0;pair_count=0
     if normalization=='held_source_blocks':
         chunks=max(1,(t-lag)//block);width=min(block,t-lag)

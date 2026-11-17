@@ -2,7 +2,7 @@
 from pathlib import Path
 import copy,os,time
 from .io import need,decode,digest,sha,capture,ordinary,Budget,encode
-from .source import ROOT,TASKS,FULL,paper,neural,inspect
+from .source import ROOT,SOURCE_LOCK,TASKS,FULL,paper,neural,inspect
 from .plan import construct,paired_access
 from .exposure import Ledger
 from . import adapters,comparisons
@@ -45,7 +45,7 @@ def run(setup,request,root,budget,ledger):
         available.append((key,dict(slot,task=setup['task']),j))
     if setup['task']==TASKS[0]:
         paired_access(request['paired_access'])
-        need(request['scoring_source_lock_sha256']==sha(capture(ROOT/'SOURCE_LOCK.json')),'actual registered scoring source')
+        need(request['scoring_source_lock_sha256']==sha(capture(ROOT/SOURCE_LOCK)),'actual registered scoring source')
         evaluation_banks=comparisons.paper_banks(setup,request,available)
         public_views={}
         for key,slot,j in available:

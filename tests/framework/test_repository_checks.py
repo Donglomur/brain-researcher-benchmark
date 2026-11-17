@@ -185,13 +185,57 @@ class RepositoryChecksTests(unittest.TestCase):
         extra.unlink()
         extra = path.parent / "unexpected.py"
         extra.write_text("Must not be read\n")
-        with self.assertRaisesRegex(ValueError, "Non-JSON current-binding"):
+        with self.assertRaisesRegex(ValueError, "Unexpected current-binding"):
             self.check()
         extra.unlink()
         path.unlink()
         path.symlink_to(self.root / "missing-private-binding")
         with self.assertRaisesRegex(ValueError, "ordinary single-link"):
             self.check()
+
+    def test_current_binding_readme_is_pinned_with_strict_member_names(self):
+        directory = self.root / checks.CURRENT_CLOSURES / "example"
+        readme = directory / "README.md"
+        body = b"# Current source descriptor\nNo scientific qualification.\n"
+        readme.write_bytes(body)
+        result = self.build()
+        self.assertEqual(result["current_binding_files"], 3)
+        self.assertEqual(self.check()["source_check"], "passed")
+        inventory = json.loads((self.root / checks.INVENTORY).read_text())
+        row = next(row for row in inventory["files"]
+                   if row["path"] == readme.relative_to(self.root).as_posix())
+        self.assertEqual(row["owner"], "current-binding-metadata")
+        self.assertEqual(row["bytes"], len(body))
+        self.assertEqual(row["sha256"], hashlib.sha256(body).hexdigest())
+        readme.write_bytes(body + b"Modified guide\n")
+        with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
+            self.check()
+        readme.write_bytes(body)
+        rejected = directory / "rejected-members"
+        rejected.mkdir()
+        # Separate directory avoids README/readme aliasing on macOS filesystems.
+        for name in ("notes.md", "readme.md", "README.MD", "README.txt", "source.py", "binding.JSON"):
+            path = rejected / name
+            path.write_text("Generated unsupported member\n")
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "Unexpected current-binding member"):
+                self.build()
+            path.unlink()
+        rejected.rmdir()
+        self.assertEqual(self.check()["source_check"], "passed")
+
+    def test_current_binding_readme_rejects_symlinks_and_hardlinks(self):
+        directory = self.root / checks.CURRENT_CLOSURES / "example"
+        readme = directory / "README.md"
+        target = self.root / "outside-binding-note.md"
+        target.write_text("Generated fixture, not a current binding\n")
+        for alias in ("symlink", "hardlink"):
+            if alias == "symlink":
+                readme.symlink_to(target)
+            else:
+                readme.hardlink_to(target)
+            with self.subTest(alias=alias), self.assertRaisesRegex(ValueError, "ordinary single-link file"):
+                self.build()
+            readme.unlink()
 
     def test_outside_paths_and_source_aliases_refuse_before_inventory_write(self):
         row = self.registry["implementations"][0]
@@ -238,6 +282,28 @@ class RepositoryChecksTests(unittest.TestCase):
         (self.root / "benchmarks/paper/UNKNOWN").mkdir()
         with self.assertRaisesRegex(ValueError, "Orphan source directory"):
             self.build()
+
+    def test_unregistered_top_level_benchmark_namespace_refuses(self):
+        self.build()
+        typo = self.root / "benchmarks/papre/PAPER-001/runner.py"
+        typo.parent.mkdir(parents=True)
+        typo.write_text("raise AssertionError('Do not execute')\n")
+        for operation in (self.check, self.build):
+            with self.subTest(operation=operation.__name__), self.assertRaisesRegex(
+                    ValueError, "Orphan source directory: benchmarks/papre"):
+                operation()
+        typo.unlink()
+        typo.parent.rmdir()
+        typo.parent.parent.rmdir()
+        stray = self.root / "benchmarks/unregistered.py"
+        stray.write_text("raise AssertionError('Do not execute')\n")
+        with self.assertRaisesRegex(ValueError, "Orphan source file: benchmarks/unregistered.py"):
+            self.check()
+        stray.unlink()
+        # Runtime output remains outside the benchmark source namespace.
+        (self.root / ".neurobench").mkdir()
+        (self.root / ".neurobench/result.bin").write_bytes(b"generated runtime output")
+        self.assertEqual(self.check()["source_check"], "passed")
 
     def test_byte_limits_and_non_source_payloads_refuse(self):
         with patch.object(checks, "MAX_READ_BYTES", 1), self.assertRaisesRegex(ValueError, "budget"):

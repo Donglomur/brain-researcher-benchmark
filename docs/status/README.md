@@ -20,6 +20,19 @@ current execution qualification.
 
 ## Current construction work
 
+The [November 16 source audit](audit-2026-11-16.md) records a targeted review of
+all 234 task definitions and 290 source relationships. Its
+[machine-readable census](audits/2026-11-16.json) preserves the review scope,
+findings and unreviewed areas for each item. The resulting repairs address input
+validation, numerical stability, source resolution, process cleanup and CI
+coverage. One confirmed clock-boundary defect in NEURAL-047 remains open; the
+proposed normalization was withdrawn because no defensible timestamp-precision
+policy had been established.
+
+The audit does not establish scientific readiness. At its baseline, 164 tasks had
+owned source relationships and 70 had none. Authentic-data validation, protected
+evaluation and task-specific qualification remain separate work.
+
 Four new components extend existing tasks: complete-support Helsinki EEG scoring
 and causal packets, vestibular condition scoring, matched laser-EEG evidence
 packets, and empirical iSTTC four-estimator fit production. The

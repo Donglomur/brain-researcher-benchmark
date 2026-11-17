@@ -39,7 +39,9 @@ def validate_packet(d,person):
         need(d[name].shape==(n,) and d[name].dtype==np.dtype('uint8')
              and set(d[name].tolist())<=allowed,'Exact covariate '+name)
     rt=d['rt_samples']
-    need(rt.shape==(n,) and rt.dtype==np.dtype('int64') and np.all((rt*1000>=200*1024)&(rt*1000<=1000*1024)),'Eligible marker RT')
+    # At 1024 Hz, 200..1000 ms admits exactly integer samples 205..1024.
+    # Compare before scaling: int64 multiplication can wrap unrelated values.
+    need(rt.shape==(n,) and rt.dtype==np.dtype('int64') and np.all((rt>=205)&(rt<=1024)),'Eligible marker RT')
     need(d['sample_offsets'].dtype==np.dtype('int16') and np.array_equal(d['sample_offsets'],OFFSETS),'Exact sample axis')
     need(d['channels'].dtype.kind=='U' and d['channels'].tolist()==['FCz_reref','HEOG_bipolar','VEOG_bipolar'],'Exact channel axis')
     need(d['units'].shape==() and str(d['units'])=='native_EEGLAB_amplitude','Native amplitude units')

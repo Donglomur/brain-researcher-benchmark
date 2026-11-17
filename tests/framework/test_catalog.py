@@ -528,6 +528,88 @@ class PublicCatalogTests(unittest.TestCase):
         with self.assertRaises((ValueError, FileNotFoundError)):
             cli.public_metadata_mode(self.root)
 
+    def test_authoritative_canonical_metadata_cannot_be_inferred_from_registry(self):
+        catalog.generate(self.root)
+        registry_path = self.root / catalog.REGISTRY
+        original_registry = json.loads(registry_path.read_text())
+        original_row = next(row for row in original_registry['tasks'] if row['id'] == 'NEURAL-001')
+        specification_path = self.root / original_row['specification']['path']
+        original_specification = json.loads(specification_path.read_text())
+        output_path = self.root / catalog.OUTPUT / 'catalog.json'
+        original_output = output_path.read_bytes()
+        changes = [
+            ('schema_version', True, 'Canonical task lineage'),
+            ('schema_version', 1.0, 'Canonical task lineage'),
+            ('track', None, 'Canonical task track'),
+            ('title', 'Changed authoritative title', 'Task title'),
+            ('title', None, 'Task title'),
+            ('title', '   ', 'Task title'),
+        ]
+        for field, value, reason in changes:
+            registry = copy.deepcopy(original_registry)
+            row = next(row for row in registry['tasks'] if row['id'] == 'NEURAL-001')
+            specification = {**original_specification, field: value}
+            size, digest = write(specification_path, specification)
+            for key in ('specification', 'original_specification'):
+                row[key].update(bytes=size, sha256=digest)
+            write(registry_path, registry)
+            with self.subTest(field=field, value=value), self.assertRaisesRegex(ValueError, reason):
+                catalog.generate(self.root)
+            self.assertEqual(output_path.read_bytes(), original_output)
+
+        # A coherent title edit remains valid after both declarations are updated.
+        registry = copy.deepcopy(original_registry)
+        row = next(row for row in registry['tasks'] if row['id'] == 'NEURAL-001')
+        specification = {**original_specification, 'title': 'Changed authoritative title'}
+        size, digest = write(specification_path, specification)
+        row['title'] = specification['title']
+        for key in ('specification', 'original_specification'):
+            row[key].update(bytes=size, sha256=digest)
+        write(registry_path, registry)
+        result = catalog.discover(self.root)
+        self.assertEqual(next(row for row in result['tasks'] if row['id'] == 'NEURAL-001')['title'],
+                         specification['title'])
+
+    def test_expansion_title_omission_and_specification_alias_remain_explicit(self):
+        registry_path = self.root / catalog.REGISTRY
+        registry = json.loads(registry_path.read_text())
+        row = next(row for row in registry['tasks'] if row['id'] == 'NEURAL-EXP-1-0')
+        path = self.root / row['specification']['path']
+        specification = json.loads(path.read_text())
+        self.assertNotIn('track', specification)
+        self.assertNotEqual(specification['id'], row['id'])
+        del specification['title']
+        size, digest = write(path, specification)
+        for key in ('specification', 'original_specification'):
+            row[key].update(bytes=size, sha256=digest)
+        write(registry_path, registry)
+        result = catalog.discover(self.root)
+        actual = next(item for item in result['tasks'] if item['id'] == row['id'])
+        self.assertEqual(actual['title'], row['title'])
+        self.assertEqual(actual['track_source'], 'registry')
+        self.assertTrue(actual['specification_alias'])
+        self.assertEqual(actual['specification_id'], specification['id'])
+
+    def test_malformed_input_assets_refuses_before_generated_output_writes(self):
+        catalog.generate(self.root)
+        registry_path = self.root / catalog.REGISTRY
+        original_registry = json.loads(registry_path.read_text())
+        original_row = next(row for row in original_registry['tasks'] if row['id'] == 'NEURAL-001')
+        specification_path = self.root / original_row['specification']['path']
+        original_specification = json.loads(specification_path.read_text())
+        output = self.root / catalog.OUTPUT / 'catalog.json'
+        original_output = output.read_bytes()
+        for value in (None, [], 'not an object', True):
+            registry = copy.deepcopy(original_registry)
+            row = next(row for row in registry['tasks'] if row['id'] == 'NEURAL-001')
+            size, digest = write(specification_path, {**original_specification, 'input_assets': value})
+            for key in ('specification', 'original_specification'):
+                row[key].update(bytes=size, sha256=digest)
+            write(registry_path, registry)
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'input_assets must be an object'):
+                catalog.generate(self.root)
+            self.assertEqual(output.read_bytes(), original_output)
+
 
 class PublishedInventoryTests(unittest.TestCase):
     def test_actual_public_catalog_is_complete_without_counting_components(self):

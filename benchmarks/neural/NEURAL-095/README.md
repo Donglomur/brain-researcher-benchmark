@@ -21,8 +21,9 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Task documentation
 
-- [Reference-data notice](docs/rights/NEURAL_095_REFERENCE_DATA_NOTICE_20261115.md)
+- [Historical reference-data notice](docs/rights/NEURAL_095_REFERENCE_DATA_NOTICE_20261115.md)
 - [Rights provenance](docs/rights/NEURAL_095_RIGHTS_PROVENANCE_20261115.json)
+- [Current rights and source locations](docs/rights/README.md)
 
 ## Implementation artifacts
 

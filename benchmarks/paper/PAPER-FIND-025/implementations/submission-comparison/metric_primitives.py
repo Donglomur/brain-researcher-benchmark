@@ -3,7 +3,7 @@
 The caller must establish endpoint, cohort, support, preprocessing and split.
 No function here establishes provenance or resolves the paper/code mismatch.
 """
-from math import fsum, isfinite, sqrt
+from math import fsum, isfinite, sqrt, ulp
 
 
 class UndefinedMetric(ValueError):
@@ -38,7 +38,11 @@ def signed_variance_explained(observed, predicted):
 
 
 def squared_pearson_correlation(observed, predicted):
-    """Squared centered correlation, distinct from signed variance explained."""
+    """Squared centered correlation, distinct from signed variance explained.
+
+    Only a small binary64 overshoot at the mathematical upper bound is repaired.
+    This arithmetic guard is not a tolerance for externally supplied scores.
+    """
     y, p = _pair(observed, predicted)
     ym, pm = fsum(y)/len(y), fsum(p)/len(p)
     yc, pc = tuple(v-ym for v in y), tuple(v-pm for v in p)
@@ -49,7 +53,13 @@ def squared_pearson_correlation(observed, predicted):
     value = corr*corr
     if not isfinite(value):
         raise UndefinedMetric("nonfinite arithmetic")
-    return value
+    # Products, two square roots/divisions and the final square can put a
+    # perfect correlation just above one despite fsum's accurate reductions.
+    # Bound this repair to eight ULPs at one; a larger Cauchy-Schwarz violation
+    # is an arithmetic failure, never a successful score.
+    if value > 1 + 8*ulp(1.0):
+        raise UndefinedMetric("correlation arithmetic outside [0,1]")
+    return min(value, 1.0)
 
 
 def binary_accuracy(observed, predicted):

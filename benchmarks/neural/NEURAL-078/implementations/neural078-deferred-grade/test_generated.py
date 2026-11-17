@@ -31,7 +31,8 @@ def write(p,b):p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b);retur
 def check_peak(root):
     global MAX_FIXTURE_BYTES
     n=sum(p.stat().st_size for p in root.rglob('*') if p.is_file());MAX_FIXTURE_BYTES=max(MAX_FIXTURE_BYTES,n);assert n<2000000
-api=load('_test078_api',HERE/'score_artifact.py');SOURCE=pin(read(HERE/'SOURCE_MANIFEST.json'));CONTEXT=api.bootstrap(SOURCE);SOURCES,MODS,_=CONTEXT;IO=MODS['bound_io'];ADM=MODS['admission'];GRADE=MODS['grading'];WORKER=load('_test078_worker',HERE/'trusted_entry.py')
+CURRENT=HERE.parents[4]/'benchmarks/integrity/current-closures/input-neural078/SOURCE_MANIFEST.json'
+api=load('_test078_api',HERE/'score_artifact.py');SOURCE=pin(read(CURRENT));CONTEXT=api.bootstrap(SOURCE,manifest_path=CURRENT);SOURCES,MODS,_=CONTEXT;IO=MODS['bound_io'];ADM=MODS['admission'];GRADE=MODS['grading'];WORKER=load('_test078_worker',HERE/'trusted_entry.py')
 # Only scalar finiteness and an unused OFFSETS declaration are exercised in these
 # stdlib generated report tests; actual NumPy/runtime dependency is unqualified.
 np=types.ModuleType('numpy');np.isfinite=math.isfinite;np.arange=lambda *a,**k:None;np.int16='int16';sys.modules['numpy']=np
@@ -92,9 +93,13 @@ def report(unsupported=False):
         row.update({n:None if count==1 else -(i+1)*.25 for n in v.NUMBERS});people.append(row)
     return dict(schema='neural078_contrast_submission_v1',protocol_sha256=v.PROTOCOL_SHA256,participants=people,aggregate=dict(status='not_all_participants_supported' if unsupported else 'all_participants_supported',matched_FCz_equal_person_mean=None if unsupported else -1.125,matched_FCz_between_person_descriptive_SE=None if unsupported else .21))
 
-def fixture(root,unsupported=False):
+def fixture(root,unsupported=False,bind_current_sources=True):
     root=root.resolve();repo=root/'repo';old=repo/'authoring/delivery-20261105/common/neural078-holder-readiness-successor-v1';attempt=root/'producer';package=repo/'authoring/delivery-20261105/common/exports/neural078-reference-v3';sources=dict(SOURCES)
     binding=json.loads(sources['producer/program/BINDINGS.json']);rows={r['target']:r for r in binding['files']};people=MODS['policy'].SCOPE['people'];gold=enc(report(unsupported))
+    # This entirely generated producer/reference fixture binds its own numerical
+    # source. The unchanged published original producer is not silently rebound.
+    if bind_current_sources:
+        for name in ('score.py','analysis_core.py'):rows['private/source/'+name].update(pin(sources['scorer/'+name]))
     gold_pin=write(package/'private/reference/GOLD.json',gold);rows['private/reference/GOLD.json'].update(gold_pin)
     bp=dict(schema='neural078_private_target_binding_v1',gold=dict(name='GOLD.json',**gold_pin),packets=[dict(person=p,name=p+'.npz',**ADM.only(rows['public/data/'+p+'.npz'])) for p in people],protocol_sha256=rows['public/PROTOCOL.json']['sha256'],frozen_sources={n:pin(sources['scorer/'+n]) for n in ('score.py','analysis_core.py')},empirical_EEG_contrasts_computed=True,new_scientific_choices=False,unsupported_nulls_preserved=True,host_admission_required=True,model_fits=0,candidate_or_method_evaluations=0,answer_source_sha256='a'*64)
     braw=enc(bp);bpin=write(package/'private/reference/TARGET_BINDING.json',braw);rows['private/reference/TARGET_BINDING.json'].update(bpin)
@@ -148,6 +153,14 @@ def run(request,context,docker=None,**kw):
     api.ORIGIN=time.monotonic();return api.execute(request,SOURCE,context=context,check=lambda *a:True,call=docker or FakeDocker(),budget_class=FakeBudget,**kw)
 
 class Tests(unittest.TestCase):
+    def test_original_numerical_binding_is_not_silently_replaced(self):
+        with tempfile.TemporaryDirectory() as temp:
+            req,ctx,_=fixture(Path(temp),bind_current_sources=False);d=FakeDocker();result=run(req,ctx,d)
+            self.assertFalse(result['success'],result)
+            self.assertEqual(result['error_type'],'ValueError')
+            self.assertFalse(result['private_grade_dispatched'])
+            self.assertEqual((d.starts,d.target_reads,PRIVATE_OPENS),(0,0,[]))
+
     def test_complete195_protected_flow(self):
         with tempfile.TemporaryDirectory() as temp:
             req,ctx,_=fixture(Path(temp));d=FakeDocker();result=run(req,ctx,d)

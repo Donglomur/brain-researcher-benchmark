@@ -25,9 +25,17 @@ class PackageControls(unittest.TestCase):
             target = self.root / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(body)
-        manifest = BOOTSTRAP.stable_read(PACKAGE.root / BOOTSTRAP.MANIFEST,
+        manifest = BOOTSTRAP.stable_read(PACKAGE.manifest_path,
                                        BOOTSTRAP.MAX_MEMBER, PACKAGE.selected)
-        (self.root / BOOTSTRAP.MANIFEST).write_bytes(manifest)
+        self.current_manifest = None
+        self.manifest_path = self.root / BOOTSTRAP.MANIFEST
+        if PACKAGE.predecessor is not None:
+            historical = BOOTSTRAP.stable_read(PACKAGE.root / BOOTSTRAP.MANIFEST,
+                                               BOOTSTRAP.MAX_MEMBER, PACKAGE.predecessor)
+            self.manifest_path.write_bytes(historical)
+            self.manifest_path = self.base / "current-manifest.json"
+            self.current_manifest = self.manifest_path
+        self.manifest_path.write_bytes(manifest)
         self.selected = dict(PACKAGE.selected)
 
     def tearDown(self):
@@ -35,10 +43,11 @@ class PackageControls(unittest.TestCase):
 
     def verify(self, root=None):
         return BOOTSTRAP.verify(self.root if root is None else root,
-                                self.selected["bytes"], self.selected["sha256"])
+                                self.selected["bytes"], self.selected["sha256"],
+                                current_manifest=self.current_manifest)
 
     def repin_manifest(self, mutate):
-        path = self.root / BOOTSTRAP.MANIFEST
+        path = self.manifest_path
         doc = json.loads(path.read_bytes())
         mutate(doc)
         body = (json.dumps(doc, indent=2) + "\n").encode()
@@ -60,6 +69,8 @@ class PackageControls(unittest.TestCase):
         command = [sys.executable, "-I", "-S", "-B", str(self.root / "package_tools.py"),
                    "verify", "--root", str(self.root), "--manifest-bytes", str(self.selected["bytes"]),
                    "--manifest-sha256", self.selected["sha256"]]
+        if self.current_manifest is not None:
+            command.extend(["--current-manifest", str(self.current_manifest)])
         result = subprocess.run(command, cwd=self.base, capture_output=True, timeout=15, check=False)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout)["source_members"], len(PACKAGE.captured))
@@ -67,6 +78,31 @@ class PackageControls(unittest.TestCase):
     def test_wrong_release_pin_refused(self):
         self.selected["sha256"] = "0" * 64
         with self.assertRaises(BOOTSTRAP.PackageError):
+            self.verify()
+
+    def test_current_selection_preserves_historical_manifest(self):
+        if self.current_manifest is None:
+            return
+        path = self.root / BOOTSTRAP.MANIFEST
+        path.write_bytes(path.read_bytes()+b" ")
+        with self.assertRaisesRegex(BOOTSTRAP.PackageError, "source pin mismatch"):
+            self.verify()
+
+    def test_current_selection_cannot_crop_roster(self):
+        if self.current_manifest is None:
+            return
+        self.repin_manifest(lambda document: document["members"].pop())
+        with self.assertRaisesRegex(BOOTSTRAP.PackageError, "same complete source roster"):
+            self.verify()
+
+    def test_current_selection_cannot_repin_scientific_contract(self):
+        if self.current_manifest is None:
+            return
+        def change(document):
+            row = next(x for x in document["members"] if x["path"] == "source/contracts/COHORT.json")
+            row["sha256"] = "0"*64
+        self.repin_manifest(change)
+        with self.assertRaisesRegex(BOOTSTRAP.PackageError, "preserved scientific contracts"):
             self.verify()
 
     def test_changed_scientific_contract_refused(self):

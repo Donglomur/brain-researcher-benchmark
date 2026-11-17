@@ -314,7 +314,11 @@ class Runtime:
                 selector.register(stream,selectors.EVENT_READ,index)
             while selector.get_map() or not wait_owned:
                 budget.checkpoint()
-                if not wait_owned:
+                # Keep the original leader unreaped while either pipe is open.
+                # A descendant may still own a pipe after the leader exits;
+                # retaining its PID prevents reuse before failure cleanup can
+                # safely signal the original process group.
+                if not wait_owned and not selector.get_map():
                     pid,s,u=os.wait4(p.pid,os.WNOHANG)
                     if pid:
                         status=s;usage=u;wait_owned=True

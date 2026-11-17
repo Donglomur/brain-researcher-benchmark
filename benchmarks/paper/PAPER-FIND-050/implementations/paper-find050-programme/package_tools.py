@@ -23,6 +23,7 @@ MAX_MEMBER = 1048576
 MAX_TOTAL = 4194304
 MAX_MEMBERS = 128
 SCHEMA = "paper_find050_portable_source_v1"
+CURRENT_SCHEMA = "paper_find050_portable_source_current_v1"
 
 
 class PackageError(ValueError):
@@ -135,26 +136,55 @@ def closed_tree(root, names):
     require(seen == set(names) and directories == expected_dirs, "complete closed source tree")
 
 
-def verify(root, manifest_bytes, manifest_sha256):
+def verify(root, manifest_bytes, manifest_sha256, *, current_manifest=None):
     root = absolute(root)
     selected = {"path": MANIFEST, "bytes": manifest_bytes, "sha256": manifest_sha256}
     pin_fields(selected)
-    body = stable_read(root / MANIFEST, MAX_MEMBER, selected)
+    manifest_path = root / MANIFEST
+    if current_manifest is not None:
+        supplied = os.fspath(current_manifest)
+        manifest_path = absolute(os.path.dirname(supplied)) / relative(os.path.basename(supplied))
+        require(root not in manifest_path.parents, "current manifest outside preserved package")
+    body = stable_read(manifest_path, MAX_MEMBER, selected)
     manifest = decode(body)
-    require(type(manifest) is dict and set(manifest) == {"schema", "task_id", "members"}, "exact manifest fields")
-    require(manifest["schema"] == SCHEMA and manifest["task_id"] == "PAPER-FIND-050", "selected package identity")
+    fields = {"schema", "task_id", "members"}
+    predecessor = None
+    if current_manifest is not None:
+        fields.add("predecessor_manifest")
+    require(type(manifest) is dict and set(manifest) == fields, "exact manifest fields")
+    schema = SCHEMA if current_manifest is None else CURRENT_SCHEMA
+    require(manifest["schema"] == schema and manifest["task_id"] == "PAPER-FIND-050", "selected package identity")
+    if current_manifest is not None:
+        predecessor = manifest["predecessor_manifest"]
+        pin_fields(predecessor)
+        require(predecessor["path"] == MANIFEST, "preserved predecessor manifest")
+        historical = decode(stable_read(root / MANIFEST, MAX_MEMBER, predecessor))
+        require(type(historical) is dict and set(historical) == {"schema", "task_id", "members"}
+                and historical["schema"] == SCHEMA and historical["task_id"] == "PAPER-FIND-050",
+                "historical package identity")
+        require(type(historical["members"]) is list and 1 <= len(historical["members"]) <= MAX_MEMBERS,
+                "bounded historical manifest roster")
+        for row in historical["members"]:
+            pin_fields(row)
     rows = manifest["members"]
     require(type(rows) is list and 1 <= len(rows) <= MAX_MEMBERS, "bounded manifest roster")
     for row in rows:
         pin_fields(row)
     names = [row["path"] for row in rows]
     require(names == sorted(set(names)) and MANIFEST not in names, "sorted unique nonrecursive manifest")
-    require(sum(row["bytes"] for row in rows) + len(body) <= MAX_TOTAL, "bounded package bytes")
+    if predecessor is not None:
+        require(names == [row["path"] for row in historical["members"]], "same complete source roster")
+        original = {row["path"]: row for row in historical["members"]}
+        require(all(row == original[row["path"]] for row in rows
+                    if row["path"].startswith("source/contracts/") or row["path"] == "PREREQUISITES.md"),
+                "preserved scientific contracts and prerequisites")
+    historical_bytes = 0 if predecessor is None else predecessor["bytes"]
+    require(sum(row["bytes"] for row in rows) + len(body) + historical_bytes <= MAX_TOTAL, "bounded package bytes")
     closed_tree(root, {*names, MANIFEST})
     captured = {row["path"]: stable_read(root / row["path"], row["bytes"], row) for row in rows}
     require({"package_tools.py", "README.md", "source/critical/__init__.py",
              "source/contracts/PROGRAMME.json", "source/contracts/GATES.json"} <= captured.keys(), "complete package roles")
-    return VerifiedPackage(root, captured, selected)
+    return VerifiedPackage(root, captured, selected, manifest_path, predecessor)
 
 
 class CapturedLoader(importlib.abc.Loader):
@@ -172,8 +202,10 @@ class CapturedLoader(importlib.abc.Loader):
 
 
 class VerifiedPackage(importlib.abc.MetaPathFinder):
-    def __init__(self, root, captured, selected):
+    def __init__(self, root, captured, selected, manifest_path=None, predecessor=None):
         self.root, self.captured, self.selected = root, captured, selected
+        self.manifest_path = root / MANIFEST if manifest_path is None else manifest_path
+        self.predecessor = predecessor
         self.roles = {"critical": "source/critical/__init__.py",
                       "test_native_transport": "source/tests/test_native_transport.py",
                       "test_peer_transport": "tests/test_peer_transport.py",
@@ -275,10 +307,12 @@ def main(argv=None):
     parser.add_argument("--root", required=True, help="canonical absolute package root")
     parser.add_argument("--manifest-bytes", required=True, type=int)
     parser.add_argument("--manifest-sha256", required=True)
+    parser.add_argument("--current-manifest", help="explicit absolute current manifest; preserves the historical package manifest")
     parser.add_argument("--author-root", help="explicit existing exact external source; only with verify-author")
     args = parser.parse_args(argv)
     require((args.command == "verify-author") == (args.author_root is not None), "author-root only for explicit verify-author")
-    package = verify(args.root, args.manifest_bytes, args.manifest_sha256)
+    package = verify(args.root, args.manifest_bytes, args.manifest_sha256,
+                     current_manifest=args.current_manifest)
     if args.command == "verify":
         result = {"source_members": len(package.captured), "source_bytes": sum(map(len, package.captured.values())),
                   "scientific_qualification_granted": False}
