@@ -259,18 +259,28 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/docs/initial-evaluator-v1.md",
-                  "bytes": 10784,
-                  "sha256": "35db04d214514b59d9cbca2982ae7e4cff2e3c011fbe9409fd8b42a35db4a398"
+                  "bytes": 14324,
+                  "sha256": "10d73244f01148d911d9f7693944536478967604dc3bac7aacb24f4572da1034"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1743,
-                  "sha256": "86b3ad386d0f167dcf121c38f6248c0c11692ef0f2dcba9a7143a32cb5f8cc5e"
+                  "bytes": 2368,
+                  "sha256": "afc6f0657806b69d9fc8dc9543eec3291fa015806b344f0e77dce61030d949fc"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/evaluator.py",
                   "bytes": 17843,
                   "sha256": "ceee93c45768ae71fb65635083892215c23672878abf21ca90e5e045704ee9a6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/native-clock-provenance.json",
+                  "bytes": 4806,
+                  "sha256": "6956cedb642422ca767455708aa804edeec638d7bf99f510dbec27a81d0123f9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/native_clock_audit.py",
+                  "bytes": 8783,
+                  "sha256": "7dc1c59b5992b29076a14c141954bd50bf7ff4f37128258fa00c6bb3a7c130c8"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/provenance.json",
@@ -281,6 +291,11 @@ jobs:
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/tests/test_evaluator.py",
                   "bytes": 9090,
                   "sha256": "b1e66331c7c0f3ecc2edf16700d9a7d729c6ed37c34fb01cfd2f9f59511db512"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/tests/test_native_clock_audit.py",
+                  "bytes": 4403,
+                  "sha256": "9f984fd68d3098dcc3f9544e14ed182a548b4dc3d9e47d43701e0c92ee71431f"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-REP-003/task.json",
@@ -328,8 +343,8 @@ jobs:
               "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-ROOT-ADD-005/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 54 > 0
-          assert sum(row['bytes'] for row in rows) == 609665 <= 33554432
+          assert len(rows) == 57 > 0
+          assert sum(row['bytes'] for row in rows) == 631822 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -372,7 +387,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 609665,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 631822,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
