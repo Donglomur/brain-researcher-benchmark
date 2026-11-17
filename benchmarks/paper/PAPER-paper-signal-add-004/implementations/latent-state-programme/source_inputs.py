@@ -12,11 +12,47 @@ import io
 import json
 from pathlib import Path
 import zipfile
-from core import TASK, HMM, people, runs, identity, need, encoded
+from core import TASK, HMM, people, runs, identity, need, encoded, finite
 from safe_io import capture, child, durable_new, new_json, pin, strict, write_array
 
 CTF_BYTES = 684320829
 CTF_SHA = 'c6bb9b81844e156af410071d96f53d6e460bc5fa9e0347ee63fc5ab691857463'
+
+
+def ctf_demographics(raw):
+    """Validate the released CSV's literal person/row join before using ages.
+
+    The author scripts consume ages in row order. Reordering a malformed CSV
+    here would silently change that literal analysis, so require the original
+    subject00..subject64 order and retain the original member bytes separately.
+    The returned records also support the explicitly separate age sensitivity.
+    """
+    need(type(raw) is bytes, 'Original demographics CSV bytes')
+    try:
+        reader = csv.reader(io.StringIO(raw.decode('utf-8'), newline=''), strict=True)
+        header = next(reader, None)
+        need(header is not None and len(header) == 4 and
+             set(header) == {'name', 'age', 'gender', 'handedness'},
+             'Exact released demographics columns, without duplicate headers')
+        person_column, age_column = header.index('name'), header.index('age')
+        roster = people('ctf_static')
+        records = []
+        for index, row in enumerate(reader):
+            need(index < len(roster) and len(row) == len(header),
+                 'Exactly65 complete demographics rows, without extra fields')
+            person = row[person_column]
+            need(person == roster[index],
+                 'Literal ordered CTF person identity; no positional relabeling or sorting')
+            try:
+                age = float(row[age_column])
+            except ValueError as error:
+                raise ValueError('Original age must be numeric years') from error
+            need(finite(age) and 0 < age < 130, 'Finite original age in years')
+            records.append({'person': person, 'age': age})
+        need(len(records) == len(roster), 'All65 original demographics rows')
+    except (csv.Error, UnicodeDecodeError) as error:
+        raise ValueError('Well-formed UTF-8 original demographics CSV') from error
+    return records
 
 
 def numeric_original(raw):
@@ -43,7 +79,6 @@ def numeric_original(raw):
 
 
 def build(spec, output, limits):
-    import numpy as np
     need(set(limits) == {'read_bytes','write_bytes','array_bytes'} and
          all(type(v) is int and v > 0 for v in limits.values()), 'Full prospective preparation allocation')
     root = Path(output)
@@ -74,18 +109,21 @@ def build(spec, output, limits):
     with zipfile.ZipFile(io.BytesIO(archive)) as z:
         infos={i.filename:i for i in z.infolist() if not i.is_dir()}
         need(set(infos)==required and len(z.infolist())==133,'Exact original ZIP support')
-        for name in sorted(entries):
+        def read_member(name):
             d,i=entries[name],infos[name]
             need(i.file_size==d['bytes'] and i.compress_size==d['compressed_bytes'] and i.CRC==int(d['crc32'],16)
                  and not i.flag_bits&1, 'Exact released member metadata')
             used['read']+=i.file_size;need(used['read']<=limits['read_bytes'],'Expanded full source read charge')
             body=z.read(i);need(len(body)==i.file_size,'Complete CRC-checked member')
+            return body
+        # Check the age/person join before decoding signals or publishing data.
+        demographics=read_member('demographics.csv')
+        age_records=ctf_demographics(demographics)
+        native_files['ctf/demographics.csv']=save('ctf/demographics.csv',demographics)
+        import numpy as np
+        for name in sorted(required-{'demographics.csv'}):
+            body=read_member(name)
             native_files['ctf/'+name]=save('ctf/'+name,body)
-            if name=='demographics.csv':
-                rows=list(csv.DictReader(io.StringIO(body.decode('utf-8'))))
-                need(len(rows)==65 and 'age' in rows[0], 'Original ordered65-person age metadata')
-                age_records=[{'person':p,'age':float(r['age'])} for p,r in zip(people('ctf_static'),rows)]
-                continue
             family,person=Path(name).parts[0],Path(name).stem
             x=numeric_original(body);need(x.shape[1]==(1 if family=='bursts' else 38),'All original channels')
             group='ctf_bursts' if family=='bursts' else'ctf_networks'
