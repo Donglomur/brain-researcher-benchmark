@@ -209,6 +209,6 @@ def render(epoch_id, start_sample, channel_names, channel_values_volts,
                 canvas.pixel(point[0], middle - round(value / gain_volts * 30), raster.BLUE)
             previous = point
         if clipped:
-            canvas.text(1030, top - 12, 'CLIPPED: INCREASE UV/DIV', raster.RED, scale=1)
+            canvas.text(28, top + 40, 'CLIPPED: INCREASE UV/DIV', raster.RED, scale=1)
     canvas.text(390, 806, 'TIME SINCE RECORDING START (S)  /  SAMPLE CLOCK NEVER WRAPS', scale=1)
     return compress_png(canvas.png())
