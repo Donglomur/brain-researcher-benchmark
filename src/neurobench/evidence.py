@@ -19,7 +19,8 @@ PILOT = 'docs/science/difficulty-pilot-20261117.json'
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
-PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER)
+NATIVE = 'docs/status/operator-controls-20261116.json'
+PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -293,6 +294,127 @@ def engineering_records(doc, source, viewer=False):
     return [row]
 
 
+def native_operator_records(doc, source):
+    """Summarize the executed source revision without inspecting private receipts."""
+    require(type(doc.get('schema_version')) is int and doc['schema_version'] == 1
+            and doc.get('kind') == 'authentic_development_operator_controls'
+            and doc.get('purpose') == 'development-control', 'unsupported native operator control report')
+    source_commit = text(doc['source_commit'])
+    require(len(source_commit) == 40 and all(c in '0123456789abcdef' for c in source_commit),
+            'invalid native control source revision')
+    sleep_commit = text(doc['sleep_adapter_commit'])
+    require(10 <= len(sleep_commit) <= 40 and all(c in '0123456789abcdef' for c in sleep_commit),
+            'invalid native sleep adapter revision')
+    inventory = obj(doc['operator_source_inventory'])
+    require(set(inventory) == {'path', 'bytes', 'sha256'}
+            and inventory['path'] == 'src/neurobench/operator-sources.json', 'native operator source inventory differs')
+    integer(inventory['bytes'], 1)
+    digest(inventory['sha256'])
+    environment = obj(doc['native_environment'])
+    expected_environment = {'local_unix_socket': True, 'pull': 'never', 'network': 'none',
+                            'read_only': True, 'non_root': True,
+                            'memory_bytes_per_container': 4294967296, 'cpus_per_container': 2,
+                            'serialized_shared_lease': True}
+    require(all(type(environment.get(key)) is type(value) and environment[key] == value
+                for key, value in expected_environment.items()), 'native control environment boundary differs')
+    image = text(environment['image'])
+    require(image.startswith('sha256:'), 'native control image must be digest identified')
+    digest(image[7:])
+    environment = {**expected_environment, 'image': image,
+                   'docker_server': text(environment['docker_server']),
+                   'host_dispatch_python': text(environment['host_dispatch_python'])}
+    definitions = {
+        'NEURAL-077': {'prefix': 'eeg', 'rows': 400, 'files': 8,
+                       'condition': 'feature_programme_input_packet; fixed p=0.5 scorer control',
+                       'primary': 'equal-person balanced accuracy',
+                       'companion': 'equal-person natural log loss',
+                       'references': ['prior', 'eeg', 'eog_site', 'gross_amplitude', 'behavioral_history', 'eeg_history']},
+        'NEURAL-007': {'prefix': 'sleep', 'rows': 5450, 'files': 24,
+                       'condition': 'feature/common-model programme input packet; fixed uniform five-class scorer control',
+                       'primary': 'equal-person fixed-five-class macro-F1',
+                       'companion': 'balanced accuracy and signed reference differences',
+                       'references': ['YASA', 'RF']},
+    }
+    panels, controls = doc['panels'], doc['controls']
+    require(type(panels) is list and len(panels) == 2 and type(controls) is list and len(controls) == 8,
+            'complete two-panel native control report required')
+    panel_rows, seen = {}, set()
+    for panel in panels:
+        obj(panel)
+        task = text(panel['task_id'])
+        require(task in definitions and task not in panel_rows, 'unknown or duplicate native panel')
+        definition = definitions[task]
+        require(integer(panel['development_people']) == 2 and integer(panel['training_people']) == 6
+                and integer(panel['development_rows']) == definition['rows']
+                and integer(panel['public_input_files']) == definition['files'], 'native panel coverage differs')
+        references = texts(panel['fixed_reference_arms'])
+        require(len(references) == len(set(references)) and set(references) == set(definition['references'])
+                and panel['primary_metric'] == definition['primary']
+                and panel['companion_metric'] == definition['companion']
+                and panel['condition'] == definition['condition'], 'native panel metric, condition or references differ')
+        panel_rows[task] = panel
+    controls_by_task = {task: [] for task in definitions}
+    for control in controls:
+        obj(control)
+        task, identifier = text(control['task_id']), text(control['id'])
+        require(task in definitions and identifier not in seen, 'unknown task or repeated native control')
+        seen.add(identifier)
+        definition = definitions[task]
+        expected = {
+            'validate': (0, 'valid_prediction_contract', False, 0, 1),
+            'incomplete': (2, 'invalid_submission', False, 0, 1),
+            'score': (0, 'scored', True, 2 if task == 'NEURAL-077' else 1, 2),
+            'wrong-target': (3, 'scoring_error' if task == 'NEURAL-077' else 'operator_error', True, 1, 2),
+        }
+        prefix = definition['prefix'] + '-'
+        require(identifier.startswith(prefix) and identifier[len(prefix):] in expected, 'unknown native control case')
+        case = identifier[len(prefix):]
+        exit_code, status, private, loaders, containers = expected[case]
+        require(integer(control['expected_exit']) == exit_code and integer(control['observed_exit']) == exit_code
+                and control['status'] == status and control['private_stage_dispatched'] is private
+                and integer(control['target_loader_attempts']) == loaders
+                and integer(control['owned_containers']) == containers
+                and control['all_owned_containers_absent'] is True, 'native control outcome or access expectation contradicted')
+        require(integer(control['population_rows']) == definition['rows']
+                and control['condition'] == 'fixed_probability_software_control', 'native control population or condition differs')
+        selected = {key: control[key] for key in ('id', 'task_id', 'population_rows', 'condition', 'expected_exit',
+                    'observed_exit', 'status', 'private_stage_dispatched', 'target_loader_attempts',
+                    'owned_containers', 'all_owned_containers_absent')}
+        selected['expected_refusal'] = case in ('incomplete', 'wrong-target')
+        for name in ('retained_result', 'retained_receipt'):
+            pin = obj(control[name])
+            require(set(pin) == {'bytes', 'sha256'}, 'native retained evidence must have no locator')
+            selected[name] = {'bytes': integer(pin['bytes'], 1), 'sha256': digest(pin['sha256'])}
+        controls_by_task[task].append(selected)
+    totals = obj(doc['totals'])
+    require(integer(totals['native_attempts']) == len(controls)
+            and integer(totals['owned_containers']) == sum(row['owned_containers'] for row in controls)
+            and totals['owned_container_absence_verified'] is True, 'native control totals disagree')
+    require(all(integer(totals[key]) == 0 for key in
+                ('new_solver_attempts', 'new_model_calls', 'fits', 'acquisitions', 'environment_installs')),
+            'native software controls cannot claim new models, fits or acquisition')
+    result = []
+    for index, panel in enumerate(panels):
+        task = panel['task_id']
+        require(len(controls_by_task[task]) == 4, 'native panel controls incomplete')
+        row = record('native-operator-controls-20261116:' + task, task, 'native_operator_control', source,
+                     '/panels/' + str(index), doc['scope'], panel['condition'], doc['limits'])
+        row.update(coverage={key: panel[key] for key in ('development_people', 'development_rows', 'public_input_files', 'training_people')},
+                   primary_metric=panel['primary_metric'], companion_metric=panel['companion_metric'],
+                   fixed_reference_arms=list(panel['fixed_reference_arms']),
+                   controls=sorted(controls_by_task[task], key=lambda item: item['id']),
+                   native_environment=environment,
+                   source_provenance={'source_commit': source_commit, 'sleep_adapter_commit': sleep_commit,
+                                      'operator_source_inventory': dict(inventory)},
+                   execution_utc_date=text(doc['execution_utc_date']), report_date=text(doc['report_date']),
+                   public_input_observation=text(doc['public_input_observation']),
+                   counterexamples_preserved=texts(doc['counterexamples_preserved']),
+                   evidence_custody=text(doc['evidence_custody']), model_attempts_recorded=0,
+                   original_records_in_publication=False)
+        result.append(row)
+    return result
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -308,7 +430,8 @@ def load(root, task_ids=None):
         require(all(type(item) is str and item for item in task_ids), 'invalid task ID allowlist')
     records, reports = {}, []
     for relative, project in ((PILOT, pilot_records), (HISTORY, historical_records),
-                              (DIRECT, engineering_records), (VIEWER, lambda doc, source: engineering_records(doc, source, True))):
+                              (DIRECT, engineering_records), (VIEWER, lambda doc, source: engineering_records(doc, source, True)),
+                              (NATIVE, native_operator_records)):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -331,7 +454,14 @@ def load(root, task_ids=None):
         'direct_interpretation_attempts': 0, 'viewer_interpretation_attempts': 0,
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'],
         'historical_profiles': categories['historical_paper_calibration'] + categories['historical_programme_control'],
-        'historical_programme_controls': sum(len(row.get('controls', [])) for items in records.values() for row in items),
+        'historical_programme_controls': sum(len(row.get('controls', [])) for items in records.values() for row in items
+                                            if row['category'] == 'historical_programme_control'),
+        'native_operator_controls': sum(len(row['controls']) for items in records.values() for row in items
+                                        if row['category'] == 'native_operator_control'),
+        'native_operator_control_reports': len({row['source']['path'] for items in records.values() for row in items
+                                               if row['category'] == 'native_operator_control'}),
+        'native_control_tasks': sum(any(row['category'] == 'native_operator_control' for row in items)
+                                    for items in records.values()),
         'engineering_reports_with_generated_controls': sum('software_controls' in row for items in records.values() for row in items),
     }
     return {'schema_version': 1, 'kind': 'public_recorded_evidence_summary',
