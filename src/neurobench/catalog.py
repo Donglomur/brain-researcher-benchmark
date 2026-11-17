@@ -647,12 +647,14 @@ def markdown_link(label, path, base=OUTPUT):
 
 def paper_count_text(catalog):
     counts = catalog['paper_improvement_counts']
-    return (f"Paper improvement audit: **{counts['covered']}/{counts['registered']} covered**; "
+    return (f"Current paper-improvement contract audit: **{counts['covered']}/{counts['registered']} covered**; "
             f"**{counts['improvement_ready']} improvement-ready**, **{counts['design_ready']} source-grounded designs**, "
             f"**{counts['source_unresolved']} source-unresolved**, **{counts['ineligible']} ineligible**, "
             f"**{counts['not_audited']} not audited**. Eligibility means an ordered source task was identified; "
             'it does not establish an executable or scientifically qualified comparison. '
-            'Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.\n\n')
+            'Paper reproduction is a separate first-class outcome; these counts describe the existing improvement contracts, '
+            'not reproduction qualification. Numerical fidelity remains a necessary comparison check. '
+            'A new split is an extension, never a same-task paper victory.\n\n')
 
 
 def neural_count_text(catalog):
@@ -664,6 +666,7 @@ def neural_count_text(catalog):
     return (f"Neural understanding revision: **{summary['covered']}/{summary['registered']} covered**; "
             + dispositions + '. These describe delivered source scope. Direct observation, typed-viewer interpretation, '
             'tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. '
+            'Native interpretation and tool/model building are separate first-class outcomes. '
             'Programme performance does not establish direct interpretation.\n\n')
 
 
@@ -672,12 +675,17 @@ def evidence_text(catalog, base=OUTPUT):
     counts = evidence['counts']
     if not counts['tasks_with_recorded_evidence']:
         return ''
+    probes = counts.get('author_model_inference_probes', 0)
+    probe_text = (f"Separately, **{probes} author-model inference probes** record partial source-model execution; "
+                  'complete author calibration remains unqualified. ') if probes else ''
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
             f"{counts['authentic_engineering_reports']} authentic-input engineering reports, "
-            f"{counts.get('paper_source_preparation_reports', 0)} paper source-preparation reports and "
+            f"{counts.get('paper_source_preparation_reports', 0)} paper and "
+            f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
+            + probe_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')
@@ -689,7 +697,10 @@ def render(catalog):
     intro = ('This is a public source inventory, not a list of qualified benchmarks. '
              'Scientific and submission readiness are **unknown here**. Runtime manifests '
              'and source components do not establish successful execution. Registered IDs '
-             'may alias earlier contract identifiers; they do not count independent studies or datasets.\n\n')
+             'may alias earlier contract identifiers; they do not count independent studies or datasets.\n\n'
+             'The project targets four first-class outcomes: paper reproduction, paper improvement, native neural interpretation, '
+             'and neural tool/model building. Outcome conditions share scientific task IDs while retaining separate evidence and qualification. '
+             + markdown_link('Read the four-outcome design', 'docs/design/four-outcomes.md') + '.\n\n')
     files['README.md'] = (f'# Neuroscience task catalog\n\n{intro}' + evidence_text(catalog) + paper_count_text(catalog) + neural_count_text(catalog) +
         f"Browse **{c['total']} registered questions**: [{c['paper']} paper tasks](paper.md) and "
         f"[{c['neural']} neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications "
@@ -853,11 +864,13 @@ def render_tracks(catalog):
     files = {}
     artifacts = {record['id']: record for record in catalog['implementations']}
     descriptions = {
-        'paper': ('Paper research', 'Success requires surpassing the source paper on the same original scientific task. '
+        'paper': ('Paper research', 'Paper reproduction and paper improvement are separate first-class outcomes on the same scientific task. '
+                  'Reproduction assesses faithful recovery of the source result; improvement assesses superior performance. '
                   'Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. '
                   'Compare paper + data with paper + data + official code under fixed matched budgets; '
-                  'historical reproduction is calibration only.'),
-        'neural': ('Neural-data understanding', 'Infer specified targets from permitted neural and behavioral observations. '
+                  'existing historical attempts retain their recorded scope and are not automatically qualified for either outcome.'),
+        'neural': ('Neural-data understanding', 'Native interpretation and tool/model building are separate first-class outcomes. '
+                   'Infer specified targets from permitted neural and behavioral observations. '
                    'Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes '
                    'are distinct conditions; each requires its own competent comparator and evidence.'),
     }
@@ -908,14 +921,16 @@ def render_tracks(catalog):
             if row.get('paper_improvement'):
                 improvement = row['paper_improvement']
                 text += ('## Current paper-improvement objective\n\n'
-                         '**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.\n\n'
+                         '**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. '
+                         'Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.\n\n'
                          '**Disposition:** ' + markdown_text(improvement['disposition']) + '. '
                          + markdown_text(improvement.get('disposition_reason', '')) + '\n\n'
                          '- ' + markdown_link('Source-grounded improvement contract', improvement['contract']['path'], task) + '\n'
-                         '- ' + (markdown_link('Preserved historical task definition (calibration only)', improvement['historical_specification']['path'], task)
+                         '- ' + (markdown_link('Preserved historical task definition', improvement['historical_specification']['path'], task)
                                  if improvement['historical_specification'] else
                                  markdown_link('Initial source-paper task registration (no predecessor)', improvement['initial_registration']['path'], task)) + '\n\n'
-                         'Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. '
+                         'Within the existing improvement contract, historical graders and pilot scores retain their calibration role. '
+                         'They are not automatically qualified reproductions or improvements. '
                          'Published paper results, reproduced author baselines, and verified current SOTA are separate claims. '
                          'A new split, easier inputs, smaller cohort or changed metric is an extension.\n\n')
             if row.get('neural_understanding'):
