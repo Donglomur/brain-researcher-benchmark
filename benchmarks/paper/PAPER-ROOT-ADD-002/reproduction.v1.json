@@ -1,0 +1,409 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-002",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Computational reproduction is a distinct, meaningful outcome for the original V1 neural-only decoding task, but original numeric targets, complete finding/control and observation identities, EEG grouping parity and authentic submitted-analysis verification remain unresolved. Existing generated controls and artifact conversion do not establish AI reproduction.",
+  "source_paper": {
+    "title": "Non-invasive decoding of typed sentences from human brain activity",
+    "url": "https://www.nature.com/articles/s41593-026-02303-2"
+  },
+  "evidence": [
+    {
+      "id": "typing-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02303-2",
+      "locator": "Fig. 2e–h; Brain2Qwerty ablations; Methods: preprocessing, train/validation/test splits, Evaluation/CER",
+      "supports": "Original V1 modalities, ablated neural-only versus language-assisted systems, and sentence-level CER target."
+    },
+    {
+      "id": "typing-export",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/scripts/extract_predictions.py",
+      "locator": "compute_cer, process_json, SUBJECT_MERGES, print_summary (lines 20–87)",
+      "supports": "Scores the presented true sentence, merges duplicate MEG recording IDs, and averages sentence CER within subject then across subjects."
+    },
+    {
+      "id": "typing-config",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/config/xp_config.py",
+      "locator": "experiment_config (lines 17–77)",
+      "supports": "Pinned current source uses 300 epochs, batch64, learning rate5e-5, split seed1; comment explicitly identifies a changed learning rate."
+    },
+    {
+      "id": "typing-split",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/transforms.py",
+      "locator": "SpanishBCBLPreprocessing; Brain2QwertyV1Splitter (lines 17–190)",
+      "supports": "Participant/event cleaning and connected-component TF-IDF similarity clustering with keystroke-weighted greedy split allocation."
+    },
+    {
+      "id": "typing-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/README.md",
+      "locator": "Publications, Code, Data",
+      "supports": "V1 links the source paper and SpanishBCBL; V2 data are separately embargoed."
+    },
+    {
+      "id": "typing-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/evaluator.py",
+      "locator": "module docstring; sentence_metrics; summarize; evaluate_validated",
+      "supports": "Historical scorer is a presented-sentence export implementation; it explicitly disclaims original reference competence and scientific qualification."
+    },
+    {
+      "id": "typing-callback",
+      "kind": "author_code",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/callbacks.py",
+      "locator": "LogSentencePredictions._collect_batch and _save",
+      "supports": "Per-keystroke neural argmax, typed classes, presented true text and logits; rank-zero-only save and absence of observed button_UID in the raw callback file."
+    },
+    {
+      "id": "typing-sampler",
+      "kind": "author_code",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/utils.py",
+      "locator": "SentenceGroupedDistributedSampler._distribute; CHAR_INDEX; participant aliases",
+      "supports": "Whole-sentence rank assignment, repeated raw-sample padding on shorter nonempty ranks, original 29-class output alphabet and MEG alias bookkeeping."
+    },
+    {
+      "id": "typing-eeg-grouping",
+      "kind": "author_code",
+      "url": "https://github.com/facebookresearch/brain2qwerty/blob/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/scripts/extract_predictions.py",
+      "locator": "extract_subject: S(\\d+) regex and unknown fallback; print_summary",
+      "supports": "Raw author export recognizes S<n> MEG tokens but not registered numeric EEG participant tokens; source-exact EEG grouping parity remains unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict V1 sentence characters from keystroke-aligned EEG or MEG. Match the paper Conv+Trans ablation for the registered neural-only condition; full Brain2Qwerty with N-gram correction is a separate source condition.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "SpanishBCBL V1 is identified by the author release. The registration pins revision88f9096c6ce3a3fb17cc7b8e3131ff7f96da5684, but exact paper-era recording/event payload equivalence has not been established.",
+      "evidence_ids": [
+        "typing-release",
+        "typing-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Fig.2 reports20 EEG and19 MEG participants. Author export merges S18→S1, S14→S4, S10/S21→S5. The complete original modality-specific recording/session and sentence roster remains unbound.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-split"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Recover the exact original fixed-seed sentence-cluster train/validation/test membership. Paper describes80/10/10 agglomerative TF-IDF clustering; pinned code builds similarity-connected components and greedily targets keystroke counts. Equal ratios alone do not prove identical heldout sentences.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-split",
+        "typing-config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "V1 neural-only condition supplies0.5-second EEG/MEG windows around known keystroke timing and approved participant/sensor metadata. No reference sentence, typed character, language-model rescoring, V2 recordings or added calibration labels may enter inference.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-config"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper specifies0.1–20Hz filtering,50Hz resampling,−0.2 to+0.3s windows, baseline correction and robust scaling. Resolve current extractor baseline conventions, typed versus intended targets, cleaning and training-default changes against the paper recipe before admission.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-config",
+        "typing-split"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "CER is character Levenshtein edits divided by reference sentence length. The pinned export compares predictions with true/presented sentences; WER is secondary and cannot replace the source CER.",
+      "evidence_ids": [
+        "typing-export"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Average sentence CER within each source participant, then equally across participants, separately for EEG and MEG; source export reports subject-level SEM. Do not pool characters or merge modalities into an easier score.",
+      "evidence_ids": [
+        "typing-export",
+        "typing-eeg-grouping"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain separate EEG and MEG original V1 neural-only Conv+Trans CER panels, every original held-out sentence and ordered keystroke, source-export WER companions and participant CER SEM. The exact Fig.2e–h ablation/control correspondence and complete modality-specific original person/session/sentence roster are not yet authenticated; the declared findings do not certify panel completeness. Full Brain2Qwerty language-assisted headline values cannot substitute for this neural-only panel.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-split",
+        "typing-callback",
+        "typing-sampler"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Original V1 neural-only offline decoding uses the approved 0.5-second EEG or MEG windows around known keystroke onsets and participant/sensor metadata, with original training and validation labels only for development. Presented test sentences, typed test characters and grading targets must be excluded from candidate inference; no added calibration labels, language-model rescoring or V2 observations. The public data/code release does not by itself establish an enforced exposure boundary.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-config",
+        "typing-callback",
+        "typing-release"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "meg_conv_trans_cer",
+      "kind": "scalar",
+      "description": "Original MEG V1 neural-only Conv+Trans character error rate on the complete original held-out sentence panel.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "character edits per presented-reference codepoint (dimensionless rate; not percent)",
+      "aggregation": "Literal per-sentence Levenshtein distance divided by presented-reference length; mean within biological person, then equal-person mean within this modality. Preserve all cases and undefined support; do not pool characters or modalities.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The matching original Conv+Trans modality-specific CER target has not been recovered. The language-assisted headline is a different source condition. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    },
+    {
+      "id": "meg_conv_trans_wer",
+      "kind": "scalar",
+      "description": "Required source-export companion MEG V1 neural-only Conv+Trans word error rate on the same complete sentence/keystroke panel; it does not replace CER.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "word edits per presented-reference whitespace token (dimensionless rate; not percent)",
+      "aggregation": "Whitespace-token Levenshtein edits divided by reference word count for each sentence; mean within biological person then equal-person mean within this modality, without changing text normalization or omitting undefined support.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source export defines WER but the matching original full-panel modality-specific WER target is not recovered; no value is inferred from CER. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    },
+    {
+      "id": "meg_conv_trans_cer_sem",
+      "kind": "scalar",
+      "description": "Required source-export companion MEG V1 neural-only Conv+Trans participant-level CER standard error of the mean.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "CER rate standard error (dimensionless rate; not a confidence interval)",
+      "aggregation": "Sample standard deviation (ddof=1) of biological-person mean sentence CER divided by the square root of the grouped person count, separately for this modality. Complete-support and source conditional-support summaries must remain distinct.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original person-level CER values and matching original SEM have not been recovered. A descriptive SEM does not supply a reproduction confidence level, interval or justified tolerance. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    },
+    {
+      "id": "eeg_conv_trans_cer",
+      "kind": "scalar",
+      "description": "Original EEG V1 neural-only Conv+Trans character error rate on the complete original held-out sentence panel.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "character edits per presented-reference codepoint (dimensionless rate; not percent)",
+      "aggregation": "Literal per-sentence Levenshtein distance divided by presented-reference length; mean within biological person, then equal-person mean within this modality. Preserve all cases and undefined support; do not pool characters or modalities.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-eeg-grouping"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The matching original Conv+Trans modality-specific CER target has not been recovered. The language-assisted headline is a different source condition. Resolve the author export S<n>-only subject regex versus explicit scientific EEG person grouping before comparison. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    },
+    {
+      "id": "eeg_conv_trans_wer",
+      "kind": "scalar",
+      "description": "Required source-export companion EEG V1 neural-only Conv+Trans word error rate on the same complete sentence/keystroke panel; it does not replace CER.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "word edits per presented-reference whitespace token (dimensionless rate; not percent)",
+      "aggregation": "Whitespace-token Levenshtein edits divided by reference word count for each sentence; mean within biological person then equal-person mean within this modality, without changing text normalization or omitting undefined support.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-eeg-grouping"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source export defines WER but the matching original full-panel modality-specific WER target is not recovered; no value is inferred from CER. Resolve the author export S<n>-only subject regex versus explicit scientific EEG person grouping before comparison. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    },
+    {
+      "id": "eeg_conv_trans_cer_sem",
+      "kind": "scalar",
+      "description": "Required source-export companion EEG V1 neural-only Conv+Trans participant-level CER standard error of the mean.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "CER rate standard error (dimensionless rate; not a confidence interval)",
+      "aggregation": "Sample standard deviation (ddof=1) of biological-person mean sentence CER divided by the square root of the grouped person count, separately for this modality. Complete-support and source conditional-support summaries must remain distinct.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-eeg-grouping"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original person-level CER values and matching original SEM have not been recovered. A descriptive SEM does not supply a reproduction confidence level, interval or justified tolerance. Resolve the author export S<n>-only subject regex versus explicit scientific EEG person grouping before comparison. No numerical equivalence band is justified by the reviewed source evidence; none is invented.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source estimate and person-level variation, then independently justify a reproduction agreement rule; subject SEM is not an equivalence interval.",
+        "independent_unit": "Biological participant within modality; repeated recording aliases, sessions, shared sentences and model seeds are not additional independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original roster and source estimator/seed variability are unbound. No sample minimum, confidence level, test threshold or deterministic-equivalence rule has been scientifically justified.",
+        "evidence_ids": [
+          "typing-paper",
+          "typing-export"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original Conv+Trans CER values for both modalities, source-export WER companions, person-level CER and SEM targets are not recovered; all expected values and agreement tolerances remain unresolved.",
+    "The exact original Fig.2e–h ablation/control correspondence and immutable complete neural-only finding panel are unbound. The identified findings cannot be certified complete before that source review; do not replace the task with full-system language-assisted results.",
+    "Paper-era SpanishBCBL payload equivalence, complete modality-specific biological-person/session/sentence/keystroke rosters and original sentence-cluster split membership remain unauthenticated.",
+    "Paper versus current code clustering, preprocessing/baseline, typed versus intended/presented conventions and training defaults remain unreconciled.",
+    "The author export S<n> subject regex can pool numeric EEG identifiers as unknown, whereas the benchmark evaluator uses explicit EEG person identities; source-exact EEG aggregation parity is unresolved.",
+    "The existing bridge and evaluator verify supplied artifacts only. No authentic submitted-analysis execution interface, common input manifest, protected inference boundary, source-native independent verification program or complete original data preparation is qualified.",
+    "Author callback rank-zero saving and repeated-sample distributed padding cannot establish full test coverage. Actual observed button_UID traces and a complete unpadded source-equivalent execution must be independently verified; no inferred ordering or deduplication is admitted.",
+    "Matched paper+data versus paper+data+author-code delivery, code-only information addition, exposure policy and cumulative access/resource budgets are not frozen for either outcome."
+  ]
+}
