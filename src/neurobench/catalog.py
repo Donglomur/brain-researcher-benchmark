@@ -675,8 +675,10 @@ def evidence_text(catalog, base=OUTPUT):
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
-            f"{counts['authentic_engineering_reports']} authentic-input engineering reports are separate software evidence. "
-            + markdown_link('Read the published evidence', evidence['reports'][0]['path'], base)
+            f"{counts['authentic_engineering_reports']} authentic-input engineering reports, "
+            f"{counts.get('paper_source_preparation_reports', 0)} paper source-preparation reports and "
+            f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
+            + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')
 
