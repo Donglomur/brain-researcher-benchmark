@@ -1,0 +1,1432 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-ADD-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicitly selected complete Figure3 encoding andFigure4 decoding are independently represented as source-indexed numeric families. Missing authentic support/axes, paper-code target/method reconciliation, original references and comparison criteria keep reproduction unresolved. The narrower current likelihood improvement component remains genuine evidence but does not provide complete-family pairing. No old28 finding inventory or combined scalar stands in for the selected primary.",
+  "source_paper": {
+    "title": "Encoding of cerebellar dentate neuron activity during visual attention in rhesus macaques",
+    "url": "https://elifesciences.org/articles/99696"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Results: Encoding of task events, Decoding trial variables; Figures 3–4; Methods: Encoding model and Decoding model",
+      "supports": "Identifies the dentate encoding/decoding analyses, source likelihood-based model selection, and descriptive reported outputs."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/fitSingleCellGLM.m",
+      "locator": "fitSingleCellGLM, baselineTrials default and design construction around lines 139–159",
+      "supports": "Defines six event kernels and a response-derived five-trial moving-average baseline before cross-validation."
+    },
+    {
+      "id": "category",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "locator": "fit method, cvTrainSel generation, cv1NegLnL selection and cv2NegLnL evaluation around lines 496–529",
+      "supports": "Separate trial-based cross-validation assignments select regularization and evaluate goodness of fit; retained fitInfo is a possible author-baseline recovery route, not an observed score."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.1rn8pk14s",
+      "locator": "January 22, 2025 release; README Files and variables",
+      "supports": "cells4.2.mat.zip supplies per-cell trials, monkey/cell identities, spike seconds, event milliseconds and eye traces; archive also contains some Purkinje cells."
+    },
+    {
+      "id": "encoding-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure3A-E; Methods Encoding model",
+      "supports": "Unspecialized and category-modulated Poisson models, four current/past direction category families, modIdx distributions, hierarchy fractions and correct/error example response curves."
+    },
+    {
+      "id": "decoding-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure4A-D; Methods Decoding model",
+      "supports": "Current outcome/current gap/past outcome/past gap significant-cell fractions by monkey, event and200ms bin, trial-category balancing, permutation evidence and between-monkey Fisher exact comparisons."
+    },
+    {
+      "id": "encoding-figure-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/erasmus_encoding_figure.m",
+      "locator": "modelTrialPredictions lines96-180; plotModulationStrength; plotModulationCategories; plotModelPredictions call88/definition372",
+      "supports": "Figure derivation retains native trial frames/categories/reward masks,5ms canonical epoch interpolation, category-specific normalized curves and modIdx; source category fractions pool rare combinations under2%. This is distinct from the raw-bin likelihood calculation."
+    },
+    {
+      "id": "converter-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/convertToGLMData.m",
+      "locator": "Experiment values/timings and bin-size default; per-cell trial filtering and seconds-to-ms spike conversion",
+      "supports": "Native neuron/trial/event fields, spike units, direction conventions and exclusions must remain linked to source cells; default50ms bins require reconciliation with paper25ms bins."
+    },
+    {
+      "id": "source-score-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "locator": "poissonLogLikelihood97-100; xvalRegularizationPath152-174; specialize448-452; regress496-539; jointPrediction543-580",
+      "supports": "cv2NegLnL is negative summed Poisson LL including log-factorials, without normalization. Hierarchy scores use original global-bin prediction assembly; inherited leaf fitInfo can refer to parent support. Generated folds are local and not assigned to the saved cvTrainSel property; cv1NegLnL is overwritten."
+    },
+    {
+      "id": "decoder-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/decodeTrialOutcome.m",
+      "locator": "19-20 folds/shuffles;33-34 SVM/ECOC;53 target exclusions;192-216 balancing;242-265 weighted predictions/permutation accuracy",
+      "supports": "Actual native masks, trial weights, targets, predictions and accuracy arrays. Publication logistic/current-past-outcome mapping remains unresolved; current source code is not assumed publication-equivalent."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Explicitly root-selected option C: complete Figure 3 category encoding and Figure 4 current/past decoding as distinct component outcomes. Preserve the Figure 3 unspecialized/hierarchical category comparison, current/past dependencies, per-monkey modulation distributions/proportions and original direction-/outcome-conditioned response examples; preserve the Figure 4 full current/past variables, event-aligned curves, eligible per-monkey cell/trial support, balancing and null/control comparisons including the weak/null past-gap result. Every selected panel retains its authentic source definitions and indispensable controls; no combined scalar or partial-component completion.",
+      "evidence_ids": [
+        "encoding-paper",
+        "decoding-paper",
+        "fit",
+        "decoder-code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad DOI 10.5061/dryad.1rn8pk14s, January 22, 2025 cells4.2.mat.zip release. Only metadata was reviewed; no neural payload was opened.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper records 305 DN neurons from macaques Mi and Mo. Exact analysis-included cells/trials must be reconciled to the archive, whose README also notes Purkinje-cell records; all eligible source DN cells must be retained.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Figure3 requires authentic original trial-based regularization and goodness-of-fit CV plus hierarchy selection. Source-generated fold assignments are not preserved in saved model objects. Figure4 requires its original per-target validation/null protocol, with paper logistic versus active3fold SVM/ECOC50shuffle mapping unresolved. No guarded block or cross-animal split substitutes for either selected panel.",
+      "evidence_ids": [
+        "category",
+        "source-score-code",
+        "decoder-code",
+        "decoding-paper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Figure3 uses source fixation, C onset, delay, choice-target, saccade and reward timing with current/past category-dependent responses and a response-derived five-trial rate baseline. Figure4 uses original per-cell spikes in event-aligned200ms windows, current/past labels and source inverse-category-frequency balancing. Resolve prior-choice versus past-outcome and active target exclusions; no added eye predictors, training-only null or altered input privileges are admitted.",
+      "evidence_ids": [
+        "fit",
+        "encoding-paper",
+        "decoding-paper",
+        "decoder-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source trial/cell exclusions, original direction/event/history conventions, spike seconds-to-ms conversion and native retained-bin support. Reconcile Figure3 paper25ms counts with converter50ms default, response-derived baseline and event-warped model-figure derivations. Figure4 retains original200ms alignments and source balancing/null masks; exact target/configuration and original plotted coordinates remain unbound.",
+      "evidence_ids": [
+        "fit",
+        "converter-code",
+        "encoding-figure-code",
+        "decoding-paper",
+        "decoder-code"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Selected Figure3 quantities are source per-cell prediction/unnormalized Poisson LL support, category-conditioned modIdx distributions, complete hierarchy proportions and original direction/correct-error response curves. Selected Figure4 quantities are all per-monkey current/past event-bin decodable-cell fractions, counts/denominators and source null/Fisher comparisons, supported by weighted prediction/null arrays. Numeric references and reproduction criteria remain unbound; no combined scalar or larger-biological-effect victory is defined.",
+      "evidence_ids": [
+        "source-score-code",
+        "encoding-paper",
+        "encoding-figure-code",
+        "decoding-paper",
+        "decoder-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Report complete Figure3 andFigure4 components separately with their original cell/category/monkey/event/time support. Preserve source category RMS/histogram normalization and pooled rare-category grouping followed by per-monkey proportions, full source example curves, and per-monkey Figure4 numerator/denominator curves. No source cross-cell predictive scalar or cross-component aggregate is authenticated; success on one component cannot discharge the other.",
+      "evidence_ids": [
+        "encoding-paper",
+        "encoding-figure-code",
+        "decoding-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete selected Figure3A-E andFigure4A-D, represented by separate indexed numeric families with all original model/category comparisons, Mi/Mo distributions/proportions, original example curves, balanced current/past decoding curves and null/Fisher controls. Original structured support/reference/criteria remain unresolved. Figure1 behavioral trends, Figure2 independent modulation census, PCA/ramping andFigure5 anatomy are separately retained evidence, not blanket obligations; authenticated companions remain necessary when a selected claim actually depends on them.",
+      "evidence_ids": [
+        "encoding-paper",
+        "encoding-figure-code",
+        "decoding-paper",
+        "decoder-code"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "The same authentic original paper, Dryad observations and source scientific identities must underlie both paper+data and paper+data+author-code conditions; approved code is the only added information. Disclose source response-derived smoothing and selected CV; source outputs, operator targets/verifiers and prior attempt history are not participant inputs. Exact delivery/observation identities, source-code closure, target reconciliation, exposure and access/resource budgets are unbound. This standalone primary is not paired to the narrower current improvement contract.",
+      "evidence_ids": [
+        "paper",
+        "data",
+        "fit",
+        "decoder-code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure3_model_prediction_likelihood_support",
+      "kind": "indexed_array_family",
+      "description": "Figure3A source unspecialized-versus-selected hierarchical category model comparison, with original per-cell predictions and likelihood support. This genuine modeling evidence cannot alone discharge the Figure3 category distributions or Figure4 decoding.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure3_model_prediction_likelihood_support",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "unspecialized_mean_counts",
+            "manifest_key": "unspecialized_mean_counts",
+            "source_quantity": "Source unspecialized stitched-CV expected spike counts at every original retained bin.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_bin",
+                "units": "original source bin identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Recover original ordered count/prediction bins and trial-to-bin map; no synthetic regular grid is substituted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "expected spikes per source bin",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "No cross-bin normalization; preserve source mean=exp(XW), full eligible source support and original response-derived baseline.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "monkey",
+                "cell_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Match authentic original source identities, support and derivation before comparison; record keys name scientific identifiers, not invented record values. Candidate-selected matching/subsets are not permitted.",
+                "evidence_ids": [
+                  "encoding-paper",
+                  "fit",
+                  "source-score-code",
+                  "encoding-figure-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "hierarchical_mean_counts",
+            "manifest_key": "hierarchical_mean_counts",
+            "source_quantity": "Final source hierarchy joint stitched-CV expected counts at every original global bin.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_bin",
+                "units": "original source bin identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Recover original ordered count/prediction bins and trial-to-bin map; no synthetic regular grid is substituted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "expected spikes per source bin",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Assemble the complete disjoint leaf predictions on original bin positions; never sum inherited parent-support fitInfo as independent child scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "monkey",
+                "cell_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Match authentic original source identities, support and derivation before comparison; record keys name scientific identifiers, not invented record values. Candidate-selected matching/subsets are not permitted.",
+                "evidence_ids": [
+                  "encoding-paper",
+                  "fit",
+                  "source-score-code",
+                  "encoding-figure-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "model_log_likelihood",
+            "manifest_key": "model_log_likelihood",
+            "source_quantity": "Per-cell source unspecialized and joint hierarchical Poisson log likelihoods.",
+            "membership": "data_dependent",
+            "shape": [
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_model_stage",
+                "units": "model stage",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "unspecialized",
+                    "final_hierarchical"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "nats on original cell support",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Sum over original bins of -mu+y*log(mu)-lgamma(y+1), including factorial terms; cv2NegLnL is its negative. No nats/spike or cross-cell macro-average is introduced.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "monkey",
+                "cell_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Match authentic original source identities, support and derivation before comparison; record keys name scientific identifiers, not invented record values. Candidate-selected matching/subsets are not permitted.",
+                "evidence_ids": [
+                  "encoding-paper",
+                  "fit",
+                  "source-score-code",
+                  "encoding-figure-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure3_count_prediction_bins",
+        "figure3_model_selection_lineage"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare source-equivalent per-cell original-count predictions and LL on exact original support; preserve model stage and native arithmetic. Arithmetic replay tolerance is not a scientific equivalence margin.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "evidence_ids": [
+        "encoding-paper",
+        "fit",
+        "source-score-code",
+        "encoding-figure-code"
+      ]
+    },
+    {
+      "id": "figure3_modulation_distributions",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure3B per-monkey modulation-index values and distributions for current/past gap and saccade categories; no overall LL or averaged-category replacement.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure3_modulation_distributions",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "cell_modulation_index",
+            "manifest_key": "cell_modulation_index",
+            "source_quantity": "Original per-cell modIdx for each of the four Figure3B category families and each monkey.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_cell",
+                "units": "original DN cell identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Recover complete source eligible DN cells for this category/animal; never choose candidate-dependent support."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless modulation index",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source category/outcome-conditioned prediction ratios relative to unspecialized prediction, canonical event-time interpolation and source RMS/time/category reduction; only original hierarchy-included category support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "monkey",
+                "encoding_category"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Match authentic original source identities, support and derivation before comparison; record keys name scientific identifiers, not invented record values. Candidate-selected matching/subsets are not permitted.",
+                "evidence_ids": [
+                  "encoding-paper",
+                  "fit",
+                  "source-score-code",
+                  "encoding-figure-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "modulation_histogram_probability",
+            "manifest_key": "modulation_histogram_probability",
+            "source_quantity": "Original per-monkey, per-category modIdx histogram probabilities.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              4,
+              null
+            ],
+            "axes": [
+              {
+                "name": "monkey",
+                "units": "source subject",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "Mi",
+                    "Mo"
+                  ]
+                }
+              },
+              {
+                "name": "encoding_category",
+                "units": "source category family",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "current_gap_direction",
+                    "current_saccade_direction",
+                    "past_gap_direction",
+                    "past_saccade_direction"
+                  ]
+                }
+              },
+              {
+                "name": "modulation_bin",
+                "units": "dimensionless modIdx bin",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original published/native histogram edge mapping remains unbound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction of source category-eligible cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original native histogram bin edges, category masks and within-animal denominator; no selected bins or population mean substitute.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "modulation_histogram_counts",
+            "manifest_key": "modulation_histogram_counts",
+            "source_quantity": "Cell count in every source modulation histogram bin.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              4,
+              null
+            ],
+            "axes": [
+              {
+                "name": "monkey",
+                "units": "source subject",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "Mi",
+                    "Mo"
+                  ]
+                }
+              },
+              {
+                "name": "encoding_category",
+                "units": "source category family",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "current_gap_direction",
+                    "current_saccade_direction",
+                    "past_gap_direction",
+                    "past_saccade_direction"
+                  ]
+                }
+              },
+              {
+                "name": "modulation_bin",
+                "units": "dimensionless modIdx bin",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Same original histogram bin identities as probabilities."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Counts on identical original cell/category/bin support underlying each probability; preserve zero-count bins and denominator derivation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "modulation_bin_edges",
+            "manifest_key": "modulation_bin_edges",
+            "source_quantity": "Source numeric edge coordinates used for the modulation distributions.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "edge_index",
+                "units": "source histogram edge position",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Recover exact native/display edge sequence; no invented coordinates or range."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless modulation index",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Native figure code supplies the histogram construction, but its exact original publication reference/configuration remains unverified.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure3_modulation_derivation"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Assess complete cell-level modIdx and all source histogram ordinates/edges with authenticated source category/cell correspondence; preserve both monkeys and all four category families.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "evidence_ids": [
+        "encoding-paper",
+        "fit",
+        "source-score-code",
+        "encoding-figure-code"
+      ]
+    },
+    {
+      "id": "figure3_hierarchy_proportions",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure3C per-monkey selected-category hierarchy proportions and counts, preserving source rare-category pooling.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure3_hierarchy_proportions",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "category_proportions",
+            "manifest_key": "category_proportions",
+            "source_quantity": "Every original source hierarchy-category proportion in Mi and Mo.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              null
+            ],
+            "axes": [
+              {
+                "name": "monkey",
+                "units": "source subject",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "Mi",
+                    "Mo"
+                  ]
+                }
+              },
+              {
+                "name": "source_hierarchy_category",
+                "units": "native complete category-combination label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Full selected hierarchy labels including unspecialized and miscellaneous1-4category labels are unbound; current/past categories cannot be merged."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction of original eligible cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Classify each original cell by complete selected hierarchy; preserve pooled-across-animal less-than2-percent miscellaneous grouping followed by separate per-monkey normalization.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          },
+          {
+            "id": "category_cell_counts",
+            "manifest_key": "category_cell_counts",
+            "source_quantity": "Every original source hierarchy-category numerator in Mi and Mo.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              null
+            ],
+            "axes": [
+              {
+                "name": "monkey",
+                "units": "source subject",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "Mi",
+                    "Mo"
+                  ]
+                }
+              },
+              {
+                "name": "source_hierarchy_category",
+                "units": "native complete category-combination label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Full selected hierarchy labels including unspecialized and miscellaneous1-4category labels are unbound; current/past categories cannot be merged."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Same category labels, selected cell roster and grouping policy as proportions; retain zero counts and full per-animal denominators.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure3_category_membership"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare complete source hierarchy distributions with original semantic category correspondence; do not accept a total significant-cell fraction, strengthened effect or category relabeling as reproduction.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "evidence_ids": [
+        "encoding-paper",
+        "fit",
+        "source-score-code",
+        "encoding-figure-code"
+      ]
+    },
+    {
+      "id": "figure3_original_example_curves",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure3D/E source predicted firing-rate curves for the original three Mi and three Mo example cells, all four gap directions and correct/error outcomes.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure3_original_example_curves",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "predicted_firing_rate_curve",
+            "manifest_key": "predicted_firing_rate_curve",
+            "source_quantity": "Original predicted firing-rate-versus-time trace for each source example cell/gap direction/correct-error combination.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "canonical_source_time",
+                "units": "milliseconds on source event-warped trial axis",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source example event/time coordinates and interpolation mapping remain unbound; preserve full displayed and native derivation support."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "spikes per second",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original count-to-rate conversion, trial/outcome/category selections and source event warping. All six original designated examples are required; no favorable or candidate-selected replacement.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "monkey",
+                "original_example_cell_id",
+                "gap_direction",
+                "trial_outcome"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "The variable-length record collection is fixed by authentic original source-designated examples: three cells per monkey, four source gap directions and both correct/error rows. Recover those identities/time axes before any comparison; data-dependent records do not authorize candidate-chosen examples or nearest-curve matching.",
+                "evidence_ids": [
+                  "encoding-paper",
+                  "fit",
+                  "source-score-code",
+                  "encoding-figure-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "encoding-paper",
+              "fit",
+              "source-score-code",
+              "encoding-figure-code"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure3_example_trace_derivation"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare every original example curve on its exact source-defined event/time support; curve means, selected time points and generic conformity categories are not substitutes.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "encoding-paper",
+          "fit",
+          "source-score-code",
+          "encoding-figure-code"
+        ]
+      },
+      "evidence_ids": [
+        "encoding-paper",
+        "fit",
+        "source-score-code",
+        "encoding-figure-code"
+      ]
+    },
+    {
+      "id": "figure4_current_past_decoding_curves",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure4A-D source current/past decoding curves and original between-monkey comparisons. Figure4C prior-choice versus past-outcome remains explicitly unresolved; all weak/null past-gap results are required.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure4_current_past_decoding_curves",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "decodable_cell_fraction",
+            "manifest_key": "decodable_cell_fraction",
+            "source_quantity": "Fraction of eligible original cells meeting the authentic source decoding/null rule for every panel, monkey, event alignment and200ms bin.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction of eligible cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-monkey numerator/denominator on source target/event/bin support. Preserve all current/past targets and bins, including weak/zero past-gap results; no pooled accuracy or favorable-bin subset.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "decodable_cell_count",
+            "manifest_key": "decodable_cell_count",
+            "source_quantity": "Original number of source cells passing the source null comparison at every curve coordinate.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count from the full source cell-level decision mask using original target/class/balancing eligibility; source significance thresholds are not benchmark acceptance criteria.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "eligible_cell_count",
+            "manifest_key": "eligible_cell_count",
+            "source_quantity": "Original eligible-cell denominator at every Figure4 curve coordinate.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "cells",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve complete source exclusions and target/event/bin support; neither full305 source count nor candidate retained rows may silently replace the original denominator. Unsupported/zero-denominator handling remains source-unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "between_monkey_fisher_p",
+            "manifest_key": "between_monkey_fisher_p",
+            "source_quantity": "Original two-sided Fisher comparison p-value between Mi and Mo cell fractions for every source panel/event/bin tested.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "p-value",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Use original source contingency numerators/denominators and complete tested-bin support. Source p<0.05 plot annotation is not an accepted reproduction or superiority threshold.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "decoding-paper",
+          "decoder-code",
+          "converter-code",
+          "data"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure4_curve_counts_and_comparisons"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare all source per-monkey current/past target curves, denominators and source comparisons after target/method mapping. Numeric reference equivalence cannot adjudicate the unresolved Figure4C variable or turn non-significance into equivalence.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "decoding-paper",
+          "decoder-code",
+          "converter-code",
+          "data"
+        ]
+      },
+      "evidence_ids": [
+        "decoding-paper",
+        "decoder-code",
+        "converter-code",
+        "data"
+      ]
+    },
+    {
+      "id": "figure4_weighted_prediction_null_controls",
+      "kind": "indexed_array_family",
+      "description": "Source numeric prediction, weighting and null controls needed to derive complete Figure4 decoding; source logistic versus active SVM/ECOC identity remains unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure4_weighted_prediction_null_controls",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "weighted_observed_accuracy",
+            "manifest_key": "weighted_observed_accuracy",
+            "source_quantity": "Per-cell weighted held-out classification accuracy at every original target/alignment/time bin.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction correctly classified after source trial weighting",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source labels, held-out predictions and inverse-category-frequency trial weights; weighted accuracy supports but does not equal the significant-cell-fraction result.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "cell_id",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "weighted_shuffled_accuracy",
+            "manifest_key": "weighted_shuffled_accuracy",
+            "source_quantity": "Per-cell weighted accuracy for every original shuffled-label comparison at each original alignment/bin.",
+            "membership": "data_dependent",
+            "shape": [
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              },
+              {
+                "name": "source_shuffle",
+                "units": "original null experiment identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authenticate original null realization/order/count; current-author-code50shuffles is not proof of final-paper identity."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction correctly classified after source trial weighting",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the entire original null experiment set and source CV procedure; active code uses50shuffles/3folds but publication-equivalent count/configuration is unresolved and not fabricated here.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "cell_id",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "source_trial_weights",
+            "manifest_key": "source_trial_weights",
+            "source_quantity": "Original inverse-category-frequency normalized trial weights used for each source decoding target and cell.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_trial",
+                "units": "original trial identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered original eligible per-cell trials with prior-trial linkage, labels and weight mapping remain unbound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless trial weight",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Reconstruct original category combinations, source64-combination account, unbalanceable exclusions, class support and normalization. Do not rebalance using candidate output or silently substitute a new target/category list.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "cell_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          },
+          {
+            "id": "decodable_cell_indicator",
+            "manifest_key": "decodable_cell_indicator",
+            "source_quantity": "Numeric source decision indicator for each original cell and target/alignment/bin underlying Figure4 fractions.",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "milliseconds on original source alignment",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authentic original coordinates, event alignment and native/display transformation remain unbound; bin widths alone do not define the axis."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "indicator (0 or1) on authentic source eligible support",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Derive from the original observed/null outputs and source decision procedure, retaining exclusions separately rather than interpreting missing observations as zero. The publication-equivalent rule and numerical criteria remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "figure4_panel",
+                "monkey",
+                "cell_id",
+                "source_alignment"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Bind original panels4A(current outcome),4B(current gap),4C(past variable unresolved) and4D(past gap), both monkeys and every original alignment/bin. Figure4C prior-choice versus past-outcome ambiguity must be resolved before semantic correspondence; do not match by favorable curves or rename a convenient source target.",
+                "evidence_ids": [
+                  "decoding-paper",
+                  "decoder-code",
+                  "converter-code",
+                  "data"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "decoding-paper",
+              "decoder-code",
+              "converter-code",
+              "data"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "decoding-paper",
+          "decoder-code",
+          "converter-code",
+          "data"
+        ]
+      },
+      "required_granular_output_ids": [
+        "figure4_prediction_weight_shuffle_derivation"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Verify source-equivalent weighted prediction/null arrays on complete source support and their derivation of every Figure4 fraction. Supplied predictions, source hashes or labels alone cannot establish authentic computation.",
+        "independent_unit": "Two source macaques, Mi and Mo; source cells/trials/bins are nested observations, not independent animals.",
+        "dependence": "Retain within-cell trial/time dependence, repeated model/category estimates and shared CV training data. Display examples are source exemplars, not independent population replicates.",
+        "multiplicity": "Complete declared source panel and indispensable controls must be covered; original selection/null/Fisher procedures remain source reconstruction details, not invented reproduction acceptance rules.",
+        "rationale": "No authenticated source-equivalent reference arrays, complete identities, numerical acceptance policy or uncertainty rule exists. The represented quantities support future numerical reference comparison; missing source references/criteria are source gaps rather than scientific ineligibility or a schema-only limitation.",
+        "evidence_ids": [
+          "decoding-paper",
+          "decoder-code",
+          "converter-code",
+          "data"
+        ]
+      },
+      "evidence_ids": [
+        "decoding-paper",
+        "decoder-code",
+        "converter-code",
+        "data"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Paper25ms encoding counts versus converter50ms default; original conversion configuration, final-bin support, directions, spike units, exclusions and DN/Purkinje mapping unbound.",
+    "Response-derived five-trial baseline is part of the native information condition. Original folds/random state and model-selection records are missing; generated cvTrainSel is local/unsaved and cv1NegLnL overwritten. Inherited leaf fitInfo may refer to parent support, so only authenticated disjoint-bin predictions can establish hierarchy LL.",
+    "Accepted replay covers per-cell LL/support only. Full selected category identities, lineage, weights, epoch transforms, modIdx, hierarchy fractions and source example curves need authentic granular exports/independent derivation.",
+    "Paper logistic decoding versus active SVM/ECOC3fold50shuffle code; source category exclusions remove condition_code/past_condition. Authentic final-paper source version/configuration and target mapping remain unresolved.",
+    "Figure4C Results describes prior choice while caption/Methods says past outcome; this selection preserves the ambiguity and does not decide its label.",
+    "Original eligible cell/trial masks, balancing combinations/weights, native significant-cell rule, source numerical curves and binwise denominator/Fisher outputs remain unbound.",
+    "Authentic data/run custody, full component verification programs, expected arrays, justified reproduction tolerances, dependence-aware method comparisons and matched exposure/resource budgets remain unresolved. No manifest hash or acceptance criterion is invented.",
+    "Authenticate complete original indexed families and correspondence: source cell/trial membership, model stage/category labels, hierarchy grouping, six original example identities, all native event/time axes, Figure4 target definitions and original denominators. The supplied partial shapes/named keys do not authenticate those coordinates.",
+    "No source-equivalent reference manifest, independent full-panel comparison program, numeric criterion/tolerance or uncertainty policy exists. All expected references and policy hashes remain null; printed curves, counts, hashes or a successful software replay are insufficient.",
+    "Full-primary pairing is unavailable: this independently represented Figure3+Figure4 primary is broader than the current encoding-likelihood improvement component. Preserve that legitimate component evidence without forcing false eight-anchor equality or constructing an outcomes bundle.",
+    "Structured numerical reference equivalence is representable in v2, but no method superiority, biological effect increase, independent-animal inference or causal attention claim is admitted. Unsupported later scientific comparison classes would require explicit schema limitation rather than fabricated criteria."
+  ]
+}

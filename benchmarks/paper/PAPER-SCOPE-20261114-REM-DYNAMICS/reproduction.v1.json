@@ -1,0 +1,613 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-SCOPE-20261114-REM-DYNAMICS",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original two-protocol finding family is source-identified, but authentic full-panel identities, numerical reference arrays/source time grid, executable analysis and independent granular verification, tolerance and uncertainty remain unresolved. Existing prediction scorers and published significance anchors cannot establish AI computational reproduction.",
+  "source_paper": {
+    "title": "Low-dimensional population dynamics in the brainstem gate REM sleep",
+    "url": "https://www.nature.com/articles/s41593-026-02314-z"
+  },
+  "evidence": [
+    {
+      "id": "paper_classification",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Figure2h, Figure5d–e; Methods, Classification analysis",
+      "supports": "Defines spontaneous transition and laser-success LDA targets, Monte Carlo sampling, original accuracy and reported cohort/event counts."
+    },
+    {
+      "id": "paper_pca",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Methods, preprocessing of Neuropixels data and Dimensionality reduction using PCA",
+      "supports": "Whole-session representation,2.5s bins, smoothing, wake exclusions, sign rules and original observation regime."
+    },
+    {
+      "id": "author_data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19462601",
+      "locator": "Ver2 published9April2026; description and lozano_hong_jin_2026.zip entry",
+      "supports": "Authentic Ver2 archive metadata identifies the five-cohort release. Prior external dmM-only preparation exists, but neither complete original2h+5e cohort nor original numeric reference arrays are authenticated for this outcome."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/tortugar/Npx/ded027368c37f19c837baf02b81802007886ba46/README.md",
+      "locator": "Data organization and System requirements",
+      "supports": "2.5s rate/annotation format,KCUT/EXCLUDE controls,custom sleep dependencies; example recording is not the whole cohort."
+    },
+    {
+      "id": "author_loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/tortugar/Npx/ded027368c37f19c837baf02b81802007886ba46/neuropyx.py",
+      "locator": "load_mouse lines439–508; sleep_components lines1503 onward",
+      "supports": "Loader truncates surplus sleep annotations; PCA function defaults differ from the paper parameters. Inspected module contains no LDA/LinearDiscriminantAnalysis named entrypoint."
+    },
+    {
+      "id": "registered_scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-SCOPE-20261114-REM-DYNAMICS/task.json",
+      "locator": "complete_scientific_unit; reproduction; improvement; activation_gates",
+      "supports": "Both2h and 5e are registered; proposed held-mouse causal Brier comparison is a new prospective protocol, not the source performance test."
+    },
+    {
+      "id": "paper_fig2_caption",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Figure2g-h caption; retained article SHA25683792709d1157ba7527a4b67e95c93c98d94932e3396d8a0c44c6f9587cfdc18",
+      "supports": "Six mice,47 NREM-to-REM and377 NREM-to-Wake events; PC1 tsig0s and correctedP4.98e-15; PC2 tsig-110s and correctedP<0.0038. All22PC curves,25 resamples,SEM and PC3-PC22 source significance results remain required."
+    },
+    {
+      "id": "paper_fig5_caption",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Figure5d-e caption and Methods Classification analysis; same retained article hash",
+      "supports": "45NREM-at-laser-onset dmM trials from5mice:20successful and25unsuccessful; REM within60s defines success;22individual-PC classifications over10resamples; PC2 one-sided Bonferroni-correctedP0.00018,T(9)8.34."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure2h: classify NREM-to-REM versus NREM-to-Wake transitions using each of PC1–PC22 across 10s bins in the preceding 150s. Figure5e: classify whether a dmM laser trial beginning in NREM reaches REM within 60s from each PC at laser onset. Preserve both protocol strata.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo19462601 Ver2, lozano_hong_jin_2026.zip,md5 b4283da46ef2989eab44ccd20a2d77cc. Release has five cohorts and config files; only the original spontaneous and dmM cohorts feed this registered family. Metadata is verified; archive member coverage remains uninspected.",
+      "evidence_ids": [
+        "author_data",
+        "registered_scope"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source reports six spontaneous mice with 47 NREM-to-REM and 377 NREM-to-Wake transitions;5e has 45 eligible laser trials from five mice, 20 successful and 25 unsuccessful. Exact animal/session membership and all event/config joins must be recovered from the full authentic archive, not just example DL159.",
+      "evidence_ids": [
+        "paper_classification",
+        "author_readme"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source 2h repeatedly samples 70% of REM transitions for training and 30% for testing, with equal randomly sampled Wake cases in each,25 repetitions.5e pools mice then uses 70/30 trial sampling,10 repetitions. Exact draws/seeds and disjoint Wake sampling are unrecovered; held-mouse folds would change the task.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original session neural rates and sleep-state/EEG annotation needed for representation, event alignment and PC sign. Whole-recording information is part of the source analysis. This event-conditioned setting does not establish a causal110s online-warning system.",
+      "evidence_ids": [
+        "paper_pca",
+        "paper_classification"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses 2.5 s rates, z-scoring, Gaussian sigma 1.5 bins, full-recording PCA after long-wake exclusion, PC1 REM-positive and PC2 NREM-sigma-positive signs. Exact cuts, exclusions, timestamp reconciliation and nondefault author call arguments remain unbound; a causal filter/train-only PCA is a separately labelled extension.",
+      "evidence_ids": [
+        "paper_pca",
+        "author_readme",
+        "author_loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Prediction accuracy equals correctly classified held test events divided by all held test events for each PC/bin and repetition. Preserve full2h accuracy curves and 5e accuracy distributions; tsig and Bonferroni tests are descriptive source summaries, not a replacement performance objective.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source 2h presents mean accuracy across 25 resamplings with SEM and 5e box plots across 10 resamplings, using pooled events. No single scalar combining PCs, horizons or protocols is specified. Recover all accuracy arrays and freeze an original-endpoint comparison without selecting the most favorable PC/time bin.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Both original protocol strata are mandatory: Figure2h includes all22PCs, every source-authenticated numerical time coordinate and feature-bin boundary in the preceding150s, all25resampling draws, all47NREM-to-REM/377NREM-to-Wake events from six mice, full held-event confusion/accuracy arrays, full mean/SEM curves and original one-sided chance/Bonferroni/tsig companions includingPC3-PC22. Figure5e includes all22PCs and10draws across all45NREM-at-onset dmM trials from five mice,20REM-within60s and25without, complete held-trial confusion/accuracy distributions and original one-sided chance/Bonferroni summaries. Original cuts, excluded units/events and mouse/session support must be retained as provenance controls. No default15/16time grid, favorable-PC/bin selection, substituted43-trial subset, cross-protocol average, held-mouse split or prospective Brier endpoint can replace this panel. Source reference arrays, exact grid and event identities remain unresolved.",
+      "evidence_ids": [
+        "paper_classification",
+        "paper_fig2_caption",
+        "paper_fig5_caption",
+        "paper_pca",
+        "author_data",
+        "registered_scope"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The original event-conditioned transductive analysis permits whole-session neural rates, source sleep-state/EEG annotations, original configuration cuts and unit exclusions for whole-recording normalization/PCA, centeredGaussian smoothing and PC sign alignment. The two paired AI conditions receive the same paper and identical authentic input/identity/preprocessing/split support; only the second adds a rights-reviewed original-author-code manifest. Published aggregates are permitted knowledge but cannot prove computation. Original neural arrays, preprocessing intermediates, event features, split draws and held-event predictions must be generated or traced by an independently executed submitted analysis before independent verification; a program that merely emits paper numbers or supplied owner predictions is insufficient. Operator reference caches, verification targets and other-condition histories are excluded from candidate workspaces; exact enforceable delivery, freeze and budget policies remain unbound. This observation regime is not a causal online110s warning or held-mouse extension.",
+      "evidence_ids": [
+        "paper_pca",
+        "paper_classification",
+        "author_readme",
+        "registered_scope"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig2h_pc1_tsig",
+      "kind": "scalar",
+      "description": "Published PC1 significance-onset companion; reproduce its derivation from full source-grid accuracy/test arrays, not a printed-value match.",
+      "status": "verified",
+      "expected": 0,
+      "units": "seconds relative to transition",
+      "aggregation": "Earliest coordinate from which original corrected above-chance significance persists through transition.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig2h_pc2_tsig",
+      "kind": "scalar",
+      "description": "Published PC2 significance-onset companion; no causal online-warning interpretation.",
+      "status": "verified",
+      "expected": -110,
+      "units": "seconds relative to transition",
+      "aggregation": "Earliest coordinate from which original corrected above-chance significance persists through transition.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig2h_pc1_adjusted_p",
+      "kind": "scalar",
+      "description": "Published PC1 corrected significance companion; exact original tested coordinate/family and recomputation remain to be bound.",
+      "status": "verified",
+      "expected": 4.98e-15,
+      "units": "probability",
+      "aggregation": "Original one-sided test and Bonferroni adjustment; no significance-only reproduction.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_pc2_t",
+      "kind": "scalar",
+      "description": "Published PC2 t-statistic companion with9degrees of freedom; independently derive from all10accuracy values.",
+      "status": "verified",
+      "expected": 8.34,
+      "units": "t statistic",
+      "aggregation": "Original one-sided chance0.5 comparison over10resamples; resamples are not10animals.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_pc2_adjusted_p",
+      "kind": "scalar",
+      "description": "Published PC2 Bonferroni-corrected p-value companion; correction family remains unresolved.",
+      "status": "verified",
+      "expected": 0.00018,
+      "units": "probability",
+      "aggregation": "Original one-sided chance0.5 test with source-bound Bonferroni correction.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig2h_mice",
+      "kind": "scalar",
+      "description": "Source spontaneous mouse count, requiring original mouse/session identity ledger rather than a supplied count.",
+      "status": "verified",
+      "expected": 6,
+      "units": "mice",
+      "aggregation": "Count unique original eligible spontaneous mice.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig2h_rem_events",
+      "kind": "scalar",
+      "description": "Source spontaneous NREM-to-REM event count, requiring source event eligibility/exclusion derivation.",
+      "status": "verified",
+      "expected": 47,
+      "units": "events",
+      "aggregation": "Count original eligible NREM-to-REM transitions across all six mice.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig2h_wake_events",
+      "kind": "scalar",
+      "description": "Source spontaneous NREM-to-Wake event count; retain unselected Wake events in the census.",
+      "status": "verified",
+      "expected": 377,
+      "units": "events",
+      "aggregation": "Count all original eligible NREM-to-Wake transitions, not only randomly sampled examples.",
+      "evidence_ids": [
+        "paper_fig2_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig2_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_mice",
+      "kind": "scalar",
+      "description": "Source dmM mouse count, requiring original mouse/session identity ledger.",
+      "status": "verified",
+      "expected": 5,
+      "units": "mice",
+      "aggregation": "Count unique original eligible dmM mice.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_trials",
+      "kind": "scalar",
+      "description": "Source eligible laser-trial count; earlier43-trial unfitted preparation cannot substitute.",
+      "status": "verified",
+      "expected": 45,
+      "units": "trials",
+      "aggregation": "All original NREM-at-laser-onset trials across five mice.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_successful_trials",
+      "kind": "scalar",
+      "description": "Source trial successes from authentic sleep annotation within source60-second window, not a supplied total.",
+      "status": "verified",
+      "expected": 20,
+      "units": "trials",
+      "aggregation": "Count original eligible trials withREM within60seconds of laser onset.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_unsuccessful_trials",
+      "kind": "scalar",
+      "description": "Source unsuccessful-trial count from complete original eligibility and outcome ledger.",
+      "status": "verified",
+      "expected": 25,
+      "units": "trials",
+      "aggregation": "Count original eligible trials withoutREM within60seconds.",
+      "evidence_ids": [
+        "paper_fig5_caption",
+        "paper_classification"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical acceptance width is inferred from printed precision, historical graders or generated controls. Recover the original numerical realization and independently justify the full-panel tolerance before admission.",
+        "evidence_ids": [
+          "paper_fig5_caption",
+          "paper_classification"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Exact deterministic numerical comparison versus authenticated source arrays and any biological uncertainty rule remain unbound; resampling SEM is descriptive, not independent mouse replication.",
+        "independent_unit": "Mouse; events/trials and reused random draws are nested or repeated observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve the original25/10draw summaries and separate six/five-mouse biological units; do not infer reproduction from nonrejection or source p-values alone.",
+        "evidence_ids": [
+          "paper_classification"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact Figure2h numerical time coordinates/feature-bin boundaries and original accuracy arrays for both2h/5e are unavailable; no default15/16grid or printed-value match is admissible.",
+    "Complete authenticated original six-mouse spontaneous and five-mouse dmM event/session/unit/cut/exclusion joins remain unresolved. Prior external dmM conversion reported43eligible/19successful trials versus paper45/20 and is not original-panel reproduction.",
+    "Original Monte Carlo draws, seeds, rounding, Wake train/test overlap policy and cross-PC sharing require source recovery; held-mouse or newly sampled panels are extensions until original comparison fidelity is established.",
+    "Whole-session rate normalization, centered smoothing, long-Wake exclusion, annotation/rate clock reconciliation, source-PC signs and nondefault author configuration remain unbound; introductory Npx code is not a full figure runner.",
+    "The findings array contains only genuine published scalar summaries and cohort counts; it does not represent the complete original finding panel. Required accuracy tensors, mean/SEM curves and allPC significance companions cannot be encoded by the current scalar/categorical finding schema without a reviewed structured-output extension. Their source axes, identities and values must be recovered; no invented error scalar, favorable average or unresolved grid placeholder substitutes for them. A separate external STRUCTURED_OUTPUT_PROPOSAL.json records this schema gap and source-native requirements.",
+    "No source-independent numerical tolerance, exact original Bonferroni family, completePC3-PC22tsig outputs or valid biological uncertainty rule is admitted. Published rounded statistics do not supply acceptance widths.",
+    "Computational reproduction requires an independently executed submitted analysis starting from authentic permitted inputs: source-identity cohort/event ledgers; normalization/smoothing/cut/unit masks; source-native PCA loadings/scores/sign evidence or scientifically equivalent audit trace; exact source features/time support; source-bound partitions; every held-event/trial prediction; fitted decision outputs sufficient to recompute predictions; full confusion/accuracy/mean/SEM/test/tsig arrays and per-mouse support. Matching supplied predictions or paper aggregates alone is insufficient.",
+    "Existing implementations/figure2h-score-v1/score.py scores declared-grid prediction cells; shared/neuroscience-components/rem-dmm-figure5e/score.py historical_fig5e scores220supplied held-trial cells. Both are useful recomputation interfaces, not authentic-input analysis runners or complete independent granular-output verifiers. No duplicate scorer is introduced.",
+    "No immutable combined analysis-interface/authentic-data/verification/evaluator/cohort/split/panel/observation/metric/aggregation manifests exist for the full source family. admission_policy is omitted rather than inventing identities; actual granular required_outputs cannot be bound until recovered.",
+    "Matched paper+data and paper+data+author-code manifests, independent context/target-exposure boundaries, frozen candidates, common cumulative access/resource budgets and independent operator execution/verification are unresolved for both reproduction and improvement. All four scientific outcomes remain unknown."
+  ]
+}

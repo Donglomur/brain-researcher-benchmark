@@ -1,0 +1,1160 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-007",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Fig.4 numerical findings and complete functional-control families are source-grounded, but original data/identity support, exact aggregation/invocation, acceptance tolerances and a full-cohort independent native-output verifier are missing. The recovered publication v2.0 functions are source components, not computational reproduction evidence.",
+  "source_paper": {
+    "title": "Tracking neurons across days with high-density probes",
+    "url": "https://www.nature.com/articles/s41592-024-02440-1"
+  },
+  "evidence": [
+    {
+      "id": "um-paper",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11978519/fullTextXML",
+      "locator": "Results: Validation with stable functional properties, Fig.4; Methods: ROC and AUC; Data availability",
+      "supports": "Original cross-day ISI AUC, animal-level aggregation, eligible recordings and limited public data coverage."
+    },
+    {
+      "id": "um-data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/24305758/versions/1",
+      "locator": "description; version 1 file metadata",
+      "supports": "The demo comprises IDs1-5 and two consecutive recordings per mouse; this is not the full 16-mouse result population."
+    },
+    {
+      "id": "um-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/README.md",
+      "locator": "Usage; Output; Modules",
+      "supports": "Waveform inputs, unit identity metadata, independent functional validation and author pipeline route."
+    },
+    {
+      "id": "um-functional",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/MATLAB/FunctionalScores/ComputeFunctionalScores.m",
+      "locator": "functional score preparation and ISI calculations",
+      "supports": "Current author functional validation implementation; does not establish paper-era equivalence."
+    },
+    {
+      "id": "um-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-007/implementations/native-paired/installed/native-paired/README.md",
+      "locator": "Scope; Callable sequence; Functional independence",
+      "supports": "Registered runtime explicitly calls the five-mouse endpoint a functional proxy and uses official v2.0 with a benchmark-specific decoder."
+    },
+    {
+      "id": "um-v2-release",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/12734237",
+      "locator": "Paper reference 50; release metadata version v2.0 and isSupplementTo GitHub v2.0; recovered tag commit 6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e",
+      "supports": "Paper-cited version is v2.0, also used by the legacy native reference. A version label alone does not establish a paper-era mismatch; algorithm/data/evaluation equivalence remains separate."
+    },
+    {
+      "id": "um-native-summary",
+      "kind": "author_code",
+      "url": "https://github.com/EnnyvanBeest/UnitMatch/blob/6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e/MATLAB/Paper_Figures/summaryFunctionalPlots.m",
+      "locator": "lines66-67,116-164,179-252,314-331,392-477,530-537",
+      "supports": "Native duration/match eligibility, intermediate-UID reassignment, directed split exclusion, per-pair ROC/AUC, groupVector aggregation, slope fits and distinct plotted/printed support; returned FPSum/days/deltaDays/match/yield/slope products."
+    },
+    {
+      "id": "um-native-uids",
+      "kind": "author_code",
+      "url": "https://github.com/EnnyvanBeest/UnitMatch/blob/6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e/MATLAB/UnitMatchPipeline/AssignUniqueIDAlgorithm.m",
+      "locator": "lines58-80,106-118,134-148",
+      "supports": "Source directional probability filtering, sorted pair order and intermediate UID construction; exact original cluster/session identity is retained through UniqueIDConversion."
+    },
+    {
+      "id": "um-native-functional",
+      "kind": "author_code",
+      "url": "https://github.com/EnnyvanBeest/UnitMatch/blob/6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e/MATLAB/FunctionalScores/ComputeFunctionalScores.m",
+      "locator": "function entry and cached-score short circuit; population coupling; lines211-253 ISI; natural image response section; appended MatchTable",
+      "supports": "Spike/session joins, native 42-edge ISI recipe in seconds and split halves, complete directed ISICorr, population and visual fingerprints; independent verification must recompute authentic fingerprints rather than accept cached scores."
+    },
+    {
+      "id": "um-native-auc",
+      "kind": "author_code",
+      "url": "https://github.com/EnnyvanBeest/UnitMatch/blob/6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e/MATLAB/Dependencies/HelperFunctions/getAUC.m",
+      "locator": "entire getAUC function",
+      "supports": "MATLAB perfcurve numerical ROC/AUC path, including positive/negative class orientation and supplied ROC sample grid; no portable numerical parity is inferred."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original chronic Neuropixels study recordings supporting Fig. 4. Public demo24305758v1 covers IDs1-5; full datasets for IDs1,7,8 are linked in24411841v1, and remaining full recordings are available only on request. The complete Fig. 4 input release is not recovered.",
+      "evidence_ids": [
+        "um-paper",
+        "um-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The published cross-day ISI summary uses16 mice. Exact eligible session/location/pair membership must be restored; five mice with two consecutive recordings cannot replace this population.",
+      "evidence_ids": [
+        "um-paper",
+        "um-data"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Within-recording split-half waveforms calibrate matching; functional validation evaluates original across-day recording pairs. There is no original leave-one-mouse-out improvement split. A new held-mouse fold remains an extension.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Average waveforms at recording sites, position and original unit/session metadata. Functional ISI, population coupling and sensory responses are evaluation information, excluded from matching and candidate selection on final recordings.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve independently spike-sorted units, author waveform processing/drift correction, good-unit criteria and the paper-era default matching algorithm. Current pinned functional code and the registered v2/greedy decoder have not been reconciled to the publication version.",
+      "evidence_ids": [
+        "um-paper",
+        "um-functional",
+        "um-registration",
+        "um-v2-release",
+        "um-native-uids",
+        "um-native-functional"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "ROC AUC separating ISI-histogram correlations of matches from nonmatches; use original exclusions and require at least 20 matched units per eligible recording comparison. Within-recording matched units are excluded.",
+      "evidence_ids": [
+        "um-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain original recording/location summaries within each mouse and then the16-mouse mean with animal-level uncertainty. Match counts, eligible support and pair/day coverage must be retained; neurons and directed pair entries are not independent replicates.",
+      "evidence_ids": [
+        "um-paper",
+        "um-native-summary"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Fig.4 functional validation and its Extended Data Fig.5 recording-pair support: retain all original eligible recording/location/day pairs for the 16-mouse ISI and population-coupling populations, and the original nine-mouse visual-response subset, without treating it as 16 mice. For each fingerprint retain cross-day matched/nonmatched and within-day same/different-unit distributions and ROC/AUCs, all original match counts and available-unit denominators, recording durations/dates, split-unit exclusions, functional-fingerprint reliability/support, per-location AUC-versus-days fits, per-mouse summaries, population means/SEMs and slope median/dispersion. Preserve the original example unit/neighbor/match fingerprints, example-pair cross/within AUCs and 183-day examples; their exact identities remain unrecovered. Native summaryFunctionalPlots enforces both recording durations >=600 seconds, reassigns intermediate UIDs for each pair, excludes rows by split UID1, and uses match-direction count/2 >=20 with a non-all-NaN functional score. Its groupVector-based pair concatenation and slope-conditioned printed summary need reconciliation with the manuscript location-averaging wording and the actual original Fig.4 invocation. Natural-image eligibility requires the source first-day reliability rule; the exact release branch and complete original masks must be qualified. Granular verification must join every MatchTable row to original animal/location/session/cluster identities, recompute independent fingerprints and directed correlations from authentic spikes/stimuli, retain UID assignments and all exclusion masks, then derive FPSum, deltaDays, numMatchedUnits, maxAvailableUnits and bsave. No full-cohort immutable roster, masks, independent verifier or exact source-output panel is available yet.",
+      "evidence_ids": [
+        "um-paper",
+        "um-native-summary",
+        "um-native-uids",
+        "um-native-functional",
+        "um-native-auc"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same paper, authentic original waveform observations, recording-site positions and original unit/session metadata under an eventual frozen common input manifest. Printed numbers and figure claims are known solver inputs and cannot establish computational reproduction. Matching and candidate selection on final recordings cannot use ISI, population-coupling or visual-response evaluation information. After candidate freeze, an independent operator must execute the submitted analysis against authentic held-aside functional observations and verify native row-level products and derived findings. Author code is the only permitted information addition in paper+data+author-code; the 6ef0023cb4a7be0a94dabbab24bb79c084b6fb1e v2.0 publication lineage is recovered, but neither a complete paired delivery manifest nor an enforced target boundary is established. The five-mouse leave-one-mouse-out demo is separately scoped and cannot define the original observations or split.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code",
+        "um-v2-release",
+        "um-native-functional",
+        "um-registration"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "isi_cross_day_auc_mean",
+      "kind": "scalar",
+      "description": "ISI histogram: mean cross-day matched-versus-nonmatched ROC AUC across the original 16 mice.",
+      "status": "verified",
+      "expected": 0.88,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 16-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_cross_day_auc_sem",
+      "kind": "scalar",
+      "description": "ISI histogram: reported across-mouse SEM of cross-day ROC AUC.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 16 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_within_day_auc_mean",
+      "kind": "scalar",
+      "description": "ISI histogram: within-day same-unit-versus-different-unit ROC AUC companion control.",
+      "status": "verified",
+      "expected": 0.94,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 16-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_within_day_auc_sem",
+      "kind": "scalar",
+      "description": "ISI histogram: reported across-mouse SEM of the within-day ROC AUC control.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 16 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_stability_slope_median",
+      "kind": "scalar",
+      "description": "ISI histogram: reported median slope of cross-day AUC versus elapsed days.",
+      "status": "verified",
+      "expected": -0.001,
+      "units": "ROC AUC per day",
+      "aggregation": "Fit original eligible recording-location AUC-versus-days slopes, average slopes within mouse, then median across original 16 mice. Native source uses linear days despite a log display axis; exact invocation/support needs recovery.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_stability_slope_dispersion",
+      "kind": "scalar",
+      "description": "ISI histogram: reported m.a.d. accompanying the across-mouse median stability slope.",
+      "status": "verified",
+      "expected": 0.008,
+      "units": "ROC AUC per day",
+      "aggregation": "Original reported m.a.d. across 16 mouse slope summaries; qualify exact MATLAB mad invocation and paper definition before verification.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_cross_day_auc_mean",
+      "kind": "scalar",
+      "description": "Population-coupling: mean cross-day matched-versus-nonmatched ROC AUC across the original 16 mice.",
+      "status": "verified",
+      "expected": 0.92,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 16-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_cross_day_auc_sem",
+      "kind": "scalar",
+      "description": "Population-coupling: reported across-mouse SEM of cross-day ROC AUC.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 16 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_within_day_auc_mean",
+      "kind": "scalar",
+      "description": "Population-coupling: within-day same-unit-versus-different-unit ROC AUC companion control.",
+      "status": "verified",
+      "expected": 0.96,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 16-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_within_day_auc_sem",
+      "kind": "scalar",
+      "description": "Population-coupling: reported across-mouse SEM of the within-day ROC AUC control.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 16 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_stability_slope_median",
+      "kind": "scalar",
+      "description": "Population-coupling: reported median slope of cross-day AUC versus elapsed days.",
+      "status": "verified",
+      "expected": -0.006,
+      "units": "ROC AUC per day",
+      "aggregation": "Fit original eligible recording-location AUC-versus-days slopes, average slopes within mouse, then median across original 16 mice. Native source uses linear days despite a log display axis; exact invocation/support needs recovery.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_stability_slope_dispersion",
+      "kind": "scalar",
+      "description": "Population-coupling: reported m.a.d. accompanying the across-mouse median stability slope.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "ROC AUC per day",
+      "aggregation": "Original reported m.a.d. across 16 mouse slope summaries; qualify exact MATLAB mad invocation and paper definition before verification.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=16); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_cross_day_auc_mean",
+      "kind": "scalar",
+      "description": "Natural-image response: mean cross-day matched-versus-nonmatched ROC AUC across the original 9 mice.",
+      "status": "verified",
+      "expected": 0.85,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 9-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_cross_day_auc_sem",
+      "kind": "scalar",
+      "description": "Natural-image response: reported across-mouse SEM of cross-day ROC AUC.",
+      "status": "verified",
+      "expected": 0.02,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 9 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_within_day_auc_mean",
+      "kind": "scalar",
+      "description": "Natural-image response: within-day same-unit-versus-different-unit ROC AUC companion control.",
+      "status": "verified",
+      "expected": 0.9,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original recording/location/session-pair summaries within each mouse, then the source 9-mouse summary; exact pair/location weighting and slope-eligible printed support remain unresolved.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_within_day_auc_sem",
+      "kind": "scalar",
+      "description": "Natural-image response: reported across-mouse SEM of the within-day ROC AUC control.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Source SEM across the original 9 mouse summaries; no neuron- or pair-pooled inference.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_stability_slope_median",
+      "kind": "scalar",
+      "description": "Natural-image response: reported median slope of cross-day AUC versus elapsed days.",
+      "status": "verified",
+      "expected": -0.006,
+      "units": "ROC AUC per day",
+      "aggregation": "Fit original eligible recording-location AUC-versus-days slopes, average slopes within mouse, then median across original 9 mice. Native source uses linear days despite a log display axis; exact invocation/support needs recovery.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_stability_slope_dispersion",
+      "kind": "scalar",
+      "description": "Natural-image response: reported m.a.d. accompanying the across-mouse median stability slope.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "ROC AUC per day",
+      "aggregation": "Original reported m.a.d. across 9 mouse slope summaries; qualify exact MATLAB mad invocation and paper definition before verification.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "mouse (original n=9); dependent recording locations, days, units and directed pairs stay grouped",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_example_cross_day_auc",
+      "kind": "scalar",
+      "description": "ISI histogram: original displayed example-pair cross-day AUC.",
+      "status": "verified",
+      "expected": 0.95,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_example_within_day_auc",
+      "kind": "scalar",
+      "description": "ISI histogram: original displayed example-pair within-day AUC control.",
+      "status": "verified",
+      "expected": 0.97,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "isi_example_183_day_auc",
+      "kind": "scalar",
+      "description": "ISI histogram: original example cross-day AUC at 183 days.",
+      "status": "verified",
+      "expected": 0.82,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results. Retain the original 183-day separation.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and 183-day recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_example_cross_day_auc",
+      "kind": "scalar",
+      "description": "Population-coupling: original displayed example-pair cross-day AUC.",
+      "status": "verified",
+      "expected": 0.98,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_example_within_day_auc",
+      "kind": "scalar",
+      "description": "Population-coupling: original displayed example-pair within-day AUC control.",
+      "status": "verified",
+      "expected": 0.98,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "population_coupling_example_183_day_auc",
+      "kind": "scalar",
+      "description": "Population-coupling: original example cross-day AUC at 183 days.",
+      "status": "verified",
+      "expected": 0.82,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results. Retain the original 183-day separation.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and 183-day recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_example_cross_day_auc",
+      "kind": "scalar",
+      "description": "Natural-image response: original displayed example-pair cross-day AUC.",
+      "status": "verified",
+      "expected": 0.95,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_example_within_day_auc",
+      "kind": "scalar",
+      "description": "Natural-image response: original displayed example-pair within-day AUC control.",
+      "status": "verified",
+      "expected": 0.96,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    },
+    {
+      "id": "natural_images_example_183_day_auc",
+      "kind": "scalar",
+      "description": "Natural-image response: original example cross-day AUC at 183 days.",
+      "status": "verified",
+      "expected": 0.75,
+      "units": "dimensionless ROC AUC",
+      "aggregation": "Original displayed example recording pair, preserving exact animal/location/session/unit identities; those source identities have not been recovered, so no example may be selected after seeing results. Retain the original 183-day separation.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This is a printed source value. Decimal precision alone does not justify an equivalence margin; no original full-cohort rerun variability or independently justified reproduction tolerance is recovered.",
+        "evidence_ids": [
+          "um-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source computation and reproduction uncertainty/acceptance rule require independent source qualification before any attempt.",
+        "independent_unit": "original example mouse and 183-day recording pair, not an independent population replicate",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source population SEM and slope dispersion are findings to reproduce, not an allowed mismatch band, an independent rerun error, or a confidence interval. Repeated unit pairs/recordings are dependent.",
+        "evidence_ids": [
+          "um-paper",
+          "um-native-summary"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Full original 16-mouse ISI/population-coupling recordings, nine-mouse visual subset, exact eligible location/session-pair rosters and original example identities are unrecovered; the five-mouse/two-day demo cannot substitute.",
+    "Original groupVector, duration/date metadata, goodness/reliability exclusions and every native UID/functional row identity remain unbound to immutable authentic manifests.",
+    "Manuscript location averaging versus native concatenation of eligible pair AUCs, slope-qualified printed support versus plotted summaries, and exact slope-dispersion convention require original invocation reconciliation.",
+    "No independently justified numerical tolerance or reproduction uncertainty criterion exists for any reported mean, SEM, slope, dispersion or example. Source SEM/m.a.d. are not tolerance defaults.",
+    "No admitted complete analysis interface/evaluator or independent full-original-cohort output-verification program exists. admission_policy is deliberately absent rather than filled with invented identities. Candidate method is free; verification must establish the frozen original observations, identities, panel and source-consistent findings rather than mandate author-code copying.",
+    "Required native verification: independently join original waveform/session/cluster identities; check candidate MatchTable probabilities/UIDs and two-session split exclusions; recompute functional scores from authentic spikes and stimuli (not cached values), including ISI split histograms, directed correlations and companion fingerprints; check 600-second/20-match/reliability eligibility and every excluded row; recompute source ROC/AUC, match counts, available-unit denominators, dates, fits and complete per-mouse/condition aggregates; trace all 27 declared values plus source distributions/example profiles to these products.",
+    "The recovered MATLAB AssignUniqueIDAlgorithm, ComputeFunctionalScores(recompute=1), getAUC and summaryFunctionalPlots are concrete source interfaces, but transitive dependencies, MATLAB/toolboxes, source artifact provenance and numerical equivalence are unqualified. The five-mouse independent arithmetic bank cannot verify the original full panel.",
+    "Complete paired paper+data versus paper+data+author-code input/code manifests, independent authoring and execution traces, candidate freeze, functional-target isolation, exposure policy and cumulative access/resource budgets remain unfrozen.",
+    "The canonical task still contains improvement-only/calibration-only wording. Its current raw-byte outcome binding is provisional and must be repinned by integration after the authorized canonical wording correction; no scientific result is implied."
+  ]
+}

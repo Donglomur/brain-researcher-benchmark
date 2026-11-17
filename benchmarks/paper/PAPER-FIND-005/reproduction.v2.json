@@ -1,0 +1,3326 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Root explicitly selected the same complete original five-target regional population-decoding family. This declaration now represents its source-indexed real/null/session/regional quantities without substituting selected examples or counts for complete effect vectors. Authentic target-specific support, numeric references, source-profile adjudication, independent granular execution verification and source-justified reproduction criteria remain unresolved. A valid metadata declaration does not establish computation or either scientific outcome.",
+  "source_paper": {
+    "title": "A brain-wide map of neural activity during complex behaviour",
+    "url": "https://doi.org/10.1038/s41586-025-09235-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12408349/",
+      "locator": "Methods: Neural analyses; Inclusion criteria; Overview of decoding; Decoding target variables; Decoding cross-validation; Decoding significance testing with null distributions",
+      "supports": "Original regional decoding uses balanced accuracy for stimulus/choice/feedback and R-squared for wheel variables, with repeated nested within-session cross-validation and null-corrected regional effects."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/bwm_loading.py",
+      "locator": "bwm_query; bwm_units; load_good_units; filter_units_region; filter_sessions",
+      "supports": "The 2023_12_bwm_release fixture, unit-version check and unit/session/region QC define the source loading route; a complete published scoring roster still needs reconciliation."
+    },
+    {
+      "id": "settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_stimside.py",
+      "locator": "TARGET, align_time, time_window, n_runs, estimator_kwargs and trial-mask settings",
+      "supports": "Stimulus-side decoding uses nonzero contrast and 0-100 ms stimulus-aligned input; pinned logistic maximum iterations differs from the manuscript."
+    },
+    {
+      "id": "decoder",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/decoding.py",
+      "locator": "run-specific random seeds; shuffled KFold; balanced_accuracy_score/r2_score; concatenated prediction scoring",
+      "supports": "Author code supplies deterministic run seeds and nested scoring machinery, but no rerun result is established by this inspection."
+    },
+    {
+      "id": "outputs",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/process_outputs.py",
+      "locator": "create_pdtable_from_raw and check_scores",
+      "supports": "Real/null scores are averaged over runs; predictions can be rescored; summary effects retain session and regional identities."
+    },
+    {
+      "id": "pipeline",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/README.md",
+      "locator": "Full-cohort decoding and summary-table generation workflow",
+      "supports": "The source provides a complete-cohort execution route. Debugging subsets are not equivalent to the paper cohort."
+    },
+    {
+      "id": "regional-source",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/meta/bwm_figs.py",
+      "locator": "group_into_regions; significance_by_region (cached lines 1982-2058)",
+      "supports": "Source regional effects subtract separately computed medians; session Fisher p-values, BH q-values and fraction of significant sessions are retained. Minimum source figure eligibility is five units and two sessions."
+    },
+    {
+      "id": "source-format",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/05_format_results.py",
+      "locator": "Formatted result rows: run_id=i_run+1; R2_test from Rsquared_test_full; balanced_acc_test from balanced_acc_test_full",
+      "supports": "Raw run IDs and formatted run IDs differ by one. Original whole-run scores, trial-indexed prediction arrays, targets and fold indices are source-native granular outputs."
+    },
+    {
+      "id": "wheel-speed-settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_wheel-speed.py",
+      "locator": "TARGET; TIME_WINDOW; BINSIZE; N_BINS_LAG; N_PSEUDO; N_RUNS; SAVE_PREDICTIONS_PSEUDO",
+      "supports": "Wheel speed uses 20-ms bins and ten causal lag bins around first movement, two repeats and 100 null sessions; source settings do not save null predictions."
+    },
+    {
+      "id": "wheel-velocity-settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_wheel-vel.py",
+      "locator": "TARGET; TIME_WINDOW; BINSIZE; N_BINS_LAG; N_PSEUDO; N_RUNS; SAVE_PREDICTIONS_PSEUDO",
+      "supports": "Wheel velocity is a separate original endpoint with the same source timing, repeat and null counts, not a replacement or pooled wheel score."
+    },
+    {
+      "id": "source-summary",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/06_generate_summary_tables.py",
+      "locator": "create_pdtable_from_raw and bwm_units session-region filtering",
+      "supports": "The complete source table is filtered by source unit/session/region eligibility; neither a small debug cohort nor an arbitrary region subset recovers the original vector."
+    },
+    {
+      "id": "accepted-scorer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-FIND-005/implementations/decoder-score-import-v1/scorer.py",
+      "locator": "score_real; evaluate; summarize_session; summarize_regions; main",
+      "supports": "Accepted operator-only software rescores original-trial-order real predictions, checks full run/null identity support and returns both reducer profiles. It does not authenticate source cohorts, independently rescore null predictions, execute AI analyses, or establish scientific reproduction."
+    },
+    {
+      "id": "paper-visual-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of the visual stimulus; Fig. 4a,f,i and caption",
+      "supports": "The source names VISp among visual-stimulus decoding regions and presents its original decoding result. Fig. 4a/f reports the region-level null-corrected balanced-accuracy quantity; Fig. 4i is a distinct example probability curve."
+    },
+    {
+      "id": "paper-choice-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of choice; Fig. 5a,f,g,i and caption",
+      "supports": "The source identifies GRN among strongest choice decoding regions and states that choice decoding covers more brain regions than visual-stimulus decoding. The original window is the 100 ms preceding first wheel movement."
+    },
+    {
+      "id": "paper-feedback-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of feedback; Fig. 6a,f,i and caption",
+      "supports": "The source presents the IRN feedback decoding example and the complete regional feedback map, using the 200 ms after feedback onset. The original region-level quantity is null-corrected balanced accuracy; a selected example is not the entire regional panel."
+    },
+    {
+      "id": "paper-wheel-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of wheel movement; Fig. 7a,c,e,f,g; Supplementary Fig. 7; Methods Decoding target variables",
+      "supports": "The paper reports wheel speed decoding in 163 of 201 reportable regions, names GRN among strongest speed effects, and presents GRN speed and velocity decoding examples. Methods specify wheel R-squared; the Fig. 7a caption instead says balanced accuracy, an unresolved wording discrepancy that must not silently change the metric."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "IBL 2023_12_bwm_release with source sorted-spike/trial loaders and unit-version verification.",
+      "evidence_ids": [
+        "loader"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper reports 139 mice, 459 sessions/699 insertions, and 201 analyzed regions/62,857 neurons. The exact endpoint-specific session/unit/region manifest and paper eligibility parity are not frozen here.",
+      "evidence_ids": [
+        "paper",
+        "loader"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Nested fivefold random interleaved trial CV within each session; ten repetitions for binary targets and two for wheel targets. Retain original fold/seed rules; mouse-held-out evaluation would change the task.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-QC neural population spikes per session/region and declared event windows; behavioral targets are labels, not additional decoder features.",
+      "evidence_ids": [
+        "paper",
+        "settings"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source windows and QC are documented, but manuscript logistic max_iter=20000 versus pinned stimulus config max_iter=1000 and downstream region/unit eligibility require reconciliation before baseline replay.",
+      "evidence_ids": [
+        "paper",
+        "settings",
+        "loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Score concatenated outer-test predictions per run, average runs per session, then report regional median of session score minus its null median. Significance combines session evidence separately.",
+      "evidence_ids": [
+        "paper",
+        "outputs",
+        "regional-source"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The complete original five-target regional population-decoding family in Figures 4a, 5a, 6a and 7a,c, with source controls needed to interpret full session/regional results. Preserve each target's original metric, cohort, window, masks, within-session validation, real/null comparisons and complete eligible effect vector. This is an explicit named selection now, not a historically frozen panel or an all-paper requirement. Required source-indexed families below retain every original real/null run score, repeated-run mean, both session-null medians, session-corrected effect, both unresolved regional reducer profiles, session p-value, regional Fisher p-value, complete-family BH q-value/call and significant-session fraction. Record keys are original endpoint/session/region/pseudo/run identities rather than an invented rectangular cohort or a cross-target score. The existing original example probability/time-course outputs, original-order real targets/predictions, null derivation evidence, all retained/excluded mouse/probe/unit/trial identities, target-specific masks and outer/inner folds remain mandatory granular companions. Their authentic support/coordinates and independent verification are missing. Eight preserved individually identified scalar/categorical findings are associated source summaries only and cannot replace these complete indexed families and companions. Other single-cell, GLM, trajectory and latency analyses are separately named source evidence rather than automatic primary obligations. Stronger decoding cannot establish unique or causal representation; task-variable correlation and feedback/consumption confounds remain. Original significance is not a superiority criterion, and new cross-mouse evaluation cannot replace source within-session validation.",
+      "evidence_ids": [
+        "paper",
+        "paper-visual-result",
+        "paper-choice-result",
+        "paper-feedback-result",
+        "paper-wheel-result",
+        "loader",
+        "decoder",
+        "outputs",
+        "regional-source",
+        "source-summary"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The original decoder observes source-QC sorted neural population spikes, with probes merged within each session and region, in the original target-specific event windows. Trial events provide alignment and source masks; behavioral stimulus, choice, feedback and wheel values are targets rather than extra predictive features. Preserve original within-session nested trial folds and the causal wheel lag/bin structure. Paper+data and paper+data+author-code must use identical original data, masks, folds, endpoint coverage, target access and budgets; only the pinned author code may be added in the latter condition. Source targets and operator scoring arrays are not silently delivered as candidate features.",
+      "evidence_ids": [
+        "paper",
+        "settings",
+        "decoder",
+        "wheel-speed-settings",
+        "wheel-velocity-settings"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "stimulus_side_original_decoding_family",
+      "kind": "indexed_array_family",
+      "description": "Complete original stimulus_side regional population-decoding family (Figure 4a): source-keyed run/session/region quantities with 10 repetitions and 200 source null datasets; preserve target-specific cohort/window/masks and both unresolved source/paper effect profiles.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "stimulus_side_original_decoding_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_run_score",
+            "manifest_key": "stimulus_side.observed_run_score",
+            "source_quantity": "Formatted real full-run balanced_acc_test/R2_test (pseudo_id=-1); original full concatenated outer-test predictions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Score original trial/bin observations once per outer-CV run, never mean fold scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "decoder",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "decoder",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_run_score",
+            "manifest_key": "stimulus_side.null_run_score",
+            "source_quantity": "Formatted source null full-run balanced_acc_test/R2_test; each original null ID and repetition.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source null datasets and runs separately; observed pseudo_id=-1 is excluded from this member. Current importer accepts recorded scalars, not independently rescored null predictions.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "observed_session_mean",
+            "manifest_key": "stimulus_side.observed_session_mean",
+            "source_quantity": "sessions.real_score: observed run-mean source score.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Arithmetic mean over original real decoding repetitions within session and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_pseudo_run_mean",
+            "manifest_key": "stimulus_side.null_pseudo_run_mean",
+            "source_quantity": "Per-null-dataset run mean used by source session summaries.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average repetitions separately for each original pseudo/imposter ID before null medians. This is a source-defined intermediate; current scorer computes it but does not emit the complete vector in its report.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_median_including_observed",
+            "manifest_key": "stimulus_side.source_median_including_observed",
+            "source_quantity": "sessions.source_median_including_observed, from source observed-included p_scores.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of observed run-mean score and all separate null run means; preserve source discrepancy.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_null_only_median",
+            "manifest_key": "stimulus_side.paper_null_only_median",
+            "source_quantity": "sessions.paper_null_only_median, as described by paper null-only correction.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of null run means only; keep distinct from source observed-included profile pending adjudication.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_corrected_score",
+            "manifest_key": "stimulus_side.paper_corrected_score",
+            "source_quantity": "sessions.paper_corrected_score: observed run mean minus paper null-only median.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the paired within-session null median from observed score before the paper regional reduction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_session_p",
+            "manifest_key": "stimulus_side.source_session_p",
+            "source_quantity": "sessions.source_session_p from original source real/null comparison.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve observed-included p comparison and >= null-tie convention; source information-presence statistic, not superiority.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_figure_effect",
+            "manifest_key": "stimulus_side.source_figure_effect",
+            "source_quantity": "regions.source_figure_effect, the pinned source group_into_regions effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of regional observed session scores minus median of regional source session-null summaries.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_text_effect",
+            "manifest_key": "stimulus_side.paper_text_effect",
+            "source_quantity": "regions.paper_text_effect, the paper Methods regional effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of paired within-session observed-minus-null corrected scores over complete original regional support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fisher_p",
+            "manifest_key": "stimulus_side.source_fisher_p",
+            "source_quantity": "regions.source_fisher_p over original source session evidence.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fisher combination of all source-eligible session p-values in each endpoint and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_bh_q",
+            "manifest_key": "stimulus_side.source_bh_q",
+            "source_quantity": "regions.source_bh_q over the complete endpoint-specific region family.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Benjamini-Hochberg correction separately for each original target across the complete eligible region family.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fraction_significant_sessions",
+            "manifest_key": "stimulus_side.source_fraction_significant_sessions",
+            "source_quantity": "regions.source_fraction_significant_sessions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fraction of original source-eligible regional sessions with source session p<0.05; preserve denominator.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_significant",
+            "manifest_key": "stimulus_side.source_significant",
+            "source_quantity": "regions.source_significant source regional call.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "boolean",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original source regional q<0.01 call derived from the complete endpoint-specific BH family; not a superiority criterion.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "source-format",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "required_granular_output_ids": [
+        "stimulus_side_source_identity_support",
+        "stimulus_side_real_targets_predictions",
+        "stimulus_side_complete_null_derivation",
+        "stimulus_side_source_run_score_records",
+        "stimulus_side_session_region_summary_records",
+        "stimulus_side_original_example_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare independently derived complete authentic source-keyed quantities to a source-equivalent original reference after profile adjudication. Numerical tolerance, exact discrete-call policy and correspondence remain unqualified; copying source aggregates cannot satisfy computation.",
+        "independent_unit": "Mouse for biological uncertainty; preserve source sessions/regions and repeated within-session folds.",
+        "dependence": "Sessions, units and repeated CV folds from the same mouse are dependent; null runs and regions are not new independent animals.",
+        "multiplicity": "Preserve original within-target BH source companions. A criterion across all reproduction quantities/targets and dependence is unresolved; source significance is not an equivalence tolerance or improvement rule.",
+        "rationale": "The supported comparison class can represent numeric reference equivalence, but authentic references, complete support, criteria and verifier bindings are absent. This is a source/criterion gap, not scientific ineligibility or an invented schema limitation.",
+        "evidence_ids": [
+          "paper",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "source-format",
+        "outputs",
+        "regional-source",
+        "accepted-scorer"
+      ]
+    },
+    {
+      "id": "choice_original_decoding_family",
+      "kind": "indexed_array_family",
+      "description": "Complete original choice regional population-decoding family (Figure 5a): source-keyed run/session/region quantities with 10 repetitions and 200 source null datasets; preserve target-specific cohort/window/masks and both unresolved source/paper effect profiles.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "choice_original_decoding_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_run_score",
+            "manifest_key": "choice.observed_run_score",
+            "source_quantity": "Formatted real full-run balanced_acc_test/R2_test (pseudo_id=-1); original full concatenated outer-test predictions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Score original trial/bin observations once per outer-CV run, never mean fold scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "decoder",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "decoder",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_run_score",
+            "manifest_key": "choice.null_run_score",
+            "source_quantity": "Formatted source null full-run balanced_acc_test/R2_test; each original null ID and repetition.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source null datasets and runs separately; observed pseudo_id=-1 is excluded from this member. Current importer accepts recorded scalars, not independently rescored null predictions.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "observed_session_mean",
+            "manifest_key": "choice.observed_session_mean",
+            "source_quantity": "sessions.real_score: observed run-mean source score.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Arithmetic mean over original real decoding repetitions within session and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_pseudo_run_mean",
+            "manifest_key": "choice.null_pseudo_run_mean",
+            "source_quantity": "Per-null-dataset run mean used by source session summaries.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average repetitions separately for each original pseudo/imposter ID before null medians. This is a source-defined intermediate; current scorer computes it but does not emit the complete vector in its report.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_median_including_observed",
+            "manifest_key": "choice.source_median_including_observed",
+            "source_quantity": "sessions.source_median_including_observed, from source observed-included p_scores.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of observed run-mean score and all separate null run means; preserve source discrepancy.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_null_only_median",
+            "manifest_key": "choice.paper_null_only_median",
+            "source_quantity": "sessions.paper_null_only_median, as described by paper null-only correction.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of null run means only; keep distinct from source observed-included profile pending adjudication.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_corrected_score",
+            "manifest_key": "choice.paper_corrected_score",
+            "source_quantity": "sessions.paper_corrected_score: observed run mean minus paper null-only median.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the paired within-session null median from observed score before the paper regional reduction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_session_p",
+            "manifest_key": "choice.source_session_p",
+            "source_quantity": "sessions.source_session_p from original source real/null comparison.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve observed-included p comparison and >= null-tie convention; source information-presence statistic, not superiority.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_figure_effect",
+            "manifest_key": "choice.source_figure_effect",
+            "source_quantity": "regions.source_figure_effect, the pinned source group_into_regions effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of regional observed session scores minus median of regional source session-null summaries.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_text_effect",
+            "manifest_key": "choice.paper_text_effect",
+            "source_quantity": "regions.paper_text_effect, the paper Methods regional effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of paired within-session observed-minus-null corrected scores over complete original regional support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fisher_p",
+            "manifest_key": "choice.source_fisher_p",
+            "source_quantity": "regions.source_fisher_p over original source session evidence.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fisher combination of all source-eligible session p-values in each endpoint and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_bh_q",
+            "manifest_key": "choice.source_bh_q",
+            "source_quantity": "regions.source_bh_q over the complete endpoint-specific region family.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Benjamini-Hochberg correction separately for each original target across the complete eligible region family.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fraction_significant_sessions",
+            "manifest_key": "choice.source_fraction_significant_sessions",
+            "source_quantity": "regions.source_fraction_significant_sessions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fraction of original source-eligible regional sessions with source session p<0.05; preserve denominator.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_significant",
+            "manifest_key": "choice.source_significant",
+            "source_quantity": "regions.source_significant source regional call.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "boolean",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original source regional q<0.01 call derived from the complete endpoint-specific BH family; not a superiority criterion.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "source-format",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "required_granular_output_ids": [
+        "choice_source_identity_support",
+        "choice_real_targets_predictions",
+        "choice_complete_null_derivation",
+        "choice_source_run_score_records",
+        "choice_session_region_summary_records",
+        "choice_original_example_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare independently derived complete authentic source-keyed quantities to a source-equivalent original reference after profile adjudication. Numerical tolerance, exact discrete-call policy and correspondence remain unqualified; copying source aggregates cannot satisfy computation.",
+        "independent_unit": "Mouse for biological uncertainty; preserve source sessions/regions and repeated within-session folds.",
+        "dependence": "Sessions, units and repeated CV folds from the same mouse are dependent; null runs and regions are not new independent animals.",
+        "multiplicity": "Preserve original within-target BH source companions. A criterion across all reproduction quantities/targets and dependence is unresolved; source significance is not an equivalence tolerance or improvement rule.",
+        "rationale": "The supported comparison class can represent numeric reference equivalence, but authentic references, complete support, criteria and verifier bindings are absent. This is a source/criterion gap, not scientific ineligibility or an invented schema limitation.",
+        "evidence_ids": [
+          "paper",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "source-format",
+        "outputs",
+        "regional-source",
+        "accepted-scorer"
+      ]
+    },
+    {
+      "id": "feedback_original_decoding_family",
+      "kind": "indexed_array_family",
+      "description": "Complete original feedback regional population-decoding family (Figure 6a): source-keyed run/session/region quantities with 10 repetitions and 200 source null datasets; preserve target-specific cohort/window/masks and both unresolved source/paper effect profiles.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "feedback_original_decoding_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_run_score",
+            "manifest_key": "feedback.observed_run_score",
+            "source_quantity": "Formatted real full-run balanced_acc_test/R2_test (pseudo_id=-1); original full concatenated outer-test predictions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Score original trial/bin observations once per outer-CV run, never mean fold scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "decoder",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "decoder",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_run_score",
+            "manifest_key": "feedback.null_run_score",
+            "source_quantity": "Formatted source null full-run balanced_acc_test/R2_test; each original null ID and repetition.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source null datasets and runs separately; observed pseudo_id=-1 is excluded from this member. Current importer accepts recorded scalars, not independently rescored null predictions.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "observed_session_mean",
+            "manifest_key": "feedback.observed_session_mean",
+            "source_quantity": "sessions.real_score: observed run-mean source score.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Arithmetic mean over original real decoding repetitions within session and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_pseudo_run_mean",
+            "manifest_key": "feedback.null_pseudo_run_mean",
+            "source_quantity": "Per-null-dataset run mean used by source session summaries.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average repetitions separately for each original pseudo/imposter ID before null medians. This is a source-defined intermediate; current scorer computes it but does not emit the complete vector in its report.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_median_including_observed",
+            "manifest_key": "feedback.source_median_including_observed",
+            "source_quantity": "sessions.source_median_including_observed, from source observed-included p_scores.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of observed run-mean score and all separate null run means; preserve source discrepancy.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_null_only_median",
+            "manifest_key": "feedback.paper_null_only_median",
+            "source_quantity": "sessions.paper_null_only_median, as described by paper null-only correction.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of null run means only; keep distinct from source observed-included profile pending adjudication.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_corrected_score",
+            "manifest_key": "feedback.paper_corrected_score",
+            "source_quantity": "sessions.paper_corrected_score: observed run mean minus paper null-only median.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the paired within-session null median from observed score before the paper regional reduction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_session_p",
+            "manifest_key": "feedback.source_session_p",
+            "source_quantity": "sessions.source_session_p from original source real/null comparison.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve observed-included p comparison and >= null-tie convention; source information-presence statistic, not superiority.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_figure_effect",
+            "manifest_key": "feedback.source_figure_effect",
+            "source_quantity": "regions.source_figure_effect, the pinned source group_into_regions effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of regional observed session scores minus median of regional source session-null summaries.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_text_effect",
+            "manifest_key": "feedback.paper_text_effect",
+            "source_quantity": "regions.paper_text_effect, the paper Methods regional effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of paired within-session observed-minus-null corrected scores over complete original regional support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fisher_p",
+            "manifest_key": "feedback.source_fisher_p",
+            "source_quantity": "regions.source_fisher_p over original source session evidence.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fisher combination of all source-eligible session p-values in each endpoint and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_bh_q",
+            "manifest_key": "feedback.source_bh_q",
+            "source_quantity": "regions.source_bh_q over the complete endpoint-specific region family.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Benjamini-Hochberg correction separately for each original target across the complete eligible region family.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fraction_significant_sessions",
+            "manifest_key": "feedback.source_fraction_significant_sessions",
+            "source_quantity": "regions.source_fraction_significant_sessions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fraction of original source-eligible regional sessions with source session p<0.05; preserve denominator.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_significant",
+            "manifest_key": "feedback.source_significant",
+            "source_quantity": "regions.source_significant source regional call.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "boolean",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original source regional q<0.01 call derived from the complete endpoint-specific BH family; not a superiority criterion.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "source-format",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "required_granular_output_ids": [
+        "feedback_source_identity_support",
+        "feedback_real_targets_predictions",
+        "feedback_complete_null_derivation",
+        "feedback_source_run_score_records",
+        "feedback_session_region_summary_records",
+        "feedback_original_example_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare independently derived complete authentic source-keyed quantities to a source-equivalent original reference after profile adjudication. Numerical tolerance, exact discrete-call policy and correspondence remain unqualified; copying source aggregates cannot satisfy computation.",
+        "independent_unit": "Mouse for biological uncertainty; preserve source sessions/regions and repeated within-session folds.",
+        "dependence": "Sessions, units and repeated CV folds from the same mouse are dependent; null runs and regions are not new independent animals.",
+        "multiplicity": "Preserve original within-target BH source companions. A criterion across all reproduction quantities/targets and dependence is unresolved; source significance is not an equivalence tolerance or improvement rule.",
+        "rationale": "The supported comparison class can represent numeric reference equivalence, but authentic references, complete support, criteria and verifier bindings are absent. This is a source/criterion gap, not scientific ineligibility or an invented schema limitation.",
+        "evidence_ids": [
+          "paper",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "source-format",
+        "outputs",
+        "regional-source",
+        "accepted-scorer"
+      ]
+    },
+    {
+      "id": "wheel_speed_original_decoding_family",
+      "kind": "indexed_array_family",
+      "description": "Complete original wheel_speed regional population-decoding family (Figure 7a): source-keyed run/session/region quantities with 2 repetitions and 100 source null datasets; preserve target-specific cohort/window/masks and both unresolved source/paper effect profiles.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "wheel_speed_original_decoding_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_run_score",
+            "manifest_key": "wheel_speed.observed_run_score",
+            "source_quantity": "Formatted real full-run balanced_acc_test/R2_test (pseudo_id=-1); original full concatenated outer-test predictions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Score original trial/bin observations once per outer-CV run, never mean fold scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "decoder",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "decoder",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_run_score",
+            "manifest_key": "wheel_speed.null_run_score",
+            "source_quantity": "Formatted source null full-run balanced_acc_test/R2_test; each original null ID and repetition.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source null datasets and runs separately; observed pseudo_id=-1 is excluded from this member. Current importer accepts recorded scalars, not independently rescored null predictions.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "observed_session_mean",
+            "manifest_key": "wheel_speed.observed_session_mean",
+            "source_quantity": "sessions.real_score: observed run-mean source score.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Arithmetic mean over original real decoding repetitions within session and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_pseudo_run_mean",
+            "manifest_key": "wheel_speed.null_pseudo_run_mean",
+            "source_quantity": "Per-null-dataset run mean used by source session summaries.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average repetitions separately for each original pseudo/imposter ID before null medians. This is a source-defined intermediate; current scorer computes it but does not emit the complete vector in its report.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_median_including_observed",
+            "manifest_key": "wheel_speed.source_median_including_observed",
+            "source_quantity": "sessions.source_median_including_observed, from source observed-included p_scores.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of observed run-mean score and all separate null run means; preserve source discrepancy.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_null_only_median",
+            "manifest_key": "wheel_speed.paper_null_only_median",
+            "source_quantity": "sessions.paper_null_only_median, as described by paper null-only correction.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of null run means only; keep distinct from source observed-included profile pending adjudication.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_corrected_score",
+            "manifest_key": "wheel_speed.paper_corrected_score",
+            "source_quantity": "sessions.paper_corrected_score: observed run mean minus paper null-only median.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the paired within-session null median from observed score before the paper regional reduction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_session_p",
+            "manifest_key": "wheel_speed.source_session_p",
+            "source_quantity": "sessions.source_session_p from original source real/null comparison.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve observed-included p comparison and >= null-tie convention; source information-presence statistic, not superiority.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_figure_effect",
+            "manifest_key": "wheel_speed.source_figure_effect",
+            "source_quantity": "regions.source_figure_effect, the pinned source group_into_regions effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of regional observed session scores minus median of regional source session-null summaries.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_text_effect",
+            "manifest_key": "wheel_speed.paper_text_effect",
+            "source_quantity": "regions.paper_text_effect, the paper Methods regional effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of paired within-session observed-minus-null corrected scores over complete original regional support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fisher_p",
+            "manifest_key": "wheel_speed.source_fisher_p",
+            "source_quantity": "regions.source_fisher_p over original source session evidence.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fisher combination of all source-eligible session p-values in each endpoint and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_bh_q",
+            "manifest_key": "wheel_speed.source_bh_q",
+            "source_quantity": "regions.source_bh_q over the complete endpoint-specific region family.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Benjamini-Hochberg correction separately for each original target across the complete eligible region family.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fraction_significant_sessions",
+            "manifest_key": "wheel_speed.source_fraction_significant_sessions",
+            "source_quantity": "regions.source_fraction_significant_sessions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fraction of original source-eligible regional sessions with source session p<0.05; preserve denominator.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_significant",
+            "manifest_key": "wheel_speed.source_significant",
+            "source_quantity": "regions.source_significant source regional call.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "boolean",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original source regional q<0.01 call derived from the complete endpoint-specific BH family; not a superiority criterion.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "source-format",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "required_granular_output_ids": [
+        "wheel_speed_source_identity_support",
+        "wheel_speed_real_targets_predictions",
+        "wheel_speed_complete_null_derivation",
+        "wheel_speed_source_run_score_records",
+        "wheel_speed_session_region_summary_records",
+        "wheel_speed_original_example_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare independently derived complete authentic source-keyed quantities to a source-equivalent original reference after profile adjudication. Numerical tolerance, exact discrete-call policy and correspondence remain unqualified; copying source aggregates cannot satisfy computation.",
+        "independent_unit": "Mouse for biological uncertainty; preserve source sessions/regions and repeated within-session folds.",
+        "dependence": "Sessions, units and repeated CV folds from the same mouse are dependent; null runs and regions are not new independent animals.",
+        "multiplicity": "Preserve original within-target BH source companions. A criterion across all reproduction quantities/targets and dependence is unresolved; source significance is not an equivalence tolerance or improvement rule.",
+        "rationale": "The supported comparison class can represent numeric reference equivalence, but authentic references, complete support, criteria and verifier bindings are absent. This is a source/criterion gap, not scientific ineligibility or an invented schema limitation.",
+        "evidence_ids": [
+          "paper",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "source-format",
+        "outputs",
+        "regional-source",
+        "accepted-scorer"
+      ]
+    },
+    {
+      "id": "wheel_velocity_original_decoding_family",
+      "kind": "indexed_array_family",
+      "description": "Complete original wheel_velocity regional population-decoding family (Figure 7c): source-keyed run/session/region quantities with 2 repetitions and 100 source null datasets; preserve target-specific cohort/window/masks and both unresolved source/paper effect profiles.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "wheel_velocity_original_decoding_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_run_score",
+            "manifest_key": "wheel_velocity.observed_run_score",
+            "source_quantity": "Formatted real full-run balanced_acc_test/R2_test (pseudo_id=-1); original full concatenated outer-test predictions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Score original trial/bin observations once per outer-CV run, never mean fold scores.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "decoder",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "decoder",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_run_score",
+            "manifest_key": "wheel_velocity.null_run_score",
+            "source_quantity": "Formatted source null full-run balanced_acc_test/R2_test; each original null ID and repetition.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source null datasets and runs separately; observed pseudo_id=-1 is excluded from this member. Current importer accepts recorded scalars, not independently rescored null predictions.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id",
+                "run_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "source-format",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "source-format",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "observed_session_mean",
+            "manifest_key": "wheel_velocity.observed_session_mean",
+            "source_quantity": "sessions.real_score: observed run-mean source score.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Arithmetic mean over original real decoding repetitions within session and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "null_pseudo_run_mean",
+            "manifest_key": "wheel_velocity.null_pseudo_run_mean",
+            "source_quantity": "Per-null-dataset run mean used by source session summaries.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average repetitions separately for each original pseudo/imposter ID before null medians. This is a source-defined intermediate; current scorer computes it but does not emit the complete vector in its report.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region",
+                "pseudo_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_median_including_observed",
+            "manifest_key": "wheel_velocity.source_median_including_observed",
+            "source_quantity": "sessions.source_median_including_observed, from source observed-included p_scores.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of observed run-mean score and all separate null run means; preserve source discrepancy.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_null_only_median",
+            "manifest_key": "wheel_velocity.paper_null_only_median",
+            "source_quantity": "sessions.paper_null_only_median, as described by paper null-only correction.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of null run means only; keep distinct from source observed-included profile pending adjudication.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_corrected_score",
+            "manifest_key": "wheel_velocity.paper_corrected_score",
+            "source_quantity": "sessions.paper_corrected_score: observed run mean minus paper null-only median.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the paired within-session null median from observed score before the paper regional reduction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_session_p",
+            "manifest_key": "wheel_velocity.source_session_p",
+            "source_quantity": "sessions.source_session_p from original source real/null comparison.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve observed-included p comparison and >= null-tie convention; source information-presence statistic, not superiority.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "eid",
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "outputs",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "outputs",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_figure_effect",
+            "manifest_key": "wheel_velocity.source_figure_effect",
+            "source_quantity": "regions.source_figure_effect, the pinned source group_into_regions effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of regional observed session scores minus median of regional source session-null summaries.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "paper_text_effect",
+            "manifest_key": "wheel_velocity.paper_text_effect",
+            "source_quantity": "regions.paper_text_effect, the paper Methods regional effect.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "R-squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median of paired within-session observed-minus-null corrected scores over complete original regional support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "paper",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fisher_p",
+            "manifest_key": "wheel_velocity.source_fisher_p",
+            "source_quantity": "regions.source_fisher_p over original source session evidence.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fisher combination of all source-eligible session p-values in each endpoint and region.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_bh_q",
+            "manifest_key": "wheel_velocity.source_bh_q",
+            "source_quantity": "regions.source_bh_q over the complete endpoint-specific region family.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Benjamini-Hochberg correction separately for each original target across the complete eligible region family.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_fraction_significant_sessions",
+            "manifest_key": "wheel_velocity.source_fraction_significant_sessions",
+            "source_quantity": "regions.source_fraction_significant_sessions.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fraction of original source-eligible regional sessions with source session p<0.05; preserve denominator.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          },
+          {
+            "id": "source_significant",
+            "manifest_key": "wheel_velocity.source_significant",
+            "source_quantity": "regions.source_significant source regional call.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "boolean",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original source regional q<0.01 call derived from the complete endpoint-specific BH family; not a superiority criterion.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Native source keys identify the quantity, but the authentic ordered complete endpoint-specific roster and reference/export correspondence are not frozen. Each record value is source-scalar (rank zero); the family collection is not a pooled scalar or invented Cartesian cohort.",
+                "evidence_ids": [
+                  "regional-source",
+                  "accepted-scorer"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "regional-source",
+              "accepted-scorer"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "source-format",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "required_granular_output_ids": [
+        "wheel_velocity_source_identity_support",
+        "wheel_velocity_real_targets_predictions",
+        "wheel_velocity_complete_null_derivation",
+        "wheel_velocity_source_run_score_records",
+        "wheel_velocity_session_region_summary_records",
+        "wheel_velocity_original_example_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare independently derived complete authentic source-keyed quantities to a source-equivalent original reference after profile adjudication. Numerical tolerance, exact discrete-call policy and correspondence remain unqualified; copying source aggregates cannot satisfy computation.",
+        "independent_unit": "Mouse for biological uncertainty; preserve source sessions/regions and repeated within-session folds.",
+        "dependence": "Sessions, units and repeated CV folds from the same mouse are dependent; null runs and regions are not new independent animals.",
+        "multiplicity": "Preserve original within-target BH source companions. A criterion across all reproduction quantities/targets and dependence is unresolved; source significance is not an equivalence tolerance or improvement rule.",
+        "rationale": "The supported comparison class can represent numeric reference equivalence, but authentic references, complete support, criteria and verifier bindings are absent. This is a source/criterion gap, not scientific ineligibility or an invented schema limitation.",
+        "evidence_ids": [
+          "paper",
+          "outputs",
+          "regional-source",
+          "accepted-scorer"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "source-format",
+        "outputs",
+        "regional-source",
+        "accepted-scorer"
+      ]
+    },
+    {
+      "id": "stimulus_side_VISp_regional_effect",
+      "kind": "scalar",
+      "description": "Original VISp region-level stimulus-side decoding effect in Fig. 4a/f; this is one named-region scalar, not the whole stimulus-region vector.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-visual-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-visual-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-visual-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "choice_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level choice decoding effect in Fig. 5a/f; distinguish it from the selected-session probability curve in Fig. 5i.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-choice-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "feedback_IRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original IRN region-level feedback decoding effect within Fig. 6a/f; the selected IRN session in Fig. 6i establishes an example, not the regional scalar value.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-feedback-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-feedback-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-feedback-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level wheel-speed decoding effect in Fig. 7a/e; distinguish it from the example trial speed trace in Fig. 7f.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "decoder",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_velocity_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level wheel-velocity decoding effect within Fig. 7c/e; distinguish it from the example trial velocity trace in Fig. 7g.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "decoder",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_significantly_decodable_region_count",
+      "kind": "scalar",
+      "description": "Printed original finding: wheel speed was significantly decodable from 163 reportable areas. This authentic scalar count is a companion only and never replaces all regional magnitudes, identities and null controls.",
+      "status": "verified",
+      "expected": 163,
+      "units": "regions",
+      "aggregation": "Count all source-reportable regions meeting the original combined-session and full-region-family corrected significance criterion for wheel speed. The original printed denominator is 201; derive this count from every authentic regional result rather than emit the known number.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_reportable_region_count",
+      "kind": "scalar",
+      "description": "Printed denominator for the original wheel-speed decoding coverage: 201 reportable areas. This count does not authenticate which regions or their trial/session/unit support.",
+      "status": "verified",
+      "expected": 201,
+      "units": "regions",
+      "aggregation": "Count the complete original eligible region roster used for the wheel-speed panel before applying its significant-region count; preserve exact retained and excluded source identities.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "loader"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "loader"
+        ]
+      }
+    },
+    {
+      "id": "choice_vs_stimulus_decodable_region_count_order",
+      "kind": "categorical",
+      "description": "Original source statement: choice decoding represents a larger number of brain regions than visual-stimulus decoding. This is one categorical ordering finding; it cannot replace either complete regional effect vector or the actual two counts.",
+      "status": "verified",
+      "expected": "choice_more",
+      "units": "ordering of original significantly decodable region counts",
+      "aggregation": "Compare counts derived separately from the complete original choice and stimulus-side region families using source eligibility and original combined-session/BH evidence. Preserve both underlying count values and all regional magnitudes/controls; do not invent or choose a cross-target significance family.",
+      "evidence_ids": [
+        "paper-choice-result",
+        "paper",
+        "regional-source"
+      ],
+      "categories": [
+        "choice_more",
+        "equal",
+        "stimulus_more"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source states an ordering, so the expected category is exact; quantitative magnitudes, identities, counts and uncertainty remain mandatory companions and are not supplied by a categorical match.",
+        "evidence_ids": [
+          "paper-choice-result"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "regional-source"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authentic endpoint-specific mouse/session/probe/unit/region rosters, target windows/masks, retained/excluded trial identities and full eligible support remain unresolved. Source-wide counts cannot instantiate each target-specific collection.",
+    "Complete original numeric effect vectors, real/null score records, example prediction/time-course arrays and source-equivalent reference manifests have not been recovered or independently authenticated.",
+    "Paper versus pinned logistic settings, observed-score inclusion in the null median and regional difference-of-medians versus median-of-session-differences remain unresolved. Both profiles are retained; no favorable recipe is selected.",
+    "Wheel Methods/source use R-squared while Figure7a caption says balanced accuracy. Preserve the conflict; do not conflate binary balanced accuracy with continuous wheel R-squared.",
+    "The existing importer checks supplied manifests and rescores real predictions; null leaves remain recorded source scalars. Independent authentic-data execution, original null derivation/replay and all granular-output verification identities are absent.",
+    "Source-justified reproduction tolerances, criterion policies, exact correspondence and dependence-aware uncertainty are unresolved. No comparison program/reference/data/policy hashes are fabricated.",
+    "Typed source-record families are expressible in v2, but authentic record membership/support, dtype/domain identities and complete numerical references remain unavailable. Ragged prediction/time-course companions require their genuine source coordinates before eligibility.",
+    "Matched paper+data and paper+data+author-code delivery, exposure/resource budgets and independent execution custody remain unresolved. Scope selection alone does not release a canonical identity or establish either outcome."
+  ]
+}

@@ -1,0 +1,2429 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-replacement-008",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The explicitly selected fixed-channel-mask language spatial-encoding comparison is a valid independent original reproduction target. Its48 printed source mean/SEM targets and two complete source context AUC families are represented, but original session/fold/query identity, checkpoint-selection lineage, authentic reference arrays, source reductions and independently justified comparison criteria remain unresolved. This standalone declaration does not release normal outcome binding; four current broad anchors require the exact source-backed binder corrections recorded externally. Missing candidate-superiority criteria do not block independent reproduction.",
+  "source_paper": {
+    "title": "BaRISTA: Brain Scale Informed Spatiotemporal Representation of Human Intracranial Neural Activity",
+    "url": "https://arxiv.org/html/2512.12135v1"
+  },
+  "evidence": [
+    {
+      "id": "barista-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Sections 4.1–4.5; Tables 1–5; Appendices A, C, E, F, K and Tables 16–19",
+      "supports": "Defines source main and chronological classification, reconstruction, pretraining/exposure regimes, numeric tables and aggregation. Table 1 selects one pretraining seed using validation; Table 10 instead averages three."
+    },
+    {
+      "id": "barista-readme",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/README.md",
+      "locator": "Data Preparation; Data Segmentation; Finetuning the Model; Loading Pretrained Model",
+      "supports": "Release distinguishes main random nonoverlap from chronological experiments, documents force_nonoverlap, supplied checkpoint types and five chronological fold generation."
+    },
+    {
+      "id": "barista-config",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/braintreebank.yaml",
+      "locator": "subjects_to_process, finetune_sessions, segment_length_s, sampling, split and preprocessing configuration",
+      "supports": "Pinned session labels, 3-second/2048-Hz input geometry, split fractions and force_nonoverlap configuration; subject 6 hold-out identifier is HS6_4."
+    },
+    {
+      "id": "barista-metric",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py",
+      "locator": "run_epoch; validation checkpoint selection; final evaluation",
+      "supports": "Scores softmax positive-class probabilities using sklearn roc_auc_score and selects weights from validation. Native logs alone are not authenticated per-query predictions."
+    },
+    {
+      "id": "barista-aggregate",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py",
+      "locator": "parse_from_seeds, parse_summary_or_seeds, main",
+      "supports": "Released helper computes available-seed means/population SD, rounds before some higher aggregation and permits incomplete seed sets; this cannot certify manuscript SEM parity or complete support."
+    },
+    {
+      "id": "barista-seeds",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh",
+      "locator": "SEEDS=(0 1 2 3 4); session/checkpoint/experiment arguments",
+      "supports": "Five default fine-tuning seeds and explicit matching checkpoint/session experiments are available as a rerun route."
+    },
+    {
+      "id": "barista-table-1",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 1; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-2",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 2; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-3",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 3; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-4",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 4; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-10",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 10; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-11",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 11; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-12",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 12; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-13",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 13; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-14",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 14; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-15",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 15; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-16",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 16; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-17",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 17; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-table-19",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Table 19; exact model/task rows and caption in arXiv2512.12135v1",
+      "supports": "Published numerical targets and declared condition-specific aggregation; printed values are known source targets, never evidence of executed reproduction."
+    },
+    {
+      "id": "barista-scaling",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Section4.5, Figures5 and9, AppendixK.1",
+      "supports": "Five pretraining percentages5/10/25/50/75 with five random session subsets per percentage and roughly matched update counts; ordinary and chronological language-task results remain separate."
+    },
+    {
+      "id": "barista-inference",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Sections4.2–4.3, Figure3 and AppendixK",
+      "supports": "Paired Wilcoxon comparisons and Bonferroni-corrected two-way encoding/masking ANOVA accompany complete condition arrays; source inferential claims do not provide a reproduction equivalence rule."
+    },
+    {
+      "id": "barista-interpretation",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "AppendixG, Figures7–8",
+      "supports": "Absolute linear projection weights, parcel75th percentile, session-wise min-max normalization, AUC-weighted session averaging, twelve250ms patches and temporal/language-region loading visualizations."
+    },
+    {
+      "id": "barista-spectral",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "AppendixI, Table13",
+      "supports": "1162 three-second segments, low<40Hz versus40–150Hz signal filtering and variance-normalized MSE; source captions describe five finetuning seeds, separate from one-seed main reconstruction."
+    },
+    {
+      "id": "barista-baseline-check",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "AppendixE.1",
+      "supports": "Authors re-pretrained PopT and checked its original-segment task separately; these observations must not be confused with the BaRISTA segment panel. Brant receives6144-to1500 resampling."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original spatial-encoding comparison with channel masking held fixed: pretrained channel/channel, parcel/channel and lobe/channel conditions and their three matching random-initialized encoding controls on sentence-onset and speech/non-speech decoding, including corresponding chronological sensitivity. Preserve the selected Table2 and Table17 language result support; no full-factorial, reconstruction, volume/optical-flow or whole-paper primary is selected.",
+      "evidence_ids": [
+        "barista-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Brain Treebank: 10 people, 26 movie-viewing sessions, 2048-Hz iEEG plus aligned transcripts and spatial metadata. Source provides the data family and session partition, but immutable raw/annotation/checkpoint hashes and the authentic upstream preprocessing join remain unbound.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seventeen pretraining, two downstream-validation and seven downstream-test sessions from people 1,2,3,4,6,7,10 are required. Table 5 labels person 6 test as Session 3; pinned code names HOLDSUBJ_6_HS6_4. Reconcile paper labels with native recording identities rather than assume equivalence. Standard pretraining includes test people; held-person-out is a distinct source condition.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-config"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Main analysis: nonoverlapping 3-second segments, random 80/10/10. Appendix K: overlapping segments within partitions but five chronological 80/10/10 splits with no between-partition overlap. Exact saved row identities, balancing and original fold choices are not authenticated. force_nonoverlap=True belongs to main tasks; False belongs to chronological tasks.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Complete original source channels and spatial labels for each selected three-second iEEG language segment, permitted training/development labels and authenticated source pretraining/checkpoint exposure. Classification uses the entire offline segment; final query labels remain evaluator-only. These source observations and comparator conditions do not prescribe candidate architecture.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source noisy/corrupted-channel exclusion, Laplacian rereferencing, ventricular exclusion, source filtering/normalization and word-centered segmentation. Native data/config-to-paper correspondence, clock alignment and exact channels must be authenticated; a normalized array of the right shape is insufficient.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-config"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Semantic-positive-class ROC-AUC for each selected language task, computed from all source query probabilities and labels within the original session/finetuning-seed/fold context, with half credit for score ties. Native source uses roc_auc_score. Random and chronological conditions remain separate; no cross-task scalar is a selected finding. Reconstruction MSE/R2 is separately retained source evidence, not this primary metric.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Selected main results aggregate7 test sessions x5 fine-tuning seeds (35 cells) per source condition/language task; selected chronological results aggregate7 sessions x5 original folds x5 fine-tuning seeds (175). Preserve every underlying session/fold/seed result and the source validation-selected pretraining-checkpoint regime. Figure3/Table10 three-pretraining-seed averaging is distinct associated evidence. Exact historical SEM/reduction and dependence-aware reproduction criteria remain unresolved; repeated cells are not independent people.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-aggregate"
+      ]
+    },
+    "full_panel": {
+      "status": "verified",
+      "description": "Exactly the root-selected channel-masking column of Table2 and corresponding sentence-onset/speech-non-speech results in Table17: pretrained channel/channel, parcel/channel and lobe/channel conditions plus their three matching random-initialized encoding controls. Preserve both language tasks, all seven original test sessions, five fine-tuning seeds, the original random nonoverlapping partition and all five chronological folds. The main and chronological AUC arrays are separate; source summaries and every underlying per-session/fold/seed result are required, with authentic ordered query probabilities and source support. Source17/2/7 session allocation describes comparator pretraining/validation/test provenance; it does not require new whole-pretraining execution. Validation-selected pretraining checkpoints remain distinct from the Figure3/Table10 three-seed sensitivity study. The48 source mean/SEM summaries and two structured AUC families preserve this selected result; authentic identities, original references and comparison criteria remain unresolved. Other factorial cells, PopT/Brant comparisons, three-pretraining-seed sensitivity and538 wider scalar records remain separately named evidence, as do source interpretation vectors. Their availability does not make all of them primary obligations. This scope cannot establish encoding-versus-masking importance, full-factorial ANOVA, all-mask robustness, volume/optical-flow, reconstruction, held-person-out, scaling or whole-paper success. Source model/configuration labels define original comparators, not a candidate architecture restriction or a demand to improve random-null controls.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-table-2",
+        "barista-table-17",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The paper+data and paper+data+author-code conditions must preserve identical selected original language observations, source channel/spatial/annotation joins, training/development/query boundaries, pretraining exposure and declared resource/search budgets; only the approved author-code addition differs. Inputs are complete offline6144-sample/2048Hz source segments. Final query labels are evaluator-only. Independently track information histories across overlapping protocols/folds and related BrainTreebank tasks; official code or printed results do not prove computation. Verify source checkpoint/validation selection and per-query probabilities from independently executed analysis. Source comparator configurations do not restrict candidate architecture. Observation/access manifests, budgets and independent verification remain unbound; no paired admission is released.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config",
+        "barista-metric"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_channels_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_channels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.778,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_channels_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_channels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.019,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.688,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.017,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_parcels_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_parcels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.862,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_parcels_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_parcels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.016,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_parcels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_parcels; reported mean.",
+      "status": "verified",
+      "expected": 0.683,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_parcels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_parcels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.017,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_lobes_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_lobes_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.842,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.barista_lobes_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, barista_lobes_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.016,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_lobes.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_lobes; reported mean.",
+      "status": "verified",
+      "expected": 0.681,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.sentence_onset.random_lobes.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap sentence_onset, random_lobes; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.017,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_channels_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_channels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.764,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_channels_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_channels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.02,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.616,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.019,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_parcels_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_parcels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.869,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_parcels_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_parcels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.016,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_parcels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_parcels; reported mean.",
+      "status": "verified",
+      "expected": 0.627,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_parcels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_parcels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.018,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_lobes_channels.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_lobes_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.841,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.barista_lobes_channels.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, barista_lobes_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.019,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_lobes.mean",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_lobes; reported mean.",
+      "status": "verified",
+      "expected": 0.628,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.random_nonoverlap.speech_vs_nonspeech.random_lobes.sem",
+      "kind": "scalar",
+      "description": "Table2 random_nonoverlap speech_vs_nonspeech, random_lobes; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.017,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "35 original session/finetuning-seed AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-2",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-2",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_channels_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_channels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.778,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_channels_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_channels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.693,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_parcels_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_parcels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.853,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_parcels_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_parcels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.007,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_parcels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_parcels; reported mean.",
+      "status": "verified",
+      "expected": 0.697,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_parcels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_parcels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_lobes_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_lobes_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.832,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.barista_lobes_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, barista_lobes_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.008,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_lobes.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_lobes; reported mean.",
+      "status": "verified",
+      "expected": 0.69,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.sentence_onset_time.random_lobes.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological sentence_onset_time, random_lobes; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_channels_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_channels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.733,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_channels_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_channels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.011,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.594,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.008,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_parcels_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_parcels_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.834,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_parcels_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_parcels_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_parcels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_parcels; reported mean.",
+      "status": "verified",
+      "expected": 0.608,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_parcels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_parcels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_lobes_channels.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_lobes_channels; reported mean.",
+      "status": "verified",
+      "expected": 0.82,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.barista_lobes_channels.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, barista_lobes_channels; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_lobes.mean",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_lobes; reported mean.",
+      "status": "verified",
+      "expected": 0.606,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "classification.chronological.speech_vs_nonspeech_time.random_lobes.sem",
+      "kind": "scalar",
+      "description": "Table17 chronological speech_vs_nonspeech_time, random_lobes; separately reported SEM, not a confidence bound or tolerance.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "175 original session/finetuning-seed/fold AUC cells; seven test people; validation-selected pretraining seed per source condition; retain every query and all companion models, never pool different tasks. Preserve the source-reported SEM separately; exact historical SEM implementation is unresolved.",
+      "evidence_ids": [
+        "barista-table-17",
+        "barista-metric",
+        "barista-aggregate"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounding and SEM are preserved as source observations, not an invented allowable reproduction error. Native aggregation/numerical fidelity and an independently justified criterion remain unresolved.",
+        "evidence_ids": [
+          "barista-table-17",
+          "barista-metric",
+          "barista-aggregate"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-grounded deterministic equivalence or dependence-aware interval criterion is frozen; printed SEM and significance are not reproduction tolerances.",
+        "independent_unit": "Original person/session; source pretraining seeds, finetuning seeds, folds and subsets are repeated conditions, with possible shared-movie dependence. Spectral segments/channels are nested, not independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The full original panel and metric/exposure lineage must be authenticated before choosing numerical agreement and statistical criteria. No confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "barista-paper"
+        ]
+      }
+    },
+    {
+      "id": "selected_language.random_nonoverlap.auc_cells",
+      "kind": "indexed_array_family",
+      "description": "Complete selected random_nonoverlap fixed-channel-mask language AUC result, with all six source pretrained/random conditions and original repeated context support. Known dimension counts are source design, not authenticated array identities or executed results.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "selected_language.random_nonoverlap.auc_cells",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "auc_by_original_context",
+            "manifest_key": "random_nonoverlap_source_auc_cells",
+            "source_quantity": "Original semantic-positive-class ROC-AUC for every selected source condition, language endpoint, original test session and fine-tuning seed",
+            "membership": "fixed",
+            "shape": [
+              6,
+              2,
+              7,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_condition",
+                "units": "original model/control condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "barista_channels_channels",
+                    "barista_parcels_channels",
+                    "barista_lobes_channels",
+                    "random_channels",
+                    "random_parcels",
+                    "random_lobes"
+                  ]
+                }
+              },
+              {
+                "name": "language_endpoint",
+                "units": "original source task",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sentence_onset",
+                    "speech_vs_nonspeech"
+                  ]
+                }
+              },
+              {
+                "name": "original_test_session",
+                "units": "source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Seven original test sessions corresponding to source people1,2,3,4,6,7,10. Authentic ordered session/recording/movie identities are unbound; person6 paper Session3 versus native HS6_4 remains unresolved. Person labels are not silently substituted for session identity."
+                }
+              },
+              {
+                "name": "finetuning_seed",
+                "units": "author fine-tuning seed identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 5
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC-AUC (dimensionless)",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each cell is computed with original roc_auc_score from all authenticated source queries in that context, preserving positive-label semantics, query order and undefined/single-class support behavior. No cross-task pooling. Original Table2 means/SEM reduce the complete 35 session/seed cells per condition/task; exact historic SEM, failure/support and pretraining-selection parity remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "barista-paper",
+              "barista-table-2",
+              "barista-metric",
+              "barista-seeds",
+              "barista-config"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "barista-paper",
+          "barista-table-2",
+          "barista-metric",
+          "barista-seeds",
+          "barista-config"
+        ]
+      },
+      "required_granular_output_ids": [
+        "selected_random_nonoverlap_context_identity",
+        "selected_random_nonoverlap_query_probabilities",
+        "selected_random_nonoverlap_auc_cells",
+        "selected_random_nonoverlap_checkpoint_lineage"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently authenticate an original-source-equivalent reference and complete selected-context correspondence, then compare all source AUC cells with separately justified numerical/uncertainty criteria. No tolerance is inferred from rounded tables or SEM; no comparison has run.",
+        "independent_unit": "Original person/session for the intended population claim; no minimum or confidence level is invented.",
+        "dependence": "Five fine-tuning seeds and chronological folds repeat source sessions and can share queries/movies. Source35/175 cells are not independent people; paired dependence and any shared-movie structure must be justified.",
+        "multiplicity": "Both language endpoints, all six source conditions and every original selected context remain visible. No cross-task average can hide a regression; a complete original-finding comparison policy remains unresolved.",
+        "rationale": "Numerical reference equivalence is supported by the schema, but authentic original arrays/session/fold identities, source support/dtype/selection lineage and comparison policies are absent. This is a source/criterion gap, not scientific ineligibility or a schema-only blocker. Candidate superiority is a separate outcome.",
+        "evidence_ids": [
+          "barista-paper",
+          "barista-table-2",
+          "barista-metric",
+          "barista-seeds",
+          "barista-config"
+        ]
+      },
+      "evidence_ids": [
+        "barista-paper",
+        "barista-table-2",
+        "barista-metric",
+        "barista-seeds",
+        "barista-config"
+      ]
+    },
+    {
+      "id": "selected_language.chronological.auc_cells",
+      "kind": "indexed_array_family",
+      "description": "Complete selected chronological fixed-channel-mask language AUC result, with all six source pretrained/random conditions and original repeated context support. Known dimension counts are source design, not authenticated array identities or executed results.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "selected_language.chronological.auc_cells",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "auc_by_original_context",
+            "manifest_key": "chronological_source_auc_cells",
+            "source_quantity": "Original semantic-positive-class ROC-AUC for every selected source condition, language endpoint, original test session and fine-tuning seed and chronological fold",
+            "membership": "fixed",
+            "shape": [
+              6,
+              2,
+              7,
+              5,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_condition",
+                "units": "original model/control condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "barista_channels_channels",
+                    "barista_parcels_channels",
+                    "barista_lobes_channels",
+                    "random_channels",
+                    "random_parcels",
+                    "random_lobes"
+                  ]
+                }
+              },
+              {
+                "name": "language_endpoint",
+                "units": "original source task",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sentence_onset_time",
+                    "speech_vs_nonspeech_time"
+                  ]
+                }
+              },
+              {
+                "name": "original_test_session",
+                "units": "source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Seven original test sessions corresponding to source people1,2,3,4,6,7,10. Authentic ordered session/recording/movie identities are unbound; person6 paper Session3 versus native HS6_4 remains unresolved. Person labels are not silently substituted for session identity."
+                }
+              },
+              {
+                "name": "finetuning_seed",
+                "units": "author fine-tuning seed identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 5
+                }
+              },
+              {
+                "name": "original_chronological_fold",
+                "units": "source chronological partition identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All five original chronological80/10/10 partitions. Exact saved row identities, chronological boundary realizations and ordered source fold mapping remain unbound; no synthetic fold labels or manifests substitute."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC-AUC (dimensionless)",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each cell is computed with original roc_auc_score from all authenticated source queries in that context, preserving positive-label semantics, query order and undefined/single-class support behavior. No cross-task pooling. Original Table17 means/SEM reduce the complete 175 session/fold/seed cells per condition/task; exact historic SEM, failure/support and pretraining-selection parity remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "barista-paper",
+              "barista-table-17",
+              "barista-metric",
+              "barista-seeds",
+              "barista-config"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "barista-paper",
+          "barista-table-17",
+          "barista-metric",
+          "barista-seeds",
+          "barista-config"
+        ]
+      },
+      "required_granular_output_ids": [
+        "selected_chronological_context_identity",
+        "selected_chronological_query_probabilities",
+        "selected_chronological_auc_cells",
+        "selected_chronological_checkpoint_lineage"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently authenticate an original-source-equivalent reference and complete selected-context correspondence, then compare all source AUC cells with separately justified numerical/uncertainty criteria. No tolerance is inferred from rounded tables or SEM; no comparison has run.",
+        "independent_unit": "Original person/session for the intended population claim; no minimum or confidence level is invented.",
+        "dependence": "Five fine-tuning seeds and chronological folds repeat source sessions and can share queries/movies. Source35/175 cells are not independent people; paired dependence and any shared-movie structure must be justified.",
+        "multiplicity": "Both language endpoints, all six source conditions and every original selected context remain visible. No cross-task average can hide a regression; a complete original-finding comparison policy remains unresolved.",
+        "rationale": "Numerical reference equivalence is supported by the schema, but authentic original arrays/session/fold identities, source support/dtype/selection lineage and comparison policies are absent. This is a source/criterion gap, not scientific ineligibility or a schema-only blocker. Candidate superiority is a separate outcome.",
+        "evidence_ids": [
+          "barista-paper",
+          "barista-table-17",
+          "barista-metric",
+          "barista-seeds",
+          "barista-config"
+        ]
+      },
+      "evidence_ids": [
+        "barista-paper",
+        "barista-table-17",
+        "barista-metric",
+        "barista-seeds",
+        "barista-config"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the selected original seven sessions/person/movie/recording/channel/annotation identities and exact saved random/chronological splits. Person6 paper Session3 versus native HS6_4 is unresolved; source counts and tensor shapes are not authentic support.",
+    "Authenticate all selected source checkpoint/exposure and validation-selection identities and original fine-tuning contexts. Do not silently average three pretraining seeds or duplicate three released checkpoints into unrelated conditions.",
+    "No source-equivalent per-context AUC reference arrays, ordered per-query probability and protected-label joins, trusted selected-panel reference execution or independent derivation verification is bound. The existing770-context/14-companion scorer is a broader retained interface, not a qualified selected420-context/six-condition executor.",
+    "All source/session/fold axis identity manifests, domain/dtype/support/derivation policies and numerical reference/comparison/uncertainty policies remain null or unresolved. Known design dimensions and published values do not fill these roles.",
+    "Preserve every selected source context, complete per-query probability output and undefined/single-class support behavior; scalar means/SEM cannot establish granular derivation. Queries vary by source context, so no uniform query-count axis is invented.",
+    "Original source SEM, checkpoint selection, exact support and dependence-aware reproduction criteria remain unresolved. Do not use rounded precision, published SEM, stronger significance or a pooled endpoint as an automatic reproduction tolerance.",
+    "Normal same-primary binding requires actual exact reproduction/improvement anchor equality and explicit identity release. Current target/inputs/metric/aggregation contain broader selected-scope errors; exact source-backed field corrections are proposed externally, not applied. No future improvement contract or identity hash is fabricated.",
+    "No complete admitted data/observation/program manifest or candidate information/search/resource boundary is available. Admission policy is omitted. No scientific outcomes, paired binding, native qualification or whole-paper result is established."
+  ]
+}

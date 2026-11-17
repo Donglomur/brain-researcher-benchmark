@@ -1,0 +1,2917 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-013",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original feeding-related biological findings are valid first-class reproduction targets independently of improvement ineligibility. Source-to-figure, detector, temporal and NREM-rate lineage remains unresolved, and the existing archive-fidelity interface does not compute the complete original findings and controls.",
+  "source_paper": {
+    "title": "Food intake enhances hippocampal sharp wave-ripples",
+    "url": "https://elifesciences.org/articles/105059"
+  },
+  "evidence": [
+    {
+      "id": "ripple-paper",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11996173/fullTextXML",
+      "locator": "Results; Figures 1–3; Methods: Data processing, analyses, and sleep scoring; Animals; Food restriction and experimental procedures",
+      "supports": "The source studies pre/post-meal physiological changes, defines detection and session-level ratios, and identifies different experimental cohorts. It supplies no prediction or reconstruction accuracy benchmark."
+    },
+    {
+      "id": "ripple-archive",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/28691093",
+      "locator": "Version 1, DOI 10.6084/m9.figshare.28691093.v1; files inventory",
+      "supports": "Author deposit lists all-done.mat, 2022food_safe.xlsx, MainAnalysisScript.m, extractRippleAndFPStructs4.m, detectRipples.m and SleepQuantificationFeb2025.m. Inventory inspection does not establish raw-input completeness or archive-to-figure mapping."
+    },
+    {
+      "id": "ripple-fig1",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11996173/fullTextXML",
+      "locator": "Results paragraphs 1–3; Figure 1C–K; Figure 1—figure supplement 1",
+      "supports": "Chow/no-food paired-session power, NREM rate and duration, dose associations, delta-power mediation and NREM-duration companion."
+    },
+    {
+      "id": "ripple-fig2",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11996173/fullTextXML",
+      "locator": "Results paragraph 4; Figure 2B–F",
+      "supports": "Ad-libitum chocolate control: nine animals, 39 sessions, four correlations and sleep-depth mediation."
+    },
+    {
+      "id": "ripple-fig3",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11996173/fullTextXML",
+      "locator": "Results paragraph 5; Figure 3A–E",
+      "supports": "Caloric Jello, sugar-free Jello and no-food controls; animal-level SWR/delta ratios, displayed means and standard errors, and pairwise contrasts."
+    },
+    {
+      "id": "ripple-methods",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11996173/fullTextXML",
+      "locator": "Materials and methods: Data processing, analyses, and sleep scoring; Food restriction and experimental procedures",
+      "supports": "NREM-only analysis, sleep exclusion, shared pre/post thresholds, per-session POST/PRE ratios and events per NREM second; no independent-replication tolerance is prescribed."
+    },
+    {
+      "id": "ripple-extractor",
+      "kind": "author_code",
+      "url": "https://ndownloader.figshare.com/files/53301542",
+      "locator": "extractRippleAndFPStructs4.m, Figshare version 1: lines 74–95, 136–190, 221–226, 263",
+      "supports": "Public source initializes POST from PRE, exports separately thresholded detector-2 power vectors, and divides rates by final selected NREM timestamps. These observations do not establish the generating revision of the release."
+    },
+    {
+      "id": "ripple-detector",
+      "kind": "author_code",
+      "url": "https://ndownloader.figshare.com/files/53301548",
+      "locator": "detectRipples.m, Figshare version 1: threshold crossing and event windows; lines 4–32",
+      "supports": "Source event power sums shifted RMS-envelope samples over an inclusive approximately 50 ms window; duration and power are distinct quantities, and events are not independent animals."
+    },
+    {
+      "id": "ripple-main",
+      "kind": "author_code",
+      "url": "https://ndownloader.figshare.com/files/53301545",
+      "locator": "MainAnalysisScript.m, Figshare version 1: constructor lines 78–104 and later food/chocolate analyses",
+      "supports": "Constructor stores detector-specific ratios, rates, durations, delta measures and animal/day/condition identities; later legacy field names do not authenticate archive-to-figure membership."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate pre/post-feeding changes in hippocampal SWR power, duration and rate, and their association with meal amount and sleep depth. This is an observational/experimental biological effect-estimation task.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author release Data and code for Kaya et al. (2025), Figshare article 28691093 version 1. The historical task uses processed event/session structs in all-done.mat; raw-to-event inference is outside that preserved scope.",
+      "evidence_ids": [
+        "ripple-archive"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper distinguishes food-restricted chow, ad-libitum chocolate and Jello cohorts; Figure 2 reports nine animals/39 sessions and Figure 3 reports 7/9/10 animals across its conditions. The registration records 95 released sessions/10 animals, but their exact mapping to each paper figure and condition code was not verified from primary metadata.",
+      "evidence_ids": [
+        "ripple-paper",
+        "ripple-archive"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The source compares paired pre/post sleep sessions and experimental food conditions; it defines no train/validation/test split or held-out prediction contest. A new animal split would introduce a new evaluation task.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "For the preserved processed-event scope: author event/session ripple measurements, food conditions, NREM durations and animal/session identifiers. The deposit also lists analysis helpers; it does not by itself establish access to complete raw LFP and sleep-scoring inputs.",
+      "evidence_ids": [
+        "ripple-archive"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source detection uses NREM only, excludes sessions with under 30 minutes sleep, filters LFP at 150–250 Hz, and requires peaks at least 5 SD with at least 40 ms above 1 SD. Pre/post comparisons use session means and postsleep/presleep ratios. Processed archive reproduction must preserve the originating detector and condition dictionary.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Ripple fold changes, meal correlations and mediation coefficients describe physiology. None is an ordered method-performance loss whose improvement establishes a paper win.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Paper analyses form session-level pre/post ratios; condition comparisons and captions distinguish animal and session counts. Repeated events and sessions cannot be silently promoted to independent animals.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered central feeding-effect target comprises Figure 1C–K and its NREM-duration supplement, ad-libitum chocolate Figure 2B–F, and caloric/sugar-free/no-food Figure 3B–E. Preserve every original session/animal, all power/rate/duration and delta-power quantities, all food and sleep-depth associations, mediation paths and companion controls. Figure 1 requires complete quantitative session-wise ratio vectors with exact original identities in the granular computation outputs; no pooled scalar or categorical direction replaces them. The 95-session/10-animal processed archive is not an authenticated union of those figure panels. Hormone-administration Figure 4 and SWR-triggered LH photometry Figure 5 are outside this preserved registered target, not silently counted as reproduced.",
+      "evidence_ids": [
+        "ripple-paper",
+        "ripple-fig1",
+        "ripple-fig2",
+        "ripple-fig3",
+        "ripple-archive"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both conditions require the same original, provenance-bound processed observations and identities: source detector-specific PRE/POST event measurements, meal amount and condition, animal/day/session membership, NREM exposure and delta-power observations sufficient to derive the registered original findings. Paper+data+author-code adds only the unchanged four public author MATLAB sources. Stored benchmark answers, source aggregate copying, repaired POST prefixes, reinterpreted numeric condition codes, missing raw LFP/sleep data and newly inferred detector identities are not substitutes for authenticated observation support. The existing detector-2-only packet does not supply the original full panel, rates or mediation inputs.",
+      "evidence_ids": [
+        "ripple-archive",
+        "ripple-methods",
+        "ripple-extractor",
+        "ripple-main"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "chow-large-power-increase-count",
+      "kind": "scalar",
+      "description": "Source reports increased SWR power in all 38 large-meal session pairs (0.5–1.5 g); reconstruct the event-to-session evidence, not just this count.",
+      "status": "verified",
+      "expected": 38,
+      "units": "session_pairs",
+      "aggregation": "Count over the exact original 38 large-meal session pairs; session tests and effect magnitudes require their original provenance.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-large-rate-increase-count",
+      "kind": "scalar",
+      "description": "Source reports increased SWR rate in 31 of the same 38 large-meal session pairs.",
+      "status": "verified",
+      "expected": 31,
+      "units": "session_pairs",
+      "aggregation": "Count over the exact original large-meal session pairs using NREM-occupancy-normalized rates.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-small-meal-power-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent power modulation for the small-meal control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original small-meal session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-small-meal-rate-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent rate modulation for the small-meal control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original small-meal session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-small-meal-duration-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent duration modulation for the small-meal control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original small-meal session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-no-food-power-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent power modulation for the no-food control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original no-food session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-no-food-rate-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent rate modulation for the no-food control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original no-food session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-no-food-duration-control",
+      "kind": "categorical",
+      "description": "Figure 1 reports no consistent duration modulation for the no-food control; nonrejection is not equivalence and full session magnitudes remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original no-food session-level PRE/POST comparisons; no invented pooled statistic.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-large-duration-control",
+      "kind": "categorical",
+      "description": "Large chow meals do not show the corresponding consistent SWR-duration modulation; retain every original duration ratio.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original large-meal paired-session duration comparisons.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-correlation-meal-power",
+      "kind": "scalar",
+      "description": "Food amount versus SWR power fold change, Figure 1F; include experimental and no-food sessions, with no-food assigned zero food amount.",
+      "status": "verified",
+      "expected": 0.66,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "Source session-level correlation over the exact Figure 1F–J cohort; animal membership retained for dependence assessment.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-correlation-meal-rate",
+      "kind": "scalar",
+      "description": "Food amount versus SWR rate fold change, Figure 1G; include experimental and no-food sessions, with no-food assigned zero food amount.",
+      "status": "verified",
+      "expected": 0.44,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "Source session-level correlation over the exact Figure 1F–J cohort; animal membership retained for dependence assessment.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-correlation-meal-duration",
+      "kind": "scalar",
+      "description": "Food amount versus SWR duration fold change, Figure 1H; exact coefficient not recovered; include experimental and no-food sessions, with no-food assigned zero food amount.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "Source session-level correlation over the exact Figure 1F–J cohort; animal membership retained for dependence assessment.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-correlation-meal-delta",
+      "kind": "scalar",
+      "description": "Food amount versus EEG delta-power fold change, Figure 1I; include experimental and no-food sessions, with no-food assigned zero food amount.",
+      "status": "verified",
+      "expected": 0.45,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "Source session-level correlation over the exact Figure 1F–J cohort; animal membership retained for dependence assessment.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-correlation-delta-power",
+      "kind": "scalar",
+      "description": "Delta-power fold change versus SWR power fold change, Figure 1J; include experimental and no-food sessions, with no-food assigned zero food amount.",
+      "status": "verified",
+      "expected": 0.65,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "Source session-level correlation over the exact Figure 1F–J cohort; animal membership retained for dependence assessment.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-meal-duration-association-control",
+      "kind": "categorical",
+      "description": "Figure 1H reports no significant food-dose/duration association; the coefficient is unresolved and nonsignificance is not evidence of equivalence.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original session-level dose/duration association, including zero-food sessions.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-delta-to-power",
+      "kind": "scalar",
+      "description": "Figure 1K source-reported delta-to-power mediation coefficient; exact design/scaling and all original observations must be recovered.",
+      "status": "verified",
+      "expected": 0.16,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source mediation model over the original chow/no-food session panel; preserve adjustment and dependence structure.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-delta-to-power-se",
+      "kind": "scalar",
+      "description": "Reported standard error accompanying Figure 1K delta-to-power.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same source mediation fit as the corresponding coefficient; not a new confidence interval.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-meal-to-delta",
+      "kind": "scalar",
+      "description": "Figure 1K source-reported meal-to-delta mediation coefficient; exact design/scaling and all original observations must be recovered.",
+      "status": "verified",
+      "expected": 0.28,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source mediation model over the original chow/no-food session panel; preserve adjustment and dependence structure.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-meal-to-delta-se",
+      "kind": "scalar",
+      "description": "Reported standard error accompanying Figure 1K meal-to-delta.",
+      "status": "verified",
+      "expected": 0.07,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same source mediation fit as the corresponding coefficient; not a new confidence interval.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-indirect-via-delta",
+      "kind": "scalar",
+      "description": "Figure 1K source-reported indirect-via-delta mediation coefficient; exact design/scaling and all original observations must be recovered.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source mediation model over the original chow/no-food session panel; preserve adjustment and dependence structure.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-indirect-via-delta-se",
+      "kind": "scalar",
+      "description": "Reported standard error accompanying Figure 1K indirect-via-delta.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same source mediation fit as the corresponding coefficient; not a new confidence interval.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-direct-meal-to-power",
+      "kind": "scalar",
+      "description": "Figure 1K source-reported direct-meal-to-power mediation coefficient; exact design/scaling and all original observations must be recovered.",
+      "status": "verified",
+      "expected": 0.1,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source mediation model over the original chow/no-food session panel; preserve adjustment and dependence structure.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-mediation-direct-meal-to-power-se",
+      "kind": "scalar",
+      "description": "Reported standard error accompanying Figure 1K direct-meal-to-power.",
+      "status": "verified",
+      "expected": 0.02,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same source mediation fit as the corresponding coefficient; not a new confidence interval.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-nrem-duration-control-p",
+      "kind": "scalar",
+      "description": "Figure 1 supplement reports paired PRE/POST NREM-duration p=0.1759; this does not establish equal sleep duration.",
+      "status": "verified",
+      "expected": 0.1759,
+      "units": "p_value",
+      "aggregation": "Source paired t-test of total NREM occupancy per PRE/POST sleep session in the food-restricted 0–1.5 g panel.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chow-nrem-duration-control-statistic",
+      "kind": "scalar",
+      "description": "Paired NREM-duration t-statistic required to reconstruct the source control; exact numerical target not recovered.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "t_statistic",
+      "aggregation": "Same source paired-session NREM-duration comparison as the reported p-value, with original degrees of freedom and occupancy units retained.",
+      "evidence_ids": [
+        "ripple-fig1"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig1"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-power",
+      "kind": "scalar",
+      "description": "Figure 2 source correlation of chocolate intake with power fold change under ad-libitum conditions.",
+      "status": "verified",
+      "expected": 0.57,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "All 39 original sessions from nine animals; preserve original session/animal mapping and chocolate dose.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-power-p",
+      "kind": "scalar",
+      "description": "Reported p-value accompanying the Figure 2 chocolate/power correlation; exact reconstruction alone is not an effect-equivalence test.",
+      "status": "verified",
+      "expected": 0.0001,
+      "units": "p_value",
+      "aggregation": "Same original session-level correlation as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-rate",
+      "kind": "scalar",
+      "description": "Figure 2 source correlation of chocolate intake with rate fold change under ad-libitum conditions.",
+      "status": "verified",
+      "expected": 0.1,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "All 39 original sessions from nine animals; preserve original session/animal mapping and chocolate dose.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-rate-p",
+      "kind": "scalar",
+      "description": "Reported p-value accompanying the Figure 2 chocolate/rate correlation; exact reconstruction alone is not an effect-equivalence test.",
+      "status": "verified",
+      "expected": 0.53,
+      "units": "p_value",
+      "aggregation": "Same original session-level correlation as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-duration",
+      "kind": "scalar",
+      "description": "Figure 2 source correlation of chocolate intake with duration fold change under ad-libitum conditions.",
+      "status": "verified",
+      "expected": -0.11,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "All 39 original sessions from nine animals; preserve original session/animal mapping and chocolate dose.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-duration-p",
+      "kind": "scalar",
+      "description": "Reported p-value accompanying the Figure 2 chocolate/duration correlation; exact reconstruction alone is not an effect-equivalence test.",
+      "status": "verified",
+      "expected": 0.1,
+      "units": "p_value",
+      "aggregation": "Same original session-level correlation as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-delta",
+      "kind": "scalar",
+      "description": "Figure 2 source correlation of chocolate intake with delta fold change under ad-libitum conditions.",
+      "status": "verified",
+      "expected": 0.29,
+      "units": "dimensionless correlation coefficient",
+      "aggregation": "All 39 original sessions from nine animals; preserve original session/animal mapping and chocolate dose.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-correlation-delta-p",
+      "kind": "scalar",
+      "description": "Reported p-value accompanying the Figure 2 chocolate/delta correlation; exact reconstruction alone is not an effect-equivalence test.",
+      "status": "verified",
+      "expected": 0.07,
+      "units": "p_value",
+      "aggregation": "Same original session-level correlation as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-rate-association-control",
+      "kind": "categorical",
+      "description": "Figure 2 reports no significant chocolate-dose association with rate; retain the coefficient and magnitude, not an absence-of-effect claim.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original 39-session/nine-animal chocolate panel.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-duration-association-control",
+      "kind": "categorical",
+      "description": "Figure 2 reports no significant chocolate-dose association with duration; retain the coefficient and magnitude, not an absence-of-effect claim.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original 39-session/nine-animal chocolate panel.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-delta-association-control",
+      "kind": "categorical",
+      "description": "Figure 2 reports no significant chocolate-dose association with delta; retain the coefficient and magnitude, not an absence-of-effect claim.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original 39-session/nine-animal chocolate panel.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-mediation-indirect-via-delta",
+      "kind": "scalar",
+      "description": "Figure 2F source-reported indirect-via-delta coefficient.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source chocolate/delta/SWR-power mediation model over the exact 39-session panel.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-mediation-indirect-via-delta-se",
+      "kind": "scalar",
+      "description": "Figure 2F standard error for indirect-via-delta.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same original Figure 2F mediation fit as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-mediation-direct-chocolate-to-power",
+      "kind": "scalar",
+      "description": "Figure 2F source-reported direct-chocolate-to-power coefficient.",
+      "status": "verified",
+      "expected": 0.05,
+      "units": "source-reported B; normalization/scale unresolved",
+      "aggregation": "Source chocolate/delta/SWR-power mediation model over the exact 39-session panel.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-mediation-direct-chocolate-to-power-se",
+      "kind": "scalar",
+      "description": "Figure 2F standard error for direct-chocolate-to-power.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "source-reported B standard error; scale unresolved",
+      "aggregation": "Same original Figure 2F mediation fit as the corresponding coefficient.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "chocolate-indirect-mediation-control",
+      "kind": "categorical",
+      "description": "Figure 2F reports no significant indirect delta-power mediation; compute the indirect estimate and its source uncertainty without treating nonrejection as equivalence.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Source Figure 2F mediation model, paired with the direct-effect output.",
+      "evidence_ids": [
+        "ripple-fig2"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig2"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-power-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of power fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-power-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of power fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-rate-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of rate fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-rate-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of rate fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-duration-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of duration fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-duration-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of duration fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-delta-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of delta fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-regular-delta-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of delta fold change for regular; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for regular (reported n=7 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-power-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of power fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-power-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of power fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-rate-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of rate fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-rate-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of rate fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-duration-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of duration fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-duration-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of duration fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-delta-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of delta fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-sugar-free-delta-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of delta fold change for sugar-free; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for sugar-free (reported n=9 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-power-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of power fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-power-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of power fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-rate-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of rate fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-rate-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of rate fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-duration-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of duration fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-duration-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of duration fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-delta-mean",
+      "kind": "scalar",
+      "description": "Figure 3 displayed mean of delta fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed mean.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-no-food-delta-se",
+      "kind": "scalar",
+      "description": "Figure 3 displayed se of delta fold change for no-food; numeric value not transcribed or digitized.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "standard error of dimensionless POST/PRE ratio",
+      "aggregation": "Original Figure 3 animal-level values for no-food (reported n=10 animals); preserve all animals and source weighting before deriving the displayed se.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-regular-vs-sugar-free-t",
+      "kind": "scalar",
+      "description": "Figure 3 original power-regular-vs-sugar-free contrast, reported t(14).",
+      "status": "verified",
+      "expected": 2.59,
+      "units": "t_statistic",
+      "aggregation": "Source animal-level comparison with reported degrees of freedom 14; retain original membership and test specification.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-regular-vs-sugar-free-p",
+      "kind": "scalar",
+      "description": "Reported p-value for the original Figure 3 power-regular-vs-sugar-free contrast.",
+      "status": "verified",
+      "expected": 0.02,
+      "units": "p_value",
+      "aggregation": "Same source animal-level contrast as the corresponding t-statistic.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-regular-vs-no-food-t",
+      "kind": "scalar",
+      "description": "Figure 3 original power-regular-vs-no-food contrast, reported t(15).",
+      "status": "verified",
+      "expected": 2.39,
+      "units": "t_statistic",
+      "aggregation": "Source animal-level comparison with reported degrees of freedom 15; retain original membership and test specification.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-regular-vs-no-food-p",
+      "kind": "scalar",
+      "description": "Reported p-value for the original Figure 3 power-regular-vs-no-food contrast.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "p_value",
+      "aggregation": "Same source animal-level contrast as the corresponding t-statistic.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-rate-regular-vs-no-food-t",
+      "kind": "scalar",
+      "description": "Figure 3 original rate-regular-vs-no-food contrast, reported t(15).",
+      "status": "verified",
+      "expected": 2.18,
+      "units": "t_statistic",
+      "aggregation": "Source animal-level comparison with reported degrees of freedom 15; retain original membership and test specification.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-rate-regular-vs-no-food-p",
+      "kind": "scalar",
+      "description": "Reported p-value for the original Figure 3 rate-regular-vs-no-food contrast.",
+      "status": "verified",
+      "expected": 0.046,
+      "units": "p_value",
+      "aggregation": "Same source animal-level contrast as the corresponding t-statistic.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-sugar-free-vs-no-food-p",
+      "kind": "scalar",
+      "description": "Source reports p=0.38 for sugar-free versus no-food ripple power; not evidence that the effects are equal.",
+      "status": "verified",
+      "expected": 0.38,
+      "units": "p_value",
+      "aggregation": "Original Figure 3 sugar-free/no-food animal comparison.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision does not determine a reproduction tolerance. Authentic original identities, computation lineage and independently justified numerical or uncertainty criteria are unresolved; no tolerance is inferred from the archived-report grader.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-power-sugar-free-vs-no-food-control",
+      "kind": "categorical",
+      "description": "Figure 3 reports no significant power difference for sugar-free-vs-no-food; quantitative animal-level values and uncertainty remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original Figure 3 animal-level sugar-free-vs-no-food contrast; retain both source groups without inventing an equivalence margin.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-rate-regular-vs-sugar-free-control",
+      "kind": "categorical",
+      "description": "Figure 3 reports no significant rate difference for regular-vs-sugar-free; quantitative animal-level values and uncertainty remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original Figure 3 animal-level regular-vs-sugar-free contrast; retain both source groups without inventing an equivalence margin.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-rate-sugar-free-vs-no-food-control",
+      "kind": "categorical",
+      "description": "Figure 3 reports no significant rate difference for sugar-free-vs-no-food; quantitative animal-level values and uncertainty remain required.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original Figure 3 animal-level sugar-free-vs-no-food contrast; retain both source groups without inventing an equivalence margin.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-duration-across-conditions-control",
+      "kind": "categorical",
+      "description": "Figure 3 reports no significant duration differences across its original regular, sugar-free and no-food conditions; do not infer equivalence or invent an unspecified omnibus or pairwise test.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original Figure 3 animal-level three-condition comparison and its source tests; retain all group magnitudes and uncertainty.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    },
+    {
+      "id": "jello-delta-across-conditions-control",
+      "kind": "categorical",
+      "description": "Figure 3 reports no significant delta differences across its original regular, sugar-free and no-food conditions; do not infer equivalence or invent an unspecified omnibus or pairwise test.",
+      "status": "verified",
+      "expected": "reported_no_consistent_modulation",
+      "units": "source_reporting_category",
+      "aggregation": "Original Figure 3 animal-level three-condition comparison and its source tests; retain all group magnitudes and uncertainty.",
+      "evidence_ids": [
+        "ripple-fig3"
+      ],
+      "categories": [
+        "reported_no_consistent_modulation",
+        "reported_consistent_modulation"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source reporting category is not evidence of equivalence or absence of an effect; quantitative companion outputs and a justified decision rule remain required.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve the source analysis and reported uncertainty; a computational reproduction criterion has not been justified. Source p-values and standard errors are findings to reconstruct, not an automatically sufficient acceptance test.",
+        "independent_unit": "Animals; repeated sessions and ripple events remain nested observations, not independent biological replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The released archive-to-panel mapping and source analysis lineage are unresolved. No new confidence level, sample minimum, equivalence band or significance-only reproduction rule is introduced.",
+        "evidence_ids": [
+          "ripple-fig3"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact mapping of the 95-session/10-animal archive to original chow, chocolate and Jello figure panels and condition codes is unresolved; archive coverage is not paper-panel coverage.",
+    "Figure 1 per-session magnitude vectors require exact source identities, values and granular verification. Categorical patterns and the 38/31 counts cannot replace them; no scalar family or invented pooled summary is used. Missing archive-to-panel lineage is a genuine source gap, independently of the scalar/categorical findings schema.",
+    "Paper joint PRE/POST detector thresholds are not reconciled with the exported separate-threshold detector-2 event powers; detector-1 summary fields do not establish original observation lineage.",
+    "The public extractor initializes POST arrays with PRE data before appending later recordings; the archive generating revision and POST-only temporal identity remain unresolved. Neither matching nor nonmatching processed prefixes settles this.",
+    "The paper defines SWR rate per NREM second, while public source divides event counts by final selected NREM timestamps. Original NREM occupancy, event membership and rate definitions require reconciliation.",
+    "Complete delta-power, NREM-duration and mediation design/normalization support is not delivered by the existing power2/duration2 packet; source coefficients and p-values cannot be computationally reproduced by printing their published values.",
+    "Exact displayed Figure 3 group means/standard errors, full animal-level magnitudes, unrecovered Figure 1 duration association and NREM test statistic, and any additional figure mediation path outputs remain unresolved; no figure digitization or surrogate scalar has been introduced.",
+    "No source-justified numerical tolerance, equivalence decision, independent-unit minimum or confidence level has been frozen. Reported nonsignificance is not evidence of equivalence or reproduction.",
+    "Existing prepare.py, core.reference, score.py, stage_view.py and run_program.py implement the archived detector-2 reconstruction interface only. No authenticated full original-panel analysis interface, independent granular verifier or full-panel data manifest exists for an admission policy.",
+    "Matched paper+data and paper+data+author-code original-panel delivery, exposure policy, independent executions, verification identities and cumulative resource/access budgets remain unresolved. Existing historical controls do not fill the four new outcome cells."
+  ]
+}

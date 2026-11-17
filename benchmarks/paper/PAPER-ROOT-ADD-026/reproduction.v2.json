@@ -1,0 +1,2479 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-026",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "An honest source-indexed standalone representation preserves the adopted DN/refit, adaptation-hierarchy and category-selectivity family, with Figure 3C prediction separately identified. Source identities, exact references, indispensable controls, authentic computation/verification and criteria remain unqualified. This is not an automatic 440-descriptor or every-figure denominator and does not force equality with a narrower improvement component.",
+  "source_paper": {
+    "title": "Temporal dynamics of short-term neural adaptation across human visual cortex",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161"
+  },
+  "evidence": [
+    {
+      "id": "adapt-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161",
+      "locator": "Materials and methods: Subjects, Data preprocessing, Data selection, Data summary, Model fitting and Model evaluation; Figure 3C",
+      "supports": "Defines four participants, 79 responsive electrodes, 72 category-by-temporal response conditions, 12-fold condition cross-validation, and region-wise prediction performance."
+    },
+    {
+      "id": "adapt-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/README.md",
+      "locator": "Repository description and Structure",
+      "supports": "Links the publication to the Visual ECoG dataset ds004194 and identifies preprocessing, modelling and figure scripts."
+    },
+    {
+      "id": "adapt-fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/modelling_modelFit.py",
+      "locator": "model_fit: pseudo-random test selection, fold scoring and output writing; lines 180–246 in reviewed source",
+      "supports": "Each fold takes one condition per category with random.sample, fits the remaining conditions, averages rounded per-condition R², and writes scores without test-index identities. Active scaling default P differs from Figure 3 scaling S and must not be silently substituted."
+    },
+    {
+      "id": "adapt-score",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/utils.py",
+      "locator": "r_squared(data, fit)",
+      "supports": "Computes R² as 1 minus residual sum of squares divided by variance about the observed trace mean, using NaN-aware sums."
+    },
+    {
+      "id": "adapt-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/mkFigure3.py",
+      "locator": "VA, scaling, per-electrode param_DN_* loading and bootstrap summaries; lines 28–115",
+      "supports": "Figure 3 uses all responsive electrodes, scaling none/S, region-specific bootstrap medians and 68% intervals over 1000 resamples; no single whole-cohort scalar is supplied."
+    },
+    {
+      "id": "adapt-summary-metrics",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161",
+      "locator": "Methods: Summary metrics; Bootstrapping procedure and statistical testing",
+      "supports": "Defines time-to-peak at533ms, FWHM by duration, isolated second/first AUC recovery by ISI, mean recovery, and log-curve extrapolation at1second; summaries are derived after electrode-resampled mean traces."
+    },
+    {
+      "id": "adapt-duration",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g004",
+      "locator": "Figure4A-C; Results: Higher visual areas exhibit slower and prolonged responses to single stimuli",
+      "supports": "Duration response traces, time-to-peak and six FWHM values for neural data and DN in all three original visual regions."
+    },
+    {
+      "id": "adapt-repetition-traces",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g005",
+      "locator": "Figure5A-B; Methods: Summary metrics item3; S3Figure",
+      "supports": "Repeated-stimulus traces and first-response subtraction yielding the isolated second response, for six ISIs and all three regions in neural data and DN."
+    },
+    {
+      "id": "adapt-recovery",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g006",
+      "locator": "Figure6A-C; Methods: Summary metrics items3-5",
+      "supports": "AUC_second/AUC_first byISI, mean recovery over all six ISIs, and log-curve prediction at1second; keep neural and DN summaries separate."
+    },
+    {
+      "id": "adapt-normalization",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g007",
+      "locator": "Figure7A-C; Results: Differences in adaptation reflect slower normalization in higher visual areas",
+      "supports": "533ms duration/ISI DN numerator and denominator traces plus tau1,tau2,n,sigma summaries. Parameter tradeoffs limit mechanistic identification."
+    },
+    {
+      "id": "adapt-category",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g008",
+      "locator": "Figure8A-D; Data selection and Data summary; S4Table",
+      "supports": "Preferred/nonpreferred category-selective traces, recovery curves and1second recovery, with main d-prime0.5 subset reported as26electrodes; identities must be source-bound."
+    },
+    {
+      "id": "adapt-category-mechanism",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.g009",
+      "locator": "Figure9A-B; Results: Lingering normalization and stronger input drive result in stronger adaptation and slower recovery rate for preferred stimuli",
+      "supports": "Model response, input drive, normalization pool and semisaturation decomposition at533msISI for preferred/nonpreferred stimuli, main category-selective subset."
+    },
+    {
+      "id": "adapt-two-channel",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s001",
+      "locator": "S1FigureA-D; Results introduction and duration/repetition sections",
+      "supports": "L+Q and A+S models with and without category scaling are source companion comparisons; A+S offset responses, FWHM and recovery mismatches cannot be omitted."
+    },
+    {
+      "id": "adapt-preference-duration",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s002",
+      "locator": "S2FigureA-F",
+      "supports": "Repeat duration traces,533ms time-to-peak and all six FWHM values separately for preferred and nonpreferred stimuli, neural data and DN, all original regions."
+    },
+    {
+      "id": "adapt-response-isolation",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s003",
+      "locator": "S3Figure; Methods: Summary metrics items3-5",
+      "supports": "First-response averaging/subtraction, response integration and recovery-log-curve calculation provide required derivation checks rather than copied aggregate values."
+    },
+    {
+      "id": "adapt-preferred-recovery",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s004",
+      "locator": "S4Figure",
+      "supports": "All-area repetition recovery comparisons for preferred stimuli, neural and DN traces/summary metrics."
+    },
+    {
+      "id": "adapt-nonpreferred-recovery",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s005",
+      "locator": "S5Figure",
+      "supports": "All-area repetition recovery comparisons for nonpreferred stimuli, neural and DN traces/summary metrics."
+    },
+    {
+      "id": "adapt-unnormalized",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s006",
+      "locator": "S6FigureA; Figure8A cross-reference",
+      "supports": "Unnormalized category-selective response amplitude control. S6 caption names d-prime0.75/n12 whereas Figure8A main-panel cross-reference concerns d-prime0.5/n26; this binding is unresolved, not silently rewritten."
+    },
+    {
+      "id": "adapt-category075",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s007",
+      "locator": "S7FigureA-D; Data summary; S4Table",
+      "supports": "Category-selectivity sensitivity at d-prime0.75 with12reported electrodes: preferred/nonpreferred traces, recovery byISI and1second recovery."
+    },
+    {
+      "id": "adapt-category100",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s008",
+      "locator": "S8FigureA-D; Data summary; S4Table",
+      "supports": "Category-selectivity sensitivity at d-prime1.0 with6reported electrodes: preferred/nonpreferred traces, recovery byISI and1second recovery. Results prose mislabels supplementary references; retain correct caption identity and disclose conflict."
+    },
+    {
+      "id": "adapt-rosters",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161",
+      "locator": "Data selection and Data summary; Figure2C; S9/S10Figures; S1-S4Tables",
+      "supports": "Four participants and original anatomical/selection provenance; source data-summary groups17/15/47 and category thresholds0.5/0.75/1 with reported counts26/12/6. Counts alone do not authenticate electrode identities."
+    },
+    {
+      "id": "adapt-category-fit-control",
+      "kind": "paper",
+      "url": "https://doi.org/10.1371/journal.pcbi.1012161.s011",
+      "locator": "S11Figure; Model evaluation",
+      "supports": "Source example compares DN with/without category scaling on a least-preferred category, preserving possible strongly negative R2. Exact example identity and values require recovery."
+    },
+    {
+      "id": "adapt-compute",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/modelling_computeData.py",
+      "locator": "lines27-47,56-103,109 in pinned source",
+      "supports": "Constructs all72 category-by-temporal conditions from source events, exclusions and baseline-corrected epochs; three metadata columns precede named samples. Exclusion row indexing requires reconciliation."
+    },
+    {
+      "id": "adapt-model",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/models/Models_DN.py",
+      "locator": "DN dynamics and category scaling; reviewed code closure at commit09cd778fac545d406cba39ba408f0f00fbe39975",
+      "supports": "Source-native stimulus/input-drive/normalization/output traces and time constants; nonidentifiable category-scale/semisaturation combinations prohibit a fabricated unique-parameter target."
+    },
+    {
+      "id": "adapt-source-data",
+      "kind": "author_data",
+      "url": "https://openneuro.org/datasets/ds004194/versions/3.0.0",
+      "locator": "Brandsetal2024TemporalAdaptationECoG derivative; source roster, events, epochs, timing and condition-mean tables",
+      "supports": "Author-linked source route; release-to-publication correspondence, exact category-selective identities and complete analytic lineage are not established by a URL or table count."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The retained named empirical family comprises DN/category-scaled model refitting and source-defined adaptation-hierarchy/category-selectivity comparisons. Figure 3C prediction is a legitimate within-family model result supported by the original prediction-improvement proposal. Preserve the appropriate populations and indispensable controls for each named finding. No automatic every-figure requirement or sole-primary Figure 3C replacement is selected.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-readme"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visual ECoG dataset OpenNeuro ds004194 is author-linked. Registration names version 3.0.0, but the reviewed primary sources do not pin that version’s exact processed files to the published Figure 3 fit inputs. Freeze the source release, trial manifest and preprocessing lineage before comparison.",
+      "evidence_ids": [
+        "adapt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original p11-p14 empirical recording family with the source-defined responsive regional and category-selective populations for each named comparison. Figure 3C uses all 79 source-responsive electrodes (17 V1-V3, 15 VOTC, 47 LOTC); the main preferred/nonpreferred comparison uses the source d-prime >0.5 population reported as 26 electrodes. Exact electrode, trial, region and category-preference identities and publication input lineage remain unqualified; counts are not identity manifests. No favorable participant, region or category subset is permitted.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure",
+        "adapt-category",
+        "adapt-rosters"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Keep separate original full-data DN/category-scaled fits used for temporal/category summaries and Figure 3C condition-held-out fits. The prediction component has all 72 conditions, 12 source sample/remove folds, 66 training and six query traces, one query per category. Original RNG allocations are absent; a prospective exact-protocol replay does not recover the historical run. Full-data biological summaries cannot be reported as held-condition or unseen-participant prediction.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-summary-metrics"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Use the source measured single/repeated-stimulus broadband responses, stimulus timing, category identity and source trial/electrode/preference metadata appropriate to each named result. Binary stimulus/category inputs drive DN refits; fitted states, published curve/result arrays and evaluator targets are outputs or protected assessment evidence rather than prediction inputs. Full-data fitting and train-only condition-CV access have distinct, explicit boundaries.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-compute"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source rereferencing, broadband extraction, trial/artifact and electrode selection, run-wise prestimulus baseline correction and original condition averaging. Authenticate the exclusion-mask indexing, source selection exposure, source time grid and category/region joins. Source baseline code returns a fraction whereas paper plots describe percentage change; do not silently change units or treat display smoothing as fitting preprocessing.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-readme",
+        "adapt-compute",
+        "adapt-summary-metrics"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Keep source-defined quantities separate: fitted broadband time courses; onset-to-peak at the longest single-pulse duration and FWHM across source durations; isolated second/first response AUC recovery across source ISIs, mean recovery and source log-curve extrapolation at one second; preferred/nonpreferred recovery comparisons. Figure 3C separately uses held-condition R2 with native NaN handling and rounding. No single pooled score, parameter-identity requirement or prediction gain substitutes for the biological quantities.",
+      "evidence_ids": [
+        "adapt-summary-metrics",
+        "adapt-duration",
+        "adapt-recovery",
+        "adapt-category",
+        "adapt-fit",
+        "adapt-score"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "For temporal/recovery results preserve source electrode-resampled mean traces before deriving metrics, the reported median and descriptive 16th/84th percentiles over 1000 resamples, and the source regional or category-selected pooling appropriate to that claim. Figure 3C separately averages six rounded condition R2 values per fold, 12 folds per electrode, then regional bootstrap medians. Match source row/condition ordering, first-response subtraction, integration and normalization. Neither electrode resampling nor a printed interval automatically defines participant-level inference or reproduction equivalence.",
+      "evidence_ids": [
+        "adapt-summary-metrics",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-category"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Represent the adopted DN/refit, adaptation-hierarchy and category-selectivity family through source-indexed fitted responses, regional temporal/recovery quantities and main preferred/nonpreferred recovery quantities, with the complete Figure 3C comparison reported as a separate within-family component. Preserve all original identities, conditions, source controls and granular derivations for these named comparisons. Exact source output references, category-selected identities and indispensable-control bindings remain unresolved. The former 440-descriptor inventory, alternative-model/mechanism figures and threshold/preference supplements are retained as associated evidence, not an automatic mandatory denominator; no sole Figure 3C or every-figure selection is made.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-duration",
+        "adapt-recovery",
+        "adapt-category",
+        "adapt-fit",
+        "adapt-figure"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Authenticated source responses and metadata are permitted for original full-data refits and empirical biological summaries. For Figure 3C, each fit sees only its 66 training responses; the six query identities omit targets. Source selection exposure and all access remain declared. The author-code information condition may add only the approved immutable author source to otherwise matched data/noncode resources. No protected authentic transport, output verifier or paired family protocol is established; current improvement remains a narrower prediction component.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-compute",
+        "adapt-readme"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "original_dn_full_data_refits",
+      "kind": "indexed_array_family",
+      "description": "Original DN/category-scaled full-data fitted response time courses needed for the enrolled temporal/category comparisons. Fitted parameter vectors and optimizer/source configuration are mandatory execution provenance; nonidentifiable parameter values are not a numerical biological target.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "original_dn_full_data_refits",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "full_data_fitted_responses",
+            "manifest_key": "full_data_fitted_responses",
+            "source_quantity": "Source model response on all original condition rows for each original electrode, source panel and DN configuration.",
+            "membership": "data_dependent",
+            "shape": [
+              72,
+              819
+            ],
+            "axes": [
+              {
+                "name": "source_response_condition",
+                "units": "original condition identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All 72 original ordered trial_type/img_cat/temp_cond rows; actual per-electrode order must be authenticated, not generated by sorting."
+                }
+              },
+              {
+                "name": "named_neural_sample",
+                "units": "source column ordinal",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 819
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source baseline-corrected broadband units; fraction/percent and normalization lineage unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fit each source condition-mean dataset with the qualified source DN configuration and retain all condition predictions in original order. Named-column full fits are distinct from positional CV targets. Active P versus intended S and source invocation history remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_panel",
+                "source_electrode",
+                "source_model_configuration"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact original source identity/order and complete record support require an independently authenticated manifest; no record IDs or correspondence hash are invented.",
+                "evidence_ids": [
+                  "adapt-paper",
+                  "adapt-fit",
+                  "adapt-compute",
+                  "adapt-model"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "adapt-paper",
+              "adapt-fit",
+              "adapt-compute",
+              "adapt-model"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-paper",
+          "adapt-fit",
+          "adapt-compute",
+          "adapt-model"
+        ]
+      },
+      "required_granular_output_ids": [
+        "source_observations_and_selection",
+        "full_fit_predictions",
+        "fit_execution_and_parameters"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare complete source-equivalent full-fit prediction records after authentic source configuration and support are bound. Do not require unique fitted parameter values or treat saved curves alone as evidence of executed fitting.",
+        "independent_unit": "Source participants with electrodes nested within participant; source fit/bootstrap randomness is separate from biological replication.",
+        "dependence": "Preserve repeated conditions within electrode, shared fitting/training data, regional participant coverage and category-selected pooling. Bootstrap draws, folds and electrodes are not additional independent people.",
+        "multiplicity": "No favorable array element, region or preference selection. A justified joint rule across complete declared members and all required controls is unresolved; no threshold or across-quantity scalar is invented.",
+        "rationale": "Source quantities are genuine indexed outputs, but authentic source-equivalent references, identities and numerical agreement/uncertainty policies are not frozen. Source gaps are not scientific ineligibility. Unsupported causal/mechanistic or biological-superiority claims are not admitted by this numerical class.",
+        "evidence_ids": [
+          "adapt-paper",
+          "adapt-fit",
+          "adapt-compute",
+          "adapt-model"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-compute",
+        "adapt-model"
+      ]
+    },
+    {
+      "id": "regional_temporal_adaptation",
+      "kind": "indexed_array_family",
+      "description": "Regional temporal quantities underpinning the named adaptation hierarchy; complete source time courses and peak/half-height derivations accompany reported summaries.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "regional_temporal_adaptation",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "neural_data_duration_traces",
+            "manifest_key": "neural_data_duration_traces",
+            "source_quantity": "Source regional mean response time courses for every original single-pulse duration.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "single_pulse_duration",
+                "units": "paper duration label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source response units and normalization; exact scale unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Keep source observed/model traces separate, with source bootstrap average traces and display-only smoothing distinguished. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "neural_data_time_to_peak",
+            "manifest_key": "neural_data_time_to_peak",
+            "source_quantity": "Source onset-to-peak response delay for the longest 533 ms stimulus, by region.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds as reported; native time conversion requires source binding",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "neural_data_fwhm",
+            "manifest_key": "neural_data_fwhm",
+            "source_quantity": "Source response full-width at half-maximum for every original duration, by region.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "single_pulse_duration",
+                "units": "paper duration label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds as reported; native time conversion requires source binding",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_duration_traces",
+            "manifest_key": "DN_S_full_fit_duration_traces",
+            "source_quantity": "Source regional mean response time courses for every original single-pulse duration.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "single_pulse_duration",
+                "units": "paper duration label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source response units and normalization; exact scale unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Keep source observed/model traces separate, with source bootstrap average traces and display-only smoothing distinguished. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_time_to_peak",
+            "manifest_key": "DN_S_full_fit_time_to_peak",
+            "source_quantity": "Source onset-to-peak response delay for the longest 533 ms stimulus, by region.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds as reported; native time conversion requires source binding",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_fwhm",
+            "manifest_key": "DN_S_full_fit_fwhm",
+            "source_quantity": "Source response full-width at half-maximum for every original duration, by region.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "single_pulse_duration",
+                "units": "paper duration label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds as reported; native time conversion requires source binding",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-duration",
+              "adapt-summary-metrics",
+              "adapt-paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-duration",
+          "adapt-summary-metrics",
+          "adapt-paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "regional_bootstrap_traces",
+        "source_peak_halfheight_coordinates",
+        "source_observations_and_selection",
+        "full_fit_predictions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Numerical comparison of original regional traces and source temporal summaries requires authenticated time coordinates, source reference arrays and a justified criterion; directional claims are retained separately.",
+        "independent_unit": "Source participants with electrodes nested within participant; source fit/bootstrap randomness is separate from biological replication.",
+        "dependence": "Preserve repeated conditions within electrode, shared fitting/training data, regional participant coverage and category-selected pooling. Bootstrap draws, folds and electrodes are not additional independent people.",
+        "multiplicity": "No favorable array element, region or preference selection. A justified joint rule across complete declared members and all required controls is unresolved; no threshold or across-quantity scalar is invented.",
+        "rationale": "Source quantities are genuine indexed outputs, but authentic source-equivalent references, identities and numerical agreement/uncertainty policies are not frozen. Source gaps are not scientific ineligibility. Unsupported causal/mechanistic or biological-superiority claims are not admitted by this numerical class.",
+        "evidence_ids": [
+          "adapt-duration",
+          "adapt-summary-metrics",
+          "adapt-paper"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-duration",
+        "adapt-summary-metrics",
+        "adapt-paper"
+      ]
+    },
+    {
+      "id": "regional_repetition_recovery",
+      "kind": "indexed_array_family",
+      "description": "Original regional recovery hierarchy from repeated-stimulus responses, preserving response isolation, all ISIs and the distinction between measured recovery and extrapolation.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "regional_repetition_recovery",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "neural_data_first_response",
+            "manifest_key": "neural_data_first_response",
+            "source_quantity": "Source estimated first-response trace used for subtraction/integration.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source first-response construction from the 134 ms single-pulse response and repetition responses before second onset, source averaging and integration support.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "neural_data_isolated_second_response",
+            "manifest_key": "neural_data_isolated_second_response",
+            "source_quantity": "Source first-response-subtracted second-response trace for every ISI.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the original first-response estimate and retain source windows and all isolated traces. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "neural_data_recovery_ratio",
+            "manifest_key": "neural_data_recovery_ratio",
+            "source_quantity": "Source isolated second-response AUC divided by first-response AUC, for all six ISIs.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless AUC_second/AUC_first",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "neural_data_mean_recovery",
+            "manifest_key": "neural_data_mean_recovery",
+            "source_quantity": "Source recovery ratio averaged across all six original ISIs.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless mean recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "neural_data_recovery_at_one_second",
+            "manifest_key": "neural_data_recovery_at_one_second",
+            "source_quantity": "Source heuristic log-recovery curve evaluated at one second; an extrapolated quantity, not a measured ISI.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless extrapolated recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fit the source y=c+a*log(x) relation using original six ISIs and source time units, evaluate at one second. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_first_response",
+            "manifest_key": "DN_S_full_fit_first_response",
+            "source_quantity": "Source estimated first-response trace used for subtraction/integration.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source first-response construction from the 134 ms single-pulse response and repetition responses before second onset, source averaging and integration support.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_isolated_second_response",
+            "manifest_key": "DN_S_full_fit_isolated_second_response",
+            "source_quantity": "Source first-response-subtracted second-response trace for every ISI.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Subtract the original first-response estimate and retain source windows and all isolated traces. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_recovery_ratio",
+            "manifest_key": "DN_S_full_fit_recovery_ratio",
+            "source_quantity": "Source isolated second-response AUC divided by first-response AUC, for all six ISIs.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless AUC_second/AUC_first",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_mean_recovery",
+            "manifest_key": "DN_S_full_fit_mean_recovery",
+            "source_quantity": "Source recovery ratio averaged across all six original ISIs.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless mean recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_recovery_at_one_second",
+            "manifest_key": "DN_S_full_fit_recovery_at_one_second",
+            "source_quantity": "Source heuristic log-recovery curve evaluated at one second; an extrapolated quantity, not a measured ISI.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless extrapolated recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fit the source y=c+a*log(x) relation using original six ISIs and source time units, evaluate at one second. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-recovery",
+              "adapt-repetition-traces",
+              "adapt-response-isolation",
+              "adapt-summary-metrics"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces",
+          "adapt-response-isolation",
+          "adapt-summary-metrics"
+        ]
+      },
+      "required_granular_output_ids": [
+        "regional_bootstrap_traces",
+        "pulse_isolation_auc_windows",
+        "recovery_log_fit_coefficients",
+        "source_observations_and_selection",
+        "full_fit_predictions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare complete source regional recovery quantities only after source first-response construction, integration/log-fit definitions and source-equivalent references are authenticated. No extrapolated value is promoted to an observed response.",
+        "independent_unit": "Source participants with electrodes nested within participant; source fit/bootstrap randomness is separate from biological replication.",
+        "dependence": "Preserve repeated conditions within electrode, shared fitting/training data, regional participant coverage and category-selected pooling. Bootstrap draws, folds and electrodes are not additional independent people.",
+        "multiplicity": "No favorable array element, region or preference selection. A justified joint rule across complete declared members and all required controls is unresolved; no threshold or across-quantity scalar is invented.",
+        "rationale": "Source quantities are genuine indexed outputs, but authentic source-equivalent references, identities and numerical agreement/uncertainty policies are not frozen. Source gaps are not scientific ineligibility. Unsupported causal/mechanistic or biological-superiority claims are not admitted by this numerical class.",
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces",
+          "adapt-response-isolation",
+          "adapt-summary-metrics"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-recovery",
+        "adapt-repetition-traces",
+        "adapt-response-isolation",
+        "adapt-summary-metrics"
+      ]
+    },
+    {
+      "id": "category_selectivity_adaptation",
+      "kind": "indexed_array_family",
+      "description": "Named main category-selectivity comparison of repetition suppression/recovery for preferred versus nonpreferred stimuli, with original source selection and response-isolation controls.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "category_selectivity_adaptation",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "neural_data_preferred_nonpreferred_traces",
+            "manifest_key": "neural_data_preferred_nonpreferred_traces",
+            "source_quantity": "Main source category-selective preferred/nonpreferred repeated-stimulus responses.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Use the original main category-selective population (d-prime >0.5, reported n=26) and source preference/nonpreference averaging. Counts do not establish identities. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "neural_data_isolated_second_response",
+            "manifest_key": "neural_data_isolated_second_response",
+            "source_quantity": "Main source category-selective isolated second-response traces, retaining both preference groups.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source preference-specific first-response estimates and subtraction/integration windows. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "neural_data_preference_recovery_ratio",
+            "manifest_key": "neural_data_preference_recovery_ratio",
+            "source_quantity": "Preferred/nonpreferred source recovery ratios across all original ISIs.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless AUC_second/AUC_first",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "neural_data_preference_recovery_at_one_second",
+            "manifest_key": "neural_data_preference_recovery_at_one_second",
+            "source_quantity": "Preferred/nonpreferred source log-recovery extrapolation at one second.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless extrapolated recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original six observations, source coefficients and one-second evaluation for each preference. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_preferred_nonpreferred_traces",
+            "manifest_key": "DN_S_full_fit_preferred_nonpreferred_traces",
+            "source_quantity": "Main source category-selective preferred/nonpreferred repeated-stimulus responses.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Use the original main category-selective population (d-prime >0.5, reported n=26) and source preference/nonpreference averaging. Counts do not establish identities. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_isolated_second_response",
+            "manifest_key": "DN_S_full_fit_isolated_second_response",
+            "source_quantity": "Main source category-selective isolated second-response traces, retaining both preference groups.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_time",
+                "units": "source timebase; exact physical coordinates unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original source time grid and source-specific normalization/integration/display alignment must be authenticated; no new resampling grid is chosen."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source broadband response units; normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source preference-specific first-response estimates and subtraction/integration windows. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_preference_recovery_ratio",
+            "manifest_key": "DN_S_full_fit_preference_recovery_ratio",
+            "source_quantity": "Preferred/nonpreferred source recovery ratios across all original ISIs.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              6,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "interstimulus_interval",
+                "units": "paper ISI label in milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    17,
+                    33,
+                    67,
+                    134,
+                    267,
+                    533
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless AUC_second/AUC_first",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          },
+          {
+            "id": "DN_S_full_fit_preference_recovery_at_one_second",
+            "manifest_key": "DN_S_full_fit_preference_recovery_at_one_second",
+            "source_quantity": "Preferred/nonpreferred source log-recovery extrapolation at one second.",
+            "membership": "fixed",
+            "shape": [
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_preference",
+                "units": "source preferred/nonpreferred label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "preferred",
+                    "nonpreferred"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless extrapolated recovery ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original six observations, source coefficients and one-second evaluation for each preference. Source resamples electrodes 1000 times, averages original traces within the declared source panel before deriving the metric, and reports median and descriptive 16th/84th percentiles. Preserve draw identities, category averaging, normalization and source timing; these intervals are outputs, not a reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-category",
+              "adapt-summary-metrics",
+              "adapt-rosters",
+              "adapt-response-isolation"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-category",
+          "adapt-summary-metrics",
+          "adapt-rosters",
+          "adapt-response-isolation"
+        ]
+      },
+      "required_granular_output_ids": [
+        "category_selection_and_preference",
+        "category_bootstrap_traces",
+        "pulse_isolation_auc_windows",
+        "recovery_log_fit_coefficients",
+        "full_fit_predictions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare original preferred/nonpreferred arrays on authenticated source identities and normalization. Exact selection/preference computation and reference arrays remain unqualified; threshold sensitivities and additional source panels are associated evidence pending indispensable-control mapping.",
+        "independent_unit": "Source participants with electrodes nested within participant; source fit/bootstrap randomness is separate from biological replication.",
+        "dependence": "Preserve repeated conditions within electrode, shared fitting/training data, regional participant coverage and category-selected pooling. Bootstrap draws, folds and electrodes are not additional independent people.",
+        "multiplicity": "No favorable array element, region or preference selection. A justified joint rule across complete declared members and all required controls is unresolved; no threshold or across-quantity scalar is invented.",
+        "rationale": "Source quantities are genuine indexed outputs, but authentic source-equivalent references, identities and numerical agreement/uncertainty policies are not frozen. Source gaps are not scientific ineligibility. Unsupported causal/mechanistic or biological-superiority claims are not admitted by this numerical class.",
+        "evidence_ids": [
+          "adapt-category",
+          "adapt-summary-metrics",
+          "adapt-rosters",
+          "adapt-response-isolation"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-category",
+        "adapt-summary-metrics",
+        "adapt-rosters",
+        "adapt-response-isolation"
+      ]
+    },
+    {
+      "id": "figure3c_prediction_component",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure 3C source condition-CV comparison remains a separately reported within-family empirical prediction component. Its current improvement contract is narrower than this standalone original-primary reproduction contract.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure3c_prediction_component",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "held_condition_prediction_traces",
+            "manifest_key": "held_condition_prediction_traces",
+            "source_quantity": "All original condition-CV query predictions, each fold with six source-balanced conditions.",
+            "membership": "data_dependent",
+            "shape": [
+              6,
+              819
+            ],
+            "axes": [
+              {
+                "name": "source_query_condition",
+                "units": "original condition identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Six source query identities for this electrode/model/fold, one per category; historical realization is not recovered."
+                }
+              },
+              {
+                "name": "source_cv_target_position",
+                "units": "source positional or named-column branch",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "819 source target positions. Literal CV includes temp_cond and excludes sample 818; corrected named-column branch and physical time correspondence remain explicit and unqualified."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source target-branch response units; literal metadata coordinate is not a neural sample",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original one-per-category sample/remove loop. Bind complete source electrode/model/fold coverage, explicit target-column branch and source condition order before comparison.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_electrode",
+                "source_model",
+                "source_fold",
+                "source_target_branch"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact original source identity/order and complete record support require an independently authenticated manifest; no record IDs or correspondence hash are invented.",
+                "evidence_ids": [
+                  "adapt-fit",
+                  "adapt-score",
+                  "adapt-figure",
+                  "adapt-paper"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "adapt-fit",
+              "adapt-score",
+              "adapt-figure",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "condition_r2",
+            "manifest_key": "condition_r2",
+            "source_quantity": "Source per-query condition R2 rounded to three decimals.",
+            "membership": "data_dependent",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_query_condition",
+                "units": "original condition identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Six source query identities for this electrode/model/fold, one per category; historical realization is not recovered."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original NaN behavior and source rounding for all six query traces, not pooled trace R2.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_electrode",
+                "source_model",
+                "source_fold",
+                "source_target_branch"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact original source identity/order and complete record support require an independently authenticated manifest; no record IDs or correspondence hash are invented.",
+                "evidence_ids": [
+                  "adapt-fit",
+                  "adapt-score",
+                  "adapt-figure",
+                  "adapt-paper"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "adapt-fit",
+              "adapt-score",
+              "adapt-figure",
+              "adapt-paper"
+            ]
+          },
+          {
+            "id": "regional_r2_summary",
+            "manifest_key": "regional_r2_summary",
+            "source_quantity": "Figure 3C separate original region/model bootstrap summaries.",
+            "membership": "fixed",
+            "shape": [
+              3,
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "visual_area",
+                "units": "source region label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "source_model",
+                "units": "original DN scaling label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "DN_none",
+                    "DN_S"
+                  ]
+                }
+              },
+              {
+                "name": "source_bootstrap_summary",
+                "units": "percentile",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    16,
+                    50,
+                    84
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average the six rounded condition scores within each fold with four-decimal rounding, then all 12 fold scores per electrode with four-decimal rounding. Preserve 1000 within-region electrode-resampled medians and their median/16th/84th percentiles; do not pool regions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-fit",
+              "adapt-score",
+              "adapt-figure",
+              "adapt-paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-fit",
+          "adapt-score",
+          "adapt-figure",
+          "adapt-paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_fold_manifest_and_target_branch",
+        "all_query_predictions_and_score_levels",
+        "regional_score_bootstrap",
+        "source_observations_and_selection"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Preserve both DN_none and DN_S source comparisons and the original region-wise prediction support. A future candidate improvement must compare with qualified DN_S on paired inputs/folds; numerical agreement or prediction gain alone cannot establish biological/full-family improvement.",
+        "independent_unit": "Source participants with electrodes nested within participant; source fit/bootstrap randomness is separate from biological replication.",
+        "dependence": "Preserve repeated conditions within electrode, shared fitting/training data, regional participant coverage and category-selected pooling. Bootstrap draws, folds and electrodes are not additional independent people.",
+        "multiplicity": "No favorable array element, region or preference selection. A justified joint rule across complete declared members and all required controls is unresolved; no threshold or across-quantity scalar is invented.",
+        "rationale": "Source quantities are genuine indexed outputs, but authentic source-equivalent references, identities and numerical agreement/uncertainty policies are not frozen. Source gaps are not scientific ineligibility. Unsupported causal/mechanistic or biological-superiority claims are not admitted by this numerical class.",
+        "evidence_ids": [
+          "adapt-fit",
+          "adapt-score",
+          "adapt-figure",
+          "adapt-paper"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-fit",
+        "adapt-score",
+        "adapt-figure",
+        "adapt-paper"
+      ]
+    },
+    {
+      "id": "duration-hierarchy-neural_data",
+      "kind": "categorical",
+      "description": "neural_data: ordering of533ms time-to-peak across original visual areas; separate per-area magnitudes and traces remain required. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "V1-V3_below_VOTC_below_LOTC",
+      "units": "time-to-peak ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-duration"
+      ],
+      "categories": [
+        "V1-V3_below_VOTC_below_LOTC",
+        "different_order",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-duration"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-duration"
+        ]
+      }
+    },
+    {
+      "id": "recovery-hierarchy-neural_data",
+      "kind": "categorical",
+      "description": "neural_data: higher visual areas show stronger repetition suppression and slower recovery than V1-V3; retain per-ISI magnitudes, mean and1second extrapolation. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "VOTC_and_LOTC_less_recovered_than_V1-V3",
+      "units": "regional recovery ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-recovery",
+        "adapt-repetition-traces"
+      ],
+      "categories": [
+        "VOTC_and_LOTC_less_recovered_than_V1-V3",
+        "different_order",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces"
+        ]
+      }
+    },
+    {
+      "id": "category-direction-dprime0.5-neural_data",
+      "kind": "categorical",
+      "description": "neural_data, d-prime0.5: preferred stimuli have stronger repetition suppression and slower recovery; numerical curves and extrapolated effects remain required. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "preferred_less_recovered_than_nonpreferred",
+      "units": "preference recovery ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-category"
+      ],
+      "categories": [
+        "preferred_less_recovered_than_nonpreferred",
+        "same_recovery",
+        "preferred_more_recovered",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-category"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-category"
+        ]
+      }
+    },
+    {
+      "id": "duration-hierarchy-DN_S_full_fit",
+      "kind": "categorical",
+      "description": "DN_S_full_fit: ordering of533ms time-to-peak across original visual areas; separate per-area magnitudes and traces remain required. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "V1-V3_below_VOTC_below_LOTC",
+      "units": "time-to-peak ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-duration"
+      ],
+      "categories": [
+        "V1-V3_below_VOTC_below_LOTC",
+        "different_order",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-duration"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-duration"
+        ]
+      }
+    },
+    {
+      "id": "recovery-hierarchy-DN_S_full_fit",
+      "kind": "categorical",
+      "description": "DN_S_full_fit: higher visual areas show stronger repetition suppression and slower recovery than V1-V3; retain per-ISI magnitudes, mean and1second extrapolation. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "VOTC_and_LOTC_less_recovered_than_V1-V3",
+      "units": "regional recovery ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-recovery",
+        "adapt-repetition-traces"
+      ],
+      "categories": [
+        "VOTC_and_LOTC_less_recovered_than_V1-V3",
+        "different_order",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-recovery",
+          "adapt-repetition-traces"
+        ]
+      }
+    },
+    {
+      "id": "category-direction-dprime0.5-DN_S_full_fit",
+      "kind": "categorical",
+      "description": "DN_S_full_fit, d-prime0.5: preferred stimuli have stronger repetition suppression and slower recovery; numerical curves and extrapolated effects remain required. This scientific source ordering supplements the indexed quantities; it does not replace their magnitudes, identities or derivation.",
+      "status": "verified",
+      "expected": "preferred_less_recovered_than_nonpreferred",
+      "units": "preference recovery ordering",
+      "aggregation": "For the declared panel, resample original electrodes1000times, average their source traces before deriving the metric, then retain the median and descriptive16th/84th percentiles. Keep neural-data and full-fit model summaries separate; source normalization, smoothing, timing and any preference averaging must be independently reconciled.",
+      "evidence_ids": [
+        "adapt-category"
+      ],
+      "categories": [
+        "preferred_less_recovered_than_nonpreferred",
+        "same_recovery",
+        "preferred_more_recovered",
+        "undefined"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical vocabulary records the source claim only; it does not replace magnitude, source traces or an execution-derived verification.",
+        "evidence_ids": [
+          "adapt-category"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source summaries use electrode resampling; an independently justified reproduction criterion and handling of stochastic refits/resampling are not frozen.",
+        "independent_unit": "Participant, with electrodes nested within participant and repeated conditions within electrode; source descriptive electrode resampling is not independent-person replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Retain original descriptive medians/68% intervals and source statistical comparisons as required outputs. Do not infer a confidence level, replication minimum, causal mechanism or equivalence from source significance/nonrejection; region-specific participant coverage and reused folds remain explicit.",
+        "evidence_ids": [
+          "adapt-category"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact source-equivalent response/output reference arrays, original fit invocations, processed release/publication lineage and original responsive/category-selective identities remain unresolved. No expected reference or authentic identity/policy/program hash is invented.",
+    "Known axis labels and source counts describe reviewed quantities, not authenticated full-array support. Source condition order, physical time coordinates, selection/preference membership, native dtype and array-domain/correspondence policies require independent binding.",
+    "Preserve full-data named-column fits separately from the inspected CV positional slice that includes temp_cond and omits sample 818. Active category-selective/P fitter defaults differ from responsive/S Figure 3 settings. No historical parity or silent correction is claimed.",
+    "Biological summaries require source trial/artifact masks, baseline units, pulse isolation, relevant duration/ISI windows, original trace averaging, integration/log-fit and bootstrap derivations. Source raw fraction versus plotted percent, display smoothing and selection lineage remain open.",
+    "Fitted parameters and source optimization history are required execution evidence, not unique mechanistic targets; category-scale/semisaturation tradeoffs preclude invented parameter equivalence. The native model/runtime has not been qualified or executed.",
+    "Keep the adopted named family and only indispensable source controls mandatory. Associated preference strata, threshold sensitivities, mechanism, two-channel and supplementary descriptors remain preserved; their entire numerical envelope is not automatically enrolled. Final named-result/control boundary remains a source qualification gap.",
+    "Figure 3C has all original responsive electrodes, conditions, models and regions. Historical fold identities or a justified exact-source stochastic replay, source NaN/rounding, numerical comparator and configuration must be authenticated. Existing replay supplies packets only.",
+    "All scalar/categorical uncertainty rules and indexed-array numerical reference/criterion/uncertainty policies remain unresolved. Descriptive 68% bootstrap intervals are not a chosen equivalence margin or independent-participant inference. No biological superiority criterion is inferred from larger effects or prediction R2.",
+    "The V2 numerical-reference class does not admit causal/mechanistic explanation or biological superiority from these arrays. Such unsupported claim classes remain outside this declaration, distinct from missing scientific reference/criterion evidence.",
+    "This standalone primary intentionally differs from the narrower current Figure 3C improvement target. Full-primary paired outcome binding is unavailable under the accepted route; no outcomes file, final task identity, authentic exposure/resource protocol or admission policy is created."
+  ]
+}

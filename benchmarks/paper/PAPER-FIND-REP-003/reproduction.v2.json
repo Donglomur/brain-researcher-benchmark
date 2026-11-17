@@ -1,0 +1,2495 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-REP-003",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The accepted original primary contains five-mouse M1/S1 kinematic decoding and a distinct two-mouse M1-fl intervention timing/trajectory finding. Source-defined indexed quantities and claim directions can be declared honestly, but source identities, numerical references, data-dependent support, independent verification and scientific criteria remain unresolved. Figure 5 evidence is partial primary coverage. This standalone reproduction declaration is independent of the narrower current Figure 5 improvement contract and does not admit a whole-primary paired bundle.",
+  "source_paper": {
+    "title": "Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping",
+    "url": "https://doi.org/10.7554/eLife.106270.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12885482/",
+      "locator": "Version of Record; Figure 5 A–H; Methods: Joint angle and velocity decoding",
+      "supports": "Original joint-angle reconstruction, five-mouse comparison, 90/10 trial splits repeated 50 times, input processing and figure aggregation."
+    },
+    {
+      "id": "cv",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/cvRegress.m",
+      "locator": "Cross-validation partition loop and VEs assignments",
+      "supports": "Trial-level modulo splits and VE = 1 - var(test residual)/var(test target), not uncentered SSE-based R-squared."
+    },
+    {
+      "id": "decode",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decode.m",
+      "locator": "PCA and cvRegress call",
+      "supports": "Source pre-CV neural PCA and nPartitions=10, nFolds=5: the implementation loops five repetitions of ten held-out partitions despite potentially confusing variable names."
+    },
+    {
+      "id": "population",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_analysis.m",
+      "locator": "mouseInfoM1, mouseInfoS1 and rng(240926)",
+      "supports": "Pins five mice, their ten M1/S1 sessions, RADICaL and deconvolved branches, and source RNG seed."
+    },
+    {
+      "id": "load",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/loadDecode.m",
+      "locator": "preT/postT, ZETA sorting and ROIs",
+      "supports": "Uses lift-locked -100 to 400 ms and top 100 lift-modulated cells; instantaneous and lagged branches are distinct."
+    },
+    {
+      "id": "repo",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/README.md",
+      "locator": "Repository introduction and data DOI",
+      "supports": "Connects the source figure implementation to Figshare 28326998."
+    },
+    {
+      "id": "local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "score_arrays, evaluate and aggregation output",
+      "supports": "Local normalized scorer preserves source VE but its phase-template delta, fold/joint reduction and equal-mouse summary are prospective choices."
+    },
+    {
+      "id": "main",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_main.m",
+      "locator": "A-H panel construction, jointsToPlot, median-VE trial selection",
+      "supports": "Main per-joint score distributions, selected joint time courses, skeletal postures and all-mouse summaries."
+    },
+    {
+      "id": "plot_all",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/plots/plotVEAll.m",
+      "locator": "jointsP=1:7, jointsD=8:24; median(median(VEs(:,joints)))",
+      "supports": "Each mouse and area has one median-over-joint-medians summary for each proximal/distal group; preserve the separate per-joint medians."
+    },
+    {
+      "id": "supp1",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp1.m",
+      "locator": "A-B outputsM1_sd/outputsS1_sd; C-D outputsM1_rv/outputsS1_rv",
+      "supports": "Required smoothed deconvolved-angle and RADICaL-velocity companions."
+    },
+    {
+      "id": "supp2",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp2.m",
+      "locator": "outputPrxDst, outputD2S and plotVEvsVar",
+      "supports": "Required proximal/distal partial, distance-to-spout partial and actual-kinematic-variance versus VE companions."
+    },
+    {
+      "id": "supp3",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp3.m",
+      "locator": "A-B outputResL; C-D outputResR; E-F outputWc; G-H outputWa",
+      "supports": "Required target-residual and causal/acausal lag companions; source plotting order conflicts with article caption target labels."
+    },
+    {
+      "id": "partial_pd",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodePartialPrxDst.m",
+      "locator": "Source mutual proximal/distal regression before PCA and CV",
+      "supports": "Preserve full-data target residualization and its actual observation exposure."
+    },
+    {
+      "id": "partial_d2s",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodePartialD2S.m",
+      "locator": "Source distance-to-spout regression before PCA and CV",
+      "supports": "Preserve source distance predictors and target residualization before CV."
+    },
+    {
+      "id": "residual",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodeResiduals.m",
+      "locator": "LR==1 defines L, LR==2 defines R; condition-wise mean subtraction",
+      "supports": "Preserve target identities, trial membership and source all-trial mean subtraction; do not silently swap L/R labels to fit the caption."
+    },
+    {
+      "id": "wiener",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodeWiener.m",
+      "locator": "Lagged neural predictors and cvRegress",
+      "supports": "Preserve source causal/acausal lags, outcome alignment, PCA and 50 fits."
+    },
+    {
+      "id": "variance",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/plots/plotVEvsVar.m",
+      "locator": "var(outcomes(testInds,j)) paired with VEs(f,j)",
+      "supports": "Source scatter consists of each held-out joint/fold target variance and its VE, not a newly invented correlation scalar."
+    },
+    {
+      "id": "pca",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/pca4Regression.m",
+      "locator": "Pre-CV PCA and random orthogonal rotation",
+      "supports": "PCA uses source pre-CV exposure; random rotation consumes the source RNG before subsequent fold generation."
+    },
+    {
+      "id": "bagged",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/baggedDecode.m",
+      "locator": "Held-out model reconstruction and trial-wise outputs",
+      "supports": "Original trajectory/posture route requires source jointAnglesRecon and posXYZRecon, beyond the current VE exporter."
+    },
+    {
+      "id": "inverse",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/inverseKinematics_PD_vAF.m",
+      "locator": "Angle-to-skeleton reconstruction",
+      "supports": "Source geometric reconstruction required for displayed skeletal postures."
+    },
+    {
+      "id": "author_data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.6084/m9.figshare.28326998",
+      "locator": "Data archive linked by pinned author README; exact article-version/file set unresolved",
+      "supports": "Identifies the original data collection, not an authenticated complete Figure 5 input manifest."
+    },
+    {
+      "id": "intervention_paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12885482/",
+      "locator": "Figure 1 H/I and Results intervention paragraph; Methods animals/optogenetics; cached reviewed text lines13-15,54,60",
+      "supports": "Separate two-mouse M1-fl inactivation contact/event timing and disrupted-trajectory finding. Source timing, caption/text panel joins and unconditional contact denominators remain unresolved; no S1 intervention was performed."
+    },
+    {
+      "id": "intervention_hist",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig1/plots/plotOptoHists.m",
+      "locator": "lines7-12 eligibility;19-24 binEdges and vals_N/vals_O",
+      "supports": "Source histogram pools two intervention mice and selects success==1, optoProblem==0, contact after lift and wrongGrabFirst==0. Thirty edges linspace(0,9,30) produce29 probability bins separately for optoTrial0/1. This conditional display is not an unconditional within3second contact probability."
+    },
+    {
+      "id": "intervention_trajectory",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig1/plots/plotOptoTrajectories.m",
+      "locator": "lines12-43 right-target trials; mean(posXYZ(:,:,2:3),3); control source indices<60",
+      "supports": "Representative right-target stimulation trajectories and selected early right-target controls, with source time points and 3D centroid values. Source examples do not define an all-trial quantitative causal kinematic effect."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Both expressly retained empirical result families: M1-fl/S1-fl joint-motion and reach/grasp encoding/decoding, and supplied M1-fl cortical-inactivation timing/trajectory disruption. Preserve source-specific populations and indispensable controls. Figure 5 provides genuine nested coverage of the first family. No all-figure/whole-paper requirement, S1 intervention, high-level target-decoding task, raw pose/segmentation revalidation or across-learning perturbation study is added.",
+      "evidence_ids": [
+        "paper",
+        "decode",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Bind the source Figshare DOI 10.6084/m9.figshare.28326998 to distinct authentic neural/kinematic and intervention input manifests. Recover the exact article-version/file set, all source RADICaL inputs, intervention assignments/event times/trajectories, and their original animal/session/trial joins. A released object inventory is not complete source-protocol verification.",
+      "evidence_ids": [
+        "repo",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preserve all five source imaging mice cfa17, cfa19, cfa20, cfa22 and cfa24, one M1 and one S1 session each, with all original eligible trials and 24 joints. Separately retain the two source VGAT-ChR2 mice used for M1-fl intervention experiments and their source-defined eligible trials. Do not pool the imaging and intervention cohorts or invent S1 intervention data; exact intervention animal/session/trial mapping remains unresolved.",
+      "evidence_ids": [
+        "population",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "For Figure 5 preserve source RNG 240926, five repetitions of ten trial partitions and all 50 original train/test fits, binding original trial order and recorded fold identities. For the distinct M1-fl intervention result preserve source control/stimulation assignments and eligibility rather than impose decoder CV or a new held-animal split. Source Methods specifies a 50-control-trial warm-up followed by 25% stimulation probability; original assignment and eligibility joins remain unverified.",
+      "evidence_ids": [
+        "population",
+        "cv",
+        "decode",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "For the original Figure 5 branch retain RADICaL-inferred rates of the top 100 lift-modulated cells per session and the branch-specific original comparison inputs. For M1-fl intervention retain source stimulation/control assignments, cue/water/lift/contact event records, tracked reach/grasp trajectories and raw eligibility flags. Preserve each family's original observations; decoded kinematics are not intervention evidence.",
+      "evidence_ids": [
+        "paper",
+        "load",
+        "population",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve Figure 5 interpolated joint angles, 15-ms Gaussian smoothing, -100 to +400 ms lift window, unsmoothed RADICaL rates and pre-CV PCA retaining 90% of neuron count, plus the original exposures of indispensable companion controls. Separately preserve intervention source clocks, event subtraction and display masks. Methods places stimulation from 150 ms before cue through 3 s afterward; caption/text event wording and the physical cue/water-time join must be reconciled without silently reanchoring.",
+      "evidence_ids": [
+        "paper",
+        "decode",
+        "load",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "For each Figure 5 joint/fold retain VE = 1 - Var(y - yhat)/Var(y) with source MATLAB sample-variance semantics. Separately recover original M1-fl intervention contact/event timing and disrupted-trajectory evidence using their own source-defined estimands. The success-conditioned normalized contact histogram is not an unconditional within-3-second contact probability, and the selected right-target trajectory display is not an all-trial quantitative kinematic effect. No joint scalar or intervention superiority rule is specified.",
+      "evidence_ids": [
+        "cv",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve Figure 5 A/E joint/fold distributions and D/H median-over-fold then proximal/distal median-over-joint summaries within each mouse and area. Keep intervention animal/session/trial denominators and source statistical/display procedures separate: normalized histograms condition on source success/problem/contact/lift/wrong-grab masks, while trajectory examples use right-target stimulation trials and right-target control trial indices below 60. Source population-effect aggregation and uncertainty remain unresolved; trial counts, folds and joints do not create independent animals.",
+      "evidence_ids": [
+        "paper",
+        "plot_all",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the original complete 24-joint Figure 5 M1/S1 comparison in all five imaging mice, original joint/fold arrays and source medians, trajectories/postures and indispensable controls, together with the separate original two-mouse M1-fl intervention contact/event-timing and disrupted-trajectory finding. Keep each family's cohort, eligibility, source clocks, trial assignments, denominators, display selections and independent-unit limits separate. Existing Figure 5 scalar summaries cover only part of the first family; they do not cover all decoder arrays/companions or the intervention family. No S1 intervention, every-figure mandate, raw pose/segmentation revalidation or across-learning perturbation requirement is added.",
+      "evidence_ids": [
+        "paper",
+        "population",
+        "main",
+        "supp2",
+        "supp3",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Preserve the original observations and preprocessing exposures of each named result: Figure 5 neural inputs, source kinematics, cell selection, PCA and companion-control exposure; separately, supplied M1-fl stimulation/control assignments, original event clocks, eligibility flags and trajectory observations. Use source-defined control and display selection, including success-conditioned histogram masks and selected right-target trajectories, without treating them as an unconditional contact probability or all-trial kinematic effect. Paired information conditions must share the same scientific inputs and independent verification boundaries, with author code as the only addition. No new data access or execution is authorized.",
+      "evidence_ids": [
+        "paper",
+        "population",
+        "main",
+        "supp2",
+        "supp3",
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig5_original_score_panel",
+      "kind": "indexed_array_family",
+      "description": "Original all24-joint Figure5 M1/S1 score panel and actual source reductions, preserving five imaging mice and50 recorded fits per session.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig5_original_score_panel",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "joint_fold_ve",
+            "manifest_key": "joint_fold_ve",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.output.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One source VE per mouse/area/fit/joint:1-Var(target-prediction)/Var(target), MATLAB sample variance over concatenated held-out trial times; preserve negative values.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "cv",
+              "population",
+              "plot_all"
+            ]
+          },
+          {
+            "id": "joint_fold_median_ve",
+            "manifest_key": "joint_fold_median_ve",
+            "source_quantity": "Figure5D/H per-joint median(output.VEs(:,joint))",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median over the50 original fits within each mouse/area/joint, not pooled across mice or joints.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "plot_all",
+              "main"
+            ]
+          },
+          {
+            "id": "proximal_distal_median_ve",
+            "manifest_key": "proximal_distal_median_ve",
+            "source_quantity": "Figure5D/H black-line median(median(output.VEs(:,joint_group)))",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              2
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "joint_group",
+                "units": "source group",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "proximal_1_to7",
+                    "distal_8_to24"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median over joint fold-medians within source proximal1:7 or distal8:24, separately for each mouse and area.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "plot_all",
+              "main"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "cv",
+          "population",
+          "main",
+          "plot_all"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig5_original_score_panel_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Five imaging mice; M1/S1 sessions paired within mouse.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "paper",
+          "cv",
+          "population",
+          "main",
+          "plot_all"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "cv",
+        "population",
+        "main",
+        "plot_all"
+      ]
+    },
+    {
+      "id": "fig5_original_trajectories_postures",
+      "kind": "indexed_array_family",
+      "description": "Original observed/decoded joint trajectories and source-reconstructed postures, including the actual representative display selections.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig5_original_trajectories_postures",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "observed_joint_trajectories",
+            "manifest_key": "observed_joint_trajectories",
+            "source_quantity": "Original trial jointAngles used by Figure5 decoding",
+            "membership": "data_dependent",
+            "shape": [
+              51,
+              24
+            ],
+            "axes": [
+              {
+                "name": "lift_locked_time",
+                "units": "ms",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -100,
+                  "step": 10,
+                  "count": 51
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "degrees",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve each original eligible trial; no averaging over source trial identities.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse",
+                "area",
+                "session",
+                "trial"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "paper",
+                  "load",
+                  "main"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "load",
+              "main"
+            ]
+          },
+          {
+            "id": "heldout_joint_predictions",
+            "manifest_key": "heldout_joint_predictions",
+            "source_quantity": "Original fitted-model held-out joint-angle predictions",
+            "membership": "data_dependent",
+            "shape": [
+              51,
+              24
+            ],
+            "axes": [
+              {
+                "name": "lift_locked_time",
+                "units": "ms",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -100,
+                  "step": 10,
+                  "count": 51
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "degrees",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One original held-out prediction trajectory per source model and test trial, with exact train/test provenance; do not echo target observations.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse",
+                "area",
+                "session",
+                "model",
+                "trial"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "cv",
+                  "decode",
+                  "main"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "cv",
+              "decode",
+              "main"
+            ]
+          },
+          {
+            "id": "bagged_joint_reconstructions",
+            "manifest_key": "bagged_joint_reconstructions",
+            "source_quantity": "baggedDecode jointAnglesRecon",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "degrees",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source trial-wise bagging/model membership and original output layout; exact native dimensions and trial identity manifest remain unbound.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse",
+                "area",
+                "session",
+                "trial"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "bagged",
+                  "main"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "bagged",
+              "main"
+            ]
+          },
+          {
+            "id": "skeletal_reconstructions",
+            "manifest_key": "skeletal_reconstructions",
+            "source_quantity": "baggedDecode/inverseKinematics posXYZRecon and original matching skeleton",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source skeletal-coordinate units; physical scale/layout binding unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original link lengths/neutralized posture, selected median-VE left/right example trial identities and seven displayed frames. No invented posture-error scalar.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse",
+                "area",
+                "session",
+                "trial"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "bagged",
+                  "inverse",
+                  "main"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "bagged",
+              "inverse",
+              "main"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "main",
+          "bagged",
+          "inverse",
+          "cv"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig5_original_trajectories_postures_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Five imaging mice; source example trials are representative displays, not extra independent units.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "paper",
+          "main",
+          "bagged",
+          "inverse",
+          "cv"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "main",
+        "bagged",
+        "inverse",
+        "cv"
+      ]
+    },
+    {
+      "id": "fig5_source_companion_panels",
+      "kind": "indexed_array_family",
+      "description": "Reviewed original Figure5 companion score quantities. Preserve branch identities and the unresolved supplement3 caption/source L/R ordering conflict; no unrelated whole-paper panels are added.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig5_source_companion_panels",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "deconvolved_angles",
+            "manifest_key": "deconvolved_angles",
+            "source_quantity": "outputsM1_sd/outputsS1_sd.output.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp1",
+              "population",
+              "load"
+            ]
+          },
+          {
+            "id": "radical_velocities",
+            "manifest_key": "radical_velocities",
+            "source_quantity": "outputsM1_rv/outputsS1_rv.output.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp1",
+              "population",
+              "load"
+            ]
+          },
+          {
+            "id": "partial_proximal_distal",
+            "manifest_key": "partial_proximal_distal",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputPrxDst.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp2",
+              "partial_pd"
+            ]
+          },
+          {
+            "id": "partial_distance_to_spout",
+            "manifest_key": "partial_distance_to_spout",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputD2S.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp2",
+              "partial_d2s"
+            ]
+          },
+          {
+            "id": "left_target_residual",
+            "manifest_key": "left_target_residual",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputResL.VEs;LR==1",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp3",
+              "residual"
+            ]
+          },
+          {
+            "id": "right_target_residual",
+            "manifest_key": "right_target_residual",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputResR.VEs;LR==2",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp3",
+              "residual"
+            ]
+          },
+          {
+            "id": "causal_lags",
+            "manifest_key": "causal_lags",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputWc.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp3",
+              "wiener"
+            ]
+          },
+          {
+            "id": "acausal_lags",
+            "manifest_key": "acausal_lags",
+            "source_quantity": "outputsM1_rr/outputsS1_rr.outputWa.VEs",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete original branch-specific joint/fold panel and source per-joint/proximal-distal reductions. Bind each branch original recorded folds and preprocessing/partial-residual exposure; never replace the primary instantaneous branch.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "supp3",
+              "wiener"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "supp1",
+          "supp2",
+          "supp3",
+          "partial_pd",
+          "partial_d2s",
+          "residual",
+          "wiener"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig5_source_companion_panels_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Five imaging mice, paired M1/S1 sessions; repeated branch fits and joints are dependent.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "paper",
+          "supp1",
+          "supp2",
+          "supp3",
+          "partial_pd",
+          "partial_d2s",
+          "residual",
+          "wiener"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "supp1",
+        "supp2",
+        "supp3",
+        "partial_pd",
+        "partial_d2s",
+        "residual",
+        "wiener"
+      ]
+    },
+    {
+      "id": "fig5_variance_ve_scatter",
+      "kind": "indexed_array_family",
+      "description": "Original Figure5 supplement2 E/F paired held-out target variance and VE; no correlation scalar is substituted for the source scatter.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig5_variance_ve_scatter",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "heldout_target_variance",
+            "manifest_key": "heldout_target_variance",
+            "source_quantity": "plotVEvsVar var(output.outcomes(testInds,joint))",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "degrees squared",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source sample variance over each exact held-out joint/fold support.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "variance",
+              "supp2",
+              "cv"
+            ]
+          },
+          {
+            "id": "matched_joint_fold_ve",
+            "manifest_key": "matched_joint_fold_ve",
+            "source_quantity": "plotVEvsVar output.VEs(fit,joint)",
+            "membership": "fixed",
+            "shape": [
+              5,
+              2,
+              50,
+              24
+            ],
+            "axes": [
+              {
+                "name": "imaging_mouse",
+                "units": "source animal identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "cfa17",
+                    "cfa19",
+                    "cfa20",
+                    "cfa22",
+                    "cfa24"
+                  ]
+                }
+              },
+              {
+                "name": "area",
+                "units": "source cortical area",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "M1",
+                    "S1"
+                  ]
+                }
+              },
+              {
+                "name": "source_fit_index",
+                "units": "source model ordinal; original trial membership unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 50
+                }
+              },
+              {
+                "name": "joint",
+                "units": "source joint-angle name",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "SHDRf",
+                    "SHDRa",
+                    "SHDRr",
+                    "ELBOf",
+                    "WRSTf",
+                    "WRSTd",
+                    "WRSTr",
+                    "MCP1f",
+                    "MCP2f",
+                    "MCP3f",
+                    "MCP4f",
+                    "MCP1a",
+                    "MCP2a",
+                    "MCP3a",
+                    "MCP4a",
+                    "MCP1o",
+                    "MCP4o",
+                    "P1P2",
+                    "P2P3",
+                    "P3P4",
+                    "PIP1f",
+                    "PIP2f",
+                    "PIP3f",
+                    "PIP4f"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless variance explained",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Pair each target variance with that same source mouse/area/joint/fold VE.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "variance",
+              "supp2",
+              "cv"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "variance",
+          "supp2",
+          "cv"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig5_variance_ve_scatter_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Five imaging mice; scatter points are not independent animals.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "variance",
+          "supp2",
+          "cv"
+        ]
+      },
+      "evidence_ids": [
+        "variance",
+        "supp2",
+        "cv"
+      ]
+    },
+    {
+      "id": "m1_intervention_conditional_histogram",
+      "kind": "indexed_array_family",
+      "description": "Original source success-conditioned contact-time display pooled across the two intervention mice. It is distinct from unconditional within3second contact probabilities.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "m1_intervention_conditional_histogram",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "source_histogram_edges",
+            "manifest_key": "source_histogram_edges",
+            "source_quantity": "plotOptoHists binEdges=linspace(0,9,30)",
+            "membership": "fixed",
+            "shape": [
+              30
+            ],
+            "axes": [
+              {
+                "name": "edge_ordinal",
+                "units": "source bin-edge index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 30
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds of source grabTimeC/1000 clock; cue relation unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Thirty source edges including0 and9 define29 intervals. Preserve native floating-point edge generation and endpoint conventions; no numerical reference is claimed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "intervention_hist"
+            ]
+          },
+          {
+            "id": "conditional_contact_histograms",
+            "manifest_key": "conditional_contact_histograms",
+            "source_quantity": "plotOptoHists vals_N and vals_O",
+            "membership": "fixed",
+            "shape": [
+              2,
+              29
+            ],
+            "axes": [
+              {
+                "name": "optoTrial",
+                "units": "source control0/stimulation1 code",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "interval_ordinal",
+                "units": "between consecutive source edges",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 29
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source probability-normalized histogram",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Pool the source-selected trials across both mice/sessions separately by optoTrial0/1; retain source histcounts Normalization=probability including original support/denominator semantics.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "intervention_hist"
+            ]
+          },
+          {
+            "id": "selected_contact_times",
+            "manifest_key": "selected_contact_times",
+            "source_quantity": "normalContactTimes and optoContactTimes",
+            "membership": "data_dependent",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "selected_trial",
+                "units": "source trial identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original success/optoProblem/contact-after-lift/wrongGrabFirst selected identity/order manifest unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds of source grabTimeC/1000 clock; cue relation unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each collection record corresponds to one source optoTrial condition and preserves all selected event times and full selected/excluded identity audit. This cannot define overall contact incidence.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "optoTrial"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "intervention_hist"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "intervention_hist"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist"
+        ]
+      },
+      "required_granular_output_ids": [
+        "m1_intervention_conditional_histogram_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Two separate intervention mice; source display pools their selected trials but does not create trial-level animal replication.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist"
+        ]
+      },
+      "evidence_ids": [
+        "intervention_paper",
+        "intervention_hist"
+      ]
+    },
+    {
+      "id": "m1_intervention_original_contact_lift_outcomes",
+      "kind": "indexed_array_family",
+      "description": "Original reported contact and reach-initiation outcomes during the source3second period. Exact denominator/event-clock derivation is unresolved and cannot be supplied by the conditional histogram.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "m1_intervention_original_contact_lift_outcomes",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "reported_contact_within_period_by_condition",
+            "manifest_key": "reported_contact_within_period_by_condition",
+            "source_quantity": "Original Results fraction contacting the spout within3seconds of cue under control/inactivation",
+            "membership": "fixed",
+            "shape": [
+              2
+            ],
+            "axes": [
+              {
+                "name": "optoTrial",
+                "units": "source control0/stimulation1 code",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction of source condition trials; source denominator unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original reported control/stimulation aggregation and eligible denominators. Do not infer unconditional probabilities from success-conditioned display support; no printed percentages are promoted to verified output references.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "intervention_paper"
+            ]
+          },
+          {
+            "id": "reported_lift_within_period_by_mouse_condition",
+            "manifest_key": "reported_lift_within_period_by_mouse_condition",
+            "source_quantity": "Original Results per-mouse fraction with lift within3seconds under control/inactivation",
+            "membership": "fixed",
+            "shape": [
+              2,
+              2
+            ],
+            "axes": [
+              {
+                "name": "intervention_mouse",
+                "units": "source animal",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Two source VGAT-ChR2 mice; native identities and paper mouse1/mouse2 correspondence require authentication."
+                }
+              },
+              {
+                "name": "optoTrial",
+                "units": "source control0/stimulation1 code",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fraction of source mouse/condition trials; source denominator unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the paper two-mouse distinction and original event-window eligibility, without replacing it by five imaging mice or a new causal model. Exact animal correspondence and event clock remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "intervention_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist"
+        ]
+      },
+      "required_granular_output_ids": [
+        "m1_intervention_original_contact_lift_outcomes_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Two intervention mice, distinct from the five imaging mice; trial counts do not increase independent animal sample size.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist"
+        ]
+      },
+      "evidence_ids": [
+        "intervention_paper",
+        "intervention_hist"
+      ]
+    },
+    {
+      "id": "m1_intervention_representative_trajectories",
+      "kind": "indexed_array_family",
+      "description": "Source right-target stimulation and selected early control trajectory display supporting the original disrupted-reach finding; no all-trial quantitative effect is invented.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "m1_intervention_representative_trajectories",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "displayed_centroid_trajectories",
+            "manifest_key": "displayed_centroid_trajectories",
+            "source_quantity": "plotOptoTrajectories mean(kinematics(tr).posXYZ(:,:,2:3),3)",
+            "membership": "data_dependent",
+            "shape": [
+              null,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_time",
+                "units": "source tPts clock; timing alignment unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Preserve each selected source trial tPts exactly; frame count and clock correspondence are not frozen."
+                }
+              },
+              {
+                "name": "coordinate",
+                "units": "source position-coordinate axis",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "x",
+                    "y",
+                    "z"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source posXYZ coordinate units; physical-scale verification unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve LR==2 source trials; all displayed optoTrial==1 traces and optoTrial==0 source trial indices<60. Preserve observed source identity/order and first plotted point; no all-trial effect or unrestricted averaging is substituted.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse",
+                "session",
+                "source_trial_index"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+                "evidence_ids": [
+                  "intervention_trajectory",
+                  "intervention_paper"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "intervention_trajectory",
+              "intervention_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_trajectory"
+        ]
+      },
+      "required_granular_output_ids": [
+        "m1_intervention_representative_trajectories_granular_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently derive the complete source-defined quantities from authentic original observations and compare with a provenance-qualified source reference under separately justified numerical and scientific criteria. No reference or threshold has been recovered/bound for this declaration.",
+        "independent_unit": "Two intervention mice in the experiment; selected display trials are illustrative, not independent effect estimates.",
+        "dependence": "Preserve source nesting, trial/temporal dependence and repeated fits. Do not treat trial samples, joints, bins or folds as additional animals, and do not combine imaging and intervention cohorts.",
+        "multiplicity": "Retain all declared source members and indispensable controls; joint family-level acceptance and any uncertainty adjustment remain unresolved.",
+        "rationale": "This names the supported numerical reference comparison class without specifying a tolerance or result. Source equivalence, original output identities and a source-grounded scientific decision remain unresolved; matching arrays alone cannot establish an unverified causal or population interpretation.",
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_trajectory"
+        ]
+      },
+      "evidence_ids": [
+        "intervention_paper",
+        "intervention_trajectory"
+      ]
+    },
+    {
+      "id": "original_kinematic_information_direction",
+      "kind": "categorical",
+      "description": "Original source conclusion that joint-kinematic information is present in both M1-fl and S1-fl, supported by the full original24-joint panel and relevant controls; decoding is not causal joint control.",
+      "status": "verified",
+      "expected": "kinematic_information_in_both_areas",
+      "units": "source scientific direction/pattern; not an execution status",
+      "aggregation": "Interpret only with complete corresponding original numerical panels, source support/controls and separately justified original inference. A reported category or printed claim alone cannot establish computational reproduction.",
+      "evidence_ids": [
+        "paper",
+        "main",
+        "supp2",
+        "supp3"
+      ],
+      "categories": [
+        "kinematic_information_in_both_areas",
+        "kinematic_information_in_one_area_only",
+        "source_pattern_absent"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "A source qualitative direction requires a justified evidence-based decision, not a numeric tolerance copied from print precision.",
+        "evidence_ids": [
+          "paper",
+          "main",
+          "supp2",
+          "supp3"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source scientific decision and justify its independent uncertainty before admitting a directional result; no p-value cutoff or equivalence margin is inferred.",
+        "independent_unit": "Five imaging mice with paired M1/S1 sessions.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The expected source statement is documented; its complete computational/inferential acceptance criterion remains unresolved. Original trial counts or a smaller p-value do not establish independent animals or superiority.",
+        "evidence_ids": [
+          "paper",
+          "main",
+          "supp2",
+          "supp3"
+        ]
+      }
+    },
+    {
+      "id": "original_m1_disruption_direction",
+      "kind": "categorical",
+      "description": "Original source M1-fl inactivation disruption of reaching/grasping, assessed through contact/event timing and original trajectory evidence; not S1 intervention or an across-learning effect.",
+      "status": "verified",
+      "expected": "m1_inactivation_disrupts_reach_and_grasp",
+      "units": "source scientific direction/pattern; not an execution status",
+      "aggregation": "Interpret only with complete corresponding original numerical panels, source support/controls and separately justified original inference. A reported category or printed claim alone cannot establish computational reproduction.",
+      "evidence_ids": [
+        "intervention_paper",
+        "intervention_hist",
+        "intervention_trajectory"
+      ],
+      "categories": [
+        "m1_inactivation_disrupts_reach_and_grasp",
+        "no_source_compatible_disruption_pattern"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "A source qualitative direction requires a justified evidence-based decision, not a numeric tolerance copied from print precision.",
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist",
+          "intervention_trajectory"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source scientific decision and justify its independent uncertainty before admitting a directional result; no p-value cutoff or equivalence margin is inferred.",
+        "independent_unit": "Two intervention mice; original independent inference and eligibility unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The expected source statement is documented; its complete computational/inferential acceptance criterion remains unresolved. Original trial counts or a smaller p-value do not establish independent animals or superiority.",
+        "evidence_ids": [
+          "intervention_paper",
+          "intervention_hist",
+          "intervention_trajectory"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original whole-primary scope contains two distinct empirical families. Figure5 arrays or its20 scalar summaries alone cannot discharge the separate M1-fl intervention result; the current narrower improvement contract is retained independently and no whole-primary pairing is created.",
+    "Authenticate all original five-mouse/ten-session neural inputs, ROI/RADICaL/PCA exposure, trial order and branch-specific50fold manifests. Global RNG240926 alone does not bind original folds.",
+    "Recover complete original numerical Figure5 references, bagged and skeletal outputs, companion prediction/target lineage and scientific criteria. Current exporter/scorer covers only the main instantaneous angle branch and does not establish submitted-analysis execution.",
+    "Preserve supplement3 left/right source identities; paper caption and plotting-script ordering conflict remains unresolved. No favorable relabeling or replacement branch is selected.",
+    "Authenticate separate two-mouse intervention assignments, animal/session/trial joins, masks and source clocks. Methods stimulation timing and Results/caption/event wording require reconciliation; do not silently equate native waterTime subtraction with physical cue alignment.",
+    "Success-conditioned source histograms use different support from original overall within3second contact fractions. Original numerators, denominators and event-clock criteria remain unresolved; conditional source replay cannot fill this gap.",
+    "Intervention trajectories are selected right-target displays with control trial indices<60, not an all-trial quantitative causal estimator. Original example identities, positional units, source timing and scientific trajectory criterion remain unresolved.",
+    "Indexed coordinate identities, support/domain/derivation policies, authentic reference manifests, allowed output representations and independent verification programs remain absent. Known shapes and labels are source declarations only; unknown axes/shapes remain null or unresolved. No admission policy hashes are invented.",
+    "Numerical-reference equivalence criteria, original directional interpretation, population uncertainty, multiplicity and minimum meaningful improvement remain unfrozen. Do not infer criteria from printed precision, original significance, smoother curves, stronger disruption or fabricated all-close thresholds.",
+    "Standalone reproduction does not create an outcomes binding, final task hash release, paired delivery, solver receipt, native execution or successful scientific outcome. All four scientific cells remain unknown and the mixed whole-primary bundle remains unavailable."
+  ]
+}

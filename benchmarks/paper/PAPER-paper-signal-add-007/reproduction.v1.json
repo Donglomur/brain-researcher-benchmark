@@ -1,0 +1,584 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-signal-add-007",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Fig4 source equations and complete intended cohort/metric/control panel are identified, and a reviewed numerical component exists. Full native per-animal/per-unit ICNet and LNP references, reliability/CF and magnitude/coherence companion derivation, authentic output identities, exact aggregation and independent tolerance/uncertainty remain unrecovered. Printed values alone cannot qualify computational reproduction; this does not depend on improvement eligibility.",
+  "source_paper": {
+    "title": "Modelling neural coding in the auditory midbrain with high resolution and accuracy",
+    "url": "https://www.nature.com/articles/s42256-025-01104-9"
+  },
+  "evidence": [
+    {
+      "id": "icnet-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01104-9",
+      "locator": "Results: ICNet performance across sounds; Fig. 4b,d; Methods: Predictive power metrics and Statistics; Data availability",
+      "supports": "Identifies the original seven-animal/four-sound prediction endpoint and source-reported explained-correlation/variance results."
+    },
+    {
+      "id": "icnet-metrics",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01104-9.pdf",
+      "locator": "pp. 1490-1491, equations (3)-(5), Predictive power metrics and Statistics",
+      "supports": "Explained correlation uses both trial predictions and trial-to-trial reliability after flattening units/time; explains the separate expected-count variance metric and within-animal unit bootstrap."
+    },
+    {
+      "id": "icnet-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/12636772",
+      "locator": "Version v1 (2024-07-03), Sound and IC recordings sections",
+      "supports": "Exact four thirty-second calibrated sounds, two response trials, animals 3-9, audio/neural rates and measurement-time inputs; metadata only, no neural arrays inspected."
+    },
+    {
+      "id": "icnet-code",
+      "kind": "author_code",
+      "url": "https://github.com/fotisdr/ICNet",
+      "locator": "README: ICNet description and DNN/src contents",
+      "supports": "Author model architecture, pretrained weights and inference example; nine training-animal branches are distinct from the seven-animal evaluation subset."
+    },
+    {
+      "id": "icnet-legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-007/implementations/registered-runtime/manifest.json",
+      "locator": "scope; program_execution.qualification_blockers; verification",
+      "supports": "The local complete-released7/held-sound pair is unqualified, ungraded and not executed; its held-sound folds are prospective extensions."
+    },
+    {
+      "id": "icnet-fig4-complete",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12460167/",
+      "locator": "Fig. 4b,d,e; Results ICNet is a highly accurate model of neural coding; Methods Predictive power metrics equations (3)-(5), Linear-nonlinear models and Statistics",
+      "supports": "Original seven-animal/four-sound animal metrics, 3476-unit ICNet and LNP metric distributions, source boxplot reductions, mean-activity/reliability/CF companions and three printed associations after the stated 1% exclusions. Exact array identities, native per-unit reference values and reduction of textual scores remain unrecovered."
+    },
+    {
+      "id": "icnet-native-interface",
+      "kind": "author_code",
+      "url": "https://github.com/fotisdr/ICNet/blob/7a631f1779662ee70b1819ac0c9ce0191bcaf158/src/ICNet_functions.py",
+      "locator": "simulate_model_responses, lines192-336; file SHA25671f991df7fdc9d697cf6ab21c0da207d6e98d8e37520f81964f39b7e798eea19",
+      "supports": "Native ICNet predicts categorical probabilities for counts0-4 then discards them after sampling; a reproduction adapter must retain probabilities and derive expected counts separately. Animal outputs may sort columns by CF. Time arithmetic uses seconds divided by36000 despite the hours docstring. No metrics, native data preparation or model execution is provided by source inspection."
+    },
+    {
+      "id": "icnet-source-equation-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-signal-add-007/implementations/source-equations-v1/scorer.py",
+      "locator": "Task-local implementations/source-equations-v1/scorer.py SHA256ee2f1d5e3d927c142ab3ec70aec212dfa7d70a8a7253905dd10016b85d6eea5e; independently accepted BUILD_REPORT.json SHA2565e0b43a556095ea2db5133dad168871b9a0fe291672dbf2c1986eb1a31c962c0",
+      "supports": "Existing score_case and score_panel implement Eq3-5 and retain full animal/unit outputs. Generated controls are software evidence only; source masks, CF joins, native probabilities, LNP model, ddof, source-reference values, scalar aggregation and uncertainty qualification remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict inferior-colliculus multi-unit spike-count activity for the original Fig. 4b,d seven-animal/four-sound evaluation. Preserve both trial-specific neural response prediction and reliability-normalized assessment; this scope does not include whole-paper new-animal adaptation or ASR.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo 12636772 v1: IC_data_trial1.mat, IC_data_trial2.mat and sound_data.mat. Use all four original thirty-second sounds: speech in quiet, speech in noise, band-limited moving ripples and music.",
+      "evidence_ids": [
+        "icnet-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original evaluation animals 3-9, both successive trials and all source-eligible recorded units (paper Fig. 4d reports 3,476 units across seven animals). These animals were represented during model training; the four evaluation sound excerpts were excluded from training.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original model training versus the four held-out evaluation sounds, with both successive evaluation trials used in the source score. The public trial1/trial2 arrays are not a training/test partition. Training on three evaluation sounds, trial1 calibration, or new held-animal folds changes the task and is an extension.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calibrated audio waveform, original animal decoder identity and the trial/animal-specific measurement time used for non-stationarity. Characteristic-frequency metadata identifies units but must not permit selecting units using evaluation outcomes.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Audio rate is 24414.0625 Hz and one neural bin equals 32 audio samples (762.9395 Hz); preserve sound intensities and exact measurement times. Paper evaluates only units with repeated-broadband-noise reliability at least 0.2. The exact reliability mask, initial-context crop/alignment and native prediction-to-trial mapping have not been verified.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data",
+        "icnet-legacy"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Primary explained correlation (%) = 50*[rho(vec(R1),vec(Rhat1)) + rho(vec(R2),vec(Rhat2))]/rho(vec(R1),vec(R2)), equation (3). Rhat is sampled model activity; the separate variance metric uses predicted expected counts and source equations (4)-(5). Raw RMSE or ordinary correlation is not interchangeable.",
+      "evidence_ids": [
+        "icnet-metrics"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig. 4b flattens time and eligible units within each animal, reports all seven animal scores per sound and displays their distribution; Fig. 4d scores individual units separately. Recover the exact reduction underlying the textual per-sound numbers before scalar grading. No newly invented average across sounds or subset of easy units can replace the source endpoint.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-metrics"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The complete original source scope below is identified, but the current v1 scalar findings retain only11 printed summaries. Native animal/unit distributions, count-probability tensors and companion profiles require structured-output support; full-panel computational reproduction is not represented by these exposed summaries. Original Fig. 4b,d evaluation only: animals 3-9, speech_in_quiet, speech_in_noise, moving_ripples and music, both successive trials and all 3,476 source-eligible units. Retain all 28 animal/sound cases with separate equation (3) correlation and equations (4)-(5) variance metrics; the eight printed per-sound ICNet summaries are additional source claims, not replacements for those 56 animal metrics. Reconstruct Fig. 4d ICNet and original LNP values for every eligible unit for each sound and both metrics, preserving all signed/out-of-range values and undefined-value handling; reproduce each source median, 25th/75th percentile and 1.5 IQR whisker from that complete population. Retain Fig. 4e per-unit mean recorded count, trial-to-trial correlation and CF identities and the three reported activity/CF/reliability associations with performance, including the distinct3,406-unit set after the source top/bottom 1% exclusions. Four-primary-sound magnitude/coherence companion profiles referenced in Supplementary Fig. 2 must be retained and independently reconciled before admission; their exact source axes, reductions and acceptance criteria remain unresolved. This complete original panel is not the four-new-sound/four-animal Fig. 4c experiment, new-animal adaptation, ASR or the whole 14-animal paper.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data",
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "For original neural prediction, preserve calibrated audio, original animal decoder identity and trial-specific measurement times in seconds; original CF/unit identifiers establish joins and the independent source broadband-noise reliability mask, not outcome-selected units. Both published successive-trial response arrays are evaluation observations for reliability and reproduction analysis, not a trial1 training/trial2 test split; none of the four evaluation sounds may become predictor-development data. Paper+data and paper+data+author-code must share the same authentic recordings, source identities, permitted observations and evaluator; authenticated author code is the sole information addition in the latter condition, with no currently frozen paired package. Printed claims are allowed inputs and cannot establish computation. Independent execution must retain ICNet native count probabilities, sampled counts and separately derived expected counts for every trial/case; LNP Poisson rates/expected counts, sampled counts and original model/kernel provenance; full source mask, time/crop/column joins, all equations (3)-(5) intermediates, per-unit metrics and reliability/CF companions. The verifier must derive reports from those authentic granular outputs using the existing source-equation component and separately verified source-native companion calculations. Neither a program printing tables nor a source-code/calibration/software-control receipt can populate an AI outcome. Original training/validation access, exact mask and alignment, LNP release, stochastic draws, evaluator identities, exposure history and paired budgets remain unresolved.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data",
+        "icnet-metrics",
+        "icnet-native-interface",
+        "icnet-fig4-complete"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "text_icnet_speech_in_quiet_correlation",
+      "kind": "scalar",
+      "description": "Published ICNet explained-correlation summary for speech_in_quiet, with reported confidence interval 92.9-93.1 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 92.9,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_speech_in_noise_correlation",
+      "kind": "scalar",
+      "description": "Published ICNet explained-correlation summary for speech_in_noise, with reported confidence interval 91.1-91.6 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 91.2,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_moving_ripples_correlation",
+      "kind": "scalar",
+      "description": "Published ICNet explained-correlation summary for moving_ripples, with reported confidence interval 73.3-74.0 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 73.5,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_music_correlation",
+      "kind": "scalar",
+      "description": "Published ICNet explained-correlation summary for music, with reported confidence interval 91.2-91.7 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 91.3,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_speech_in_quiet_variance",
+      "kind": "scalar",
+      "description": "Published ICNet explained-variance summary for speech_in_quiet, with reported confidence interval 91.4-91.8 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 91.5,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_speech_in_noise_variance",
+      "kind": "scalar",
+      "description": "Published ICNet explained-variance summary for speech_in_noise, with reported confidence interval 83.3-84.3 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 83.6,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_moving_ripples_variance",
+      "kind": "scalar",
+      "description": "Published ICNet explained-variance summary for moving_ripples, with reported confidence interval 64.0-65.2 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 64.4,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "text_icnet_music_variance",
+      "kind": "scalar",
+      "description": "Published ICNet explained-variance summary for music, with reported confidence interval 83.3-84.3 percent; this known printed input is not computational evidence, and its interval is not a reproduction tolerance.",
+      "status": "verified",
+      "expected": 83.6,
+      "units": "percent",
+      "aggregation": "Exact source reduction underlying the textual per-sound value remains unresolved. Do not substitute a new mean across animals/sounds or assert that this textual value is the Fig. 4b median.",
+      "evidence_ids": [
+        "icnet-metrics",
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source reporting uses1,000 within-animal unit bootstrap samples. Exact bootstrap estimand, confidence convention, stochastic-prediction variation and the reproduction decision remain to be independently frozen; no CI overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "fig4_companion_performance_association_mean_activity",
+      "kind": "scalar",
+      "description": "Source-reported association between mean_activity and explained-correlation model performance across the four original sounds, with reported confidence interval -0.14 to -0.10. Required source companion, not a new optimization objective or a tolerance band.",
+      "status": "verified",
+      "expected": -0.12,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Source reports3,406 units from seven animals after excluding the top and bottom1% of explainable correlation explained. Recover the exact four-sound reduction, pairing, trim boundaries, retained unit identities and source uncertainty; the 3,476-unit main panel must remain unchanged by this companion-specific exclusion.",
+      "evidence_ids": [
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "The paper reports 1,000 bootstrap samples for all reported values, but specifies within-animal unit resampling explicitly for model-performance metrics. The association-specific resampling, four-sound pooling and confidence-interval construction are not explicitly specified in the recovered source; those details and the reproduction decision remain unresolved. No CI-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "fig4_companion_performance_association_characteristic_frequency",
+      "kind": "scalar",
+      "description": "Source-reported association between characteristic_frequency and explained-correlation model performance across the four original sounds, with reported confidence interval -0.03 to 0. Required source companion, not a new optimization objective or a tolerance band.",
+      "status": "verified",
+      "expected": -0.02,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Source reports3,406 units from seven animals after excluding the top and bottom1% of explainable correlation explained. Recover the exact four-sound reduction, pairing, trim boundaries, retained unit identities and source uncertainty; the 3,476-unit main panel must remain unchanged by this companion-specific exclusion.",
+      "evidence_ids": [
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "The paper reports 1,000 bootstrap samples for all reported values, but specifies within-animal unit resampling explicitly for model-performance metrics. The association-specific resampling, four-sound pooling and confidence-interval construction are not explicitly specified in the recovered source; those details and the reproduction decision remain unresolved. No CI-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    },
+    {
+      "id": "fig4_companion_performance_association_trial_reliability",
+      "kind": "scalar",
+      "description": "Source-reported association between trial_reliability and explained-correlation model performance across the four original sounds, with reported confidence interval 0.53-0.55. Required source companion, not a new optimization objective or a tolerance band.",
+      "status": "verified",
+      "expected": 0.54,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Source reports3,406 units from seven animals after excluding the top and bottom1% of explainable correlation explained. Recover the exact four-sound reduction, pairing, trim boundaries, retained unit identities and source uncertainty; the 3,476-unit main panel must remain unchanged by this companion-specific exclusion.",
+      "evidence_ids": [
+        "icnet-fig4-complete"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance inferred from one-decimal printing, the reported confidence interval, source improvement headroom or a legacy grader. Resolve native ddof, masking, alignment, exact reference reduction and sample-generation variability before independently specifying a reproduction band.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "The paper reports 1,000 bootstrap samples for all reported values, but specifies within-animal unit resampling explicitly for model-performance metrics. The association-specific resampling, four-sound pooling and confidence-interval construction are not explicitly specified in the recovered source; those details and the reproduction decision remain unresolved. No CI-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Seven animals; units/time bins/trials/sounds are nested or repeated observations. Source unit bootstraps describe source reporting and are not thousands of independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published confidence intervals and rounded values do not justify an absolute computational-reproduction tolerance. Native source preparation, seed policy, reference distributions and uncertainty must be reconciled first.",
+        "evidence_ids": [
+          "icnet-metrics",
+          "icnet-fig4-complete"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original response mask, ordered3476-unit identities, full native timing/crop and both measurement-time inputs are not authenticated; the source equation scorer accepts operator declarations and cannot establish these identities.",
+    "Recover all56 Fig4b animal targets and complete ICNet/LNP per-unit distributions, exact boxplot handling and companion reference outputs. Eight printed per-sound values and three printed associations are exposed paper inputs, not an independent computational reference.",
+    "ICNet native probabilities must be retained before the released helper overwrites them with categorical samples; derive expected counts from probabilities and independently check both trial-specific sample/count outputs. Source inference has not run.",
+    "Recover authentic original LNP kernel/model/training provenance, rates and sampled counts. The released generic ICNet demonstration does not supply the full LNP comparator, and fitting it on the four evaluation sounds changes the source split.",
+    "Resolve variance ddof, source textual reduction, stochastic draw policy, bootstrap procedure and a source-justified numerical tolerance. None is assigned a default or inferred from rounding/CI overlap.",
+    "Recover full Fig4e mean-count/reliability/CF joins, the separate3406-unit trim mask and all three association reductions. Validate the referenced four-sound magnitude/coherence companion profiles, frequency/time axes and source-native derivation; no aggregate-only or direction-only substitute is admitted.",
+    "The existing source-equations-v1 scorer provides only numerical Eq3-5 calculation and structural panel checks; an independent execution verifier connecting authentic source inputs, probabilities, LNP outputs, masks, companions and reported findings remains missing. Admission policy is omitted because immutable cohort/split/panel/observations/metric/aggregation identity manifests do not exist.",
+    "Freeze separate reproduction and improvement participant execution/exposure protocols for the same paper+data versus paper+data+author-code pairs. Original development access, exact author artifact delivery and cumulative budgets remain unresolved; no historical attempt or author calibration is promoted.",
+    "Schema coverage is independently incomplete: paper-reproduction/v1 scalar/categorical findings cannot represent the required native ICNet/LNP output tensors, full metric distributions and reliability/coherence profiles. The external STRUCTURED_OUTPUT_PROPOSAL records exact known axes/source interfaces and separates this engineering block from genuine unresolved native identities, reference values, criteria and verification. Do not scalarize these families or interpret the11 printed-summary findings as complete-panel coverage."
+  ]
+}

@@ -1,0 +1,1323 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DPAD",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Reproduction is an independent first-class target. Source-supported scalar/categorical summaries are identified, but the authentic full panel, numeric targets, preparation identities, equivalence criteria and computation verification are unresolved; no eligible admission policy can be supplied.",
+  "source_paper": {
+    "title": "Dissociative and prioritized modeling of behaviorally relevant neural dynamics using recurrent neural networks",
+    "url": "https://www.nature.com/articles/s41593-024-01731-2"
+  },
+  "evidence": [
+    {
+      "id": "dpad_paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11452342/",
+      "locator": "Figure 6h-i; Methods: Fourth dataset; Cross-validation; Selection of the latent state dimension; Automatic selection of nonlinearity settings",
+      "supports": "Original joint decoding/self-prediction experiment, cohort definition, temporal folds and training-only model selection."
+    },
+    {
+      "id": "dpad_metric_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ShanechiLab/DPAD/41f108bc90252ced19fe3c8eda7eaff2e87c57b3/source/DPAD/tools/evaluation.py",
+      "locator": "evaluateDecoding; evalPrediction(CC); getCVedPerf; computePairwiseStatsTests; findPerformanceFrontier; sanitize_perfs",
+      "supports": "Pearson correlation and channel means, filtering of invalid predictions, model-selection helpers and frontier implementation; historical Figure 6 caller is not established."
+    },
+    {
+      "id": "dpad_author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/DPAD",
+      "locator": "README: Publication; Usage examples",
+      "supports": "Author implementation identity and example/model documentation routes, not a publication-era Figure 6 rerun receipt."
+    },
+    {
+      "id": "sabes_record",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3854034",
+      "locator": "Version v2; Description; Variable names; Decoder Results; Supplements",
+      "supports": "Raw spike/kinematic release, sessions from Indy and Loco, wideband links; refh_results.csv belongs to Makin decoder results, not DPAD Figure 6."
+    },
+    {
+      "id": "registered_dpad",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/task.json",
+      "locator": "complete_scope; prospective_improvement; remaining_gates; scoring",
+      "supports": "Historical registration scopes Figure 6h-i and proposes a separate held-session improvement extension."
+    },
+    {
+      "id": "local_dpad_evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "SESSIONS; GATES; channel_cc; choose_dimension; protocol; select; companion docs/initial-evaluator-v1.md",
+      "supports": "Existing scorer is prediction-evaluation plumbing with unverified session/electrode and source-runtime equivalence; generated controls do not establish author performance."
+    },
+    {
+      "id": "dpad_fig6_summary",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-024-01731-2",
+      "locator": "Figure 6c,h-i caption and Results: DPAD consistently localized nonlinearities in the behavior readout; Figure 3 caption for plus/whisker meaning",
+      "supports": "Seven model alternatives, separate neural/behavior mean CC and SEM over 35 session-folds, and the categorical finding that behavior-readout-only nonlinearity reaches the joint performance frontier. Numeric coordinates are not recovered."
+    },
+    {
+      "id": "dpad_paired_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v2/paired.py",
+      "locator": "freeze_reference; select_candidate; compare; main; companion README and provenance.json",
+      "supports": "Accepted local scoring interfaces retain full author grid, dual per-channel CC, training-only selection and candidate contrasts. They do not fit native models or authenticate source-paper predictions, observation use or original sanitization."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Joint one-step-ahead prediction of neural activity and 2D cursor position/velocity in Figure 6h-i, comparing nonlinear mapping locations.",
+      "evidence_ids": [
+        "dpad_paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Sabes grid-reaching release, exact Zenodo record 3854034 (v2); source spike timestamps and kinematics, not its precomputed Makin decoder-result CSV.",
+      "evidence_ids": [
+        "sabes_record",
+        "dpad_paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper: monkey I, seven wideband-available sessions from 20160622/01 through 20160921/01, random 32 of 96 M1 electrodes with 77-99 units. Exact electrode identities and session crosswalk remain unverified.",
+      "evidence_ids": [
+        "dpad_paper",
+        "local_dpad_evaluator"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Five equal continuous temporal test segments per session; models fit remaining segments. Architecture search uses two inner training folds. State dimensions and architecture are selected from training data.",
+      "evidence_ids": [
+        "dpad_paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Training uses neural and behavior observations; test inference uses past neural observations, without test behavior.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover original binning, Gaussian smoothing, alignment and boundary handling for the exact channels. The existing historical_symmetric/prospective_causal profiles are declarations, not verified native preparation. Changing filter causality changes the input condition.",
+      "evidence_ids": [
+        "local_dpad_evaluator"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson CC separately for each behavior/neural channel: covariance divided by the product of standard deviations; arithmetic channel mean gives each fold score. Higher is better in both coordinates.",
+      "evidence_ids": [
+        "dpad_metric_code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure reporting averages 35 session-fold outcomes. Author code has invalid-row filtering and later channel sanitization; the original caller and resulting inclusion masks must be recovered before the strict local full-coverage scorer is equivalent.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code",
+        "local_dpad_evaluator"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Figure 6h-i original spiking experiment: seven sessions of monkey I, five temporal folds each, seven alternatives (fully linear; only A-prime, K, Cy or Cz nonlinear; flexible decoding-focused; flexible self-prediction-focused), both neural and four-channel behavior CC. Retain all eight dimensions 1,2,4,8,16,32,64,128, all 90 training-search architectures, training-only selected models, every per-channel/fold score, 35-fold mean and SEM for each method/endpoint, all joint-frontier contrasts and the Cz-only localization conclusion. The local interface covers 1960 author dimension cases and 245 selected cases. Scalar findings below represent 28 source-reported mean/SEM summaries and one categorical conclusion only; they do not represent or replace mandatory prediction arrays, training-search records, masks, selected-model identities and complete nonlinearity companion comparisons. Original numeric panel, exact channel/session identities and source sanitization remain unresolved.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_fig6_summary",
+        "dpad_metric_code",
+        "dpad_paired_component"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Fit and choose architectures/dimensions using only neural and behavior observations within the original outer training partition, with two inner training folds for architecture selection. Original test predictions are one step ahead and use past neural observations only; test behavior is an evaluation target and never an inference input. Both information conditions retain identical original observations, cohort, folds, preprocessing and evaluation; author code is the only additional information in the +author-code condition. Authentic preparation and enforcement remain unverified.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig6i_linear_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the fully linear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_linear_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the fully linear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_linear_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the fully linear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_linear_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the fully linear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Aprime_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the only recursion A-prime nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Aprime_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the only recursion A-prime nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Aprime_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the only recursion A-prime nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Aprime_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the only recursion A-prime nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_K_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the only neural input K nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_K_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the only neural input K nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_K_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the only neural input K nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_K_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the only neural input K nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cy_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the only neural readout Cy nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cy_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the only neural readout Cy nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cy_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the only neural readout Cy nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cy_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the only neural readout Cy nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cz_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the only behavior readout Cz nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cz_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the only behavior readout Cz nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cz_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the only behavior readout Cz nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_only_Cz_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the only behavior readout Cz nonlinear model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_decoding_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the flexible nonlinearity with decoding-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_decoding_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the flexible nonlinearity with decoding-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_decoding_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the flexible nonlinearity with decoding-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_decoding_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the flexible nonlinearity with decoding-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_prediction_neural_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of neural channel-mean Pearson CC for the flexible nonlinearity with neural-self-prediction-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_prediction_neural_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of neural channel-mean Pearson CC for the flexible nonlinearity with neural-self-prediction-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_prediction_behavior_mean_cc",
+      "kind": "scalar",
+      "description": "Figure 6i MEAN of behavior channel-mean Pearson CC for the flexible nonlinearity with neural-self-prediction-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Arithmetic mean of the 35 original session-fold channel-mean CC values; each fold uses the larger of the smallest dimensions attaining training neural and behavior peaks.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_flexible_prediction_behavior_sem_cc",
+      "kind": "scalar",
+      "description": "Figure 6i SEM of behavior channel-mean Pearson CC for the flexible nonlinearity with neural-self-prediction-focused architecture selection model, evaluated at each fold's training-selected latent dimension.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless Pearson CC",
+      "aggregation": "Source Figure 6i whisker SEM across the same 35 original session-fold channel-mean CC values; recover native inclusion and SEM implementation before numerical calibration.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper",
+        "dpad_metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Exact original numeric coordinate/whisker and source-supported numerical or scientific reproduction tolerance have not been recovered; plotting resolution or local agreement is not used to invent a band.",
+        "evidence_ids": [
+          "dpad_fig6_summary",
+          "dpad_metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    },
+    {
+      "id": "fig6i_Cz_only_joint_frontier",
+      "kind": "categorical",
+      "description": "In the original spiking grid-reaching comparison, a model with nonlinearity only in behavior readout Cz lies on the joint behavior-decoding/neural-self-prediction frontier against every original alternative.",
+      "status": "verified",
+      "expected": "on_joint_frontier",
+      "units": "joint-frontier membership",
+      "aggregation": "Evaluate the complete two-coordinate seven-method panel over all 35 session-folds and all required pairwise nonlinearity contrasts after training-only selection. The categorical claim cannot replace the numerical means, SEMs or underlying comparisons.",
+      "evidence_ids": [
+        "dpad_fig6_summary",
+        "dpad_paper"
+      ],
+      "categories": [
+        "on_joint_frontier",
+        "not_on_joint_frontier"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Source categorical membership is matched exactly only after authentic granular computation and the complete quantitative companion panel are verified; a printed claim match alone is insufficient.",
+        "evidence_ids": [
+          "dpad_fig6_summary"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original mean/SEM and pairwise frontier construction, then justify reproduction criteria independently of the local diagnostic.",
+        "independent_unit": "35 repeated temporal evaluation folds nested in seven sessions from one monkey; folds and channels are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper describes one-sided signed-rank frontier comparisons with P<=0.05 and at least 1 percent relative mean difference. That source localization rule is not an equivalence tolerance or a justified independent-unit model. No confidence level, sample minimum or equivalence band is invented.",
+        "evidence_ids": [
+          "dpad_paper",
+          "dpad_metric_code",
+          "dpad_fig6_summary"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original numeric Figure 6i mean/SEM coordinates and complete method/session/fold source results are missing; Zenodo refh_results.csv is a different paper's decoder result and cannot supply these targets.",
+    "Exact random 32-electrode subset, resulting 77-99 units and seven wideband-session crosswalk are unresolved. Local session labels are candidate mappings, not authenticated original identities.",
+    "Native binning, Gaussian smoothing, alignment, boundary handling, historical architecture/dimension caller and original invalid-row/channel sanitization are unverified; strict local rejection is not source parity.",
+    "All observation-level neural/behavior predictions, original masks and temporal memberships, 90-architecture training-search records, selected model/configuration identities, complete dimension scores and joint-nonlinearity comparisons remain mandatory. The scalar/categorical schema represents only the source summary findings, not the entire required structured panel.",
+    "No authentic input/preparation manifest or independent submitted-analysis execution and granular-output verification program is frozen. Scoring supplied predictions or copying source aggregates does not establish computational reproduction.",
+    "Source-supported reproduction tolerances and dependence-aware uncertainty are unresolved. The source frontier thresholds are not an equivalence tolerance.",
+    "Matched paper+data and paper+data+author-code delivery manifests, exposure policy, author-code bundle, cumulative access/resource budgets and freeze/verification custody are not established."
+  ]
+}

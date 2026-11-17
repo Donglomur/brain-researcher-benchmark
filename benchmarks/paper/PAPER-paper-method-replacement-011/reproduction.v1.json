@@ -1,0 +1,224 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-replacement-011",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Root explicitly selects complete Figure 4a-c sentence-onset versus no-speech linear decoding. This external partial v1 draft declares only the two actual source sentence peak-time scalars, 100 and 300 ms; it cannot represent or admit the complete contact/time peak map, example curve, training-CV contact selection and temporal/frontal held-out curve panel. Native identities, original arrays/windows/splits, authentic training/execution, independent verification and justified reproduction criteria remain unresolved. A separate corrected native-output proposal records the complete selected obligations; no vector-family scalar placeholders are used.",
+  "source_paper": {
+    "title": "Brain Treebank: Large-scale intracranial recordings from naturalistic language stimuli",
+    "url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/aefa2385b3f33abf1526ae4e2c208cd9-Abstract-Datasets_and_Benchmarks_Track.html"
+  },
+  "evidence": [
+    {
+      "id": "treebank-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Reviewed arXiv v1: Figure 4a-c and Section 4 S4.p7-S4.p8; Section 3; Appendix A.5 and A.9",
+      "supports": "Original complete sentence-onset/no-speech single-contact linear-decoding map, example and training-selected temporal/frontal held-out curves; ten-participant population, 114 bad-contact exclusions, subject-5 regional/brain-plot restriction and source preprocessing/examples/splits. Exact native identities and equivalence to a separate proceedings version are not established."
+    },
+    {
+      "id": "treebank-runner",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py",
+      "locator": "RegressionRunnerTestSet.split_and_train_and_test, lines 31-55",
+      "supports": "Decimates by ten, applies StandardScaler in the logistic-regression pipeline, cross-validates training ROC-AUC and returns test ROC-AUC."
+    },
+    {
+      "id": "treebank-time",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "locator": "get_crossval_indices; run_electrode_test; run_subject_test; write_summary",
+      "supports": "Different runner paths exist; neural-runner train/validation list appends are reversed and the generic all-ROC summary is not automatically the paper top-ten figure aggregation."
+    },
+    {
+      "id": "treebank-decoding-timing",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Section 4 S4.p8, Figure 4c, reviewed arXiv v1",
+      "supports": "Original linear sentence-onset decoding peaks at 100 ms in the temporal lobe and 300 ms in the frontal lobe. These disclosed derived findings cannot replace the complete selected curves, map, source example or native computation."
+    },
+    {
+      "id": "treebank-source-window-audit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "locator": "run_subject_test: np.arange window starts; int sample conversion; commented-out end-extent assertion; regression_runner_test_set dispatch",
+      "supports": "Original final-window extent and the configured regression task must be reconstructed; the NN helper's swapped indices and generic summary cannot establish original source splitting or panel aggregation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original 2024 Brain Treebank recordings and movie-aligned annotations for the selected Figure 4a-c experiment. The reviewed publication is arXiv 2411.08343v1; no byte/content equivalence to a separate proceedings version or later expanded release is asserted. Exact original release, recordings, transcript/annotation, contact and example manifests remain unqualified.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Published population is ten epilepsy participants and their original recorded English movies. Remove the source 114 corrupted contacts. Retain subject 5 in nonregional analyses, but exclude subject 5 from atlas-region analyses and brain plots. These are published eligibility rules, not authenticated contact, example or panel membership manifests.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve original 80/20 train/test example partitions shared across contacts within each participant, and five-fold CV within the training portion for source contact selection. Original balanced example IDs, negative subsampling, split/fold identities, seeds and configured regression task/runner remain unverified. A new movie/participant holdout or repaired split cannot silently substitute for this source task; the neural-runner swapped-index path does not establish its original splits.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source single-contact neural samples for sentence-onset versus no-speech classification. The source nominally uses 250-ms windows shifted by 100 ms over -1 to +1 second relative to onset; exact endpoint handling, source window identities and sample support remain unresolved, with no presumed window count. Transcripts/audio timing construct targets and negatives and are not decoder predictors. Multichannel inputs would change the selected task.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source sEEG sampling is 2048 Hz; regression decimates by ten and fits zero-mean/unit-variance scaling within each training-CV fold and final training partition. Positive epochs are two seconds centered on sentence onset; negatives come from three-second segments without speech timestamps, with the source at-least-500-ms buffer, balanced classes and all original recorded movies per participant. Exact native sample bounds, negative construction, decimation behavior and fitted-state lineage remain unqualified.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Held-out ROC-AUC for each original contact/time window; higher means better prediction. Positive-class ranking AUC uses half credit for score ties and chance is 0.5. Retain all five training-fold AUCs and their arithmetic mean for source selection, distinct from pooled out-of-fold AUC. Reproduction retains the original linear decoder; a candidate improvement may use another decoder on the same qualified inputs/examples but cannot establish the original linear-specific timing interpretation.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 4a maps eligible contacts by maximum held-out AUC over the full original time support. Figure 4b retains the full source example time course in right-hemisphere banks of superior temporal sulcus; its exact contact and selection provenance remain unknown. Figure 4c retains temporal and frontal held-out mean curves and source 95% electrode-display intervals from ten contacts per group selected by peak mean five-fold training-CV AUC. Preserve source selection/tie rules and distinguish peak of the group mean curve from mean of individual peaks. Exact contact identities, reference curves, CI computation and panel decision criteria remain unqualified; no Figure 5 distribution is silently required.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete selected Figure 4a-c only: original linear contact/time outputs and training-CV selection evidence, eligible-contact peak map, exact source example time course, and complete training-selected temporal/frontal held-out curves with original confidence displays and derived timing claims. Retain all original movies/examples, source contact exclusions, subject 5 in nonregional computations and its exclusion from atlas-region results and brain plots. Retain every original window, five separate training-fold AUCs and their mean, source top-ten membership/ties and class/split/preprocessing controls. Exact source axes/arrays/identities/criteria are unresolved. The two disclosed latency scalars below are only partial evidence and cannot admit this full panel. Figures 2-3 and 5-7 are separate retained components, not silently reproduced or automatic prerequisites for Figure 4.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time",
+        "treebank-decoding-timing"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Each decoder receives the original single-contact neural samples in its exact source window. Operator-prepared sentence labels and speech-free negatives come from original movie annotations; audio/transcripts are not extra prediction features. Preserve original shared splits, five training folds, training-fitted preprocessing and training-only contact/window/model selection; held-out labels or scores cannot choose contacts, features or ties. Paper_data and paper_data_author_code must keep the same observations, examples, evaluator and budgets, differing only by authorized author code. Paper figures and timing claims are allowed information, so matching them cannot prove computation. An independent operator must execute the frozen native analysis on authenticated recordings, verify sample/example/fit use, and independently derive the complete selected panel. Source data delivery, native verifier, exposure rules and execution receipts are not established. Candidate nonlinear prediction gains cannot establish linear-specific timing or language-specificity beyond acoustics.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "sentence_temporal_peak_latency",
+      "kind": "scalar",
+      "description": "The reviewed arXiv v1 reports a 100-ms temporal-lobe peak for original linear sentence-onset versus no-speech decoding (Section 4 S4.p8; Figure 4c). This actual derived scalar is partial source evidence, not the complete Figure 4a-c finding or proof of native computation.",
+      "status": "verified",
+      "expected": 100,
+      "units": "milliseconds relative to source onset/window time convention",
+      "aggregation": "Derive from the complete original linear-decoder temporal held-out mean AUC curve after source training-CV top-ten selection. Authenticate exact source window coordinate, original membership, confidence display and peak tie handling. A nonlinear candidate peak or favorable subset cannot replace this source linear timing claim.",
+      "evidence_ids": [
+        "treebank-decoding-timing",
+        "treebank-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from the printed timing, nominal 100-ms steps, chance AUC or a plot. Recover authentic source arrays, numerical precision and source-equivalent native behavior, then independently justify a complete-panel reproduction criterion.",
+        "evidence_ids": [
+          "treebank-decoding-timing",
+          "treebank-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original numerical panel and source confidence-display computation, then independently freeze a reproduction equivalence/uncertainty rule; no electrode-independent or printed-claim-only rule is admitted.",
+        "independent_unit": "Participant; movies, contacts, epochs, overlapping windows and CV folds are nested/dependent, not independent participant replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper's descriptive 95% electrode confidence bars do not justify a participant-level reproduction equivalence interval, and no source-supported tolerance or calibrated native variability has been frozen.",
+        "evidence_ids": [
+          "treebank-paper"
+        ]
+      }
+    },
+    {
+      "id": "sentence_frontal_peak_latency",
+      "kind": "scalar",
+      "description": "The reviewed arXiv v1 reports a 300-ms frontal-lobe peak for original linear sentence-onset versus no-speech decoding (Section 4 S4.p8; Figure 4c). This actual derived scalar is partial source evidence, not the complete Figure 4a-c finding or proof of native computation.",
+      "status": "verified",
+      "expected": 300,
+      "units": "milliseconds relative to source onset/window time convention",
+      "aggregation": "Derive from the complete original linear-decoder frontal held-out mean AUC curve after source training-CV top-ten selection. Authenticate exact source window coordinate, original membership, confidence display and peak tie handling. A nonlinear candidate peak or favorable subset cannot replace this source linear timing claim.",
+      "evidence_ids": [
+        "treebank-decoding-timing",
+        "treebank-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from the printed timing, nominal 100-ms steps, chance AUC or a plot. Recover authentic source arrays, numerical precision and source-equivalent native behavior, then independently justify a complete-panel reproduction criterion.",
+        "evidence_ids": [
+          "treebank-decoding-timing",
+          "treebank-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original numerical panel and source confidence-display computation, then independently freeze a reproduction equivalence/uncertainty rule; no electrode-independent or printed-claim-only rule is admitted.",
+        "independent_unit": "Participant; movies, contacts, epochs, overlapping windows and CV folds are nested/dependent, not independent participant replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper's descriptive 95% electrode confidence bars do not justify a participant-level reproduction equivalence interval, and no source-supported tolerance or calibrated native variability has been frozen.",
+        "evidence_ids": [
+          "treebank-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Root explicitly selected complete Figure 4a-c in ROOT_MINDEYE_TREEBANK_SELECTIONS.md; this revises the broader three-task primary. The exact accepted public primary_scope is copied into target.description. This external draft does not update task/improvement/outcomes/registry bytes or release any final identity.",
+    "Only two authentic sentence timing scalars are declared in this partial v1 draft. Complete original linear contact/time arrays, peak map, source example, top-ten selection, temporal/frontal curves and source CI displays remain mandatory and cannot be admitted from these scalars. No vector-family placeholder or invented global score is supplied.",
+    "Recover original 2024 recording/transcript/annotation/contact/example and release manifests. Preserve ten original participants, all their original recorded movies, 114 corrupted-contact removals and subject-5 nonregional versus atlas/brain-plot restrictions. Reviewed arXiv v1 is not asserted equivalent to another publication/release.",
+    "Authenticate original balanced sentence/no-speech examples, negative selection and at-least-500-ms speech buffer; original shared within-participant 80/20 splits, five training folds, seeds and correct regression runner. Do not introduce a new split, enlarged data release or multichannel input.",
+    "Authenticate exact original window identities and endpoints, integer sample conversion, full/truncated final extent and decimation/scaling support. Nominal 250-ms windows at 100-ms steps across -1 to +1 second do not establish a 21-window manifest.",
+    "Reconstruct original contact eligibility, source map coordinates, Figure 4b example identity/selection, temporal/frontal group membership, top-ten training selection/ties and all original AUC/CI/peak arrays. The caption names one example while Appendix A.9 refers to Figure 4b-c selection; do not invent the example identity or reconcile that lineage by guesswork.",
+    "Source training score is arithmetic mean of five fold AUCs, not AUC of pooled out-of-fold scores. Recompute source class balance, positive-probability polarity, score ties, contact/window maxima and regional curves from complete native predictions.",
+    "Existing decoding-curves-v1/evaluate.py requires sentence, word and noun/verb task keys. Preserve it as broader source arithmetic engineering; it is not a ready selected-Figure-4 evaluator. Neither supplied-score reduction nor the separate initial word-response component authenticates original observations, fitting or full-panel native verification. No duplicate scorer is introduced here.",
+    "Freeze and independently execute a submitted native analysis on authenticated permitted single-contact inputs. Verify example/movie/contact/window/fold identities, sample bounds, scaler/model fit state, out-of-fold and held-out probabilities, all selection and aggregation, exclusions and original linear baseline. A program printing published AUCs or 100/300-ms values is insufficient.",
+    "No authentic data/evaluator/interface identities, numerical reference, independently justified tolerance, complete-panel comparison, uncertainty or admission_policy is established. Existing opt-in v2 supports declarative arrays; it does not recover native identities, original support, computation or scientific criteria. A separate corrected native-output proposal records these gaps.",
+    "Separately assess candidate predictive improvement only against an independently reproduced source linear baseline on the same qualified inputs and held-out examples. Do not require logistic regression for every candidate, but do not use nonlinear gains to claim reproduction of linear-specific timing or language specificity beyond acoustic correlates. No AUC margin, source control panel, superiority statistic or participant/selection-aware uncertainty is invented.",
+    "Original electrode-display 95% intervals are not a new participant-level confirmatory reproduction or superiority rule. Movies, contacts, examples, overlapping windows and folds are dependent within participant; preserve original display semantics and independently justify any later inference.",
+    "Figure 5 regional-distribution results, Figures 6-7 word/POS decoding and Figures 2-3 adjusted responses remain separate retained components. Their old definitions and implementations are preserved; they neither substitute for nor silently expand the selected Figure 4 primary.",
+    "Original broader improvement/outcome drafts remain unchanged and cannot automatically pair with this newly selected primary. Own canonical task/outcome/catalog/CLI/admission integration, final identity release, matched information delivery/exposure and cumulative budgets remain held. All scientific outcomes remain unknown."
+  ]
+}

@@ -1,0 +1,369 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-EXP-20261113-002",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The primary is the complete original five-mouse Figure 2h/4d,e empirical finding about stationary versus locomotion state and the time course and temporal stability of visual-speed information in V1. Four source-supported Figure 4e mean/SEM companions are represented below, but native curves, matrices, paired mouse-level state/time estimates and indispensable original statistics are incomplete. Structured-output schema limitations are distinct from missing authentic trial/unit/run identities, complete reference arrays, justified numerical criteria and independent native verification. Source-native decoder-performance gains remain meaningful separately named method evidence; higher accuracy, a larger locomotion effect or a weakened denominator does not automatically establish biological superiority. This external scope-corrected proposal is not bound to the unchanged current improvement/outcomes contracts; the mixed bundle remains unavailable pending coherent scope representation and final canonical task binding.",
+  "source_paper": {
+    "title": "Flexible neural population dynamics govern the speed and stability of sensory encoding in mouse visual cortex",
+    "url": "https://www.nature.com/articles/s41467-024-50563-y"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-50563-y",
+      "locator": "Results Figures 2h and 4d,e; Methods: Independent-neuron decoding of binned spike counts, Cross-time decoding of binned spike counts; equation 21. Methods cross-time text internally calls the panel Figure 5d,e.",
+      "supports": "Complete original five-mouse Figure 2h/4d,e empirical state/time finding: locomotion alters the time course of six-speed V1 information and stabilizes cross-time readout sooner. Source-native decoding measures that finding; within-time three-fold diagonal-covariance and cross-time half-split analyses with five repeats remain distinct. Source methods and equation 21 support the measurement definitions, not a generic maximization criterion for biological superiority."
+    },
+    {
+      "id": "within",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/processSession_decoding.m",
+      "locator": "normal state criteria; unit filtering; options.kfold=3; GammaOpt/GammaOne sections",
+      "supports": "Normal state criteria, unit filtering, within-time three-fold CV and GammaOne diagonal-covariance route consistent with the original independent-neuron decoder; exact run configuration still needs authentication."
+    },
+    {
+      "id": "cross",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/processSession_crossTimeDecoding.m",
+      "locator": "lines 14\u201332, 163\u2013181, 240\u2013320",
+      "supports": "State/trial/unit eligibility and two-way random splits with five repetitions; these match the source cross-time split design. Exact subsampling and saved run membership require binding."
+    },
+    {
+      "id": "metric",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/NeuralDataAnalysis/do_cvDA.m",
+      "locator": "lines 99\u2013130",
+      "supports": "Prediction accuracy is proportion correct, averaged over folds, with per-class accuracy also returned."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/26031226/versions/1",
+      "locator": "version 1 metadata; code link and sole data archive",
+      "supports": "Versioned preprocessed Horrocks et al. 2024 data deposit; no payload or labels inspected."
+    },
+    {
+      "id": "cross_full",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/CrossTimeDecodingAnalysis.m",
+      "locator": "Five source sessionTags; all goodUnits; stat/run.perm.perf; five random half splits; 20 by 20 train/test windows.",
+      "supports": "The recovered full-population route supplies complete state-specific matrices. nTrials is referenced without assignment in this script; saved run/configuration and source inputs still need binding."
+    },
+    {
+      "id": "within_reduce",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/analyseDiscriminantAnalysis_spikeCounts.m",
+      "locator": "just gamma=1 section: average five perm.meanPerf curves per session; mean and SEM across five sessions, -150:10:1750 ms.",
+      "supports": "191 within-time mean and SEM values per state, preserving five primary mouse sessions."
+    },
+    {
+      "id": "cross_reduce",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/analyseTrainTestDecoding.m",
+      "locator": "mean perm.perf; full matrix means; train_idx=4 early row and diagonal companions; normalized performance timeIdx2Use=3:12 and trainIdx=4.",
+      "supports": "Complete 20 by 20 accuracy means for each state, early 100-200 ms training-row SEM, and per-mouse above-chance ratio-of-sums over 0-1000 ms before five-mouse mean/SEM. Full matrices and denominator are required companions to the relative summary."
+    },
+    {
+      "id": "sample_sem",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/GenericFunctions/sem.m",
+      "locator": "std(x,[],dim)/sqrt(size(x,dim))",
+      "supports": "Source SEM uses sample standard deviation over the five mice after within-mouse permutation averaging; windows and repeats are not biological replication."
+    },
+    {
+      "id": "subsample_distinction",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/analyse_CrossTimeDecodingMultPopsize.m",
+      "locator": "popSize/rep processing; concatenate subsamples, cap ratios at one, median/medianCI.",
+      "supports": "This population-size route has different aggregation and shuffled controls. It is not substituted for the registered full-population Figure 2h/4d,e route."
+    },
+    {
+      "id": "reported_relative",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-50563-y",
+      "locator": "Results Figure 4e: stationary 0.25 +/- 0.04; locomotion 0.58 +/- 0.07, means +/- SEM, five mice.",
+      "supports": "Four printed scalar source values, distinct from full accuracy curves/matrices and from a computational reproduction criterion."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The complete original five-mouse Figure 2h/4d,e empirical state/time decoding finding, preserving within-time curves, state/train/test-time matrices, relative cross-time generalization and its numerator/denominator, paired mouse-level effects and source-required controls. The Allen extension and other figures remain outside this task.",
+      "evidence_ids": [
+        "paper",
+        "within_reduce",
+        "cross_reduce"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Figshare 26031226 version 1, DOI 10.6084/m9.figshare.26031226.v1, paired with publication-tag author code e3796c13fe7afe7a84854cd5a02c36de268e88f4. This identifies the source deposit and code; authentic released trial/unit arrays, admitted source cohort membership and figure-producing run linkage remain unbound.",
+      "evidence_ids": [
+        "data",
+        "within",
+        "cross_full"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain all five primary mice, one original session each, paired stationary/locomotion measurements and every qualifying state/class cell. Source session tags are M22027_20220517, M22029_20220607, M22031_20220524, M22032_20220621 and M22033_20220706. Authentic raw trial/unit joins and complete inclusion masks are not frozen. The separate Allen extension and other figures remain outside this task; repeats, neurons, trials and windows are not independent animals.",
+      "evidence_ids": [
+        "paper",
+        "cross_full",
+        "within_reduce"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Within-time Figure 2h uses random stratified three-fold CV repeated five times, diagonal covariance and inner five-fold delta tuning. Cross-time uses half train/half test, five repeats, nonoverlapping 100 ms windows and inner five-fold gamma/delta tuning. The source/code two-fold cross-time design agrees; actual memberships, seeds and figure-producing population settings remain unbound. Preserve these original source routes for the empirical state/time finding. The pooled-state chronological calibration and held-mouse adaptation remain a distinct prospective extension.",
+      "evidence_ids": [
+        "paper",
+        "cross",
+        "within",
+        "cross_full"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original binned V1 spike-count vectors and six visual-speed labels, with stationary and locomotion analyses fitted separately under the source protocol. Behavioral state defines the original comparison and model dispatch; pooling states or adding behavior/pupil prediction shortcuts changes this information condition. Raw speed-value/class mapping, trial IDs and admitted unit identities require authentic binding.",
+      "evidence_ids": [
+        "paper",
+        "within",
+        "cross_full"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source normal state criteria, full-contrast 573-dot trials, duration tolerance, minimum trial balancing and quality/rate unit filters are retained. Source uses isi_viol<=0.1, amplitude_cutoff<=0.1, amplitude>=50 and dm_fr>=1. Within-time windows are 100 ms wide at 10 ms steps; cross-time windows are nonoverlapping 100 ms. These are the source recipe, not proof that authentic inclusion masks or the figure-producing run have been recovered.",
+      "evidence_ids": [
+        "within",
+        "cross",
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source decoding accuracy is correct predictions divided by held-out test trials, with chance 1/6. Equation 21 and the author reducer normalize above-chance cross-time performance using the corresponding within-time diagonal: preserve raw accuracy, positive above-chance numerator terms and the diagonal denominator. These source-native measurements support the state/time biological finding and a separately named decoder-method comparison; no generic higher-accuracy or larger-state-effect rule is an established primary biological superiority criterion.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "cross_reduce"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain complete original state/time/class support and paired mouse-level outputs. Within-time accuracy averages held-fold proportions, then five repeats within each mouse; source summaries use five mice equally with sample SEM. Cross-time accuracy averages repeats within mouse; relative generalization is the source ratio of above-chance sums within each mouse before five-mouse mean/SEM, preserving its raw numerator and diagonal denominator. Keep the original paired state/time comparisons and indispensable statistics; exact inferential mapping, full numeric outputs and a simultaneous state/time reproduction or superiority rule remain unbound. No grand mean, favorable cell or invented scalar reduction substitutes for the native panel.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "within_reduce",
+        "cross_reduce",
+        "sample_sem"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The primary panel is complete original five-mouse Figure 2h and Figure 4d,e: how stationary versus locomotion state changes the time course and temporal stability of six-speed information in V1. Preserve both states, every original mouse and qualifying speed class; 191-window within-time curves and mouse/cohort mean/SEM; complete 20-by-20 train/test accuracy matrices and diagonals; early 100-200 ms training profiles; original relative-generalization profiles and early summaries with raw numerator/denominator; paired mouse-level state/time effects and indispensable original statistics. Source arrays/repeat support and authentic trial/unit inclusion provenance remain mandatory. The four Figure 4e printed mean/SEM companions in findings do not represent or satisfy this full panel. Native curve/matrix and paired state/time comparison support remains schema-blocked; exact reference arrays, inference and scientific criteria are separately unresolved. No new elementwise-error scalar, placeholder expansion, selected cell, extra figure, Allen cohort or clipped/median population-size branch replaces it. Source-native same-panel decoder gains are legitimate separately named method evidence, not automatic biological superiority. A candidate may preserve, attenuate or challenge the source pattern; primary superiority is unavailable until scientifically justified, without requiring a larger locomotion effect or prescribing its direction.\n\nRetained source-specific qualifications:\nReproduce the complete original five-mouse Figure 2h and Figure 4d,e finding on how stationary versus locomotion states alter the time course and temporal stability of six-speed information in V1. Retain source-native state-specific within-time decoding curves, cross-time matrices, relative generalization and paired mouse-level state/time effects. Improved decoding on the same panel is meaningful separately reported empirical method evidence; higher accuracy or a larger locomotion effect alone does not establish improvement of the biological finding.",
+      "evidence_ids": [
+        "paper",
+        "within_reduce",
+        "cross_full",
+        "cross_reduce",
+        "sample_sem",
+        "subsample_distinction"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions receive the same paper and complete admitted original data plus neutral interface documentation; the +author-code condition alone adds an immutable publication-tag author-code package. Paper figures and printed values are allowed observations and cannot count as evidence that analysis was computed. Source normal state dispatch, original trial/unit quality criteria, balanced six-class support, within-time three-fold repeated CV and cross-time half-split repeated CV are preserved. Model fitting, feature removal and nested hyperparameter selection must respect each original training partition; test labels may be used only by the operator to score held predictions. No pooled-state chronological extension, extra behavior/pupil shortcut, final output leakage, favorable time cell or smaller neuron panel is admitted. Public data exposure is retained as a limitation. Exact paired input, author-code, split, exposure, cumulative budget and evaluator manifests are not frozen. Both outcomes retain this empirical state/time scope. Comparisons of improved decoder methods must be explicitly distinguished from primary biological interpretation; no outcome is accepted merely because the four allowed printed scalars match.",
+      "evidence_ids": [
+        "paper",
+        "within",
+        "cross_full",
+        "metric",
+        "data"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig4e-stationary-early-relative-mean",
+      "kind": "scalar",
+      "description": "Figure 4e reported stationary relative cross-time performance mean for the decoder trained 100-200 ms. This printed value is an allowed paper observation, not computational evidence. This is a scalar companion to the primary state/time finding, not standalone complete-panel reproduction or a primary superiority threshold.",
+      "status": "verified",
+      "expected": 0.25,
+      "units": "dimensionless_above_chance_ratio",
+      "aggregation": "Average the five permutation matrices within each mouse; clip accuracy minus 1/6 below zero; sum the early training row over test windows 0-1000 ms and divide by the corresponding sum of the diagonal. Do not clip the ratio at one. Then take the equal mean of five mouse ratios. Preserve raw accuracy, numerator, denominator and undefined denominators without dropping mice.",
+      "evidence_ids": [
+        "paper",
+        "reported_relative",
+        "cross_reduce",
+        "sample_sem"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No calibrated numerical agreement bound is available. Printed rounding and reported SEM alone do not justify a tolerance for stochastic source-protocol reproduction. Recover complete author outputs and source-compatible variation before independently freezing a criterion; neither a loose historical grader bound nor the improvement margin supplies it.",
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve five mouse-level estimates and original folds/permutations as nested repeated measurements; no interval-containment or directional inference criterion has been source-justified and frozen.",
+        "independent_unit": "Mouse: the five primary source animals; trials, neurons, folds, windows and permutations are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports mouse-level mean and SEM. SEM is retained as an original output, not silently converted into a reproduction tolerance, confidence interval, or evidence from failure to reject a difference.",
+        "evidence_ids": [
+          "paper",
+          "sample_sem"
+        ]
+      }
+    },
+    {
+      "id": "fig4e-stationary-early-relative-sem",
+      "kind": "scalar",
+      "description": "Figure 4e reported stationary relative cross-time performance sem for the decoder trained 100-200 ms. This printed value is an allowed paper observation, not computational evidence. This is a scalar companion to the primary state/time finding, not standalone complete-panel reproduction or a primary superiority threshold.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "dimensionless_above_chance_ratio",
+      "aggregation": "Average the five permutation matrices within each mouse; clip accuracy minus 1/6 below zero; sum the early training row over test windows 0-1000 ms and divide by the corresponding sum of the diagonal. Do not clip the ratio at one. Then take sample standard deviation of the five mouse ratios divided by sqrt(5). Preserve raw accuracy, numerator, denominator and undefined denominators without dropping mice.",
+      "evidence_ids": [
+        "paper",
+        "reported_relative",
+        "cross_reduce",
+        "sample_sem"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No calibrated numerical agreement bound is available. Printed rounding and reported SEM alone do not justify a tolerance for stochastic source-protocol reproduction. Recover complete author outputs and source-compatible variation before independently freezing a criterion; neither a loose historical grader bound nor the improvement margin supplies it.",
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve five mouse-level estimates and original folds/permutations as nested repeated measurements; no interval-containment or directional inference criterion has been source-justified and frozen.",
+        "independent_unit": "Mouse: the five primary source animals; trials, neurons, folds, windows and permutations are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports mouse-level mean and SEM. SEM is retained as an original output, not silently converted into a reproduction tolerance, confidence interval, or evidence from failure to reject a difference.",
+        "evidence_ids": [
+          "paper",
+          "sample_sem"
+        ]
+      }
+    },
+    {
+      "id": "fig4e-locomotion-early-relative-mean",
+      "kind": "scalar",
+      "description": "Figure 4e reported locomotion relative cross-time performance mean for the decoder trained 100-200 ms. This printed value is an allowed paper observation, not computational evidence. This is a scalar companion to the primary state/time finding, not standalone complete-panel reproduction or a primary superiority threshold.",
+      "status": "verified",
+      "expected": 0.58,
+      "units": "dimensionless_above_chance_ratio",
+      "aggregation": "Average the five permutation matrices within each mouse; clip accuracy minus 1/6 below zero; sum the early training row over test windows 0-1000 ms and divide by the corresponding sum of the diagonal. Do not clip the ratio at one. Then take the equal mean of five mouse ratios. Preserve raw accuracy, numerator, denominator and undefined denominators without dropping mice.",
+      "evidence_ids": [
+        "paper",
+        "reported_relative",
+        "cross_reduce",
+        "sample_sem"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No calibrated numerical agreement bound is available. Printed rounding and reported SEM alone do not justify a tolerance for stochastic source-protocol reproduction. Recover complete author outputs and source-compatible variation before independently freezing a criterion; neither a loose historical grader bound nor the improvement margin supplies it.",
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve five mouse-level estimates and original folds/permutations as nested repeated measurements; no interval-containment or directional inference criterion has been source-justified and frozen.",
+        "independent_unit": "Mouse: the five primary source animals; trials, neurons, folds, windows and permutations are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports mouse-level mean and SEM. SEM is retained as an original output, not silently converted into a reproduction tolerance, confidence interval, or evidence from failure to reject a difference.",
+        "evidence_ids": [
+          "paper",
+          "sample_sem"
+        ]
+      }
+    },
+    {
+      "id": "fig4e-locomotion-early-relative-sem",
+      "kind": "scalar",
+      "description": "Figure 4e reported locomotion relative cross-time performance sem for the decoder trained 100-200 ms. This printed value is an allowed paper observation, not computational evidence. This is a scalar companion to the primary state/time finding, not standalone complete-panel reproduction or a primary superiority threshold.",
+      "status": "verified",
+      "expected": 0.07,
+      "units": "dimensionless_above_chance_ratio",
+      "aggregation": "Average the five permutation matrices within each mouse; clip accuracy minus 1/6 below zero; sum the early training row over test windows 0-1000 ms and divide by the corresponding sum of the diagonal. Do not clip the ratio at one. Then take sample standard deviation of the five mouse ratios divided by sqrt(5). Preserve raw accuracy, numerator, denominator and undefined denominators without dropping mice.",
+      "evidence_ids": [
+        "paper",
+        "reported_relative",
+        "cross_reduce",
+        "sample_sem"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No calibrated numerical agreement bound is available. Printed rounding and reported SEM alone do not justify a tolerance for stochastic source-protocol reproduction. Recover complete author outputs and source-compatible variation before independently freezing a criterion; neither a loose historical grader bound nor the improvement margin supplies it.",
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve five mouse-level estimates and original folds/permutations as nested repeated measurements; no interval-containment or directional inference criterion has been source-justified and frozen.",
+        "independent_unit": "Mouse: the five primary source animals; trials, neurons, folds, windows and permutations are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports mouse-level mean and SEM. SEM is retained as an original output, not silently converted into a reproduction tolerance, confidence interval, or evidence from failure to reject a difference.",
+        "evidence_ids": [
+          "paper",
+          "sample_sem"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "PRIMARY/SECONDARY REPRESENTATION: the corrected primary is the original empirical state/time finding. The unchanged improvement contract orders decoder performance. The schema/binding must distinguish these roles before this mixed bundle can be available; an accuracy delta or larger locomotion effect alone cannot discharge primary biological superiority. This external proposal intentionally does not pass unchanged-anchor pairing against the stale improvement definition.",
+    "INCOMPLETE NATIVE PANEL: four published Figure 4e mean/SEM companions are supported, but the full within-time curves, cross-time matrices, paired mouse-level state/time effects and original statistics are not represented by scalar/categorical v1. Keep the existing source-grounded structured proposal and its scope annotations in SCOPE_REVISION_HANDOFF.json; no invented reduction or null-cell explosion.",
+    "Complete Figure 2h curves, Figure 4 accuracy matrices/profile values, original mouse-level patterns and exact source numerical companions are unrecovered. Four printed Figure 4e mean/SEM scalars cannot substitute for structured targets or prove analysis execution.",
+    "Bind all five original mouse sessions, normal state/class support, trial/unit masks, nested training partitions, stochastic CV/repeat realizations and exact full-population figure-producing run. The recovered CrossTimeDecodingAnalysis.m has an unresolved nTrials workspace/input dependency.",
+    "Existing source-decoding-metrics-v1/source_metrics.py is a tested runnable reducer: summarize() consumes five-by-191 within-time and five-by-20-by-20 cross-time arrays per mouse/state; score_within_time_folds() reduces class-ordered held predictions. Its CLI pins an operator export and writes numeric summaries. It is not a submitted-analysis runner, native data preparer, or independent proof that supplied arrays were computed from source observations.",
+    "A submitted analysis must expose original ordered trial/unit identities, inclusion masks, labels/predictions for every held fold and cross-time permutation, feature/training-only masks, source class confusion/count support, all per-mouse/repeat accuracy arrays and ratio numerators/diagonals. An independent operator verifier must check those outputs against authenticated source observations and splits, recompute correct/trial counts and fold/repeat/mouse reductions, and link every declared finding to those computations. No such complete verifier or authentic ordered identity manifest exists yet; aggregate agreement alone is inadmissible.",
+    "The schema requires immutable evaluator and six evaluation-identity hashes before admission_policy can be specified. Those authentic native manifests and the submitted-analysis/verifier identities are absent, so admission_policy is deliberately omitted rather than populated with arbitrary hashes or the reducer hash as an end-to-end verifier.",
+    "Neither printed precision, source SEM nor old coefficient-transport controls justify a reproduction tolerance or uncertainty criterion. Leave every tolerance and inferential rule unresolved until independently source-grounded; no numerical default, confidence level or outcome threshold is invented.",
+    "Both paired information-condition protocols lack immutable common input/code/exposure/evaluator manifests and cumulative access/resource budgets. Historical pooled-state chronological calibration, software controls and author replay do not populate AI reproduction or AI improvement cells.",
+    "AUTHORITY/IDENTITY HOLD: the accepted scope memo and batch adoption authorize this bounded hierarchy correction; they do not authenticate outputs, supply superiority criteria, finalize canonical task bytes or authorize a fresh outcome receipt. Current task, improvement, history, old reproduction/outcomes and all components remain preserved."
+  ]
+}

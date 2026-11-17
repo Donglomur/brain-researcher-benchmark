@@ -1,0 +1,1002 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-031",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "PARTIAL source-supported scalar inventory only: 18 original calcium segmentation fractions and five original method-throughput scalars. The mandatory synthetic 24-by-10 neuron coefficient distributions, real-voltage two-by-100 pixel coefficient panels and all underlying movies/traces/spike support are structured findings, not source-defined single scalars, and are retained unresolved in full_panel and blockers without invented reduction or categorical replacement. This sidecar does not cover the complete original task. Original input/output identities, full companion routing, source route, agreement criteria and executable verification remain unbound. Neither improvement ineligibility nor passing arithmetic controls decide reproduction; no computational reproduction is admitted.",
+  "source_paper": {
+    "title": "Real-time self-supervised denoising for high-speed fluorescence neural imaging",
+    "url": "https://www.nature.com/articles/s41467-025-64681-8"
+  },
+  "evidence": [
+    {
+      "id": "fast-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "locator": "Figure 3b,d–f and voltage-imaging Results; Figure 1d; Methods: Training and inference",
+      "supports": "Defines synthetic spike-width controls, real 1000-Hz QuasAr6a electrophysiology comparison, pixel-level correlations and source same-stack training; separately reports hardware-bound throughput."
+    },
+    {
+      "id": "fast-readme",
+      "kind": "author_code",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/README.md",
+      "locator": "Quick Start; Configuration; Training and inference guide",
+      "supports": "Pinned executable author route and configuration: model/checkpoint workflow, 100 epochs, seed 123, and code configuration values requiring reconciliation with paper Methods."
+    },
+    {
+      "id": "fast-inference",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test.py",
+      "locator": "goTesting, temporal output accumulation and image saving",
+      "supports": "Author temporal-window inference and output handling must be preserved and audited against original frame support."
+    },
+    {
+      "id": "prospective-evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-031/docs/initial-evaluator-v1.md",
+      "locator": "Scientific basis and prospective choices; Provenance and preserved discrepancies",
+      "supports": "Existing evaluator declares new ROI/F0/group-split rules, uses synthetic-only image error, and explicitly excludes native test-stack adaptation; it is an extension and measurement component."
+    },
+    {
+      "id": "fast-calcium",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "locator": "Figure 2a-i; neuronal calcium Results; Methods, Neuron segmentation and evaluation metrics",
+      "supports": "Original8000-frame vS1 calcium movie;155 manually annotated neurons in one dataset; raw plus DeepCAD-RT, SRDTrans, DeepVid, SUPPORT and FAST; temporal maximum projection then common Cellpose; Accuracy, Recall and F1. FAST reported0.92/0.71/0.64; SUPPORT Accuracy0.93."
+    },
+    {
+      "id": "fast-speed",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "locator": "Figure 1b-d and caption; Principle and performance; System latency and pipeline integration",
+      "supports": "Stride-dependent synthetic PSNR/SSIM and FPS; original throughput comparison on512x192x5000 stack using RTX A6000, FAST1100.45FPS. Throughput is distinct from end-to-end acquisition latency and denoising fidelity."
+    },
+    {
+      "id": "fast-synthetic",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "locator": "Figure 3a-c and caption; simulation Results",
+      "supports": "All2/4/6/8ms spike-width conditions,10 simulated neurons per condition; raw and five denoising methods; per-neuron denoised deltaF/F correlation with clean synthetic truth. Caption uses two-way ANOVA/Tukey; no reproduction tolerance is specified."
+    },
+    {
+      "id": "fast-deposit",
+      "kind": "author_data",
+      "url": "https://zenodo.org/api/records/15872025/files/README.md/content",
+      "locator": "Original Data; Publicly Sourced and Reused Data; Licensing Information",
+      "supports": "Five collections distinguish neuronal calcium8Hz, simulated fast voltage, real single-cell voltage1000Hz plus patch clamp, zebrafish voltage and astrocyte volume. Reused files1/3/4 retain original source terms; only original files2/5 explicitly CC BY4.0. This inventory does not prove exact figure file/ROI mapping."
+    },
+    {
+      "id": "fast-gui",
+      "kind": "author_code",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test_in_gui.py",
+      "locator": "goTesting: mean, range(0,timeFrame,1), overlap updates and output[:,:t]",
+      "supports": "GUI invokes T windows, including reflected tail, unlike CLI T-C+1; both center whole augmented tensor and save originalT frames. Exact paper route remains unresolved."
+    },
+    {
+      "id": "fast-dataset",
+      "kind": "author_code",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/datasets/dataset.py",
+      "locator": "_get_test_item; _get_train_item",
+      "supports": "Inference appends endpoint-repeating reverse tail of up to100 frames, returns originalT; training uses source same-stack adjacent pairs. Padding never adds independent observations."
+    },
+    {
+      "id": "fast-params",
+      "kind": "author_code",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/params.json",
+      "locator": "miniBatch_size; batch_size; train_frames; weight_decay",
+      "supports": "Pinned defaults C4, outer batch1, train_frames2000 and weight_decay0.9 must not be assumed exact figure settings or silently harmonized with paper full-stack/1e-4 Methods."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source raw data are deposited at Zenodo 15872025; Figure 3d–f uses a QuasAr6a-expressing cortical neuron and simultaneous patch clamp, while the registered scope also retains real calcium imaging. Exact archive files/version, full collection inclusion and native export manifest remain unresolved.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 3d describes 4,982 frames from the 1,000-Hz mouse L2/3 example, 1,000 displayed pixel traces and a separate n=100-pixel correlation comparison in Figure 3f. Their exact pixel identities and independence are not recovered; this is not 100 independent neurons or animals. Calcium collection identity also remains to be bound.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Methods treat the full input stack as a sample for self-supervised temporal-window training (default 100 epochs). Preserve the source allowance for unlabeled same-stack adaptation and protect electrophysiology/reference labels. The local recording-disjoint split disallowing test-stack adaptation is a separate extension.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Same raw fluorescence stack, imaging frame rate/exposure and permitted spatiotemporal context as source FAST; synchronized electrophysiology is an evaluator comparator, not a candidate training target. Synthetic clean traces belong only to the source simulation controls.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover original ROI/pixel selection, fluorescence baseline definition, electrophysiology synchronization, temporal context, overlap handling, clipping and full-frame support. The local fixed-ROI/F0 rules are explicit prospective choices; paper weight decay 1e-4 and pinned README 0.9 are not silently interchangeable.",
+      "evidence_ids": [
+        "fast-paper",
+        "fast-readme",
+        "fast-inference",
+        "prospective-evaluator",
+        "fast-gui",
+        "fast-dataset",
+        "fast-params"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Figure 3f uses Pearson correlation r=sum((x-xbar)(y-ybar))/sqrt(sum((x-xbar)^2)sum((y-ybar)^2)) between single-pixel ΔF/F and synchronized electrophysiology. Figure 3b analogously compares simulated traces with clean truth; image PSNR/SSIM and throughput are distinct outcomes.",
+      "evidence_ids": [
+        "fast-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Exact pixel-level source summaries and baseline numeric correlation are not recovered. Report source strata separately; pixel/frame correlations cannot justify animal-level confidence, and prospective ROI/recording/group means cannot be substituted for the paper reduction.",
+      "evidence_ids": [
+        "fast-paper",
+        "prospective-evaluator"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered real neuronal-calcium and single-cell-voltage scope requires the complete original Figure2 raw-plus-five-method Accuracy/Recall/F1 panel over all155 annotated neurons and8000 frames; Figure3d-f raw/FAST fluorescence-electrophysiology comparison with original100-pixel quantitative and1000-pixel displayed rosters over4982 frames; Figure3a-c raw-plus-five-method controls for every2/4/6/8ms spike-width condition and10 simulated neurons; and original Figure1d matched-hardware throughput with temporal-fidelity/stride controls. Preserve full raw/denoised movies, fixed source traces, morphology and segmentation outputs, not only favorable aggregates. The exact Figure1b stride grid and the required routing of additional Figure3g-i zebrafish and Figure4 astrocyte collections into this registered task are unbound; no reduced panel or full-five-collection claim is admitted. This is a PARTIAL scalar inventory, not complete canonical coverage: Figure3b requires the full 24 method-by-width distributions of 10 original neuron correlations each (all 240 coefficient identities plus clean/noisy/denoised traces, original spike shapes/times and source statistical comparisons); Figure3f requires both raw and FAST panels of 100 original pixel correlations each (all 200 coefficient identities and full synchronized traces), with the separate 1000 displayed-pixel roster preserved. No mean, median, selected exemplar, categorical claim or other invented scalar may replace these structured panels.",
+      "evidence_ids": [
+        "fast-calcium",
+        "fast-paper",
+        "fast-synthetic",
+        "fast-speed",
+        "fast-deposit"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both paired information conditions must permit the same complete source raw fluorescence stacks, frame identities/rates and source-allowed unlabeled same-stack training. Original electrophysiology, clean synthetic targets, manual masks and final metric references remain operator-owned. The paper is common input and its printed results are known answers, so aggregate agreement cannot prove computation. Author code is the only additional information in the +code condition; code-derived temporal oracle and route diagnostics are operator-side by default. Whole-stack centering in the pinned CLI and GUI needs the last original frame; both routes use all-pixel augmented-stack means, and their different tail-window support must be disclosed. Exact original C/S, training extent, weights provenance, source route, runtime budgets and enforceable delivery/exposure manifests remain unbound.",
+      "evidence_ids": [
+        "fast-paper",
+        "fast-readme",
+        "fast-inference",
+        "fast-gui",
+        "fast-dataset",
+        "fast-params"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "calcium_raw_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i Raw input neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_raw_recall",
+      "kind": "scalar",
+      "description": "Figure2i Raw input neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_raw_f1",
+      "kind": "scalar",
+      "description": "Figure2i Raw input neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepcad_rt_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i DeepCAD-RT neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepcad_rt_recall",
+      "kind": "scalar",
+      "description": "Figure2i DeepCAD-RT neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepcad_rt_f1",
+      "kind": "scalar",
+      "description": "Figure2i DeepCAD-RT neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_srdtrans_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i SRDTrans neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_srdtrans_recall",
+      "kind": "scalar",
+      "description": "Figure2i SRDTrans neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_srdtrans_f1",
+      "kind": "scalar",
+      "description": "Figure2i SRDTrans neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepvid_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i DeepVid neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepvid_recall",
+      "kind": "scalar",
+      "description": "Figure2i DeepVid neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_deepvid_f1",
+      "kind": "scalar",
+      "description": "Figure2i DeepVid neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_support_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i SUPPORT neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "verified",
+      "expected": 0.93,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_support_recall",
+      "kind": "scalar",
+      "description": "Figure2i SUPPORT neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_support_f1",
+      "kind": "scalar",
+      "description": "Figure2i SUPPORT neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_fast_accuracy",
+      "kind": "scalar",
+      "description": "Figure2i FAST neuronal-calcium segmentation Accuracy, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "verified",
+      "expected": 0.92,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_fast_recall",
+      "kind": "scalar",
+      "description": "Figure2i FAST neuronal-calcium segmentation Recall, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "verified",
+      "expected": 0.71,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "calcium_fast_f1",
+      "kind": "scalar",
+      "description": "Figure2i FAST neuronal-calcium segmentation F1, retaining the full original maximum-projection/Cellpose comparison and manual annotation support.",
+      "status": "verified",
+      "expected": 0.64,
+      "units": "dimensionless segmentation fraction",
+      "aggregation": "Original single calcium dataset, all8000 frames before temporal maximum projection, all155 manual neuron annotations. Freeze source pixel/object matching, TP/TN/FP/FN definitions and exact panel reduction; do not pool methods or select representative cells.",
+      "evidence_ids": [
+        "fast-calcium"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "One original imaging dataset; neuron annotations are nested within that dataset, not155 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-calcium"
+        ]
+      }
+    },
+    {
+      "id": "throughput_deepcad_rt",
+      "kind": "scalar",
+      "description": "Figure1d DeepCAD-RT throughput under the original matched NVIDIA RTX A6000 and512x192x5000 image-stack comparison; fidelity and acquisition-latency companions must remain separate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "frames per second",
+      "aggregation": "Full5000-frame512x192 stack with the original timing boundary, source temporal context and matching method configuration. Exact repeated-run aggregation, warmup/transfer/I/O boundary and common hardware software stack remain unbound.",
+      "evidence_ids": [
+        "fast-speed"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "Matched complete recording execution/timing repetition on the source hardware; frame count is not independent timing replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      }
+    },
+    {
+      "id": "throughput_srdtrans",
+      "kind": "scalar",
+      "description": "Figure1d SRDTrans throughput under the original matched NVIDIA RTX A6000 and512x192x5000 image-stack comparison; fidelity and acquisition-latency companions must remain separate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "frames per second",
+      "aggregation": "Full5000-frame512x192 stack with the original timing boundary, source temporal context and matching method configuration. Exact repeated-run aggregation, warmup/transfer/I/O boundary and common hardware software stack remain unbound.",
+      "evidence_ids": [
+        "fast-speed"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "Matched complete recording execution/timing repetition on the source hardware; frame count is not independent timing replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      }
+    },
+    {
+      "id": "throughput_deepvid",
+      "kind": "scalar",
+      "description": "Figure1d DeepVid throughput under the original matched NVIDIA RTX A6000 and512x192x5000 image-stack comparison; fidelity and acquisition-latency companions must remain separate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "frames per second",
+      "aggregation": "Full5000-frame512x192 stack with the original timing boundary, source temporal context and matching method configuration. Exact repeated-run aggregation, warmup/transfer/I/O boundary and common hardware software stack remain unbound.",
+      "evidence_ids": [
+        "fast-speed"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "Matched complete recording execution/timing repetition on the source hardware; frame count is not independent timing replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      }
+    },
+    {
+      "id": "throughput_support",
+      "kind": "scalar",
+      "description": "Figure1d SUPPORT throughput under the original matched NVIDIA RTX A6000 and512x192x5000 image-stack comparison; fidelity and acquisition-latency companions must remain separate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "frames per second",
+      "aggregation": "Full5000-frame512x192 stack with the original timing boundary, source temporal context and matching method configuration. Exact repeated-run aggregation, warmup/transfer/I/O boundary and common hardware software stack remain unbound.",
+      "evidence_ids": [
+        "fast-speed"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "Matched complete recording execution/timing repetition on the source hardware; frame count is not independent timing replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      }
+    },
+    {
+      "id": "throughput_fast",
+      "kind": "scalar",
+      "description": "Figure1d FAST throughput under the original matched NVIDIA RTX A6000 and512x192x5000 image-stack comparison; fidelity and acquisition-latency companions must remain separate.",
+      "status": "verified",
+      "expected": 1100.45,
+      "units": "frames per second",
+      "aggregation": "Full5000-frame512x192 stack with the original timing boundary, source temporal context and matching method configuration. Exact repeated-run aggregation, warmup/transfer/I/O boundary and common hardware software stack remain unbound.",
+      "evidence_ids": [
+        "fast-speed"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction agreement band is recovered. Printed precision, a source significance test, a generated arithmetic control or arbitrary epsilon does not define an acceptable reproduction tolerance.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source sampling/reduction and justify an agreement rule before evaluation. Preserve all original observations and dependence; no generic confidence interval, test threshold or sample minimum is assigned.",
+        "independent_unit": "Matched complete recording execution/timing repetition on the source hardware; frame count is not independent timing replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source counts describe the reported observation support, not independent biological replication. Repeated windows, pixels, neuron instances, method runs or timing repetitions cannot silently become independent animals.",
+        "evidence_ids": [
+          "fast-speed"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "PARTIAL inventory only: Figure3b is a 24-by-10 original neuron-correlation panel and Figure3f is a two-by-100 original pixel-correlation panel, not 26 source-defined aggregate scalars. Their complete coefficient arrays, neuron/pixel/method/width identities, underlying movies and synchronized traces, spike shapes/times and original statistical comparisons remain mandatory. No source-defined single-scalar reduction is recovered and none is invented; these structured panels prevent complete canonical coverage or admission.",
+    "Exact original source file/version mapping, complete real-calcium/voltage and simulation input manifests, original pixel/ROI/manual-mask identities and electrophysiology synchronization remain unverified.",
+    "Real-voltage and synthetic coefficient values/distributions and original reductions are unrecovered. Reported calcium fractions and FAST throughput are known printed targets, not independently executed reference outputs.",
+    "Every numerical reproduction tolerance and dependence-aware agreement rule remains unresolved; source P<0.001 does not establish numerical equivalence or independent-animal replication.",
+    "The full Figure1b stride-quality-speed grid, exact original C/S and figure-route mapping remain unbound. CLI T-C+1 and GUI T calls have different last-frame output ancestry despite identical saved shapes.",
+    "Full-stack centering and permitted same-stack training require whole-recording access. Kernel FPS cannot establish causal or end-to-end acquisition latency; exact original source timing boundary and online route need verification.",
+    "Paper full-stack training and weight_decay1e-4 conflict with pinned default train_frames2000 and weight_decay0.9. Do not select a convenient route or silently repair it while claiming source parity.",
+    "The current prospective evaluator changes the source split and ROI/F0 rules. The accepted temporal oracle verifies arithmetic only. Neither supplies a source-native complete evaluator, authentic input manifest, submitted-analysis interface or independent full-output verifier.",
+    "Complete Figure2 calcium segmentation requires exact source Cellpose model/version/settings, original maximum projection and manual-mask matching; full movies and qualitative spatial/temporal companions cannot be replaced by reported fractions.",
+    "The broader paper also contains zebrafish voltage and astrocyte-volume findings. Their exact required relation to this registered neural calcium/single-cell-voltage panel remains unresolved; no full-five-collection paper reproduction is claimed or silently reduced.",
+    "No paired common-input/exposure/resource protocol or author-code-only addition manifest has been authenticated. Separate AI computation and independent output verification are absent for all four outcome/condition cells.",
+    "The pinned GUI initializes timings to zero and never fills them, then prints fps=avg/1000. This printed value is not a measured throughput. An independent measured execution boundary and clock/device completion record are required; no author-code timing bug is silently repaired into a paper result."
+  ]
+}

@@ -1,0 +1,550 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-021",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Faithful reproduction of the original descriptive developmental findings is a valid first-class outcome. This scalar-only contract retains ten source-defined scientific association estimands, not a completed finding panel. Regional distributions, original model/inference tables and native data-to-statistic verification require structured outputs. The schema gap is distinct from genuine unresolved authentic thirteen-participant provenance, historical estimator conventions, exact original numerical references and justified reproduction criteria. Tested preprocessing and postfit algebra are not an executed reproduction.",
+  "source_paper": {
+    "title": "Developmental relationships between the human alpha rhythm and intrinsic neural timescales are dependent on neural hierarchy",
+    "url": "https://doi.org/10.1152/jn.00435.2025"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://journals.physiology.org/doi/full/10.1152/jn.00435.2025",
+      "locator": "Methods: Participants, Signal Processing, Spectral Calculations, Spectral Parameterization; Figs. 2–4 and Tables 1–3",
+      "supports": "Source population, spectral estimands and descriptive age/hierarchy regressions."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/README.md",
+      "locator": "Intended order of operations and dependencies",
+      "supports": "Links source data and specifies spectrum, spectral-fit, statistics sequence with the author Lorentzian FOOOF fork."
+    },
+    {
+      "id": "author_stats",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/PAF_INT_stats_figs.ipynb",
+      "locator": "Parameter/QC loading; sensorimotor/association grouping; PAF/INT omnibus/region regressions; interaction model cells",
+      "supports": "Source fit0 QC, grouped smoothing and participant/region aggregation preceding descriptive regressions."
+    },
+    {
+      "id": "author_fit",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/spect_aper_fitting.ipynb",
+      "locator": "Lorentzian fit setup, PAF and INT extraction cells",
+      "supports": "Author estimator conventions and dependency-sensitive spectral extraction."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-021/docs/initial-evaluator-v1.md",
+      "locator": "Source semantics and prospective repairs; Native scientific gates retained",
+      "supports": "Local held-out prediction metric and train-only comparator are prospective; native spectral conventions remain unresolved."
+    },
+    {
+      "id": "author_loader",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/PAF_INT_neurodev/blob/218f87e81d4aa8ac3658467f4a4c85ad1dc4128d/load_ephys_save_spect.ipynb",
+      "locator": "Processing parameters and participant/region loop; multitaper_spectrogram; final linear-power CSV",
+      "supports": "Original normalized bipolar observations, ID/age/region/time units, 0.25-second offsets, one-second windows and 200-bin 0.5–100 Hz spectra. Inspected cached notebook SHA256 043fbc795d366d42130ce96752ba7802429c94a6f5704f0a4aad9fb6e3fbe291."
+    },
+    {
+      "id": "source_data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/16954184",
+      "locator": "Miles_Weaver_Webb_Ojemann_2025_iEEGData.zip; original clinical resting iEEG and montage/channel tables",
+      "supports": "Original recording route; archived inventory is not a newly authenticated payload or immutable prepared input manifest."
+    },
+    {
+      "id": "inspected_lorentzian_model",
+      "kind": "author_code",
+      "url": "https://github.com/jtmiles/fooof/blob/858a5f703a05022d33d995dc31d4ba5c2b3cb01b/fooof/core/funcs.py",
+      "locator": "lorentzian_function log_knee model; observed branch pin is prospective, not established historical paper dependency",
+      "supports": "The inspected log-knee model convention differs from the notebook helper composition. Cached source SHA256 8a7e6d3f6dcb902e52ef0b2286722b77f77b4b49c8575425df6cd5a06efd00fd; this pin does not resolve historical INT extraction."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate peak alpha frequency and intrinsic timescale, then characterize age relationships and their dependence on sensorimotor versus association hierarchy.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Original resting ECoG release Zenodo 16954184, linked by the paper; author README links the associated concept record 16954183.",
+      "evidence_ids": [
+        "paper",
+        "author_readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Thirteen cross-sectional epilepsy-monitoring participants, approximately ages 3–33, with variable coverage of six cortical regions.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "Original age/hierarchy regressions use the observed clinical cohort; no paper prediction holdout is defined. Local participant-held-out PAF/INT errors constitute an extension.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Resting ECoG, participant age, cortical-region assignments and montage/channel information.",
+      "evidence_ids": [
+        "paper",
+        "author_readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper preprocessing and Lorentzian spectral fitting are documented, but historical fork identity, knee-to-timescale conversion and paper 3–14 Hz versus code 2–14 Hz alpha selection require reconciliation.",
+      "evidence_ids": [
+        "paper",
+        "author_fit",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "PAF, INT and their age/hierarchy regression coefficients, correlations and R² quantify associations. R² is explanatory fit here, not a protected prediction baseline.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "The author notebook pools eligible time rows within participant/region or context, then regresses participant summaries against log2 age; the interaction uses participant-region summaries.",
+      "evidence_ids": [
+        "author_stats"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete original thirteen-participant descriptive panel, with each participant contributing only their actual eligible coverage of Postcentral_gyrus, Precentral_gyrus, Superior_temporal_gyrus, Middle_frontal_gyrus, Middle_temporal_gyrus and Supramarginal_gyrus. Required source families include native PAF/INT extraction and QC; participant-region, pooled-context and omnibus distributions/means/quartiles; both metrics versus log2 age for omnibus, sensorimotor, association and all six individual regions; the complete six-region BH correction separately for each metric; pooled participant-region PAF–INT Pearson correlation; INT ~ C(ctx)*PAF + log2(age); and both context-specific INT ~ PAF + log2(age) models. Retain all coefficients, inference and sample/coverage provenance, including nonsignificant results. The complete primary-paper/table/supplement correspondence, exact numerical references and any additional companion panels remain unresolved. Prospective grouped spectral smoothing, participant-clustered/paired sensitivities and held-out prediction are distinct extensions, not replacement source controls. The ten scalar findings declared here are a partial scientific-summary view only. Original regional families, identity-indexed distributions, model/inference tables and native output lineage require structured schema support; no reduction across those axes is introduced.",
+      "evidence_ids": [
+        "paper",
+        "author_stats",
+        "author_fit",
+        "author_loader"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Use the original resting ECoG recordings, original participant ages, cortical-region assignments and channel/montage metadata, together with the source paper and its exposed figures/tables. The paper+data condition excludes author analysis code; paper+data+author-code adds only the authenticated pinned author code under a common original-data/evaluation protocol. Source figures and aggregates are allowed inputs but cannot replace independently executed derivation from authentic recordings and verified granular outputs. No new participant split or prospective prediction targets are introduced. The exact delivery, code dependency and exposure manifests remain unfrozen.",
+      "evidence_ids": [
+        "paper",
+        "author_readme",
+        "author_loader",
+        "source_data"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "paf_age_omnibus_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original PAF developmental age slope for omnibus: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hz per doubling of age",
+      "aggregation": "PAF ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within omnibus, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "paf_age_sensorimotor_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original PAF developmental age slope for sensorimotor: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hz per doubling of age",
+      "aggregation": "PAF ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within sensorimotor, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "paf_age_association_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original PAF developmental age slope for association: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hz per doubling of age",
+      "aggregation": "PAF ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within association, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_age_omnibus_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original INT developmental age slope for omnibus: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms per doubling of age",
+      "aggregation": "INT ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within omnibus, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_age_sensorimotor_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original INT developmental age slope for sensorimotor: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms per doubling of age",
+      "aggregation": "INT ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within sensorimotor, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_age_association_log2_age_coefficient",
+      "kind": "scalar",
+      "description": "Original INT developmental age slope for association: change in the participant-level mean per doubling of age, estimated by the source regression. This is a scientific association estimand; its exact original numerical reference and reproduction criterion remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms per doubling of age",
+      "aggregation": "INT ~ intercept + log2(age years), one mean per eligible participant; pool original eligible regional time rows within association, preserving source weights, not equal-region means.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional and overlapping spectral-window measurements are nested within participant.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "pooled_paf_int_pearson_r",
+      "kind": "scalar",
+      "description": "Original pooled Pearson association between participant-region PAF and INT means. Retain source pairing and the limitation of region-row independence; this scalar does not replace the hierarchy-dependent coupling panel.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless",
+      "aggregation": "One paired PAF/INT mean per eligible participant-region; pool all original represented regions; no participant-level reweighting or pseudoreplication claim.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional summaries are nested and source nonrobust region-row inference does not account for nesting.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_paf_joint_ctx_s_paf_coefficient",
+      "kind": "scalar",
+      "description": "Original hierarchy dependence of the PAF–INT association: the sensorimotor-versus-association difference in the PAF coefficient in INT ~ C(ctx)*PAF + log2(age).",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms/Hz",
+      "aggregation": "INT ~ C(ctx)*PAF + log2(age), association reference A and sensorimotor indicator S; original participant-region means and source nonrobust covariance.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional summaries are nested and source nonrobust region-row inference does not account for nesting.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_paf_sensorimotor_paf_coefficient",
+      "kind": "scalar",
+      "description": "Original age-adjusted PAF–INT association within sensorimotor cortex: the PAF coefficient in the source INT ~ PAF + log2(age) model.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms/Hz",
+      "aggregation": "INT ~ PAF + log2(age) within original sensorimotor participant-region rows; source nonrobust covariance.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional summaries are nested and source nonrobust region-row inference does not account for nesting.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    },
+    {
+      "id": "int_paf_association_paf_coefficient",
+      "kind": "scalar",
+      "description": "Original age-adjusted PAF–INT association within association cortex: the PAF coefficient in the source INT ~ PAF + log2(age) model.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ms/Hz",
+      "aggregation": "INT ~ PAF + log2(age) within original association participant-region rows; source nonrobust covariance.",
+      "evidence_ids": [
+        "paper",
+        "author_stats"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source target and independently justified reproduction margin are not frozen; no tolerance is inferred from printed rounding, significance, an old grader or generated software controls.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reproduce the source model and report its complete covariance/inferential output; a scientific reproduction uncertainty/admission criterion has not been independently frozen.",
+        "independent_unit": "Participant; regional summaries are nested and source nonrobust region-row inference does not account for nesting.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source sample count, t/p statistics and source covariance must be retained as outputs, but a source association p value or failure to reject a discrepancy does not establish reproduction. Do not invent independent replication from windows or region rows.",
+        "evidence_ids": [
+          "paper",
+          "author_stats"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate all thirteen original participants, their variable coverage of all six cortical regions, age/montage/channel identities, original recording versions and complete eligible participant/region/time windows; no complete authentic input manifest is frozen.",
+    "Reconcile historical Lorentzian FOOOF identity and the notebook knee-to-INT transformation with the model definition, paper 3–14 Hz versus source 2–14 Hz peak selection and source peak-width semantics before claiming native spectral equivalence.",
+    "Resolve source notebook execution issues including intfs used before definition, whole-table spectral smoothing across participant/region boundaries and version-sensitive grouped Gaussian smoothing. Literal source reproduction and any prospective repaired sensitivity must remain separately labelled; the grouping repair cannot silently replace the source.",
+    "Incomplete full finding panel: the ten retained scalar estimands do not replace original six-region age-effect families, participant-region/context distributions, model coefficient/inference tables, complete within-metric six-region BH corrections or source-native verification outputs. These native identity-indexed tables and unequal-coverage distributions cannot be represented by scalar/categorical v1 without losing structure. They are specified in the external STRUCTURED_OUTPUT_PROPOSAL.json, not expanded into unresolved cell placeholders or a new aggregate score. Independent complete paper/table/supplement correspondence and any additional source companions also remain unresolved.",
+    "No justified scalar reproduction tolerances or uncertainty/admission rule are frozen. Source printed precision, p values, R-squared or source SEM must not be converted automatically into an equivalence margin. All expected targets, tolerances, confidence levels and minimum independent-unit criteria remain null until source-grounded independent review.",
+    "Runnable interface implementations/spectral-smoothing-v1/smoothing.py --spectra --packet --output-directory emits literal-source and prospective grouped spectral tables plus row-neighbor lineage. It stops before the author 58.5–61.5 Hz interpolation with buffer 5; raw filtering/resampling/multitaper generation, custom spectral fitting and PAF/INT extraction are not supplied by it.",
+    "Runnable interface implementations/initial-evaluator-v1/evaluator.py analyze --parameters --packet --output computes supplied-table QC counts, participant_region, participant_context_pooled_time_rows, participant_omnibus_pooled_time_rows, source_age_models, source_region_level_INT_PAF_interaction, source_context_INT_PAF_age_models and source_pooled_region_PAF_INT_correlation. It consumes supplied INT without resolving its estimator and is not an independent verifier that an analysis used authentic ECoG.",
+    "Required source-native verification must bind original recording/channel/region/window identities to spectra and native parameter rows (fit0, PAF, PAA, INT, offset, knee, exponent), the abs(fit0)<0.2 mask, missingness, Gaussian smoothing/refill lineage, and all participant summaries including quartiles, mean weights and represented regions. These authentic ordered output identities are not frozen.",
+    "For every age model, independently reconstruct the actual participant design matrix, coefficients, n, residual degrees of freedom, covariance/standard errors, t and p values, R-squared and the complete six-region within-metric BH family. For the joint/context coupling models and pooled correlation, preserve the paired participant-region identity table and source nonrobust covariance while disclosing nesting. Required complete coefficient/covariance tables and their derivation of each reported scalar lack an independent authenticated verifier.",
+    "The postfit implementation has prospective stable-time sorting, explicit Gaussian sigma, participant-clustered sensitivity and equal-observed-region paired contrast; its score-heldout route introduces prediction. These are separate sensitivities/extensions, not substitutes for the original descriptive source analyses or their literal historical execution.",
+    "Published figures, printed statistical tables and notebook outputs are allowed inputs and exposed results. A program that copies them, including a source coefficient or categorical significance claim, is insufficient. Independent operator execution on authentic inputs and verification of all required granular outputs must precede any computational reproduction admission.",
+    "Admission_policy is omitted: no complete native evaluator, submitted-analysis interface manifest, authentic-data/ordered panel identities or independent output-verification program has been frozen. Existing software hashes cannot be promoted into these missing scientific identities. The matched paper+data and paper+data+author-code input/code/exposure manifests and cumulative budgets also remain unresolved."
+  ]
+}

@@ -1,0 +1,346 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-006",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The restored primary is the original Figures 4–5 probability/reward reactivation–heuristic-weight relationship. Four published scalar summaries are source-supported partial findings, but the complete required maps, indispensable estimation/decoder controls, authentic identities, original protocol, agreement criteria and independent computational verification remain unresolved. Localizer decoding supports this primary; its accuracy alone cannot establish primary reproduction. Separate detection/BIS findings are additional evidence, not completion requirements.",
+  "source_paper": {
+    "title": "Heuristics in risky decision-making relate to preferential representation of information",
+    "url": "https://www.nature.com/articles/s41467-024-48547-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results, Figs. 3–5; Methods: Participants, MEG analysis, Decoding outcome stimuli, Relating behavioral weighting of information to preferential representation of stimuli",
+      "supports": "The registered result relates within-participant decoded reactivation to between-participant heuristic weights. Seven-fold localizer classification is a separate decoder validation step; the paper does not define held-out participant prediction of behavioral weights as this result."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Task_Reactivation_Analysis.m",
+      "locator": "Task_Reactivation_Analysis.m; paired classifier script Train_Classifiers_Apply_To_Task.m at revision 1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612",
+      "supports": "Author analysis computes reactivation maps and group associations from localizer-trained classifiers; source code was inspected statically."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-006/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: nested_prediction, HOLDS",
+      "supports": "The existing implementation explicitly describes prospective participant-held-out prediction, unresolved author parity, and no authentic full-cohort qualification. Its LOPO MSE is not a paper baseline."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Fig. 3C,D and Methods: Decoding outcome stimuli",
+      "supports": "The paper itself evaluates held-out localizer outcome-stimulus decoding with seven-fold cross-validation. Three classifiers are tested at train/test timepoint combinations; an example is correct when its target classifier has the highest activation. This is an original ordered accuracy endpoint, distinct from the descriptive reactivation/heuristic association."
+    },
+    {
+      "id": "paper_full_findings",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results Par14–25, especially Par19–20 and Figures 4–5; Methods Par74 and Par77–88 in PMC11106265 XML",
+      "supports": "The primary is the N=19 probability/reward reactivation–heuristic-weight relationship. Four published peak t-statistics and corrected p-values are partial source summaries, not complete maps or evidence of new computation. Behavioral estimates, decoder validation and relevant specificity/influence/null controls support this relation."
+    },
+    {
+      "id": "paper_companions",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results Par16–24; Methods Par74 and Par77–88; article-described decoder, specificity, influence, response-alignment and preprocessing/session-decoding controls",
+      "supports": "Behavioral hierarchical EM weights, decoder validation and transfer, null/class definitions, penalty selection, response-time support, cross-axis specificity, influence/unbiased estimates, response alignment and relevant preprocessing/session-decoding controls support the retained relation. The safe-association single-participant dependence must accompany any safe-comparison interpretation. Article citations identify control roles but do not recover complete supplementary recipes; every supplemental figure, sensor-topography exercise or alternative behavioral model is not automatically required."
+    },
+    {
+      "id": "heldout_code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Train_Classifiers_Apply_To_Heldout_Loc.m",
+      "locator": "five-fold class partitions; penalty loop; temporal axes; null data; scaleFunc; pred_reg_epoch_im; saved output fields",
+      "supports": "Deposited code uses five folds,21 recruits,60 examples per class,12/class/fold,seven stimulus classes and three trained outcome classifiers; assignments are randomized per penalty and not saved. Its time domain and active penalty grid differ from paper descriptions; an undefined variable and absent helper prevent native replay."
+    },
+    {
+      "id": "classifier_analysis",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Classifier_Analysis.m",
+      "locator": "pred_class_outcome_mtx; outcome_trials; group_outcome; subj_mn_class; plot index2 and yline(.3594)",
+      "supports": "The recoverable original metric uses logit argmax over channels1:3 and pools180 outcome trials; source analysis includes21 participants,0:10:500 bins, and a threshold attributed to an absent script. This is not the complete paper19-person seven-fold protocol."
+    },
+    {
+      "id": "epoch_code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Epoch_Train_Data.m",
+      "locator": "time_points_events=-250:10:600; run_num=1:3;140-event check; good channel intersection; artToZero",
+      "supports": "Three140-event localizer blocks preserve420 observations, but deposited epoch domain differs from both Fig3 and the held-out classifier script; event/sensor joins and artifact handling require authentic verification."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/ReadMe.md",
+      "locator": "Behavioral Analysis; MEG analysis; intermediate artifact descriptions",
+      "supports": "Author route includes hierarchical behavior fits and saved intermediate MEG activations. Source-code presence does not establish authenticated data, a runnable full analysis or an independent verifier."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Original Figures 4–5 localizer-to-choice probability/reward reactivation–heuristic-weight relationship, with the source behavioral-weight and decoder-validation companions necessary to that claim; no every-figure requirement. Exact numerical panel binding remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "paper_full_findings",
+        "code",
+        "registration"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source MEG risky-choice/localizer recordings are linked to OpenNeuro ds005065/1.0.0. The primary requires original choice and localizer epochs, event/behavior tables and hierarchical behavioral-fit artifacts with authenticated participant/trial/sensor/time joins. Exact correspondence between the release and the original analysis remains unresolved; the separate detection study and BIS questionnaires are not primary data requirements.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "author_readme",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Original N=19 main-analysis participants after excluding source IDs 6 and 19 from 21 recruits. Preserve original within-participant trial eligibility and response-time masks; exact identities and joins remain unbound. Localizer code summaries over all 21 recruits require reconciliation as supporting validation. The N=18 BIS and N=88 detection cohorts are separate additional evidence, not substitutes for this primary cohort.",
+      "evidence_ids": [
+        "paper_full_findings",
+        "code",
+        "heldout_code",
+        "classifier_analysis"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The source primary relates within-participant choice-reactivation effects to between-participant behavioral weights; it is not held-out-participant prediction. Classifiers are fitted on localizer data and applied to choice events. Paper seven-fold held-out localizer validation is supporting, and its conflict with five-fold deposited code remains unresolved. Preserve original training/null examples, penalty selection and source participant-label permutation inference rather than introduce a new split.",
+      "evidence_ids": [
+        "paper",
+        "paper_full_findings",
+        "code",
+        "ordered_candidates",
+        "heldout_code"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original localizer sensor epochs, seven stimulus classes and null examples support outcome classifiers. Choice-epoch continuous outcome activation probabilities, event probabilities/rewards, response times and choices must link to the original hierarchical EM probability/reward heuristic weights. Exact native artifact and identity bindings are unresolved. Accuracy labels alone are insufficient for the primary continuous-reactivation analysis.",
+      "evidence_ids": [
+        "paper_full_findings",
+        "code",
+        "author_readme",
+        "heldout_code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source 0.5-Hz high-pass, 100-Hz downsampling, OSL sensor/ICA cleaning, absolute-95th-percentile scaling, lasso classifiers, probability-stimulus-locked choice epochs and response-time eligibility. Source joint first-level regressions, robust second-level fits and Gaussian sigma 1.5-bin smoothing define the original relation. Missing scaling helper, held-out scaling, differing temporal grids and probability-coefficient scaling remain unresolved; no silent repair establishes source parity.",
+      "evidence_ids": [
+        "paper_full_findings",
+        "paper_companions",
+        "code",
+        "heldout_code",
+        "epoch_code"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "The primary outputs are both complete probability/reward prioritization maps and their associations with corresponding behavioral heuristic weights, including source robust-regression t-maps and 5000-draw maximum-statistic permutation inference. Four published peak t/pFWE summaries are partial visible source targets. No single favorable latency, decoder accuracy, stronger association or smaller p-value substitutes for the complete primary relationship or defines its improvement.",
+      "evidence_ids": [
+        "paper_full_findings",
+        "paper_companions",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain source trial-level outcome activation contrasts and joint probability/reward designs, yielding participant-specific first-level maps, followed by robust between-participant association with hierarchical behavioral weights across the original 19 people. Preserve unsmoothed/smoothed maps, original train/test support, maxima and all 5000 shuffled-participant maximum-statistic draws for each primary relationship. Trials, time cells and permutations are not independent participants. Exact map identities and observed-versus-null domain discrepancies remain unresolved.",
+      "evidence_ids": [
+        "paper_full_findings",
+        "code",
+        "author_readme"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Explicitly PARTIAL proposal: the four scalar findings are the published probability/reward peak t-statistics and corrected p-values for Figures 4–5. They do not represent the complete primary panel. Required native structured outputs remain unrepresented by scalar findings: (1) authentic N=19 participant/localizer/choice/behavior joins, event identities, original trial masks and response-time support; (2) source joint hierarchical EM behavioral probability/reward weights and fitting outputs needed to reproduce those estimates, without importing every unrelated alternative model; (3) continuous choice-reactivation outputs, joint trial designs, participant-specific probability/reward effects, both complete first-level and robust second-level train-by-test maps, unsmoothed/smoothed maps, peak coordinates and all 5000 participant-label maximum-null draws for each primary relationship; (4) supporting localizer class/null/penalty validation, activation and accuracy curves/maps, and transfer to choice presentations, with original folds, temporal support and cohort discrepancies unresolved; (5) source cross-axis specificity, unbiased/influence, response-alignment and relevant preprocessing/session-decoding controls. Preserve the safe-outcome single-participant-dependence caveat wherever that comparison supports interpretation. Exact source-native recipes and numerical references for these indispensable controls remain unresolved. No scalar average, invented category, placeholder vector or favorable selected latency replaces native maps.\n\nSeparate detection (Figure 6), neural BIS (Figure 7), detection-BIS non-replication, unrelated behavioral-model alternatives and sensor-topography exercises remain preserved as additional source evidence externally; they are not automatic primary completion requirements. There is no all-seven-figures or every-supplement obligation. Localizer decoding is supporting evidence, not a replacement primary. Numerical panel identities, computational verification and scientific agreement criteria must be frozen before admission.",
+      "evidence_ids": [
+        "paper",
+        "paper_full_findings",
+        "paper_companions",
+        "code",
+        "author_readme",
+        "ordered_candidates",
+        "heldout_code",
+        "classifier_analysis",
+        "epoch_code"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Matched primary reproduction conditions require the same authentic source paper, primary MEG/localizer/behavior data and observation protocol, with official author code as the only addition. Preserve source localizer-only classifier fitting, continuous choice reactivation with response-time censoring, hierarchical behavioral estimation and original participant-level inference. No authenticated common-input/exposure manifest, protected execution boundary or cumulative access/resource protocol is established. Visible source summaries cannot prove computation. The separate decoder-improvement proposal addresses a supporting result and cannot be forced into a same-target primary outcome bundle.",
+      "evidence_ids": [
+        "paper",
+        "paper_full_findings",
+        "paper_companions",
+        "code",
+        "author_readme"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "probability_neural_choice_peak_t",
+      "kind": "scalar",
+      "description": "Fig4F–G; Results Par19: positive probability-neural versus probability-choice peak at train420ms/test420ms.",
+      "status": "verified",
+      "expected": 3.024,
+      "units": "t-statistic",
+      "aggregation": "Maximum of the original sigma1.5-bin smoothed robust-regression map across19 participants; complete map and all controls remain mandatory.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "probability_neural_choice_peak_pfwe",
+      "kind": "scalar",
+      "description": "Fig4F–G; Results Par19: reported one-sided max-statistic permutation p-value.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "Original5000 participant-label permutations over the complete source map, not an arbitrary uncorrected cell test.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "reward_neural_choice_peak_t",
+      "kind": "scalar",
+      "description": "Fig5F–G; Results Par20: positive reward-neural versus reward-choice peak at train480ms/test110ms.",
+      "status": "verified",
+      "expected": 2.974,
+      "units": "t-statistic",
+      "aggregation": "Maximum of the original sigma1.5-bin smoothed robust-regression map across19 participants; complete map and controls required.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "reward_neural_choice_peak_pfwe",
+      "kind": "scalar",
+      "description": "Fig5F–G; Results Par20: reported one-sided max-statistic permutation p-value.",
+      "status": "verified",
+      "expected": 0.034,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "Original5000 participant-label permutations over the complete source map.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The authorized primary is bounded Figures 4–5 neural–heuristic relationships with indispensable estimation/decoder controls. The unchanged improvement contract proposes secondary Figure 3 decoding. These are deliberately different scientific scopes; no same-target outcome bundle is admitted and no anchor equality is forced. Final task/binding integration remains pending.",
+    "Only four source-supported primary scalar summaries are declared. Both complete probability/reward maps, native intermediate outputs, all source maximum-null draws and indispensable companions remain unrepresented as findings and computationally unverified. Exact numerical panel membership, identities and independently justified agreement criteria remain unresolved; no convenient map scalarization is permitted.",
+    "Authenticate the original 19-person cohort (source IDs 6 and 19 excluded), event/sensor/localizer/choice/behavior identities, response-time masks and original joint hierarchical EM fit artifacts. Separate N=18 BIS and N=88 detection cohorts are not primary completion requirements.",
+    "Paper/code localizer validation disagrees on seven versus five folds, 19 versus 21 participants and temporal grids (paper test endpoint 800 ms; training script 850 ms; analysis 0:10:500 ms; epoch -250:10:600 ms). Original fold/seed identities and 50-versus-51 timepoint descriptions remain unresolved; supporting status does not waive these conflicts.",
+    "Deposited localizer code contains undefined pred_reg_epoch_im and absent scaleFunc and rescales held-out data by image class across test times. Original penalty choice uses the reported CV diagonal. Replacing source procedures or inventing independent evaluation would not establish historical parity.",
+    "The paper and deposited task-analysis code differ by a factor of two in the probability coefficient and in observed-versus-permutation map domains. Reconcile source conventions without silently normalizing or trimming the scientific target.",
+    "Indispensable specificity, unbiased/influence, response-alignment and preprocessing/session-decoding controls have article-described roles but incomplete source-native executable recipes and numerical references. Preserve the safe-association single-participant caveat wherever the safe comparison is interpreted; do not impose every unrelated supplement as primary.",
+    "The accepted localizer scorer performs supplied-logit arithmetic only; it is not a primary independent verifier. The prior localizer-to-task evaluator uses prospective scaling and participant-held-out behavioral prediction, not the original complete hierarchical estimation, robust maps and permutation inference. Authentic native input-dependent computation remains unproved.",
+    "Published scalar values are visible source inputs, not AI-computed results. No independently justified tolerance, numerical-variation criterion, authentic interface/output manifests or complete computational acceptance rule exists. Higher decoder accuracy, stronger association or smaller p-value does not define primary same-result improvement.",
+    "No authenticated matched paper+data versus paper+data+author-code protocol, exposure boundary, candidate freeze or cumulative access/resource budgets have been bound. Historical calibration and generated controls remain distinct from new scientific reproduction. Outcomes are not modified by this source-scope correction."
+  ]
+}

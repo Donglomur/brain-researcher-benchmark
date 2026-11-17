@@ -1,0 +1,361 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-signal-add-017",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Same-primary corrected recorded binary/ternary finger-decoding and fine-tuning comparison. The source supports separate MI and ME participant accuracy quantities and named model/session/class axes, so v2 can declare these honestly with unresolved identities, references and criteria. Exact complete support, model provenance, full original contrast and uncertainty outputs, independent computation and paired access remain unqualified. This is partial structured source coverage with the complete enrolled scope retained in full_panel, not an eligible endpoint, complete representation, trained result or new human closed-loop gain.",
+  "source_paper": {
+    "title": "EEG-based brain-computer interface enables real-time robotic hand control at individual finger level",
+    "url": "https://www.nature.com/articles/s41467-025-61064-x"
+  },
+  "evidence": [
+    {
+      "id": "finger-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-61064-x",
+      "locator": "Figure 2A; Methods: Offline analysis and Online decoding; Discussion",
+      "supports": "Offline versus online comparisons, selected participant cohort and online headline result."
+    },
+    {
+      "id": "finger-functions",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/Functions.py",
+      "locator": "generate_paths, load_and_filter_data, train_models",
+      "supports": "Original source-folder selection, trial-first 80/20 validation, EEG preprocessing and native EEGNet training/fine-tuning route."
+    },
+    {
+      "id": "finger-params",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/bfinl/Finger-BCI-Decoding/c3a51c374d85f7b01e33ec4e998cf007d7da7763/main_model_training.py",
+      "locator": "lines 21–58, params and modeltype routing",
+      "supports": "Subject/session, MI/ME, two-/three-class separation and window/resampling/filter parameters."
+    },
+    {
+      "id": "finger-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-017/docs/initial-evaluator-v1.md",
+      "locator": "Implemented scope and prospective decisions; Evidence and retained limits",
+      "supports": "The local same-Finetune-trial spectral replay differs from the original online Base-versus-Finetune human-adapting design; participant-macro hard voting and bootstrap policies are prospective construction choices."
+    },
+    {
+      "id": "finger-recorded-panel",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-61064-x",
+      "locator": "Figure 2A and associated MI Results; ME Results referring to S7; Methods Offline simulation and Statistical analysis. Prior authenticated readable extraction lines 774–780 and 865–868.",
+      "supports": "Complete binary/ternary recorded-session model comparison, source participant trial accuracy, common S2-Finetune observations, separate MI/ME and replay/recorded-online roles; Figure 2B/C and S7 learning-attribution companions. Original HTML SHA-256 d515db75b178dc6fd9cc7cc5250eb72e6f2266016f5c749270e91069ddd30a2a. Complete S7 numerical definitions and original contrast/reference arrays remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-params"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Published Finger-BCI Figshare data are identified; complete source-member-to-MAT-to-evaluation provenance and original offline analysis membership remain unqualified.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The final source cohort is 21 selected BCI responders, not all 49 recruits. Preserve the original MI/ME and binary/ternary participant/session scope.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-params"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper offline analyses include five-fold decoding and retrospective session-model comparisons. Native training uses trial-first 80/20 validation; these are distinct splits. Exact figure-specific folds and source-session mappings remain unbound.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions",
+        "finger-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "128-channel EEG and permitted training/calibration labels, with source task condition. Evaluation targets and recorded online predictions/probabilities are excluded from candidate input.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Native code uses CAR, 1-second windows at 128-sample stride from 1024 Hz, resampling to 100 Hz, causal fourth-order 4–40 Hz Butterworth filtering and per-window channel z-scoring. Binary fine-tuning draws both Base class folders before retaining thumb/pinky.",
+      "evidence_ids": [
+        "finger-functions",
+        "finger-params"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source offline classification accuracy needs its figure-specific window/trial rule recovered. Online cumulative finger decisions and a local hard-vote replay score are not interchangeable.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-functions",
+        "finger-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original fold/session/participant weighting for the chosen offline panel is not yet joined to published numbers; the local participant-macro paired replay aggregation is prospective.",
+      "evidence_ids": [
+        "finger-paper",
+        "finger-registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete Figure 2A MI recorded-session comparison in both thumb–pinky [1,4] and thumb–index–pinky [1,2,4] conditions: S1-Base, S1-Finetune and S2-Base replay on the same complete source-eligible S2-Finetune observations, alongside the separately identified recorded S2-Finetune online result. Preserve every eligible participant, model/result arm, original reported contrast, source aggregation and uncertainty; the known participant accuracy arrays are only partial structured coverage until exact identities, full contrast definitions and reference outputs are authenticated. Keep the existing ME/S7 counterpart separately named and unqualified, never pooled with or inferred from MI. Figure 2B/C and S7 FBCSP five-fold and run-trend companions are required for machine-versus-human-learning attribution; no such attribution follows from these accuracy arrays alone. The author trial-first 80/20 training/validation split is not the final replay assessment or five-fold companion analysis. Full Figure 6 eleven-condition coverage, later Session-5 missing events and whole-paper companions are not automatic obligations for this retained Session-1/2 primary. Offline recorded replay and recorded online control remain distinct; no new human closed-loop gain is claimed.",
+      "evidence_ids": [
+        "finger-recorded-panel",
+        "finger-functions",
+        "finger-params"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Candidate decoding uses source EEG, task/class condition and training/calibration labels permitted by authentic source chronology. Assessment targets and stored online prediction/probability fields remain independent-operator evaluation/reference material, not candidate-time features. Retain source participant/session/run/trial/sample identities, common S2-Finetune support across arms and the original binary two-Base-folder fine-tuning route. Exact common data/code-only delivery, observation-role, evaluator and resource manifests remain unresolved for matched paper+data versus paper+data+author-code conditions.",
+      "evidence_ids": [
+        "finger-recorded-panel",
+        "finger-functions",
+        "finger-params"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "mi_recorded_session_accuracy",
+      "kind": "indexed_array_family",
+      "description": "MI Figure 2A: original participant trial-classification accuracy for both binary/ternary conditions and all three replay arms plus the recorded S2-Finetune online result, preserving complete common S2-Finetune assessment support within each condition. Exact original contrasts and uncertainty remain required in full_panel; this unresolved numerical declaration is not complete computational reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "mi_original_recorded_model_comparison",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "participant_trial_accuracy",
+            "manifest_key": "mi/participant_trial_accuracy",
+            "source_quantity": "Original MI participant trial-classification accuracy in the source recorded-session model comparison; S1-Base, S1-Finetune and S2-Base replay and recorded S2-Finetune online results remain distinct.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2,
+              4
+            ],
+            "axes": [
+              {
+                "name": "source_participant",
+                "units": "source participant identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source-eligible participant roster and exclusions are unresolved. The nominal 21 retained responders are not an authenticated dimension or membership manifest."
+                }
+              },
+              {
+                "name": "class_condition",
+                "units": "source finger-label condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "binary thumb–pinky [1,4]",
+                    "ternary thumb–index–pinky [1,2,4]"
+                  ]
+                }
+              },
+              {
+                "name": "model_result_arm",
+                "units": "source model-session and replay/recorded result role",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "S1-Base replay",
+                    "S1-Finetune replay",
+                    "S2-Base replay",
+                    "S2-Finetune recorded online result"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent correct trials",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source trial-majority classification accuracy within each participant/task/class/result-arm cell. Exact eligible decision interval, window inclusion, ties, exclusions, denominator and original group weighting/uncertainty remain unresolved; use the same complete eligible S2-Finetune observations across compared arms. No prospective participant macro bootstrap is substituted.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "finger-recorded-panel"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "finger-recorded-panel",
+          "finger-params"
+        ]
+      },
+      "required_granular_output_ids": [
+        "mi_common_s2_assessment_support",
+        "mi_chronological_model_provenance",
+        "mi_window_and_trial_decisions",
+        "mi_participant_accuracy_panel",
+        "mi_original_contrasts_and_uncertainty"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "No scientific comparison is implemented or qualified. Independently authenticate original per-participant source accuracy/reference outputs and full contrast definitions, derive submitted outputs on the original complete support, and justify the numeric agreement and uncertainty rules before freezing a comparison program. The declared class supplies no default tolerance, norm, scalar reduction or success test.",
+        "independent_unit": "Source participants for group claims; exact eligible roster remains unresolved.",
+        "dependence": "Sessions, runs, trials and overlapping decisions are nested/repeated within participant; preserve identical S2-Finetune observations across model/result arms within each task/class condition. Keep MI and ME separate.",
+        "multiplicity": "Exact original enrolled-contrast membership and figure-specific adjustment remain unresolved. Do not replace the source panel with all invented pairwise contrasts or select favorable p-values; source text/caption and general/specific-method discrepancies require resolution for enrolled statistical claims.",
+        "rationale": "This is an honest source-unresolved declaration of known numeric quantities. Original references, contrast/uncertainty definitions and scientifically justified agreement criteria are absent; null policies are qualification holds, not evidence of failure or scientific ineligibility. Printed paper means and p-values do not establish computation.",
+        "evidence_ids": [
+          "finger-recorded-panel",
+          "finger-registration"
+        ]
+      },
+      "evidence_ids": [
+        "finger-recorded-panel",
+        "finger-params"
+      ]
+    },
+    {
+      "id": "me_recorded_session_accuracy",
+      "kind": "indexed_array_family",
+      "description": "ME separately retained ME/S7 counterpart: original participant trial-classification accuracy for both binary/ternary conditions and all three replay arms plus the recorded S2-Finetune online result, preserving complete common S2-Finetune assessment support within each condition. Exact original contrasts and uncertainty remain required in full_panel; this unresolved numerical declaration is not complete computational reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "me_original_recorded_model_comparison",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "participant_trial_accuracy",
+            "manifest_key": "me/participant_trial_accuracy",
+            "source_quantity": "Original ME participant trial-classification accuracy in the source recorded-session model comparison; S1-Base, S1-Finetune and S2-Base replay and recorded S2-Finetune online results remain distinct.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2,
+              4
+            ],
+            "axes": [
+              {
+                "name": "source_participant",
+                "units": "source participant identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source-eligible participant roster and exclusions are unresolved. The nominal 21 retained responders are not an authenticated dimension or membership manifest."
+                }
+              },
+              {
+                "name": "class_condition",
+                "units": "source finger-label condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "binary thumb–pinky [1,4]",
+                    "ternary thumb–index–pinky [1,2,4]"
+                  ]
+                }
+              },
+              {
+                "name": "model_result_arm",
+                "units": "source model-session and replay/recorded result role",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "S1-Base replay",
+                    "S1-Finetune replay",
+                    "S2-Base replay",
+                    "S2-Finetune recorded online result"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent correct trials",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source trial-majority classification accuracy within each participant/task/class/result-arm cell. Exact eligible decision interval, window inclusion, ties, exclusions, denominator and original group weighting/uncertainty remain unresolved; use the same complete eligible S2-Finetune observations across compared arms. No prospective participant macro bootstrap is substituted.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "finger-recorded-panel"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "finger-recorded-panel",
+          "finger-params"
+        ]
+      },
+      "required_granular_output_ids": [
+        "me_common_s2_assessment_support",
+        "me_chronological_model_provenance",
+        "me_window_and_trial_decisions",
+        "me_participant_accuracy_panel",
+        "me_original_contrasts_and_uncertainty"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "No scientific comparison is implemented or qualified. Independently authenticate original per-participant source accuracy/reference outputs and full contrast definitions, derive submitted outputs on the original complete support, and justify the numeric agreement and uncertainty rules before freezing a comparison program. The declared class supplies no default tolerance, norm, scalar reduction or success test.",
+        "independent_unit": "Source participants for group claims; exact eligible roster remains unresolved.",
+        "dependence": "Sessions, runs, trials and overlapping decisions are nested/repeated within participant; preserve identical S2-Finetune observations across model/result arms within each task/class condition. Keep MI and ME separate.",
+        "multiplicity": "Exact original enrolled-contrast membership and figure-specific adjustment remain unresolved. Do not replace the source panel with all invented pairwise contrasts or select favorable p-values; source text/caption and general/specific-method discrepancies require resolution for enrolled statistical claims.",
+        "rationale": "This is an honest source-unresolved declaration of known numeric quantities. Original references, contrast/uncertainty definitions and scientifically justified agreement criteria are absent; null policies are qualification holds, not evidence of failure or scientific ineligibility. Printed paper means and p-values do not establish computation.",
+        "evidence_ids": [
+          "finger-recorded-panel",
+          "finger-registration"
+        ]
+      },
+      "evidence_ids": [
+        "finger-recorded-panel",
+        "finger-params"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact source-member/participant/session/run/trial/exclusion joins and complete immutable common S2-Finetune assessment support are unresolved; nominal design counts do not establish actual source membership.",
+    "Source-era training/calibration chronology, models/checkpoints/configurations, randomness and original per-window/trial prediction outputs are not qualified. The accepted preparer is input software only, not a trained decoder or final panel producer.",
+    "Source trial-majority voting is named, but exact window/trial eligibility, ties, denominators, missingness/domain handling and original participant/group weighting remain unresolved.",
+    "Every original reported model/session contrast and source uncertainty remains required; complete contrast identities, statistical quantities, reference values and representation are not yet authenticated. The two declared participant-accuracy arrays are partial structured coverage and cannot certify complete original-panel reproduction.",
+    "ME/S7 complete supplementary numerical definitions and reference arrays remain unavailable in the inspected evidence; retain a separate unresolved counterpart rather than borrowing MI outputs.",
+    "Machine-versus-human-learning attribution requires the corresponding Figure 2B/C or S7 FBCSP five-fold and run-trend outputs, fits, folds, run denominators and uncertainty. This candidate does not claim that attribution without those companions; 80/20 training validation is a different role.",
+    "Original source references, numerical agreement policies and uncertainty remain unresolved. Source Figure 2A text/caption p-value and general versus figure-specific multiplicity discrepancies must be resolved for enrolled statistical claims; no default tolerance or statistical threshold is supplied.",
+    "No complete runnable submitted-analysis interface, authentic data/output identity manifest or independently qualified source-panel verifier is present. Printing known summaries or matching array dimensions does not demonstrate computation.",
+    "Paired paper+data versus paper+data+author-code access/resource/delivery and observation policies remain unresolved. Assessment targets and recorded online predictions/probabilities are operator-only evaluation/reference material.",
+    "No same-result improvement margin or superiority criterion is qualified; this reproduction declaration alone cannot complete both outcomes. No canonical installation, final task binding, outcome bundle or scientific result is established by metadata validation."
+  ]
+}

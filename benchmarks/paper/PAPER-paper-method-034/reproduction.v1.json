@@ -1,0 +1,565 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-034",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Figure5 hippocampal findings are legitimate reproduction targets independently of improvement. Source support, numerical targets, complete companion artifacts and authentic-data computation verification remain unresolved despite an independently reviewed2000-row numerical endpoint.",
+  "source_paper": {
+    "title": "MARBLE: interpretable representations of neural population dynamics using geometric deep learning",
+    "url": "https://www.nature.com/articles/s41592-024-02582-2"
+  },
+  "evidence": [
+    {
+      "id": "marble-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11903309/",
+      "locator": "Figure 5c-d; Methods: Linear maze experiments in rats",
+      "supports": "Original within-animal mean absolute position error,32-dimensional representation,36 cosine neighbors and2,000 observations; paper preprocessing description."
+    },
+    {
+      "id": "marble-decode",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb",
+      "locator": "split_data, preprocessing, checkpoint-loading and main comparison cells",
+      "supports": "Achilles chronological 80/20 split, training PCA 20, checkpoint routes and mean-error plot; this recipe is not proven equivalent to publication."
+    },
+    {
+      "id": "marble-train",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+      "locator": "CEBRA training loop and MARBLE loop",
+      "supports": "Full-recording model fitting, behavior-label access and PCA 10 MARBLE training; historical checkpoint lineage remains unresolved."
+    },
+    {
+      "id": "marble-helper",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/rat_utils.py",
+      "locator": "convert_spikes_to_rates; decoding_pos_dir",
+      "supports": "Final-row omission, per-row and median error outputs, and time-unit interpretation requiring reconciliation."
+    },
+    {
+      "id": "marble-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-034/implementations/fit-closed-comparator/README.md",
+      "locator": "four-rat clean/half populations, dimensions3/32 and complete fit/query roles",
+      "supports": "The existing source comparator is a prospective extension; its authored reference is not a published author baseline."
+    },
+    {
+      "id": "marble-figure5-publisher",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-024-02582-2",
+      "locator": "Figure 5a-e; Results: Consistent latent neural representations across animals; Methods: Linear maze navigation; reference to Supplementary Figure 5.",
+      "supports": "Three-method 3D representations; rat1 32D decoding traces and 2000-observation mean/SD; paired Wilcoxon display; source-target 3D alignment R-squared; Gaussian-kernel/PCA robustness companions. Numeric chart values, exact contrast mapping and supplemental grid were not recovered."
+    },
+    {
+      "id": "marble-rat-data-route",
+      "kind": "author_data",
+      "url": "https://dataverse.harvard.edu/api/access/datafile/7609512",
+      "locator": "Harvard Dataverse DOI10.7910/DVN/KTE4PC, held version12.0, file7609512 rat_hippocampus/rat_data.pkl.",
+      "supports": "Existing source route for original hippocampal observations; neither payload nor original Figure5 row/animal joins are newly authenticated by this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode rat position within rat1 in Figure 5d; cross-animal consistency is a distinct secondary result.",
+      "evidence_ids": [
+        "marble-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original rat hippocampal linear-maze recording is identified; the registered rat_data.pkl route and original Figure 5d support/checkpoint joins remain unadmitted.",
+      "evidence_ids": [
+        "marble-paper",
+        "marble-decode"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 5d is a within-rat1 comparison; the author decoding notebook selects Achilles. This does not justify a pooled four-rat replacement.",
+      "evidence_ids": [
+        "marble-paper",
+        "marble-decode"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Pinned decoder uses chronological 80/20; publication reports2,000 observations while helper omission yields1999. Historical fit/query membership is unverified.",
+      "evidence_ids": [
+        "marble-paper",
+        "marble-decode",
+        "marble-helper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Neural firing-rate inputs are identified, but exact historical supervision and query-neural access differ by method; CEBRA-behavior full-label fitting is present in the training notebook.",
+      "evidence_ids": [
+        "marble-train"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper PCA 5 on the animal data, decoder train-only PCA 20 and MARBLE training PCA 10 are not silently reconciled; smoothing time units and final-row handling also remain open.",
+      "evidence_ids": [
+        "marble-paper",
+        "marble-decode",
+        "marble-train",
+        "marble-helper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Mean absolute position error: sum(abs(predicted_position-true_position))/n on the original Figure 5d support, using32-dimensional embeddings and36-neighbor cosine decoding.",
+      "evidence_ids": [
+        "marble-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Mean within the original rat/query support, with source standard deviation; median error and pooled multi-animal scores are different endpoints.",
+      "evidence_ids": [
+        "marble-paper",
+        "marble-helper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Registered hippocampal Figure5 scope: original rat1 complete2000-observation32D/36-cosine-neighbor decoding traces, means and SD for MARBLE/CEBRA-time/CEBRA-behavior; Figure5a source recording/behavior identities; Figure5b three-dimensional representations; original Figure5d paired contrasts; Figure5e original directed animal-pair alignment/R-squared results and ordering; referenced SupplementaryFigure5 preprocessing robustness controls. Original source-target R-squared matrices are mandatory structured outputs, not scalar findings or an invented cross-pair mean. Exact original trace/contrast/pair identities and supplemental setting grid are not recovered. The current scalar/categorical schema cannot represent that required R-squared vector; scalar findings alone do not cover the complete original panel. Other MARBLE RNN/synthetic/macaque experiments are outside this registered task. Existing1999-row/four-rat clean/half-neuron extension cannot replace any original panel.",
+      "evidence_ids": [
+        "marble-figure5-publisher",
+        "marble-paper",
+        "marble-decode",
+        "marble-helper"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions must receive identical authenticated original neural observations, time/row identities and allowed source-specific training labels; author code is the only additional information in paper_data_author_code. MARBLE is described as unsupervised, CEBRA-time uses time, and CEBRA-behavior uses position/direction labels. Historical checkpoint label access, paper-wide PCA versus training-only notebook PCA, query neural context and exact fit/query membership remain unresolved; do not silently substitute the prospective train-only extension. Original targets/data are public, and isolation cannot establish unseen-target status.",
+      "evidence_ids": [
+        "marble-figure5-publisher",
+        "marble-decode",
+        "marble-train",
+        "marble-helper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig5d_marble_mean_absolute_error",
+      "kind": "scalar",
+      "description": "unsupervised MARBLE mean absolute rat1 position error on every original Figure5d query observation, derived from the Figure5c decoding trace using32-dimensional embeddings and36-neighbor cosine decoding.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Mean of abs(predicted_position_m-true_position_m) over all original2000 rat1 query observations; no median, pooling across rats or half-neuron substitution.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording with dependent time bins; traversal/block identity unresolved",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_marble_absolute_error_sd",
+      "kind": "scalar",
+      "description": "unsupervised MARBLE one-standard-deviation companion in Figure5d on the same complete error vector as its mean; source SD denominator must be resolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Standard deviation of all original2000 per-observation absolute errors; population/sample convention unresolved, not a standard error or confidence interval.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording; source SD describes errors, not independent-animal uncertainty",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_cebra_time_mean_absolute_error",
+      "kind": "scalar",
+      "description": "CEBRA-time mean absolute rat1 position error on every original Figure5d query observation, derived from the Figure5c decoding trace using32-dimensional embeddings and36-neighbor cosine decoding.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Mean of abs(predicted_position_m-true_position_m) over all original2000 rat1 query observations; no median, pooling across rats or half-neuron substitution.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording with dependent time bins; traversal/block identity unresolved",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_cebra_time_absolute_error_sd",
+      "kind": "scalar",
+      "description": "CEBRA-time one-standard-deviation companion in Figure5d on the same complete error vector as its mean; source SD denominator must be resolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Standard deviation of all original2000 per-observation absolute errors; population/sample convention unresolved, not a standard error or confidence interval.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording; source SD describes errors, not independent-animal uncertainty",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_cebra_behavior_mean_absolute_error",
+      "kind": "scalar",
+      "description": "CEBRA-behavior mean absolute rat1 position error on every original Figure5d query observation, derived from the Figure5c decoding trace using32-dimensional embeddings and36-neighbor cosine decoding.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Mean of abs(predicted_position_m-true_position_m) over all original2000 rat1 query observations; no median, pooling across rats or half-neuron substitution.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording with dependent time bins; traversal/block identity unresolved",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_cebra_behavior_absolute_error_sd",
+      "kind": "scalar",
+      "description": "CEBRA-behavior one-standard-deviation companion in Figure5d on the same complete error vector as its mean; source SD denominator must be resolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "m",
+      "aggregation": "Standard deviation of all original2000 per-observation absolute errors; population/sample convention unresolved, not a standard error or confidence interval.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither an authenticated numerical target nor source-grounded precision/variability is available; no value is digitized, guessed or inherited from an extension grader.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original rat1 recording; source SD describes errors, not independent-animal uncertainty",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5b_position_direction_representation",
+      "kind": "categorical",
+      "description": "MARBLE 3D latent representation captures the original rat position and walking direction structure, with CEBRA-time and CEBRA-behavior representations retained as controls.",
+      "status": "verified",
+      "expected": "position_and_walking_direction_structure",
+      "units": "source qualitative finding",
+      "aggregation": "Source Figure5b point/trajectory representations with original observation identities and position/direction coloring; no invented scalar geometry statistic.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [
+        "position_and_walking_direction_structure",
+        "source_structure_not_recovered"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source claim only; it cannot substitute for required numerical magnitudes, original granular outputs or a separately justified inference rule.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Original recorded rat trajectory; no independent-unit count asserted",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_marble_vs_cebra_time",
+      "kind": "categorical",
+      "description": "Original Figure5e qualitative ordering: MARBLE cross-animal consistency exceeds CEBRA-time.",
+      "status": "verified",
+      "expected": "MARBLE_higher",
+      "units": "source qualitative finding",
+      "aggregation": "Original Figure5e comparison on its complete source-target pair panel; numerical R-squared findings remain separately required.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [
+        "MARBLE_higher",
+        "equal",
+        "MARBLE_lower"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source claim only; it cannot substitute for required numerical magnitudes, original granular outputs or a separately justified inference rule.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Four original animal recordings; source/target pair dependence unresolved",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_marble_vs_cebra_behavior",
+      "kind": "categorical",
+      "description": "Original Figure5e qualitative ordering: MARBLE cross-animal consistency is below CEBRA-behavior.",
+      "status": "verified",
+      "expected": "MARBLE_lower",
+      "units": "source qualitative finding",
+      "aggregation": "Original Figure5e comparison on its complete source-target pair panel; no held-out transfer interpretation.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [
+        "MARBLE_higher",
+        "equal",
+        "MARBLE_lower"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source claim only; it cannot substitute for required numerical magnitudes, original granular outputs or a separately justified inference rule.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Four original animal recordings; source/target pair dependence unresolved",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "suppfig5_kernel_scale_robustness",
+      "kind": "categorical",
+      "description": "Original hippocampal preprocessing companion referenced by Methods: results remain stable over the source SupplementaryFigure5 range of Gaussian smoothing kernel scales. Exact sweep values and numerical curves remain unadmitted.",
+      "status": "verified",
+      "expected": "stable_over_original_source_range",
+      "units": "source qualitative finding",
+      "aggregation": "Complete original SupplementaryFigure5 settings and method/output correspondence; no new sweep grid, selected favorable settings or quantitative stability threshold.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [
+        "stable_over_original_source_range",
+        "source_robustness_not_recovered"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source claim only; it cannot substitute for required numerical magnitudes, original granular outputs or a separately justified inference rule.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Repeated preprocessing settings on the original recordings, not independent biological replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    },
+    {
+      "id": "suppfig5_pca_components_robustness",
+      "kind": "categorical",
+      "description": "Original hippocampal preprocessing companion referenced by Methods: results remain stable over the source SupplementaryFigure5 range of PCA dimensions. Exact sweep values and numerical curves remain unadmitted.",
+      "status": "verified",
+      "expected": "stable_over_original_source_range",
+      "units": "source qualitative finding",
+      "aggregation": "Complete original SupplementaryFigure5 settings and method/output correspondence; no new sweep grid, selected favorable settings or quantitative stability threshold.",
+      "evidence_ids": [
+        "marble-figure5-publisher"
+      ],
+      "categories": [
+        "stable_over_original_source_range",
+        "source_robustness_not_recovered"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source claim only; it cannot substitute for required numerical magnitudes, original granular outputs or a separately justified inference rule.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-specific reproduction rule requires original artifacts and a frozen dependence-aware verification protocol; no default confidence level or numerical criterion.",
+        "independent_unit": "Repeated preprocessing settings on the original recordings, not independent biological replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published time-bin counts and in-sample alignment pairs do not establish independent biological replication; exact source variation and reproduction precision are not authenticated.",
+        "evidence_ids": [
+          "marble-figure5-publisher"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original rat1 Figure5d2000 query identities, decoder training membership and rat1-to-Achilles join are not authenticated; later helper1999-row support is not equivalent.",
+    "Paper PCA5 over animal data versus decoding notebook train-only PCA20 and training PCA10, physical smoothing units and representation/query access remain unresolved.",
+    "Original numerical mean/SD values, source SD convention, original paired contrast mapping/statistics and dependence-aware reproduction criteria are unadmitted.",
+    "Figure5b original3D representations, Figure5c full decoded traces and Figure5e original animal-pair identities, alignment artifacts and complete pairwise R-squared vectors are missing; complete original controls cannot be replaced by the clean/half-neuron extension.",
+    "The referenced SupplementaryFigure5 exact Gaussian-kernel/PCA setting grid and output curves are not held; those companions cannot be declared reproduced.",
+    "Released checkpoint routes do not establish byte identity, trained population, label exposure, historical recipe or competent native author execution.",
+    "The accepted endpoint CLI emits mean, population/sample SD and input pins, but no saved per-observation decoded predictions/errors and no independent authentic-data derivation verifier. Its decode function returns2000 predictions only in memory.",
+    "No authenticated original input/identity manifests, complete paired participant delivery, code-only difference manifest, source-grounded tolerance, cumulative episode budget or complete granular verification policy exists. Admission policy and pairing therefore remain unspecified.",
+    "Generated controls and operator source checks establish neither AI computational reproduction nor improvement; printed source claims alone are insufficient.",
+    "The required Figure5e per-method source-target R-squared matrix is a source-native vector. No original scalar reduction has been authenticated and none is invented; the scalar/categorical finding schema leaves this mandatory output unrepresented. This engineering limitation is distinct from missing authentic source identities, numerical arrays and criteria, and must be resolved before complete-panel admission."
+  ]
+}

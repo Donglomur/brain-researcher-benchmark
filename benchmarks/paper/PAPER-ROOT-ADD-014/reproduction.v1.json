@@ -1,0 +1,961 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-014",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "PARTIAL source-grounded summary contract only; complete original coverage is not claimed. The registered task includes alpha and broadband pRF prediction, spatial-scale/location/containment with shuffled-electrode control, low/high broadband frequency controls, and baseline/gain comparisons. Confirmed summary findings are represented below while the required full Figure 4/5/6/7 numerical distributions, curves, controls and individual-participant outputs remain in full_panel and blockers. Original identities, source-native computation, full independent verification, numerical equivalence and uncertainty criteria are unresolved. Reproduction eligibility is assessed independently from improvement.",
+  "source_paper": {
+    "title": "Precise spatial tuning of visually driven alpha oscillations in human visual cortex",
+    "url": "https://elifesciences.org/articles/90387"
+  },
+  "evidence": [
+    {
+      "id": "alpha-paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/90387",
+      "locator": "Results2.3 and2.6; Fig.7; Methods: electrode selection, spectral decomposition, pRF model fitting",
+      "supports": "Original alpha/broadband pRF task, historical366-electrode selection and first/second-half cross-validation."
+    },
+    {
+      "id": "alpha-claim",
+      "kind": "paper",
+      "url": "https://elifesciences.org/reviewed-preprints/90387",
+      "locator": "Graphical and statistical support for primary claims, claim5; Fig.7 and Supplementary Fig.7-1",
+      "supports": "Author claim summary reports median cross-validated variance explained43% with model-based correction versus10% without, with31 electrodes for the gain comparison."
+    },
+    {
+      "id": "alpha-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KenYMB/ECoG_alphaPRF/4321eb4374db782d09f3f43362836f234a4e4f9b/functions/Outline/ecog_prf_analyzePRF.m",
+      "locator": "options lines58–75; analyzePRFdog calls lines166–177",
+      "supports": "Source linear Gaussian-surround route, zero-degree polynomial nuisance, full fit xvalmode0 and within-run cross-validation xvalmode2."
+    },
+    {
+      "id": "alpha-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KenYMB/ECoG_alphaPRF/4321eb4374db782d09f3f43362836f234a4e4f9b/README.md",
+      "locator": "Analysis Setup/Download Data; Getting Started",
+      "supports": "OpenNeuro ds004194 source archive and main/supplementary figure reproduction entrypoints."
+    },
+    {
+      "id": "alpha-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-014/implementations/alpha-programme/spatial/README.md",
+      "locator": "Operator method and resources; Protected grading API",
+      "supports": "Local portable source-shaped comparator is not the historical optimizer;433 released electrodes, source-fold versus literal Eq6 distinction, and equal-person aggregation are explicitly disclosed."
+    },
+    {
+      "id": "alpha-fig7-paper-local",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/90387",
+      "locator": "Cached eLife 2023;12:RP90387 paper.pdf, SHA256 1802d3c57ec1e603e26f92854c405370a829ad8f6e90587a0c9d323ccc808d2d; printed pages 9–10, Figure 7 caption; graphical/statistical claim 5 and nesting, printed page 33. Source-review extracted text lines 543–605 and 2034–2047.",
+      "supports": "Both alpha fits allow signed gain; electrode medians 43% and 10%; corrected 29 negative of 31, uncorrected 14 negative and 17 positive; positive pRF size–eccentricity relationship only after correction; all three patterns across individual patients in Figure 7 supplement 1. Caption gives 68% bootstrap intervals with 1000 resamples, which is a reported display interval, not a reproduction equivalence tolerance."
+    },
+    {
+      "id": "alpha-fig7-entrypoint",
+      "kind": "author_code",
+      "url": "https://github.com/KenYMB/ECoG_alphaPRF/blob/4321eb4374db782d09f3f43362836f234a4e4f9b/makeFigures/makeFigure7_7S1.m",
+      "locator": "Lines 11–19 invoke ecog_APRFF_10k1e_checkalpha_bothgaind and export hF(1); subsequent exports are the individual-patient companion.",
+      "supports": "Binds the exact Figure 7/7S1 route rather than a generic alpha fitter or a positive-gain-only alternative."
+    },
+    {
+      "id": "alpha-fig7-code",
+      "kind": "author_code",
+      "url": "https://github.com/KenYMB/ECoG_alphaPRF/blob/4321eb4374db782d09f3f43362836f234a4e4f9b/scripts/ecog_APRFF_10k1e_checkalpha_bothgaind.m",
+      "locator": "Lines 38–85 settings and both prfbidirgain alpha loads; 102–103 display gain sign; 127–153 selection and peak response; 271 ispltall=true; 859–1180 first simple-summary xval/gain/size panels; 1181 onward individual subjects.",
+      "supports": "Full panel uses fixed V1/V2/V3 identities and the intersection of both broadband xval/eccentricity selections, with no alpha-score/sign selection. Both alpha branches are signed gain. Gain uses source response reconstruction; size/eccentricity panel preserves per-electrode geometry, outlier procedure, covariance slope and bootstrap. Source nboot=5000 differs from the caption 1000."
+    },
+    {
+      "id": "alpha-fig7-threshold",
+      "kind": "author_code",
+      "url": "https://github.com/KenYMB/ECoG_alphaPRF/blob/4321eb4374db782d09f3f43362836f234a4e4f9b/functions/files/ecog_prf_getthreshold.m",
+      "locator": "INITd_threshold sets alpha_cod=0.95 and ecclimit=50; getthreshold flattens the respective broadband permutation result, takes prctile(...,95) and rounds it.",
+      "supports": "Two original selection thresholds must be recovered from authentic source artifacts; no invented constant or candidate-selected mask is permitted."
+    },
+    {
+      "id": "alpha-original-full-panel",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/90387",
+      "locator": "Cached paper.pdf SHA256 1802d3c57ec1e603e26f92854c405370a829ad8f6e90587a0c9d323ccc808d2d; printed pp.6–10 (Figures 4–7 and companions), Appendix 1 claims 1–5 pp.32–33; extracted text lines 382–535, 1945–2047.",
+      "supports": "Original alpha/broadband prediction and spatial-scale task: responsive/nonresponsive and participant panels; 53 qualifying electrodes with overlapping probabilistic map assignments; alpha/broadband geometry, normalized pRFs, 2D histograms, size/eccentricity curves, real-versus-shuffled containment; low/high broadband frequency companion. These distributions and controls are required in addition to scalar summaries."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author release identifies OpenNeuro ds004194; canonical task names version3.0.0. Bind the exact BIDS runs, aperture matrices and original derived timecourses to the paper experiment before comparing scores.",
+      "evidence_ids": [
+        "alpha-release",
+        "alpha-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper selection yields366 electrodes from9 participants; the local released roster has433 electrodes. Recover the original QC/visual-selection and figure-specific31-electrode Fig.7 membership, without selecting electrodes by candidate performance.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-claim",
+        "alpha-registration",
+        "alpha-fig7-threshold"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original two-fold within-run prediction: fit the first or second half of the75-sample timecourse, predict the opposite half, then concatenate predictions. The source wrapper uses xvalmode2. A new heldout-run split is an extension.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original visual apertures and source ECoG responses with subject/electrode metadata; source spectral processing separates alpha suppression from broadband elevation before spatial fitting. Preserve alpha and broadband conditions.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Match original rereferencing, epoch rejection, evoked-response removal, spectral baseline model, beta nuisance terms and target-band selection. The local timecourse-only route does not establish full raw-to-paper parity.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Higher cross-validated variance explained is ordered. Reconcile literal paper1−SSE/sum(response²) with the source routine’s foldwise DC projection and exact gain constraints; report percent units and preserve both formulas until equivalence is established.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code",
+        "alpha-registration",
+        "alpha-fig7-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig.7 reports an electrode median; recover its exact original selection and aggregate. The local equal-person mean gain over433 released electrodes is a different estimand and cannot be compared numerically to43%.",
+      "evidence_ids": [
+        "alpha-claim",
+        "alpha-registration",
+        "alpha-fig7-code"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete registered scope remains mandatory: Figure 4/4S1/4S2 alpha and broadband pRF prediction/selection distributions, visually responsive versus nonresponsive controls, V1–V3 and dorsolateral maps, pooled and individual-participant outputs; Figure 5/5S1 paired alpha/broadband pRF locations and sizes, normalized receptive fields, polar-angle/eccentricity/size 2D histograms, size-versus-eccentricity curves and uncertainty, and true-versus-shuffled-electrode 1-SD containment in both map groups; Figure 6/6S1/6S2 high-frequency (70–180 Hz) versus low-frequency (3–26 Hz) broadband versus alpha size distributions, gain/spectral controls and paired geometry with participant nesting; Figure 7/7S1 both signed-gain alpha baseline conditions, full prediction and response-gain distributions, size/eccentricity curves and every original participant panel. Figure-specific selection identities differ: historical 366 source electrodes, 53 geometry-qualified electrodes with overlapping 35 V1–V3/45 dorsolateral membership, and 31 maximum-assignment Figure 7 electrodes cannot be interchanged. The findings list contains partial source summary findings only and cannot stand in for these required structured outputs. Full numerical coverage, original identities, source computation and comparison criteria remain unresolved.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-original-full-panel",
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code",
+        "alpha-fig7-threshold"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Use only authenticated original visual apertures, spectral/ECoG inputs, subject/electrode metadata and the source preprocessing route. For each 75-point within-run timecourse fit one half and predict the opposite half (38/37 samples), without final-half responses entering fitting or selection. Bind both broadband selection artifacts and signed-gain corrected/uncorrected alpha routes independently of candidate performance. The operator retains evaluation responses, original fitted outputs and selection references; matched condition exposure manifests and a runnable isolated analysis interface are not yet frozen. Author code is the sole intended information difference between paper+data and paper+data+author-code. This applies to every original alpha/broadband panel and its own source selection; the Figure 7 selector cannot define the complete Figure 4/5/6 panel. No bootstrap draw, atlas assignment, shuffled-electrode control or known source fitted output may be silently turned into an additional independent participant or candidate fitting feature.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code",
+        "alpha-release",
+        "alpha-fig7-code",
+        "alpha-fig7-threshold"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig7-corrected-alpha-median",
+      "kind": "scalar",
+      "description": "Figure 7 left: source baseline-corrected signed-gain alpha cross-validated variance explained. Preserve the complete per-electrode distribution and companion uncorrected condition.",
+      "status": "verified",
+      "expected": 43,
+      "units": "percent cross-validated variance explained",
+      "aggregation": "Electrode median over the exact original 31-electrode Figure 7 panel; retain every paired electrode and participant identity; no equal-person replacement.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This source report fixes a target only. Neither rounding nor an observed count supplies a justified computational reproduction tolerance; authentic granular outputs and the source identity are still required.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover exact source-level outputs and justify equivalence tolerance and replication/uncertainty before final evaluation; published rounded aggregates are insufficient.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-uncorrected-alpha-median",
+      "kind": "scalar",
+      "description": "Figure 7 left: source uncorrected signed-gain alpha cross-validated variance explained on the identical electrode panel and folds.",
+      "status": "verified",
+      "expected": 10,
+      "units": "percent cross-validated variance explained",
+      "aggregation": "Electrode median over the exact original 31-electrode Figure 7 panel; retain every paired electrode and participant identity; no equal-person replacement.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This source report fixes a target only. Neither rounding nor an observed count supplies a justified computational reproduction tolerance; authentic granular outputs and the source identity are still required.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover exact source-level outputs and justify equivalence tolerance and replication/uncertainty before final evaluation; published rounded aggregates are insufficient.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-corrected-negative-gain-count",
+      "kind": "scalar",
+      "description": "Figure 7 middle: 29 of 31 corrected-alpha electrodes have negative physiological/display gain. Reconstruct signed peak response using the original convention; retain the complete response-ratio distribution, not just a sign counter.",
+      "status": "verified",
+      "expected": 29,
+      "units": "electrodes",
+      "aggregation": "Count of negative physiological/display gains among the same 31 electrodes; source fitted-parameter sign flip and peak-response transform must be preserved.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This source report fixes a target only. Neither rounding nor an observed count supplies a justified computational reproduction tolerance; authentic granular outputs and the source identity are still required.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover exact source-level outputs and justify equivalence tolerance and replication/uncertainty before final evaluation; published rounded aggregates are insufficient.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-uncorrected-negative-gain-count",
+      "kind": "scalar",
+      "description": "Figure 7 middle: 14 uncorrected-alpha electrodes have negative gain, with the paired positive-gain companion retained.",
+      "status": "verified",
+      "expected": 14,
+      "units": "electrodes",
+      "aggregation": "Count of negative physiological/display gains among the same 31 electrodes, derived from the source signed reconstruction.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This source report fixes a target only. Neither rounding nor an observed count supplies a justified computational reproduction tolerance; authentic granular outputs and the source identity are still required.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover exact source-level outputs and justify equivalence tolerance and replication/uncertainty before final evaluation; published rounded aggregates are insufficient.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-uncorrected-positive-gain-count",
+      "kind": "scalar",
+      "description": "Figure 7 middle: 17 uncorrected-alpha electrodes have positive gain. This completes the reported raw-alpha sign mixture.",
+      "status": "verified",
+      "expected": 17,
+      "units": "electrodes",
+      "aggregation": "Count of positive physiological/display gains among the same 31 electrodes, paired with the 14 negative-gain electrodes.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "This source report fixes a target only. Neither rounding nor an observed count supplies a justified computational reproduction tolerance; authentic granular outputs and the source identity are still required.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover exact source-level outputs and justify equivalence tolerance and replication/uncertainty before final evaluation; published rounded aggregates are insufficient.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-corrected-size-eccentricity",
+      "kind": "categorical",
+      "description": "Figure 7 right: baseline-corrected alpha pRF size increases with eccentricity. Require paired electrode size/eccentricity/sign outputs and the source robust/outlier/line procedure and uncertainty display; a categorical assertion alone is insufficient.",
+      "status": "verified",
+      "expected": "increases_with_eccentricity",
+      "units": "source-described pattern",
+      "aggregation": "Source Figure 7 covariance-slope line with median-based intercept after its rotated two-standard-deviation outlier procedure; original electrode-level size and eccentricity in visual degrees.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [
+        "increases_with_eccentricity",
+        "does_not_increase_with_eccentricity"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a qualitative pattern; no numeric tolerance is inferred. The rule for assigning a category from independently verified outputs remains unresolved.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original numerical panel and predeclare a source-grounded reproduction comparison. The caption describes 68% bootstrap bands from 1000 resamples, whereas the pinned Figure 7 script sets nboot=5000. Resolve this difference before any uncertainty decision.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7-uncorrected-size-eccentricity",
+      "kind": "categorical",
+      "description": "Figure 7 right: the source reports no corresponding positive size–eccentricity relationship without correction. No operational zero-slope, non-significance or equivalence threshold is inferred from this description.",
+      "status": "verified",
+      "expected": "does_not_increase_with_eccentricity",
+      "units": "source-described pattern",
+      "aggregation": "Identical source Figure 7 geometry/line procedure for uncorrected alpha on the same panel, including all signed-gain points and source exclusions.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [
+        "increases_with_eccentricity",
+        "does_not_increase_with_eccentricity"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a qualitative pattern; no numeric tolerance is inferred. The rule for assigning a category from independently verified outputs remains unresolved.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original numerical panel and predeclare a source-grounded reproduction comparison. The caption describes 68% bootstrap bands from 1000 resamples, whereas the pinned Figure 7 script sets nboot=5000. Resolve this difference before any uncertainty decision.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7s1-participant-prediction",
+      "kind": "categorical",
+      "description": "Figure 7 supplement 1 and claim 5 nesting: the source describes higher corrected versus uncorrected cross-validated prediction accuracy across individual patients. Require every original participant panel and its electrode outputs; no new participant count, majority rule or pooled-only proxy is specified.",
+      "status": "verified",
+      "expected": "consistent_across_individual_patients",
+      "units": "source-described pattern",
+      "aggregation": "Separate original participant panels preserving the Figure 7 electrode memberships, both conditions and source panel calculations; not an equal-person aggregate.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [
+        "consistent_across_individual_patients",
+        "not_consistent_across_individual_patients"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a qualitative pattern; no numeric tolerance is inferred. The rule for assigning a category from independently verified outputs remains unresolved.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original numerical panel and predeclare a source-grounded reproduction comparison. The caption describes 68% bootstrap bands from 1000 resamples, whereas the pinned Figure 7 script sets nboot=5000. Resolve this difference before any uncertainty decision.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7s1-participant-gain",
+      "kind": "categorical",
+      "description": "Figure 7 supplement 1 and claim 5 nesting: the source describes corrected suppression versus the uncorrected gain mixture across individual patients. Require every original participant panel and its electrode outputs; no new participant count, majority rule or pooled-only proxy is specified.",
+      "status": "verified",
+      "expected": "consistent_across_individual_patients",
+      "units": "source-described pattern",
+      "aggregation": "Separate original participant panels preserving the Figure 7 electrode memberships, both conditions and source panel calculations; not an equal-person aggregate.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [
+        "consistent_across_individual_patients",
+        "not_consistent_across_individual_patients"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a qualitative pattern; no numeric tolerance is inferred. The rule for assigning a category from independently verified outputs remains unresolved.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original numerical panel and predeclare a source-grounded reproduction comparison. The caption describes 68% bootstrap bands from 1000 resamples, whereas the pinned Figure 7 script sets nboot=5000. Resolve this difference before any uncertainty decision.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig7s1-participant-size-eccentricity",
+      "kind": "categorical",
+      "description": "Figure 7 supplement 1 and claim 5 nesting: the source describes size–eccentricity relationship with correction versus without correction across individual patients. Require every original participant panel and its electrode outputs; no new participant count, majority rule or pooled-only proxy is specified.",
+      "status": "verified",
+      "expected": "consistent_across_individual_patients",
+      "units": "source-described pattern",
+      "aggregation": "Separate original participant panels preserving the Figure 7 electrode memberships, both conditions and source panel calculations; not an equal-person aggregate.",
+      "evidence_ids": [
+        "alpha-fig7-paper-local",
+        "alpha-fig7-code"
+      ],
+      "categories": [
+        "consistent_across_individual_patients",
+        "not_consistent_across_individual_patients"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a qualitative pattern; no numeric tolerance is inferred. The rule for assigning a category from independently verified outputs remains unresolved.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original numerical panel and predeclare a source-grounded reproduction comparison. The caption describes 68% bootstrap bands from 1000 resamples, whereas the pinned Figure 7 script sets nboot=5000. Resolve this difference before any uncertainty decision.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-fig7-paper-local",
+          "alpha-fig7-code"
+        ]
+      }
+    },
+    {
+      "id": "fig5-v1v3-alpha-larger-max-assignment",
+      "kind": "scalar",
+      "description": "Figure 5a: alpha pRF larger than broadband in 15 of 17 maximum-probability V1–V3 electrodes.",
+      "status": "verified",
+      "expected": 15,
+      "units": "electrodes",
+      "aggregation": "Source count among 17 maximum-probability V1–V3 electrodes; exact source identities and paired geometry required, with participant grouping preserved.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-v1v3-alpha-larger-probabilistic",
+      "kind": "scalar",
+      "description": "Appendix claim 2: alpha pRF larger in 33 of 35 electrodes with nonzero V1–V3 assignment probability.",
+      "status": "verified",
+      "expected": 33,
+      "units": "electrodes",
+      "aggregation": "Source count among 35 nonzero-probability V1–V3 electrodes; exact source identities and paired geometry required, with participant grouping preserved.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-dorsolateral-alpha-larger-max-assignment",
+      "kind": "scalar",
+      "description": "Figure 5 supplement 1a: alpha pRF larger in 34 of 36 maximum-probability dorsolateral electrodes.",
+      "status": "verified",
+      "expected": 34,
+      "units": "electrodes",
+      "aggregation": "Source count among 36 maximum-probability dorsolateral electrodes; exact source identities and paired geometry required, with participant grouping preserved.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-dorsolateral-alpha-larger-probabilistic",
+      "kind": "scalar",
+      "description": "Appendix claim 2: alpha pRF larger in 41 of 45 electrodes with nonzero dorsolateral assignment probability.",
+      "status": "verified",
+      "expected": 41,
+      "units": "electrodes",
+      "aggregation": "Source count among 45 nonzero-probability dorsolateral electrodes; exact source identities and paired geometry required, with participant grouping preserved.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-v1v3-containment-matched",
+      "kind": "scalar",
+      "description": "Figure 5/5S1 and Appendix claim 3: reported v1v3 1-SD broadband-within-alpha containment for the matched electrode pairing. The original shuffled-electrode control is required alongside the matched pairing.",
+      "status": "verified",
+      "expected": 92.3,
+      "units": "percent containment",
+      "aggregation": "Original mean fraction of broadband 1-SD pRF area inside the alpha 1-SD pRF in v1v3; original matched pairing, geometry population, integration/normalization and resampling must be authenticated. Full geometry and control distributions remain required.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-v1v3-containment-shuffled",
+      "kind": "scalar",
+      "description": "Figure 5/5S1 and Appendix claim 3: reported v1v3 1-SD broadband-within-alpha containment for the shuffled electrode pairing. The original shuffled-electrode control is required alongside the matched pairing.",
+      "status": "verified",
+      "expected": 30.0,
+      "units": "percent containment",
+      "aggregation": "Original mean fraction of broadband 1-SD pRF area inside the alpha 1-SD pRF in v1v3; original shuffled pairing, geometry population, integration/normalization and resampling must be authenticated. Full geometry and control distributions remain required.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-dorsolateral-containment-matched",
+      "kind": "scalar",
+      "description": "Figure 5/5S1 and Appendix claim 3: reported dorsolateral 1-SD broadband-within-alpha containment for the matched electrode pairing. The original shuffled-electrode control is required alongside the matched pairing.",
+      "status": "verified",
+      "expected": 98.0,
+      "units": "percent containment",
+      "aggregation": "Original mean fraction of broadband 1-SD pRF area inside the alpha 1-SD pRF in dorsolateral; original matched pairing, geometry population, integration/normalization and resampling must be authenticated. Full geometry and control distributions remain required.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig5-dorsolateral-containment-shuffled",
+      "kind": "scalar",
+      "description": "Figure 5/5S1 and Appendix claim 3: reported dorsolateral 1-SD broadband-within-alpha containment for the shuffled electrode pairing. The original shuffled-electrode control is required alongside the matched pairing.",
+      "status": "verified",
+      "expected": 25.7,
+      "units": "percent containment",
+      "aggregation": "Original mean fraction of broadband 1-SD pRF area inside the alpha 1-SD pRF in dorsolateral; original shuffled pairing, geometry population, integration/normalization and resampling must be authenticated. Full geometry and control distributions remain required.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig6-high-broadband-size",
+      "kind": "scalar",
+      "description": "Figure 6: reported high-broadband pRF size, retaining all three original distributions and low/high-broadband geometry/spectral companions.",
+      "status": "verified",
+      "expected": 1.0,
+      "units": "degrees of visual angle",
+      "aggregation": "Source Figure 6 V1–V3 bootstrap mean pRF size; 5000 samples with source mean and SD-of-mean display. Recover exact source memberships and bootstrap/atlas recipe; scalar summary does not replace violin, per-electrode parameters or companion outputs.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig6-low-broadband-size",
+      "kind": "scalar",
+      "description": "Figure 6: reported low-broadband pRF size, retaining all three original distributions and low/high-broadband geometry/spectral companions.",
+      "status": "verified",
+      "expected": 1.1,
+      "units": "degrees of visual angle",
+      "aggregation": "Source Figure 6 V1–V3 bootstrap mean pRF size; 5000 samples with source mean and SD-of-mean display. Recover exact source memberships and bootstrap/atlas recipe; scalar summary does not replace violin, per-electrode parameters or companion outputs.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    },
+    {
+      "id": "fig6-alpha-size",
+      "kind": "scalar",
+      "description": "Figure 6: reported alpha pRF size, retaining all three original distributions and low/high-broadband geometry/spectral companions.",
+      "status": "verified",
+      "expected": 2.3,
+      "units": "degrees of visual angle",
+      "aggregation": "Source Figure 6 V1–V3 bootstrap mean pRF size; 5000 samples with source mean and SD-of-mean display. Recover exact source memberships and bootstrap/atlas recipe; scalar summary does not replace violin, per-electrode parameters or companion outputs.",
+      "evidence_ids": [
+        "alpha-original-full-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published summary only; original granular outputs, aggregation, numerical equivalence and stochastic-repeatability criteria remain unresolved. No zero/default tolerance is inferred.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the figure-specific source outputs and original atlas/bootstrap/shuffle recipe, then justify reproducibility and participant-aware uncertainty. Descriptive 5000-draw resampling does not provide new biological replication or an equivalence rule.",
+        "independent_unit": "Participant; electrodes and within-run halves/time samples are nested. Source electrode bootstraps are descriptive, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, participant acceptance count, minimum replication rule or operational qualitative criterion is fixed. Failure to reject a relationship is not evidence of equivalence.",
+        "evidence_ids": [
+          "alpha-original-full-panel"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "PARTIAL contract: the findings list does not exhaust the registered full Figure 4/5/6/7 numerical panel. Preserve every responsive/nonresponsive, map, participant, distribution, geometry, spectral and shuffled-electrode companion explicitly required by full_panel; no scalar/categorical summary replaces those outputs.",
+    "Current improvement projection emphasizes the Figure 7 ordered metric; the original registered primary output also requires alpha AND broadband pRF models and spatial-scale/location comparisons. This contract preserves its eight description strings for binding but reports the broader original-scope conflict rather than narrowing the task.",
+    "Authenticate distinct Figure 4/5/6 atlas/QC and prediction selections, the 53-electrode geometry population and overlapping 35/45 map memberships, maximum-assignment 17/36 displays, full normalized pRF/histogram/curve outputs and both actual/shuffled containment routes. The accepted 366-to-31 Figure 7 selector does not implement these.",
+    "Recover and independently verify low/high broadband frequency-specific fits, spectra, gain and geometry outputs, Figure 6 bootstrap/atlas uncertainty and all original native source branches. The accepted Figure 7 prediction API cannot establish these controls.",
+    "Authenticate the historical nine-participant 366-electrode population, source atlas/QC normalization, both rounded permutation cutoffs and the exact 31 Figure 7 electrode identities; the released 433-row roster is not a substitute.",
+    "Bind original input/version/aperture and preprocessing manifests and source signed-gain alpha fits to the original within-run 38/37 folds; source-fold projection and literal paper Eq.6 remain separate pending native parity.",
+    "Complete a frozen runnable candidate analysis interface and independent verifier for granular prediction, source gain/peak-response, size/eccentricity/line-fit and all individual-patient companion outputs. The accepted prediction-only operator API is insufficient for the full panel.",
+    "Recover exact numerical companion reference outputs and justify scalar tolerances and operational qualitative/participant criteria; rounded 43%/10% and descriptive sign counts are not equivalence margins.",
+    "Resolve the published 68%/1000-resample interval description against the pinned script nboot=5000, and distinguish source display bootstraps from independent participant uncertainty.",
+    "Freeze common input, author-code-only exposure, evaluation identity and matched access/resource manifests for both conditions; no complete admission policy or new AI execution receipt exists."
+  ]
+}

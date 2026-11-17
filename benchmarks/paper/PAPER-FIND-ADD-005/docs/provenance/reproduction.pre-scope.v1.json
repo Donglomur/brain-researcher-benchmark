@@ -1,0 +1,1257 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-ADD-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original descriptive behavioral/encoding/decoding findings are first-class reproduction targets independently of improvement. Their source panel and arithmetic are documented, but native cohort/fold/bin identities, several paper/code target-method mappings, granular companion outputs and a justified complete verification/criterion policy are absent. Operator replay and generated software checks are not AI reproduction.",
+  "source_paper": {
+    "title": "Encoding of cerebellar dentate neuron activity during visual attention in rhesus macaques",
+    "url": "https://elifesciences.org/articles/99696"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Results: Encoding of task events, Decoding trial variables; Figures 3–4; Methods: Encoding model and Decoding model",
+      "supports": "Identifies the dentate encoding/decoding analyses, source likelihood-based model selection, and descriptive reported outputs."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/fitSingleCellGLM.m",
+      "locator": "fitSingleCellGLM, baselineTrials default and design construction around lines 139–159",
+      "supports": "Defines six event kernels and a response-derived five-trial moving-average baseline before cross-validation."
+    },
+    {
+      "id": "category",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "locator": "fit method, cvTrainSel generation, cv1NegLnL selection and cv2NegLnL evaluation around lines 496–529",
+      "supports": "Separate trial-based cross-validation assignments select regularization and evaluate goodness of fit; retained fitInfo is a possible author-baseline recovery route, not an observed score."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.1rn8pk14s",
+      "locator": "January 22, 2025 release; README Files and variables",
+      "supports": "cells4.2.mat.zip supplies per-cell trials, monkey/cell identities, spike seconds, event milliseconds and eye traces; archive also contains some Purkinje cells."
+    },
+    {
+      "id": "local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/README.md",
+      "locator": "Prospective paired models and evaluation; evaluator.py evaluate_cell/evaluate",
+      "supports": "The retained implementation uses a new conditional full-minus-reduced likelihood in nats/spike, ridge harmonics, eye inputs and guarded contiguous folds; it is not source GLM parity."
+    },
+    {
+      "id": "behavior-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure1C-E; Figure1 supplement1; Supplementary file1; Methods Behavioral model",
+      "supports": "Per-direction performance, separate L/R and U/D behavioral weights over sessions, current/history variables, and the reported multiple-testing caveat. Figure caption calls its error bars95% intervals while Methods describes5th-95th bootstrap percentiles; do not silently choose either."
+    },
+    {
+      "id": "modulation-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure2B-I and supplement1; Methods Neuronal modulation analysis and Directional selectivity",
+      "supports": "Source spike time courses, facilitation/suppression counts, direction selectivity, baseline/sliding windows, and separate stimulus/saccade latency distributions."
+    },
+    {
+      "id": "encoding-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure3A-E; Methods Encoding model",
+      "supports": "Unspecialized and category-modulated Poisson models, four current/past direction category families, modIdx distributions, hierarchy fractions and correct/error example response curves."
+    },
+    {
+      "id": "ramping-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure3 supplements1-2; Supplementary file2; Methods Principal component decomposition and Detection of firing rate ramping onset",
+      "supports": "Correct/error population PCA, first three components, source100-trials-per-outcome filtering, Gaussian smoothing, modified Kneedle onset and Mo-minus-Mi latency contrast of-115ms with F10.9,p0.001."
+    },
+    {
+      "id": "decoding-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure4A-D; Methods Decoding model",
+      "supports": "Current outcome/current gap/past outcome/past gap significant-cell fractions by monkey, event and200ms bin, trial-category balancing, permutation evidence and between-monkey Fisher exact comparisons."
+    },
+    {
+      "id": "anatomy-context",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Figure5A-G; Results Identification of recording site in DN and its connectivity; histological Methods",
+      "supports": "Original anatomical context is CTb labeling at the recording sites. Histological sections/annotations are not established inputs to the registered electrophysiology task; this sidecar does not claim whole-paper anatomy reconstruction."
+    },
+    {
+      "id": "behavior-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/fitBehaviorData.m",
+      "locator": "Configuration and targetY assignment; logistic fitting; fitInfo.designX/targetY/modelW/bootstrapW; behaviorModel save",
+      "supports": "Actual source file fits binary saccade direction separately by gap axis, uses three history terms and saves coefficient/target/design/bootstrap arrays. This differs from portions of the paper correct-response wording and needs source reconciliation."
+    },
+    {
+      "id": "decoder-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/decodeTrialOutcome.m",
+      "locator": "cfg.nCVFolds/cfg.nShuffles/cfg.fitFcn; cfg.behavCategories; condDecode.selectedTrials/trialWeight/target; model.prediction/accuracy/alignedTime/alignedActivity",
+      "supports": "Actual source uses3-fold SVM/ECOC with50 shuffles, excludes condition_code/past_condition from category targets, and saves actual predictions plus all shuffle accuracies. Paper logistic/current-past-outcome mapping is not established."
+    },
+    {
+      "id": "encoding-figure-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/erasmus_encoding_figure.m",
+      "locator": "modelTrialPredictions lines96-179; plotModulationStrength; plotModulationCategories; plotExamplePredictions",
+      "supports": "Figure derivation retains native trial frames/categories/reward masks,5ms canonical epoch interpolation, category-specific normalized curves and modIdx; source category fractions pool rare combinations under2%. This is distinct from the raw-bin likelihood calculation."
+    },
+    {
+      "id": "converter-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/convertToGLMData.m",
+      "locator": "Experiment values/timings and bin-size default; per-cell trial filtering and seconds-to-ms spike conversion",
+      "supports": "Native neuron/trial/event fields, spike units, direction conventions and exclusions must remain linked to source cells; default50ms bins require reconciliation with paper25ms bins."
+    },
+    {
+      "id": "source-score-code",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "locator": "poissonLogLikelihood97-100; xvalRegularizationPath152-174; specialize448-452; regress496-539; jointPrediction543-580",
+      "supports": "cv2NegLnL is negative summed Poisson LL including log-factorials, without normalization. Hierarchy scores use original global-bin prediction assembly; inherited leaf fitInfo can refer to parent support. Generated folds are local and not assigned to the saved cvTrainSel property; cv1NegLnL is overwritten."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict individual dentate-neuron spike counts from trial events and category-dependent event responses; retain the original encoding problem. Behavioral decoding and modulation summaries are distinct source analyses, not interchangeable scalar victory targets.",
+      "evidence_ids": [
+        "paper",
+        "fit"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad DOI 10.5061/dryad.1rn8pk14s, January 22, 2025 cells4.2.mat.zip release. Only metadata was reviewed; no neural payload was opened.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper records 305 DN neurons from macaques Mi and Mo. Exact analysis-included cells/trials must be reconciled to the archive, whose README also notes Purkinje-cell records; all eligible source DN cells must be retained.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper specifies fivefold likelihood selection; CategorizedModel creates separate trial-based CV assignments for regularization and goodness-of-fit. Original fold realizations/random state and the compared model-stage outputs remain unrecovered; contiguous guarded folds are an extension.",
+      "evidence_ids": [
+        "paper",
+        "category"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original encoding uses fixation, C onset, delay, choice-target, saccade and reward timing with current/past trial categories. The author baseline also uses response-derived trial-rate smoothing, which must be disclosed; adding eye regressors or a training-only null changes the comparison.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "local"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Methods describe 25-ms counts and five event-basis functions over 1.5 seconds; code uses a five-trial rate baseline. Converter settings, exclusions and exact original count support need source-run reconciliation, including the registered 25-ms paper versus 50-ms converter-default mismatch.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "local"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Recover the original evaluated predictive likelihood and its normalization from cv2NegLnL. No published scalar on that exact support was recovered. Figure 3 modulation strength and Figure 4 significant-cell fraction are not predictive-accuracy objectives.",
+      "evidence_ids": [
+        "paper",
+        "category"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original figures summarize cell properties separately by monkey; no source-defined single cross-cell predictive-likelihood aggregation was recovered. A pooled nats/spike or cell-macro average must not silently become the published score.",
+      "evidence_ids": [
+        "paper",
+        "local"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered original electrophysiological/behavioral task spans Figure1 behavior/current-history models, Figure2 event modulation/direction selectivity, Figure3 unspecialized and full category hierarchy with modIdx/proportions/correct-error response curves, its PCA/ramping companions, and Figure4 balanced current/past decoding. All Mi/Mo cells, sessions, categories, bins and source controls must be retained. Required arrays remain unrepresented in the scalar/categorical finding list: all per-cell unspecialized/hierarchical likelihoods and support, directional-selectivity statistics/preferred directions, all category modIdx values/histograms, complete hierarchy proportions, original example-cell curves, correct/error PCA traces/loadings, and original event-bin decoding fractions/predictions/weights/shuffle comparisons. Source-defined scalar summaries are retained separately, never vector proxies. Missing authentic axes, reference arrays, source reconciliation and complete criteria leave full-panel source fidelity unresolved independently of the scalar-schema limitation. Figure5 CTb anatomical findings are retained as a source-scope boundary: authentic histological inputs and their relationship to this registered electrophysiology task are unestablished; no whole-paper anatomical reproduction is claimed.",
+      "evidence_ids": [
+        "behavior-paper",
+        "modulation-paper",
+        "encoding-paper",
+        "ramping-paper",
+        "decoding-paper",
+        "anatomy-context",
+        "data"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions require the same original public paper and authenticated Dryad neuron/trial observations, exact event/history identities, original exclusions, bins and original source information privileges. The author-code condition adds only the approved pinned author analysis snapshot. Preserve and disclose response-derived five-trial rate smoothing before CV; do not replace it with an online forecast, training-only null, extra eye predictors or guarded blocked folds. Keep independent evaluator targets, native reference outputs, prior attempts and verification programs outside participant delivery. The public-paper/data exposure remains explicit. Exact common input/code manifests, native folds, source decoder/behavior target mapping, exposure policy and cumulative budgets are absent.",
+      "evidence_ids": [
+        "paper",
+        "data",
+        "fit",
+        "source-score-code",
+        "behavior-code",
+        "decoder-code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "behavior_Mi_up_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mi, up gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mi_down_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mi, down gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mi_left_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mi, left gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mi_right_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mi, right gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mi_current_gap_weight_trajectory",
+      "kind": "categorical",
+      "description": "Figure1E reported current-gap weighting strategy for Mi; the full L/R and U/D coefficient trajectories and intervals must be computed from original trials, not replaced by the qualitative label.",
+      "status": "verified",
+      "expected": "weight_change_concentrated_in_UD",
+      "units": "source behavioral-strategy category",
+      "aggregation": "Separate source sessions and L/R versus U/D tasks; no pooled-animal learning curve.",
+      "evidence_ids": [
+        "behavior-paper",
+        "behavior-code"
+      ],
+      "categories": [
+        "weight_change_concentrated_in_UD",
+        "UD_and_LR_weights_increase",
+        "other_source_strategy"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source claim supplies a vocabulary, not a justified inferential reproduction rule; required numerical trajectories and companion results cannot be replaced by this category.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mo_up_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mo, up gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mo_down_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mo, down gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mo_left_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mo, left gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mo_right_performance",
+      "kind": "scalar",
+      "description": "Figure1C median fraction of correct responses for Mo, right gap direction; retain its session-level distribution, quartiles and source training/retraining membership.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction correct",
+      "aggregation": "Source Figure1C session distribution and its median, separately by monkey and gap direction; exact session/condition mapping remains unresolved.",
+      "evidence_ids": [
+        "behavior-paper",
+        "data"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "behavior_Mo_current_gap_weight_trajectory",
+      "kind": "categorical",
+      "description": "Figure1E reported current-gap weighting strategy for Mo; the full L/R and U/D coefficient trajectories and intervals must be computed from original trials, not replaced by the qualitative label.",
+      "status": "verified",
+      "expected": "UD_and_LR_weights_increase",
+      "units": "source behavioral-strategy category",
+      "aggregation": "Separate source sessions and L/R versus U/D tasks; no pooled-animal learning curve.",
+      "evidence_ids": [
+        "behavior-paper",
+        "behavior-code"
+      ],
+      "categories": [
+        "weight_change_concentrated_in_UD",
+        "UD_and_LR_weights_increase",
+        "other_source_strategy"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source claim supplies a vocabulary, not a justified inferential reproduction rule; required numerical trajectories and companion results cannot be replaced by this category.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      }
+    },
+    {
+      "id": "history_Mi_LR_past_saccade_regression_R2",
+      "kind": "scalar",
+      "description": "Reported Mi L/R previous-saccade-weight trend regression R2; requires full fitted weight-by-session observations and source regression, with the family correction companion.",
+      "status": "verified",
+      "expected": 0.32,
+      "units": "dimensionless R2",
+      "aggregation": "Source Figure1 supplement1 regression on session weights for Mi L/R, not neural predictive likelihood.",
+      "evidence_ids": [
+        "behavior-paper",
+        "behavior-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper",
+          "behavior-code"
+        ]
+      }
+    },
+    {
+      "id": "history_Mi_LR_past_saccade_nominal_p",
+      "kind": "scalar",
+      "description": "Reported nominal p-value for Mi L/R prior-saccade-weight trend; this is an original statistic to reconstruct, not an acceptance threshold or proof of a history effect.",
+      "status": "verified",
+      "expected": 0.016,
+      "units": "p-value",
+      "aggregation": "Same source regression and original six-test-per-monkey family.",
+      "evidence_ids": [
+        "behavior-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "behavior-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper"
+        ]
+      }
+    },
+    {
+      "id": "history_multiple_testing_companion",
+      "kind": "categorical",
+      "description": "Supplementary file1 reports that the nominally significant regressions do not survive its Bonferroni correction. Reproduce all six regressions per monkey and retain raw statistics; this does not demonstrate absence of biological history effects.",
+      "status": "verified",
+      "expected": "none_survive_reported_Bonferroni_correction",
+      "units": "reported correction outcome",
+      "aggregation": "Complete original per-monkey regression family; no favorable-test selection.",
+      "evidence_ids": [
+        "behavior-paper"
+      ],
+      "categories": [
+        "none_survive_reported_Bonferroni_correction",
+        "one_or_more_survive_reported_Bonferroni_correction"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source claim supplies a vocabulary, not a justified inferential reproduction rule; required numerical trajectories and companion results cannot be replaced by this category.",
+        "evidence_ids": [
+          "behavior-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "behavior-paper"
+        ]
+      }
+    },
+    {
+      "id": "modulated_cell_count_stimulus_facilitation",
+      "kind": "scalar",
+      "description": "Figure2 source count of facilitation cells in the stimulus window; original selected cell identities, trial spike counts and tests must derive this count.",
+      "status": "verified",
+      "expected": 90,
+      "units": "cells",
+      "aggregation": "Source Figure2G-I combined descriptive population; retain monkey-stratified supplement1 and all original eligibility denominators.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "modulated_cell_count_stimulus_suppression",
+      "kind": "scalar",
+      "description": "Figure2 source count of suppression cells in the stimulus window; original selected cell identities, trial spike counts and tests must derive this count.",
+      "status": "verified",
+      "expected": 85,
+      "units": "cells",
+      "aggregation": "Source Figure2G-I combined descriptive population; retain monkey-stratified supplement1 and all original eligibility denominators.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "modulated_cell_count_saccade_facilitation",
+      "kind": "scalar",
+      "description": "Figure2 source count of facilitation cells in the saccade window; original selected cell identities, trial spike counts and tests must derive this count.",
+      "status": "verified",
+      "expected": 57,
+      "units": "cells",
+      "aggregation": "Source Figure2G-I combined descriptive population; retain monkey-stratified supplement1 and all original eligibility denominators.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "modulated_cell_count_saccade_suppression",
+      "kind": "scalar",
+      "description": "Figure2 source count of suppression cells in the saccade window; original selected cell identities, trial spike counts and tests must derive this count.",
+      "status": "verified",
+      "expected": 38,
+      "units": "cells",
+      "aggregation": "Source Figure2G-I combined descriptive population; retain monkey-stratified supplement1 and all original eligibility denominators.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "stimulus_peak_trough_latency_contrast",
+      "kind": "scalar",
+      "description": "Figure2I stimulus-epoch facilitation-versus-suppression latency comparison: the paper reports suppression earlier and a KS p-value below0.0041. The exact statistic/reference distribution is unrecovered; the bound is not an invented exact target.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Kolmogorov-Smirnov statistic",
+      "aggregation": "Source cell peak/trough latency distributions; retain90 facilitating and85 suppressing identities plus per-monkey companion distributions.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "saccade_peak_trough_nominal_p",
+      "kind": "scalar",
+      "description": "Figure2I reported saccade-epoch KS p-value; no significant difference is not treated as evidence of equivalence.",
+      "status": "verified",
+      "expected": 0.23,
+      "units": "p-value",
+      "aggregation": "Source57 facilitating and38 suppressing cells, original peak/trough windows and separate animal companion outputs.",
+      "evidence_ids": [
+        "modulation-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "modulation-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mi_PCA_component_1_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC1 explained-variance quantity for Mi; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mi_PCA_component_2_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC2 explained-variance quantity for Mi; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mi_PCA_component_3_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC3 explained-variance quantity for Mi; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mo_PCA_component_1_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC1 explained-variance quantity for Mo; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mo_PCA_component_2_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC2 explained-variance quantity for Mo; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "Mo_PCA_component_3_explained_variance",
+      "kind": "scalar",
+      "description": "Figure3 supplement1 original PC3 explained-variance quantity for Mo; complete correct/error mean firing-rate matrices, PCA loadings and time courses remain mandatory companions.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction explained variance",
+      "aggregation": "Source PCA on correct/error trial-average activity in[-0.5,1.5]s around stimulus onset with the original combined population construction; retain original monkey outputs and axis conventions.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "ramping_onset_Mo_minus_Mi",
+      "kind": "scalar",
+      "description": "Reported average onset contrast: Mo ramping starts115ms earlier than Mi. Keep correct/error within-cell observations, source100-trial-per-outcome minimum, stimulus-modulated selection and modified Kneedle derivation.",
+      "status": "verified",
+      "expected": -115,
+      "units": "milliseconds",
+      "aggregation": "Mo-minus-Mi source repeated-measures comparison, not independent trial/bin samples.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "ramping_monkey_effect_F",
+      "kind": "scalar",
+      "description": "Original repeated-measures ANOVA monkey-effect F statistic accompanying the115ms ramping contrast; retain original design and all selected cells.",
+      "status": "verified",
+      "expected": 10.9,
+      "units": "F statistic",
+      "aggregation": "Source trial outcome within cell and monkey between groups; source degrees of freedom and full reference table still need binding.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    },
+    {
+      "id": "ramping_monkey_effect_nominal_p",
+      "kind": "scalar",
+      "description": "Original p-value accompanying the source ramping monkey-effect statistic; it is not a reproduction or improvement acceptance threshold.",
+      "status": "verified",
+      "expected": 0.001,
+      "units": "p-value",
+      "aggregation": "Same source repeated-measures analysis with its original Tukey companion procedure and correct/error contrasts.",
+      "evidence_ids": [
+        "ramping-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated reference arrays, complete original support and justified reproduction band are jointly bound. Published rounding, source p-values and replay arithmetic tolerances are not adopted as acceptance tolerances.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source estimator, complete support and reference outputs before freezing the reproduction decision; retain original repeated-cell/trial dependence and per-animal analyses.",
+        "independent_unit": "Macaque; sessions, cells and trials remain nested/repeated. Two source animals do not turn cells, bins or folds into independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No new confidence level, sample minimum, equivalence margin or nonrejection-as-reproduction rule is justified by the currently authenticated artifacts.",
+        "evidence_ids": [
+          "ramping-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the complete original305 DN-neuron cohort and its Mi145/Mo160 identities, sessions, trial exclusions and all figure-specific subsets; the public archive also includes Purkinje-cell records.",
+    "Reconcile paper25ms bins with converter50ms default, seconds-to-ms conversion, final-bin support, event/direction conventions and response-derived five-trial smoothing. No original fold realization or complete source-run configuration is recovered.",
+    "Native CategorizedModel stores predictions but does not assign generated local cvTrainSel to the object and overwrites cv1NegLnL. Recover an authenticated source-protocol execution/fold record rather than relabeling new guarded folds as original.",
+    "The source score arithmetic is recovered as unnormalized summed Poisson LL with factorial constants, but authentic per-cell baseline numbers and any original cross-cell predictive aggregate are absent. Inherited leaf fitInfo may refer to parent support.",
+    "The accepted source-score-replay-v1 verifies an operator export of original targets, source bin identities and unspecialized/hierarchical predictions; export_dentate_scores.m has not been executed. It does not yet export category labels, full lineage, event-basis coefficients, CV selection matrices or canonical-epoch/modIdx derivation needed for the complete Figure3 panel.",
+    "The paper describes logistic neural decoding of current/past outcome and gap. Cached decodeTrialOutcome.m uses3-fold SVM/ECOC and50 shuffles and excludes condition_code/past_condition from target categories. The exact paper/code algorithm and target mapping must be resolved, not silently substituted.",
+    "Behavioral target descriptions differ from the cached fitBehaviorData targetY=saccade_direction path; source bootstrap interval wording also differs between caption95% and Methods5th-95th percentiles. Freeze the authentic target/design and interval interpretation before comparison.",
+    "Complete original direction-selectivity, category/modIdx, hierarchy-combination, example-cell, PCA/ramping and decoding-bin reference arrays are absent. These required arrays are not represented in the scalar finding list and must not be collapsed to invented scalar averages. Genuine missing axes/references and methods remain source gaps; a later fully source-defined vector blocked only by schema would instead require an engineering schema extension.",
+    "Figure5 CTb anatomical context has no authenticated section/annotation inputs or executable interface in the registered Dryad electrophysiology route. Its source-scope relationship requires explicit adjudication; this contract does not imply whole-paper anatomy reproduction.",
+    "No full-panel independent authentic-data verification program, common input/observation manifests, justified numeric tolerances, dependence-aware reproduction criteria or finite paired-condition budgets are frozen. Printed counts,p-values or categorical claims and programs printing them are insufficient.",
+    "The retained initial-evaluator-v1 ridge/eye/blocked-fold conditional-gap analysis is an extension and cannot supply original full-panel reproduction or a same-task paper improvement receipt."
+  ]
+}
