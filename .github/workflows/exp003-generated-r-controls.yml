@@ -1,0 +1,119 @@
+name: EXP003 generated R source controls
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: exp003-generated-r-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
+  exp003-generated-r:
+    needs: source-preflight
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        timeout-minutes: 1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        timeout-minutes: 1
+        with:
+          python-version: '3.11.18'
+      - name: Run only pinned generated R controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          EXP003_OUTPUT="${RUNNER_TEMP}/exp003-generated-r-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          exp003_run_pinned() {
+            EXP003_SECONDS="$1"
+            shift
+            /usr/bin/timeout --signal=TERM --kill-after=35s "${EXP003_SECONDS}s" python -I -S -B - "$@" <<'PY'
+          import hashlib, os, stat, sys
+          from pathlib import Path
+          
+          def need(ok, message):
+              if not ok:
+                  raise ValueError(message)
+          
+          def fingerprint(info):
+              return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+          
+          def secure_parent(path):
+              path = Path(path).absolute()
+              need('..' not in path.parts, 'normalized absolute path required')
+              descriptor = os.open(path.anchor, os.O_RDONLY | os.O_DIRECTORY)
+              try:
+                  for part in path.parts[1:-1]:
+                      following = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=descriptor)
+                      os.close(descriptor)
+                      descriptor = following
+                  return descriptor, path.name
+              except BaseException:
+                  os.close(descriptor)
+                  raise
+          
+          def pinned(path, size, digest):
+              need(type(size) is int and 0 < size <= 65536, 'source extent refused')
+              parent, name = secure_parent(path)
+              descriptor = None
+              try:
+                  descriptor = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+                  before = os.fstat(descriptor)
+                  need(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size, 'ordinary single-link source of exact size required')
+                  with os.fdopen(descriptor, 'rb', closefd=False) as stream:
+                      body = stream.read(size + 1)
+                  after = os.fstat(descriptor)
+                  current = os.stat(name, dir_fd=parent, follow_symlinks=False)
+                  need(fingerprint(before) == fingerprint(after) == fingerprint(current)
+                       and len(body) == size and hashlib.sha256(body).hexdigest() == digest, 'source pin mismatch')
+                  return body
+              finally:
+                  if descriptor is not None:
+                      os.close(descriptor)
+                  os.close(parent)
+          
+          local_pins = [
+              ("scripts/maintenance/run_exp003_generated_r.py", 14959, "0d8a6c0f95de42379157bb39a45cc8e937f114e8583af4be592f1ac967910a85"),
+              ("benchmarks/integrity/exp003-generated-r.environment.v1.json", 6031, "3de6839e6bcc7224bba06bee1088302f4ec0e5882bde8385d509b7c19c2284bc"),
+              ("tests/maintenance/test_exp003_generated_r.py", 13760, "fc7822ced04b716b9a09b00c18f87c493666fb4d0f0db1a454756ab3c9005699"),
+          ]
+          verified = {name: pinned(Path(name), size, digest) for name, size, digest in local_pins}
+          p = sys.argv[1]
+          bootstrap, environment, controls = [item[0] for item in local_pins]
+          need(p in (bootstrap, controls), "only reviewed control entrypoints are executable")
+          if p == bootstrap:
+              need(len(sys.argv) == 4, "checkout and output arguments required")
+              sys.argv = [p, environment, str(len(verified[environment])), hashlib.sha256(verified[environment]).hexdigest()] + sys.argv[2:]
+          else:
+              need(len(sys.argv) == 2, "focused controls take no selection or skip arguments")
+              sys.argv = [p]
+          exec(compile(verified[p],p,"exec"),{"__name__":"__main__","__file__":p,"__EXP003_VERIFIED_BOOTSTRAP__":verified[bootstrap]})
+          PY
+          }
+          exp003_run_pinned 20 tests/maintenance/test_exp003_generated_r.py
+          exp003_run_pinned 450 scripts/maintenance/run_exp003_generated_r.py "$GITHUB_WORKSPACE" "$EXP003_OUTPUT"
+      - name: Preserve generated control and setup evidence
+        if: always()
+        timeout-minutes: 1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: exp003-generated-r-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: |
+            ${{ runner.temp }}/exp003-generated-r-${{ github.run_id }}-${{ github.run_attempt }}/*.log
+            ${{ runner.temp }}/exp003-generated-r-${{ github.run_id }}-${{ github.run_attempt }}/*.json
