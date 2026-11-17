@@ -104,9 +104,9 @@ def build(arguments):
          "Owner output remains private artifacts-build")
     need(not output.exists() and output.parent.is_dir(), "Fresh operation output with existing parent")
     captured = {}
-    for relative, pin in manifest["files"].items():
-        owner.relpath(relative)
-        captured[relative] = owner.checked({"path": str(root / relative), **pin})
+    for relative, pin in owner.source_members(manifest["files"]).items():
+        captured[relative] = owner.checked({"path": str(root / relative),
+            "bytes": pin["bytes"], "sha256": pin["sha256"]})
     worker = manifest["worker"]
     contract_path = worker["path"].rsplit("/", 1)[0] + "/external_contract.py"
     need(contract_path in manifest["files"], "External validator belongs to software closure")

@@ -1,4 +1,4 @@
-"""Single selected Findlay no-download census continuation worker under the unchanged durable V4 owner.
+"""Single selected Findlay no-download census continuation worker under the current durable V4 owner.
 
 No native parser is imported in this module. The selection is the caller-supplied
 request digest; source locks are identities and never execution authorization.
@@ -24,7 +24,7 @@ PROFILE = {"work_seconds": 180, "recovery_seconds": 60, "whole_seconds": 240,
 OWNER_ROOT = "benchmarks/shared/program-execution/ownership-v4/"
 OWNER_PINS = {
     "process_owner.py": {"bytes": 6707, "sha256": "b9e8f366f4b639a87e6c7c580e4bceff228c031cd767a4a3bebe37ea85d496ea"},
-    "group_bootstrap.py": {"bytes": 2351, "sha256": "b435ddb3e88c94f98413c69d7f378df348f5d827b585be2c1b47adf754b53778"},
+    "group_bootstrap.py": {"bytes": 2562, "sha256": "45626b0c7c29ffedb8881260f08099d6d3c9441cf46ddeb8c694e3658067bda9"},
     "trusted_controller.py": {"bytes": 2119, "sha256": "c6b144d400f2e5fff154753d1e2e16ee2fb3e216186ac4dfb2f7fd24a3269234"},
 }
 META_CAP = 8 * 1024 * 1024
@@ -154,6 +154,19 @@ def load_request(path, expected_sha256, with_bytes=False):
     return (value, len(body)) if with_bytes else value
 
 
+def source_members(files):
+    need(type(files) is dict and 5 <= len(files) <= 128, "Finite complete source graph")
+    for name, pin in files.items():
+        relpath(name)
+        need(name.endswith(".py"), "Software-only source graph; private metadata is separately admitted")
+        need(type(pin) is dict and set(pin) == {"bytes", "sha256"}
+             and type(pin["bytes"]) is int and 0 < pin["bytes"] <= 262144
+             and type(pin["sha256"]) is str and re.fullmatch("[a-f0-9]{64}", pin["sha256"]),
+             "Exact source-member content pin; locators belong to graph keys")
+    need(sum(pin["bytes"] for pin in files.values()) <= SOURCE_CAP, "Source closure size ceiling")
+    return files
+
+
 def source_lock(request, with_bytes=False):
     ex = request["execution"]
     body = checked(ex["source_lock"])
@@ -162,29 +175,29 @@ def source_lock(request, with_bytes=False):
          "entrypoint", "worker", "files"} and value["schema"] == "findlay-intake-source-lock/v1"
          and value["repository_root"] == ex["repository_root"] and value["execution_authority"] is False,
          "Exact nonauthorizing source lock")
-    need(type(value["files"]) is dict and 5 <= len(value["files"]) <= 128, "Finite complete source graph")
-    need(sum(p["bytes"] for p in value["files"].values()) <= SOURCE_CAP, "Source closure size ceiling")
+    source_members(value["files"])
     need(value["worker"] == ex["source_adoption"]["worker"], "Selected worker descriptor")
     for name, pin in OWNER_PINS.items():
-        need(value["files"].get(OWNER_ROOT + name) == pin, "Unchanged canonical V4 owner source")
+        need(value["files"].get(OWNER_ROOT + name) == pin, "Selected current V4 owner source")
     for field in ("entrypoint", "worker"):
-        pin = value[field]; relpath(pin["path"])
+        pin = value[field]
+        need(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"}
+             and type(pin["bytes"]) is int, "Exact selected source-role descriptor")
+        relpath(pin["path"])
         need(value["files"].get(pin["path"]) == {k: pin[k] for k in ("bytes", "sha256")},
              "Entrypoint and worker are exact graph members")
     need(Path(__file__).absolute() == Path(ex["repository_root"]) / value["entrypoint"]["path"],
          "Exact selected runner location")
-    need(all(not Path(name).is_absolute() and name.endswith(".py") for name in value["files"]),
-         "Software-only source graph; private metadata is separately admitted")
     return (value, len(body)) if with_bytes else value
 
 
 def source_capture(request, lock, deadline, adopted=False):
     root = Path(request["execution"]["repository_root"])
     result = {}; read_bytes = 0
-    for relative, pin in sorted(lock["files"].items()):
+    for relative, pin in sorted(source_members(lock["files"]).items()):
         need(time.monotonic() < deadline, "Source verification original deadline")
         relpath(relative)
-        body = checked({"path": str(root / relative), **pin})
+        body = checked({"path": str(root / relative), "bytes": pin["bytes"], "sha256": pin["sha256"]})
         read_bytes += len(body); result[relative] = body
         if adopted:
             spec = request["execution"]["source_adoption"]["commit"] + ":" + relative
