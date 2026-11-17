@@ -118,7 +118,7 @@ def main():
         else:
             packet=packet_valid(pinned_json(Path(a.operator).parent,op['packet']))
             try: candidate=read_json(a.submission,2_000_000)
-            except (ValueError,OSError,UnicodeError) as e:
+            except (ValueError,OSError,UnicodeError,RecursionError) as e:
                 result={'status':'invalid_submission','score':None,'target_loader_calls':0,'detail':type(e).__name__}
             else:
                 if op.get('gold') is None:
