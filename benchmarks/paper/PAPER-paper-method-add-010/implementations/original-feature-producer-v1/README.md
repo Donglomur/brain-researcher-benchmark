@@ -11,6 +11,13 @@ anchor. This package does not turn that rounded number into a pass threshold,
 authenticate the historical folds, or establish a reproduction/improvement.
 It adds no benchmark ID and does not replace the current task policy.
 
+The subsequent [authentic preparation receipt](AUTHENTIC_PREPARATION.v1.json)
+records one successful run on all 94 released participant CSVs: 376 selected
+category windows, with every produced array independently checked. This is
+release-specific input preparation only. No authentic feature calculation,
+native DBA, model fit or scientific score was run, and the historical
+publication/input/fold joins remain unresolved.
+
 ## Three executable steps
 
 Run from this directory using an existing environment. Fresh output directories
