@@ -47,7 +47,10 @@ authentic-data and scientific qualification limits. Four expansion workflows
 [C](../../.github/workflows/construction-expansion-c.yml),
 [D](../../.github/workflows/construction-expansion-d.yml)) add 69 jobs covering
 66 further scoped packages and 1,161 generated test cases. Their commands and
-source pins define coverage; these checks do not run authentic-data campaigns.
+source pins define coverage; these checks do not run authentic-data campaigns. The
+[NEURAL-047 clock workflow](../../.github/workflows/neural047-clock-arithmetic.yml)
+adds 22 generated arithmetic and source-authentication controls while preserving
+the task's external native-clock and deployment requirements.
 
 Run both commands from the repository root using Python 3.11 or later.
 
