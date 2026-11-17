@@ -1,0 +1,2142 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-032",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Root explicitly selected OptionA on2026-11-17: Tables1/8 complete four-subject one-hour retrieval/reconstruction plus the separate Figure5 subject1 one-hour pretrained-versus-from-scratch reconstruction contrast. This newly selects the previously unbound comparison; it is not a retroactive claim that the old definition had already selected it. Both corrected retrieval directions are genuine primary components. Fifty actual scalar table targets are retained, but Figure5 source ordinates/normalization identities, native complete-panel outputs, exposure/resource parity, independent computation verification and justified agreement/superiority criteria remain unqualified. Semantic route is same_primary_unqualified, not a false primary mismatch and not scientific admission.",
+  "source_paper": {
+    "title": "MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data",
+    "url": "https://proceedings.mlr.press/v235/scotti24a.html"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v235/scotti24a.html",
+      "locator": "Sections 2/3/3.3; Table 1 one-hour row; Appendix A.2 and Table 8; Section 3.1.1/Figure 5 one-hour point",
+      "supports": "Selected four-subject one-hour absolute retrieval/reconstruction and separate subject-1 one-hour pretrained-versus-from-scratch reconstruction contrast, with source split, repeated presentations and normalization exposure."
+    },
+    {
+      "id": "correction",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/README.md",
+      "locator": "Retrieval metric correction; Usage; pretrained model configurations",
+      "supports": "Corrected retrieval directions and scores; first-session adaptation of leave-target-subject-out checkpoints."
+    },
+    {
+      "id": "metric_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/final_evaluations.ipynb",
+      "locator": "Retrieval eval, cells 4f862220-1df3-49b0-a36c-0aa2f168315d and 2e49d57a-9b65-490c-a1e0-61bd05682171",
+      "supports": "OpenCLIP token space, cosine top-1 retrieval, 30 draws of 300 paired samples and draw averaging."
+    },
+    {
+      "id": "inference_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/recon_inference.ipynb",
+      "locator": "Parser --new_test; inference repeat handling and embedding/reconstruction production",
+      "supports": "Source inference entrypoint and repeated-image handling must be preserved when producing evaluation features."
+    },
+    {
+      "id": "published-core-panel",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v235/scotti24a.html",
+      "locator": "Table 1 one-hour row and Appendix A.5 Table 8: eight image-reconstruction metrics and two corrected retrieval directions only",
+      "supports": "Fifty actual printed scalar targets: ten four-subject means and ten metrics for each of subjects 1,2,5,7 at one session. Captions/GNet and other inventory results are not mandatory selected findings. Source values are allowed paper inputs, not executed-computation evidence."
+    },
+    {
+      "id": "native-training",
+      "kind": "author_code",
+      "url": "https://github.com/MedARC-AI/MindEyeV2/blob/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/Train.ipynb",
+      "locator": "First-session shard selection; leave-target-subject-out shared model pretraining and subsequent fine-tuning",
+      "supports": "Source-native analysis entrypoint and original training allocation; converted/pinned notebook plus complete runtime, images, neural files, model resources and exposure manifest are still needed."
+    },
+    {
+      "id": "native-complete-metrics",
+      "kind": "author_code",
+      "url": "https://github.com/MedARC-AI/MindEyeV2/blob/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/final_evaluations.ipynb",
+      "locator": "final_evaluations.ipynb: all_images/all_recons loads; cosine retrieval; two_way_identification; PixCorr, SSIM, AlexNet2/5, Inception, CLIP, EffNet/SwAV",
+      "supports": "Native operands and reductions required for the selected reconstruction/retrieval metrics. Other notebook output families are separate evidence. Metric resource/preprocessing/blend and native arithmetic parity remain unqualified."
+    },
+    {
+      "id": "source-selected-transfer",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v235/scotti24a.html",
+      "locator": "Section 3.1.1 and Figure 5, subject 1, one-hour point; cached paper text lines 406-455",
+      "supports": "Original pretrained-versus-from-scratch reconstruction comparison at the same target-subject one-hour training budget. Figure 5 normalizes each metric with random COCO-image reconstructions as 0 and the source 40-session pretrained reference as 1; black lines are medians. Exact one-hour ordinates, normalization reference identities and model/output joins remain unrecovered. Other durations are not newly required outcomes."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Root-selected Option A: the original four-subject one-hour fMRI-to-image retrieval/reconstruction result in Tables 1/8 plus the one-hour point of the subject-1 pretrained-versus-from-scratch reconstruction contrast in Figure 5/Section 3.1.1. Preserve their separate test supports, complete named reconstruction metrics, normalization references, training and image-model exposure, original repeated presentations and source reductions. Apply the authoritative physical-direction correction unambiguously in the task and both access conditions while retaining original labels and correction provenance. Same target-subject data does not imply equal total pretraining data or compute.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "correction"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Natural Scenes Dataset and source MindEyeV2 derivatives for the selected Tables1/8 one-hour absolute result and Figure5 subject-1 one-hour transfer comparison. Preserve original shared1000 test support and exact neural/image/checkpoint/reference identities separately for these results. The full NSD training partition is relevant to source normalization/pretraining; it does not make a forty-session performance panel a selected primary outcome. Exact artifact identities remain unqualified.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "correction"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The absolute one-hour panel uses subjects1,2,5,7, each with the original model pretrained on the other seven subjects and target first-session adaptation. The Figure5 transfer contrast is subject1 only, comparing pretrained and from-scratch reconstruction at the same one-hour target-subject budget. Keep these supports distinct; the subject1 contrast neither replaces the four-subject result nor creates additional independent participants.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "correction"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve original first-session adaptation excluding shared1000 test images, all original shared1000 test observations and repeated presentations, including source-supported first-session test repeats. The selected Figure5 one-hour arms retain the original same test support and target training allocation; authenticate their exact trial/model/reference joins separately. No prospective session-disjoint restriction, reduced-image set or other training-duration outcome replaces this selection.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "inference_code"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Use source single-trial nsdgeneral fMRI responses, paired training images and native image-model resources. The pretrained arms include leave-target-subject-out neural pretraining; the from-scratch subject1 arm intentionally differs in neural pretraining exposure. Same target-subject data does not mean equal total neural/image exposure or compute. Freeze those exposure roles; no test image identity or target image feature may enter a candidate brain query.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "native-training",
+        "correction"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source GLMSingle normalized betas,1.8-mm native nsdgeneral voxels and full-training-partition voxel normalization before reducing target adaptation to one hour. Retain post-model repeated-presentation handling and source reconstruction preprocessing/refinement. Figure5 metric normalization uses its own original random-COCO zero and forty-session pretrained unit references; those reference identities and exact transform must be recovered, not replaced with four-subject table means or assumed Table8 outputs. First-session-only normalization is a labelled extension.",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "inference_code",
+        "native-complete-metrics"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "For each original300-item retrieval pool, flatten and L2-normalize full OpenCLIP token embeddings and score top1 in both physical directions: corrected Image retrieval is brain query to image candidates (original paper column Brain), corrected Brain retrieval is image query to brain candidates (original column Image). Preserve PixCorr,SSIM,AlexNet2,AlexNet5,Inception,CLIP,EffNet and SwAV reconstruction metrics. Figure5 retains its source per-metric normalized one-hour pretrained/from-scratch outputs and displayed median reductions; source ordinate/reference and native comparison criteria remain unresolved. Neither retrieval direction alone discharges reconstruction or transfer.",
+      "evidence_ids": [
+        "metric_code",
+        "native-complete-metrics",
+        "correction",
+        "source-selected-transfer"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Keep each subject and each selected metric separate; the Table1 absolute result equally averages subjects1,2,5,7 after source per-subject reductions. Retrieval averages30 original300-item draws within subject. These overlapping draws are Monte Carlo variation, not independent people or an improvement test. Report the one-hour subject1 Figure5 arm contrast on its own normalized metric support and original median reduction, without pooling it into the four-subject result or collapsing the complete comparison into an invented scalar. A qualified same-one-hour author comparator and justified joint decision remain required.",
+      "evidence_ids": [
+        "paper",
+        "metric_code",
+        "source-selected-transfer"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "evidence_ids": [
+        "published-core-panel",
+        "source-selected-transfer",
+        "correction",
+        "native-complete-metrics"
+      ],
+      "description": "Mandatory selected primary coverage has two separate supports: Tables1/8 one-hour retrieval/reconstruction on subjects1,2,5,7, and the one-hour subject1 pretrained-versus-from-scratch reconstruction contrast of Figure5/Section3.1.1. The fifty scalar findings below preserve all actual one-hour table targets for the eight image metrics and two corrected retrieval directions. They are partial selected-primary coverage: exact Figure5 per-arm/per-metric ordinates, normalization references, source median reductions and native comparison outputs remain required and source-unresolved. No null grid, proxy contrast scalar or categorical success is invented. The forty-session model is needed only in its actual Figure5 normalization-reference role; no forty-session result panel, Table6 comparison, extra training duration, human preference, caption/GNet metric, architecture, ceiling, COCO retrieval or UMAP/ROI result becomes automatically mandatory. Preserve the prior429-value inventory as separate evidence. Complete reconstruction, native computation verification and the selected transfer comparison cannot be discharged by retrieval-only success."
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "evidence_ids": [
+        "paper",
+        "source-selected-transfer",
+        "correction",
+        "native-training",
+        "inference_code"
+      ],
+      "description": "Both intended paper+data and paper+data+author-code conditions specify the same root-selected OptionA task: four-subject one-hour reconstruction plus corrected Image retrieval (brain query to image candidates; paper column Brain) and corrected Brain retrieval (image query to brain candidates; paper column Image), together with the separate subject1 one-hour pretrained/from-scratch reconstruction contrast. The paper and printed values are visible in both; the second condition additionally receives an authenticated author-code delivery. Preserve source first-session allocation, full-training normalization exposure, test repeats, native image resources and intentional neural-pretraining difference between Figure5 arms. Captions or intermediate images used inside the reconstruction pipeline retain source input roles, but this does not require caption metric outcomes. Target image features, reference reconstructions, final shared1000 feedback and Figure5 reference outputs have operator/candidate roles to freeze. Independent operator execution must derive all selected findings from authentic granular outputs; copying published tables or emitting them from a program cannot qualify. Immutable paired data/code/exposure/resource/verification manifests remain unavailable."
+    }
+  },
+  "findings": [
+    {
+      "id": "subject01_1session_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), pixcorr. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.235,
+      "units": "Pearson correlation (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), pixcorr. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.2,
+      "units": "Pearson correlation (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), pixcorr. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.175,
+      "units": "Pearson correlation (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), pixcorr. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.17,
+      "units": "Pearson correlation (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_ssim",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), ssim. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.428,
+      "units": "SSIM (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_ssim",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), ssim. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.433,
+      "units": "SSIM (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_ssim",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), ssim. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.405,
+      "units": "SSIM (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_ssim",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), ssim. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.408,
+      "units": "SSIM (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), alexnet2. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8802,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), alexnet2. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.85,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), alexnet2. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8311,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), alexnet2. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.807,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), alexnet5. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.9333,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), alexnet5. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.9213,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), alexnet5. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.91,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), alexnet5. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8590000000000001,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_inception",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), inception. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8356,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_inception",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), inception. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8186,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_inception",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), inception. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8432999999999999,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_inception",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), inception. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.7490000000000001,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_clip_image",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), clip_image. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8075,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_clip_image",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), clip_image. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.7939,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_clip_image",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), clip_image. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.8253,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_clip_image",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), clip_image. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.7429000000000001,
+      "units": "two-way identification fraction",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_efficientnet_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), efficientnet_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.798,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_efficientnet_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), efficientnet_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.807,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_efficientnet_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), efficientnet_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.781,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_efficientnet_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), efficientnet_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.854,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_swav_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), swav_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.459,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_swav_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), swav_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.467,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_swav_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), swav_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.444,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_swav_distance",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), swav_distance. Original first-session shared-subject adaptation condition.",
+      "status": "verified",
+      "expected": 0.504,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Original source reduction over the complete 1000 shared test images for this subject; native per-image/voxel/token reduction and resource parity require authentication.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_image_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), image_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: brain query to image candidates. The original paper table labeled this numeric value Brain; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.7763,
+      "units": "top-1 retrieval fraction; brain query to 300 image candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_image_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), image_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: brain query to image candidates. The original paper table labeled this numeric value Brain; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.6718000000000001,
+      "units": "top-1 retrieval fraction; brain query to 300 image candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_image_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), image_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: brain query to image candidates. The original paper table labeled this numeric value Brain; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.4696,
+      "units": "top-1 retrieval fraction; brain query to 300 image candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_image_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), image_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: brain query to image candidates. The original paper table labeled this numeric value Brain; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.37770000000000004,
+      "units": "top-1 retrieval fraction; brain query to 300 image candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject01_1session_brain_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 1, 1 scanning session(s), brain_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: image query to brain candidates. The original paper table labeled this numeric value Image; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.9396,
+      "units": "top-1 retrieval fraction; image query to 300 brain candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject02_1session_brain_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 2, 1 scanning session(s), brain_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: image query to brain candidates. The original paper table labeled this numeric value Image; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.9053,
+      "units": "top-1 retrieval fraction; image query to 300 brain candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject05_1session_brain_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 5, 1 scanning session(s), brain_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: image query to brain candidates. The original paper table labeled this numeric value Image; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.6694,
+      "units": "top-1 retrieval fraction; image query to 300 brain candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "subject07_1session_brain_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 8: subject 7, 1 scanning session(s), brain_retrieval. Original first-session shared-subject adaptation condition. Author-corrected physical direction: image query to brain candidates. The original paper table labeled this numeric value Image; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.6444,
+      "units": "top-1 retrieval fraction; image query to 300 brain candidates",
+      "aggregation": "Thirty original 300-image retrieval draws within this subject, then their arithmetic mean; this finding is not pooled across subjects.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "One fixed original fMRI participant for this subject-specific finding; images/pools are dependent observations, not independent participants",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 pixcorr, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.195,
+      "units": "Pearson correlation (dimensionless)",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_ssim",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 ssim, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.419,
+      "units": "SSIM (dimensionless)",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 alexnet2, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.8420000000000001,
+      "units": "two-way identification fraction",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 alexnet5, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.9059999999999999,
+      "units": "two-way identification fraction",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_inception",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 inception, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.812,
+      "units": "two-way identification fraction",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_clip_image",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 clip_image, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.792,
+      "units": "two-way identification fraction",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_efficientnet_distance",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 efficientnet_distance, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.81,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_swav_distance",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 swav_distance, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result.",
+      "status": "verified",
+      "expected": 0.468,
+      "units": "Pearson correlation distance (dimensionless)",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_image_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 image_retrieval, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result. Author-corrected physical direction: brain query to image candidates. The original paper table labeled this numeric value Brain; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.574,
+      "units": "top-1 retrieval fraction; brain query to 300 image candidates",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    },
+    {
+      "id": "cohort_1session_brain_retrieval",
+      "kind": "scalar",
+      "description": "Published Table 1 one-hour MindEye2 brain_retrieval, equally weighted across source subjects 1,2,5,7; selected absolute retrieval/reconstruction result. Author-corrected physical direction: image query to brain candidates. The original paper table labeled this numeric value Image; the pinned README exchanges the original Image/Brain retrieval labels. This direction is explicitly required in both access conditions.",
+      "status": "verified",
+      "expected": 0.79,
+      "units": "top-1 retrieval fraction; image query to 300 brain candidates",
+      "aggregation": "Compute the source metric per subject on complete original support, then equally average subjects 1,2,5,7; retain subject-specific outputs and the complete selected reconstruction metrics.",
+      "evidence_ids": [
+        "published-core-panel",
+        "native-complete-metrics",
+        "correction",
+        "metric_code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source prints a rounded result but supplies no validated numerical reproduction tolerance. Do not infer an acceptance band from table rounding, an old grader threshold or generated dense-versus-blocked arithmetic. Native source rerun/resource parity and a justified predeclared tolerance remain required.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No source-justified computational equivalence interval or deterministic acceptance rule has been frozen; printed precision and a numerical kernel test are insufficient.",
+        "independent_unit": "Human participant; four original fMRI participants, with shared images and nested repeated presentations",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Shared test images, repeated presentations, overlapping retrieval pools and stochastic model/refinement outputs cannot be treated as independent people. Authentic source-level variation and a pre-execution agreement rule remain unqualified.",
+        "evidence_ids": [
+          "published-core-panel",
+          "native-complete-metrics",
+          "correction",
+          "metric_code"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate exact selected NSD/derivative/checkpoint/shared1000 identities, full first-session allocation, all source repeats and full-training normalization lineage for the four-subject absolute panel and separate subject1 comparison. Counts and paper targets alone are insufficient.",
+    "Recover the original Figure5 one-hour pretrained/from-scratch reconstruction outputs, complete source metric membership/ordinates, original random-COCO zero-reference identities, forty-session pretrained unit-reference identities, normalization transform and median reductions. Do not infer Figure5 values from Table8, use Table6 forty-session from-scratch control, import other durations or substitute human preference.",
+    "Disclose intentional pretraining differences between the same-target-subject-data arms. Do not enforce invented equal total neural exposure or compute, or erase the source normalization/image-model exposure to manufacture a nominally matched comparison.",
+    "Qualify native full-token extraction, original retrieval-pool identities, repeated-presentation order/weighting, dtype/tie/RNG behavior and the complete eight-metric reconstruction path, including native learned feature resources and paper-versus-code image-identification/refinement semantics. Existing bounded-retrieval-v2 is a mathematical feature scorer, not a native complete-outcome executor.",
+    "Preserve original paper retrieval column labels and authoritative correction provenance in the task and both access-condition descriptions: Table1 one-hour Brain57.4% becomes corrected Image retrieval brain->image0.574; original Image79.0% becomes corrected Brain retrieval image->brain0.790. Correct labels cannot establish scientific improvement or supply missing reconstruction/transfer results.",
+    "Native per-image reconstructions/features/decisions and the two-arm normalized Figure5 comparison require identity-indexed output representation and source-native verification. The scalar schema currently captures fifty real table summaries only. Genuine missing Figure5 source targets/references and native identities are distinct from that schema limitation; no placeholder family or invented reduction fills it.",
+    "Independent operator execution must bind submitted analysis, authentic inputs, checkpoints/runtime/exposure and granular outputs, then recompute every selected metric and Figure5 reduction. Require per-image reconstruction/metric evidence, full retrieval query outcomes and exact arm/reference joins; printed-value agreement is not reproduction.",
+    "Freeze source-justified reproduction tolerances/uncertainty and a separate same-one-hour improvement decision with a qualified author comparator. Thirty overlapping retrieval pools cannot supply participant-level uncertainty or superiority. Single subject1 transfer support cannot be pooled as four-participant comparative evidence. No numerical margin or joint rule is inferred from printed precision.",
+    "Forty-session performance, Table6, additional durations, human preference, captions/GNet, architecture, image-generation ceiling, COCO retrieval and UMAP/ROI analyses remain separate retained evidence; they are not mandatory selected task outcomes. The forty-session normalization reference is preserved only in its original selected Figure5 role.",
+    "Canonical owner must integrate the accepted target and coordinated factual anchors into task/improvement/reproduction and both access-condition descriptions, preserving predecessor bytes, then bind final actual task/registry/outcomes identities. This external draft intentionally differs from unchanged improvement anchors and must not be bound to the old outcome sidecar. Both paired protocols, budgets and all four scientific outcomes remain unresolved."
+  ]
+}

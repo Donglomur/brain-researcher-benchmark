@@ -1,0 +1,1453 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-replacement-016",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The accepted registered primary is the comparative participant/ROI profile, temporal-model versus classification-task, and architecture/layer result family on the repeated test videos. Indexed-array v2 can represent these source quantities without invented scalar reductions. Authentic native references, exact result-specific layer/group membership, historical settings, independent derivation and comparison criteria remain unresolved. Candidate alignment is a separate empirical performance outcome and cannot be silently bound as same-primary improvement.",
+  "source_paper": {
+    "title": "One Hundred Neural Networks and Brains Watching Videos: Lessons from Alignment",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf",
+      "locator": "Official ICLR 2025 Methods 3.1-3.3; Figure2 temporal/task comparison; Figures4-5 architecture/training comparisons; registered participant/regional and layer profiles. Scope adjudicator inspected this exact PDF by bounded web read; no local manuscript digest is claimed.",
+      "supports": "Registered comparative primary on ten participants and 102 repeated test videos. Model ranking is a related separate empirical performance outcome; all22 figures and the1000-video training analysis are not automatically mandatory."
+    },
+    {
+      "id": "calc",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/scripts/calc_alignment.py",
+      "locator": "main: feature extraction; RDMCreator; RSA; pvalue and layer-order logic",
+      "supports": "Released script uses PCA100 with102 estimator rows, raw RSA outputs and multiplicity-sensitive layer selection."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/configs/datasets/bmd.yaml",
+      "locator": "dataset_version, selection, average_external, transform",
+      "supports": "versionB/MNI152/merged_hemispheres_streams_pkl; test selection; subject data not externally averaged."
+    },
+    {
+      "id": "author_plot",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/repralign/utils/custom_plotting.py",
+      "locator": "get_max_corr_layer_df lines40-45; get_roi_mg_sigzero_sigpairs lines82-117; bmd_plot_per_roi_group lines344-421; adjust_layers and normalize_to_model_depth lines484-558; bmd_plot_all_layers_line_roi_groups lines561-694.",
+      "supports": "Source participant-mean selected-layer scores, group median/null comparisons, architecture grouping and adjusted normalized-depth curves. Exact historical figure callers, membership and plotting dependency behavior remain to be authenticated."
+    },
+    {
+      "id": "author_reader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/repralign/datasets/reader.py",
+      "locator": "BMDReader split selection, repetition averaging, raw2rdm and subject handling",
+      "supports": "Original neural observation processing and separate test/training panels; authentic derivative/stimulus joins remain unqualified."
+    },
+    {
+      "id": "author_features",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/repralign/models/custom_extraction_functions.py",
+      "locator": "preprocess_mmaction, extract_mmaction and source clip aggregation",
+      "supports": "Source feature derivation must be traced from actual videos/checkpoints; historical clip pooling must not silently become a different average."
+    },
+    {
+      "id": "author_null",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/repralign/utils/statistical_significance.py",
+      "locator": "Source permutation and pair/group significance functions",
+      "supports": "Reported null/group outputs require the complete source schedule, source layer-selection rule and correction conventions; conventional p-value significance is not reproduction equivalence."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The retained comparative participant/regional RSA profiles and declared temporal-model versus classification-task and architecture/layer findings on the original ten-participant, 102 repeated-test-video panel. Preserve complete source-defined support for each named result and its necessary controls; do not infer a requirement for all 22 figures or substitute the separate training-video analysis.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source BOLDMoments versionB MNI152 merged hemisphere/stream derivatives and corresponding original repeated test videos. The protocol provides source labels, not authenticated derivative/video/voxel identity manifests.",
+      "evidence_ids": [
+        "paper",
+        "config",
+        "author_reader"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original ten participants and all17 source ROIs across each named comparative result, with the complete original model support for that result. The99-model catalogue is retained source context; result-specific filters and all default emitted-layer identities still require authentication.",
+      "evidence_ids": [
+        "paper",
+        "author_plot"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original102 repeated test videos, each shown ten times. The separate1000-video training analysis does not become mandatory and cannot replace this support. The public test panel is not an unseen candidate-evaluation set.",
+      "evidence_ids": [
+        "paper",
+        "config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original video stimuli, source pretrained-model representations and participant/ROI responses support out-of-the-box RSA. Preserve classification-task and architecture/training controls for the named comparisons. A brain-fitted readout or target reweighting changes the original observation condition.",
+      "evidence_ids": [
+        "paper",
+        "calc"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source repetition averaging, participant-specific ROI responses,1-Pearson dissimilarities and the historical source feature/clip/reduction pipeline. Released calc_alignment uses unstandardized PCA100 with102 estimator rows; actual historical dependency, checkpoint, native-layer and clip-aggregation identities remain unresolved. No auxiliary reduction or training-video branch is automatically required.",
+      "evidence_ids": [
+        "paper",
+        "calc",
+        "config",
+        "author_reader",
+        "author_features"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Layer/ROI RSA is signed Spearman correlation of upper-triangle model and participant RDMs. Retain complete participant profiles and the source comparison outputs. Higher candidate RSA and stronger group contrasts do not by themselves improve the registered comparative findings.",
+      "evidence_ids": [
+        "paper",
+        "calc",
+        "author_plot"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain participant-specific RSA and original participant means/uncertainty. Source whole-model ROI summaries select the first maximal signed participant-mean layer in source order. The source group function takes medians across the original model group and median permutation arrays, with its own pairwise correction. Depth curves retain original adjusted layer identities and normalization; their actual figure-specific calls and dependency-defined error bars remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "author_plot",
+        "author_null"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete retained participant/regional RSA profiles, task-controlled temporal-model comparisons and architecture/layer comparisons on the original repeated test panel, including each result-specific model/ROI/layer group and indispensable uncertainty/null/noise-ceiling controls. The three indexed families below preserve those outputs without a tensor-cell expansion. A99-model/17ROI catalogue alone does not authenticate all result filters. No blanket335-condition,22-figure,two-table or1000-training-video obligation is imposed. Exact historical numerical arrays, result rosters, dependencies, source reductions and qualified comparison policies remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "calc",
+        "author_plot"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both paper+data access conditions would use the same admitted original repeated-video observations and budgets; the author-code condition additionally receives the pinned source manifest. Publication figures and values are allowed inputs but copying them is not computational reproduction. Candidate freeze/public-panel feedback policy and immutable data/exposure manifests remain unresolved. Separate candidate alignment must not populate a same-primary improvement cell.",
+      "evidence_ids": [
+        "paper",
+        "calc",
+        "config",
+        "author_reader"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "registered_participant_regional_rsa_profiles",
+      "kind": "indexed_array_family",
+      "description": "Complete registered participant and regional representational-similarity profiles on the repeated test videos, including original selected-layer profiles and indispensable source uncertainty/noise/null companions.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "registered_participant_regional_rsa_profiles",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "participant_rsa_rows",
+            "manifest_key": "participant_rsa_rows",
+            "source_quantity": "Original R_array participant RSA values for each native model/layer/ROI row",
+            "membership": "fixed",
+            "shape": [
+              null,
+              10
+            ],
+            "axes": [
+              {
+                "name": "native_rsa_row",
+                "units": "ordered model/layer/ROI record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original results.csv rows keyed by model, Layer_FullNames and ROI, retaining native layer order and skips. Exact emitted-layer roster and row order are unqualified; no padded model-by-layer rectangle is imposed."
+                }
+              },
+              {
+                "name": "participant",
+                "units": "source participant identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sub-01",
+                    "sub-02",
+                    "sub-03",
+                    "sub-04",
+                    "sub-05",
+                    "sub-06",
+                    "sub-07",
+                    "sub-08",
+                    "sub-09",
+                    "sub-10"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve ten participant values before any averaging, keeping source row and participant identities. Native fields and historical Net2Brain representation must be authenticated.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "mean_rsa_rows",
+            "manifest_key": "mean_rsa_rows",
+            "source_quantity": "Original source R per native model/layer/ROI row",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "native_rsa_row",
+                "units": "ordered model/layer/ROI record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original results.csv rows keyed by model, Layer_FullNames and ROI, retaining native layer order and skips. Exact emitted-layer roster and row order are unqualified; no padded model-by-layer rectangle is imposed."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source participant-mean RSA; do not maximize separately within participants or apply absolute values.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "sem_rsa_rows",
+            "manifest_key": "sem_rsa_rows",
+            "source_quantity": "Original source SEM per native model/layer/ROI row",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "native_rsa_row",
+                "units": "ordered model/layer/ROI record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original results.csv rows keyed by model, Layer_FullNames and ROI, retaining native layer order and skips. Exact emitted-layer roster and row order are unqualified; no padded model-by-layer rectangle is imposed."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "RSA standard-error units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source SEM and dependence; historical implementation/version and denominator remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "selected_model_roi_rsa",
+            "manifest_key": "selected_model_roi_rsa",
+            "source_quantity": "Source maximum signed participant-mean RSA for each original model and ROI",
+            "membership": "fixed",
+            "shape": [
+              99,
+              17
+            ],
+            "axes": [
+              {
+                "name": "model",
+                "units": "source model configuration identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "AlexNet",
+                    "Densenet161",
+                    "Densenet201",
+                    "efficientnet_b3",
+                    "efficientnet_b6",
+                    "regnet_x_16gf",
+                    "regnet_y_8gf",
+                    "ResNet34",
+                    "ResNet50",
+                    "ResNet101",
+                    "ResNet152",
+                    "resnext50_32x4d",
+                    "resnext101_32x8d",
+                    "VGG11",
+                    "VGG11_bn",
+                    "VGG19",
+                    "VGG19_bn",
+                    "wide_resnet50_2",
+                    "wide_resnet101_2",
+                    "inception_v3",
+                    "inception_v4",
+                    "repvgg_a2",
+                    "repvgg_b2",
+                    "seresnet50",
+                    "seresnext50_32x4d",
+                    "xception41",
+                    "xception71",
+                    "cait_s24_224",
+                    "cait_xxs24_224",
+                    "convit_small",
+                    "convit_base",
+                    "deit_small_patch16_224",
+                    "deit_base_patch16_224",
+                    "swin_tiny_patch4_window7_224",
+                    "swin_small_patch4_window7_224",
+                    "swin_base_patch4_window7_224",
+                    "twins_pcpvt_base",
+                    "vit_small_patch16_224",
+                    "vit_base_patch16_224",
+                    "mvitv2_small_in1k",
+                    "mvitv2_base_in1k",
+                    "c2d_r50_nopool_mma",
+                    "c2d_r101_nopool_mma",
+                    "c2d_r50_pool8_mma",
+                    "c2d_r50_pool16_mma",
+                    "TSN_r50_8",
+                    "TSN_r101_8",
+                    "TSN_d161_3",
+                    "TSN_mobones4_8",
+                    "TSN_swin_8",
+                    "timesformer_spaceOnly",
+                    "ircsn_r152",
+                    "ircsn_bnfrozen_r152_ig65m",
+                    "ircsn_bnfrozen_r50_ig65m",
+                    "ircsn_r152_ig65m",
+                    "ipcsn_bnfrozen_r152_ig65m",
+                    "ipcsn_r152",
+                    "i3d_r50_mma",
+                    "i3d_r50_dotprod",
+                    "i3d_r50_embgauss",
+                    "i3d_r50_gauss",
+                    "i3d_r50_heavy",
+                    "r2plus1d_r50_mma",
+                    "slowfast_r50_mma",
+                    "slowfast_r101_mma",
+                    "slow_r50_mma",
+                    "slow_r101",
+                    "slow_r50_in1k",
+                    "slow_r50_in1k_embgauss",
+                    "tanet_r50",
+                    "tpn_r50",
+                    "tsm_r50",
+                    "tsm_r50_dotprod",
+                    "tsm_r50_gauss",
+                    "tsm_r50_embgauss",
+                    "tsm_r50_mobones4_16",
+                    "x3d_s",
+                    "x3d_m",
+                    "MViT_v2_S",
+                    "MViT_v2_B",
+                    "video_swin_tiny",
+                    "video_swin_small",
+                    "video_swin_base",
+                    "timesformer_divST",
+                    "timesformer_jointST",
+                    "uniformer_S",
+                    "uniformer_B",
+                    "uniformer_v2_B_16_CLIP_k400",
+                    "uniformer_v2_B_16_CLIP_k710_k400",
+                    "videomae_B",
+                    "videomae_v2_S",
+                    "videomae_v2_B",
+                    "slow_r50_in1k_k710",
+                    "video_swin_small_k710",
+                    "uniformer_v2_B_16_CLIP_k710",
+                    "MViT_v2_S_ssv2",
+                    "MViT_v2_B_ssv2",
+                    "tsm_r50_ssv2",
+                    "TSN_r50_8_ssv2"
+                  ]
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "get_max_corr_layer_df uses groupby ROI R.idxmax per model dataframe; retain first maximum in source row order, selected layer and all original models/ROIs.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "selected_source_layer_index",
+            "manifest_key": "selected_source_layer_index",
+            "source_quantity": "Original selected layer index for each model/ROI",
+            "membership": "fixed",
+            "shape": [
+              99,
+              17
+            ],
+            "axes": [
+              {
+                "name": "model",
+                "units": "source model configuration identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "AlexNet",
+                    "Densenet161",
+                    "Densenet201",
+                    "efficientnet_b3",
+                    "efficientnet_b6",
+                    "regnet_x_16gf",
+                    "regnet_y_8gf",
+                    "ResNet34",
+                    "ResNet50",
+                    "ResNet101",
+                    "ResNet152",
+                    "resnext50_32x4d",
+                    "resnext101_32x8d",
+                    "VGG11",
+                    "VGG11_bn",
+                    "VGG19",
+                    "VGG19_bn",
+                    "wide_resnet50_2",
+                    "wide_resnet101_2",
+                    "inception_v3",
+                    "inception_v4",
+                    "repvgg_a2",
+                    "repvgg_b2",
+                    "seresnet50",
+                    "seresnext50_32x4d",
+                    "xception41",
+                    "xception71",
+                    "cait_s24_224",
+                    "cait_xxs24_224",
+                    "convit_small",
+                    "convit_base",
+                    "deit_small_patch16_224",
+                    "deit_base_patch16_224",
+                    "swin_tiny_patch4_window7_224",
+                    "swin_small_patch4_window7_224",
+                    "swin_base_patch4_window7_224",
+                    "twins_pcpvt_base",
+                    "vit_small_patch16_224",
+                    "vit_base_patch16_224",
+                    "mvitv2_small_in1k",
+                    "mvitv2_base_in1k",
+                    "c2d_r50_nopool_mma",
+                    "c2d_r101_nopool_mma",
+                    "c2d_r50_pool8_mma",
+                    "c2d_r50_pool16_mma",
+                    "TSN_r50_8",
+                    "TSN_r101_8",
+                    "TSN_d161_3",
+                    "TSN_mobones4_8",
+                    "TSN_swin_8",
+                    "timesformer_spaceOnly",
+                    "ircsn_r152",
+                    "ircsn_bnfrozen_r152_ig65m",
+                    "ircsn_bnfrozen_r50_ig65m",
+                    "ircsn_r152_ig65m",
+                    "ipcsn_bnfrozen_r152_ig65m",
+                    "ipcsn_r152",
+                    "i3d_r50_mma",
+                    "i3d_r50_dotprod",
+                    "i3d_r50_embgauss",
+                    "i3d_r50_gauss",
+                    "i3d_r50_heavy",
+                    "r2plus1d_r50_mma",
+                    "slowfast_r50_mma",
+                    "slowfast_r101_mma",
+                    "slow_r50_mma",
+                    "slow_r101",
+                    "slow_r50_in1k",
+                    "slow_r50_in1k_embgauss",
+                    "tanet_r50",
+                    "tpn_r50",
+                    "tsm_r50",
+                    "tsm_r50_dotprod",
+                    "tsm_r50_gauss",
+                    "tsm_r50_embgauss",
+                    "tsm_r50_mobones4_16",
+                    "x3d_s",
+                    "x3d_m",
+                    "MViT_v2_S",
+                    "MViT_v2_B",
+                    "video_swin_tiny",
+                    "video_swin_small",
+                    "video_swin_base",
+                    "timesformer_divST",
+                    "timesformer_jointST",
+                    "uniformer_S",
+                    "uniformer_B",
+                    "uniformer_v2_B_16_CLIP_k400",
+                    "uniformer_v2_B_16_CLIP_k710_k400",
+                    "videomae_B",
+                    "videomae_v2_S",
+                    "videomae_v2_B",
+                    "slow_r50_in1k_k710",
+                    "video_swin_small_k710",
+                    "uniformer_v2_B_16_CLIP_k710",
+                    "MViT_v2_S_ssv2",
+                    "MViT_v2_B_ssv2",
+                    "tsm_r50_ssv2",
+                    "TSN_r50_8_ssv2"
+                  ]
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source ordered layer index",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Carry the original Layer/Layer_FullNames correspondence and first-max tie choice; indices without authentic layer-name mapping are insufficient.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "selected_model_roi_sem",
+            "manifest_key": "selected_model_roi_sem",
+            "source_quantity": "Source SEM attached to selected model/ROI row",
+            "membership": "fixed",
+            "shape": [
+              99,
+              17
+            ],
+            "axes": [
+              {
+                "name": "model",
+                "units": "source model configuration identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "AlexNet",
+                    "Densenet161",
+                    "Densenet201",
+                    "efficientnet_b3",
+                    "efficientnet_b6",
+                    "regnet_x_16gf",
+                    "regnet_y_8gf",
+                    "ResNet34",
+                    "ResNet50",
+                    "ResNet101",
+                    "ResNet152",
+                    "resnext50_32x4d",
+                    "resnext101_32x8d",
+                    "VGG11",
+                    "VGG11_bn",
+                    "VGG19",
+                    "VGG19_bn",
+                    "wide_resnet50_2",
+                    "wide_resnet101_2",
+                    "inception_v3",
+                    "inception_v4",
+                    "repvgg_a2",
+                    "repvgg_b2",
+                    "seresnet50",
+                    "seresnext50_32x4d",
+                    "xception41",
+                    "xception71",
+                    "cait_s24_224",
+                    "cait_xxs24_224",
+                    "convit_small",
+                    "convit_base",
+                    "deit_small_patch16_224",
+                    "deit_base_patch16_224",
+                    "swin_tiny_patch4_window7_224",
+                    "swin_small_patch4_window7_224",
+                    "swin_base_patch4_window7_224",
+                    "twins_pcpvt_base",
+                    "vit_small_patch16_224",
+                    "vit_base_patch16_224",
+                    "mvitv2_small_in1k",
+                    "mvitv2_base_in1k",
+                    "c2d_r50_nopool_mma",
+                    "c2d_r101_nopool_mma",
+                    "c2d_r50_pool8_mma",
+                    "c2d_r50_pool16_mma",
+                    "TSN_r50_8",
+                    "TSN_r101_8",
+                    "TSN_d161_3",
+                    "TSN_mobones4_8",
+                    "TSN_swin_8",
+                    "timesformer_spaceOnly",
+                    "ircsn_r152",
+                    "ircsn_bnfrozen_r152_ig65m",
+                    "ircsn_bnfrozen_r50_ig65m",
+                    "ircsn_r152_ig65m",
+                    "ipcsn_bnfrozen_r152_ig65m",
+                    "ipcsn_r152",
+                    "i3d_r50_mma",
+                    "i3d_r50_dotprod",
+                    "i3d_r50_embgauss",
+                    "i3d_r50_gauss",
+                    "i3d_r50_heavy",
+                    "r2plus1d_r50_mma",
+                    "slowfast_r50_mma",
+                    "slowfast_r101_mma",
+                    "slow_r50_mma",
+                    "slow_r101",
+                    "slow_r50_in1k",
+                    "slow_r50_in1k_embgauss",
+                    "tanet_r50",
+                    "tpn_r50",
+                    "tsm_r50",
+                    "tsm_r50_dotprod",
+                    "tsm_r50_gauss",
+                    "tsm_r50_embgauss",
+                    "tsm_r50_mobones4_16",
+                    "x3d_s",
+                    "x3d_m",
+                    "MViT_v2_S",
+                    "MViT_v2_B",
+                    "video_swin_tiny",
+                    "video_swin_small",
+                    "video_swin_base",
+                    "timesformer_divST",
+                    "timesformer_jointST",
+                    "uniformer_S",
+                    "uniformer_B",
+                    "uniformer_v2_B_16_CLIP_k400",
+                    "uniformer_v2_B_16_CLIP_k710_k400",
+                    "videomae_B",
+                    "videomae_v2_S",
+                    "videomae_v2_B",
+                    "slow_r50_in1k_k710",
+                    "video_swin_small_k710",
+                    "uniformer_v2_B_16_CLIP_k710",
+                    "MViT_v2_S_ssv2",
+                    "MViT_v2_B_ssv2",
+                    "tsm_r50_ssv2",
+                    "TSN_r50_8_ssv2"
+                  ]
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "RSA standard-error units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Carry SEM from the same selected native row; do not replace with a best-participant or model-family uncertainty.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "calc",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "lower_noise_ceiling",
+            "manifest_key": "lower_noise_ceiling",
+            "source_quantity": "Source lower neural noise-ceiling profile",
+            "membership": "fixed",
+            "shape": [
+              17
+            ],
+            "axes": [
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "RSA correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover the original participant-based lower-noise-ceiling computation and ROI support; no independently invented ceiling formula or normalization.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_reader",
+              "calc"
+            ]
+          },
+          {
+            "id": "upper_noise_ceiling",
+            "manifest_key": "upper_noise_ceiling",
+            "source_quantity": "Source upper neural noise-ceiling profile",
+            "membership": "fixed",
+            "shape": [
+              17
+            ],
+            "axes": [
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "RSA correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover the original upper-noise-ceiling computation and all ROI support. Raw versus UNC-normalized plotting must follow the original named invocation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_reader",
+              "calc"
+            ]
+          },
+          {
+            "id": "native_layer_nulls",
+            "manifest_key": "native_layer_nulls",
+            "source_quantity": "Source null arrays for native model/layer/ROI rows",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "native_rsa_row",
+                "units": "ordered model/layer/ROI record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original results.csv rows keyed by model, Layer_FullNames and ROI, retaining native layer order and skips. Exact emitted-layer roster and row order are unqualified; no padded model-by-layer rectangle is imposed."
+                }
+              },
+              {
+                "name": "source_permutation",
+                "units": "shared source null-schedule index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered permutation schedule, seed and count are not authenticated; preserve common schedules across models/groups."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed RSA null statistic",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source permutations on original stimulus identities, shared across model conditions; recover actual schedule, count and cached-row joins.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "calc",
+              "author_null",
+              "author_plot"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "calc",
+          "author_plot"
+        ]
+      },
+      "required_granular_output_ids": [
+        "source_brain_responses",
+        "source_video_features",
+        "source_rdms",
+        "native_rsa_rows",
+        "source_noise_and_nulls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently reconstruct and compare every named native member on its original source support against an authenticated source-equivalent numerical reference. No generic vector norm, stronger-effect criterion or tolerance is adopted; original reference arrays and a scientific equivalence policy remain unresolved.",
+        "independent_unit": "Original human participant for neural inference; model configurations are related design comparisons, not additional human replicates.",
+        "dependence": "Repeated videos, shared participants/ROIs, correlated model families, selected layers and shared permutation schedules must retain their original dependence.",
+        "multiplicity": "Recover the actual result-specific model/ROI/layer/group family and source correction; no universal new correction or favorable subset is imposed.",
+        "rationale": "V2 represents the numerical result family. Missing authentic reference/identity/criterion evidence is a source qualification gap; scientific interpretation and same-primary superiority are not inferred from numerical agreement or larger RSA.",
+        "evidence_ids": [
+          "paper",
+          "calc",
+          "author_plot"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "calc",
+        "author_plot"
+      ]
+    },
+    {
+      "id": "registered_temporal_task_architecture_comparisons",
+      "kind": "indexed_array_family",
+      "description": "Registered temporal-model versus classification-task comparisons and original architecture/training group comparisons, preserving exact matched-task group support and source inferential outputs.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "registered_temporal_task_architecture_comparisons",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "group_median_rsa",
+            "manifest_key": "group_median_rsa",
+            "source_quantity": "Source task-controlled temporal, architecture and training-group median RSA profiles",
+            "membership": "fixed",
+            "shape": [
+              null,
+              17
+            ],
+            "axes": [
+              {
+                "name": "source_comparison_group",
+                "units": "named result and original model-group identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact Figure2 temporal/task and Figures4-5 architecture/training group/filter calls, plus declared registered counterparts. Preserve classification-task conditioning and original membership; protocol ModelType/ArchType alone does not authenticate the full result-specific roster."
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "get_roi_mg_sigzero_sigpairs takes median of the original group selected-layer R values; authenticate exact figure-specific model/task filters. No pooled human/model or cross-ROI scalar.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "group_median_nulls",
+            "manifest_key": "group_median_nulls",
+            "source_quantity": "Source model-group median permutation profiles",
+            "membership": "fixed",
+            "shape": [
+              null,
+              17,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_comparison_group",
+                "units": "named result and original model-group identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact Figure2 temporal/task and Figures4-5 architecture/training group/filter calls, plus declared registered counterparts. Preserve classification-task conditioning and original membership; protocol ModelType/ArchType alone does not authenticate the full result-specific roster."
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              },
+              {
+                "name": "source_permutation",
+                "units": "shared source null-schedule index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered permutation schedule, seed and count are not authenticated; preserve common schedules across models/groups."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed RSA null statistic",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Median across stacked original group NullDistrib arrays at each shared permutation, with identical model membership and original schedule.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot",
+              "author_null"
+            ]
+          },
+          {
+            "id": "group_against_zero_pvalues",
+            "manifest_key": "group_against_zero_pvalues",
+            "source_quantity": "Original group-median significance-against-zero profiles",
+            "membership": "fixed",
+            "shape": [
+              null,
+              17
+            ],
+            "axes": [
+              {
+                "name": "source_comparison_group",
+                "units": "named result and original model-group identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact Figure2 temporal/task and Figures4-5 architecture/training group/filter calls, plus declared registered counterparts. Preserve classification-task conditioning and original membership; protocol ModelType/ArchType alone does not authenticate the full result-specific roster."
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "p-value",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source compute_significance_against_zero on the group null median and observed median. Recover source tails/count handling; p-values are descriptive/inferential output, not reproduction tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot",
+              "author_null"
+            ]
+          },
+          {
+            "id": "ordered_group_pair_pvalues",
+            "manifest_key": "ordered_group_pair_pvalues",
+            "source_quantity": "Original ordered group-pair significance profiles",
+            "membership": "fixed",
+            "shape": [
+              null,
+              17
+            ],
+            "axes": [
+              {
+                "name": "ordered_group_contrast",
+                "units": "source result and ordered group pair",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original result-specific ordered group-pair identities and corrections from get_roi_mg_sigzero_sigpairs, without selecting favorable contrasts."
+                }
+              },
+              {
+                "name": "roi",
+                "units": "source ROI identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "V2",
+                    "V3v",
+                    "V3d",
+                    "hV4",
+                    "OFA",
+                    "LOC",
+                    "FFA",
+                    "PPA",
+                    "V3ab",
+                    "IPS0",
+                    "IPS1",
+                    "RSC",
+                    "EBA",
+                    "TOS",
+                    "MT",
+                    "STS"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source corrected p-value",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source pairwise null comparison and comb(number_of_groups,2) factor, with explicit Kinetics-710 exception. Authenticate each named original call; preserve source values rather than imposing new clipping/correction.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot",
+              "author_null"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "author_plot",
+          "author_null"
+        ]
+      },
+      "required_granular_output_ids": [
+        "native_rsa_rows",
+        "original_group_membership",
+        "source_noise_and_nulls",
+        "source_group_comparisons"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently reconstruct and compare every named native member on its original source support against an authenticated source-equivalent numerical reference. No generic vector norm, stronger-effect criterion or tolerance is adopted; original reference arrays and a scientific equivalence policy remain unresolved.",
+        "independent_unit": "Original human participant for neural inference; model configurations are related design comparisons, not additional human replicates.",
+        "dependence": "Repeated videos, shared participants/ROIs, correlated model families, selected layers and shared permutation schedules must retain their original dependence.",
+        "multiplicity": "Recover the actual result-specific model/ROI/layer/group family and source correction; no universal new correction or favorable subset is imposed.",
+        "rationale": "V2 represents the numerical result family. Missing authentic reference/identity/criterion evidence is a source qualification gap; scientific interpretation and same-primary superiority are not inferred from numerical agreement or larger RSA.",
+        "evidence_ids": [
+          "paper",
+          "author_plot",
+          "author_null"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "author_plot",
+        "author_null"
+      ]
+    },
+    {
+      "id": "registered_architecture_layer_profiles",
+      "kind": "indexed_array_family",
+      "description": "Complete registered model and architecture/layer profiles with source adjusted layer identities, normalized-depth curves and original uncertainty on the repeated test-video support.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "registered_architecture_layer_profiles",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "adjusted_depth_coordinates",
+            "manifest_key": "adjusted_depth_coordinates",
+            "source_quantity": "Original normalized layer/depth coordinates for registered architecture/layer profiles",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_depth_curve_row",
+                "units": "result/model-or-group/ROI/source-depth record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original plot-call and group membership, adjusted native layer identities and normalized depths. Model-specific ragged depth rows remain keyed records; display coordinates are not substituted for layer identities."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "relative model depth",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve adjust_layers branch: SlowFast stream maximum, original within-group layer reconciliation, and Layer divided by per-model MaxLayer. Exact original caller and membership remain unresolved; no guessed uniform interpolation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "adjusted_model_rsa",
+            "manifest_key": "adjusted_model_rsa",
+            "source_quantity": "Original per-model RSA ordinates on the source adjusted layer coordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_depth_curve_row",
+                "units": "result/model-or-group/ROI/source-depth record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original plot-call and group membership, adjusted native layer identities and normalized depths. Model-specific ragged depth rows remain keyed records; display coordinates are not substituted for layer identities."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Carry source-adjusted layer RSA ordinates alongside exact original layer identities; retain participant and ROI lineage to native RSA rows.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "group_curve_ordinates",
+            "manifest_key": "group_curve_ordinates",
+            "source_quantity": "Original displayed group/ROI layer-curve ordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_depth_curve_row",
+                "units": "result/model-or-group/ROI/source-depth record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original plot-call and group membership, adjusted native layer identities and normalized depths. Model-specific ragged depth rows remain keyed records; display coordinates are not substituted for layer identities."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "signed Spearman correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover the actual bmd_plot_all_layers_line_roi_groups invocation and dependency-defined lineplot estimator. Do not adopt the commented-out median estimator or guess a new group reduction.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot"
+            ]
+          },
+          {
+            "id": "group_curve_uncertainty",
+            "manifest_key": "group_curve_uncertainty",
+            "source_quantity": "Original group/ROI curve uncertainty endpoints",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_depth_curve_row",
+                "units": "result/model-or-group/ROI/source-depth record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original plot-call and group membership, adjusted native layer identities and normalized depths. Model-specific ragged depth rows remain keyed records; display coordinates are not substituted for layer identities."
+                }
+              },
+              {
+                "name": "interval_bound",
+                "units": "source plotted uncertainty endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "RSA interval endpoint",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source lineplot uses errorbar None for separate plots or ci95 otherwise. Recover original separate flag, dependency/bootstrap behavior and numerical endpoints; this is reported uncertainty, not an acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "author_plot"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "author_plot"
+        ]
+      },
+      "required_granular_output_ids": [
+        "native_rsa_rows",
+        "original_group_membership",
+        "source_depth_curves"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently reconstruct and compare every named native member on its original source support against an authenticated source-equivalent numerical reference. No generic vector norm, stronger-effect criterion or tolerance is adopted; original reference arrays and a scientific equivalence policy remain unresolved.",
+        "independent_unit": "Original human participant for neural inference; model configurations are related design comparisons, not additional human replicates.",
+        "dependence": "Repeated videos, shared participants/ROIs, correlated model families, selected layers and shared permutation schedules must retain their original dependence.",
+        "multiplicity": "Recover the actual result-specific model/ROI/layer/group family and source correction; no universal new correction or favorable subset is imposed.",
+        "rationale": "V2 represents the numerical result family. Missing authentic reference/identity/criterion evidence is a source qualification gap; scientific interpretation and same-primary superiority are not inferred from numerical agreement or larger RSA.",
+        "evidence_ids": [
+          "paper",
+          "author_plot"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "author_plot"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authentic derivative/video/checkpoint, participant/ROI and source layer identities remain unqualified.",
+    "Historical preprocessing, reduction, dependency settings and exact original numerical profiles remain unresolved.",
+    "The existing candidate/reference comparator is descriptive and does not independently authenticate input observations, source feature extraction, RDMs, RSA or original reference values.",
+    "Candidate freeze, permitted public-panel feedback, selection-aware uncertainty, meaningful effect and a predeclared across-ROI decision rule remain unresolved; the public panel is not an unseen test.",
+    "Stronger family contrasts, smaller p-values or higher candidate fit do not by themselves establish improvement of the comparative scientific findings or a biological mechanism.",
+    "Scalar summaries do not cover the retained profile and curve families. Mixed primary-reproduction and separate candidate-performance targets remain unavailable as a same-target bundle when the schema cannot represent the distinction.",
+    "The official pinned ICLR PDF was inspected through a bounded web read; no local manuscript content digest is claimed. Prior component reviews and the assistant-derived all-figure inventory do not establish named-result revision authority.",
+    "The three structured families describe authentic named result quantities, not numerical references. All expected references, authentic identity/domain/derivation policies and comparison criteria remain null/unresolved.",
+    "Exact result-specific group and native layer rosters, curve invocations, source SEM/ceiling definitions and plotting dependency settings remain unqualified; nominal source dimensions are not authenticated artifact shapes.",
+    "V2 can represent these indexed numerical outputs. No overall scalar-only schema block is asserted; the separate candidate-performance objective still cannot be silently paired as the same primary target."
+  ]
+}
