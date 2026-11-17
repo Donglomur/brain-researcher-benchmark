@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-050",
   "track": "neural",
-  "title": "Motor gamma beyond behavior state",
+  "title": "Incremental contemporaneous movement information in motor gamma",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "sensorimotor_readout"
   },
-  "scientific_question": "Do motor-region gamma associations with movement remain after behavior state and time-of-day matching?",
+  "scientific_question": "Does prespecified motor-channel 80–100 Hz log power improve same-window wrist-speed prediction over behavior state and time of day in held-out patients or, separately, held-out days of the same patient?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Patient-level gamma/movement contrast, matched-event analysis and error evidence."
+    "Independently computed paired difference in held-out movement MSE between state/time baseline and gamma-augmented prediction; positive, null and negative increments are all valid. Matched high-minus-low movement gamma contrasts are secondary."
   ],
   "input_assets": {
     "routes": [
@@ -75,19 +75,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "acquisition/ElectricalSeries data, rate (500 Hz archive description)",
-    "allowed_context": "processing/behavior/Position spatial_series R_Wrist and eight other keypoints at30Hz; intervals/epochs start_time,stop_time,labels",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Official notebook windows both streams using seconds and their sample rates, then downsamples neural features to pose bins. Starting-time consistency still needs payload validation.",
-    "source_contract_evidence": "DANDI metadata+assets and pinned notebook source"
+    "inputs": [
+      "Bounded exported ECoG samples×channels, actual ecog_time_s and validity mask; anatomy-selected motor channels fixed before outcomes.",
+      "Selected contralateral wrist xy pose, actual pose times, confidence and validity for operator target construction; exact behavior state epochs and qualified local time offset.",
+      "Gamma feature: demean each independent 2-second window, Hann taper, integrate one-sided periodogram for 80≤f<100 Hz, then mean natural-log power over fixed motor channels."
+    ],
+    "forbidden_inputs": [
+      "Query wrist speed/pose values and held-out targets in participant prediction input; target-derived channel selection or held-out model tuning.",
+      "Whole-source signal/pose reads beyond approved bounded export, unqualified source quality flags or assumed synchronous stream starts.",
+      "Future-window signal used to claim forecasting, unknown artifact gaps treated as valid finite zeros."
+    ],
+    "case_identity": "Prepared feature rows carry unique id plus patient/day/session and start/stop UTC support; raw source asset path/id and export hash bind operator provenance. No complete authentic AJILE12 row inventory is admitted.",
+    "split": "population_transfer leaves each whole patient out and requires at least three patients; within_patient_days separately holds each day out within patient and requires at least two days per patient. Same-patient train/test supports require a 2-second guard.",
+    "coverage": "All declared exports are processed with explicit exclusions for confidence<0.4, invalid samples, missing frame support, nonfinite values or state transitions. Full 12-patient/55-day authentic source coverage remains unverified; reports retain unmatched matched-analysis windows/days/patients."
   },
-  "biological_unit": "12 patients,55 day/session NWBs; subject and session in filenames",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Patient for population-transfer summaries; days nested within patient. Within-patient day transfer is a separately named estimand.",
+  "case_definition": "Nonoverlapping fixed 2-second supported window with one exact behavior-state label set, nested in day and patient.",
   "split": {
-    "policy": "Group all days by patient for population transfer; within-patient held-out days reported separately; continuous guard bands around feature windows.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "population_transfer leaves each whole patient out and requires at least three patients; within_patient_days separately holds each day out within patient and requires at least two days per patient. Same-patient train/test supports require a 2-second guard.",
+    "coverage": "All declared exports are processed with explicit exclusions for confidence<0.4, invalid samples, missing frame support, nonfinite values or state transitions. Full 12-patient/55-day authentic source coverage remains unverified; reports retain unmatched matched-analysis windows/days/patients."
   },
   "reference": {
     "source_code_url": "https://github.com/BruntonUWBio/ajile12-nwb-data",
@@ -101,50 +107,103 @@
     "data_url": "https://dandiarchive.org/dandiset/000055"
   },
   "controls": [
-    "Anatomy chosen before outcomes",
-    "matched state/time",
-    "artifact rejection",
-    "day-level autocorrelation controls."
+    "Anatomy and wrist laterality before outcomes; verify line/muscle artifact masks and camera/pose error.",
+    "Actual stream offsets, regular clocks, full-window support, no state transition and no cross-window filter support.",
+    "Equal patient/day weighting, no held-out state unseen in training, no target leakage through transform selection.",
+    "Report matched analysis separately from complete prediction support; retain unmatched days and patients."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The target is an across-patient matched prediction increment requiring held-out model fitting and aggregation.",
+      "boundary": "Reading isolated waveform images cannot establish this estimand; a direct single-window movement decoder would be a separately specified condition.",
+      "evidence_ids": [
+        "scorer"
+      ],
+      "missing": [
+        "No direct-observation task or direct-response protocol for this aggregate contrast."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A future ECoG/spectrum viewer could support artifact and matched-window investigation.",
+      "boundary": "Only permitted observation projections; target-derived matching remains operator-only and cannot leak query speed to a prediction actor.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed-viewer implementation or complete participant transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical prepare/evaluate routines support an operator investigation and reproducible conditional-contrast calculation.",
+      "boundary": "Per-case participants would need protected source/target roles, matched tools and sealed fitting access; current operator CLI does not provide that isolation.",
+      "evidence_ids": [
+        "scorer",
+        "source_mapping"
+      ],
+      "missing": [
+        "Participant case harness and independent authentic execution evidence.",
+        "Operator analysis/comparator source does not supply a participant episode or candidate programme execution route."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The fixed evaluation programme implements a predeclared gamma feature and ridge comparison.",
+      "boundary": "Keep protocol, folds, anatomy and QC frozen before authentic outcomes; this supplied comparator is not an arbitrary candidate runner.",
+      "evidence_ids": [
+        "scorer"
+      ],
+      "missing": [
+        "Arbitrary candidate execution/admission and genuine full-source qualification.",
+        "Operator analysis/comparator source does not supply a participant episode or candidate programme execution route."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out incremental movement prediction and paired effect intervals.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Equal-patient, equal-day held-out baseline-minus-gamma movement MSE, pixels²/second²",
+      "direction": "two_sided",
+      "aggregation": "MSE within each patient/day, equal mean across days within patient, then equal mean across patients. State the split mode.",
+      "rationale": "Reports the signed fixed-comparator prediction increment on all supported days, including constant-target days. Positive, null and negative increments are valid scientific answers. A larger increment is not an unrestricted contestant reward or evidence of better interpretation; the existing evaluator computes the contrast but supplies no answer-error rubric for an investigator report."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Delta R² with its defined-day/patient counts; constant-target days remain undefined for R² but retain MSE.",
+      "Matched high-minus-low gamma log-power differences, matched/unmatched coverage and patient/day summaries.",
+      "Complete baseline/gamma/day-shift predictions, per-day errors and exclusion ledger; source pixels remain explicit."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "State/time ridge baseline",
+        "inputs": "State one-hot terms and daily sine/cosine phase.",
+        "procedure": "Fixed alpha=1 weighted ridge with unpenalized intercept; training weights equal patients, days within patient and windows within day; train-only scaling."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Matched gamma-augmented ridge",
+        "inputs": "Exactly the baseline design plus fixed motor gamma log-power feature.",
+        "procedure": "Same alpha, train-only scaling and held-out rows; nuisance-feature shrinkage can still affect conditional interpretation, so this fixed-estimator increment is not all possible neural information."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Prespecified matched windows and temporal diagnostic",
+        "inputs": "Held-out windows matched within patient/day/exact state/hour; gamma circularly shifted by half the ordered day sequence for a separate diagnostic.",
+        "procedure": "High/low threshold is training-window median speed; greedily match nearest unused opposite-group window within 300 seconds. Refit shifted model; gaps/state changes and wrap prevent exchangeable-null claims."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Anatomy and wrist laterality before outcomes; verify line/muscle artifact masks and camera/pose error.",
+      "Actual stream offsets, regular clocks, full-window support, no state transition and no cross-window filter support.",
+      "Equal patient/day weighting, no held-out state unseen in training, no target leakage through transform selection.",
+      "Report matched analysis separately from complete prediction support; retain unmatched days and patients."
+    ],
+    "uncertainty": "Descriptive 2,000-draw seed-50 patient cluster bootstrap of patient summaries, with day averaging before resampling. No interval for fewer than two contributing patients; endpoint-specific support counts must accompany intervals. Overlapping train folds and limited cohort constrain generalization.",
+    "failure_policy": "Reject invalid manifests/clocks/source IDs, cross-session interval overlaps, split-guard violations, unsupported training states and nonfinite predictions. Retain excluded windows and reasons; require complete target IDs for both predictors. Undefined R² is reported with counts, never used to replace full-support MSE.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "2aa996ad91e3fad41212d4a0d7c715e07abff80622446bfee90b1738ad11dd9c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "a313ed58e5be0dc8a647a5ee34d053adb5f5edcaacf4a5650b994837cc9457bb"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -221,6 +280,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-055",
+  "track": "neural",
+  "title": "Repeated-image EEG identification",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H031"
+    ],
+    "titles": [
+      "THINGS-EEG2"
+    ],
+    "overlap_groups": [
+      "THINGS-stimulus-family"
+    ],
+    "task_family": "visual_identification"
+  },
+  "scientific_question": "Can released EEG identify one of 200 candidate images for a held-out person without labeled target-person calibration?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Independent 200-candidate scores and a balanced-panel one-to-one assignment per participant."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://osf.io/3jk45/",
+      "https://doi.org/10.1016/j.neuroimage.2022.119754",
+      "https://github.com/gifale95/eeg_encoding",
+      "https://api.osf.io/v2/nodes/anp5v/files/osfstorage/",
+      "https://api.osf.io/v2/nodes/y63gw/files/osfstorage/",
+      "https://api.osf.io/v2/licenses/563c1cf88c5e4a3877f9e96a/",
+      "https://raw.githubusercontent.com/gifale95/eeg_encoding/101997d4f14c41b615bcaf8c0907740106d260c5/04_synthesizing_eeg_data/linearizing_encoding_utils.py",
+      "https://raw.githubusercontent.com/gifale95/eeg_encoding/101997d4f14c41b615bcaf8c0907740106d260c5/LICENSE.md",
+      "../specifications/NEURAL_EEG_EVIDENCE.md"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H031",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "5b663b0d8126950c93096fa1c83271495c883caa43f07cf6834060c063c1eacc",
+        "data_manifest": {
+          "version": "OSF file revisions: subject01version1,modified2022-08-12; collection is not a sealed release",
+          "manifest_url": "https://api.osf.io/v2/nodes/anp5v/files/osfstorage/",
+          "subjects": 10,
+          "example_assets": [
+            {
+              "name": "sub-01.zip",
+              "osf_id": "62f6b4ff170d520c73c27c1e",
+              "bytes": 1071722467,
+              "sha256": "f25d5ea30ba6811edd7ebd460d7b271edaf527b6920ab2d3d6e7950e9ee9639f"
+            },
+            {
+              "name": "image_metadata.npy",
+              "osf_id": "625c3f0d0bfe3c21cf182889",
+              "bytes": 656579,
+              "sha256": "681a75633c59a356a66ca19a277429c1d48a00a98405ff96e53ee0b9f00b397c"
+            }
+          ],
+          "bounded_storage": "~1.07GBcompressed per subject; ten ZIPsizes observed near10.72GBtotal; raw/source EEG is separate."
+        },
+        "recording_contract": {
+          "neural": "preprocessed_eeg_training.npy/test arrays with preprocessed_eeg_data,ch_names,times keys in official loader",
+          "labels": "Image identity/category supplied by image_metadata.npy and training/test image archives; training arrays ordered by image and repetition",
+          "time_alignment": "times vector carries epoch time; preserve sensor/time axes and repetitions; exact array dimensions require bounded payload verification",
+          "biological_ids": "sub01–10 manifest entries; reference supports within- and leave-one-subject-out encoding",
+          "evidence": "OSF actual recording ZIPs + image metadata hashes; pinned loader and encoding entrypoint"
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "preprocessed_eeg_training.npy/test arrays with preprocessed_eeg_data,ch_names,times keys in official loader",
+    "allowed_context": "Image identity/category supplied by image_metadata.npy and training/test image archives; training arrays ordered by image and repetition",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "times vector carries epoch time; preserve sensor/time axes and repetitions; exact array dimensions require bounded payload verification",
+    "source_contract_evidence": "OSF actual recording ZIPs + image metadata hashes; pinned loader and encoding entrypoint"
+  },
+  "biological_unit": "sub01–10 manifest entries; reference supports within- and leave-one-subject-out encoding",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Original test concepts excluded from supervised fitting; outer leave-one-person-out using only other people training arrays; concept-grouped development; released MVNN exposure declared.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/gifale95/eeg_encoding",
+    "commit_or_archive_version": "101997d4f14c41b615bcaf8c0907740106d260c5",
+    "entrypoints": [
+      "04_synthesizing_eeg_data/linearizing_encoding.py",
+      "04_synthesizing_eeg_data/linearizing_encoding_utils.py",
+      "05_synthetic_data_analyses/zero_shot_identification.py"
+    ],
+    "role": "Official EEG encoding and image-identification source; reference execution and task-case mapping remain untested.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1016/j.neuroimage.2022.119754",
+    "data_url": "https://osf.io/3jk45/"
+  },
+  "controls": [
+    "80-repeat means",
+    "equal batch prior",
+    "opaque IDs",
+    "candidate-only and alignment-shuffle references",
+    "matched encoder tools."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Participant-macro assignment Top-1; independent-query Top-1 separately reported.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": "~1.07GBcompressed per subject; ten ZIPsizes observed near10.72GBtotal; raw/source EEG is separate."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Apply NEURAL_EEG_EVIDENCE: transductive MVNN with repeat groups, train-person feature selection, safe ingest and exact metadata joins."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Data OSF license is CC BY4.0 whereas code LICENSE.md is CC BY-NC4.0; do not conflate."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Public repeated-image test set is exposed development."
+    },
+    {
+      "id": "source_3",
+      "requirement": "NPY dictionaries use pickle in author code; safe isolated ingestion and array schema checks required before execution."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Apply NEURAL_EEG_EVIDENCE: transductive MVNN with repeat groups, train-person feature selection, safe ingest and exact metadata joins."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "a80f6bb4597c067fbcefebe930054fa56731927d5878b6bab517cef251e61917",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

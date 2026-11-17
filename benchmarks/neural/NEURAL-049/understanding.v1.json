@@ -1,0 +1,284 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-049",
+  "title": "Event-cued retrospective reach-parameter decoding from ECoG",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The current definition explicitly adopts the supplied retrospective event-cued reach-angle scope with complete magnitude and onset-speed companions. Its ±5-second observations and within-patient day split differ from the preserved original causal continuous wrist-velocity target, which remains unmet history. Native census and execution are unqualified.",
+  "scientific_target": {
+    "question": "Conditional on a source-curated known reach onset, can retrospective ECoG predict the released reach parameters on held-out days of the same patient beyond permitted timing/acquisition context?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Primary: the released intervals/reaches Reach_angle_degrees folded vertical angle, in degrees within [-90,90], not circular heading. Complete secondary targets are Reach_magnitude_px and Onset_speed_px_per_sec from the same row.",
+    "answer_origin": "Authenticated released intervals/reaches rows in DANDI 000055 version 0.220127.0436; exact cue/target schema, source CSV lineage and full event counts still require native admission. The separate ReachEvents product is not a positional join key.",
+    "case_unit": "Every released curated reach row, nested in one of 55 within-patient held-day folds.",
+    "independent_unit": "Twelve patients for person-macro summaries; event counts and days are nested. Symmetric day holdout measures within-patient transfer, not held-person generalization.",
+    "inference_scope": "Retrospective event-cued decoding conditional on source selection and whole-query-batch exposure. C→NC quantifies recording values beyond common technical masks/context, not a causal effect or pure intrinsic reasoning.",
+    "exclusions": [
+      "Original continuous confidence-qualified signed wrist-velocity forecasting is not delivered by this scorer.",
+      "Known event onset is a behavioral oracle; no event detection or prospective pre-movement/chronological deployment claim.",
+      "No across-patient population transfer, metric-scale movement calibration or direct/no-tools neural understanding claim."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete 10-second [event onset−5,event onset+5) ECoG interval: 5000 source-grid samples at qualified 500 Hz with actual fractional alignment and all admitted within-person channels.",
+      "Common structure: opaque row IDs, relative alignment, channel axes and explicit source/structural availability masks. C adds permitted anonymized time-of-day/day ordinal/static acquisition context; N adds neural values; NC adds both.",
+      "All other days of the same patient supply labels for current-fold training; the full held-day label-free query batch is available equally to frozen and investigating methods."
+    ],
+    "forbidden_inputs": [
+      "Held-day angle/magnitude/speed, pose coordinates, reach stop/duration, speech/bimanual fields, behavior-derived electrode R² and private target-row mappings.",
+      "Source filenames, original patient/date identity, query-day whole-file signal statistics/quality flags for learned scaling, another fold fitted state or held-label feedback.",
+      "Using separate ReachEvents by assumed equal-length/position matching to intervals/reaches."
+    ],
+    "case_identity": "Opaque event IDs tied by operator-only census to exact intervals/reaches rows, source day and patient; the 12-person/55-object descriptor roster is fixed, but authenticated E_sd event counts remain unknown.",
+    "split": "All 55 source days each held once within its patient; 202 inner training-day folds for reference selection. All other days, including chronologically later days, may train. No held-person panel is implemented.",
+    "coverage": "Required full 12-patient/55-day source roster and every intervals/reaches row, including zero-row days and all-masked neural rows. Core F/I×C/N/NC, optional supplied-decoder and assignment-diagnostic panels are conditions of one task, not new benchmark IDs."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-patient out-of-fold R² for released folded vertical reach angle",
+      "direction": "higher",
+      "aggregation": "Pool all held-day event predictions within each person to compute 1−SSE/SST, then average equally over all 12 persons; retain negative R². Zero support or zero SST makes the full 12-person primary undefined.",
+      "rationale": "Measures patient-balanced performance on a genuine released behavior target while preserving the actual event-cued scope and complete cohort."
+    },
+    "secondary": [
+      "Complete magnitude R² in pixels and onset-speed R² in pixels/second, with separate SSE/SST/counts and raw versus projected prediction errors.",
+      "Complete C/N/NC contributions, F/I differences, fixed training-mean anchor and frozen reference-family comparisons.",
+      "Separate completion/status for optional supplied decoder and neural-bundle-assignment diagnostic; no borrowing their outputs to complete core."
+    ],
+    "comparators": [
+      {
+        "name": "Training mean and timing/acquisition context",
+        "inputs": "Current outer-training labels and permitted C context only.",
+        "procedure": "Training mean plus identical-context C model; same complete event support and fixed target-domain projection as neural methods."
+      },
+      {
+        "name": "Independent reference banks",
+        "inputs": "Same C/N/NC views and train-only transformations.",
+        "procedure": "Source defines ridge, boosted-tree and learned temporal-network families over 25 configurations with complete inner-day selection; R1 is anchor only after independent R2 parity. Authentic competence and resource feasibility remain unqualified."
+      },
+      {
+        "name": "Supplied-decoder and neural-assignment conditions",
+        "inputs": "Exact case-local trained reference for optional tool panel; whole coherent donor neural bundle for optional disrupted panel.",
+        "procedure": "Report agent-plus-decoder against decoder alone; regenerate disrupted training and held inputs and refit from first exposure under the same policy. The deterministic within-day reassignment is diagnostic, not an exchangeable causal randomization."
+      }
+    ],
+    "nuisance_controls": [
+      "Known onset shared across every view; source selection and retrospective post-onset support stay explicit.",
+      "Train-only scaling/selection within each inner fold; retain all masks and channels without target-derived electrode selection.",
+      "Equal permitted batches, tools and budgets for F/I; no global union of outer-fold training labels or cross-fold caches.",
+      "Angle is folded, not circular; pixel targets remain camera-dependent and uncalibrated."
+    ],
+    "uncertainty": "Source specifies whole-person bootstrap simultaneous contrast bands within separately named angle families, conditional on one realized author policy and overlapping training folds. Twelve convenience patients do not guarantee population inference; resampling events would pseudoreplicate.",
+    "failure_policy": "All source rows and three endpoints require finite unique predictions before targets are opened. Common target-blind projection uses angle [-90,90], magnitude/speed ≥0, while raw error is retained. An unresolved required row/person, zero SST or missing endpoint makes its complete result undefined; no valid-subset repair."
+  },
+  "implementation": {
+    "scorer_target": "program/grade.py reads protected angle/magnitude/speed arrays after output admission, recomputes inner selection SSE, per-person R², complete 12-person macro and contrasts. This differs from original continuous-velocity prediction.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Curated-retrospective programme implementation plus portable constructor/stage source; explicit F/I core and optional supplied-tool/assignment panels. The registered bridge still contains historical path aliases and cannot by itself establish a working relocated route.",
+    "missing": [
+      "Authentic full native event/channel/clock/target census and source-quality/rights qualification.",
+      "Qualified numerical reference agreement/competence, realistic resource feasibility, actual actor isolation and end-to-end native completion.",
+      "An implementation for the original continuous pre-movement velocity estimand, if that scope is retained as a future condition."
+    ],
+    "execution_evidence": "Inspected design, actual scorer/contracts and portable source boundaries. Source states native preparation/execution qualifications remain unestablished; no result or readiness follows from constructor/schema presence.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-049/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/DESIGN.md",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/SCORING_AND_CONTRASTS.md",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/SOURCE_RATIONALE.md",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/EXPOSURE_AND_EXECUTION_CONTRACT.md",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/reference-design/NUMERICAL_CONTRACTS.md",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/contracts.py",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/grade.py",
+      "benchmarks/neural/NEURAL-049/implementations/registered-runtime/score.py",
+      "benchmarks/neural/NEURAL-049/implementations/registered-runtime/portable-v1/README.md",
+      "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/provenance.json",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/investigator.py",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/actor_pipeline.py",
+      "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/candidate_worker.py"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential numeric or rendered single-event ECoG view would need an explicit finite response protocol on the same retrospective target.",
+      "boundary": "No direct result can be inferred from programmes operating on 5000×channel arrays and learned case-local state.",
+      "evidence_ids": [],
+      "missing": [
+        "No no-tools observation transport, rendering/quantization policy or demonstration protocol."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential bounded event waveform/spectrum viewer, preserving complete permitted channels/time support.",
+      "boundary": "Only typed actions over released neural observation projection; no pose/target/raw NWB access.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed-viewer source or response collection for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I source authors/edits analyses within a fresh held-day context; optional T1 supplies the exact case-local decoder.",
+      "boundary": "Same data, full label-free query batch and budgets as F; no held targets, cross-fold state or arbitrary original NWB reads.",
+      "evidence_ids": [
+        "access_contract",
+        "programme_contracts",
+        "investigator_source",
+        "actor_pipeline_source"
+      ],
+      "missing": [
+        "Physical isolation, authentic complete data and reference/model custody remain unqualified."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F source seals arbitrary prediction code and fitting/batch-adaptation recipe before study-value exposure.",
+      "boundary": "Training within an isolated held-day context is allowed; post-exposure unrestricted code generation is I, not F.",
+      "evidence_ids": [
+        "access_contract",
+        "programme_contracts",
+        "actor_pipeline_source",
+        "candidate_worker_source"
+      ],
+      "missing": [
+        "Native source-route qualification, full reference graph feasibility and complete observed execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original_definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/historical/task.pre-understanding.v1.json",
+      "sha256": "61b6541401327db0b2601f0bb222090ab7732b07552efdcd9dd3a3f8ecff41c3",
+      "supports": "Preserved original scientific question, source identity and proposed endpoint."
+    },
+    {
+      "id": "successor_design",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/DESIGN.md",
+      "sha256": "eb4c38c81085994a5906c6fe5b7949d5061810372ddabbd4a61e9dece91add84",
+      "supports": "Explicit change from continuous signed velocity to curated event-cued folded angle and complete 12-person/55-day scope."
+    },
+    {
+      "id": "scoring_contract",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/SCORING_AND_CONTRASTS.md",
+      "sha256": "dea81f0a4a6594f47a4f77e4929fd763427914d5ace36d75e0e5acfa5582e20b",
+      "supports": "Separate target units, complete person-macro denominators, common projection and limited uncertainty."
+    },
+    {
+      "id": "access_contract",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/EXPOSURE_AND_EXECUTION_CONTRACT.md",
+      "sha256": "b1a9b3da82d253d46c4b4df4a6e008c1c9b235a07e2ecee7810e8ac6ead20527",
+      "supports": "Exact fold-local actor projections and F/I/tool boundaries."
+    },
+    {
+      "id": "programme_contracts",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/contracts.py",
+      "sha256": "478e584455ca2440884757fc346cbd43597d2ac8cadade085dd3bab126f90114",
+      "supports": "Actual endpoints, views, people/day counts, reference families and gate identities."
+    },
+    {
+      "id": "scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/grade.py",
+      "sha256": "340a3fe280a34da14d5484aa06efc5660753e2923df3e05cb60daefdbfa4e532",
+      "supports": "Actual protected targets and angle/magnitude/speed scoring logic."
+    },
+    {
+      "id": "source_review",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/SOURCE_RATIONALE.md",
+      "sha256": "10173af1d3c58c972c8d72ea00e6cfce478710b5804d29672c665ebbc292ed24",
+      "supports": "Prior primary-source inspection and distinction between curated reach and continuous velocity."
+    },
+    {
+      "id": "ajile_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41597-022-01280-y",
+      "locator": "AJILE12 primary data paper; reused pinned review",
+      "supports": "Naturalistic ECoG and video-derived movement source with curated reach endpoints."
+    },
+    {
+      "id": "ajile_release",
+      "kind": "primary_source",
+      "url": "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/",
+      "locator": "Frozen release metadata; reused prior provenance",
+      "supports": "Source release identity, twelve patients and 55 recording-day NWBs."
+    },
+    {
+      "id": "additional_source_9",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/reference-design/NUMERICAL_CONTRACTS.md",
+      "sha256": "29c9341830f8a7039965c1fa65e4052f14bbd7771c3956d6cd33e999089b7073",
+      "supports": "Inspected independently specified numerical reference families, training-only selection and full-support parity requirements."
+    },
+    {
+      "id": "additional_source_10",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/registered-runtime/score.py",
+      "sha256": "86b3bb02d1a13bb7b7fd3e63dccaf053b0fabc4b060fb68fe1918875a811a453",
+      "supports": "Inspected registered historical bridge source and its source aliases; source presence does not prove relocation execution."
+    },
+    {
+      "id": "additional_source_11",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/registered-runtime/portable-v1/README.md",
+      "sha256": "df12cd44ea1f80aea1cc598e33e72e4a8f9dc8308e3a0db477e55072aa8cd616",
+      "supports": "Inspected implementation operating instructions and explicit unqualified deployment/source boundaries."
+    },
+    {
+      "id": "additional_source_12",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/provenance.json",
+      "sha256": "a440dceb61086f8f5efada614c992d561eea6bd898fc41c1b34f43a617bb6973",
+      "supports": "Reused exact primary-source pins and documented existing scientific/source-exposure limits."
+    },
+    {
+      "id": "investigator_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/investigator.py",
+      "sha256": "143e834d21f55f15f09032c0e402ab795512d661eee1a70f305d647dfcd67174",
+      "supports": "Actual source-only and case investigator loop emits Python analysis or submitted fit/predict methods; frozen calls accept typed numeric provider replies."
+    },
+    {
+      "id": "actor_pipeline_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/actor_pipeline.py",
+      "sha256": "e2fa6256c112ab400bf53fddc968b4ba6f243e7d6201f9224345fa6c972ce3e2",
+      "supports": "Actual held-day F versus I branch, full case views, supplied-tool lineage and separate fit/predict transport requests."
+    },
+    {
+      "id": "candidate_worker_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-049/implementations/programme-source/curated-retrospective-design-v1/implementation-v1/program/candidate_worker.py",
+      "sha256": "187525a16e3b6c3d0dcb56b3bbd9ff95ae56ca15c9ee746bc0a59a7d9f036c29",
+      "supports": "Actual authored fit/predict worker validates sealed state and complete finite three-endpoint arrays with common target-domain projection."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Prior source construction and historical failures remain preserved. No authentic full-study result, solver programme attempt or native model performance is established by this revision.",
+    "excluded_claims": [
+      "Original continuous confidence-qualified signed wrist-velocity forecasting is not delivered by this scorer.",
+      "Known event onset is a behavioral oracle; no event detection or prospective pre-movement/chronological deployment claim.",
+      "No across-patient population transfer, metric-scale movement calibration or direct/no-tools neural understanding claim."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Explicitly narrow the current target to supplied event-cued retrospective folded angle plus magnitude/speed; preserve original causal continuous wrist velocity as an unimplemented historical objective.",
+      "Specify oracle onset, ±5-second observations, within-person symmetric day holdout and full 12-person denominator; no population/chronological transfer claim.",
+      "Keep F/I and supplied-decoder modes distinct from direct or typed-viewer understanding."
+    ],
+    "source_review": "Inspected original registration, implementation scientific contract, numerical/preparation source and existing primary-source provenance. Reused explicitly pinned primary evidence; no native data acquisition or model run."
+  }
+}

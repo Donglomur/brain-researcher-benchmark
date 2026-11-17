@@ -1,0 +1,222 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-055",
+  "title": "Repeated-image EEG identification",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Public source implements a ten-person,200-candidate batch retrieval study with complete independent/programme/investigator comparisons. Authentic packets, numerical parity, execution containment and all30 scientific gates remain unqualified; source inspection is available but no current model result follows.",
+  "scientific_target": {
+    "question": "Can released80-repeat EEG means identify all200 test images of a held person without labeled target-person calibration, and how much do neural alignment and bounded investigator decisions contribute?",
+    "target_kind": "observation_decoding",
+    "known_answer": "A private bijection between200 opaque EEG query IDs and200 candidate-image IDs within each held-person panel.",
+    "answer_origin": "THINGS-EEG2 original image/response association authenticated by source mapping, never candidate-assigned labels.",
+    "case_unit": "A complete200-query held-person batch; the one-to-one assignment couples query decisions.",
+    "independent_unit": "Ten people;200 shared images,80 repetitions,conditions/seeds and960 cells are not independent people.",
+    "inference_scope": "Batch-assisted image retrieval from repeated, released noise-normalized EEG. Independent-query metrics are needed to separate signal from the known one-to-one batch prior.",
+    "exclusions": [
+      "No single-trial EEG decoding or strict inductive preprocessing claim.",
+      "No native direct or viewer understanding from F/I programme performance."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Per held-person query:80-repeat means over17 channels ×100 times; training four-repeat means on16,540 images from the other nine people.",
+      "200 candidate images through the fixed4096-dimensional feature representation plus authorized same-cell tools.",
+      "FULL,IMAGE_ONLY,ALIGN_SHUFFLE,PRE_ONLY,POST_ONLY matched arms in the full source study."
+    ],
+    "forbidden_inputs": [
+      "Labeled outer-person calibration, any original test EEG during fitting, query image mapping and original ordering.",
+      "Cross-fold state or new inference-time fitting/normalization/calibration on query data."
+    ],
+    "case_identity": "Exact opaque case/query/candidate IDs are in the future prepared ten-case panel; original subject identity and source mappings remain operator-side.",
+    "split": "Ten isolated leave-one-person-out folds with all nine inner people and concept exclusions. Source-released session MVNN already mixes train/test covariance and must be disclosed even though supervised fitting excludes the outer person.",
+    "coverage": "Ten panels ×200 queries. Current complete study specifies960 cells,96 panels,1,920 logical phases and150 reference banks; these are mandatory condition/workload counts, not additional tasks or executed cases."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant-macro one-to-one assignment Top-1",
+      "direction": "higher",
+      "aggregation": "Count correct bijective matches out of200 per person, then equal-weight ten people; report each frozen/investigator/tool condition separately.",
+      "rationale": "Matches the delivered complete-batch task while making the extra one-to-one prior explicit."
+    },
+    "secondary": [
+      "Independent-query Top-1, rank/log-loss metrics from the original scorer, and exact tie policy.",
+      "Paired FULL versus IMAGE_ONLY and ALIGN_SHUFFLE; PRE/POST comparisons; F/I and T0/T1 contrasts.",
+      "Coverage/failure bounds for incomplete panels remain diagnostics, not valid primary scores."
+    ],
+    "comparators": [
+      {
+        "name": "Independent R0/R1/R2/R3 banks",
+        "inputs": "Frozen same-cell training support and candidate features",
+        "procedure": "Implemented full-study reference bank generation; actual competence and source parity remain gates."
+      },
+      {
+        "name": "Candidate-only and alignment-shuffle controls",
+        "inputs": "Same candidate roster with neural information absent or training alignment permuted",
+        "procedure": "Implemented mandatory matched arms isolate batch/image priors and association use."
+      },
+      {
+        "name": "Independent-query decision",
+        "inputs": "Same200×200 score/probability matrix",
+        "procedure": "Score each row without assignment coupling and compare descriptively against exact maximum assignment."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep source image identity opaque and enforce concept-grouped training exclusions.",
+      "Report whitening/public source exposure and repeated-response aggregation; whitened coordinates are not raw microvolts.",
+      "Do not treat F/I equal allowances as equal consumption or unrestricted investigator semantics."
+    ],
+    "uncertainty": "Retain all ten paired-person effects and shared-image pairing; source report uncertainty remains conditional on validated pairing/resampling and the fixed shared stimulus panel.",
+    "failure_policy": "Validate every submitted panel against exact public IDs before private targets. Missing cells retain costs/failures; incomplete-panel bounds cannot replace full-panel Top-1. No silent retries or denominator shrinkage."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/README.md",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/protected.py",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/assignment.py",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/contracts/MODE_PERMISSIONS.json",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/legacy/028/scorer.py",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/programmes.py",
+      "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/broker.py"
+    ],
+    "scorer_target": "Authentic held-person image identity with distinct independent and bijective scores; complete protected numerical route is source-implemented and genuine decoding rather than copying source results.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Curated complete_study plus preparation/operator source; no authentic data/model assets or numerical execution qualification in this review.",
+    "missing": [
+      "Bind authentic full-ten packets, exact image/EEG coordinates and feature checkpoints.",
+      "Qualify native boundaries, F/I semantic compliance, costs and independent target-last grading.",
+      "Run competent references and numerical agreement checks before scientific ranking."
+    ],
+    "execution_evidence": "Source publication/inspection establishes integrity only; all30 scientific gates remain open and no new model or human attempt occurred."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No-tools reading of compact EEG traces or candidate displays is not a current condition.",
+      "boundary": "Current batch arrays and training/image models are tool/programme observations.",
+      "evidence_ids": [],
+      "missing": [
+        "Define faithful no-tools information view and independent response collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed EEG/candidate-image viewer is supplied.",
+      "boundary": "A viewer must preserve80-repeat representation and fixed candidate priors while hiding query associations.",
+      "evidence_ids": [],
+      "missing": [
+        "Audited viewer transport and complete-panel answer collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I: bounded online investigator decisions over authorized full-batch data/tools.",
+      "boundary": "Fresh same-cell context; only sealed action set; no new query fitting; full costs/failed operations retained.",
+      "evidence_ids": [
+        "e2",
+        "e5",
+        "e9"
+      ],
+      "missing": [
+        "Actual semantic/native/resource qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F: one precommitted numerical learning/search policy and sealed state.",
+      "boundary": "No investigator decisions or generated analysis policy in F; fixed scientific predictor calls permitted only in their declared role.",
+      "evidence_ids": [
+        "e3",
+        "e5",
+        "e8"
+      ],
+      "missing": [
+        "Full authentic execution and reference qualification."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "e1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-055/historical/task.pre-understanding.v1.json",
+      "sha256": "4f0956ffa8be24e64f0060a785b5189bb145c1d3d36a3980cc64729fde901298",
+      "supports": "Original registered scientific objective, source identity and limitations"
+    },
+    {
+      "id": "e2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/README.md",
+      "sha256": "bf201e2e233dfa28d1af487aac957e847e4a50f537f7f7cb25e8e00f40ae26aa",
+      "supports": "Curated full10 source scope, original qualification gaps and960 dependent study cells."
+    },
+    {
+      "id": "e3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/protected.py",
+      "sha256": "a7acb71c8290dd95c2f0726f1b03694b4825d5db4719a52a461c9b4022800cfc",
+      "supports": "Complete target-last original numerical scoring and failure-aware full-panel reporting."
+    },
+    {
+      "id": "e4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/assignment.py",
+      "sha256": "7298f00e81c3ac13db9ac00e4e01ff14e0782d6ba4c8e5a20e9d35d903657861",
+      "supports": "Exact maximum-weight bijection with deterministic lexicographic tie handling."
+    },
+    {
+      "id": "e5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/contracts/MODE_PERMISSIONS.json",
+      "sha256": "43e935217e43926337b740d76ca198116ba2b0864dd80bbd1c6f31aea849dee1",
+      "supports": "Distinct precommitted F versus bounded online investigator I permissions."
+    },
+    {
+      "id": "e6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/legacy/028/scorer.py",
+      "sha256": "32d523db849cf8f32120e44d2f5cdb47b46bd8d9657d8e3f05310d1c28f264f8",
+      "supports": "Original independent-query and assignment scoring semantics."
+    },
+    {
+      "id": "e7",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1016/j.neuroimage.2022.119754",
+      "locator": "Original source paper identified and pinned in the preserved registration",
+      "supports": "Source recording family and experimental measurement; prospective benchmark comparisons are specified separately."
+    },
+    {
+      "id": "e8",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/programmes.py",
+      "sha256": "2fcc3d57d7f02605c1c5ec039e40919516ae8c897b6a5f41fd5afdf359cb457f",
+      "supports": "Participant source commitment and same-cell FIT/INFER state identity."
+    },
+    {
+      "id": "e9",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-055/implementations/registered-runtime/complete_study/n055/broker.py",
+      "sha256": "9d0ec39e1e8cc86bd21fdfb606561d2c69a7ae3558dd19987351333ad93eeec9",
+      "supports": "Actual investigator generation restricted to I, sealed inference action set and original token/cost accounting."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome for this task is established by this source review. The separate four historical EEG/sleep programme attempts are not evidence for this task or its direct/viewer modes.",
+    "excluded_claims": [
+      "No single-trial EEG decoding or strict inductive preprocessing claim.",
+      "No native direct or viewer understanding from F/I programme performance."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make batch bijection a disclosed source of information and independent-query accuracy mandatory.",
+      "Tie the current full study to ten people, not960 benchmarks.",
+      "Distinguish bounded I semantics from direct interpretation and disclose transductive MVNN."
+    ],
+    "source_review": "Read original task, task README and the exact implementation/contract files listed below. Source declarations are distinguished from observed execution; primary citations reuse the preserved source audit unless the receipt explicitly records a fresh check."
+  }
+}

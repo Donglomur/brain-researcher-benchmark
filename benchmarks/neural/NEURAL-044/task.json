@@ -92,36 +92,81 @@
     ]
   },
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The complete registered target requires model fitting across overlapping stimulation schedules and mouse-level conditional comparisons. Reading a selected trace or effect plot would be a separate reduced interpretation condition.",
+      "boundary": "Do not relabel a selected visualization as completion of the full response-estimation/investigation target.",
+      "evidence_ids": [
+        "implementation-4",
+        "implementation-8"
+      ],
+      "missing": [
+        "A separately specified bounded observational question would be needed; no direct-observer episode exists."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "A typed calcium viewer could inspect artifacts, but no finite visual view currently delivers the full conditional estimand and controls required here.",
+      "boundary": "Keep any future visualization auxiliary to a complete numerical investigation, with no access to held response labels in prediction.",
+      "evidence_ids": [
+        "implementation-4",
+        "implementation-8"
+      ],
+      "missing": [
+        "No task-specific renderer or endpoint-preserving visual assessment is implemented."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Internal operator defines matched case-adaptive numerical investigation and held-response prediction with identical declared tools and limits.",
+      "boundary": "Separate observed-data effect reconstruction from private held-response targets; all candidate arms commit before target scoring, no feedback or test-batch adaptation.",
+      "evidence_ids": [
+        "implementation-7",
+        "implementation-10"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "The operator does not yet publish a separate participant input for its required investigation report; response packets alone do not establish that channel.",
+        "Actual isolated model/analysis process, provider qualification and complete report transport remain absent."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted response predictor and executable analysis can target the same packet and declared estimands.",
+      "boundary": "Freeze analysis and fitting recipe before query access; paired source packet/tool/resource equality; scorer receives targets only after commitments.",
+      "evidence_ids": [
+        "implementation-7",
+        "implementation-10"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "Public run/score refuses; source callability does not establish a completed programme."
+      ]
     }
   },
   "admission": {
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately.",
-    "research_qualified": false,
     "runnable": false,
-    "submission_ready": false
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   },
   "allowed_inputs": {
-    "allowed_context": [
-      "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
+    "inputs": [
+      "Investigation uses the complete stimulation schedule, source calcium/ROI identity, artifact and processing-support masks, independently measured movement, distance/power/site context and independent prestimulation baseline.",
+      "Tuning is computed on allowed regular-reward behavior blocks with all native directions and explicit behavior/rest/baseline cell links; fixed contact[0,1)seconds is a prospective choice.",
+      "Held-mouse response packets expose train-mouse response labels plus query target/follower tuning and nuisance features, restricted to independently pretest-classified sites."
     ],
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "neural_measurements": [
-      "NWB calcium imaging/ROI plane segmentation documented in DANDI"
+    "forbidden_inputs": [
+      "Held-mouse stimulation response signals/labels in the held-response prediction arm.",
+      "Response-derived held-mouse site labels, response-based cell matching, tuning fit on held behavior blocks, or baseline computed from stimulation responses.",
+      "Artificially isolated pulses ignoring192ms switching overlap, unknown movement replaced by zero, or nonresponding sites substituted for true sham."
     ],
-    "source_contract_evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations",
-    "time_alignment": "Contact-aligned tuning[0,1)seconds includes postcontact/reward activity. Response design retains the complete192ms switching schedule, ten100ms lag bins and independent baseline/ROI/clock lineage."
+    "case_identity": "Public case IDs are HMAC(response,held_mouse); response identities bind mouse,session,epoch,target_id,power,condition and follower ROI. The numerical report binds source and disposition digests. No authentic emitted roster has been produced.",
+    "split": "Implemented leave-one-mouse-out response prediction keeps all held-mouse responses private and accepts independently pretest-classified sites only. Tuning uses explicitly allowed versus held behavior blocks. Matching cutoffs/calipers come from other mice. Investigation reconstruction is a separate observed-data channel, not the prediction split.",
+    "coverage": "Required source ascertainment spans61 imaging/behavior sessions in15 mice and the52-stimulation-session/13-mouse subset. Full target×power×condition×ten100ms-lag design is retained; no subsampling when design exceeds capacity. Eligible pair counts and mouse support remain unverified."
   },
-  "biological_unit": "Mouse; complete reported61 behavior/imaging sessions15mice and52-stimulation-session13-mouse subset require genuine source identity/disposition. Trials/cells/folds/arms are nested, not extra cohorts.",
-  "case_definition": "Full mouse/session target x power x condition x ten100ms-lag basis with exposure integration; effect reconstruction and held-mouse response prediction are distinct channels, all controls retained.",
+  "biological_unit": "Mouse; cells, target/follower pairs, sessions, frames and overlapping pulses are nested dependent observations.",
+  "case_definition": "One held mouse with all eligible target×power×condition×follower responses; a separate complete mouse-level investigation report retains all controls and exclusions.",
   "construction_review": {
     "gates_open": 22,
     "operator_contract": "benchmarks/neuroscience/neural-044/OPERATOR_CONTRACT.json",
@@ -131,39 +176,59 @@
     "status": "source_only_proposal"
   },
   "controls": [
-    "Distance/activity matching",
-    "stimulation power",
-    "target selection",
-    "optical artifact and nonstimulated-cell controls."
+    "Retain full overlapping stimulation schedule and report rank/conditioning; regularization does not establish individual causal identifiability.",
+    "Remove direct/optically proximal targets below25µm; report[25,50),[50,100),[100,250] and>250µm strata.",
+    "Use separate prestimulation baseline with authenticated cross-epoch cell links; keep missing identities and unsupported comparisons visible.",
+    "Fit matching quartiles and0.2SD calipers on other mice; exact equality required for zero spread, tied quartiles are non-estimable.",
+    "Separate response-selected-site sensitivity from predictive sites classified independently before testing; absence of true sham stays absent."
   ],
   "evaluation": {
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "executor_ref": null,
-    "observable_endpoints": {
-      "definition": "Recomputed mouse-level effect and held-out response-model improvement.",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story.",
-      "scoring_status": "implemented_inactive_source; genuine inputs, native/reference/scorer qualification absent"
+    "primary": {
+      "name": "Held-mouse response MSE improvement over fixed nuisance-only ridge",
+      "direction": "higher",
+      "aggregation": "Proposed primary comparison: per-mouse nuisance-only MSE minus candidate MSE, averaged equally across eligible held mice; retain all unsupported mice as explicit dispositions. Existing code emits candidate MSE and reference nuisance-versus-tuning improvement separately, so this paired aggregate must be bound before an empirical claim.",
+      "rationale": "Requires prediction of withheld neural responses beyond measured nuisance structure. Numerical reproduction is a correctness prerequisite and cannot substitute for this outcome."
     },
-    "scorer_ref": null,
-    "source_api": "alm.operator.Operator; original target-last storage/grading and full scientific modules retained; not a verified central run/score route",
-    "unresolved_grading": [
+    "secondary": [
+      "Per-mouse candidate MSE and fixed tuning-reference MSE; report response units and model-derived label provenance.",
+      "Per-mouse adjusted/unadjusted tuning-response effects and crossfit matched high/low contrasts with uncertainty.",
+      "Independent numerical reproduction maximum error for effects, improvement and complete controls; interpretation sign is unscored.",
+      "Design rank/condition number, distance strata, optical-proximity exclusions, unmatched-pair dispositions and true-sham availability."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Nuisance-only held-mouse ridge",
+        "inputs": "Distance and squared distance, independent baseline, measured movement, power and independently pretest site class",
+        "procedure": "Implemented StandardScaler plus ridge alpha=1, fit on other mice; each training mouse total weight one."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Tuning-plus-nuisance held-mouse ridge",
+        "inputs": "Same nuisance features plus tuning similarity and site-class interaction",
+        "procedure": "Implemented fixed alpha=1 paired reference on identical train/test mice; gain does not establish causal tuning influence."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Full-schedule response estimator and null diagnostics",
+        "inputs": "Complete overlapping target×power×condition schedule, calcium, artifact/support masks and movement",
+        "procedure": "Implemented fixed ridge alpha=1, ten100ms lag bins through1s, exposure-integrated design; lead schedule and within-distance tuning rotations are diagnostics, not randomization p-values."
       }
-    ]
+    ],
+    "nuisance_controls": [
+      "Retain full overlapping stimulation schedule and report rank/conditioning; regularization does not establish individual causal identifiability.",
+      "Remove direct/optically proximal targets below25µm; report[25,50),[50,100),[100,250] and>250µm strata.",
+      "Use separate prestimulation baseline with authenticated cross-epoch cell links; keep missing identities and unsupported comparisons visible.",
+      "Fit matching quartiles and0.2SD calipers on other mice; exact equality required for zero spread, tied quartiles are non-estimable.",
+      "Separate response-selected-site sensitivity from predictive sites classified independently before testing; absence of true sham stays absent."
+    ],
+    "uncertainty": "Mouse-level paired response-improvement uncertainty and conditional-effect intervals; current source has approximate mouse t intervals for effects, not a qualified full predictive comparison. Do not use pair/frame counts as replication, and retain uncertainty from model-derived response labels as an unresolved limitation.",
+    "failure_policy": "Require exact response IDs, full finite response vectors, source/disposition digests and complete control-family reporting. Reject fabricated values for non-estimable mice. Preserve null/inconclusive results and unsupported matches; report missing actors/cases rather than dropping them.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "bf1527e700cfdca08ff9563841939bddeb07952fd7c16cbabf5c330945fecd2f",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "8ad7c2bb7f19d9c13d6485f78468e7f0c8687ac2969e252a70d2169b376cd822"
+    }
   },
   "historical_specification": {
     "document": {
@@ -518,7 +583,7 @@
     "Issue and independently qualify original source/mapping/clock/target/native/provider/resource producers before scientific execution."
   ],
   "primary_outputs": [
-    "Mouse-level conditional tuning-response effects and complete controls/dispositions; separate held-mouse response prediction and numerical investigation reproduction, including null/inconclusive results."
+    "For prediction, the held mouse response is an operator-estimated calcium-response coefficient from the declared full-schedule lag model. For investigation, numerical effects/controls are independently recomputed from the same frozen observations and estimator; their sign is not a known biological answer."
   ],
   "prospective_references": [
     "full overlap ridge alpha=1",
@@ -644,7 +709,7 @@
     "source_storage_evidence": null
   },
   "schema_version": 1,
-  "scientific_question": "What conditional tuning-response associations and independently held-mouse response prediction remain after full overlapping stimulation design and mouse-level matching? Response-defined site contrasts are observational, not randomized site-class or monosynaptic effects.",
+  "scientific_question": "Does independently measured target/follower tuning add held-mouse predictive information about stimulation-associated calcium responses beyond distance, baseline activity, movement, power and site class, and what mouse-level conditional associations remain under the complete overlapping stimulation design?",
   "source_audit_overlays": [],
   "source_identity": {
     "ids": [
@@ -659,13 +724,12 @@
     ]
   },
   "split": {
-    "data_scope": "public_development_only",
-    "manifest_status": "source_implemented_genuine_input_producer_unissued",
-    "policy": "Full mouse/session target x power x condition x ten100ms-lag basis with exposure integration; effect reconstruction and held-mouse response prediction are distinct channels, all controls retained.",
-    "uncertainty": "Mouse-level approximate t summaries; no trial/cell pseudoreplication, no automatic small-sample or causal qualification."
+    "policy": "Implemented leave-one-mouse-out response prediction keeps all held-mouse responses private and accepts independently pretest-classified sites only. Tuning uses explicitly allowed versus held behavior blocks. Matching cutoffs/calipers come from other mice. Investigation reconstruction is a separate observed-data channel, not the prediction split.",
+    "coverage": "Required source ascertainment spans61 imaging/behavior sessions in15 mice and the52-stimulation-session/13-mouse subset. Full target×power×condition×ten100ms-lag design is retained; no subsampling when design exceeds capacity. Eligible pair counts and mouse support remain unverified."
   },
   "status": "specification_only",
   "task_type": "investigation",
   "title": "Tuning-dependent targeted perturbation responses",
-  "track": "neural"
+  "track": "neural",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }
