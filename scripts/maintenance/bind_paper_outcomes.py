@@ -281,6 +281,13 @@ def build_outputs(root=ROOT):
                 binding.need(not scopes or (identifier not in scopes["entries"]
                              and identifier not in scopes.get("same_primary_corrections", {})),
                              "SMC temporal successor cannot combine another primary scope projection")
+            elif identifier == "PAPER-paper-method-029":
+                binding.need(not scopes or (identifier not in scopes["entries"]
+                             and identifier not in scopes.get("same_primary_corrections", {})),
+                             "Deeprecon reference recovery cannot combine a primary scope correction")
+                binding.need(reproduction is not None and reproduction.get("schema_version") == "paper-reproduction/v1",
+                             "Deeprecon reference recovery requires its unchanged v1 reproduction")
+                arguments["task_id"] = identifier
             else:
                 binding.need(scopes is not None and identifier not in scopes["entries"]
                              and identifier in scopes.get("same_primary_corrections", {}),

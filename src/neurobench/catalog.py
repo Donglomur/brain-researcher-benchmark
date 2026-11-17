@@ -997,14 +997,17 @@ def paper_count_text(catalog):
     successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
     scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
                                 and row['paper_outcomes']['candidate_interface'] is None
-                                and row['id'] != 'PAPER-ROOT-ADD-001' for row in catalog['tasks'])
+                                and row['id'] not in ('PAPER-ROOT-ADD-001', 'PAPER-paper-method-029') for row in catalog['tasks'])
     reference_successor_count = sum(row['id'] == 'PAPER-ROOT-ADD-001'
+                                    and row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
+                                    for row in catalog['tasks'])
+    deeprecon_reference_count = sum(row['id'] == 'PAPER-paper-method-029'
                                     and row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
                                     for row in catalog['tasks'])
     continuous_count = sum(continuous_paper_selection(row.get('paper_outcomes', {})) is not None
                            for row in catalog['tasks'])
     official_assets_count = sum('continuous_outcomes_v2' in row.get('paper_outcomes', {}) for row in catalog['tasks'])
-    temporal_successor_count = successor_count - scope_successor_count - reference_successor_count - continuous_count
+    temporal_successor_count = successor_count - scope_successor_count - reference_successor_count - deeprecon_reference_count - continuous_count
     dual_text = ''
     if outcomes['covered']:
         eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
@@ -1046,6 +1049,9 @@ def paper_count_text(catalog):
             if reference_successor_count:
                 dual_text += ('The LANGUAGE reference successor records author-provided-array/current-runtime reference recovery; '
                               'its current improvement policy and remaining source limits are explicit, with no AI outcome or qualification. ')
+            if deeprecon_reference_count:
+                dual_text += ('The Deeprecon reference successor records recovered publisher pair means; '
+                              'native replay, matched candidate comparison and scientific qualification remain unresolved. ')
             if scope_successor_count:
                 dual_text += (' ' if temporal_successor_count else '')
                 dual_text += ('For the reviewed scope-policy selections, the current primary policy governs improvement; '
@@ -1437,6 +1443,17 @@ def render_tracks(catalog):
                                  '- ' + markdown_link('Provided-author reference report', provenance['provided_reference']['path'], task) + '\n'
                                  '- ' + markdown_link('Reference recovery receipt', provenance['reference_receipt']['path'], task) + '\n\n')
                         text += ('**Current reproduction/source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
+                                 + '\n')
+                    elif row['id'] == 'PAPER-paper-method-029':
+                        provenance = outcomes['primary_policy_provenance']
+                        text += ('The reference successor records the recovered publisher table: 240 rows and 480 normalized pair means. '
+                                 'These exposed source references are not native replay or candidate results. '
+                                 'Qualified comparison, native source and uncertainty obligations remain unresolved; runtime routes are not declared by this policy.\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated reference successor', outcomes['primary_policy_revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Published reference provenance', provenance['published_reference']['path'], task) + '\n\n')
+                        text += ('**Unchanged reproduction/source limits:**\n\n'
                                  + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
                                  + '\n')
                     elif candidate is None:

@@ -31,7 +31,7 @@ SCOPE_POLICY_SUCCESSOR_TASKS = frozenset((
     "PAPER-paper-signal-add-004", "PAPER-paper-method-replacement-008",
     "PAPER-paper-method-replacement-013", "PAPER-paper-method-add-010",
 ))
-REFERENCE_SUCCESSOR_TASKS = frozenset(("PAPER-ROOT-ADD-001",))
+REFERENCE_SUCCESSOR_TASKS = frozenset(("PAPER-ROOT-ADD-001", "PAPER-paper-method-029"))
 PRIMARY_SUCCESSOR_FIELDS = frozenset(("primary_policy_revision", "primary_improvement_contract"))
 SOURCE_DECLARATION_GAP_IDS = frozenset(("PAPER-paper-method-011", "PAPER-paper-method-replacement-009"))
 SOURCE_DECLARATION_GAP_PATH = "docs/provenance/paper-outcome-source-declaration-gaps.v1.json"
@@ -129,8 +129,10 @@ def primary_successor_module(task_id=PRIMARY_SUCCESSOR_TASK):
     """Load only the fixed reviewed metadata selector for the declared task."""
     if task_id == PRIMARY_SUCCESSOR_TASK:
         filename = "paper_primary_successor.py"
-    elif task_id in REFERENCE_SUCCESSOR_TASKS:
+    elif task_id == "PAPER-ROOT-ADD-001":
         filename = "paper_language_reference.py"
+    elif task_id == "PAPER-paper-method-029":
+        filename = "paper_deeprecon_reference.py"
     elif task_id in SCOPE_POLICY_SUCCESSOR_TASKS:
         filename = "paper_scope_policy_successor.py"
     else:
@@ -646,6 +648,12 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         if identifier == PRIMARY_SUCCESSOR_TASK:
             need(scope_entry is None and primary_correction is None,
                  "SMC temporal successor cannot combine another primary scope projection")
+        elif identifier == "PAPER-paper-method-029":
+            need(scope_entry is None and primary_correction is None,
+                 "Deeprecon reference recovery cannot combine a primary scope correction")
+            need(reproduction is not None and reproduction.get("schema_version") == "paper-reproduction/v1",
+                 "Deeprecon reference recovery requires its unchanged v1 reproduction")
+            arguments["task_id"] = identifier
         else:
             need(scope_entry is None and primary_correction is not None,
                  "Scope policy successor requires its reviewed normal scope correction")

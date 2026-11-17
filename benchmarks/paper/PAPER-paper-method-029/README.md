@@ -14,6 +14,29 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
+### Current primary improvement policy
+
+**Disposition:** source\_unresolved.
+
+The reference successor records the recovered publisher table: 240 rows and 480 normalized pair means. These exposed source references are not native replay or candidate results. Qualified comparison, native source and uncertainty obligations remain unresolved; runtime routes are not declared by this policy.
+
+- [Selected current improvement contract](improvement.reference-recovery.v1.json)
+- [Authenticated reference successor](reference-recovery-successor.v1.json)
+- [Published reference provenance](implementations/published-reference-v1/SOURCE_PROVENANCE.json)
+
+**Unchanged reproduction/source limits:**
+
+- The480 published pair-mean targets are authenticated exposed references, but matching them or printing them from a program cannot demonstrate calculation from the original fMRI.
+- The72 exact source-bootstrap plotted summary targets have not been independently recovered and pinned; the existing24 observed equal-pair summaries are different statistics and cannot replace them.
+- Original target image/voxel noise-ceiling and random-pair threshold artifacts, their source ROI identities and exclusion counts are not authenticated; aggregate CSV values cannot recover these artifacts.
+- No independently justified numeric reproduction tolerance or deterministic-versus-subject-dependent uncertainty criterion is frozen. No epsilon, source-decimal-precision rule, nonrejection or CI-overlap shortcut is admitted.
+- No frozen submitted-analysis interface and authentic common-input manifest bind all5 subjects, all6000 training rows, all1200 test rows per subject, fixed training/test image identities and target VC/ROI column order to actual lawful artifacts.
+- A computation verifier must independently execute the submitted analysis and bind every source trial to its converted target-VC voxel vector for all40 pair/method cases, training-derived method-specific normalization and native model/decoder lineage. The existing evaluator computes conversions but does not authenticate submitted execution or retain a frozen prediction-output manifest.
+- The verifier must recompute all24-by-24 pattern/profile repeat correlations, preserve image and ROI-local/global voxel identities, verify each fixed ceiling/threshold mask and clip, derive every pair mean and original bootstrap companion, and reconcile native dtype/undefined-value semantics. This granular derivation verifier and its immutable output identities are not implemented or pinned; published-reference-v1 checks aggregates only.
+- Native source equivalence remains unqualified: content-loss target scaling uses fc6 decoder x statistics, brain-loss uses its own fitted y statistics, profile uses restored scaling (or verified positive affine invariance), and the current evaluator retains undefined correlations instead of the source plot nan\_to\_num behavior.
+- Matched paper+data and paper+data+author-code common-input, author-code, evaluator, cohort/split/panel/observation/metric/aggregation, exposure and cumulative budget manifests do not exist; neither pairing protocol can be specified.
+- Canonical task wording still calls reproduction calibration-only. The integration owner must preserve history and correct current wording, then supply the definitive current task raw SHA256 before final outcomes enrollment; this additive contract does not edit canonical bytes.
+
 - [Original-finding reproduction contract](reproduction.v1.json)
 - [Paired outcome protocols](outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
@@ -27,13 +50,13 @@ The current definition supports two independent outcomes: recreate the original 
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Current paper-improvement objective
+## Retained predecessor improvement policy
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original Deeprecon conversion task and author evaluation route are recoverable, but the numeric Figure 2 content-loss baseline and its complete noise-ceiling artifacts have not been recovered and pinned in this review. Raw correlations or a newly rerun local comparator cannot stand in for the published result. Admission also lacks a justified effect, dependence-aware uncertainty and fixed episode budgets.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -41,13 +64,15 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28973 bytes; SHA-256 `70a52fc9f86d15d5046c334b96668eae4983a94ed14aadb0aea07f05e6828f9e`.
+- Specification identity: 29884 bytes; SHA-256 `bf0a50c891e2654e310ede3e5e322283db064e990d925f54559b58bcc1ca1eeb`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Before current reference-recovery wording: task.json](docs/provenance/pre-reference-recovery-20261117/task.json)
+- [Before current reference-recovery wording: outcomes.v1.json](docs/provenance/pre-reference-recovery-20261117/outcomes.v1.json)
 
 ## Implementation artifacts
 
