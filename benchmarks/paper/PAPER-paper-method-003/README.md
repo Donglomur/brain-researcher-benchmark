@@ -65,6 +65,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Original 109-participant PhysioNet acquisition/preparation, full-panel pooled balanced-accuracy/kappa/weighted-F1 scoring and strict author checkpoint adapter. Preparation and fixed software controls do not establish source classifier, historical seed roster, filter/checkpoint parity, paired candidate execution, same-task superiority or current SOTA.
 - [Candidate materials v1](implementations/candidate-materials-v1) — Reviewed source component.
   Scope: Complete original 654-record, 109-person map/export/restore source with shared opaque test-epoch shuffling in both paper conditions and unchanged private source-order scoring support. Authentic export, protected candidate delivery, pretrained-access provisioning and qualified historical reference remain separate requirements; generated metric controls are not model results.
+- [Opaque submission v1](implementations/opaque-submission-v1) — Reviewed source component.
+  Scope: Opaque submission adapter source preserves original participant, collection and scoring boundaries. Generated adapter controls are separate from protected runtime/image execution, authentic candidate execution and scientific reproduction or improvement. Existing runtime gates and canonical selectors remain unchanged.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

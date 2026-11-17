@@ -20,7 +20,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 3 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 3 | not linked |
-| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 10 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 12 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 4 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 3 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 2 | not linked |
@@ -44,10 +44,10 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 2 | not linked |
 | [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 3 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
 | [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 5 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
-| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 3 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
+| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 4 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 2 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
-| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 5 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
+| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 6 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 4 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 2 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
