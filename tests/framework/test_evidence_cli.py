@@ -36,7 +36,14 @@ class EvidenceCommandTests(unittest.TestCase):
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
         self.assertEqual(result['counts']['direct_interpretation_attempts'], 0)
         self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 5)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 2)
+        for task in ('PAPER-paper-method-003', 'PAPER-paper-method-013'):
+            preparation = [record for record in result['records'][task]
+                           if record['category'] == 'paper_source_preparation']
+            self.assertEqual(len(preparation), 1)
+            self.assertEqual(preparation[0]['model_attempts_recorded'], 0)
+            self.assertFalse(preparation[0]['author_baseline_qualified'])
         self.assertIn('selected public reports only', result['scope'])
         self.assertIn('not current runtime verification', result['scope'])
         for task_records in result['records'].values():
