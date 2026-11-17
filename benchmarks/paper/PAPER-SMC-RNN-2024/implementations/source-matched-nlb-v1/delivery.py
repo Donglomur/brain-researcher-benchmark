@@ -106,7 +106,8 @@ def canonical_content_hash(item):
 def validate_input_file(path, filename, panel):
     require(contract.sha256(path) == panel["inputs_sha256"][filename], "input file hash mismatch")
     train = filename == "train_input_20ms.h5"
-    keys = TRAIN_KEYS if train else {"eval_spikes_heldin"}
+    keys = TRAIN_KEYS if train else ({"eval_spikes_heldin", "eval_spikes_heldout"}
+                                     if panel["phase"] == "val" else {"eval_spikes_heldin"})
     with h5py.File(path, "r") as handle:
         require(set(handle) == keys and not handle.attrs, "forbidden or missing HDF5 input members")
         for name in sorted(keys):
@@ -253,7 +254,7 @@ def export_pair(prepared_root, author_source, paper, output, *,
         "source_configuration": "Table 2 anchors refer to the selected 36-dimensional, 512-unit arms identified in protocol.json. Generic author training defaults differ from those configurations. Candidate algorithms need not copy the author architecture.",
         "metrics": protocol_data["metrics"], "allowed_observations": {
             "train": "All original training spikes and behavior, including forward bins.",
-            "validation": "Original validation held-in inputs and separately labeled validation targets; permitted for selection.",
+            "validation": "Original validation held-in and held-out spike arrays, plus separately labeled validation targets; permitted for selection.",
             "test": "All original test held-in spikes only; original train+validation spikes and behavior for fitting and decoder inputs.",
             "excluded": ["Original test target file", "Operator predictions", "Author checkpoints"],
         },

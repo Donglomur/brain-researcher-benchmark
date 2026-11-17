@@ -80,8 +80,9 @@ class DeliveryTests(unittest.TestCase):
                                       10 if key.endswith("_forward") else 35,
                                       137 if "heldin" in key else 45] for key in delivery.contract.RATE_KEYS},
         }
+        eval_keys = {"eval_spikes_heldin", "eval_spikes_heldout"} if phase == "val" else {"eval_spikes_heldin"}
         for filename, keys in (("train_input_20ms.h5", delivery.TRAIN_KEYS),
-                               ("eval_input_20ms.h5", {"eval_spikes_heldin"})):
+                               ("eval_input_20ms.h5", eval_keys)):
             with h5py.File(root / filename, "w") as handle:
                 for name in sorted(keys):
                     n = ntrain if name.startswith("train_") else neval
@@ -159,6 +160,16 @@ class DeliveryTests(unittest.TestCase):
         (self.inputs / "mc_maze" / "test" / "eval_target_20ms.h5").write_bytes(b"forbidden")
         with self.assertRaisesRegex(delivery.contract.ContractError, "test targets must not"):
             self.export()
+
+    def test_original_validation_labels_are_allowed_only_in_validation_inputs(self):
+        for phase, expected in (("val", {"eval_spikes_heldin", "eval_spikes_heldout"}),
+                                ("test", {"eval_spikes_heldin"})):
+            with self.subTest(phase=phase):
+                root = self.inputs / "mc_maze" / phase
+                with h5py.File(root / "eval_input_20ms.h5", "r") as handle:
+                    self.assertEqual(set(handle), expected)
+                panel = json.loads((root / "panel.json").read_text())
+                delivery.validate_input_file(root / "eval_input_20ms.h5", "eval_input_20ms.h5", panel)
 
     def test_false_input_filename_does_not_hide_targets(self):
         path = self.inputs / "mc_maze" / "test" / "eval_input_20ms.h5"
