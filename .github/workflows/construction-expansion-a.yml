@@ -2689,6 +2689,12 @@ jobs:
                             'passed': sum(phase == 'call' and outcome == 'passed' for (_, phase), outcome in gate.phases.items()),
                             'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
           PY
+      - name: DeepCaImX source panel generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B -m unittest discover -s 'benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests' -p 'test_*.py' -v
+
   construction-a-paper-signal-add-017:
     needs: source-preflight
     name: construction-a-paper-signal-add-017

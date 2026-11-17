@@ -1,10 +1,12 @@
 """Real-ledger and adversarial controls for source maintenance, no science runs."""
 import copy
+import ast
 import importlib.util
 import json
 import os
 from pathlib import Path
 import re
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -109,6 +111,31 @@ class PinControls(unittest.TestCase):
                         self.assertNotIn(name, visited)
                         visited.add(name)
                         name = dependencies[name]
+
+    def test_source_panel_ci_declares_lazy_test_dependencies(self):
+        # Inspect imports inside test methods too: a developer interpreter can
+        # otherwise hide a missing h5py wheel in the selected CI environment.
+        directory = 'benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests'
+        sources = sorted((ROOT / directory).glob('test_*.py'))
+        self.assertTrue(sources)
+        required = set()
+        for path in sources:
+            for node in ast.walk(ast.parse(path.read_text())):
+                names = ([item.name for item in node.names] if isinstance(node, ast.Import)
+                         else [node.module] if isinstance(node, ast.ImportFrom) and node.module else [])
+                required.update(name.split('.')[0] for name in names
+                                if name.split('.')[0] not in sys.stdlib_module_names)
+        jobs = []
+        for path in (ROOT / '.github/workflows').glob('*.yml'):
+            workflow = path.read_text().split('\njobs:\n', 1)[1]
+            jobs.extend((name, body) for name, body in re.findall(
+                r'^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)', workflow, re.M | re.S)
+                        if '-m unittest discover -s ' in body and directory in body)
+        self.assertEqual(len(jobs), 1, 'Source panel needs exactly one generated CI enrollment')
+        name, body = jobs[0]
+        declared = set(re.findall(r'^\s+([a-zA-Z0-9_-]+)==[^\s]+ --hash=sha256:', body, re.M))
+        self.assertTrue(required <= declared,
+                        f'{name}: undeclared generated test dependencies: {sorted(required - declared)}')
 
     def test_fixture_passes(self):
         self.assertEqual(ci.audit(self.root)['source_files'], 1)

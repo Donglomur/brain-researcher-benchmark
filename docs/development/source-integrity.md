@@ -81,6 +81,7 @@ Before pushing source or task-definition changes, run:
 ```sh
 python3 -I -S -B scripts/maintenance/workflow_source_pins.py --output /tmp/workflow-source-audit.json
 python3 -I -S -B scripts/check_source_integrity.py
+python3 -I -S -B -m unittest discover -s tests/maintenance -p 'test_workflow_source_pins.py' -v
 ```
 
 The first command is the same source-only preflight used by the shared
@@ -89,6 +90,9 @@ workflow job depends on that gate, directly or through its existing source job;
 package jobs retain their parallelism after it passes. The gate also runs the
 focused rejection controls. It installs no benchmark dependencies and executes
 no benchmark pipeline.
+The controls also inspect imports inside the DeepCaImX source-panel test methods
+and require the enrolled CI job to declare those dependencies as pinned wheels.
+This catches a missing dependency even when the local interpreter already has it.
 
 The [reviewed occurrence ledger](../../scripts/maintenance/workflow_source_pins.json)
 binds every literal SHA256 occurrence to a repository source path or an explicit

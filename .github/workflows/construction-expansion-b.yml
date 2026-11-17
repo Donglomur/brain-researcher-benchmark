@@ -1331,12 +1331,6 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
 
-      - name: DeepCaImX source panel generated controls
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 120s python -I -B -m unittest discover -s 'benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests' -p 'test_*.py' -v
-
   expansion-b-paper-paper-method-042:
     needs: expansion-b-source-identities
     runs-on: ubuntu-24.04
