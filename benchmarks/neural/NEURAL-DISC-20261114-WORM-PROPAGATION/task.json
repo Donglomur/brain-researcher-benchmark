@@ -4,7 +4,7 @@
   "title": "Conditional downstream calcium-response reconstruction after identified-neuron perturbation",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Given a stimulated neuron's measured evoked calcium and a receiver's pre-stimulation trace, can a model predict that receiver's complete measured response in a held-out worm?",
+  "scientific_question": "Does a stimulated neuron’s measured calcium response improve prediction of a receiver’s complete measured post-stimulation trace in held worms beyond receiver prehistory and train-only pair/condition means?",
   "participant_inputs": "For each experimentally observed source→receiver pair/trial, source calcium from−10to+30seconds, receiver calcium from−10to0, actual timestamps, verified neuron identities and stimulus timing/parameters. Include only information established independently of the withheld receiver response. Source post-stimulus input makes this retrospective conditional prediction, not forecasting before stimulation.",
   "known_answer": "Receiver fluorescence/time series from0to30seconds in the same trial, hidden in evaluator custody. This is an observed-response target, not a binary ground truth for direct synapses or mechanism.",
   "complete_scope": "All acquisitions and measured receiver/source pairs in the declared immutable release, including weak/nonresponding pairs and failed/self-response trials with explicit quality/coverage flags. This is a new release-level task, not whole-paper reproduction. The release's genotype/condition coverage must be reconciled against OSF; missing mutant or spontaneous cohorts cannot silently be claimed included.",
@@ -115,5 +115,133 @@
     "submission_ready": false,
     "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
     "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Receiver’s original measured fluorescence samples from 0 through 30 seconds relative to stimulation, with acquisition missingness retained; these measurements define prediction error, not a binary direct-synapse label."
+  ],
+  "biological_unit": "Authenticated worm; all acquisitions and sessions from that worm stay in one role. DANDI’s 113 subject labels can be acquisition dates and are not 113 established animals.",
+  "case_definition": "One actual stimulation trial and source-to-receiver pair, retaining every original target timestamp and weak/nonresponse case.",
+  "allowed_inputs": {
+    "inputs": [
+      "Source calcium at all original timestamps in [-10,30] s; receiver prehistory in [-10,0) s, with missing values retained.",
+      "Verified source/receiver identity, condition, stimulus duration/power and native onset; train-role target traces only. Requested held response_times_s are public, while held values and masks stay private."
+    ],
+    "forbidden_inputs": [
+      "Held/development receiver responses, target-derived normalization, response-significance masks, quality flags or arbitrary evaluator metadata.",
+      "Published full-release pair kernels/significance summaries that include held worms, or stimulus metadata silently copied from unverified converter constants."
+    ],
+    "case_identity": "Implemented normalized cases require case_id, worm_id, acquisition_id, trial_id, source_id, receiver_id and condition plus source asset/hash/ROI indices in custody. Public exports retain the identity fields and onset; an opaque target-safe alias map and exposure review remain necessary for protected participant use. Supplied identity_authenticated=true is an assertion, not an independent identity audit.",
+    "split": "Implemented train/development/held roles require every worm in exactly one role and each acquisition in one worm. Kernel regularization is selected on separate development worms, with no refit of their responses into training. Authentic role assignment and full source identity map are not delivered.",
+    "coverage": "Frozen expected_case_ids must exactly match all selected measured pairs/trials, including failures and weak/nonresponse records. Immutable release has 113 imaging and 110 segmentation assets; sub-20, sub-23 and sub-33 lack segmentation partners. Complete trace-only acquisition, OSF/genotype/spontaneous coverage and authentic worm census remain unresolved."
+  },
+  "split": {
+    "policy": "Implemented train/development/held roles require every worm in exactly one role and each acquisition in one worm. Kernel regularization is selected on separate development worms, with no refit of their responses into training. Authentic role assignment and full source identity map are not delivered.",
+    "coverage": "Frozen expected_case_ids must exactly match all selected measured pairs/trials, including failures and weak/nonresponse records. Immutable release has 113 imaging and 110 segmentation assets; sub-20, sub-23 and sub-33 lack segmentation partners. Complete trace-only acquisition, OSF/genotype/spontaneous coverage and authentic worm census remain unresolved."
+  },
+  "controls": [
+    "Implemented whole-source reassignment within animal/condition/source/stimulus/exact-clock groups; all receivers of one trial share the reassignment and unmatched singletons remain visible.",
+    "Stimulus/identity-only pair means and receiver-prehistory-only persistence; still require authentic identity permutation and synchronization-shift controls.",
+    "Check light artifacts, adjacent-cell stimulation and global calcium state; protect masks from effect-size selection.",
+    "Reconcile converter date-derived subject IDs, hardcoded WT, duration/power constants and zero/nonpositive ROI mapping against original acquisition records."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Possible complete numeric source/receiver-prehistory trace case with original timestamps and missingness.",
+      "boundary": "No tools or receiver target values; source post-stimulus context is openly retrospective. Numeric export exists but no direct model transport or complete answer collector.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Direct response protocol and proven complete-case context/coverage delivery."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed dual-trace display of source response and receiver prehistory on native time axes.",
+      "boundary": "No target trace, target mask, pooled kernel or response-selected overview; any interpolation must be declared and must not replace raw samples.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No typed trace viewer or image-only participant path is implemented."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical per-case conditional response investigation using the exported trace schema and allowed train-role data.",
+      "boundary": "Same tools/checkpoints/input/compute within comparisons; no held/development score feedback; source export is available but adaptive execution is not enforced.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Protected per-case numerical agent runtime, identity sanitization, tool logs and resource accounting."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted response-prediction code with training-only fit and fixed calibration/normalization.",
+      "boundary": "Existing evaluator consumes predictions but does not bind their generating programme or train exposure. Freeze before held-worm access and preserve exact original time grids.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Participant programme lifecycle, artifact provenance and authentic full-roster inference execution."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Complete-held-worm mean candidate MSE minus train-only pair-mean MSE",
+      "direction": "lower",
+      "aggregation": "Mean squared error over observed original samples per case; equal trials within condition/source/receiver pair; equal pairs within worm; equal held worms. Report every worm’s paired effect. A missing paired metric in any observed case suppresses the complete-roster mean and interval.",
+      "rationale": "Tests incremental conditional neural prediction beyond repeatable pair identity/stimulus structure without treating correlated pairs/trials as independent animals."
+    },
+    "secondary": [
+      "Raw model, pair-mean, receiver-persistence and convolution MSE; training-variance-normalized MSE and paired differences, undefined for missing/zero training variance.",
+      "Pearson correlation with explicit constant-trace outcomes.",
+      "Signed/absolute response-area error on adjacent valid samples within declared gap, with integrated duration and missing-tail coverage."
+    ],
+    "comparators": [
+      {
+        "name": "Training-only pair/condition mean",
+        "inputs": "Training worms’ receiver traces for matching condition/source/receiver identity.",
+        "procedure": "Implemented original-time interpolation only within supported adjacent samples and fixed max gap; average trials within worm then worms. Unseen/unsupported pairs retain undefined predictions instead of a favorable subset."
+      },
+      {
+        "name": "Receiver prehistory persistence",
+        "inputs": "Only the permitted [-10,0) receiver values.",
+        "procedure": "Implemented mean of valid prestimulus values predicts a flat poststimulus trace; no target centering."
+      },
+      {
+        "name": "Regularized source convolution",
+        "inputs": "Same source trace and receiver prehistory; train-role targets.",
+        "procedure": "Implemented prospective trapezoid lag grid [0,1,2,4] s and ridge grid [0.01,0.1,1], equal-worm fit, separate development selection without refit. These are new benchmark references, not reproduced author exponential kernels."
+      }
+    ],
+    "nuisance_controls": [
+      "Implemented whole-source reassignment within animal/condition/source/stimulus/exact-clock groups; all receivers of one trial share the reassignment and unmatched singletons remain visible.",
+      "Stimulus/identity-only pair means and receiver-prehistory-only persistence; still require authentic identity permutation and synchronization-shift controls.",
+      "Check light artifacts, adjacent-cell stimulation and global calcium state; protect masks from effect-size selection.",
+      "Reconcile converter date-derived subject IDs, hardcoded WT, duration/power constants and zero/nonpositive ROI mapping against original acquisition records."
+    ],
+    "uncertainty": "Implemented prospective paired whole-worm percentile bootstrap: 2,000 draws, seed 0, 95% interval; fewer than two supported worms or incomplete paired support yields no complete-roster interval. Actual animal count/dependence and inferential adequacy require authentic identity review.",
+    "failure_policy": "Every held case and exact original target grid must appear once, with finite predictions even at missing-target positions and correct units. Missing/extra/duplicate/grid-invalid predictions fail. All-missing targets, unsupported references, absent tails and quality flags remain explicit; no favorable intersection or shorter horizon is substituted.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a054673ee76bcd6ada77105ff86cd94dd9d20ed10ad2f64e6e3cbcdcafabba5f",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "cdb143e840819271f52a1ab97f78ca1a04a522576518a6ada60e97bb4e47a8dc"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

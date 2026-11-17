@@ -2,8 +2,8 @@
   "schema": "neuroscience_central_behavioral_task_proposal_v3",
   "candidate_id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
   "track": "neural",
-  "title": "Causal held-session prediction of human information-sampling and stopping decisions",
-  "status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "title": "Causal held-session next-action inference from human information-sampling state",
+  "status": "specification_only",
   "registered": true,
   "registration_count_delta": 1,
   "scientifically_qualified": false,
@@ -16,7 +16,7 @@
     "doi": "10.1038/s41593-026-02342-9",
     "url": "https://www.nature.com/articles/s41593-026-02342-9"
   },
-  "scientific_question": "Across all 20 released participants and all four sessions each, can a program predict each next sampling or stopping action from causally available processed state? Can it reconstruct the complete training-only reference comparison and establish a participant-level held-session loss improvement without selecting on held outcomes?",
+  "scientific_question": "Given only the currently revealed processed state and permitted within-trial history, how well can a method assign probabilities to the next recorded sampling or stopping action in a held session of the same person?",
   "why_substantial": "This preserves the complete main behavioral assay, four-action outcome, within-trial causal sequence, initial-information manipulation through the released processed variables, all people and sessions, and genuine out-of-session prediction. It tests both numerically verified prediction and interpretation of dependent uncertainty. Rare stopping actions remain explicit instead of hiding behind accuracy. It does not substitute a tiny subset, simulated observations or an answer lookup for human behavior.",
   "scope_relation": {
     "full_paper_candidate_id": "paper-hybrid-information-gathering-2026",
@@ -93,16 +93,8 @@
     "source_limits": "Processed count/cue conventions and within-trial chronology are validated; initial_visit generator/consumer discrepancy, raw JavaScript timing/initial-cue history and source-exclusion provenance remain limitations. No lossless raw sensory-history claim."
   },
   "split": {
-    "outer": "For each person, hold each of four sessions out; train on that same person’s other three sessions. All80 folds.",
-    "inner": "Hold each of the three training sessions out; select family and ridge penalty using equally weighted inner-session NLL.",
-    "ridge_grid": [
-      0.01,
-      0.1,
-      1.0
-    ],
-    "training_only": "Normalization, parameters, family/penalty/restart selection and candidate development cannot use the outer held outcomes.",
-    "interpretation": "Within-person cross-session interpolation with causality protected within trials; not future-session forecasting or unseen-person generalization.",
-    "candidate_training_delivery": "The accepted fixed-reference workflow constructs training-only views and anonymous artifacts. A general candidate training/export/provenance binding has not been certified by this proposal and remains an explicit additional delivery requirement."
+    "policy": "80 outer folds: hold each of four sessions of each of 20 people, train on their other three sessions; inner three-session selection fixes model family/penalty without outer outcomes. This is not chronological forecasting.",
+    "coverage": "Exactly 4,884 accepted trials and 163,135 eligible decisions across all 20 people and 80 sessions; 19,536 source-defined excluded rows remain disclosed. Complete no-refit protected replay is implemented but unrun."
   },
   "conditions": {
     "paper_data": "Paper/supplement, causal task specification and legally usable training/development data; no author implementation or fitted answer artifacts.",
@@ -242,5 +234,136 @@
     "private_local_profile": "Accepted trusted-host reference construction plus invented isolated episodes; full authentic arbitrary-candidate route unrun.",
     "privacy": "Private local evidence paths replaced by null; byte/hash references are provenance pointers, not redistributed evidence.",
     "historical_source_wording": "Proposal/admission language and older registered:false references elsewhere describe source history; this context and registry state current membership. All scientific scope, results, rights and limitations are unchanged."
+  },
+  "id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "One recorded action in classes 1,2,3,4 per eligible decision; classes 3 and 4 are terminal actions. The target is the action, not reproduction of the historical reference loss table."
+  ],
+  "biological_unit": "20 participants; four sessions per participant and dependent trials/decisions nested within them.",
+  "case_definition": "A next-action commitment within one completed two-option trial; fresh participant episode per trial.",
+  "allowed_inputs": {
+    "inputs": [
+      "Current nL,nR,nB,rL,rR,muL,muR,gL,gR,first_visit,after_first_visit,t fields, plus opaque token and new-trial marker.",
+      "Only previous revealed observations and own messages within that trial. The candidate successor additionally receives the corresponding unchanged TRAIN-selected model artifact; comparisons using that tool must disclose and match this access."
+    ],
+    "forbidden_inputs": [
+      "Private source row, person/session/trial identities, action, future trajectory or remaining length, per-case feedback.",
+      "Held outcomes, reference predictions and outcome-selected model choice; cross-trial candidate state."
+    ],
+    "case_identity": "OnlineSession binds each private source_row to an HMAC-SHA256 token. Candidate receives the current token only; private IDs and complete query list remain evaluator-owned.",
+    "split": "80 outer folds: hold each of four sessions of each of 20 people, train on their other three sessions; inner three-session selection fixes model family/penalty without outer outcomes. This is not chronological forecasting.",
+    "coverage": "Exactly 4,884 accepted trials and 163,135 eligible decisions across all 20 people and 80 sessions; 19,536 source-defined excluded rows remain disclosed. Complete no-refit protected replay is implemented but unrun."
+  },
+  "controls": [
+    "Report both stopping recalls so prevalent sampling actions cannot hide rare-action failure.",
+    "Validate source clock/cursor/first-visit chronology and source evidence-versus-initial-cue disjunction; mu=(r+1)/(n+2) is not universal for initial cues.",
+    "Match model-artifact/tool access between an investigator and frozen method; artifact-assisted performance is a separate condition from unassisted numeric inference.",
+    "Freeze normalization, model selection and participant state reset before held-session exposure."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential no-tools numeric inference from one 12-field current observation and permitted previous observations.",
+      "boundary": "Commit four probabilities before the next observation; original state history is preserved and later trial length withheld.",
+      "evidence_ids": [
+        "consumer"
+      ],
+      "missing": [
+        "No direct-model prompt/response transport or matched complete cohort trial established."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "This scoped assay exposes compact processed behavioral state, not neural images or raw sensory scenes.",
+      "boundary": "A graph or screenshot would be an optional representation ablation; it must preserve the same scalar/state-history information and cannot stand in for neural interpretation.",
+      "evidence_ids": [
+        "consumer",
+        "scope"
+      ],
+      "missing": [
+        "No typed viewer is needed to express the current numeric target; no viewer capability or result is claimed."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-trial scientific investigator with bounded tools and identical causal observations/model-artifact access.",
+      "boundary": "Fresh trial state; no target feedback; tool calls and artifact access matched to the frozen comparison.",
+      "evidence_ids": [
+        "candidate-source",
+        "consumer"
+      ],
+      "missing": [
+        "Candidate source is an executable endpoint, not a delivered per-case LLM investigation harness."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Hash-frozen external four-file Python candidate plus corresponding unchanged TRAIN-selected model artifact.",
+      "boundary": "All 4,884 trials/163,135 commitments; no new trusted model fits; candidate-internal computation not certified training-free.",
+      "evidence_ids": [
+        "candidate-admission",
+        "candidate-worker",
+        "candidate-transport",
+        "consumer",
+        "scorer",
+        "candidate-result"
+      ],
+      "missing": [
+        "Complete protected execution and candidate runtime/read qualification remain unestablished."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant/session-balanced four-action negative log likelihood",
+      "direction": "lower",
+      "aggregation": "Average decision NLL within each held session; equally average its four sessions within each person; equally average all 20 people.",
+      "rationale": "Proper probabilistic next-action scoring preserves rare stopping alternatives and prevents long sessions from dominating the scientific unit."
+    },
+    "secondary": [
+      "Decision-weighted and participant/session-balanced trial NLL.",
+      "All four action recalls, macro recall, confusion and accuracy; explicitly report both terminal-action recalls.",
+      "Stopping probability Brier score and complete paired person effects."
+    ],
+    "comparators": [
+      {
+        "name": "family_train_selected",
+        "inputs": "Same allowed processed state; train-only artifacts for the corresponding three training sessions.",
+        "procedure": "Existing fixed primary comparator; family and ridge penalty selected only by inner training-session NLL. Never choose comparator on held losses."
+      },
+      {
+        "name": "uniform, context_counts, ridge_train_selected",
+        "inputs": "Same state/training folds, with uniform independent of state.",
+        "procedure": "Required complete descriptive references; do not count selected-family reuse as an additional independent model family."
+      },
+      {
+        "name": "History-sensitive comparator",
+        "inputs": "Identical causal within-trial state history and permitted immutable artifact access.",
+        "procedure": "Required prospective comparator or matched-history ablation for attribution to per-case scientific investigation; currently not qualified."
+      }
+    ],
+    "nuisance_controls": [
+      "Report both stopping recalls so prevalent sampling actions cannot hide rare-action failure.",
+      "Validate source clock/cursor/first-visit chronology and source evidence-versus-initial-cue disjunction; mu=(r+1)/(n+2) is not universal for initial cues.",
+      "Match model-artifact/tool access between an investigator and frozen method; artifact-assisted performance is a separate condition from unassisted numeric inference.",
+      "Freeze normalization, model selection and participant state reset before held-session exposure."
+    ],
+    "uncertainty": "Paired participant percentile bootstrap over all 20 persons, with accepted 10,000 draws and seed 20261114; keep sessions and decisions nested. The existing reference interval is inconclusive and remains historical.",
+    "failure_policy": "Require complete 20x4 population and every eligible trial/decision. Reject duplicate/unknown/missing or out-of-order commitments and nonfinite or nonpositive four-class probabilities; sum tolerance is 1e-9, normalized only for roundoff. No successful-only scoring.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "10a5193cdc33a1d117c761529087d61cae74e170020b0a97af29898bbe19d6a1",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "af5cce92dda44b37ea1b81621c7344a10a49b902fc9e04ab4f9b8bc59e990816"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

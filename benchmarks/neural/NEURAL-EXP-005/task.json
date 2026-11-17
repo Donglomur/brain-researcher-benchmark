@@ -3,7 +3,7 @@
   "id": "NEURAL-EXP-005",
   "slug": "helsinki-neonatal-eeg",
   "track": "neural",
-  "title": "Uncertainty-aware neonatal seizure evidence from held-infant EEG",
+  "title": "Neonatal seizure-report probability from complete causal EEG windows",
   "state": {
     "stage": "registered_construction_draft",
     "runnable": false,
@@ -129,7 +129,10 @@
     "comparison": "Paired predictive and resource comparisons across investigation, frozen-program and qualified baseline conditions; no clinical deployment or SOTA claim."
   },
   "experimental_unit": "Infant; windows, seizures, channels and annotators are nested or repeated measurements.",
-  "split": "Freeze five infant-grouped folds across all 79 infants using a published cryptographic-hash seed; whole recordings stay together. Reserve development infants within each training fold. Audit seizure support before model results; no favorable post-hoc fold changes or cross-fold normalization.",
+  "split": {
+    "policy": "Implemented prospective five-fold assignment sorts the complete 79 recording IDs by SHA256 of canonical [fold_seed,recording_id], then index modulo five (16/16/16/16/15). Authentic infant identity and seizure support still need audit; all fitting/development stays within training folds.",
+    "coverage": "All 79 recordings and every k=29,...,floor(T)-1 are required. First 29 seconds and final incomplete second are outside fixed support and accounted for. No quality stratum deletes cases. Authentic case count awaits full source admission."
+  },
   "comparators": [
     "Training-fold prevalence prior, calibrated on development infants.",
     "Qualified train-only author algorithm or documented faithful refit.",
@@ -166,5 +169,140 @@
     "Qualify fresh per-case context/process enforcement so overlapping windows cannot leak future EEG."
   ],
   "contamination_limit": "All labels are public. Local held-infant folds do not establish unseen model training data; an independent unreleased acquisition is needed for a strong contamination-resistant claim.",
-  "uncertainty": "Resample infants for grouped uncertainty; windows and experts are not independent experimental units."
+  "uncertainty": "Resample infants for grouped uncertainty; windows and experts are not independent experimental units.",
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "scientific_question": "From exactly 30 seconds of neonatal EEG ending at the scored second, can a method estimate the fraction of three experts marking a seizure in that final second, beyond quality flags and amplitude?",
+  "primary_outputs": [
+    "For every eligible second, q=(a1+a2+a3)/3 from the three aligned binary expert streams. This is an uncertain expert-report target, not a unique verified seizure truth."
+  ],
+  "biological_unit": "Infant; windows, channels, seizure events and experts are dependent measurements within an infant.",
+  "case_definition": "One second [k,k+1) assessed at time k+1 from EEG [k-29,k+1).",
+  "allowed_inputs": {
+    "inputs": [
+      "All 18 pinned bipolar EEG channels at native rational sampling rate, with explicit admitted stored/calibrated units and relative sample-clock phase.",
+      "Exactly 30 one-second original-input quality flags and all finite samples in [k-29,k+1); no resampling, padding or implicit amplitude conversion by this interface."
+    ],
+    "forbidden_inputs": [
+      "Expert annotations, infant identity, original source filename, absolute offset, clinical report, complete case roster, future EEG and cross-case memory.",
+      "ECG in the primary EEG arm; quality flags recalculated from substitute control signals."
+    ],
+    "case_identity": "HMAC case ID binds assessment, selected protocol, representation, private recording ID and integer k; prediction retains frozen assessment/protocol/representation/fold/input hash. Public packet has no source recording ID or absolute k.",
+    "split": "Implemented prospective five-fold assignment sorts the complete 79 recording IDs by SHA256 of canonical [fold_seed,recording_id], then index modulo five (16/16/16/16/15). Authentic infant identity and seizure support still need audit; all fitting/development stays within training folds.",
+    "coverage": "All 79 recordings and every k=29,...,floor(T)-1 are required. First 29 seconds and final incomplete second are outside fixed support and accounted for. No quality stratum deletes cases. Authentic case count awaits full source admission."
+  },
+  "controls": [
+    "Original flags are quality indicators, not verified pauses; calibrate detector on permitted development evidence.",
+    "Independent-noise and amplitude-only conditions preserve original timestamps, labels, support and original flags.",
+    "No final-second deletion, two-expert fallback or post-hoc cohort reduction.",
+    "Fresh process/context per case is necessary because overlapping windows could otherwise leak future signal; pure packet code does not enforce it.",
+    "Public annotation exposure prevents an unseen-pretraining claim from local held-infant splits alone."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Possible full 30-second numeric or waveform interpretation with all channels and fixed units.",
+      "boundary": "Any representation must preserve scientific information and exact timing; no context-driven downsampling presumed equivalent.",
+      "evidence_ids": [
+        "packet",
+        "interface"
+      ],
+      "missing": [
+        "No direct-model transport or validated complete waveform representation."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential bounded multi-channel waveform viewer for exactly the same causal packet.",
+      "boundary": "Typed channel/time/gain actions must stay inside the single packet; no labels/raw-array escape or neighboring-window access.",
+      "evidence_ids": [
+        "packet"
+      ],
+      "missing": [
+        "No typed-viewer implementation or isolation evidence for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case numerical analysis of the exact EEG packet with admitted train-only detector tools.",
+      "boundary": "Fresh case context, immutable training artifacts, no feedback; identical source flags and observations across comparators.",
+      "evidence_ids": [
+        "packet",
+        "interface"
+      ],
+      "missing": [
+        "Packet API is available; participant analysis/model-tool harness and competent tool checkpoints are not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted predictor and fold-specific training/calibration recipe consuming the same causal packet.",
+      "boundary": "Freeze before held labels; fresh process per case and no later overlapping EEG.",
+      "evidence_ids": [
+        "packet",
+        "scorer"
+      ],
+      "missing": [
+        "No frozen-program runner, qualified train-only fit or protected complete-source execution."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Infant-macro soft-vote Brier loss",
+      "direction": "lower",
+      "aggregation": "Compute (p-q)^2 at every primary second, average within each infant, then average all 79 infants equally.",
+      "rationale": "Proper probability loss preserves inter-expert disagreement and keeps long recordings from dominating infant-level comparison."
+    },
+    "secondary": [
+      "Three separate expert Brier losses and their mean; mean expert Brier equals soft-vote Brier plus q(1-q), so the numeric endpoints must not be conflated.",
+      "Original-input quality strata, each with complete per-infant denominators and undefined empty strata.",
+      "Event sensitivity and false positives/hour are pending event-matching/operating-point definitions, not implemented primary replacements."
+    ],
+    "comparators": [
+      {
+        "name": "Train-fold prevalence prior",
+        "inputs": "Only training infant labels; development calibration inside training fold.",
+        "procedure": "Required prospective baseline, not the arbitrary constant controls used for software tests."
+      },
+      {
+        "name": "Qualified author detector or faithful train-only refit",
+        "inputs": "Identical 18-channel causal windows and original quality flags.",
+        "procedure": "Verify training membership of released weights or refit only training infants; currently no qualified fitted comparator delivered."
+      },
+      {
+        "name": "Mask-only and amplitude-only controls",
+        "inputs": "Identical original-input flags; amplitude summary only in the latter.",
+        "procedure": "Freeze feature definitions before held outcomes, retain every original case/label and compare paired infant Brier."
+      },
+      {
+        "name": "Train-only feature/SVM and temporal-convolution baselines",
+        "inputs": "Same original EEG window and flags.",
+        "procedure": "Prospective competent references with grouped training/development and matched timing; not yet fitted or qualified."
+      }
+    ],
+    "nuisance_controls": [
+      "Original flags are quality indicators, not verified pauses; calibrate detector on permitted development evidence.",
+      "Independent-noise and amplitude-only conditions preserve original timestamps, labels, support and original flags.",
+      "No final-second deletion, two-expert fallback or post-hoc cohort reduction.",
+      "Fresh process/context per case is necessary because overlapping windows could otherwise leak future signal; pure packet code does not enforce it.",
+      "Public annotation exposure prevents an unseen-pretraining claim from local held-infant splits alone."
+    ],
+    "uncertainty": "Pair comparisons and resample infants, preserving all windows/experts within each infant. compare() returns paired infant differences only; it does not implement confidence intervals.",
+    "failure_policy": "Exactly one finite p in [0,1] for every frozen case in exact order. Missing/extra/duplicate/reordered/wrong-binding or malformed rows withhold the full primary score. An infant with zero primary support holds the complete outcome instead of disappearing from denominator.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "f16e907b78c5af487961ed5ec48044aac418efb2f3e51b9d8b07b78bd4401469",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "adde2ccdd1e6366bbd83c53a31fb2d94a2df41faa9df5a878c18df702a8a93bd"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

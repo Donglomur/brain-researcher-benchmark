@@ -1,0 +1,194 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT",
+  "title": "Predicting longitudinal state-selective calcium activity across identified neurons",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The fixed-origin event-rate scoring equation is implemented over the complete declared cohort. Authentic event/mask production, MCH thresholds and longitudinal identities are not, so neither published preference-label figures nor a full-shaped generated forecast establish a measured forecast result.",
+  "scientific_target": {
+    "question": "After nine calibration sessions, how well can the future state-conditioned event rates of the same identified neurons be predicted through acute and chronic recovery, beyond stationary and slow-drift references?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "For each neuron and wake/NREM/REM state in sessions 10–21, log1p(60×event_count/valid_stable_seconds), defined only with at least 20 seconds qualified stable-state exposure.",
+    "answer_origin": "A frozen source-qualified calcium-event and hypnogram pipeline. Current scorer accepts counts/exposures but does not extract them or resolve group-specific MCH threshold.",
+    "case_unit": "One held-mouse fixed-origin forecast containing all tracked cells, states and future sessions.",
+    "independent_unit": "Mouse:31 mice across five groups; cells/sessions/states are nested. Group sizes are 6,6,6,7,6.",
+    "inference_scope": "Prediction conditional on offline processed fluorescence and retrospectively established neuron correspondence; measured calcium events are not direct spikes.",
+    "exclusions": [
+      "Historical all 21-session preference-label reconstruction as protected forecasting.",
+      "Causal effects of neurons or sleep deprivation from this fixed within-animal design.",
+      "Prospective cell discovery or unbiased neuron survival from retrospective ROI matching."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Held-mouse sessions 1–9 neural calibration and allowed acquisition-time/condition metadata, with train-only predictor scaling.",
+      "Other mice in the same predefined training split for model selection; whole longitudinal cell identity is disclosed retrospective side information."
+    ],
+    "forbidden_inputs": [
+      "Held-mouse sessions 10–21 fluorescence, events, state rates, future exposure values or all-trajectory normalization.",
+      "Maximum across allsessions/states used in triangular visualization.",
+      "Target updates between forecast sessions; evaluator-only label permutations or future target durations."
+    ],
+    "case_identity": "Scorer keys predictions by(mouse_id, neuron_id) and requires a full 36-slot future vector per cell. Actual authenticated cell/animal correspondence is not supplied by the schema.",
+    "split": "Proposed leave-one-mouse-out within group; held sessions 1–9 calibrate once, all 10–21 predicted open-loop. Internal selection mirrors the same origin on other mice.",
+    "coverage": "Numerical consumer requires all 1,661 cells,31 mice, fivegroups and 21 source sessions; 59,796 future state slots before exposure masking. These are declared cardinalities, not verified archive coverage."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-group fixed-origin squared log1p event-rate error",
+      "direction": "lower",
+      "aggregation": "Equal eligible future sessions per neuron/state, equal eligible states per neuron, neurons per mouse, mice per group, then all five groups equally.",
+      "rationale": "Avoids weighting by imaging frames, exposure duration or cell-rich groups; missing/underexposed states are not zero rates."
+    },
+    "secondary": [
+      "Paired reference-minus-candidate loss on identical masks.",
+      "Acute 10–12 and chronic 13–21 phase diagnostics.",
+      "Every exposure/missingness denominator, neuron/mouse/group result.",
+      "Preference-label persistence and occupancy-preserving shuffles only as separate retrospective diagnostics."
+    ],
+    "comparators": [
+      {
+        "name": "Stationary per-cell state-rate reference",
+        "inputs": "Held-cell sessions 1–9 plus shrinkage fitted on training mice.",
+        "procedure": "Freeze exposure-weighted calibration estimate and propagate unchanged."
+      },
+      {
+        "name": "Group/context reference",
+        "inputs": "Region/genotype and permitted acquisition context; training mice and first 9 sessions only.",
+        "procedure": "Fit hierarchical state-rate model with no future state-duration targets."
+      },
+      {
+        "name": "Slow-drift reference",
+        "inputs": "Same permitted history.",
+        "procedure": "Select regularized state-space/random-walk model on other mice, propagate open-loop from session 9; use strongest validation-selected member of complete baseline set."
+      }
+    ],
+    "nuisance_controls": [
+      "Require genuine 20-second stable-bout exposures and explicit missing reasons; never convert missing to zero.",
+      "Qualify group-specific event thresholds including MCH and actual clocks/Zeitgeber context.",
+      "Compare retrospective ROI-identity mismatch and normalization sensitivity.",
+      "LH-Vgat active/quiet-wake validation cannot be assumed validated in other groups."
+    ],
+    "uncertainty": "Paired mouse-level intervals or hierarchical resampling preserving full cell trajectories; 6–7 mice per group. Existing pure scorer does not implement uncertainty.",
+    "failure_policy": "Complete cell support and finite full future vectors required for candidate and comparator. Shared source exposure masks determine eligibility; all five groups need eligible data for primary. Malformed targets are intake errors, not candidate failures."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/fixed-origin-forecast/scorer.py",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/fixed-origin-forecast/README.md"
+    ],
+    "scorer_target": "Actual future calcium event-rate forecasts on sessions 10–21, not a match to source paper labels or plots; producer receipts identify but do not authenticate target derivation.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Standalone standard-library scorer, source-authenticated file CLI and generated complete-cohort interface checks. No observation packet, event producer, programme executor or reference fit.",
+    "missing": [
+      "Authenticate complete cohort, ROI correspondence, stable-state masks and group event pipeline including MCH.",
+      "Deliver first 9-session-only candidate inputs and qualified strongest training-only comparator.",
+      "Implement protected fixed-origin execution and mouse-level uncertainty."
+    ],
+    "execution_evidence": "Generated source and relocation controls test complete dimensions, masking and hierarchical aggregation. No authentic full-cohort prediction, biological finding or new model result is established."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential direct numerical trajectory forecast from first 9 sessions and same state/context information.",
+      "boundary": "Would require explicit complete case serialization; a table of already computed targets cannot stand in for neural observation.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Bounded complete neural-history packet and no-tools response interface."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A longitudinal trace/state viewer could support inspection without changing the forecast target.",
+      "boundary": "Must stop at fixed origin and avoid future-normalized visualizations or all-session target panels.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Typed restricted history-only views and response collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-held-mouse numerical modelling of first 9-session histories.",
+      "boundary": "No target refresh; same calibrated history and training provenance as programme comparator.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Candidate episode interface; scorer alone does not deliver investigative tools."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted open-loop programme produces 36 future values per neuron.",
+      "boundary": "Fit/adapt only on declared training mice and held first 9 sessions, freeze all future forecasts together.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Source input/target producers, programme runner and competent fitted references."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "registration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/historical/task.pre-understanding.v1.json",
+      "sha256": "de8b871e464c105da6e4c9a3cd8ca9ad8f6ba10e6405d851a62268900e0e8e01",
+      "supports": "Preserved source-backed registration, prospective scientific design and original exposure limitations; current implementation changes are described separately."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/fixed-origin-forecast/scorer.py",
+      "sha256": "d593735fec77f50e826636e988d8e0ec19253d1807a629f25ff7549a7a8257d8",
+      "supports": "score validates 1,661 cells/31 mice and evaluates sessions 10–21 log1p event rates from fixed origin 9, equal eligible-session/state/cell/mouse/group weighting."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/fixed-origin-forecast/README.md",
+      "sha256": "40c27f7e3e66f3b6d8a50d90d26c6c8e27d0ba063cb350c8251b673dc9289626",
+      "supports": "Delivered pure scorer excludes event extraction, model execution, identity qualification and competent baseline fitting."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://www.nature.com/articles/s41467-026-75792-1",
+      "locator": "Longitudinal calcium and sleep-state methods, audited in original registration",
+      "supports": "Five groups,31 mice,1,661 cells; offline processing/ROI matching and missing MCH event-threshold limitation."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.6084/m9.figshare.31441240.v1",
+      "locator": "Processed longitudinal dFF/hypnogram archive metadata",
+      "supports": "Named complete longitudinal source; a two-MCH-mouse demonstration is insufficient for the registered cohort."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "The inspected source carries construction and generated software-control evidence. No neural programme pilot among the four historical EEG/sleep attempts is attributed to this registration, and no model or human outcome is added here.",
+    "excluded_claims": [
+      "Historical all 21-session preference-label reconstruction as protected forecasting.",
+      "Causal effects of neurons or sleep deprivation from this fixed within-animal design.",
+      "Prospective cell discovery or unbiased neuron survival from retrospective ROI matching.",
+      "A declared full-size scorer input as authenticated 1,661-cell source coverage."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace stale no-scorer claim with the implemented fixed-origin numerical endpoint, without promoting absent event/identity construction.",
+      "Separate future-rate prediction from historical preference-label reconstruction and all-session normalization.",
+      "Preserve masking and session→state→cell→mouse→group weighting with a 31-mouse uncertainty unit."
+    ],
+    "source_review": "Reused the preserved registration primary-source audit and inspected the listed actual implementation paths. No authentic numerical payload or protected label was opened; no model was run."
+  }
+}

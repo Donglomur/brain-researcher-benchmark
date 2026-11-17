@@ -9,7 +9,7 @@
   "publication_note": "Public scientific design only. This is not an agent input packet, executable benchmark, result or permission to acquire data.",
   "id": "NEURAL-SCOPE-20261114-STROOP",
   "title": "Cross-person, unseen-session Stroop condition inference from frontal fNIRS",
-  "scientific_question": "Can an agent infer neutral, congruent and incongruent Stroop conditions from frontal hemodynamic signals in previously unseen people under a previously unseen session schedule, and distinguish spatial signal evidence from timing and systemic-hemodynamic confounds?",
+  "scientific_question": "Can frontal HbO/HbR blocks identify neutral, congruent and incongruent Stroop conditions in unseen people on the globally withheld third-session schedule, beyond schedule and common-mode cues?",
   "source_family_ids": [
     "figshare:31839673"
   ],
@@ -144,5 +144,130 @@
     "Audit preprocessing and identical schedule leakage, construct protected joint holdout and quantify pre-onset, time/schedule and global-mode controls.",
     "Implement sealed scorer/schema, test malformed or missing submissions and contamination controls, then reproduce competent baseline under the exact split.",
     "Assess context serialization fidelity and matched-condition budgets before any native-LLM interpretation; model runs are not authorized by this scoping draft."
-  ]
+  ],
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Original block condition code 11/12/13, mapped to neutral/congruent/incongruent after authentic marker-to-prepared-array alignment."
+  ],
+  "biological_unit": "Participant, with blocks and three sessions nested; 55 source groups require verified biological-person mapping.",
+  "case_definition": "One complete onset-relative condition block; native bridge plans 640 by 70 values at nominal 25.6 Hz.",
+  "allowed_inputs": {
+    "inputs": [
+      "35 HbO then 35 HbR channels, relative times and authenticated channel geometry for every valid [-5,20) second block. Native arrays are time by 35 at nominal 25.6 Hz; proposed 40 by 70 serialization is not yet qualified.",
+      "Matched direct/tool/program conditions receive the same six training blocks, two per class, selected by a frozen training-only rule; full-training conditions use the other 44 persons sessions 1–2 and are separate."
+    ],
+    "forbidden_inputs": [
+      "Condition markers, block indices, absolute clock, source filenames, session labels, chronology, word/ink/response and reaction time.",
+      "All held-person data and every person’s session 3 during fitting/tuning; cross-fold caches or case-adaptive test feedback."
+    ],
+    "case_identity": "Bridge makes private HMAC case IDs from complete authenticated recording plans; no public authentic case manifest is supplied.",
+    "split": "Implemented declaration: deterministic five folds of 11 people; each held group contributes session 3 only; train on the other 44 people sessions 1–2. Declaration checks do not enforce process isolation or actual training access.",
+    "coverage": "All 55 people and 165 recording reports must be accounted for. Every authentic eligible third-session block is scored; no 30-block truncation. Saved-period exact-window metadata may have 639/640/641 samples, so clock normalization is a construction gate rather than silent resampling."
+  },
+  "split": {
+    "policy": "Implemented declaration: deterministic five folds of 11 people; each held group contributes session 3 only; train on the other 44 people sessions 1–2. Declaration checks do not enforce process isolation or actual training access.",
+    "coverage": "All 55 people and 165 recording reports must be accounted for. Every authentic eligible third-session block is scored; no 30-block truncation. Saved-period exact-window metadata may have 639/640/641 samples, so clock normalization is a construction gate rather than silent resampling."
+  },
+  "controls": [
+    "Session schedules repeat across people; suppress order/time clues and globally withhold session 3.",
+    "No short-separation channels: compare common-mode-only and spatial-pattern models, with fixed no-CAR sensitivity.",
+    "Verify trimming discrepancy (UsageNotes 15/15 seconds versus article 15/5), one-based markers, continuous filtering and previous-block carryover."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed numeric 40 by 70 HbO/HbR case matrix plus same six demonstrations.",
+      "boundary": "No numerical execution or feedback; fixed model/context and all channels/cases retained.",
+      "evidence_ids": [
+        "historical-definition"
+      ],
+      "missing": [
+        "Authenticated complete packet and capacity/quantization checks."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential complete HbO/HbR channel-time plots preserving units, polarity, scale and missingness.",
+      "boundary": "A viewer would need typed bounds and identical evidence; visual views are not currently provided.",
+      "evidence_ids": [
+        "historical-definition"
+      ],
+      "missing": [
+        "Renderer, action policy and protected answer capture."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-block numerical analysis of identical canonical arrays with condition-matched training decoders.",
+      "boundary": "Fresh state per case/fold, same permitted examples and declared compute; no session 3 fitting.",
+      "evidence_ids": [
+        "stroop-bridge"
+      ],
+      "missing": [
+        "Participant packet/transport and audited tool/data parity."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed predictor frozen with fitting recipe before held block access.",
+      "boundary": "Train on selected fold/condition evidence only; scorer checks output, not actual program training custody.",
+      "evidence_ids": [
+        "stroop-scorer"
+      ],
+      "missing": [
+        "Executable lifecycle and authentic baseline qualification."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Mean participant balanced accuracy across three conditions",
+      "direction": "higher",
+      "aggregation": "Recall for each of three classes per person, then equal mean of all 55 people. Missing class/person is construction failure.",
+      "rationale": "Equal-person and equal-class weighting prevents dense blocks or prevalence from dominating condition discrimination."
+    },
+    "secondary": [
+      "Participant-macro log loss with 1e-15 true-class log floor; participant-macro Brier sum over three classes, range 0–2.",
+      "Each person and all five folds; same-case paired differences against competent baselines and nuisance-only models."
+    ],
+    "comparators": [
+      {
+        "name": "Training prior",
+        "inputs": "Same permitted training partition/pack",
+        "procedure": "Freeze three-class prevalence before held cases; chance is a mathematical control, not evidence of physiological information."
+      },
+      {
+        "name": "LDA/logistic/linear SVM",
+        "inputs": "Identical canonical HbO/HbR representation and condition-matched training evidence",
+        "procedure": "Proposed train-only fixed feature/time bins and nested participant tuning; calibrated SVM uses training folds only. No competent authentic baseline has run."
+      },
+      {
+        "name": "Schedule/common-mode/pre-onset controls",
+        "inputs": "Training schedule descriptors or global-channel averages or pre-onset signals, each separated from the neural-only arm",
+        "procedure": "Fit and freeze on sessions 1–2, then evaluate under the same held people/session schedule."
+      }
+    ],
+    "nuisance_controls": [
+      "Session schedules repeat across people; suppress order/time clues and globally withhold session 3.",
+      "No short-separation channels: compare common-mode-only and spatial-pattern models, with fixed no-CAR sensitivity.",
+      "Verify trimming discrepancy (UsageNotes 15/15 seconds versus article 15/5), one-based markers, continuous filtering and previous-block carryover."
+    ],
+    "uncertainty": "Proposed paired participant bootstrap is descriptive conditional on fixed predictions, folds and observed schedule. Overlapping training sets and absent refitting prevent unconditional generalization confidence; scorer currently emits no interval.",
+    "failure_policy": "Require exactly every committed opaque case with finite normalized three-class probabilities and consistent argmax label. Unknown/duplicate/missing cases, missing classes or incomplete 55-person census refuse the aggregate.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "4f082fde5f379700e0eca48f29dbad4c00d0b1170b1431b6fcb303008382da08",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "4d0b83f879342da4975590993552427c2896cc9933c0c0eddf46309d186a0a8a"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

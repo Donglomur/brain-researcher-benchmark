@@ -3,9 +3,9 @@
   "candidate_id": "NEURAL-SCOPE-20261114-FUS-DIRECTION",
   "track": "neural",
   "title": "Calibrated target-direction inference from complete memory-period functional-ultrasound response fields",
-  "status": "registered_construction_draft",
+  "status": "specification_only",
   "counting_unit": "One coherent neural-data assay. Native/program/tool modes, sessions, animals, temporal controls and transfer analyses are nested conditions; none is a separate benchmark.",
-  "scientific_question": "Can a general LLM interpret a complete spatial vascular response field using fixed labeled calibration examples, and does an advance-written prediction program or case-adaptive analysis improve direction inference under identical query evidence?",
+  "scientific_question": "From the same eight calibrated full-field fUS response maps and one query map, can direct visual interpretation, a fixed programme or numerical investigation infer the query target direction?",
   "measurement_and_claim": {
     "signal": "Processed functional-ultrasound Power Doppler measurements of cerebral blood volume in left posterior parietal cortex. This is a vascular proxy for activity, not a direct electrical neural measurement.",
     "target": "One of eight peripheral visual-target directions in a memory-guided saccade task, computed by the protected operator from source behavior.targetPos. Cue direction and the correct rewarded saccade direction coincide.",
@@ -825,5 +825,141 @@
   "runnable": false,
   "scientifically_qualified": false,
   "submission_ready": false,
-  "publication_note": "Public design document, not a candidate input packet. Source facts are distinguished from prospective benchmark choices. Registration does not establish authentic-input coverage, an executable reference, protected scoring, agent performance or scientific qualification."
+  "publication_note": "Public design document, not a candidate input packet. Source facts are distinguished from prospective benchmark choices. Registration does not establish authentic-input coverage, an executable reference, protected scoring, agent performance or scientific qualification.",
+  "id": "NEURAL-SCOPE-20261114-FUS-DIRECTION",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "One of eight target directions 0,45,…315 degrees, derived privately from source behavior.targetPos with verified x-right/y-up convention."
+  ],
+  "biological_unit": "Two macaques, with sessions/runs and trials nested; 49 records and 20,622 declared slots do not create 49 or 20,622 animals.",
+  "case_definition": "One complete memory-period response map for a noncalibration trial within held session/run.",
+  "allowed_inputs": {
+    "inputs": [
+      "All native spatial pixels of (memory−baseline)/baseline using latest complete pre-cue baseline and latest acquisition wholly inside memory and ending no later than go.",
+      "Training-record-only maximum absolute delta scale; RGB8 grayscale with magenta invalid pixels, exact native geometry/pitch, scale and invalid/saturation counts.",
+      "Exactly eight earliest eligible labeled direction maps and one query, shared byte-for-byte across strict modes."
+    ],
+    "forbidden_inputs": [
+      "Query behavior.targetPos, direction events, eye/target traces, reward/success, source IDs/filenames and decoder outputs.",
+      "Post-go or partially out-of-memory frames.",
+      "Hidden outer-trained/pretrained weights in programmes or model tools in the strict common-evidence comparison."
+    ],
+    "case_identity": "Frozen intake contains 49 source records and 20,622 declared trial slots; packets expose opaque fold/query keys only. Native Run99 concatenation/duplication and frame-to-trial joins remain unresolved.",
+    "split": "Leave each of 48 positive session/run records out; other 47 determine scale. Exactly 8 calibration trials per held record; every other eligible trial including earlier ones is queried, so the design is offline. Preserve zero record.",
+    "coverage": "Source algorithms validate complete logical roster and one complete fold per call.20,238 queries is all-eligible arithmetic only. Authentic eligibility and execution across all 48 folds are unestablished."
+  },
+  "split": {
+    "policy": "Leave each of 48 positive session/run records out; other 47 determine scale. Exactly 8 calibration trials per held record; every other eligible trial including earlier ones is queried, so the design is offline. Preserve zero record.",
+    "coverage": "Source algorithms validate complete logical roster and one complete fold per call.20,238 queries is all-eligible arithmetic only. Authentic eligibility and execution across all 48 folds are unestablished."
+  },
+  "controls": [
+    "Pre-cue-only maps with identical calibration and scoring.",
+    "Whole-query spatial-block permutation and between-query reassignment without changing labels/denominators.",
+    "Metadata/pixel-coordinate prior; authenticated eye/motion covariates only if actually available.",
+    "No selected voxels, resize, crop, favorable timepoint or test-session scaling."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Static nine-map PNG packet with eight labels and query, native full-field pixels and documented quantization.",
+      "boundary": "No execution tools or trained-decoder output; packet source exists but no model transport is qualified.",
+      "evidence_ids": [
+        "implementation-3",
+        "implementation-4"
+      ],
+      "missing": [
+        "Authentic native bridge, model image resizing/tokenization audit and complete-context delivery.",
+        "Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A restricted full-field map viewer could inspect the same packet.",
+      "boundary": "Static packet construction is not a typed action/viewer implementation; no raw floating arrays or hidden frames.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Typed actions, restrictive renderer and action/answer logs."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Same nine-map packet admits numerical image investigation.",
+      "boundary": "Extra trained model tools must be a separately labeled augmented condition; no cross-query state or evaluator feedback.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Candidate tool transport, enforced episode budget and competent references.",
+        "Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Same packet plus existing probability submission/scorer ABI.",
+      "boundary": "Freeze programme before held-session exposure; fit only eight supplied maps in strict mode; embedded weights are added information.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-3"
+      ],
+      "missing": [
+        "Actual frozen executor, source-trained comparison controls and protected authentic inputs.",
+        "Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-animal mean session balanced accuracy over eight directions",
+      "direction": "higher",
+      "aggregation": "Mean eight class recalls per held session; equal-session mean within animal; equal mean of two animal scores.",
+      "rationale": "Retains class balance and biological weighting instead of pooling abundant trials from one animal."
+    },
+    "secondary": [
+      "Complete 8×8 confusions and ordinary accuracy by session/animal/system.",
+      "Wrapped angular error; invalid predictions receive 180 degrees.",
+      "Multiclass Brier score; invalid predictions receive maximum 2.",
+      "Rendered-map versus private full-precision reference loss and matched-mode paired differences."
+    ],
+    "comparators": [
+      {
+        "name": "Uniform and support class-prior controls",
+        "inputs": "Same case roster and eight calibration labels, no image signal.",
+        "procedure": "Fixed eight-way probability controls."
+      },
+      {
+        "name": "Eight-shot full-field template and kernel ridge",
+        "inputs": "Only the identical eight rendered support maps, masks and current query.",
+        "procedure": "Prospective masked cosine/squared-distance templates and ridge with positive lambda selected from 0.001,0.01,0.1,1,10,100 on outer-training episodes. Kernel, mask, intercept and probability mapping remain to implement."
+      },
+      {
+        "name": "Full-information source-style PCA/LDA",
+        "inputs": "Declared larger source-training corpus; separate information condition.",
+        "procedure": "Source-informed PCA95 percent variance and LDA is not a matched-eight-shot default; source parity and complete split must be qualified separately."
+      }
+    ],
+    "nuisance_controls": [
+      "Pre-cue-only maps with identical calibration and scoring.",
+      "Whole-query spatial-block permutation and between-query reassignment without changing labels/denominators.",
+      "Metadata/pixel-coordinate prior; authenticated eye/motion covariates only if actually available.",
+      "No selected voxels, resize, crop, favorable timepoint or test-session scaling."
+    ],
+    "uncertainty": "Report both animal effects. Paired session-cluster bootstrap may describe conditional uncertainty within these two animals, never animal-population confidence.",
+    "failure_policy": "Complete intake, zero record and every required query retained. Missing/malformed/duplicate output is incorrect with worst-case angular/Brier loss; absent query classes block full balanced-accuracy aggregate. Partial staged fold output is not delivered as success.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "8e284340b33c4ddadbd5d592e8bf3f368bd3e17fb5fafc20eb71f963a1376f37",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "115934ec062e5760e2fabc5f46faa6adc789076dad77fab99a3e79c36ef7fe6d"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

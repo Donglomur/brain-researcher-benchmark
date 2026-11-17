@@ -13,7 +13,7 @@
     "figshare:31792705"
   ],
   "family_count": 1,
-  "scientific_question": "How much information about a five-second intermittent odor sequence is recoverable from population spike activity in anterior piriform cortex, and does decoding across temporal windows support persistent accumulation or transient sensory coding? Better held-out decoding alone does not establish an accumulator or a causal mechanism.",
+  "scientific_question": "How accurately can session-calibrated APCx spike counts predict the deposited full-window Total_pulse label, and what information is added by temporal patterns over total spikes?",
   "scope": {
     "canonical_unit": "The complete APCx electrophysiology assay in the cited paper: all three animals and all 42 reported sessions (17, 13, 12). All quality-passing units and all source-valid trials must be accounted for. Native member counts and unit/trial census remain unverified. If the released Parquet includes only historical AIC/p-value-selected units, that release does not satisfy this preferred all-quality-passing-unit primary. The primary remains held until its original complete unit support is obtained; retaining all animals/sessions does not repair a changed unit estimand.",
     "not_included": "The seven-animal behavioral cohort, separate catch-trial cohorts, multiple-duration behavioral cohorts and olfactory sensory-neuron calcium assay are different assays in the paper; they are not silently substituted for or counted as extensions of this neural family.",
@@ -237,5 +237,138 @@
     "storage_estimate_status": "Exact archive/file transfer bytes only. Decoded arrays, memory, extraction cache and complete-support extra storage are unmeasured; no estimate presented as observed capacity.",
     "compute_status": "Small classical per-session decoders are plausible, but no runtime or resource budget has been empirically established. No LLM spend or model execution authorized in this phase.",
     "recommendation": "Registered as one source-backed construction draft, retaining all hard gates. The design separates ordinary blind decoding from timing-informed neural decomposition; neither a runnable implementation nor a scientific result has been established."
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Integer Total_pulse deposited with each retained trial; optional low/high category is derived as <=8 versus >=9."
+  ],
+  "biological_unit": "Three mice;43 sessions and session-specific units/trials are nested, not independent animals.",
+  "case_definition": "One released trial with all retained session units over 90 50-ms bins from 0.5 to 5 seconds.",
+  "allowed_inputs": {
+    "inputs": [
+      "Integer spike counts for every released session unit in 90 fixed 50 ms bins [0.5,5), opaque session/case IDs and identical condition documentation.",
+      "Matched condition supplies first 16 calibration and 8 development trials in frozen hash ordering per session; full_calibration supplies all calibration/development rows, separately reported."
+    ],
+    "forbidden_inputs": [
+      "Total_pulse/high-low query labels, physical-command diagnostics, pulse times, reward/choice, source identities, authentic session dates and other-session/condition data.",
+      "Owner packets, private HMAC key, source Parquet, notebook outputs, hidden-score feedback or snippets aligned to unknown individual pulses."
+    ],
+    "case_identity": "Opaque HMAC-bound IDs; task.py episodes writes one file per session and condition, response identities bind packet and episode digests. Complete public source includes schemas but no authentic packets.",
+    "split": "Delivered deterministic target-blind hash split within session, not original chronological 60/20/20 proposal. All views of a trial stay together; no development refit in accepted reference panel.",
+    "coverage": "95,072 deposited rows,10,831 trials,43 sessions,383 session-unit pairs,3 mice;2,199 protected queries per condition. Retain all 900 physically unresolved trials including 165 queries;86 session-condition episodes are conditions of one registration."
+  },
+  "split": {
+    "policy": "Delivered deterministic target-blind hash split within session, not original chronological 60/20/20 proposal. All views of a trial stay together; no development refit in accepted reference panel.",
+    "coverage": "95,072 deposited rows,10,831 trials,43 sessions,383 session-unit pairs,3 mice;2,199 protected queries per condition. Retain all 900 physically unresolved trials including 165 queries;86 session-condition episodes are conditions of one registration."
+  },
+  "controls": [
+    "Historical unit/QC selection and unknown original exclusions may enrich decodable neurons; do not relabel this as all-QC population decoding.",
+    "Do not use command-derived sniff histograms or pulse masks as stimulus-blind inputs.",
+    "Retain 43-session release versus 42-session paper discrepancy,900 unresolved physical trials and missing chronology beside results."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prepared target-free numeric session episodes exist, containing the complete 90-bin signals and permitted support; a no-tools participant controller is not supplied.",
+      "boundary": "A no-execution participant could consume the episode only after capacity/fresh-context controls; episode source itself does not enforce no tools.",
+      "evidence_ids": [
+        "apcx-cli",
+        "apcx-episode-boundary"
+      ],
+      "missing": [
+        "Matched complete-context serialization and actual no-tools transport/model trial.",
+        "Actual direct-answer or per-case investigator controller; the shipped CLI prepares episodes and consumes results but launches no candidate."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Possible raster/count heatmap view of all retained units and 90 bins; no current typed renderer.",
+      "boundary": "Must preserve complete observation and cannot reveal physical-command diagnostic overlays.",
+      "evidence_ids": [
+        "historical-definition"
+      ],
+      "missing": [
+        "Typed actions, complete rendering and answer protocol."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Prepared one-session evidence and a fixed numerical reference kernel exist; no per-case investigator loop or tool-calling controller is supplied.",
+      "boundary": "Mount one episode only, fixed same-support tooling/compute, no owner targets/other sessions; this source does not enforce an LLM sandbox.",
+      "evidence_ids": [
+        "apcx-cli",
+        "apcx-episode-boundary"
+      ],
+      "missing": [
+        "Externally enforced case/session state isolation and investigator run.",
+        "Actual direct-answer or per-case investigator controller; the shipped CLI prepares episodes and consumes results but launches no candidate."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Actual task.py reference entrypoint runs the precommitted calibration-mean, count-ridge and temporal-ridge numerical procedures on one authenticated session episode; it is not an arbitrary candidate launcher.",
+      "boundary": "The fixed reference CLI executes only the shipped mean/ridge panel. Complete candidate prediction validation is an operator scoring route, not a candidate executable lifecycle or external predictor callback.",
+      "evidence_ids": [
+        "apcx-cli",
+        "apcx-reference-math",
+        "apcx-episode-boundary"
+      ],
+      "missing": [
+        "New-host frozen lifecycle and any candidate capability study.",
+        "A genuine candidate executable/predictor lifecycle with frozen input scope and captured complete outputs. Fixed reference or negative-control source alone is insufficient."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-macro RMSE of deposited Total_pulse",
+      "direction": "lower",
+      "aggregation": "Compute RMSE across every protected trial of each mouse, then equal mean of three mouse RMSEs. Clip finite negative predictions at zero; no upper clip or rounding.",
+      "rationale": "Preserves complete released label target while avoiding trial-rich animals dominating the headline score."
+    },
+    "secondary": [
+      "All 43 session and 3 animal RMSE/MAE, animal-macro MAE and pooled descriptive metrics.",
+      "R-squared explicitly undefined for constant targets; low/high balanced accuracy and log loss only with a complete optional probability column.",
+      "Prespecified temporal-minus-total-spike, temporal-minus-mean and total-spike-minus-mean paired contrasts, separately in matched and full_calibration conditions."
+    ],
+    "comparators": [
+      {
+        "name": "Calibration mean",
+        "inputs": "Current session/condition permitted calibration labels only",
+        "procedure": "Implemented fixed baseline; no neural input."
+      },
+      {
+        "name": "Total-spike ridge",
+        "inputs": "All units total spikes in [0.5,5), same support labels",
+        "procedure": "Implemented calibration-only mean/scale, seven-alpha grid 0.0001..100, development MSE selects alpha with largest-alpha tie rule; no development refit."
+      },
+      {
+        "name": "90-bin temporal ridge",
+        "inputs": "All 90 bins/all retained units, identical session/condition labels",
+        "procedure": "Implemented same seven-alpha selection and fitting rules; compared on exact same protected trials."
+      }
+    ],
+    "nuisance_controls": [
+      "Historical unit/QC selection and unknown original exclusions may enrich decodable neurons; do not relabel this as all-QC population decoding.",
+      "Do not use command-derived sniff histograms or pulse masks as stimulus-blind inputs.",
+      "Retain 43-session release versus 42-session paper discrepancy,900 unresolved physical trials and missing chronology beside results."
+    ],
+    "uncertainty": "Report all three mice and 43 sessions with paired fixed-reference differences. Missing original chronology prevents the original proposed contiguous-trial bootstrap from supporting a temporal uncertainty claim; three animals do not support broad population precision. Existing optional bootstrap source is not an accepted reference-operation result.",
+    "failure_policy": "All 86 responses and every 2,199 query per condition must match episode/packet identity exactly before owner labels are opened. Extra/missing/duplicate/replayed responses or invalid counts refuse complete aggregate; unresolved physical trials are not removed.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "7abf189339676afa27aa0994bb2d66b7c6852c7b5f0ee9d4e5ee167c6ed62afc",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "53b90eef0657f5b2089aed05ecd0b4243b0ec05c031cecc50c0eeb72f75a1ed1"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

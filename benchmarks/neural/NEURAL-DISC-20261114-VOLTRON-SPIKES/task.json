@@ -4,7 +4,7 @@
   "title": "Optical voltage trace to independently recorded spike timing across complete cell recordings",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Can a general model recover electrophysiologically verified spike events from a fixed optical voltage trace in a neuron and animal excluded from fitting?",
+  "scientific_question": "Across all 34 deposited movies from twelve cells in six declared subjects, can optical-only voltage traces identify independently adjudicated electrical spike events in a subject excluded from fitting?",
   "participant_inputs": "Per-cell fluorescence trace extracted from all frames using a fixed label-independent ROI/motion/background recipe, optical timestamps and acquisition-quality masks; include known indicator polarity and frame exposure, never patch voltage, spike annotations, cell-specific optimum threshold, or answer-tuned ROI.",
   "known_answer": "All electrophysiologically measured spike events aligned to camera exposure. Independent evaluator fixes spike detection/quality exclusions from patch records before predictions; ambiguous or saturated patch intervals remain explicitly unscorable with coverage.",
   "complete_scope": "All12 deposited cells and every recording/movie within each cell, not the three examples from the VolPy method comparison. Optical mask/extraction quality must be audited independently of spike prediction. Include low-SNR and failed-extraction records as failures/coverage, not silently remove them.",
@@ -111,5 +111,134 @@
     "submission_ready": false,
     "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
     "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Electrophysiological spike-event times at authentic electrical sample locations, adjudicated independently of optical predictions; the present repository has no complete qualified event reference."
+  ],
+  "biological_unit": "Six deposited subject groups from the complete metadata census; verify the biological grouping before population inference. Twelve cells and 34 movies are nested, not independent subjects.",
+  "case_definition": "One complete movie, partitioned into exhaustive nonoverlapping optical frame cores for submission and reassembled before event matching.",
+  "allowed_inputs": {
+    "inputs": [
+      "Complete optical voltage trace from label-independent ROI/background/motion processing, native exposure-midpoint timestamps and optical-only quality support. Trace preparation is not yet qualified.",
+      "Known indicator polarity/exposure and identical training-cell calibration across all six held-subject folds. Native frame values must be preserved; nominal 400/1000 Hz are stratum labels only."
+    ],
+    "forbidden_inputs": [
+      "Patch voltage, injected-current channel, held spike annotations or electrically optimized ROI/denoising/templates/thresholds.",
+      "Electrical-derived support/representation-ceiling events, held-subject calibration outcomes or original answer-bearing source names."
+    ],
+    "case_identity": "Current scorer requires exactly 12 opaque cells, 34 opaque movies and exhaustive core_id frame partitions, joined privately to six subjects and six outer_folds. Authentic public packet/opaque map is not delivered; hashes identify supplied artifacts rather than establish biological provenance.",
+    "split": "The native-frame scorer requires one outer fold per declared subject with every other subject’s cells as training cells; all movies follow their cell’s subject. Calibrate optical comparators on training/development only. This verifies a supplied map, not independent animal identity or training behavior.",
+    "coverage": "All twelve deposited cells and all 34 movies, including extraction failures, partial validity and undefined cells. Metadata census replaces filename-only six-token observation; paper methods’ seven-mouse count remains an unresolved source discrepancy. Full signal decoding and optical/electrical support are not established."
+  },
+  "split": {
+    "policy": "The native-frame scorer requires one outer fold per declared subject with every other subject’s cells as training cells; all movies follow their cell’s subject. Calibrate optical comparators on training/development only. This verifies a supplied map, not independent animal identity or training behavior.",
+    "coverage": "All twelve deposited cells and all 34 movies, including extraction failures, partial validity and undefined cells. Metadata census replaces filename-only six-token observation; paper methods’ seven-mouse count remains an unresolved source discrepancy. Full signal decoding and optical/electrical support are not established."
+  },
+  "controls": [
+    "Within-movie optical-to-patch block reassignment preserving duration and nuisance strata; complete recording support required.",
+    "Keep actual stored exposure-midpoint clock; do not add movie/sweep start twice or replace it with a nominal grid.",
+    "Resolve deposited 10-kHz electrical export versus paper 100-kHz acquisition and acquisition-filter metadata; do not infer anti-aliasing or physical synchronization.",
+    "Electrical-only blinded reference/quality decisions precede optical predictions; keep source gaps and failed extraction rather than choose easy intervals."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed numeric or fixed waveform-image optical trace tiles retaining complete frame cores and declared context halos.",
+      "boundary": "No tools and no patch channel; outputs remain native frame indices with at most one event per frame. Full-frame coverage must match programme arms.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No authentic optical trace packets, direct image/numeric transport or full response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed optical trace viewer with native time axis, polarity/exposure and bounded zoom.",
+      "boundary": "Only optical observations; electrical labels, private validity, raw hidden channels and representation ceiling stay evaluator-only.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer/action protocol or image delivery for this registration."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-movie numerical optical event analysis with fixed permitted tools/checkpoints.",
+      "boundary": "Same trace/calibration/halo substrate as other arms; richer-video processing is a separately labelled condition; no score feedback during held inference.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No per-case investigation runner, authentic matched packets or resource logs."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted optical trace-to-frame-event programme plus train-only calibration recipe.",
+      "boundary": "Scorer requires programme/calibration digests and complete predictions but does not execute or verify the producer; freeze before held-subject access.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No qualified optical comparator/candidate producer or protected programme execution."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Six subject-specific equal-cell event F1 values",
+      "direction": "higher",
+      "aggregation": "Match predicted native frame centers to electrical events at inclusive exact 5 ms with maximum-cardinality one-to-one matching inside each connected valid interval; sum TP/FP/FN over all movies of a cell, compute cell F1, then equally weight cells within each subject. No cross-subject primary scalar.",
+      "rationale": "Scores independent electrical event recovery without empty-window inflation, movie fragmentation or high-rate-cell dominance; all biological groups remain visible."
+    },
+    "secondary": [
+      "Precision, recall, false events per valid minute, deterministic matched latency and absolute latency.",
+      "Complete/valid duration, failed/partial/unscorable movies and predictions outside valid support at movie/cell/subject levels.",
+      "Nominal 400/1000-Hz metadata strata, observed-only subject means explicitly secondary.",
+      "Evaluator-private output-representation recall/F1 ceiling from matching every eligible native frame center after all predictions are frozen; this is not optical recoverability."
+    ],
+    "comparators": [
+      {
+        "name": "Optical MAD threshold",
+        "inputs": "Identical optical traces, native clocks and permitted training calibration.",
+        "procedure": "Required optical_mad prediction role; fit threshold/refractory policy only on training subjects. Scorer authenticates complete artifacts, not their producer or competence."
+      },
+      {
+        "name": "Optical matched filter",
+        "inputs": "Same trace-only substrate and training labels.",
+        "procedure": "Required optical_matched_filter role with train-only templates/thresholds; no electrical test template selection."
+      },
+      {
+        "name": "Metadata/rate prior",
+        "inputs": "Only permitted polarity/exposure/camera metadata and training event rate.",
+        "procedure": "Required metadata_rate role; controls gain available without the optical waveform. A full-video VolPy pipeline is richer-input auxiliary unless trace parity is proved."
+      }
+    ],
+    "nuisance_controls": [
+      "Within-movie optical-to-patch block reassignment preserving duration and nuisance strata; complete recording support required.",
+      "Keep actual stored exposure-midpoint clock; do not add movie/sweep start twice or replace it with a nominal grid.",
+      "Resolve deposited 10-kHz electrical export versus paper 100-kHz acquisition and acquisition-filter metadata; do not infer anti-aliasing or physical synchronization.",
+      "Electrical-only blinded reference/quality decisions precede optical predictions; keep source gaps and failed extraction rather than choose easy intervals."
+    ],
+    "uncertainty": "Primary is six individual subject-specific vectors and paired comparator differences, including negative/undefined values. Scorer supplies no significance or improvement threshold. Any later uncertainty must resample verified subjects and preserve nested cells/movies.",
+    "failure_policy": "Every role must submit every core with sorted unique literal frame indices, at most one event per frame; invalid submissions are rejected before private reference access. Empty/empty F1 is undefined, not perfect. Undefined cells keep the full subject mean undefined; extraction failures and unscorable coverage never disappear.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "7ca7201089fc5fcb5f85cee7d3800cf8c1f43d71c12cd263ec9952d777da029c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "ddc189697c3d5e9a4abe7dcfaad8506070fe34177dc4edeec2f7a4ae0a2f4a2f"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

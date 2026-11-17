@@ -1,0 +1,167 @@
+{
+  "id": "clinical-sensefog-stn-state",
+  "track": "neural",
+  "title": "Participant-held gait-state inference from bilateral STN LFP",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Infer observed gait state from bilateral STN local field potentials, separating freezing from an intentional stop and ordinary locomotion.",
+  "participant_inputs": "All bilateral LFP channels on the native authenticated sample grid, physical units, missing/artifact masks and relative time within the window. No IMU, EMG, gait-event labels, protocol filenames or condition-revealing timestamps in the neural-only main packet.",
+  "known_answer": "Clinical/behavioral state on a prospectively fixed time grid: freezing, voluntary stop, continuous walking, sitting and standing, with ambiguous/missing annotations retained. The exact available categories and event intervals must be authenticated before labels are frozen.",
+  "complete_scope": {
+    "question": "Infer observed gait state from bilateral STN local field potentials, separating freezing from an intentional stop and ordinary locomotion.",
+    "one_target": "Clinical/behavioral state on a prospectively fixed time grid: freezing, voluntary stop, continuous walking, sitting and standing, with ambiguous/missing annotations retained. The exact available categories and event intervals must be authenticated before labels are frozen.",
+    "unit": "Fixed2-second LFP windows at a predeclared stride across every released recording; all windows from the same participant and repeated sessions remain grouped.",
+    "input": "All bilateral LFP channels on the native authenticated sample grid, physical units, missing/artifact masks and relative time within the window. No IMU, EMG, gait-event labels, protocol filenames or condition-revealing timestamps in the neural-only main packet.",
+    "complete_compact_representation": "Complete windows containing all authenticated released LFP channels, with channel/missingness masks and the original montage recorded explicitly; do not assume two channels before the release census. Optional causal spectral tables are a separately labelled common representation. Cover all recording conditions, medication/stimulation strata actually released, dual-task periods and every annotated event. Fixed rest/standing backgrounds are required for false-alarm evaluation.",
+    "target_construction": "Derive the protected interval labels from original clinical annotations and synchronized movement evidence, not from the same LFP features being scored. Reconcile clock drift, recording gaps, freezing onset/offset, voluntary stops and boundary windows. Ambiguous overlap states remain explicit; no label interpolation across missing annotations without a source-backed rule.",
+    "heldout": "Outer leave-one-participant-out across all12 participants; all sessions/windows/hemispheres from a person stay together. Inner participant-group tuning. Preserve people without freezing events and report their false alarms.",
+    "baseline": "Training prevalence; causal band-power/logistic baseline; train-only random forest or compact temporal model. Specialist assistance exposes a frozen neural classifier/feature extractor; movement channels remain scorer-only for the primary task.",
+    "scorer": "Primary ordinary participant-macro multiclass log loss over authenticated classes: for each participant, average -log(p_true) across all its evaluable windows under the frozen natural-coverage grid, then average participant means with equal participant weight. Use a prospectively fixed finite-probability rule; report undefined/no-evaluable-window cases explicitly. Report freezing sensitivity, voluntary-stop confusion, false alarms per recorded minute, state coverage and event-onset timing with prespecified tolerances. Any class-balanced loss is a separate diagnostic with weights fixed from outer-training groups only; it does not replace the primary natural-coverage loss. Participant-cluster uncertainty and all12 fold results are mandatory.",
+    "negative_controls": [
+      "No movement-channel leakage into a neural-only score.",
+      "Protocol/task-ID-only and pre-event-context controls to expose schedule shortcuts.",
+      "Freeze code containing hard-coded clinical event times outside participant-accessible specialist tools.",
+      "Prevent overlapping windows or both hemispheres from crossing group splits.",
+      "Evaluator-owned sufficiently separated time shifts of complete multichannel LFP within the same continuous participant/session segment, with original behavioral annotations and case context fixed; no channel-wise or cross-day reassignment."
+    ],
+    "evaluator_owned_input_pairing_control": {
+      "transformation": "Apply one common integer-sample time lag to the complete all-channel LFP timeline within each authenticated continuous acquisition segment. For each original case time, obtain the donor waveform and all required signal lookback from that shifted location, while leaving the recipient annotations, case time/context and target unchanged. Every channel moves synchronously; overlapping windows retain their common temporal structure under that lag.",
+      "nuisance_strata": "Never cross participant, day, session, continuous segment, montage/channel set, sampling rate, reference/filter regime, medication or DBS setting, or other authenticated acquisition changes. Split segments at real recording gaps and those changes using target-free source metadata. Behavioral labels are not used to pick segments, lags or support. Require an exact observable channel/missingness/artifact-mask match between the complete recipient and donor support intervals.",
+      "separation_and_finite_lags": "Before held-out outcomes, freeze a training-only method for estimating the longest relevant signal-dependence time L_train from all outer-training participants. Define H as the largest authorized waveform, preprocessing and specialist-feature lookback, including the complete 2-second case window. Set G to at least max(30 seconds, 2H, L_train), rounded upward to an integer sample count per sampling stratum. If L_train or the required lookback cannot be defensibly established, mark this null unavailable. The only requested lags are +G, -G, +2G, -2G through +10G, -10G; do not choose a lag based on held-out labels or performance.",
+      "admissibility": "Use nonwrapping shifts only. A donor must stay entirely inside the same continuous segment with its complete required lookback and native time grid, preserve every authenticated released channel and satisfy the exact mask match. Segment edges, gaps, inadequate separation, missing history or mask mismatch make that case unsupported for that lag. No circular wrap, end stitching, interpolation, annotation shift, per-channel offsets, cross-day donor, window duplication or easier replacement case is allowed. Apply the same lag to all cases within its segment; record any cases that cannot receive a valid shifted packet.",
+      "scope_and_aggregation": "Always score every original full input under the original primary protocol, including participants without freezing and all released background/condition strata. Null support is additional and may be empty or uneven. For each fixed lag, compare original and transformed losses on the exact same supported case IDs in every arm, using the common participant-macro paired-support policy. Report all unsupported cases and reasons plus participant/session/state coverage; do not pool unequal coverage, discard nonpermutable days or replace the full natural-coverage primary score.",
+      "interpretation": "This is a descriptive check of dependence on the original neural/behavioral temporal pairing, not an exchangeability guarantee or proof of a physiological causal mechanism. A long recording or large lag alone does not establish a valid null; unsupported sampling structure is reported explicitly."
+    }
+  },
+  "protected_split": "Outer leave-one-participant-out across all12 participants; all sessions/windows/hemispheres from a person stay together. Inner participant-group tuning. Preserve people without freezing events and report their false alarms.",
+  "scoring": "Primary ordinary participant-macro multiclass log loss over authenticated classes: for each participant, average -log(p_true) across all its evaluable windows under the frozen natural-coverage grid, then average participant means with equal participant weight. Use a prospectively fixed finite-probability rule; report undefined/no-evaluable-window cases explicitly. Report freezing sensitivity, voluntary-stop confusion, false alarms per recorded minute, state coverage and event-onset timing with prespecified tolerances. Any class-balanced loss is a separate diagnostic with weights fixed from outer-training groups only; it does not replace the primary natural-coverage loss. Participant-cluster uncertainty and all12 fold results are mandatory.",
+  "comparators": "Training prevalence; causal band-power/logistic baseline; train-only random forest or compact temporal model. Specialist assistance exposes a frozen neural classifier/feature extractor; movement channels remain scorer-only for the primary task.",
+  "negative_controls": [
+    "No movement-channel leakage into a neural-only score.",
+    "Protocol/task-ID-only and pre-event-context controls to expose schedule shortcuts.",
+    "Freeze code containing hard-coded clinical event times outside participant-accessible specialist tools.",
+    "Prevent overlapping windows or both hemispheres from crossing group splits.",
+    "Evaluator-owned sufficiently separated time shifts of complete multichannel LFP within the same continuous participant/session segment, with original behavioral annotations and case context fixed; no channel-wise or cross-day reassignment."
+  ],
+  "paired_access_conditions": {
+    "direct": "No-tools inference on the complete canonical signal packet and target-free permitted context.",
+    "numerical": "Numerical tools on the identical packet. Frozen-program versus per-case adaptive tool use is separately logged within this task.",
+    "specialist": "Audited fixed feature extractor or train-only physiological model on identical information; trained model access is an assistance condition, not evidence of unaided understanding.",
+    "parity": "Same case IDs, inputs, units, masks, training/calibration exposure, protected answers, and transform support. Raw versus lossy derived signals are separately labelled input substrates; no equivalence assumed. Richer-input specialists are auxiliary.",
+    "interpretation": "Association, tool use, public exposure and physiological understanding remain separate. No model campaign is selected."
+  },
+  "clinical_null_common_policy": {
+    "direct_no_tools": "A general LLM receives the complete canonical per-case neural packet and the same prespecified training-derived reference information as the other arms, without code execution, external search or specialist calls.",
+    "numerical": "The same model receives the identical packet and reference information plus sandboxed numerical/Python tools. Training and tuning use only outer-training groups.",
+    "specialist_assisted": "The same packet and numerical tools plus frozen specialist feature extractors or predictors trained/tuned only in outer-training groups; returned predictions/features must use only that packet and the explicitly matched training evidence.",
+    "evidence_parity": "All main comparison arms use byte-identical canonical packets, target-free metadata, the same group splits and training evidence. Raw-waveform and derived-feature variants are separate information-substrate analyses, never relabelled as a pure tool effect.",
+    "full_scope": "Every released participant, recording, eligible condition and prespecified evaluation window is accounted for. Unsupported labels, ambiguous timing, missing channels, artifact exclusions and context-overflow cases remain in coverage and failure reports; no successful subset becomes the benchmark.",
+    "frozen_evaluation": "Prespecify labels, windows, preprocessing, splits and metric before any model outcomes. Fit transforms and hyperparameters within training groups. Protected target rows, test labels, annotation-bearing code and answer-derived features cannot be participant inputs.",
+    "uncertainty": "Report group-level scores and paired group differences; bootstrap or other intervals must respect participants and repeated recordings. Small cohorts require prominent fold-by-fold results and limited precision.",
+    "scope_of_claim": "This evaluates interpretation of a specified neural representation. Behavioral responsiveness is not proof of consciousness; stimulation metadata is not a newly measured causal-connection label; symptom recognition is not a treatment recommendation.",
+    "execution_modes": {
+      "direct_no_tools": "The model predicts directly from each complete common packet without writing or executing a prediction program. It is not a program-writing condition.",
+      "frozen_program": "Within each numerical-only or specialist-assisted arm, the LLM develops one prediction program using outer-training groups only. Freeze its source/configuration before protected evaluation. Execute that fixed program on every held-out case without per-case agent intervention or post-freeze tuning. Data-dependent computation inside the frozen program remains allowed by the prespecified rules.",
+      "case_adaptive_agent": "Within each numerical-only or specialist-assisted arm, the LLM may choose analyses, write code and call permitted tools while investigating one held-out input case. Target labels remain protected; no case-derived state or fitted updates carry into other held-out cases unless a separate causal online protocol was prospectively declared.",
+      "comparison": "Cross frozen-program versus case-adaptive execution with numerical-only versus specialist assistance. Use identical packets, training evidence, group folds and declared compute/tool budgets, and report one-time program-development cost separately from per-case cost. These are conditions of each candidate benchmark, not additional benchmark counts."
+    },
+    "evaluator_owned_pairing_controls": {
+      "purpose": "Descriptive signal-pairing dependence checks. A change in prediction loss does not establish causality, a calibrated randomization test or exchangeability. No permutation p-value is reported without an independently justified prospective exchangeability model.",
+      "custody_and_parity": "The evaluator freezes target-free nuisance strata, admissibility rules, seeds/lags and mapping manifests before model outcomes. Targets, recipient case context and annotations stay fixed. Every arm receives the same transformed packet bytes, case order, masks and support status for each transform. Donor identities, protected labels and mappings that reveal answers stay evaluator-only. Training references, fitted transforms and models remain frozen under the original outer-fold rules.",
+      "original_full_scope": "The primary evaluation still scores the full original case census and reports all original missing, ambiguous or failed cases. An unavailable null never removes a case, participant, channel, condition or session from that primary evaluation. Null packets are additional diagnostics; unsupported cases retain explicit records and are not silently filled with unchanged inputs.",
+      "support_and_aggregation": "For every transform, publish counts and reasons for valid, invalid and unsupported mappings by participant/session and declared nuisance stratum, plus descriptive target-class coverage after maps are frozen. Compare original and transformed losses on exactly the same supported case IDs within each participant; average those paired case differences within participant, then equally across participants with support. Label this explicitly as a support-limited diagnostic, list every participant without support and retain the separate full-cohort original score. Report each transform, actual distinct-transform count and, if aggregated across transforms, equal-weight the valid transform-level paired differences; do not pool windows or hide differing coverage. No supported-case diagnostic replaces the natural-coverage primary score.",
+      "invalid_policy": "No identity transform counted as a null, outcome-driven retries, post-hoc stratum relaxation, cross-group donors, target-driven map selection, invented channels, altered repetition counts, synthetic boundary joins or unequal arm coverage. Prediction failures use the same frozen scorer policy as the original evaluation. If no valid transformation exists, report the null unavailable and its exact reason."
+    }
+  },
+  "provenance": {
+    "paper": {
+      "title": "Supraspinal contributions to defective antagonistic inhibition and freezing of gait in Parkinson’s disease",
+      "doi": "10.1093/brain/awae223",
+      "year": 2024,
+      "official_url": "https://academic.oup.com/brain/article/147/12/4056/7831184"
+    },
+    "data": {
+      "official_url": "https://data.mendeley.com/datasets/c9ckcvjxc7/1",
+      "doi": "10.17632/c9ckcvjxc7.1",
+      "version": "1",
+      "published": "2024-02-01",
+      "licence": "CC BY4.0 in official Mendeley metadata",
+      "extent": "Not independently inventoried; original author README says retained full preprocessing/analysis can use up to20 GB.",
+      "optional_derived_catalogue": "https://www.nemar.org/dataset/nm000434?v=v1.0.1",
+      "derived_catalogue_role": "Discovery only; use original Mendeley release/author code as authority until derivative equivalence is separately verified."
+    },
+    "official_code": {
+      "official_url": "https://github.com/PKlocke/SenseFOG-Documentation",
+      "licence": "Repository metadata displays CC-BY-4.0; dependency/toolbox rights remain separate.",
+      "commit": "Unresolved; main branch is not an immutable pin.",
+      "runtime_from_author": "MATLAB2022a with FieldTrip1.0.1.0, Wavelet Toolbox6.1 and Signal Processing Toolbox9.0; no installation or execution selected."
+    },
+    "observed_facts": [
+      {
+        "claim": "Authors describe12 patients with idiopathic Parkinson's disease and bilateral STN DBS implants, with recordings designed to distinguish freezing from voluntary stopping.",
+        "source": "https://github.com/PKlocke/SenseFOG-Documentation"
+      },
+      {
+        "claim": "The Brain paper directs readers to the public Mendeley v1 dataset and author analysis repository.",
+        "source": "https://academic.oup.com/brain/article/147/12/4056/7831184"
+      },
+      {
+        "claim": "The code README reports a standard-computer analysis, up to20 GB retained pipeline storage, and a demo using gait-cycle time-frequency information. Demo scale is not a full-release resource measurement.",
+        "source": "https://github.com/PKlocke/SenseFOG-Documentation"
+      }
+    ],
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 35968,
+      "sha256": "cca076d5ab3e80ab85ac714b49f940696dd5b3f44a10d1c6d4fb03bb14ab1db4"
+    },
+    "selector": {
+      "array": "candidates",
+      "identity_field": "candidate_id",
+      "identity": "clinical-sensefog-stn-state"
+    }
+  },
+  "resources_and_remaining_gates": {
+    "planning": "CPU streaming preparation and linear/RF baselines; no GPU is intrinsically required by this design. Authors'20GB pipeline note is a planning signal, not an observed archive size. Native MATLAB dependencies and any converted Python parity need separate qualification; RAM/time/read envelopes require a complete file census.",
+    "must_resolve": [
+      "Exact original release file inventory, checksums and immutable code commit.",
+      "Source and independent provenance of each clinical interval label; no circular labels derived from LFP.",
+      "Synchrony, channel geometry, sampling rates and actual medication/stimulation coverage.",
+      "Patient/session identity and no-freezing participant accounting.",
+      "Strip hard-coded test annotations from any assistance-code snapshot; preserve required attribution and dependency licenses."
+    ]
+  },
+  "distinctness": "Pathological freezing versus voluntary stopping from implanted basal-ganglia signals, rather than generic motor decoding or wearable-only gait classification.",
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "source_family_ids": [
+    "sensefog-mendeley-c9ckcvjxc7"
+  ],
+  "machine_output": {
+    "predictions": "State probability vector for every fixed2s all-channel LFP window under frozen stride/class dictionary across all12 participants and all recordings/conditions/background periods.",
+    "score_rows": "Within-person natural-coverage mean negative log probability then equal-person mean; freezing sensitivity, stop confusion, false alarms/minute, state coverage and all fold outcomes.",
+    "controls": "Complete V3 common-channel nonwrapping lag grid and fixed-support paired loss differences, no annotation or per-channel shifts; null support may be empty, full original scoring remains."
+  },
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 21745,
+    "source_definition_sha256": "d9e8c67d0fc1f8e4b50a9ce099766f40d0d04235433018c7346a9d60bc1c90d6",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}
