@@ -2,14 +2,8 @@ name: Consensus occurrence controls
 
 'on':
   pull_request:
-    paths:
-      - 'components/consensus-occurrences/**'
-      - '.github/workflows/consensus-occurrence-controls.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'components/consensus-occurrences/**'
-      - '.github/workflows/consensus-occurrence-controls.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +28,7 @@ jobs:
           CONSENSUS_CONTROL_ROOT="/tmp/consensus-occurrences-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           mkdir -m 700 "$CONSENSUS_CONTROL_ROOT"
           set +e
-          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B components/consensus-occurrences/run_invented_controls.py >"$CONSENSUS_CONTROL_ROOT/stdout.log" 2>"$CONSENSUS_CONTROL_ROOT/stderr.log"
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/trial-occurrences/run_invented_controls.py >"$CONSENSUS_CONTROL_ROOT/stdout.log" 2>"$CONSENSUS_CONTROL_ROOT/stderr.log"
           CONSENSUS_CONTROL_STATUS=$?
           set -e
           printf '%s\n' "$CONSENSUS_CONTROL_STATUS" >"$CONSENSUS_CONTROL_ROOT/exit-status.txt"

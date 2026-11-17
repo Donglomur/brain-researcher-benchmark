@@ -29,9 +29,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B tools/build_public_catalog.py --check
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests -p 'test_public_catalog.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tools/tests -p 'test_neurobench_delivery.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tools/tests -p 'test_neurobench_programs.py' -v
-          python -I -S -B tools/check_public_navigation.py
-          bash -n tools/run_task.sh
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/catalog.py --check
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/check_repository.py
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_repository_checks.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_catalog.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_cli_delivery.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_program_admission.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_campaign_authority.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/maintenance -p 'test_*.py' -v
+          python -I -S -B scripts/check_navigation.py
+          bash -n examples/original-three/scripts/run_task.sh

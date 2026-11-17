@@ -2,14 +2,8 @@ name: Hybrid causal prediction synthetic controls
 
 on:
   pull_request:
-    paths:
-      - 'benchmarks/neuroscience/hybrid-causal-controls-v1/**'
-      - '.github/workflows/hybrid-causal-controls.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'benchmarks/neuroscience/hybrid-causal-controls-v1/**'
-      - '.github/workflows/hybrid-causal-controls.yml'
   workflow_dispatch:
 
 permissions:
@@ -35,7 +29,7 @@ jobs:
           set -euo pipefail
           umask 077
           HYBRID_CONTROL_ROOT="/tmp/hybrid-causal-controls-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          HYBRID_CONTROL_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/hybrid-causal-controls-v1"
+          HYBRID_CONTROL_SOURCE="$GITHUB_WORKSPACE/benchmarks/neural/NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR/implementations/hybrid-causal-controls-v1"
           mkdir -m 700 "$HYBRID_CONTROL_ROOT"
           set +e
           /usr/bin/timeout --signal=TERM --kill-after=5s 50s python -I -B -c 'import hashlib,os,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]); f=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK); z=os.fstat(f); assert stat.S_ISREG(z.st_mode) and z.st_nlink==1 and z.st_size==int(sys.argv[2]) and z.st_size<1048576; b=os.read(f,z.st_size+1); os.close(f); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})' "$HYBRID_CONTROL_SOURCE/run_controls.py" 10306 e7544ed4775cab428dc1c19b908b0fd2f621cd41cc8dba9af239853819e3de95 --out "$HYBRID_CONTROL_ROOT/artifact" --selection-sha256 e9997b264cf7bd7a4f0e7be2d5847d84cc35d7f5db93bb2edd04256d3e16acbe >"$HYBRID_CONTROL_ROOT/stdout.log" 2>"$HYBRID_CONTROL_ROOT/stderr.log"

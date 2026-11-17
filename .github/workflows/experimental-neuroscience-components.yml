@@ -32,7 +32,7 @@ jobs:
           import json
           from pathlib import Path, PurePosixPath
           import stat
-          root = Path('benchmarks/neuroscience/experimental').absolute()
+          root = Path('benchmarks/shared/experimental-neuroscience').absolute()
           def captured(path, length, digest):
               assert type(length) is int and 0 <= length <= 262144
               assert not any(p.is_symlink() for p in (path, *path.parents))
@@ -81,19 +81,19 @@ jobs:
         run: >-
           timeout --signal=TERM --kill-after=5s 30s
           python -I -S -B -m unittest discover
-          -s benchmarks/neuroscience/experimental/macaque-memory -p test_score.py -v
+          -s benchmarks/shared/experimental-neuroscience/macaque-memory -p test_score.py -v
       - name: Test dendrite scoring with invented data
         run: >-
           timeout --signal=TERM --kill-after=5s 30s
           python -I -S -B -m unittest discover
-          -s benchmarks/neuroscience/experimental/dendrites -p test_score_lobes.py -v
+          -s benchmarks/shared/experimental-neuroscience/dendrites -p test_score_lobes.py -v
       - name: Test calcium scoring with invented data
         run: >-
           timeout --signal=TERM --kill-after=5s 30s
           python -I -S -B -m unittest discover
-          -s benchmarks/neuroscience/experimental/calcium-state -p test_scorer.py -v
+          -s benchmarks/shared/experimental-neuroscience/calcium-state -p test_scorer.py -v
       - name: Test NeuralFlow likelihood with invented data
         run: >-
           timeout --signal=TERM --kill-after=5s 30s
           python -I -S -B -m unittest discover
-          -s benchmarks/neuroscience/experimental/neuralflow-likelihood -p test_likelihood.py -v
+          -s benchmarks/shared/experimental-neuroscience/neuralflow-likelihood -p test_likelihood.py -v

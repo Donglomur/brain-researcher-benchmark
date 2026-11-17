@@ -2,14 +2,8 @@ name: Retina construction controls
 
 'on':
   pull_request:
-    paths:
-      - 'components/retina-construction/**'
-      - '.github/workflows/retina-construction-controls.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'components/retina-construction/**'
-      - '.github/workflows/retina-construction-controls.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +28,7 @@ jobs:
           RETINA_CONTROL_ROOT="/tmp/retina-construction-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           mkdir -m 700 "$RETINA_CONTROL_ROOT"
           set +e
-          /usr/bin/timeout --signal=TERM --kill-after=5s 40s python -I -S -B components/retina-construction/run_offline_controls.py >"$RETINA_CONTROL_ROOT/stdout.log" 2>"$RETINA_CONTROL_ROOT/stderr.log"
+          /usr/bin/timeout --signal=TERM --kill-after=5s 40s python -I -S -B benchmarks/shared/retina-coding/construction/run_offline_controls.py >"$RETINA_CONTROL_ROOT/stdout.log" 2>"$RETINA_CONTROL_ROOT/stderr.log"
           RETINA_CONTROL_STATUS=$?
           set -e
           printf '%s\n' "$RETINA_CONTROL_STATUS" >"$RETINA_CONTROL_ROOT/exit-status.txt"

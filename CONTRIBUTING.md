@@ -1,40 +1,60 @@
 # Contributing
 
-This fork develops paper-reproduction/improvement and neural-data-understanding
-benchmarks. Open PRs against **`publish/neuroscience-200` in
-`Donglomur/brain-researcher-benchmark`**. See [the development workflow](docs/DEVELOPMENT.md)
-for commands, branch cleanup and review expectations.
+Contributions develop the paper-research and neural-data tracks in
+[Donglomur/brain-researcher-benchmark](https://github.com/Donglomur/brain-researcher-benchmark).
+Open PRs against **`publish/neuroscience-200`**. The [development guide](docs/DEVELOPMENT.md)
+explains branches, review and source maintenance.
 
-## What a contribution should establish
+## Scientific contribution
 
-1. State the scientific question, original paper/data/code provenance and exact endpoint.
-2. Define the complete case population, splits, permitted observations, tool/code access,
-   metric, comparator and reproduction/improvement conditions.
-3. Supply documented source with positive and relevant adversarial controls. Preserve
-   failed or negative outcomes and distinguish generated checks from authentic-data runs.
-4. Document external inputs, licenses, runtime/resource requirements and unresolved holds.
-   Keep protected answers, private records and credentials out of the public history.
-5. Update the source definitions and regenerate the public catalog when they change.
+A task should state its scientific question, paper/data/code provenance, complete
+case population, splits, permitted observations, metric and comparison conditions.
+Separate historical reproduction from prospective improvement. Document the exact
+inputs, environment, resource requirements, licenses and unresolved limitations.
 
-A source contribution can be merged before scientific qualification when its limits
-are explicit. Calling a benchmark finished requires evidence for the complete
-stated task, usable inputs/runtime, functioning evaluation and independent review.
-Metadata counts and green software CI alone do not meet that standard.
+Supply implementation source with meaningful positive and adversarial checks.
+Preserve failed or negative outcomes and distinguish generated software controls
+from authentic-data and model runs. A source contribution can be accepted with
+explicit limits; whole-task qualification needs evidence for the complete stated
+contract, functioning evaluation and independent review.
 
-## Checks
+## Where changes belong
+
+- Put task definitions and task-specific source in `benchmarks/paper/<ID>/` or
+  `benchmarks/neural/<ID>/`. Keep implementation packages with closed inventories
+  intact, and give alternate implementations explicit roles.
+- Put scientific code used by several tasks in `benchmarks/shared/`. This directory
+  also retains related-only sources and families without an assigned task owner;
+  see the [shared-source index](benchmarks/shared/README.md). Record the exact
+  relationship or unresolved ownership in `benchmarks/registry.json`.
+- Put task-agnostic framework code in `src/neurobench/`; use `scripts/` for commands.
+- Put current user, scientific and contributor guides in `docs/`. Retained
+  publication records belong in `docs/provenance/`; only proven inactive material
+  belongs in `archive/`.
+
+Keep IDs and scientific scope stable unless the PR explicitly proposes a reviewed
+scientific change. Update the registry and current source bindings when code moves.
+Historical source manifests retain their original paths and hashes; see
+[provenance](docs/provenance/README.md) before changing one.
+
+## Validation
 
 From the repository root, with Python 3.11 or later:
 
 ```sh
-python3 tools/build_public_catalog.py --check
-python3 tools/check_public_navigation.py
-python3 -I -S -B -m unittest discover -s tests -p 'test_public_catalog.py' -v
+python3 -I -S -B scripts/catalog.py --check
+python3 -I -S -B scripts/check_navigation.py
+python3 -I -S -B scripts/check_repository.py
+python3 -I -S -B scripts/check_source_integrity.py
+python3 -I -S -B -m unittest discover -s tests/framework -v
 ```
 
-Run the affected component's documented checks as well. Do not alter its scientific
-scope or its evidence pins just to make a failing check pass. Explain the concrete
-change, tests actually run and any remaining limits in the PR.
+Run the affected implementation's documented checks as well. Maintenance tests
+live in `tests/maintenance/`; scientific source-package controls stay with their
+packages. Do not change scientific populations, metrics or evidence merely to
+make a check pass. The PR should state the resulting behavior, tests actually run,
+and remaining limits.
 
-The [original example contribution guide](docs/original-examples-contributing.md)
-retains the upstream task format and uncued-judgment criteria. Those example-specific
-criteria are separate from this programme's broader two-track evaluation design.
+Public commits must exclude protected references, private records, credentials and
+unpublished working histories. The inherited examples retain their own
+[contribution guide](examples/original-three/CONTRIBUTING.md).
