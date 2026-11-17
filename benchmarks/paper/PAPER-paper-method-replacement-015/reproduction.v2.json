@@ -1,0 +1,1474 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-replacement-015",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The accepted same-primary correction supplies actual source-defined inference quantities and semantic axes, so v2 can declare the complete retained comparison with unresolved references, identities, dimensions, metric mapping and criteria. This is an external source-unresolved declaration, not a scientific result, executable benchmark or admitted endpoint. No unsupported thirteen-group expansion is required.",
+  "source_paper": {
+    "title": "Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data",
+    "url": "https://doi.org/10.1523/JNEUROSCI.1187-24.2025"
+  },
+  "evidence": [
+    {
+      "id": "spinal-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Methods: Quantification of spike rate inference performance and Spike rate inference with CASCADE and OASIS; Figure 4d–h",
+      "supports": "Original DS40/41 task, leave-one-neuron-out fitting, sampling/noise settings, smoothing and comparison conditions."
+    },
+    {
+      "id": "spinal-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+      "locator": "lines 16–60 and 70–93",
+      "supports": "Current author LOO route, neuron exclusion, preprocessing, correlation/error/bias formulas and summary policies; not proof of historical figure equivalence."
+    },
+    {
+      "id": "spinal-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json",
+      "locator": "admission; verification; program_execution; program_conditions",
+      "supports": "The registered source advertises a 44-cell construction scope but has no qualified executed author comparison or selected scientific runtime; these are registration facts, not paper validation."
+    },
+    {
+      "id": "spinal-main-panel",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Methods s2A1K–s2A1M; Results s3D; Figure 4a–f and Extended Data Figure 4-1",
+      "supports": "Full five-method per-neuron comparison for both spinal populations and separate cortex; nominal 21/23/80 counts, 30 Hz/noise 7/50 ms main condition, whole-neuron exclusion and source examples. Exact source roster and values remain unresolved."
+    },
+    {
+      "id": "spinal-sweeps",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Methods s2A1K; Results s3D; Figure 4g–h; Extended Data Figure 4-3a–c",
+      "supports": "Original sampling/noise and matched temporal-precision comparison families, per-neuron correlations and source-normalized performance curves. Exact grids, normalization and values remain unresolved."
+    },
+    {
+      "id": "spinal-alignment",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Methods s2A1L; Results s3D; Extended Data Figure 4-2",
+      "supports": "Original dataset-wide method-specific alignment and OASIS smoothing/delay optimization. Exact selected parameters, supporting search grid and permitted selection observations remain unresolved."
+    },
+    {
+      "id": "spinal-rate-error",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Results s3F; Figure 6a–c",
+      "supports": "Original excess/deficit rate-error components over evaluation timescales and longest-window signed-bias distributions. Exact estimands, window rules, normalization, Figure 6c model identity and mapping to historical required bias/error outputs remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "CASCADE ground-truth datasets DS40 and DS41, as linked by the paper; exact archival bytes and paper code configuration remain to be bound.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code",
+        "spinal-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 4d–e specifies 21 glutamatergic and 23 GABAergic spinal neurons. Preserve both populations and each original condition; cortex is a separate comparator dataset.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Within-dataset retraining excludes the test neuron, including its recordings, for every evaluated neuron. Cross-dataset and cortical-default models remain distinct comparators.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Extracted calcium ΔF/F traces; paired electrical spikes provide targets, never candidate inputs.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper Figure 4d–f uses 30 Hz, standardized noise 7 and 50 ms Gaussian target smoothing; other conditions have different kernels. Recover exact resampling/noise realizations, edge handling and source-era dataset-wide delay correction. The current demo noise grid 2,4,6,8 is not this original grid.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson correlation of inferred and target spike-rate traces, higher is better. Error and signed bias must remain separate diagnostics rather than a new composite score.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Original figure boxplots summarize per-neuron results separately by cell type and condition. The current demo additionally pools noise rows; that pooled summary is not the paper estimator.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Reproduce and assess improvements in the paper's continuous spike-rate inference comparison on paired spinal calcium/electrophysiology recordings, preserving both spinal populations, the source-defined held-neuron exclusions, original sampling/noise/target-smoothing conditions, cortical/default and cross-dataset CASCADE, raw fluorescence and OASIS comparators, and source-grounded correlation, bias and error outcomes. Retain complete per-neuron and condition panels and necessary alignment and temporal-precision controls. Report reproduction and source-qualified improvement separately. Acquisition experiments and the downstream in-vivo application remain outside this bounded task. Mandatory outputs are the complete original five-method Figure 4 per-neuron main comparison with separate nominal 21 glutamatergic, 23 GABAergic and 80 cortex cohorts; original sampling/noise sweeps and matched temporal-precision controls; dataset-wide alignment and OASIS smoothing/delay controls; and source-grounded correlation, rate-error and signed-bias outputs with their original timescale/model/support definitions. The Figure 6a–c mapping remains unresolved. Error and bias remain separate outputs, not a composite score, and must not be replaced by the accepted single-pass diagnostics. The broader thirteen-group source census is not an enrolled primary. No acquisition, Figure 7 in-vivo, descriptive kernel/event/relative-segment or Figure 3d simulation result is added by this declaration. Complete numerical references, identities and comparison criteria remain unresolved.",
+      "evidence_ids": [
+        "spinal-main-panel",
+        "spinal-sweeps",
+        "spinal-alignment",
+        "spinal-rate-error"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Inference candidates receive the source calcium ΔF/F observations under the original conditions. Electrical events are authorized supervised training targets within each source training fold and trusted operator evaluation targets for held-neuron inference; they are never held-neuron candidate-time inference inputs. Each test neuron and all its recordings are excluded from within-dataset training. Source cross-dataset controls, high-rate training exclusions, delay-selection observations and exact support/exposure manifests must be authenticated. Keep paper+data and paper+data+official-author-code paired observations, task, evaluator and budgets matched with only the pinned official-code addition differing; no complete paired protocol is declared.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code",
+        "spinal-alignment"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "main_matched_inference",
+      "kind": "indexed_array_family",
+      "description": "Complete original main matched inference comparison: both spinal populations, separate cortex and all five controls. No favorable class or isolated main-condition score constitutes the full primary.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "main_matched_inference",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "glutamatergic_main_per_neuron_correlations",
+            "manifest_key": "glutamatergic_main_per_neuron_correlations",
+            "source_quantity": "Original Figure 4 main-panel Pearson correlations for glutamatergic neurons across all five named methods at 30 Hz, standardized noise 7 and 50 ms target Gaussian SD. Nominal source count 21; source row identities are not authenticated.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One correlation per original neuron/method; retain each source recording/support and derive cohort-separated source median/quartile summaries with authenticated original conventions. No pooled spinal average or mean over noise rows replaces the panel.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-main-panel"
+            ]
+          },
+          {
+            "id": "gabaergic_main_per_neuron_correlations",
+            "manifest_key": "gabaergic_main_per_neuron_correlations",
+            "source_quantity": "Original Figure 4 main-panel Pearson correlations for gabaergic neurons across all five named methods at 30 Hz, standardized noise 7 and 50 ms target Gaussian SD. Nominal source count 23; source row identities are not authenticated.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One correlation per original neuron/method; retain each source recording/support and derive cohort-separated source median/quartile summaries with authenticated original conventions. No pooled spinal average or mean over noise rows replaces the panel.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-main-panel"
+            ]
+          },
+          {
+            "id": "cortex_main_per_neuron_correlations",
+            "manifest_key": "cortex_main_per_neuron_correlations",
+            "source_quantity": "Original Figure 4 main-panel Pearson correlations for cortex neurons across all five named methods at 30 Hz, standardized noise 7 and 50 ms target Gaussian SD. Nominal source count 80; source row identities are not authenticated.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source cortex neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One correlation per original neuron/method; retain each source recording/support and derive cohort-separated source median/quartile summaries with authenticated original conventions. No pooled spinal average or mean over noise rows replaces the panel.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-main-panel"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "spinal-main-panel"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observation_prediction_support",
+        "original_held_neuron_control_provenance",
+        "main_per_neuron_correlations_and_source_summaries"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved source-qualified numerical comparison of the complete declared original family and its mandatory companion outputs; no norm, reduction, all-close rule, threshold or numeric tolerance is selected.",
+        "independent_unit": "Original per-neuron outputs, preserving recording and condition membership; independent animal/session units remain unresolved.",
+        "dependence": "Recordings, bins, noise realizations, conditions and methods share neurons; source animal/session clustering remains unresolved. Do not promote them to independent biological units.",
+        "multiplicity": "Complete declared source family and mandatory controls must remain covered; no multiplicity or simultaneous-agreement rule is yet justified.",
+        "rationale": "These are existing source numerical quantities, so numerical-reference comparison is a possible declaration route. Authentic publication-equivalent references and scientific agreement/uncertainty policies are absent; the class label does not establish such a criterion.",
+        "evidence_ids": [
+          "spinal-main-panel"
+        ]
+      },
+      "evidence_ids": [
+        "spinal-main-panel"
+      ]
+    },
+    {
+      "id": "sampling_noise_precision_comparisons",
+      "kind": "indexed_array_family",
+      "description": "Complete original sampling/noise sweeps and matched temporal-precision controls with underlying per-neuron performance and normalized source curves. Exact grids remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "sampling_noise_precision_comparisons",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "glutamatergic_sampling_rate_per_neuron_correlations",
+            "manifest_key": "glutamatergic_sampling_rate_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original sampling_rate comparison for glutamatergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "sampling_rate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original sampling-rate coordinates and companion target-smoothing map; complete figure grid remains unresolved. Known Methods rate-to-SD examples do not prove the full grid."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "glutamatergic_sampling_rate_normalized_performance",
+            "manifest_key": "glutamatergic_sampling_rate_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the sampling_rate comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "sampling_rate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original sampling-rate coordinates and companion target-smoothing map; complete figure grid remains unresolved. Known Methods rate-to-SD examples do not prove the full grid."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "glutamatergic_standardized_noise_per_neuron_correlations",
+            "manifest_key": "glutamatergic_standardized_noise_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original standardized_noise comparison for glutamatergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "standardized_noise",
+                "units": "% · Hz^-1/2",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original standardized-noise coordinates, eligibility and stochastic realizations are unresolved; later demo values 2,4,6,8 are not substituted."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "glutamatergic_standardized_noise_normalized_performance",
+            "manifest_key": "glutamatergic_standardized_noise_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the standardized_noise comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "standardized_noise",
+                "units": "% · Hz^-1/2",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original standardized-noise coordinates, eligibility and stochastic realizations are unresolved; later demo values 2,4,6,8 are not substituted."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "glutamatergic_matched_temporal_precision_per_neuron_correlations",
+            "manifest_key": "glutamatergic_matched_temporal_precision_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original matched_temporal_precision comparison for glutamatergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "matched_temporal_precision",
+                "units": "source evaluation-smoothing units, exact convention unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original matched evaluation-precision coordinates and links to acquisition-rate conditions are unresolved; preserve the source control without guessing a Cartesian product."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "glutamatergic_matched_temporal_precision_normalized_performance",
+            "manifest_key": "glutamatergic_matched_temporal_precision_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the matched_temporal_precision comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "matched_temporal_precision",
+                "units": "source evaluation-smoothing units, exact convention unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original matched evaluation-precision coordinates and links to acquisition-rate conditions are unresolved; preserve the source control without guessing a Cartesian product."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_sampling_rate_per_neuron_correlations",
+            "manifest_key": "gabaergic_sampling_rate_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original sampling_rate comparison for gabaergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "sampling_rate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original sampling-rate coordinates and companion target-smoothing map; complete figure grid remains unresolved. Known Methods rate-to-SD examples do not prove the full grid."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_sampling_rate_normalized_performance",
+            "manifest_key": "gabaergic_sampling_rate_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the sampling_rate comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "sampling_rate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original sampling-rate coordinates and companion target-smoothing map; complete figure grid remains unresolved. Known Methods rate-to-SD examples do not prove the full grid."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_standardized_noise_per_neuron_correlations",
+            "manifest_key": "gabaergic_standardized_noise_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original standardized_noise comparison for gabaergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "standardized_noise",
+                "units": "% · Hz^-1/2",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original standardized-noise coordinates, eligibility and stochastic realizations are unresolved; later demo values 2,4,6,8 are not substituted."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_standardized_noise_normalized_performance",
+            "manifest_key": "gabaergic_standardized_noise_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the standardized_noise comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "standardized_noise",
+                "units": "% · Hz^-1/2",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original standardized-noise coordinates, eligibility and stochastic realizations are unresolved; later demo values 2,4,6,8 are not substituted."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_matched_temporal_precision_per_neuron_correlations",
+            "manifest_key": "gabaergic_matched_temporal_precision_per_neuron_correlations",
+            "source_quantity": "Source per-neuron Pearson correlations underlying the original matched_temporal_precision comparison for gabaergic, across the five named approaches. Exact compound-condition membership and support require source authentication.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "matched_temporal_precision",
+                "units": "source evaluation-smoothing units, exact convention unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original matched evaluation-precision coordinates and links to acquisition-rate conditions are unresolved; preserve the source control without guessing a Cartesian product."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original condition and neuron beneath the source cohort curves. This semantic axis description does not authenticate rectangular common support, original grids, noise eligibility or selected rows; any ragged support must be represented faithfully after recovery.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          },
+          {
+            "id": "gabaergic_matched_temporal_precision_normalized_performance",
+            "manifest_key": "gabaergic_matched_temporal_precision_normalized_performance",
+            "source_quantity": "Original cohort performance curve normalized to default CASCADE for the matched_temporal_precision comparison; exact normalization arithmetic and the source control roster at each coordinate remain unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              5
+            ],
+            "axes": [
+              {
+                "name": "matched_temporal_precision",
+                "units": "source evaluation-smoothing units, exact convention unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original matched evaluation-precision coordinates and links to acquisition-rate conditions are unresolved; preserve the source control without guessing a Cartesian product."
+                }
+              },
+              {
+                "name": "inference_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "raw_fluorescence",
+                    "oasis",
+                    "default_cortical_cascade",
+                    "glutamatergic_cascade",
+                    "gabaergic_cascade"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-normalized performance, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source cohort-specific normalization must be recovered; do not choose ratio-of-medians, median-of-ratios, baseline averaging or a new scalar curve reduction. Verify all contributing per-neuron values and companions.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-sweeps"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "spinal-sweeps"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observation_prediction_support",
+        "original_held_neuron_control_provenance",
+        "source_condition_manifest",
+        "sweep_per_neuron_correlations_and_source_curves"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved source-qualified numerical comparison of the complete declared original family and its mandatory companion outputs; no norm, reduction, all-close rule, threshold or numeric tolerance is selected.",
+        "independent_unit": "Original per-neuron outputs, preserving recording and condition membership; independent animal/session units remain unresolved.",
+        "dependence": "Recordings, bins, noise realizations, conditions and methods share neurons; source animal/session clustering remains unresolved. Do not promote them to independent biological units.",
+        "multiplicity": "Complete declared source family and mandatory controls must remain covered; no multiplicity or simultaneous-agreement rule is yet justified.",
+        "rationale": "These are existing source numerical quantities, so numerical-reference comparison is a possible declaration route. Authentic publication-equivalent references and scientific agreement/uncertainty policies are absent; the class label does not establish such a criterion.",
+        "evidence_ids": [
+          "spinal-sweeps"
+        ]
+      },
+      "evidence_ids": [
+        "spinal-sweeps"
+      ]
+    },
+    {
+      "id": "dataset_wide_alignment_control",
+      "kind": "indexed_array_family",
+      "description": "Original dataset-wide alignment and OASIS smoothing/delay selection and application, as indispensable companions to the enrolled inference comparison.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "dataset_wide_alignment_control",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "dataset_method_selected_delay",
+            "manifest_key": "dataset_method_selected_delay",
+            "source_quantity": "Original dataset-wide selected temporal shift for each source inference approach, applied consistently to all neurons of that dataset.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_dataset",
+                "units": "dataset identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original alignment datasets unresolved."
+                }
+              },
+              {
+                "name": "source_alignment_method",
+                "units": "method identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source alignment-method roster unresolved; do not presume raw fluorescence or a new candidate-specific optimization."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One original selected shift per source dataset/approach; no per-neuron oracle shift or adaptive shift selected from new held-neuron targets.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-alignment"
+            ]
+          },
+          {
+            "id": "oasis_selected_smoothing",
+            "manifest_key": "oasis_selected_smoothing",
+            "source_quantity": "Original OASIS smoothing parameter selected with temporal shift under the source optimization procedure.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_dataset",
+                "units": "dataset identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source dataset identities and original OASIS optimization supports unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source smoothing parameter; exact unit and convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the original joint smoothing/delay selection, its source criterion and permitted observations. Do not choose a convenient smoothing recipe.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-alignment"
+            ]
+          },
+          {
+            "id": "alignment_search_performance",
+            "manifest_key": "alignment_search_performance",
+            "source_quantity": "Supporting original delay-search performance values and OASIS smoothing/delay search values for the selected dataset-wide controls.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source performance metric; exact search representation unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original search supports and joint parameter organization are unresolved. The known OASIS delay search spans −1 to +1 seconds; that range does not establish step sizes, a regular Cartesian grid or complete array rank.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-alignment"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "spinal-alignment"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observation_prediction_support",
+        "source_condition_manifest",
+        "source_alignment_selection_and_application"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved source-qualified numerical comparison of the complete declared original family and its mandatory companion outputs; no norm, reduction, all-close rule, threshold or numeric tolerance is selected.",
+        "independent_unit": "Original per-neuron outputs, preserving recording and condition membership; independent animal/session units remain unresolved.",
+        "dependence": "Recordings, bins, noise realizations, conditions and methods share neurons; source animal/session clustering remains unresolved. Do not promote them to independent biological units.",
+        "multiplicity": "Complete declared source family and mandatory controls must remain covered; no multiplicity or simultaneous-agreement rule is yet justified.",
+        "rationale": "These are existing source numerical quantities, so numerical-reference comparison is a possible declaration route. Authentic publication-equivalent references and scientific agreement/uncertainty policies are absent; the class label does not establish such a criterion.",
+        "evidence_ids": [
+          "spinal-alignment"
+        ]
+      },
+      "evidence_ids": [
+        "spinal-alignment"
+      ]
+    },
+    {
+      "id": "source_rate_error_and_signed_bias",
+      "kind": "indexed_array_family",
+      "description": "Historically required source-grounded rate error and signed bias, using the original multi-timescale excess/deficit and longest-window bias evidence. Full source definitions and endpoint/model mapping remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "source_rate_error_and_signed_bias",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "glutamatergic_false_positive_rate_error",
+            "manifest_key": "glutamatergic_false_positive_rate_error",
+            "source_quantity": "Original Figure 6a–c excess rate-error component across evaluation timescales for glutamatergic. Exact sign, denominator, normalization and correspondence to historical required error outputs are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              },
+              {
+                "name": "evaluation_window_duration",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original window-duration grid, bin origin, recording boundary and edge conventions unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined rate-error component; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain complete per-neuron source timescale curves and their original cohort summaries. Do not substitute one-pass normalized L1, later-demo double smoothing, a newly defined window or an invented composite error.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          },
+          {
+            "id": "glutamatergic_false_negative_rate_error",
+            "manifest_key": "glutamatergic_false_negative_rate_error",
+            "source_quantity": "Original Figure 6a–c deficit rate-error component across evaluation timescales for glutamatergic. Exact sign, denominator, normalization and correspondence to historical required error outputs are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              },
+              {
+                "name": "evaluation_window_duration",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original window-duration grid, bin origin, recording boundary and edge conventions unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined rate-error component; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain complete per-neuron source timescale curves and their original cohort summaries. Do not substitute one-pass normalized L1, later-demo double smoothing, a newly defined window or an invented composite error.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          },
+          {
+            "id": "glutamatergic_longest_window_signed_bias",
+            "manifest_key": "glutamatergic_longest_window_signed_bias",
+            "source_quantity": "Original longest-evaluation-window signed-bias values/distribution for glutamatergic, retaining the source model comparison and the historical required signed-bias endpoint.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source glutamatergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined signed rate bias; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every source neuron and original longest-window derivation, cohort distribution and comparison. Exact historical endpoint mapping remains unresolved; the metric kernel signed-bias diagnostic is not a source-authenticated substitute.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          },
+          {
+            "id": "gabaergic_false_positive_rate_error",
+            "manifest_key": "gabaergic_false_positive_rate_error",
+            "source_quantity": "Original Figure 6a–c excess rate-error component across evaluation timescales for gabaergic. Exact sign, denominator, normalization and correspondence to historical required error outputs are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              },
+              {
+                "name": "evaluation_window_duration",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original window-duration grid, bin origin, recording boundary and edge conventions unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined rate-error component; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain complete per-neuron source timescale curves and their original cohort summaries. Do not substitute one-pass normalized L1, later-demo double smoothing, a newly defined window or an invented composite error.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          },
+          {
+            "id": "gabaergic_false_negative_rate_error",
+            "manifest_key": "gabaergic_false_negative_rate_error",
+            "source_quantity": "Original Figure 6a–c deficit rate-error component across evaluation timescales for gabaergic. Exact sign, denominator, normalization and correspondence to historical required error outputs are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              },
+              {
+                "name": "evaluation_window_duration",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original window-duration grid, bin origin, recording boundary and edge conventions unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined rate-error component; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain complete per-neuron source timescale curves and their original cohort summaries. Do not substitute one-pass normalized L1, later-demo double smoothing, a newly defined window or an invented composite error.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          },
+          {
+            "id": "gabaergic_longest_window_signed_bias",
+            "manifest_key": "gabaergic_longest_window_signed_bias",
+            "source_quantity": "Original longest-evaluation-window signed-bias values/distribution for gabaergic, retaining the source model comparison and the historical required signed-bias endpoint.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_neuron",
+                "units": "neuron identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered source gabaergic neuron identities and retained recordings are unresolved; source counts are nominal, not an authenticated dimension."
+                }
+              },
+              {
+                "name": "source_rate_error_model",
+                "units": "model identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original default and retrained comparator identities require authentication; Figure 6c caption/Results conflict remains unresolved, so no own-cohort or cross-cohort correction is guessed."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined signed rate bias; exact normalization and units unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every source neuron and original longest-window derivation, cohort distribution and comparison. Exact historical endpoint mapping remains unresolved; the metric kernel signed-bias diagnostic is not a source-authenticated substitute.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "spinal-rate-error"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "spinal-rate-error"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observation_prediction_support",
+        "original_held_neuron_control_provenance",
+        "source_condition_manifest",
+        "source_alignment_selection_and_application",
+        "source_rate_error_components_and_bias"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved source-qualified numerical comparison of the complete declared original family and its mandatory companion outputs; no norm, reduction, all-close rule, threshold or numeric tolerance is selected.",
+        "independent_unit": "Original per-neuron outputs, preserving recording and condition membership; independent animal/session units remain unresolved.",
+        "dependence": "Recordings, bins, noise realizations, conditions and methods share neurons; source animal/session clustering remains unresolved. Do not promote them to independent biological units.",
+        "multiplicity": "Complete declared source family and mandatory controls must remain covered; no multiplicity or simultaneous-agreement rule is yet justified.",
+        "rationale": "These are existing source numerical quantities, so numerical-reference comparison is a possible declaration route. Authentic publication-equivalent references and scientific agreement/uncertainty policies are absent; the class label does not establish such a criterion.",
+        "evidence_ids": [
+          "spinal-rate-error"
+        ]
+      },
+      "evidence_ids": [
+        "spinal-rate-error"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact source-era condition/neuron/recording manifests, noise realizations, checkpoints, held-neuron exclusions, support masks, alignment and animal/session dependence remain unresolved.",
+    "Keep original source timing separate from the later one-timepoint correction, current demo noise grid and prospective native-400ms condition; none proves original figure equivalence.",
+    "Historical correlation, bias and error outcomes remain required. The component's single-pass normalized L1/signed-bias diagnostics are not qualified reproduction of original source or later-demo bias/error columns. Source metric definitions and timescale support must be authenticated.",
+    "Preserve source discrepancies in neuron-count ordering, noise eligibility and Figure 6c model identity. Do not resolve them by a favorable cell subset, guessed comparator or convenient filename glob.",
+    "Complete reference outputs, justified agreement/superiority criteria, uncertainty units and paired access/budget manifests remain unestablished. Correlation gain alone must not conceal rate-calibration failure.",
+    "Held-neuron electrical targets cannot be exposed to inference candidates to support a newly enrolled descriptive task. Any added target-access regime or full thirteen-group primary project requires explicit scientific scope and observation-policy decisions.",
+    "Neither metric software checks nor a source inventory establishes authentic reproduction, improvement, native parity or SOTA. Restore independent reproduction reporting without accepting a partial condition as the full task.",
+    "Declaration is source_unresolved, not runtime ready: exact original interface, authentic-data manifest, independent granular verifier, evaluator/evaluation identities and comparison policies are absent. Admission policy is therefore omitted rather than populated with fabricated hashes.",
+    "Expected reference manifests, semantic/axis/support/domain/derivation identities, exact source shapes and numeric representation types remain null where unavailable. This does not prevent an honest unresolved declaration; it prevents eligibility and scientific admission.",
+    "The external OUTPUT_REQUIREMENTS.json names the required source-native quantities linked by required_granular_output_ids. These are declared requirements, not authenticated executable output identities or a generic adapter.",
+    "No source-grounded numerical agreement tolerance, complete-family uncertainty/multiplicity policy, same-task improvement effect rule or matched access/resource budget is established. Published approximate summaries and nominal significance are not such rules."
+  ]
+}
