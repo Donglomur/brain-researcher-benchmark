@@ -18,6 +18,8 @@ access conditions.
 ## Scope assessments and evidence
 
 - [Authentic delivery and prospective freezing](benchmark-construction-wave-20261116.md) describes the four existing endpoints improved after the difficulty pilot, including source discrepancies and runtime limits.
+- [SMC original-author calibration](smc-author-calibration-20261117.md) reports author-reference scores, including recovered output from a failed supervised stage. It does not establish an AI outcome or accepted reproduction.
+- [MegNIST input preparation](megnist-input-preparation-20261117.md) records authenticated preparation of the complete released inputs for one participant across four sessions. No model or scientific score was run.
 
 The [paper scope assessment](paper-scope/SCIENTIFIC_SCOPE.md) describes the
 100 original paper candidates, the examined evidence and remaining gaps. It is a
