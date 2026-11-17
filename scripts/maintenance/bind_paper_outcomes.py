@@ -141,6 +141,7 @@ def validate_existing(root=ROOT):
     previous_registry = read_pin(registry["paper_outcomes"]["pre_outcomes_registry"], "Pre-outcomes registry")
     prior_lineage(reader, previous_registry, papers, contexts)
     return {"status": "current", "registered_tasks": len(registry["tasks"]), "paper_tasks": len(papers),
+            "authenticated_endpoint_ids": sorted(binding.endpoint_selection_ids(previous)),
             "scientific_qualification": False, "bytes_read": reader.bytes_read}
 
 
