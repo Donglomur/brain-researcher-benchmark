@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "NEURAL-011",
+  "implementation": "occupancy-evaluator-v2",
+  "qualification": "scoring_companion_source_only",
+  "current_task_sha256_at_construction": "93deb7919ee477e0e46c62bcba6cf0390fd27d6577563cc9063fe07a3798f46c",
+  "current_understanding_sha256_at_construction": "0986c9408ba2674afb834caef988a89f090626996d8ca263a64ee45df83695fd",
+  "addressed_contract_gap": "Predicted-positive occupancy and predeclared constant-detector comparisons on complete recording support.",
+  "preserved_predecessor": {
+    "directory": "../initial-evaluator-v1",
+    "siena_evaluator.py": "de9f34b9d9399ae34210e55d39047c6ab1f4371d345c68ba15846c839d05aa16",
+    "source_inventory.json": "4d4ae5ae132d851bea2a2388965dbc0b528e533b4f9cbea97e5822ab660203ea",
+    "historical_contract_sha256_retained_in_event_report": "044340155db14895d22a711e2a892261d0377603714125502e911dd7181fd0ea"
+  },
+  "source_reused_from_existing_cache": {
+    "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+    "revision": "426f8d2b77974641dc9db71884e0812b249ba93b",
+    "sha256": "0cb3b685c2d7add8d0cb2376d2021ace6d551591a2a31bfbd44a0281efe187c7",
+    "role": "Verify inherited event merging, splitting, tolerances and rounded denominator; no upstream code redistributed."
+  },
+  "prospective_companion_policy": {
+    "positive_decision": "score >= each arm's existing frozen threshold after native finite-float normalization",
+    "time_support": "complete score grid; sample i covers [i/fs,(i+1)/fs)",
+    "recording_fraction": "positive sample count / n_samples, before event transformations",
+    "patient_fraction": "sum positive seconds / sum exact observed seconds over every patient recording",
+    "macro_fraction": "equal mean over every selected patient, including undefined-F1 patients",
+    "pooled_fraction": "total positive seconds / total exact observed seconds",
+    "constant_controls": "Always-negative and always-positive decisions, mandatory in evaluate output, using identical complete selected recordings.",
+    "paired_companion": "Descriptive candidate-minus-comparator differences over every selected patient; no new confidence interval or scientific acceptance cutoff."
+  },
+  "unchanged_scientific_boundaries": [
+    "Existing native patient-macro event F1, sensitivity, false-alarm metrics and defined-only F1 support are preserved.",
+    "Current task and understanding contracts, histories and v1 implementation are preserved.",
+    "No new direct-observation, typed-viewer, tool-assisted or protected frozen-program delivery.",
+    "Operator reports inherit reference events and must remain private to the evaluator.",
+    "No authentic EEG/header/payload authentication, clinical clock adjudication or full-cohort reference qualification.",
+    "No arbitrary-candidate adapter, CHB transfer, clinical utility or scientific performance claim."
+  ],
+  "new_source_download_bytes": 0,
+  "authentic_signal_samples_read": 0,
+  "new_model_or_solver_trials": 0,
+  "training_runs": 0,
+  "dependency_installs": 0
+}
