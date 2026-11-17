@@ -5,7 +5,7 @@ from pathlib import Path
 import types
 
 HERE = Path(__file__).absolute().parent
-RUNTIME_SHA = 'cec1f3c17127c67b134c81d2aa6a74758874528b250458ea16ec17e77f8c31ae'
+RUNTIME_SHA = 'c737e28d00613a71e9ba469a9082d77bb9ffa20abb3a7ed33d06355c1a3232aa'
 BOOTSTRAP_SHA = 'cd2388db9872bff4e9bd60ca2c1e21c75de4a834a5d573266e3ce57f1c1e7075'
 SCORER = 'benchmarks/neural/NEURAL-076/implementations/hierarchy-scorer-v2'
 EXECUTION_FILES = ('support.py', 'run.py', 'score_closed.py', 'INSTRUCTIONS.md', 'DEPENDENCIES.json')

@@ -39,14 +39,23 @@ understanding; it is an agent-built analysis route.
 
 ## Source and existing input closure
 
-`runtime/` contains the original 17-file full-cohort-program-v1 closure and its
-unchanged SOURCE_MANIFEST.json. Its manifest SHA-256 is
+The predecessor at commit `133c3c05c54706ba9d7ec6b1f31d743e9c0e1213`
+contained the byte-identical 17-file full-cohort-program-v1 closure and manifest
 `cec1f3c17127c67b134c81d2aa6a74758874528b250458ea16ec17e77f8c31ae`.
-LOCK.json binds the existing protected collection, original preparer/operator,
-full context identities and original runtime requirements. No controller code
-or source pin is rewritten behind that manifest. `test_controller.py` adapts
-the original source controls solely to remove private-workspace donor lookups;
-the production controller is still byte-identical.
+This successor changes only `runtime/common.py` among those 17 members: after
+all bytes are written, its publisher applies the already-intended `0444` mode
+through the owned file descriptor before `fsync`. This fixes restrictive-umask
+publication of the actual candidate `program.py`, `entry.py` and `holder.py`
+snapshots. Private parent directories retain `0700`; no lifecycle, resource,
+full-panel or scorer rule changes. The other 16 runtime members are unchanged.
+The successor SOURCE_MANIFEST.json SHA-256 is
+`c737e28d00613a71e9ba469a9082d77bb9ffa20abb3a7ed33d06355c1a3232aa`; `support.py`
+binds that exact identity. Future selections and runtime qualification must bind
+this successor; predecessor qualification is not inherited. LOCK.json still
+binds the protected collection, original preparer/operator, full context identities
+and original runtime requirements. Historical proofs remain predecessor evidence.
+`test_controller.py` remains the original source-control adaptation that removes
+private-workspace donor lookups; it was not rerun for this repair.
 
 DEPENDENCIES.json binds the four accepted hierarchy-scorer-v2 modules to commit
 `31c05a9d2675c7d4235f7a8a0df88c88981b9395`. They are captured by exact bytes before
@@ -158,6 +167,23 @@ Portable source controls:
 ```sh
 python -I -B benchmarks/neural/NEURAL-076/implementations/full-cohort-program-v2/test_bridge.py
 ```
+
+A separate, standard-library-only focused repair command is:
+
+```sh
+python -I -B benchmarks/neural/NEURAL-076/implementations/full-cohort-program-v2/test_public_modes.py
+```
+
+Its five methods exercise the actual publisher and actual candidate-phase
+snapshot path under `umask 077`, including short/failed writes and unchanged
+file/size guards. The phase uses a full 650-key invented commitment and tiny
+opaque generated staging bytes, with the native lifecycle stopped at a scripted
+boundary before execution. Only its physical free-space observation is scripted;
+real file inventory, allocation/write caps, deadline and source/commit guards
+still run. POSIX file permissions and interval timers are required. The control
+prints the observed Python version and measured fixture/publisher write calls;
+NumPy is not imported. This proof does not qualify UID/container execution or an
+authentic study. It is separate from the unchanged bridge suite below.
 
 The suite preserves all 650 keys in production-controller orchestration using
 invented in-memory phase services. It separately tests both capture-bound scorer
