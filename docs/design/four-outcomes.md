@@ -68,9 +68,18 @@ not force the improved method to copy the author algorithm.
 
 The improvement rule needs a competent, adequately qualified comparator, a
 justified effect criterion, appropriate uncertainty and the task's required
-companion checks. A higher point score alone is insufficient. A published number,
-a measured source-method result, a candidate result and verified current SOTA are
-different claims. Surpassing the source paper does not by itself establish SOTA.
+companion checks. A higher point score alone is insufficient for a statistical
+superiority or qualified improvement decision. A published number, a measured
+source-method result, a candidate result and verified current SOTA are different
+claims. Surpassing the source paper does not by itself establish SOTA.
+
+Before that decision, a fixed complete panel may report direction-aware numerical
+candidate gains against its authenticated matching comparator, in the original
+units and with all required companion results, access/exposure and execution
+provenance. Report uncertainty or state that it has not been estimated. These
+numerical comparisons do not establish statistical superiority, binary success
+or SOTA; unresolved decision thresholds do not prohibit the arithmetic. Existing
+binary validators and outcome-qualification requirements remain unchanged.
 
 Reproduction and improvement must be reported separately even when an experiment
 provides evidence relevant to both. Failure to improve does not negate a qualified

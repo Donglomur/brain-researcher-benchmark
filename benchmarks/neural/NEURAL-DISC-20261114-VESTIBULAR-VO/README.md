@@ -42,6 +42,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Distinct-pair vestibular evaluator. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Condition evaluator](implementations/condition-evaluator) — Condition evaluator.
   Scope: Complete normalized animal-by-condition evaluator with equal-repeat then equal-group MSE, frozen training-only prior comparison and separate singleton diagnostics. Authentic identities, clocks, masks, prior provenance/competence and protected execution remain external requirements; no scientific qualification.
+- [Native input bridge v1](implementations/native-input-bridge-v1) — Reviewed source component.
+  Scope: Original MAT traversal, complete structural census, target-free whole-repeat/tiled projections and supplied-training-prior reference assembly retain original clocks, identities and equal-repeat weighting. The later authentic census and deposited author-text reconciliation are accepted at their exact scopes; physical role identities, biological membership and usable original preparation remain unresolved as documented. Generated controls and structural input evidence do not establish authentic candidate execution, scientific scores or runtime qualification; the historical Docker SSL failure remains preserved.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

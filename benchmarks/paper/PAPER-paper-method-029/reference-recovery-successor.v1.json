@@ -1,0 +1,261 @@
+{
+  "schema_version": "deeprecon-reference-recovery-successor/v1",
+  "task_id": "PAPER-paper-method-029",
+  "authority": {
+    "root_adoption_sha256": "168f57e1cae69c62c966cbaa1de73e548c8253f80b8fd57b2e3a02f721299a40",
+    "proposal_manifest_sha256": "cdf65885b20cabdde20b1345d0604d593ead64045fa49525f43dc9acfb7a289b",
+    "accepted_descriptor_draft_sha256": "8ea822e4a0a31734893320e84ed5d4d2e1baa25f1cc3ee18ac4a5d9b3055edaf",
+    "accepted_successor_sha256": "87181df3a225144d4b39820b3873fb55061bdd566fed57a240b282c0f3b650cd"
+  },
+  "predecessors": {
+    "task": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/docs/provenance/pre-reference-recovery-20261117/task.json",
+      "bytes": 28973,
+      "sha256": "70a52fc9f86d15d5046c334b96668eae4983a94ed14aadb0aea07f05e6828f9e"
+    },
+    "outcomes": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/docs/provenance/pre-reference-recovery-20261117/outcomes.v1.json",
+      "bytes": 1691,
+      "sha256": "63b1a7e6bffa0f0ebcee65c34dc8f6d9dc897f322bf30fed32109f408c9b39db"
+    },
+    "improvement": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/improvement.v1.json",
+      "bytes": 14354,
+      "sha256": "50d522ee645ea86054bde5fb053e72c7a536664174015649c82c57b6c2058717"
+    },
+    "pre_outcomes_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/historical/task.pre-outcomes.v1.json",
+      "bytes": 29966,
+      "sha256": "8deeb7ba501c5c1a6155b4049fc2e4ada289ba6eed31e378f7d0f2cf4dd01dd0"
+    }
+  },
+  "unchanged_reproduction": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/reproduction.v1.json",
+    "bytes": 1251690,
+    "sha256": "d9432f48416392bad798461dfabc5d49f60e44b6ce658a9e2127c4c0aca7a602"
+  },
+  "published_reference_provenance": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/implementations/published-reference-v1/SOURCE_PROVENANCE.json",
+    "bytes": 2154,
+    "sha256": "f500b03c515593a21d842dc32d778eb643ce9dc91edeaf35c58893013aff9a38"
+  },
+  "published_source_artifact": {
+    "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs43588-025-00826-5/MediaObjects/43588_2025_826_MOESM4_ESM.csv",
+    "sha256": "f6beffbcad700f3e24208016daabe18d802805404f32a0585e2f9333fd4968fb",
+    "bytes": 15637,
+    "byte_identity_verified": true
+  },
+  "reference_support": {
+    "csv_rows": 240,
+    "pair_axis_values": 480,
+    "subjects": [
+      "sub01",
+      "sub02",
+      "sub03",
+      "sub04",
+      "sub05"
+    ],
+    "directed_pairs": 20,
+    "rois": [
+      "VC",
+      "V1",
+      "V2",
+      "V3",
+      "V4",
+      "HVC"
+    ],
+    "methods": [
+      "brain_loss",
+      "content_loss"
+    ],
+    "axes": [
+      "pattern",
+      "profile"
+    ],
+    "metric": "noise-ceiling-normalized within-pair mean correlation",
+    "summary_statistic": "observed_equal_pair_mean_not_figure_bootstrap_mean",
+    "qualification": "pair_table_summary_only",
+    "limits": [
+      "The table contains aggregated pair means, not per-feature ceilings or masks.",
+      "Source bootstrap confidence intervals are not independent-subject uncertainty.",
+      "Native data, training condition, model lineage and source replay remain unqualified."
+    ]
+  },
+  "current": {
+    "task": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/task.json",
+      "bytes": 29884,
+      "sha256": "bf0a50c891e2654e310ede3e5e322283db064e990d925f54559b58bcc1ca1eeb"
+    },
+    "improvement": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/improvement.reference-recovery.v1.json",
+      "bytes": 16145,
+      "sha256": "87181df3a225144d4b39820b3873fb55061bdd566fed57a240b282c0f3b650cd"
+    },
+    "outcomes": {
+      "path": "benchmarks/paper/PAPER-paper-method-029/outcomes.v1.json",
+      "bytes": 1559,
+      "sha256": "4ecaa3fe84077ff455079bb817edf5e7defb7a6e529f8bfd8eed6660f5364ecf"
+    }
+  },
+  "improvement_replacements": [
+    {
+      "op": "replace",
+      "path": "/disposition_reason",
+      "before": "The original Deeprecon conversion task and author evaluation route are recoverable, but the numeric Figure 2 content-loss baseline and its complete noise-ceiling artifacts have not been recovered and pinned in this review. Raw correlations or a newly rerun local comparator cannot stand in for the published result. Admission also lacks a justified effect, dependence-aware uncertainty and fixed episode budgets.",
+      "after": "The complete publisher Figure 2 pair table is authenticated: 240 rows contain 480 normalized pair means across all five subjects, 20 directed pairs, six ROIs, both methods and both axes. This recovers published pair-level references, not native data, noise ceilings, masks, model lineage or author replay. The selected complete original endpoint and matching comparator aggregation remain unbound for a qualified improvement episode. A justified effect, dependence-aware uncertainty, matched evaluation and fixed episode budgets remain unresolved."
+    },
+    {
+      "op": "replace",
+      "path": "/evidence/0/supports",
+      "before": "Defines Deeprecon evaluation, noise-ceiling normalization and source datasets; Figure 2 supplies the comparison whose numeric baseline must be recovered.",
+      "after": "Defines Deeprecon evaluation, noise-ceiling normalization and source datasets. Figure 2 supplies the comparison; its complete published pair-mean table has been recovered as n-published-figure2, while native evaluation and qualified comparison require separate evidence."
+    },
+    {
+      "op": "add",
+      "path": "/evidence/7",
+      "after": {
+        "id": "n-published-figure2",
+        "kind": "author_data",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs43588-025-00826-5/MediaObjects/43588_2025_826_MOESM4_ESM.csv",
+        "locator": "Source Data Fig. 2, MOESM4; SHA256 f6beffbcad700f3e24208016daabe18d802805404f32a0585e2f9333fd4968fb; 15,637 bytes; keys Source/Target/ROI/Method, columns pattern_mean/profile_mean",
+        "supports": "All 240 original pair/method/ROI rows and 480 normalized pair means are available as exposed published references. The CSV is not a record of submitted computation and contains no converted voxel responses, per-feature ceilings, thresholds or bootstrap replicates."
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/comparison/published_baseline/description",
+      "before": "Numeric content-loss Figure 2E/F results were not recovered from reviewed text/code. Pin the author source-data values and exact aggregation for the selected complete original endpoint, with its full pair population and required companion reporting; plotted coordinates are not exact baseline values.",
+      "after": "The authenticated publisher Source Data Fig. 2 CSV contains all 240 pair/method/ROI rows and 480 normalized pattern/profile pair means. Published pair-level references are recovered. This unresolved scalar baseline field instead records that the selected complete original endpoint and exact comparison aggregation have not yet been bound for the improvement contract. Observed equal-pair summaries must not substitute for the author bootstrap figure summaries or its 72 mean/lower/upper companions. The pair table does not supply native ceilings, thresholds, masks, model provenance or an independently reproduced author baseline."
+    },
+    {
+      "op": "replace",
+      "path": "/comparison/published_baseline/evidence_ids",
+      "before": [
+        "n-paper",
+        "n-eval-route"
+      ],
+      "after": [
+        "n-paper",
+        "n-eval-route",
+        "n-published-figure2"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/comparison/uncertainty/method",
+      "before": "Predeclare a paired, subject-dependent uncertainty analysis for the selected complete original endpoint and any jointly claimed companions after recovering its author score panel; audit the source bootstrap separately.",
+      "after": "Predeclare a paired, subject-dependent uncertainty analysis for the selected complete original endpoint and any jointly claimed companions after fixing matched author/candidate output lineage and aggregation. The 480 published pair means are recovered; audit the source bootstrap separately. Their recovery does not establish independent-subject uncertainty."
+    },
+    {
+      "op": "replace",
+      "path": "/comparison/paper_win_requires/0",
+      "before": "Predeclare a complete conversion endpoint actually evaluated in the original paper and recover its published content-loss result. Preserve the full original Deeprecon subject/pair population, selected source training/test condition, source-defined ROI scope, repeats, normalization and required controls/companion quality metrics.",
+      "after": "Predeclare a complete conversion endpoint actually evaluated in the original paper and bind its matching content-loss reference to the authenticated complete Figure 2 pair table with the appropriate source aggregation. Preserve the full original Deeprecon subject/pair population, selected source training/test condition, source-defined ROI scope, repeats, normalization and required controls/companion quality metrics."
+    },
+    {
+      "op": "replace",
+      "path": "/episode/improvement_loop",
+      "before": "After source-baseline recovery, iterate on training-only development/validation feedback for the predeclared complete original endpoint under one fixed access condition. Preserve its full subject/pair population and required controls; development choices must not replace the original final test condition.",
+      "after": "After binding the selected endpoint to the recovered published reference and qualifying the native inputs, matching source method and candidate access, iterate on training-only development/validation feedback for the predeclared complete original endpoint under one fixed access condition. Preserve its full subject/pair population and required controls; development choices must not replace the original final test condition."
+    },
+    {
+      "op": "replace",
+      "path": "/blocking_issues/0",
+      "before": "Exact numeric published baseline and source-data provenance for the selected original Figure 2 endpoint are unbound.",
+      "after": "Published pair-mean source values and provenance are recovered, but the selected complete original Figure 2 endpoint, matching comparator aggregation and required source-bootstrap companions are not yet bound for a qualified improvement comparison."
+    }
+  ],
+  "task_replacements": [
+    {
+      "pointer": "/episode/improvement/improvement_loop",
+      "before_present": true,
+      "before": "After source-baseline recovery, iterate on training-only development/validation feedback for the predeclared complete original endpoint under one fixed access condition. Preserve its full subject/pair population and required controls; development choices must not replace the original final test condition.",
+      "after": "After binding the selected endpoint to the recovered published reference and qualifying the native inputs, matching source method and candidate access, iterate on training-only development/validation feedback for the predeclared complete original endpoint under one fixed access condition. Preserve its full subject/pair population and required controls; development choices must not replace the original final test condition."
+    },
+    {
+      "pointer": "/blocking_issues/improvement/0",
+      "before_present": true,
+      "before": "Exact numeric published baseline and source-data provenance for the selected original Figure 2 endpoint are unbound.",
+      "after": "Published pair-mean source values and provenance are recovered, but the selected complete original Figure 2 endpoint, matching comparator aggregation and required source-bootstrap companions are not yet bound for a qualified improvement comparison."
+    },
+    {
+      "pointer": "/holds/preserved_limits/task_specific/0",
+      "before_present": true,
+      "before": "Exact numeric published baseline and source-data provenance for the selected original Figure 2 endpoint are unbound.",
+      "after": "Published pair-mean source values and provenance are recovered, but the selected complete original Figure 2 endpoint, matching comparator aggregation and required source-bootstrap companions are not yet bound for a qualified improvement comparison."
+    },
+    {
+      "pointer": "/holds/interpretation",
+      "before_present": true,
+      "before": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+      "after": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json. The selected improvement.reference-recovery.v1.json records recovered publisher references and remaining current limits; the archived predecessor task retains the earlier reference-availability wording."
+    },
+    {
+      "pointer": "/next_implementation_action/improvement/action",
+      "before_present": true,
+      "before": "The original Deeprecon conversion task and author evaluation route are recoverable, but the numeric Figure 2 content-loss baseline and its complete noise-ceiling artifacts have not been recovered and pinned in this review. Raw correlations or a newly rerun local comparator cannot stand in for the published result. Admission also lacks a justified effect, dependence-aware uncertainty and fixed episode budgets. Exact numeric published baseline and source-data provenance for the selected original Figure 2 endpoint are unbound. Noise-ceiling and random-pair threshold artifacts are not pinned or replayed. Author-model and data checksums, training condition and native evaluator equivalence need empirical calibration. Selected complete original endpoint, required control/companion reports, meaningful effect, stochastic-rerun calibration tolerance and uncertainty accounting for five shared subjects are not fixed. Concrete candidate access, tuning, compute and final-query budgets are not fixed.",
+      "after": "The complete publisher Figure 2 pair table is authenticated: 240 rows contain 480 normalized pair means across all five subjects, 20 directed pairs, six ROIs, both methods and both axes. This recovers published pair-level references, not native data, noise ceilings, masks, model lineage or author replay. The selected complete original endpoint and matching comparator aggregation remain unbound for a qualified improvement episode. A justified effect, dependence-aware uncertainty, matched evaluation and fixed episode budgets remain unresolved. Published pair-mean source values and provenance are recovered, but the selected complete original Figure 2 endpoint, matching comparator aggregation and required source-bootstrap companions are not yet bound for a qualified improvement comparison. Noise-ceiling and random-pair threshold artifacts are not pinned or replayed. Author-model and data checksums, training condition and native evaluator equivalence need empirical calibration. Selected complete original endpoint, required control/companion reports, meaningful effect, stochastic-rerun calibration tolerance and uncertainty accounting for five shared subjects are not fixed. Concrete candidate access, tuning, compute and final-query budgets are not fixed."
+    }
+  ],
+  "locator_replacements": [
+    {
+      "pointer": "/primary_outputs/1",
+      "before_present": true,
+      "before": "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+      "after": "Improvement: candidate outputs and a comparison on the same original task under improvement.reference-recovery.v1.json."
+    },
+    {
+      "pointer": "/success_criteria/0",
+      "before_present": true,
+      "before": "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+      "after": "Assess reproduction and improvement independently under reproduction.v1.json and improvement.reference-recovery.v1.json; do not combine their scores."
+    },
+    {
+      "pointer": "/evaluation/contracts/improvement",
+      "before_present": true,
+      "before": "improvement.v1.json",
+      "after": "improvement.reference-recovery.v1.json"
+    }
+  ],
+  "outcome_identity_replacements": [
+    {
+      "pointer": "/contracts/improvement",
+      "before_present": true,
+      "before": "a8f0efcd6d3c31b42347c60fee446d2b9c3cee36ae9e4be71c7c646112464665",
+      "after": "bd6328d829dae7d6ebdbb3820ee91f89613464b7c045e8088d2b012901b2efca"
+    },
+    {
+      "pointer": "/original_task_sha256",
+      "before_present": true,
+      "before": "70a52fc9f86d15d5046c334b96668eae4983a94ed14aadb0aea07f05e6828f9e",
+      "after": "bf0a50c891e2654e310ede3e5e322283db064e990d925f54559b58bcc1ca1eeb"
+    }
+  ],
+  "administrative_rationale_replacements": [
+    {
+      "pointer": "/pairing/reproduction/rationale",
+      "before_present": true,
+      "before": "No authentic frozen common-input/identity/evaluator/exposure/cumulative-budget manifests or submitted-analysis/granular-verification protocol exist for the complete original Figure2 condition. Published source values and code pointers alone cannot supply these identities; author-code delivery is not pinned. Final current-task raw pin awaits integration wording correction. Reproduction additionally lacks a justified tolerance and the72 source-bootstrap target values; no copied aggregate can populate either condition.",
+      "after": "No authentic frozen common-input/identity/evaluator/exposure/cumulative-budget manifests or submitted-analysis/granular-verification protocol exist for the complete original Figure2 condition. Published source values and code pointers alone cannot supply these identities; author-code delivery is not pinned. Reproduction additionally lacks a justified tolerance and the72 source-bootstrap target values; no copied aggregate can populate either condition.",
+      "removed_sentence": "Final current-task raw pin awaits integration wording correction."
+    },
+    {
+      "pointer": "/pairing/improvement/rationale",
+      "before_present": true,
+      "before": "No authentic frozen common-input/identity/evaluator/exposure/cumulative-budget manifests or submitted-analysis/granular-verification protocol exist for the complete original Figure2 condition. Published source values and code pointers alone cannot supply these identities; author-code delivery is not pinned. Final current-task raw pin awaits integration wording correction. Improvement additionally lacks a frozen complete endpoint, calibrated matching source method, meaningful effect and dependence-aware uncertainty; source values do not establish an exceed result.",
+      "after": "No authentic frozen common-input/identity/evaluator/exposure/cumulative-budget manifests or submitted-analysis/granular-verification protocol exist for the complete original Figure2 condition. Published source values and code pointers alone cannot supply these identities; author-code delivery is not pinned. Improvement additionally lacks a frozen complete endpoint, calibrated matching source method, meaningful effect and dependence-aware uncertainty; source values do not establish an exceed result.",
+      "removed_sentence": "Final current-task raw pin awaits integration wording correction."
+    }
+  ],
+  "preserved_invariants": [
+    "All eight same-task anchors are unchanged byte-equivalent JSON values.",
+    "Reproduction v1 stays byte-identical, source_unresolved, with its complete 480 pair means and 72 source-bootstrap companions.",
+    "Improvement disposition remains source_unresolved; published_baseline.status remains unresolved and value remains null because this schema field binds a selected scalar comparator, not source-table availability.",
+    "No tolerance, meaningful-effect value, uncertainty rule, comparator scalar or runtime is invented.",
+    "Native ceiling/mask/data/model/custody, matching input/access/exposure, source aggregation, companion and budget gaps remain.",
+    "Old v1 comparator and the additive discrepancy component remain unchanged; no continuous selection is adopted for this task.",
+    "Task count, admission flags, binary validators, candidate receipt provenance and all scientific outcomes remain unchanged."
+  ],
+  "qualification": "Recovered exposed publisher reference evidence only; no native replay, candidate result, instantiated paired protocol, new threshold or scientific qualification."
+}
