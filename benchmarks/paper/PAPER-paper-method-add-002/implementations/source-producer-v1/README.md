@@ -196,3 +196,22 @@ author comparison matched the complete repeated single-trial R² arrays within
 numerical reviewers separately accepted this implementation. These are generated
 numerical compatibility results; authentic preparation, reference fitting and
 empirical paper scores are not established by this receipt.
+
+## Authentic input preparation
+
+The separately admitted input-only operation subsequently completed once on
+2026-11-17. It authenticated all six originals and prepared all 511 trials,
+182 neurons and 150 bins in 0.620 seconds, with 506,609,664 bytes peak child RSS.
+No decoder, decomposition, scientific score or candidate was run. A separate
+saved-artifact audit verified hashes, complete array support, source row order,
+finiteness and every neuron's normalized minimum/maximum. The private outputs
+remain outside Git.
+
+[Authentic preparation receipt](AUTHENTIC_PREPARATION.json) distinguishes exact
+retained size (57,055,115 bytes), allocated filesystem size and the conservative
+58,103,691-byte logical-write charge. The latter includes a stated 1 MiB allowance
+for NPZ/header rewrites; cumulative and physical I/O were not directly measured.
+The operation used a 150-second total pool deadline including queue time, the
+narrower bound established by root admission. This closes authentic input
+preparation while the model/reference and paper/code qualification limits above
+remain unchanged.
