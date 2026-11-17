@@ -1,0 +1,643 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ROOT-ADD-006",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Independent source review identifies computationally meaningful original descriptive findings, so reproduction is not ineligible merely because some findings lack a superiority direction. However, the complete original finding/control panel, exact native protocol and computational verification are unresolved; the accepted Fig3 arithmetic component and published scalar targets do not establish full reproduction eligibility.",
+  "source_paper": {
+    "title": "Heuristics in risky decision-making relate to preferential representation of information",
+    "url": "https://www.nature.com/articles/s41467-024-48547-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results, Figs. 3–5; Methods: Participants, MEG analysis, Decoding outcome stimuli, Relating behavioral weighting of information to preferential representation of stimuli",
+      "supports": "The registered result relates within-participant decoded reactivation to between-participant heuristic weights. Seven-fold localizer classification is a separate decoder validation step; the paper does not define held-out participant prediction of behavioral weights as this result."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Task_Reactivation_Analysis.m",
+      "locator": "Task_Reactivation_Analysis.m; paired classifier script Train_Classifiers_Apply_To_Task.m at revision 1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612",
+      "supports": "Author analysis computes reactivation maps and group associations from localizer-trained classifiers; source code was inspected statically."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-006/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: nested_prediction, HOLDS",
+      "supports": "The existing implementation explicitly describes prospective participant-held-out prediction, unresolved author parity, and no authentic full-cohort qualification. Its LOPO MSE is not a paper baseline."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Fig. 3C,D and Methods: Decoding outcome stimuli",
+      "supports": "The paper itself evaluates held-out localizer outcome-stimulus decoding with seven-fold cross-validation. Three classifiers are tested at train/test timepoint combinations; an example is correct when its target classifier has the highest activation. This is an original ordered accuracy endpoint, distinct from the descriptive reactivation/heuristic association."
+    },
+    {
+      "id": "paper_full_findings",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results Par11–33; Figs.2–7; Methods Par48,74,82–89,91,94–97 in PMC11106265 XML",
+      "supports": "Original behavioral, neural prioritization, perceptual-detection and impulsivity findings have participant-level units, distinct19/18/88-person cohorts and source-defined companion analyses. Published numbers are visible input, not computation evidence."
+    },
+    {
+      "id": "paper_companions",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results Par11–24 and Methods Par57,66,77–81; Supplementary Figs.1–17 and Tables1–3 as cited in the primary article",
+      "supports": "Required source companions include probability-learning checks, behavioral model variants and identifiability, penalty selection, response-time support, safe outcome and cross-axis controls, influence/unbiased estimates, sensor subsets, response alignment, task-transfer decoding, ICA and trial-rejection variants, and session-decoding covariates. Supplement details are not recovered from the article citations alone."
+    },
+    {
+      "id": "heldout_code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Train_Classifiers_Apply_To_Heldout_Loc.m",
+      "locator": "five-fold class partitions; penalty loop; temporal axes; null data; scaleFunc; pred_reg_epoch_im; saved output fields",
+      "supports": "Deposited code uses five folds,21 recruits,60 examples per class,12/class/fold,seven stimulus classes and three trained outcome classifiers; assignments are randomized per penalty and not saved. Its time domain and active penalty grid differ from paper descriptions; an undefined variable and absent helper prevent native replay."
+    },
+    {
+      "id": "classifier_analysis",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Classifier_Analysis.m",
+      "locator": "pred_class_outcome_mtx; outcome_trials; group_outcome; subj_mn_class; plot index2 and yline(.3594)",
+      "supports": "The recoverable original metric uses logit argmax over channels1:3 and pools180 outcome trials; source analysis includes21 participants,0:10:500 bins, and a threshold attributed to an absent script. This is not the complete paper19-person seven-fold protocol."
+    },
+    {
+      "id": "epoch_code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Epoch_Train_Data.m",
+      "locator": "time_points_events=-250:10:600; run_num=1:3;140-event check; good channel intersection; artToZero",
+      "supports": "Three140-event localizer blocks preserve420 observations, but deposited epoch domain differs from both Fig3 and the held-out classifier script; event/sensor joins and artifact handling require authentic verification."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/ReadMe.md",
+      "locator": "Behavioral Analysis; MEG analysis; intermediate artifact descriptions",
+      "supports": "Author route includes hierarchical behavior fits and saved intermediate MEG activations. Source-code presence does not establish authenticated data, a runnable full analysis or an independent verifier."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Original Fig. 3C,D localizer decoding of outcome-stimulus identity is an ordered candidate for the whole-paper objective. Its exact scored timepoint map/aggregation and full original evaluation must be selected and bound; the existing neural–behavior association is calibration only.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "registration"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source MEG risky-choice/localizer recordings are linked in the registration to OpenNeuro ds005065/1.0.0. The complete mapping from that version to all source event tables and behavior-fit artifacts was not independently resolved.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper includes 19 main-analysis participants after two exclusions from 21 recruits. The exact Fig. 3 decoder participant/trial roster and eligibility must be recovered and bound without narrowing it to convenient files.",
+      "evidence_ids": [
+        "paper",
+        "ordered_candidates"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original Fig. 3 uses seven-fold localizer cross-validation (6/7 training, 1/7 testing) across train/test timepoints. Recover original fold assignments, class/null handling and penalty-selection relationship before admission; nested participant-held-out prediction is a different task.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Candidate requires original localizer sensor epochs and stimulus labels for outcome-vs-other-plus-null classifiers, with all original eligible trials/participants. Exact released event/epoch correspondence for the Fig. 3 evaluation remains unbound.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper describes 0.5-Hz high-pass, 100-Hz downsampling, OSL sensor/ICA cleaning, absolute-95th-percentile scaling and lasso logistic classifiers. Exact source scaling helper, fold-bound preprocessing and historical penalty selection for the Fig. 3 baseline remain to be reconciled.",
+      "evidence_ids": [
+        "paper",
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Held-out localizer classification accuracy is ordered higher-is-better; source Fig. 3C,D uses the highest of three outcome-classifier activations as the prediction. Exact map cells and primary aggregation/numeric baseline have not been frozen.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover Fig. 3C,D averaging across folds, outcome classes, timepoints and participants. Do not select a favorable diagonal or latency after evaluation or substitute LOPO behavioral-parameter MSE.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "This is an explicitly PARTIAL source-unresolved scalar proposal: the 13 findings below are actual printed statistical summaries, not the complete original finding/control panel. Complete original-paper reproduction must retain behavioral choice fits and model companions (Fig 2), localizer activation/accuracy/temporal generalization and null/penalty controls (Fig 3), probability/reward prioritization and all specificity/influence/preprocessing companions (Figs 4–5), perceptual detection and its non-replication control (Fig 6), and neural impulsivity with its 18-person cohort (Fig 7). The existing improvement anchor selects only an unresolved Fig 3 candidate. Exact structured curves, maps, model panels and Supplementary Figs 1–17/Tables 1–3 remain mandatory but unrepresented by findings entries; no scalar average, category or placeholder vector substitutes for them. No full-panel admission is possible until source identities, expected outputs, computation and criteria are independently frozen. In particular the full N=18 BIS neural map, its original negative-direction minimum statistic and all 5000 shuffled-participant minimum-null draws remain required; the single published BIS pFWE does not replace these outputs.\n\nMandatory source-native structured output obligations, retained without assigning scalar finding types:\nchoice_model_panel: Original observed and fitted acceptance curves for gain/loss, safe relative to gamble midpoint, and trigger-probability conditions; participant probability/reward weights; all model-comparison and identifiability companions. This unresolved family must be expanded to original indexed scalar findings, never reduced to one convenient mean.\nOriginal units: acceptance probability; source model parameter units; integrated BIC per model\nOriginal aggregation and scope: N19 MEG participants; original condition cells and hierarchical EM fit scope; participant means and SEM for Fig2; Supplementary Figs2–3 and Tables1–2.\n\nlocalizer_activation_curves: Complete Fig3B activation-probability curves by presented outcome and matching train/test time, including all classifier/output identities. Exact numerical cell targets are unbound; no scalarization is admitted.\nOriginal units: activation probability per source classifier/class/time cell\nOriginal aggregation and scope: Original Fig3 paperN19 cohort; held-out trials nested in participants, followed by participant means and SEM.\n\nlocalizer_accuracy_diagonal: Complete Fig3C three-outcome accuracy curve and uncertainty at every original matching train/test time. The above-chance20–500ms narrative cannot replace the complete curve or its null control.\nOriginal units: proportion correct per original time bin\nOriginal aggregation and scope: Pool180 held-out outcome trials within participant; equal weight for each of19 paper participants; sample-SD SEM. Source script21-person output is a distinct diagnostic.\n\nlocalizer_temporal_generalization: Complete Fig3D train-by-test outcome-accuracy map supporting temporal specificity. Exact indexed time-cell targets remain unresolved across caption, methods, epoching and classifier scripts; no peak or diagonal average substitutes for the map.\nOriginal units: proportion correct per original train/test cell\nOriginal aggregation and scope: Original19 participants, original seven-fold protocol; per-participant pooled outcome accuracy then participant mean; original complete grid unbound.\n\nlocalizer_null_and_penalty_panel: Original shuffled-label peak-threshold distribution and full penalty-selection curve (Fig3C and Supplementary Fig4). The code constant0.3594 is not independently bound to the paper19-person seven-fold panel and cannot serve as an improvement threshold.\nOriginal units: accuracy and null peak accuracy; mean diagonal accuracy per source penalty\nOriginal aggregation and scope: Original permutation mechanism and family-wise temporal domain unrecovered; preserve selection of0.002 using the same CV diagonal without rebranding it an independent holdout.\n\nneural_first_and_second_level_maps: Complete source probability/reward first-level effects, safe activation maps, unsmoothed and smoothed second-level t-maps, peak coordinates and5000-draw max/min null distributions. These source-indexed numeric families are unexpanded, not one scalar endpoint.\nOriginal units: activation-probability contrast per probability or absolute-reward contrast; t-statistic per map cell\nOriginal aggregation and scope: N19 for choice-neural analyses; N18 for BIS after additionally excluding participant1; source RT censoring, robustfit and sigma1.5-bin smoothing. Paper/code probability-coefficient factor2 and observed/permutation-domain mismatch unresolved.\n\nspecificity_and_influence_controls: All opposite-axis relationships, safe-outcome association and its single-participant dependence, plus unbiased behavior-neural correlation estimates (Supplementary Figs6–9). Nonsignificance cannot be substituted for equivalence or positive evidence of reproduction.\nOriginal units: source coefficients, t-statistics, p-values and influence/unbiased estimates per original contrast\nOriginal aggregation and scope: Original19-person MEG and18-person BIS cohorts; exact companion procedures and numerical targets require supplement/source recovery.\n\nsensor_response_alignment_and_main_effect_controls: Original5000 subsets of50 sensors with sensor contribution regression; response-locked reanalyses; and high-choice-weight participant main-effect diagnostics (Supplementary Figs10–12). Preserve trending/null results and original conditioning.\nOriginal units: source sensor weights and neural effect/t-statistic maps per original control\nOriginal aggregation and scope: Sensors/draws/time cells are not independent participants; retain complete original participant support and control-specific aggregation.\n\nacquisition_and_preprocessing_companions: Probability-learning query accuracy; RT support; task-transfer decoding; ICA/sensor removal counts and examples; trial retention/removal decoding and neural-effect variants; session-decoding covariates (Supplementary Figs1,5,13–17 and Table3). Exact numeric control outputs are unresolved.\nOriginal units: source query/decoding proportions, milliseconds, component/sensor counts and neural effects per control\nOriginal aggregation and scope: Original participant/run/trial units and original preprocessed/full-trial support; do not discard zeroed artifact trials or introduce a new convenient cohort.\n\nperceptual_trial_effects_and_behavior_fits: Complete participant log-RT regressions on probed-versus-unprobed gamble probability and absolute-reward contrasts, with original gamble-probed trial masks and additive-heuristic choice fits. Safe-probed trials cannot be silently included.\nOriginal units: log response-time slope per unit probability contrast or source absolute-reward unit; behavioral parameter units\nOriginal aggregation and scope: Original100 recruited,3 recording losses,5 repeated-action exclusions and4 detection nonresponse exclusions give88 participants; exact identities, trial masks and fit artifacts remain unbound.",
+      "evidence_ids": [
+        "author_readme",
+        "classifier_analysis",
+        "code",
+        "epoch_code",
+        "heldout_code",
+        "ordered_candidates",
+        "paper",
+        "paper_companions",
+        "paper_full_findings"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both conditions require the same authentic source paper, complete original data and observation protocol, with official author code as the only addition. Localizer-only decoder fitting must preserve all seven stimulus classes, training-row null examples and source cross-validation; choice reactivation uses probability-stimulus-locked epochs with response-time censoring. Hierarchical behavioral fits, detection-trial selection and BIS cohort linkage remain source-defined analyses, not prospective participant-held-out prediction. No authenticated common input/exposure manifest or protected execution boundary is available, and visible paper targets cannot establish computation.",
+      "evidence_ids": [
+        "paper",
+        "paper_full_findings",
+        "paper_companions",
+        "heldout_code",
+        "code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "probability_neural_choice_peak_t",
+      "kind": "scalar",
+      "description": "Fig4F–G; Results Par19: positive probability-neural versus probability-choice peak at train420ms/test420ms.",
+      "status": "verified",
+      "expected": 3.024,
+      "units": "t-statistic",
+      "aggregation": "Maximum of the original sigma1.5-bin smoothed robust-regression map across19 participants; complete map and all controls remain mandatory.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "probability_neural_choice_peak_pfwe",
+      "kind": "scalar",
+      "description": "Fig4F–G; Results Par19: reported one-sided max-statistic permutation p-value.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "Original5000 participant-label permutations over the complete source map, not an arbitrary uncorrected cell test.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "reward_neural_choice_peak_t",
+      "kind": "scalar",
+      "description": "Fig5F–G; Results Par20: positive reward-neural versus reward-choice peak at train480ms/test110ms.",
+      "status": "verified",
+      "expected": 2.974,
+      "units": "t-statistic",
+      "aggregation": "Maximum of the original sigma1.5-bin smoothed robust-regression map across19 participants; complete map and controls required.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "reward_neural_choice_peak_pfwe",
+      "kind": "scalar",
+      "description": "Fig5F–G; Results Par20: reported one-sided max-statistic permutation p-value.",
+      "status": "verified",
+      "expected": 0.034,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "Original5000 participant-label permutations over the complete source map.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "safe_reactivation_reward_peak_t",
+      "kind": "scalar",
+      "description": "Supplementary Fig6 and Results Par21: safe-reactivation versus reward-choice peak at train350ms/test270ms; its single-participant dependence is mandatory context.",
+      "status": "verified",
+      "expected": 5.464,
+      "units": "t-statistic",
+      "aggregation": "N19 source participant analysis with matched RT-censored trials; Supplementary Fig9c influence analysis must accompany the peak.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "safe_reactivation_reward_peak_pfwe",
+      "kind": "scalar",
+      "description": "Results Par21: reported safe-reactivation association permutation p-value; not robust evidence without the reported influence control.",
+      "status": "verified",
+      "expected": 0.011,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "Original participant-label max-statistic null; source single-participant dependence retained.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "detection_probability_spearman",
+      "kind": "scalar",
+      "description": "Fig6B and Results Par30: probability-choice weight versus probability log-RT slope.",
+      "status": "verified",
+      "expected": -0.183,
+      "units": "Spearman rank correlation",
+      "aggregation": "N88 participants; one slope and behavioral weight per participant; original gamble-probed trial selection.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "detection_probability_p",
+      "kind": "scalar",
+      "description": "Fig6B and Results Par30: reported planned one-sided Spearman correlation test.",
+      "status": "verified",
+      "expected": 0.044,
+      "units": "p-value",
+      "aggregation": "Original N88, t86=-1.72 approximation; planned comparison, no multiple-comparison correction as stated in Fig6 caption.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "detection_reward_spearman",
+      "kind": "scalar",
+      "description": "Fig6C and Results Par31: reward-choice weight versus reward log-RT slope.",
+      "status": "verified",
+      "expected": -0.21,
+      "units": "Spearman rank correlation",
+      "aggregation": "N88 participants; original participant-specific reward slope and behavioral fit.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "detection_reward_p",
+      "kind": "scalar",
+      "description": "Fig6C and Results Par31: reported planned one-sided Spearman correlation test.",
+      "status": "verified",
+      "expected": 0.025,
+      "units": "p-value",
+      "aggregation": "Original N88, t86=-2.0 approximation; planned comparison without correction as stated in Fig6 caption.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "bis_neural_probability_pfwe",
+      "kind": "scalar",
+      "description": "Fig7 and Results Par32: negative BIS versus neural probability-prioritization association at train410ms/test370ms.",
+      "status": "verified",
+      "expected": 0.001,
+      "units": "family-wise-error-corrected p-value",
+      "aggregation": "N18 after two repeated-action exclusions and missing BIS for participant1;5000 participant-label permutations using minimum smoothed-map statistic.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "bis_detection_probability_spearman",
+      "kind": "scalar",
+      "description": "Results Par33: reported nonsignificant detection-task BIS association; retain the conceptual non-replication.",
+      "status": "verified",
+      "expected": -0.084,
+      "units": "Spearman rank correlation",
+      "aggregation": "N88 detection participants; do not transfer the N18 MEG questionnaire cohort to this separate sample.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    },
+    {
+      "id": "bis_detection_probability_p",
+      "kind": "scalar",
+      "description": "Results Par33: reported one-tailed detection-task BIS p-value; this null result cannot be used as positive equivalence evidence.",
+      "status": "verified",
+      "expected": 0.79,
+      "units": "p-value",
+      "aggregation": "Original N88, reported t86=-0.78; preserve the source-direction test and do not relabel nonrejection as reproduction success.",
+      "evidence_ids": [
+        "paper_full_findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The article reports this scalar, but no source-grounded agreement tolerance or independent numerical variability criterion has been recovered. Printed precision is not automatically an equivalence tolerance.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover and independently verify the original full analysis and source sampling/permutation structure before freezing a computational agreement rule; no new confidence rule is assigned.",
+        "independent_unit": "Participant; source trials, folds, time cells, sensors and permutations are dependent measurements or computational draws, not extra independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original reported cohorts and significance procedures describe source analysis, not a justified reproduction acceptance interval or arbitrary sample minimum.",
+        "evidence_ids": [
+          "paper_full_findings"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Current preserved improvement target names only an unresolved Fig3 candidate and calls the neural–behavior association calibration only. Latest user scope makes original-finding reproduction first-class. This anchor conflict is recorded, not rewritten or treated as full-paper scope agreement; authoritative original panel binding is outstanding.",
+    "Main article and exact source scripts disagree: seven versus five folds;19 paper versus21 decoder-script participants; Fig3 test-800ms endpoint versus training-script850ms, analysis0:10:500ms and epoch-250:10:600ms domains. No original fold/seed identity or time-domain reconciliation is established.",
+    "Deposited localizer script contains undefined pred_reg_epoch_im and absent scaleFunc; it rescales each held-out image class across test times. Replacing this procedure or changing folds would not establish historical parity.",
+    "The 13 declared findings are a PARTIAL set of published scalar summaries, not a complete original finding/control panel. All 10 structured output obligations retained in full_panel, including original curves, model variants, participant maps, full N=18 BIS maps and 5000 minimum-null draws, Supplementary Figs 1–17 and Tables 1–3, remain mandatory and unrepresented as findings. Their exact source identities/targets and complete granular verification must be frozen before admission; no scalarization or category replacement is allowed.",
+    "N19 main MEG, N18 BIS and N88 perceptual-detection identities, original exclusions, event/sensor/trial joins, response-time masks and model-fit artifacts are not authenticated as one full source panel.",
+    "The accepted localizer scorer performs supplied-logit arithmetic only. The prior localizer-to-task evaluator uses prospective scaling and participant-held-out behavioral prediction; it does not implement the full original hierarchical fits, robustfit/smoothing/permutation analyses or conceptual-replication pipeline.",
+    "Paper/code probability coefficients differ by factor2 and observed/permutation training-time domains differ in deposited task analysis. Original source convention and full independent verification must be reconciled.",
+    "Published scalar values below are visible source targets, not AI-computed results. No source-grounded tolerance, numerical variation criterion, independent verifier, immutable authentic data/interface/output identity manifests or complete computational acceptance rule is established.",
+    "The original penalty was selected on the reported CV diagonal. Historical calibration and generated controls remain distinct from new AI reproduction; neither outcome has authentic paired paper+data versus paper+data+author-code delivery, exposure policy, freeze protocol or cumulative access/resource budgets."
+  ]
+}
