@@ -35,7 +35,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 3 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
 | [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 2 | not linked |
 | [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 4 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
-| [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 3 | not linked |
+| [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 4 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 4 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
 | [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 2 | not linked |
@@ -50,7 +50,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 4 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 4 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 2 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
-| [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 2 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
+| [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
 | [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 3 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
 | [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 2 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
 | [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 2 | not linked |
@@ -108,7 +108,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-092](NEURAL-092/README.md) | Within-session count prediction followed by observed state-association investigation | 2 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |
 | [NEURAL-093](NEURAL-093/README.md) | Sensory evidence decoding during decisions | 2 | [manifest](NEURAL-093/implementations/registered-runtime/manifest.json) |
 | [NEURAL-094](NEURAL-094/README.md) | Decision correlates beyond movement | 3 | [manifest](NEURAL-094/implementations/registered-runtime/manifest.json) |
-| [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 7 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
+| [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 8 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
 | [NEURAL-096](NEURAL-096/README.md) | Prior-dependent neural timing representations | 3 | [manifest](NEURAL-096/implementations/registered-runtime/manifest.json) |
 | [NEURAL-097](NEURAL-097/README.md) | Task-irrelevant stimulus-content decoding | 2 | [manifest](NEURAL-097/implementations/registered-runtime/manifest.json) |
 | [NEURAL-098](NEURAL-098/README.md) | Sustained versus transient content information | 3 | [manifest](NEURAL-098/implementations/registered-runtime/manifest.json) |

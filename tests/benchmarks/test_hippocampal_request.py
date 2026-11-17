@@ -157,8 +157,8 @@ class HippocampalRequestTests(unittest.TestCase):
                     self.construct(role=role, both_classes=False)
         self.assertEqual(list(self.root.iterdir()), [])
 
-    def test_current_manifest_only_changes_controller_and_keeps_historical_manifest(self):
-        historical_path = PACKAGE / 'EXECUTABLE_SOURCE_MANIFEST.json'
+    def test_current_manifest_has_only_reviewed_changes_and_keeps_historical_manifest(self):
+        historical_path = PACKAGE / 'historical/EXECUTABLE_SOURCE_MANIFEST.pre-public-modes.v1.json'
         historical_raw = historical_path.read_bytes()
         historical = json.loads(historical_raw)
         current = json.loads(CURRENT.read_text())
@@ -168,7 +168,8 @@ class HippocampalRequestTests(unittest.TestCase):
         old = {r['path']: r for r in historical['files']}
         new = {r['path']: r for r in current['files']}
         self.assertEqual(set(old), set(new))
-        self.assertEqual([name for name in old if old[name] != new[name]], ['controller.py'])
+        self.assertEqual([name for name in old if old[name] != new[name]],
+                         ['controller.py', 'transport/SOURCE_MANIFEST.json', 'transport/bounds.py'])
         for name, record in new.items():
             raw = (PACKAGE / name).read_bytes()
             self.assertEqual(len(raw), record['bytes'], name)

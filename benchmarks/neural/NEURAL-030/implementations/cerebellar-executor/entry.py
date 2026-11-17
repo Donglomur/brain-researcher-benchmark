@@ -6,8 +6,8 @@ from pathlib import Path
 import sys
 import types
 
-LOADER_PIN = {'bytes': 6782, 'sha256': '591cb5ef7be0ac012db9abf2445c2153922c2efd870a97e20dda1bacce661fbb'}
-SOURCE_PIN = {'bytes': 2528, 'sha256': 'ac5b8698812400f0d860ff6eeb5970c68ad3b78329bb6bc7abd010d7d17daf7c'}
+LOADER_PIN = {'bytes': 6872, 'sha256': '66b67f8cebd982f99be194dc3afbc355d9b3c834baacfe9b239e20797a859197'}
+SOURCE_PIN = {'bytes': 2607, 'sha256': '869659fb230670f2df3d6f4b9a028a73a6a68b47044c38d6850f3cfb049fc6f7'}
 
 HISTORICAL_SOURCE_PIN = {'bytes': 2295, 'sha256': 'b0cb8ef53c946ea9f4d0bddab5f6f1d7c4153a79d870a98bbb62021e7f665011'}
 PACKAGE_RELATIVE = Path('benchmarks/neural/NEURAL-030/implementations/cerebellar-executor')
