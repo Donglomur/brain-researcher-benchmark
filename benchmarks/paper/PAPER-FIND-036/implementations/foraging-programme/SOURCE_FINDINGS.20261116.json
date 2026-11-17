@@ -1,0 +1,110 @@
+{
+  "schema": "foraging_source_build_findings_v1",
+  "task_id": "PAPER-FIND-036",
+  "state": "archive_access_blocked",
+  "source_metadata": {
+    "metadata_bodies": [
+      "dryad-dataset.json",
+      "dryad-files.json"
+    ],
+    "version_id": 418976,
+    "version_number": 4,
+    "published": "2026-01-14",
+    "file_id": 4552700,
+    "file_name": "EventClassificationData_4C.zip",
+    "bytes": 15089711,
+    "sha256": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a",
+    "license": "https://spdx.org/licenses/CC0-1.0.html"
+  },
+  "public_sources": {
+    "dataset": "https://datadryad.org/dataset/doi:10.5061/dryad.v9s4mw78c",
+    "metadata": "https://datadryad.org/api/v2/versions/418976/files",
+    "paper": "https://elifesciences.org/articles/93994",
+    "author_revision": "https://github.com/knowblesse/Lobster/tree/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678"
+  },
+  "protocol_sha256": "41cca3ba7f516b52421950f94876f9c6e8bac44d60bca39a60e32b96c36e24e7",
+  "retrievals": [
+    {
+      "url": "https://datadryad.org/downloads/file_stream/4552700",
+      "started_utc": "2026-11-17T05:06:28.206693+00:00",
+      "authorization": "identified public processed archive only",
+      "attempt": 1,
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden",
+      "error_bytes": 118,
+      "error_sha256": "58bf2215b395dcac74c009aa98701854e43cbe54a1cd3a95fee6a647ca9910d4",
+      "wall_seconds": 0.1595000420056749
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/4552700/download",
+      "started_utc": "2026-11-17T05:06:59.527961+00:00",
+      "authorization": "official anonymous stash:download link from version418976 metadata; identified processed archive only",
+      "attempt": 2,
+      "status": 401,
+      "error": "HTTP Error 401: Unauthorized",
+      "error_bytes": 56,
+      "error_sha256": "1ac025323ea66e58c9a8a0b960db5a839ef812e1ff8bfea2f3aff74dc3961296",
+      "wall_seconds": 0.17300316598266363
+    }
+  ],
+  "metadata_evidence": [
+    {
+      "file": "dryad-dataset.json",
+      "bytes": 4875,
+      "sha256": "3960207e2eecda636bdec7a12dab21c0771eb766346e9b41632215d10c40450d"
+    },
+    {
+      "file": "dryad-dataset.receipt.json",
+      "bytes": 487,
+      "sha256": "212a8f7fad7b318138b90269557f41534e1b109054956d0e609c8a66002114a5"
+    },
+    {
+      "file": "dryad-files.json",
+      "bytes": 3418,
+      "sha256": "9056c17c3c1fe3cf3c289d4506c9aff3e5c88a7c18f36ed4d11c222ec8f209f9"
+    },
+    {
+      "file": "dryad-files.receipt.json",
+      "bytes": 449,
+      "sha256": "9c7811d117bed4e652a55143123337cf19b3a6bae59f6a792b73e829a873ded2"
+    }
+  ],
+  "source_semantics": [
+    {
+      "locator": "HierarchicalEventClassifier.py:49-75,103-105,111-131,171-183",
+      "finding": "Original label3/4 rows retained in source order; LabelBinarizer gives avoidance0/escape1; clipping[-5,5]; StratifiedKFold5 shuffleTrue seed622; BernoulliNB fit_priorFalse; all OOF probabilities pooled per session; escape if probability>=0.5; arithmetic mean of session HW balanced accuracies."
+    },
+    {
+      "locator": "generateEventClassifierDataset.m:51-52,74-86,96-113,117-149; Batch_generateEventClassifierDataset.m:1-5,9-21",
+      "finding": "Original2s window[-1000,+1000]ms with50ms bins, all units,999-sample symmetric Gaussian kernel std100ms; whole-session normalization but separate within-event convolution; class-block rows in label order1,2,3,4. Source row positions are label-correlated and must stay operator-only."
+    },
+    {
+      "locator": "HierarchicalEventClassifier.py:32,61-62,77-88,139-141; DESIGN.md:39-45",
+      "finding": "Unseeded null and PFI are different outputs. Omitting them leaves real HW fit/predict endpoint unchanged. Replaying only200 real HW fits should be described as endpoint replay, not unchanged whole-script execution."
+    }
+  ],
+  "known_limits": [
+    "Paper reports rounded0.7271; half-unit tolerance0.00005 is defensible only after exact source cohort/recipe admission. It does not cover undocumented version drift or changed rows.",
+    "Original script requires sklearn>=0.23.2 with a string comparison; exact historical package versions are absent from held source. Persist actual environment and full reconstructed fold indices; claim source-protocol reconstruction rather than historical bitwise identity.",
+    "The source supports pooled session balanced accuracy, not average fold BA and not reference-probability MAE.",
+    "Whole-session standardization is transductive; training-only candidate scaling cannot undo it. New-animal or time-aware splits are separate tasks.",
+    "Five rats with repeated sessions do not provide40independent biological replicates. Minimum meaningful effect and rat-aware inference are not settled by accurate author replay."
+  ],
+  "source_archive_bytes_acquired": 0,
+  "original_roster_authenticated": false,
+  "rat_mapping_authenticated": false,
+  "labels_read": 0,
+  "native_fit_count": 0,
+  "native_fit_seconds": 0,
+  "candidate_runs": 0,
+  "scientific_improvement_claims": 0,
+  "improvement_ready": false,
+  "new_module_scope": "Check existing protected full40 grade outputs against pooled balanced-accuracy endpoint and paper scalar; no source acquisition, fitting, private-array access or inference.",
+  "next_required_evidence": [
+    "Exact official source archive accessible through authorized normal access; no further attempts in this build.",
+    "Exhaustive original40member roster with processed source window and full feature coverage; source-grounded rat joins.",
+    "Persisted source seed622 original-row folds and environment; paired author/candidate memberships.",
+    "Bounded endpoint author replay and independent source-equivalence review before applying frozen rounding interval.",
+    "Predeclared task-justified meaningful effect and valid paired rat-aware uncertainty; candidate freeze and isolated final execution."
+  ]
+}
