@@ -1,0 +1,93 @@
+{
+  "schema": "sleep-viewer-scripted-software-control/v1",
+  "benchmark_id": "NEURAL-007",
+  "status": "passed_scripted_software_control",
+  "execution_source_commit": "f1dea1ee4fa779ea3ee56bc6b5a906186488506b",
+  "completed_utc": "2026-11-17T16:12:30.686717+00:00",
+  "condition": "whole_person_raw_viewer_zero_shot",
+  "population": {
+    "exposure": "previously_exposed_development_people",
+    "complete_people": 2,
+    "cases": {"development-001": 2780, "development-002": 2670},
+    "epochs": 5450,
+    "coverage": "All original epochs, including movement and unknown intervals; five class probabilities per epoch."
+  },
+  "control": {
+    "participant": "fixed_scripted_client",
+    "response": "uniform five-class probabilities",
+    "probability_per_class": 0.2,
+    "class_order": ["W", "N1", "N2", "N3", "R"],
+    "initial_images": 5450,
+    "initial_actions": 10902,
+    "required_render_calls_including_collector_replays": 21800,
+    "observed_action_kinds": {"actions": 43608, "view": 21800, "response_accepted": 21800, "complete": 8},
+    "call_graph": "Initial transport, original replay inside each transport audit, wire-correspondence replay, then the original collector replay and response validator. No additional standalone replay.",
+    "fresh_client_processes": 2,
+    "client_exit_codes": [0, 0],
+    "owned_client_process_groups_absent": true,
+    "native_exit_code": 0,
+    "boundary_assertions_passed": 6,
+    "boundary_scope": "Invented operator-file read/write denial, environment-secret absence, parent process-argument sysctl denial, localhost network denial and process-creation denial under the same sandbox policy as the scripted clients.",
+    "original_complete_response_validator": "passed"
+  },
+  "source_sha256": {
+    "transport": "e64b02c33b7233ae497acf96e06a19d35fdf7b0ce4cbc9e9af298e5309331d17",
+    "transport_bindings": "4adf6a1dc4075646d40f15e838534327e44adc7d15b13dd5a4290b945e948da4",
+    "scripted_client": "efcd09ba16bafde5796bf25f923135c1810396cc5e8d92ea8ef9f6abff67a12e",
+    "viewer": "1e04211e4bfc9f39e59c4f6986af4f5b40c9477a0581219fd4e03581230fd956",
+    "renderer": "a4b80b6cf8c0e92dd9d60551af60558dfed80661a98edb2de920bac060c387f5",
+    "viewer_bindings": "65729f53165067d0909c5fd188517fa32292f9ca85e5d674d01ef76faffb3ccf",
+    "source_facts": "abef94358f010b0f61962fee70bfbb5185cbb8374c65b467af7392a5f42be3cb",
+    "raster": "b8cc040978a38104a9adc7747748411e4abe61aa9df9c5a6cdd3c00902dd2a18",
+    "original_response_validator": "fc8363b28a86cd1f5083b4cc5d24fb1a5a4abd1d490d9163a305f85f1fbe4d23"
+  },
+  "runtime": {
+    "operator_python": "3.11.6",
+    "numpy": "1.26.3",
+    "zlib_compile": "1.2.11",
+    "zlib_runtime": "1.2.12",
+    "platform": "macOS",
+    "client": "version-specific installed Python framework executable",
+    "client_binary_sha256": "ff2d7180d4aa2dcc03193194c1999509239e00101ade54fcdd736d9fc25bd0c6",
+    "scope": "Selected source and runtime identities; not authentication of every dynamic library or provider execution."
+  },
+  "observed_resources": {
+    "native_wall_seconds": 3851.213,
+    "cpu_seconds_snapshot_including_prior_failed_attempt": 3785.7562590000002,
+    "prior_failed_attempt_cpu_seconds_carried": 0.6616390000000001,
+    "maximum_sampled_bundle_rss_bytes": 598425600,
+    "saved_bidirectional_wire_bytes": 181113639,
+    "logical_output_file_bytes": 190493216,
+    "output_file_count": 32,
+    "declared_numeric_threads": 1,
+    "scope": "Recorded CPU/RAM snapshots and logical file extents, with one numeric thread declared through admission/environment settings; no OS thread cap or continuous RSS guarantee. Postreceipt cleanup CPU, unsampled RSS peaks, ZIP-header rewrites and filesystem/runtime I/O overhead remain unmeasured. The separate historical preparation cost is not reset or added twice."
+  },
+  "preserved_failed_attempt": {
+    "status": "interpreter_startup_failed_before_python_boundary_assertions_or_authentic_packet_reads",
+    "cause": "The system Python developer-tool launcher required an unallowed toolchain library; the sandbox denied it.",
+    "resolution": "A separately reviewed attempt used the already installed framework interpreter, without widening the sandbox or changing the public transport/viewer source. The external driver and runtime selection changed.",
+    "failed_attempt_review_sha256": "2f1ee17b7b7067a2fe643f966be07f25442c4abd15ef2e815c5e8aed6856cc4e"
+  },
+  "evidence_sha256": {
+    "frozen_protocol": "91f2c09cf53e07a3001c86c4a2f0c739c0dfcda78252d4541c1c0e8a60be9e6c",
+    "complete_receipt": "fc4b99d1860903e06976e33ae13202253d75d1569b2985af486c0da62290559e",
+    "independent_output_review": "356ae6bb2203d7dc65dc7e8a9f578088b630906df9c70591837d76e222868839",
+    "final_handoff": "febf21da00bede86267ba1b499c8d2ff6876248cd7d49339f770ccbfd7e432bc"
+  },
+  "independent_review": {
+    "decision": "ACCEPT_RECORDED_SCRIPTED_TRANSPORT_SCOPE",
+    "scope": "Verified source/runtime/protocol/lease identities, all saved file hashes, wire/action correspondence, PNG framing and CRCs, complete uniform response arrays, recorded resource limits and absence of failure markers. No signal reread, rendering or collector rerun.",
+    "evidence_availability": "Operator-held artifacts are identified by hashes; raw inputs, images, responses, local paths and credentials are not published in this receipt."
+  },
+  "model_calls": 0,
+  "private_target_reads": 0,
+  "scientific_score": null,
+  "scientific_qualification": false,
+  "remaining_limits": [
+    "No provider capacity, fresh remote context, image-consumption or provider-isolation qualification.",
+    "No AI interpretation, accuracy or direct no-tool performance result.",
+    "No untouched holdout, population generalization or full 153-night qualification.",
+    "The separate programme still receives engineered features, six labeled training people and common YASA outputs; this control does not equate those information budgets or qualify that lifecycle.",
+    "Historical rendering evidence is not substituted for this exact current source execution."
+  ]
+}
