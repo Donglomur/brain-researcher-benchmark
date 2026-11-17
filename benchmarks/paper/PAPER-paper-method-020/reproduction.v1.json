@@ -1,0 +1,1473 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-020",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original CSI1 Table 1 findings are valid reproduction targets independently of improvement, and 20 printed method/category accuracies are verified. Complete native query/payload identity, publication scoring/checkpoint provenance, original baseline pipelines, required control values, justified equivalence criteria and immutable execution verification remain unresolved. The reviewed source scorer is a bounded declared-trace component, not an executed reproduction.",
+  "source_paper": {
+    "title": "Neuro-Symbolic Decoding of Neural Activity",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/33c069ac8440595724bcc373c9a52852-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/33c069ac8440595724bcc373c9a52852-Paper-Conference.pdf",
+      "locator": "Sections 4 and 5.1; complete CSI1/BOLD5000-QA half of Table 1; Appendix F.2, G.1-G.3",
+      "supports": "Five original CSI1 comparison methods and all four reported accuracies; original data/task, preprocessing, training and generated-answer baseline parser descriptions."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/loader/fqa.py",
+      "locator": "get_npy_paths and FQADataset.__getitem__",
+      "supports": "Subject/split directory loading, per-record queries/answers and full-record return."
+    },
+    {
+      "id": "train",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/train_bold5000.py",
+      "locator": "main lines 31–46, 55–99 and 129–194",
+      "supports": "Train/test domain construction, query exclusion, training sampling, test-based checkpoint selection; source flags must be authenticated."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-020/task.json",
+      "locator": "implementations/initial-evaluator-v1/README.md; docs/initial-evaluator-v1.md; evaluator.py: prepare_assessment and score_assessment",
+      "supports": "Existing CSI1 metadata inventory (4802 train/84 test paths), prospective exhaustive scorer and explicitly unqualified status."
+    },
+    {
+      "id": "source_plot",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/utils/plot_utils.py",
+      "locator": "evaluate_yes_no_results lines 295-419; evaluate_vocab_results 521-665; combined accuracy 927-938",
+      "supports": "Source posthoc unseen-concept and TF-only hop exclusions; caught exceptions; TF non-yes coercion; exact vocabulary accuracy and QA-weighted combined score."
+    },
+    {
+      "id": "source_loss",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/left/models/losses.py",
+      "locator": "QALoss lines 130-198",
+      "supports": "Structured answer decoding and null-execution failure numerator/denominator; monitor count weighting."
+    },
+    {
+      "id": "source_domain",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/left/domain.py",
+      "locator": "create_bare_domain lines 28-38; create_domain_from_query lines 45-59",
+      "supports": "Three ordered built-ins and potentially partial parser-returned domain; exact original concept eligibility must be recovered."
+    },
+    {
+      "id": "source_categories",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/data/bold5000_pred_cls.json",
+      "locator": "Complete Movement, Position, Thing and YesNo mapping",
+      "supports": "Source vocabulary category membership; Thing and unclassified successful vocabulary calls must not disappear from the overall denominator."
+    },
+    {
+      "id": "source_inventory",
+      "kind": "author_data",
+      "url": "https://huggingface.co/datasets/PPWangyc/BOLD5000-QA/tree/36c60313218c0fbf7c381294b81469f8d085ff46",
+      "locator": "Pinned CSI1/train and CSI1/test path inventory; 4802 train and 84 test paths retained in historical registration",
+      "supports": "Path inventory and original split route only; no native payload, stimulus identity or complete 2,095-query census authentication."
+    },
+    {
+      "id": "source_scorer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-020/implementations/source-scoring-v2/source_score.py",
+      "locator": "inspect_manifest, score, compare and main; source_score.py raw SHA-256 c4d1d07bb20e58e4bdf6b2b36f01a87c419b5b96a9077803a15bba50dfe643ca",
+      "supports": "Reviewed executable single-trace source scoring and denominator ledger; generated tests only, no publication-native run or full control-suite delivery."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Answer semantic queries about the viewed image from CSI1 fMRI: action, position and true/false answers, using the original BOLD5000-QA task in Table 1. This is not visual reconstruction or a new cross-subject task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author BOLD5000-QA, derived from BOLD5000 images and image-aligned fMRI. Section 4 reports 133146 training and 2095 test QA examples; the source loader consumes the author subject/train and subject/test NPY directories. Payload identity and manifest reconciliation remain admission blockers.",
+      "evidence_ids": [
+        "paper",
+        "loader"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "CSI1 is the subject for Table 1 BOLD5000-QA and the registered component. Appendix four-subject mean 0.7102 and CNeuroMod results are different paper endpoints; neither may be substituted as this baseline or claimed from a CSI1 win.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain the original image-aligned train/test partition referenced in Appendix F.2 and the released CSI1 directories. Filenames are not validated stimulus IDs. Exact image aliases, eligible query denominator, selected checkpoint and exposure history remain unresolved. A new split or train-only denominator cannot count against Table 1.",
+      "evidence_ids": [
+        "paper",
+        "loader",
+        "train",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "A symbolic question and the corresponding fMRI tensor; model output is a Boolean or answer-vocabulary concept. Images, scene graphs and answers used to construct QA are not inference inputs. Author source uses train+test query strings for symbolic-domain construction, which must be explicitly reconciled with the evaluation access policy.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Appendix F.2: WAVE-preprocessed image-aligned BOLD5000 fMRI, five TRs by 1024 regions, 2-second TR and a two-TR hemodynamic lag. Preserve the published atlas/model configuration; a different atlas is a separate paper condition.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Overall structured-answer QA accuracy, proportion of correct evaluated queries, with action/position/T/F companions. Exact original inclusion and decoding aggregation must match Table 1: training source can skip test queries with unseen concepts, whereas the local evaluator includes all declared queries and failures.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Table 1 is within CSI1 QA-level overall accuracy, alongside category accuracies, not an equal-image or four-subject average. Image/person summaries and neural-input controls are additional diagnostics.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered original panel is CSI1/BOLD5000-QA Table 1: Linear, UMBRAE, SDRecon, BrainCap and NEURONA, each with Overall, Action, Position and T/F accuracy on the publication-identical query population. Retain all 20 printed method/metric findings, source training-monitor versus final-posthoc denominator accounting, the full Movement/Position/Thing/YesNo/unknown query-category ledger, and every exclusion/failure. Required benchmark companions additionally retain matched neural, no-neural and shuffled-neural conditions and a separately trained text-only comparator; these controls have no verified published numeric targets. Apply the same full panel under paper_data and paper_data_author_code, adding only author code. The 84 test paths and 2095 stated questions are different identities; the complete per-record source query roster, original baselines and native control execution are not authenticated. Table 2 unseen-query, CNeuroMod and four-subject findings are separate endpoints and are not substituted for this registered CSI1 task.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "source_plot",
+        "source_loss",
+        "source_categories",
+        "source_inventory",
+        "reg",
+        "source_scorer"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Inference observes the original symbolic query and aligned5 TR by 1024-region CSI1 fMRI under the original atlas/transform. Original training labels are training resources; test answers, viewed images, scene graphs, stimulus identities and construction metadata are operator-held and not inference inputs. The author domain uses train+test query programs and historical best-test checkpoint selection; authentic access/selection histories must be reconciled explicitly, never silently replaced by the prospective train-only exhaustive protocol. Match original scientific inputs and budgets across paper_data and paper_data_author_code with author code as the only information addition. Match non-neural resources within neural/no-neural/shuffled-neural controls, keep neural donors outside control participants, and distinguish zero-input inference from a separately trained text-only model. Native payload delivery, code bundle and participant isolation remain unverified.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "loader",
+        "reg",
+        "source_scorer"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "csi1_table1_linear_overall",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA Linear Overall accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.4692,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct across the complete original CSI1 Table 1 evaluated query population, preserving all included categories and failure/exclusion accounting.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_linear_action",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA Linear Action accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.2069,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Action category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_linear_position",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA Linear Position accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.1778,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Position category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_linear_tf",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA Linear T/F accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.526,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 T/F category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_umbrae_overall",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA UMBRAE Overall accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.4754,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct across the complete original CSI1 Table 1 evaluated query population, preserving all included categories and failure/exclusion accounting.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_umbrae_action",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA UMBRAE Action accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.2069,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Action category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_umbrae_position",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA UMBRAE Position accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.1746,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Position category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_umbrae_tf",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA UMBRAE T/F accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.534,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 T/F category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_sdrecon_overall",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA SDRecon Overall accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.4711,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct across the complete original CSI1 Table 1 evaluated query population, preserving all included categories and failure/exclusion accounting.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_sdrecon_action",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA SDRecon Action accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.2414,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Action category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_sdrecon_position",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA SDRecon Position accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.1937,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Position category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_sdrecon_tf",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA SDRecon T/F accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.5248,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 T/F category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_braincap_overall",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA BrainCap Overall accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.4773,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct across the complete original CSI1 Table 1 evaluated query population, preserving all included categories and failure/exclusion accounting.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_braincap_action",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA BrainCap Action accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.1937,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Action category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_braincap_position",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA BrainCap Position accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.1724,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Position category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_braincap_tf",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA BrainCap T/F accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.5551,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 T/F category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_neurona_overall",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA NEURONA Overall accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.7041,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct across the complete original CSI1 Table 1 evaluated query population, preserving all included categories and failure/exclusion accounting.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_neurona_action",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA NEURONA Action accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.6207,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Action category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_neurona_position",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA NEURONA Position accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.5079,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 Position category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_table1_neurona_tf",
+      "kind": "scalar",
+      "description": "Original Table 1 CSI1/BOLD5000-QA NEURONA T/F accuracy. This is a published expected value only; copying it or replaying an author calibration is not AI computational reproduction.",
+      "status": "verified",
+      "expected": 0.7407,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted proportion correct within the original CSI1 Table 1 T/F category; retain exact category membership and denominator, not equal-image averaging.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Four-decimal printed accuracy is an expected source value, not a justified execution tolerance. No authenticated original denominator, independent rerun variability or preregistered equivalence criterion supports an exact-match, rounding-band or other numeric tolerance.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_no_neural_overall",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched no-neural inference ablation, Overall QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Overall accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_no_neural_action",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched no-neural inference ablation, Action QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Action accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_no_neural_position",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched no-neural inference ablation, Position QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Position accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_no_neural_tf",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched no-neural inference ablation, T/F QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted T/F accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_shuffled_neural_overall",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched whole-stimulus shuffled-neural inference, Overall QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Overall accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_shuffled_neural_action",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched whole-stimulus shuffled-neural inference, Action QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Action accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_shuffled_neural_position",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched whole-stimulus shuffled-neural inference, Position QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Position accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_shuffled_neural_tf",
+      "kind": "scalar",
+      "description": "Required neural-information companion: matched whole-stimulus shuffled-neural inference, T/F QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted T/F accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_trained_text_only_overall",
+      "kind": "scalar",
+      "description": "Required neural-information companion: separately trained text-only comparator, Overall QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Overall accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_trained_text_only_action",
+      "kind": "scalar",
+      "description": "Required neural-information companion: separately trained text-only comparator, Action QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Action accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_trained_text_only_position",
+      "kind": "scalar",
+      "description": "Required neural-information companion: separately trained text-only comparator, Position QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted Position accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    },
+    {
+      "id": "csi1_required_trained_text_only_tf",
+      "kind": "scalar",
+      "description": "Required neural-information companion: separately trained text-only comparator, T/F QA accuracy on the original CSI1 query panel with matched permitted non-neural resources. No numeric original-paper target has been verified; this benchmark control must not be presented as a published Table 1 condition. An all-zero tensor in the same trained model does not supply the separately trained text-only result.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "proportion correct (0 to 1)",
+      "aggregation": "Question-weighted T/F accuracy on the same authenticated original query identities and source eligibility policy as the neural condition; retain all image-cluster and exclusion/failure identities.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg",
+        "source_scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No original published or authenticated native control value and no justified replication criterion exist; leave the expected value and tolerance unresolved.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "reg"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No reproduction uncertainty or equivalence rule is frozen; preserve paired original stimulus clusters and separately characterize training-seed/checkpoint-selection variability.",
+        "independent_unit": "Original stimulus/image identity within CSI1; questions share images and one person; seeds are algorithmic replicates, not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original stimulus aliases, evaluated query set and selection history are unresolved. 2095 questions or 84 NPY paths do not establish 2095 or 84 independent biological observations.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "source_inventory"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the complete original CSI1 native query roster, answers and payload conversion, including per-record query order and exclusions:84 test paths are not proof of all 2095 reported questions or correct stimulus identities.",
+    "Identify which final posthoc/training scoring path produced Table 1. The training monitor excludes unseen concepts, counts null executions incorrect and aborts on uncaught calls; posthoc excludes caught exceptions, gates TF to 1-3 concepts and maps every non-yes decoded token to no. Do not substitute the prospective all-query/train-only scorer.",
+    "Recover exact native parser/domain outputs and query transforms, Yeo-17/atlas configuration, author selected checkpoint, seed and historical test-based selection/exposure. Rendered source receipts are not raw-byte author-code archives or executed parser/model evidence.",
+    "Recover the original Linear/UMBRAE/SDRecon/BrainCap training/inference outputs and generated-language response parser described in Appendix G.3. The current structured NEURONA trace scorer does not implement those model pipelines or their punctuation/vocabulary/default-answer parsing.",
+    "Preserve original category membership including Thing and unclassified vocabulary in overall accuracy; authenticate every numerator/denominator, complete execution ledger and question-to-original-stimulus join. Neither printed scalars nor a program that emits them verifies computation.",
+    "Execute and verify the complete matched neural/no-neural/shuffled-neural suite and separately trained text-only companion under each paired information condition; software packet preparation and one-condition source_score output are not a full suite or execution attestation.",
+    "Specify independently justified tolerances and uncertainty for each original method/metric and required companion; four-decimal printing, failure to reject a difference and model seed counts do not establish reproduction equivalence.",
+    "Authentic ordered cohort/split/panel/observation manifests, original-data analysis interface binding, granular-output identities and independent verification program are unavailable. Omit admission_policy rather than invent immutable hashes.",
+    "Freeze matched paper_data versus paper_data_author_code input delivery, author-code manifest, exposure policy and cumulative access/resource budgets; only author code may differ. No native model or AI reproduction/improvement attempt has run."
+  ]
+}
