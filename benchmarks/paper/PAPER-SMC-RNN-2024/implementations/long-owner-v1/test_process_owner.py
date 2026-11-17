@@ -3,6 +3,7 @@ from pathlib import Path
 import copy
 import hashlib
 import json
+import math
 import os
 import socket
 import sys
@@ -89,13 +90,28 @@ class ProcessOwnerTests(unittest.TestCase):
             owner.validate_grant(value)
 
     def test_expired_grant_is_not_renewed(self):
-        value = grant(True)
-        value['origin'] -= 9
-        value['deadline'] -= 9
-        value['controller_deadline'] -= 9
-        with self.assertRaises(TimeoutError):
-            owner.validate_grant(value, fixture=True)
-        self.assertEqual(owner.validate_grant(value, fixture=True, require_remaining=False), value)
+        # Crossing this binary-float boundary exposes independently shifted clocks.
+        now = math.nextafter(124.0, math.inf)
+        with mock.patch.object(owner.time, 'monotonic', return_value=now), \
+                mock.patch.object(owner, 'clock_identity', return_value='fixed-test-boot'):
+            value = grant(True)
+            self.assertEqual(owner.validate_grant(value, fixture=True), value)
+            shifted = copy.deepcopy(value)
+            for field in ('origin', 'deadline', 'controller_deadline'):
+                shifted[field] -= 9
+            self.assertNotEqual(shifted['deadline'], shifted['origin'] + 8)
+            with self.assertRaisesRegex(ValueError, 'Fixed eight-second'):
+                owner.validate_grant(shifted, fixture=True, require_remaining=False)
+            # Construct the expired fixture canonically; do not relax runtime checks.
+            shifted['deadline'] = shifted['origin'] + 8
+            shifted['controller_deadline'] = shifted['deadline'] - 2
+            expected = copy.deepcopy(shifted)
+            self.assertLess(shifted['controller_deadline'], now)
+            with self.assertRaisesRegex(TimeoutError, 'Original controller interval'):
+                owner.validate_grant(shifted, fixture=True)
+            self.assertEqual(owner.validate_grant(shifted, fixture=True,
+                                                  require_remaining=False), expected)
+            self.assertEqual(shifted, expected)
 
     def test_malformed_clocks_pins_and_extended_budget_refused(self):
         for field, replacement in [('origin', float('nan')), ('deadline', True),
