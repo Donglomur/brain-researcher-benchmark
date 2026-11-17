@@ -55,6 +55,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Neural 095 four cell runner shared runtime v1](implementations/neural-095-four-cell-runner-shared-runtime-v1) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Case investigator v1](implementations/case-investigator-v1) — Reviewed task source component.
+  Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Paired arithmetic v2](implementations/paired-arithmetic-v2) — Reviewed source component.
   Scope: Paired MAE arithmetic successor. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
