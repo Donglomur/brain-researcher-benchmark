@@ -279,6 +279,75 @@ def current_task(original, row, contract, contract_pin, history_pin, implementat
     return task
 
 
+def preserved_outcome_outputs(root, current_bytes, current, expected_count):
+    """Authenticate the newer projection without letting this older binder undo it.
+
+    The dual binder checks exact prior rows, preserved task bytes, both current
+    contracts and the deterministic newer projection.  This command retains its
+    original historical-roster guard and immutable pre-improvement snapshot, but
+    returns unchanged bytes instead of regenerating the superseded task wording.
+    """
+    rows = task_rows(current, expected_count, allow_initial=True)
+    metadata = current.get("paper_improvement")
+    require(type(metadata) is dict and metadata.get("schema_version") == VERSION
+            and metadata.get("objective") == OBJECTIVE and metadata.get("coverage_required") is True
+            and type(metadata.get("registered_count")) is int and metadata["registered_count"] == len(rows),
+            "dual outcomes must preserve the existing improvement coverage")
+    snapshot_bytes = read_file(root, SNAPSHOT)
+    validate_pin(metadata.get("pre_improvement_registry"), SNAPSHOT, snapshot_bytes, "pre-improvement registry")
+    original = strict_json(snapshot_bytes, SNAPSHOT)
+    require("paper_improvement" not in original, "historical registry must predate improvement binding")
+    originals = task_rows(original, expected_count)
+    require([row["id"] for row in originals] == [row["id"] for row in rows if not is_initial(row)],
+            "paper registration IDs/order changed from historical registry")
+    current_rows = {row["id"]: row for row in rows}
+    for prior in originals:
+        row = current_rows[prior["id"]]
+        for key in ("id", "title", "track", "task_directory", "specification_id", "specification_alias", "original_specification"):
+            require(row.get(key) == prior.get(key),
+                    "historical registry identity/pin changed: " + prior["id"] + "/" + key)
+    task_root = root / "benchmarks/paper"
+    require(task_root.is_dir() and not task_root.is_symlink(), "paper task directory is missing or linked")
+    for filename in ("task.json", "improvement.v1.json"):
+        actual = {path.parent.name for path in task_root.glob("*/" + filename)}
+        require(actual == set(current_rows), filename + " must cover exactly the registered paper IDs")
+    implementations = implementation_rows(current, {row["id"] for row in current["tasks"]})
+    originals_by_id = {row["id"]: row for row in implementation_rows(
+        original, {row["id"] for row in original["tasks"]})}
+    require(set(originals_by_id) <= {row["id"] for row in implementations},
+            "historical implementation removed from current registry")
+    paper_ids = {row["id"] for row in originals}
+    for row in implementations:
+        prior = originals_by_id.get(row["id"])
+        if prior is None:
+            continue
+        require(row.get("owner_ids") == prior.get("owner_ids")
+                and row.get("related_task_ids", []) == prior.get("related_task_ids", []),
+                "implementation task ownership changed: " + row["id"])
+        affected = paper_ids.intersection(prior["owner_ids"] + prior.get("related_task_ids", []))
+        if not affected:
+            continue
+        roles = row.get("evaluation_roles")
+        require(type(roles) is dict and all(roles.get(identifier) == "calibration_only" for identifier in affected),
+                "historical implementation paper roles changed: " + row["id"])
+        if set(prior["owner_ids"] + prior.get("related_task_ids", [])) <= paper_ids:
+            expected_notes = ((prior.get("scope_notes") or "") + " "
+                "Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.").strip()
+            require(row.get("role") == "calibration_only" and row.get("scope_notes") == expected_notes,
+                    "historical implementation calibration classification changed: " + row["id"])
+    path = safe_path(ROOT, "scripts/maintenance/bind_paper_outcomes.py")
+    require(path.is_file(), "paper outcome binder is required to preserve a newer projection")
+    spec = importlib.util.spec_from_file_location("_paper_outcomes_compatibility", path)
+    require(spec is not None, "cannot load the paper outcome binder")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+    validate_existing = getattr(module, "validate_existing", None)
+    require(callable(validate_existing), "validate_existing API is required for paper outcomes")
+    validate_existing(root)
+    return {SNAPSHOT: snapshot_bytes, REGISTRY: current_bytes}
+
+
 def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
     """Return all deterministic output bytes after a complete read-only preflight.
 
@@ -293,6 +362,10 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
     require(all(not parent.is_symlink() for parent in root.parents), "repository root has a symlink ancestor")
     current_bytes = read_file(root, REGISTRY)
     current = strict_json(current_bytes, REGISTRY)
+    if ("paper_outcomes" in current
+            or (type(current.get("tasks")) is list
+                and any(type(row) is dict and "paper_outcomes" in row for row in current["tasks"]))):
+        return preserved_outcome_outputs(root, current_bytes, current, expected_count)
     rows = task_rows(current, expected_count, allow_initial=True)
     historical_rows = [row for row in rows if not is_initial(row)]
     current_by_id = {row["id"]: row for row in historical_rows}
@@ -346,6 +419,9 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
         validate_pin(row.get("specification"), task_path, task_bytes, identifier + " current specification")
         current_doc = strict_json(task_bytes, task_path)
         validate_identity(row, current_doc)
+        if metadata is not None:
+            require(current_doc.get("objective") == OBJECTIVE,
+                    "a newer current definition requires its explicit binding; the improvement binder cannot overwrite it")
         for key in ("id", "title", "track", "task_directory", "specification_id", "specification_alias", "original_specification"):
             require(row.get(key) == original_row.get(key), "historical registry identity/pin changed: " + identifier + "/" + key)
         historical_file = safe_path(root, history_path)

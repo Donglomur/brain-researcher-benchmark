@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -160,8 +161,45 @@ def historical_member(package, value, style="package"):
     return package["root"] + "/" + name
 
 
-def task_registry(reader):
-    """Read only current public registration metadata, never old source locators."""
+def outcome_binding_module():
+    """Load one fixed framework helper without bytecode or task-code imports."""
+    path = Path(__file__).with_name("paper_outcomes_binding.py")
+    spec = importlib.util.spec_from_file_location("_source_paper_outcomes_binding", path)
+    require(spec is not None, "Paper outcome binding helper is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    root = path.parents[2]
+    body = Reader(root).read(path.relative_to(root).as_posix())
+    exec(compile(body, str(path), "exec"), module.__dict__)
+    return module
+
+
+def outcome_read_pin(reader, pin, label):
+    """Read a closed outcome pin; only its fixed registry snapshot uses 4 MiB."""
+    binding = outcome_binding_module()
+    require(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"},
+            "Closed " + label + " pin required")
+    name = relative(pin["path"])
+    limit = REGISTRY_LIMIT if name == binding.SNAPSHOT else MEMBER_LIMIT
+    require(type(pin["bytes"]) is int and 0 <= pin["bytes"] <= limit,
+            "Invalid " + label + " extent")
+    require(type(pin["sha256"]) is str and len(pin["sha256"]) == 64
+            and all(char in "0123456789abcdef" for char in pin["sha256"]),
+            "Invalid " + label + " digest")
+    raw = reader.read(name, limit=limit)
+    require(len(raw) == pin["bytes"] and hashlib.sha256(raw).hexdigest() == pin["sha256"],
+            label + " source hash or length mismatch")
+    document = strict_json(raw)
+    require(type(document) is dict, label + " must be a metadata object")
+    # json.loads accepts a finite-looking exponent that overflows a float.
+    try:
+        json.dumps(document, allow_nan=False)
+    except (ValueError, TypeError) as error:
+        raise InvalidSource("Nonfinite or non-JSON " + label) from error
+    return document
+
+
+def registry_document(reader):
+    """Read current registration metadata, preserving the complete outcome roster."""
     document = strict_json(reader.read("benchmarks/registry.json", limit=REGISTRY_LIMIT))
     require(type(document) is dict and document.get("schema_version") == 1
             and document.get("kind") == "neuroscience_benchmark_registry",
@@ -173,7 +211,31 @@ def task_registry(reader):
         require(type(row) is dict and type(row.get("id")) is str and row["id"] not in result,
                 "Invalid or duplicate registered task identity")
         result[row["id"]] = row
-    return result
+    if "paper_outcomes" in document or any("paper_outcomes" in row for row in rows):
+        try:
+            outcome_binding_module().coverage(document, lambda pin, label: outcome_read_pin(reader, pin, label))
+        except ValueError as error:
+            raise InvalidSource(str(error)) from error
+    return document, result
+
+
+def task_registry(reader):
+    """Read only current public registration metadata, never old source locators."""
+    return registry_document(reader)[1]
+
+
+def outcome_context(reader, registered, task_doc):
+    """Authenticate the new current definition and its actual archived predecessor."""
+    document, rows = registry_document(reader)
+    require(type(registered) is dict and rows.get(registered.get("id")) == registered,
+            "Paper outcome context differs from the current registry")
+    binding = outcome_binding_module()
+    read_pin = lambda pin, label: outcome_read_pin(reader, pin, label)
+    try:
+        previous = binding.coverage(document, read_pin)
+        return binding.context(registered, task_doc, previous, read_pin)
+    except ValueError as error:
+        raise InvalidSource(str(error)) from error
 
 
 def checked_paper_revision(reader, task_id, task_pin, task_doc, registered):
@@ -183,6 +245,24 @@ def checked_paper_revision(reader, task_id, task_pin, task_doc, registered):
     remains the responsibility of the paper-improvement validator and catalog.
     """
     home = "benchmarks/paper/" + task_id
+    if ("paper_outcomes" in task_pin
+            or (type(registered) is dict and "paper_outcomes" in registered)
+            or task_doc.get("objective") != PAPER_OBJECTIVE):
+        require(type(registered) is dict and "paper_outcomes" in registered
+                and task_pin.get("paper_outcomes") == registered["paper_outcomes"]
+                and registered.get("specification") == {key: task_pin[key] for key in ("path", "bytes", "sha256")}
+                and registered.get("specification_revision") == task_pin.get("specification_revision"),
+                "Current paper task is not bound to its enrolled paper outcome registration")
+        bound = outcome_context(reader, registered, task_doc)
+        require(bound is not None, "Paper outcome definition requires an authenticated predecessor")
+        prior = bound["previous_row"]
+        prior_pin = {**prior["specification"], "original_path": task_pin["original_path"],
+                     "predecessor": task_pin["predecessor"],
+                     "specification_revision": prior["specification_revision"]}
+        # The original routine authenticates the original task and improvement
+        # contract.  It receives the exact archived *document*, not a filesystem
+        # alias that pretends the old bytes remain at the current task path.
+        return checked_paper_revision(reader, task_id, prior_pin, bound["previous_document"], prior)
     revision = task_pin["specification_revision"]
     require(type(revision) is dict and set(revision) ==
             {"version", "previous_specification", "improvement_contract"}
@@ -435,8 +515,11 @@ def check_configuration(reader, config):
         task_pin = package["registered_task"]
         task_fields = {"path", "bytes", "sha256", "original_path", "predecessor"}
         require(type(task_pin) is dict and set(task_pin) in
-                (task_fields, task_fields | {"specification_revision"}),
+                (task_fields, task_fields | {"specification_revision"},
+                 task_fields | {"specification_revision", "paper_outcomes"}),
                 "Closed registered task descriptor required")
+        require("paper_outcomes" not in task_pin or track == "paper",
+                "Only paper tasks support paper outcome bindings")
         require(task_pin["path"] == home + "/task.json", "Registered task location mismatch")
         require(relative(task_pin["original_path"]).startswith("benchmarks/manifests/" + track + "/")
                 and task_pin["original_path"].count("/") == 3,

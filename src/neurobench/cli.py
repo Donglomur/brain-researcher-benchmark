@@ -56,6 +56,7 @@ def public_summary(catalog):
             'submission_ready': None, 'scientific_readiness': 'unknown',
             'submission_readiness': 'unknown',
             'paper_improvement': catalog['paper_improvement_counts'],
+            'paper_outcomes': catalog['paper_outcome_counts'],
             'neural_understanding': catalog['neural_understanding_counts'],
             'recorded_evidence': {key: catalog['recorded_evidence'][key]
                                   for key in ('counts', 'reports', 'scope')},
@@ -82,6 +83,7 @@ def public_implementations(catalog, task):
     return {**{key: task[key] for key in ('id', 'title', 'track', 'task_directory',
                                          'scientific_readiness', 'submission_readiness')},
             'paper_improvement': task.get('paper_improvement'),
+            'paper_outcomes': task.get('paper_outcomes'),
             'neural_understanding': task.get('neural_understanding'),
             'recorded_evidence': task.get('recorded_evidence', []),
             'evaluation_role': ('same_task_improvement_construction'
@@ -92,6 +94,7 @@ def public_implementations(catalog, task):
             'documentation': task.get('documentation', []),
             'interpretation': 'Explicit source assignments and related scientific sources. '
                               'Presence does not establish complete task coverage or execution readiness. '
+                              'The evaluation_role describes retained runtime scope; current outcome contracts and individual source roles remain separate. '
                               'No implementation code, data or verification receipts were opened.'}
 
 
@@ -110,6 +113,7 @@ def public_metadata_command(action, root, *, track=None, task_id=None):
                   'scientific_readiness', 'submission_readiness',
                   'local_scoring_adapter_verified', 'local_program_runner_verified')},
                  'paper_improvement': row.get('paper_improvement'),
+                 'paper_outcomes': row.get('paper_outcomes'),
                  'neural_understanding': row.get('neural_understanding'),
                  'recorded_evidence': row.get('recorded_evidence', [])}
                 for row in catalog['tasks'] if track is None or row['track'] == track]
@@ -401,19 +405,105 @@ def summary(root=ROOT):
     return public_metadata_command('status', root)
 
 
-def paper_contract(task_id, root=ROOT):
+def paper_contract(task_id, root=ROOT, *, outcome='improvement'):
     """Read the current pinned public contract, never an implementation's claims."""
+    if outcome not in ('reproduction', 'improvement'):
+        raise ValueError('Expected reproduction or improvement outcome')
     builder = public_catalog_module()
     catalog = builder.load(root)
     task = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
     if task is None or task['track'] != 'paper':
         raise ValueError('Expected a registered paper task')
-    improvement = task.get('paper_improvement')
-    if not improvement:
-        raise ValueError('No current paper improvement contract is bound for ' + task_id)
-    pin = improvement['contract']
+    if outcome == 'reproduction':
+        binding = task.get('paper_outcomes')
+        if not binding:
+            raise ValueError('No current paper outcome contracts are bound for ' + task_id)
+        pin = binding.get('reproduction_contract')
+        if pin is None:
+            raise ValueError('No reproduction proposal is bound for inspection: ' + task_id)
+    else:
+        binding = task.get('paper_outcomes', {})
+        if binding.get('availability') == 'unavailable':
+            raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+        improvement = task.get('paper_improvement')
+        if not improvement:
+            raise ValueError('No current paper improvement contract is bound for ' + task_id)
+        pin = improvement['contract']
     raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
     return builder.improvement_module().loads_contract(raw.decode('utf-8'))
+
+
+def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
+    """Read only exact public pins after complete current/previous lineage checks."""
+    builder = public_catalog_module()
+    catalog = builder.load(root)
+    task = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
+    if task is None or task['track'] != 'paper':
+        raise ValueError('Expected a registered paper task')
+    binding = task.get('paper_outcomes')
+    if not binding:
+        raise ValueError('No current paper outcome contracts are bound for ' + task_id)
+    unavailable = binding.get('availability') == 'unavailable'
+    if unavailable and not allow_unavailable:
+        raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+    outcome_binding = builder.companion_module('paper_outcomes_binding')
+    parser = builder.improvement_module().loads_contract
+    documents = {}
+    for name, field in (('reproduction', 'reproduction_contract'), ('improvement', 'improvement_contract'),
+                        ('outcomes', 'outcomes')):
+        pin = binding.get(field)
+        if pin is None:
+            documents[name] = None
+            continue
+        raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
+        documents[name] = parser(raw.decode('utf-8'))
+    engine = outcome_binding.engine(documents['reproduction'])
+    if unavailable:
+        return task, binding, documents, engine
+    errors = engine.outcomes_validate(documents['outcomes'], documents['reproduction'], documents['improvement'])
+    if errors or documents['outcomes']['original_task_sha256'] != task['specification']['sha256']:
+        raise ValueError('Paper outcome contracts differ from the authenticated current task: ' + '; '.join(errors))
+    return task, binding, documents, engine
+
+
+def paper_outcomes(task_id, root=ROOT):
+    """Inspect one task's four declared cells without supplying or inferring runs."""
+    task, binding, documents, engine = _paper_outcome_documents(task_id, root, allow_unavailable=True)
+    summary = ({'task_id': task_id, 'task_count': 1, **binding}
+               if binding.get('availability') == 'unavailable' else
+               engine.summary(documents['outcomes'], documents['reproduction'], documents['improvement']))
+    return {'task_id': task_id, 'specification': task['specification'],
+            'binding': {key: binding[key] for key in
+                        ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')},
+            'descriptor': documents['outcomes'],
+            'summary': summary}
+
+
+def _outcome_receipt(path, engine):
+    """Read explicit bounded metadata, never follow its evidence locators."""
+    path = Path(path).absolute()
+    limit = 2 * 1024 * 1024
+    message = 'Outcome receipt must be bounded ordinary JSON metadata'
+    if any(item.is_symlink() for item in (path, *path.parents)) or not path.is_file():
+        raise ValueError(message)
+    before = path.stat()
+    if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or not 0 < before.st_size <= limit:
+        raise ValueError(message)
+    with path.open('rb') as stream:
+        raw = stream.read(limit + 1)
+    after = path.stat()
+    if (len(raw) != before.st_size or len(raw) > limit
+            or (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns, before.st_nlink)
+            != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns, after.st_nlink)):
+        raise ValueError('Outcome receipt changed during bounded read')
+    return engine.loads_contract(raw.decode('utf-8'))
+
+
+def check_paper_outcome(task_id, receipt_path, root=ROOT):
+    """Validate one declared AI outcome receipt; this does not score science."""
+    _, _, documents, engine = _paper_outcome_documents(task_id, root)
+    receipt = _outcome_receipt(receipt_path, engine)
+    return engine.admit_outcome(documents['outcomes'], documents['reproduction'], documents['improvement'], receipt)
 
 
 def neural_contract(task_id, root=ROOT):
@@ -474,9 +564,10 @@ def compare_paper(task_id, result_path, root=ROOT):
 
 def require_paper_role(row, calibration):
     if row['track'] == 'paper' and not calibration:
-        raise ValueError('Paper success requires same-task source-paper superiority under its improvement contract. '
+        raise ValueError('Paper reproduction and same-task source-paper superiority use independent outcome contracts. '
                          'Historical score/run adapters are calibration only; use scripts/neurobench.py score/run --calibration explicitly, '
-                         'or paper-contract and compare-paper for the current objective.')
+                         'or inspect the separate reproduction and improvement contracts with paper-contract --outcome and paper-outcomes. '
+                         'compare-paper and check-paper-outcome validate declared metadata without establishing scientific success.')
 
 
 def require_neural_role(row, calibration, root=ROOT):
@@ -611,8 +702,13 @@ def main(argv=None, root=None):
     p = subs.add_parser('show'); p.add_argument('id')
     p = subs.add_parser('implementations', help='Show current source paths, roles and limits for a task')
     p.add_argument('id')
-    p = subs.add_parser('paper-contract', help='Inspect the current source-grounded improvement contract')
+    p = subs.add_parser('paper-contract', help='Inspect one current source-grounded paper outcome contract')
     p.add_argument('id')
+    p.add_argument('--outcome', choices=['reproduction', 'improvement'], default='improvement')
+    p = subs.add_parser('paper-outcomes', help='Inspect separate paper outcomes and paired information conditions')
+    p.add_argument('id')
+    p = subs.add_parser('check-paper-outcome', help='Validate one declared outcome receipt; execute no scientific evaluator')
+    p.add_argument('id'); p.add_argument('--receipt', required=True)
     p = subs.add_parser('neural-contract', help='Inspect the current target and separate neural access conditions')
     p.add_argument('id')
     p = subs.add_parser('evidence', help='Read scoped public execution reports without promoting qualification')
@@ -631,7 +727,11 @@ def main(argv=None, root=None):
     p.add_argument('--calibration', action='store_true', help='Explicitly use historical calibration scope; cannot establish current paper or neural success')
     args = parser.parse_args(argv)
     if args.action == 'paper-contract':
-        result = paper_contract(args.id, root)
+        result = paper_contract(args.id, root, outcome=args.outcome)
+    elif args.action == 'paper-outcomes':
+        result = paper_outcomes(args.id, root)
+    elif args.action == 'check-paper-outcome':
+        result = check_paper_outcome(args.id, args.receipt, root)
     elif args.action == 'neural-contract':
         result = neural_contract(args.id, root)
     elif args.action == 'evidence':
@@ -660,6 +760,8 @@ def main(argv=None, root=None):
             result.update(evaluation_role='calibration_only', paper_win=False, current_task_success=False)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if args.action == 'compare-paper' and result.get('comparison_admitted') is not True:
+        return 2
+    if args.action == 'check-paper-outcome' and result.get('metadata_admitted') is not True:
         return 2
     return 0
 
