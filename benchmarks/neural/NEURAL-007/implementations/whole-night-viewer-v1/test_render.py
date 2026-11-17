@@ -183,6 +183,39 @@ class RenderChecks(unittest.TestCase):
         self.assertFalse(canvas.pixels)
         self.assertTrue(any('CLIPPED' in row[2] for row in canvas.texts))
 
+    def clipping_layout_inputs(self):
+        data = self.inputs(width=3000, start=8007000, target=8007000)
+        data['epoch_id'] = 'generated-clipping-layout/2669'
+        data['channel_values_volts'] = [
+            [amplitude * math.sin(i * frequency) for i in range(3000)]
+            for amplitude, frequency in ((225e-6, .033), (300e-6, .047), (400e-6, .011))
+        ]
+        return data
+
+    def test_clipping_warnings_do_not_obscure_traces_or_other_text(self):
+        spy, canvas, _ = spy_raster()
+        render_spy(self.clipping_layout_inputs(), spy)
+        warnings = [row for row in canvas.texts if row[2].startswith('CLIPPED:')]
+        self.assertEqual(len(warnings), 3)
+
+        def bounds(row):
+            x, y, text, _, scale = row
+            return x, y, x + len(text) * 6 * scale, y + 7 * scale
+
+        def overlaps(first, second):
+            return (first[0] < second[2] and second[0] < first[2]
+                    and first[1] < second[3] and second[1] < first[3])
+
+        for warning in warnings:
+            box = bounds(warning)
+            self.assertLess(box[2], raster.LEFT)
+            self.assertEqual(warning[3], raster.RED)
+            for other in canvas.texts:
+                if other is not warning:
+                    self.assertFalse(overlaps(box, bounds(other)), (warning, other))
+            for top in r.PLOT_TOPS:
+                self.assertFalse(overlaps(box, (raster.LEFT, top, raster.RIGHT + 1, top + 181)))
+
     def test_scientific_data_and_clock_rejections_precede_canvas_creation(self):
         changes = [
             {'epoch_id': 'unsafe\nidentity'}, {'epoch_id': 'x' * 97}, {'epoch_id': 'nonASCII\u03b2'},
