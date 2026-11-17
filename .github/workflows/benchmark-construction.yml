@@ -17,7 +17,10 @@ concurrency:
 # These generated controls check source contracts and mathematical behavior.
 # They do not run authentic datasets, models, or scientific qualification.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   helsinki-complete-support-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -35,6 +38,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-EXP-005/implementations/complete-support-evaluator -p 'test_*.py' -v
 
   vestibular-condition-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -52,6 +56,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-DISC-20261114-VESTIBULAR-VO/implementations/condition-evaluator/test_evaluate.py -v
 
   laser-condition-packet-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -69,6 +74,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/condition-packets/test_packets.py
 
   isttc-empirical-estimation-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -86,6 +92,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-estimation -p 'test_producer.py' -v
 
   rep012-dependency-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:

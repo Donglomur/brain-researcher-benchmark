@@ -15,7 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   eeg-direct-response-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -52,6 +55,7 @@ jobs:
           path: ${{ runner.temp }}/eeg-direct-response-${{ github.run_id }}-${{ github.run_attempt }}/
 
   pfc-science2-package-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -92,6 +96,7 @@ jobs:
           path: ${{ runner.temp }}/pfc-science2-package-${{ github.run_id }}-${{ github.run_attempt }}/
 
   voltron-event-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -128,6 +133,7 @@ jobs:
           path: ${{ runner.temp }}/voltron-events-${{ github.run_id }}-${{ github.run_attempt }}/
 
   graspbox-scientific-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -164,6 +170,7 @@ jobs:
           path: ${{ runner.temp }}/graspbox-scorer-${{ github.run_id }}-${{ github.run_attempt }}/
 
   zapbench-finite-forecast-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -200,6 +207,7 @@ jobs:
           path: ${{ runner.temp }}/zapbench-forecast-${{ github.run_id }}-${{ github.run_attempt }}/
 
   purkinje-program-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -243,6 +251,7 @@ jobs:
           path: ${{ runner.temp }}/purkinje-program-${{ github.run_id }}-${{ github.run_attempt }}/
 
   human-ripple-program-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -284,6 +293,7 @@ jobs:
           path: ${{ runner.temp }}/human-ripple-program-${{ github.run_id }}-${{ github.run_attempt }}/
 
   abr-protected-fold-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -325,6 +335,7 @@ jobs:
           path: ${{ runner.temp }}/abr-protected-${{ github.run_id }}-${{ github.run_attempt }}/
 
   tms-behavior-portable-runner-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -364,6 +375,7 @@ jobs:
           path: ${{ runner.temp }}/tms-behavior-portable-${{ github.run_id }}-${{ github.run_attempt }}/
 
   dmfc-portable-runner-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -399,6 +411,7 @@ jobs:
           path: ${{ runner.temp }}/dmfc-portable-${{ github.run_id }}-${{ github.run_attempt }}/
 
   source-integrity:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -416,6 +429,7 @@ jobs:
       - name: Test paired study reporting with invented outcome records
         run: python -I -S -B tests/framework/test_paired_study.py
   scientific-contracts:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -439,6 +453,7 @@ jobs:
         run: python -I -B benchmarks/neural/NEURAL-030/implementations/cerebellar-contract/smoke_contract.py
 
   sleep-scientific-contracts:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -460,6 +475,7 @@ jobs:
         run: 'python -I -S -B benchmarks/shared/sleep-eog/comparison-contract/probability_diagnostics/test_probability_diagnostics.py'
 
   dimensionality-cerebellar-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -475,6 +491,7 @@ jobs:
         run: 'python -I -S -B benchmarks/paper/PAPER-paper-method-001/implementations/dimensionality-programme/programme/test_portability.py'
 
   openbmi-find-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -490,6 +507,7 @@ jobs:
         run: 'python3.11 -I -S -B -m unittest discover -s benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison -p test_find025_contract.py'
 
   jaxley-marble-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -508,6 +526,7 @@ jobs:
         run: 'python3 -I -S -B benchmarks/paper/PAPER-paper-method-034/implementations/fit-closed-comparator/test_portability.py'
 
   paired-neural-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -523,6 +542,7 @@ jobs:
         run: 'python3 -I -S -B benchmarks/neural/NEURAL-100/implementations/investigation/test_portability.py'
 
   unitmatch-native-paired-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -536,6 +556,7 @@ jobs:
         run: 'python3 -I -S -B benchmarks/paper/PAPER-paper-method-007/implementations/native-paired/test_portability.py'
 
   neural094-regional-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -550,6 +571,7 @@ jobs:
       - name: Check NEURAL-094 source materialization and refusals
         run: 'python3 -I -B benchmarks/neural/NEURAL-094/implementations/regional-comparison/test_portable_source.py'
   neural035-closed-pair-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -564,6 +586,7 @@ jobs:
       - name: Check NEURAL-035 source and protected-prerequisite refusals
         run: 'python3 -I -S -B benchmarks/neural/NEURAL-035/implementations/paired-grading/test_portable_source.py'
   nomad-recovered-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -579,6 +602,7 @@ jobs:
         run: 'python3 -I -S -B benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators/test_portable_source.py'
 
   neural055-things-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -595,6 +619,7 @@ jobs:
           python3 -I -S -B benchmarks/neural/NEURAL-055/implementations/registered-runtime/postscore_source_entry.py
           --materialize "${RUNNER_TEMP}/neural055-current-source" --inspect
   neural017-mc-maze-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -608,6 +633,7 @@ jobs:
         run: 'python3 -I -S -B benchmarks/neural/NEURAL-017/implementations/registered-runtime/test_complete_operator_source.py'
 
   neural083-preparation-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -622,6 +648,7 @@ jobs:
       - name: Check NEURAL-083 acquisition source relocation without downloads
         run: python3 -I -S -B benchmarks/neural/NEURAL-083/implementations/neural-083/acquisition-v1/test_public_source.py
   neural083-linux-owner-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 2
     steps:
@@ -664,6 +691,7 @@ jobs:
           PY_BOOTSTRAP
 
   neural002-morse-production-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -824,6 +852,7 @@ jobs:
           MORSE_RESULTS
 
   neural090-controller-engineering:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -911,6 +940,7 @@ jobs:
           N090_RESULTS
 
   neural074-operator-engineering:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -957,6 +987,7 @@ jobs:
             ${{ runner.temp }}/neural074-operator-ci-v1/CI_ADMISSION.json
 
   neural006-broker-engineering:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -1011,6 +1042,7 @@ jobs:
           path: ${{ runner.temp }}/neural006-broker-controls-v4/
 
   horrocks-construction-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -1070,6 +1102,7 @@ jobs:
           path: /tmp/horrocks-construction-controls-${{ github.run_id }}-${{ github.run_attempt }}/artifact/
 
   helsinki-recorded-grid-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -1119,6 +1152,7 @@ jobs:
           path: /tmp/helsinki-recorded-grid-controls-${{ github.run_id }}-${{ github.run_attempt }}/artifact/
 
   tms-figure2b-construction-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -1179,6 +1213,7 @@ jobs:
           path: /tmp/tms-figure2b-controls-${{ github.run_id }}-${{ github.run_attempt }}/artifact/
 
   nider-reporting-numeric-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -1214,6 +1249,7 @@ jobs:
           path: /tmp/nider-reporting-${{ github.run_id }}-${{ github.run_attempt }}/
 
   tms-real-interval-invented-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1249,6 +1285,7 @@ jobs:
           path: /tmp/tms-real-interval-${{ github.run_id }}-${{ github.run_attempt }}/
 
   dmn-evaluator-invented-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -1290,6 +1327,7 @@ jobs:
           path: ${{ runner.temp }}/dmn-evaluator-${{ github.run_id }}-${{ github.run_attempt }}/
 
   pfc-conditional-portable-invented-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1400,6 +1438,7 @@ jobs:
           path: ${{ runner.temp }}/pfc-conditional-portable-${{ github.run_id }}-${{ github.run_attempt }}/
 
   tms-independent-condition-portable-invented-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1466,6 +1505,7 @@ jobs:
           path: ${{ runner.temp }}/tms-independent-condition-portable-${{ github.run_id }}-${{ github.run_attempt }}/
 
   nider-full120-public-source-invented-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1576,6 +1616,7 @@ jobs:
           path: ${{ runner.temp }}/nider-full120-public-source-${{ github.run_id }}-${{ github.run_attempt }}/
 
   tms-behavior-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1611,6 +1652,7 @@ jobs:
           path: ${{ runner.temp }}/tms-behavior-${{ github.run_id }}-${{ github.run_attempt }}/
 
   horrocks-frozen-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1646,6 +1688,7 @@ jobs:
           path: ${{ runner.temp }}/horrocks-frozen-${{ github.run_id }}-${{ github.run_attempt }}/
 
   neuralflow-choice-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1727,6 +1770,7 @@ jobs:
           path: ${{ runner.temp }}/neuralflow-choice-${{ github.run_id }}-${{ github.run_attempt }}/
 
   ahn-count-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1804,6 +1848,7 @@ jobs:
           path: ${{ runner.temp }}/ahn-count-${{ github.run_id }}-${{ github.run_attempt }}/
 
   neural017-adaptive-broker-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1880,6 +1925,7 @@ jobs:
           path: ${{ runner.temp }}/neural017-broker-${{ github.run_id }}-${{ github.run_attempt }}/
 
   neural017-training-projector-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -1957,6 +2003,7 @@ jobs:
           path: ${{ runner.temp }}/neural017-projector-${{ github.run_id }}-${{ github.run_attempt }}/
 
   caviar-paired-predictor-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2034,6 +2081,7 @@ jobs:
           path: ${{ runner.temp }}/caviar-paired-predictor-${{ github.run_id }}-${{ github.run_attempt }}/
 
   dmfc-four-cell-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2099,6 +2147,7 @@ jobs:
           path: ${{ runner.temp }}/dmfc-component-${{ github.run_id }}-${{ github.run_attempt }}/
 
   apcx-deposited-label-component-tests:
+    needs: source-preflight
     runs-on: ubuntu-22.04
     timeout-minutes: 5
     env:
@@ -2321,6 +2370,7 @@ jobs:
           path: ${{ runner.temp }}/apcx-component-${{ github.run_id }}-${{ github.run_attempt }}/
 
   tms-fixed-region-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2341,6 +2391,7 @@ jobs:
           TMS_PORTABLE_TESTS
 
   cardiac-six-model-summary-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2359,6 +2410,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_grade.py' -v
 
   achda-timing-summary-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2377,6 +2429,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_grade.py' -v
 
   compartment-pooled-associations-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2395,6 +2448,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_grade.py' -v
 
   cerebellar-full-reconstruction-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2413,6 +2467,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_grade.py' -v
 
   compartment-matched-paper-packets-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2431,6 +2486,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_packet.py' -v
 
   stroop55-evaluator-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2449,6 +2505,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_stroop.py' -v
 
   eeg-supplemental-metrics-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2467,6 +2524,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_metrics.py' -v
 
   fus-direction-scorer-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2485,6 +2543,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_scorer.py' -v
 
   neural073-nifti-converter-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     env:
@@ -2510,6 +2569,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B -c 'import runpy, sys; sys.path.insert(0, "."); runpy.run_path("generated_checks.py", run_name="__main__")' --evidence "$RUNNER_TEMP/neural073-generated-images"
 
   rem-dmm-figure5e-evaluator-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2528,6 +2588,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_score.py' -v
 
   stroop55-native-bridge-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2546,6 +2607,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_bridge.py' -v
 
   dmfc-shared-runtime-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2610,6 +2672,7 @@ jobs:
           path: ${{ runner.temp }}/dmfc-shared-runtime-${{ github.run_id }}-${{ github.run_attempt }}/
 
   fus-input-conventions-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2628,6 +2691,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v
 
   voltron-native-frame-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     # Hosted checkout previously consumed 170s; keep the 90s test limit below.
     timeout-minutes: 6
@@ -2647,6 +2711,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B test_event_score.py
 
   pfc-matched-offline-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2665,6 +2730,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B test_paired_delivery.py
 
   tms-fixed-region-reference-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2682,6 +2748,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/fixed-region-reference/test_delivery.py --behavior-source benchmarks/paper/PAPER-paper-signal-add-021/implementations/registered-runtime/behavior-v1/reference/behavior_reference.py -v
 
   voltron-clock-ephys-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2700,6 +2767,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-complete-spike-events/clock_ephys/test_inner_zip_independent.py
 
   tms-fixed-region-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2717,6 +2785,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/fixed-region-artifacts/test_artifacts.py --profile-root benchmarks/paper/PAPER-paper-signal-add-021/implementations/registered-runtime/fixed-regions-v1 -v
 
   purkinje-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2734,6 +2803,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/test_artifact.py --profile-root benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1 --output-root "${RUNNER_TEMP}/purkinje-artifact-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 
   motor-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     env:
@@ -2759,6 +2829,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/test_external_score.py
 
   opto-central-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2776,6 +2847,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-FIND-ADD-015/implementations/central-artifact-scoring/test_interface.py -v
 
   neural022-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2798,6 +2870,7 @@ jobs:
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-022/implementations/artifact-grading/tests/test_artifact.py
   findlay-complete-preparation-source-tests:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -2852,6 +2925,7 @@ jobs:
           path: ${{ runner.temp }}/findlay-source-${{ github.run_id }}-${{ github.run_attempt }}/
 
   t15-completed-grade-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -2868,6 +2942,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/neural/NEURAL-014/implementations/completed-collection-grading/test_grade_completed.py --relocation-only
 
   purkinje-paired-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2885,6 +2960,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access/test_paired_packet.py
 
   cardiac-matched-artifact-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2902,6 +2978,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/test_public.py
 
   purkinje-paired-execution-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2919,6 +2996,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-execution/test_paired_execution.py --relocation-only
 
   cardiac-paired-execution-source:
+    needs: source-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -2937,6 +3015,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/test_public.py
 
   neural090-investigation-claims-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -2976,6 +3055,7 @@ jobs:
           N090_NUMERICAL
 
   reward-complete-programme-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -3129,6 +3209,7 @@ jobs:
           REWARD_SOURCE
 
   hierarchy25a-original-program-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3147,6 +3228,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-FIND-ADD-006/implementations/original-hierarchy/test_delivery.py
 
   hypothalamic-partial-component-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3176,6 +3258,7 @@ jobs:
           NEURAL_SOURCE
 
   ccep-partial-component-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3205,6 +3288,7 @@ jobs:
           NEURAL_SOURCE
 
   sensefog-partial-component-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3234,6 +3318,7 @@ jobs:
           NEURAL_SOURCE
 
   poyo-frozen-grid-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3277,6 +3362,7 @@ jobs:
           COMPONENT_SOURCE
 
   lep-full-assay-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3320,6 +3406,7 @@ jobs:
           COMPONENT_SOURCE
 
   dfine-missing-observation-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -3355,6 +3442,7 @@ jobs:
           DFINE_CURRENT_SOURCE
 
   pcca-descriptive-outputs-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -3368,6 +3456,7 @@ jobs:
         run: python3 -I -S -B benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/implementations/descriptive-outputs/test_portability.py
 
   localization-complete-centroid-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3415,6 +3504,7 @@ jobs:
           LOCALIZATION_SOURCE
 
   dosei-conditional-component-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3444,6 +3534,7 @@ jobs:
           DOSEI_SOURCE
 
   thalamus17-artifact-delivery-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3473,6 +3564,7 @@ jobs:
           THALAMUS_SOURCE
 
   ccep-pairing-source-delivery:
+    needs: source-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
@@ -3490,6 +3582,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python3 -I -S -B benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-pairing/test_delivery.py
 
   npvc-signed-motif-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3524,6 +3617,7 @@ jobs:
           NPVC_SOURCE
 
   sbind-whole-trial-preparation-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3621,6 +3715,7 @@ jobs:
           SBIND_SOURCE
 
   marmoset-train-only-response-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3666,6 +3761,7 @@ jobs:
               raise SystemExit(1)
           MARM0SET_SOURCE
   consensus-held-neuron-source-delivery:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3712,6 +3808,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/held-neuron/test_correction.py Projection
 
   fus-fullfield-component-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3753,6 +3850,7 @@ jobs:
           FUS_SOURCE
 
   sbind-continuous-normalization-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3856,6 +3954,7 @@ jobs:
           SBIND_NUMERICAL_SOURCE
 
   fly-pid-calibration-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -3932,6 +4031,7 @@ jobs:
               runpy.run_path(str(root / 'run_public_checks.py'), run_name='__main__')
           PY
   stroop165-prepared-metadata-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -4009,6 +4109,7 @@ jobs:
           PY
 
   ccep-native-metadata-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -4096,6 +4197,7 @@ jobs:
           CCEP_PUBLIC
 
   nider120-owner-v3-public-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -4228,6 +4330,7 @@ jobs:
           NIDER_PUBLIC
 
   hybrid-artifact-provisioning-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -4283,6 +4386,7 @@ jobs:
           HYBRID_PUBLIC
 
   pfc-clean-runtime-public-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -4486,6 +4590,7 @@ jobs:
           PFC_PUBLIC
 
   hybrid-complete-replay-admission-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -4643,6 +4748,7 @@ jobs:
           HYBRID_PUBLIC
 
   hybrid-frozen-model-candidate-interface-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -4802,6 +4908,7 @@ jobs:
           HYBRID_PUBLIC
 
   helsinki-zero-case-generated-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -4902,6 +5009,7 @@ jobs:
           HELSINKI_GENERATED
 
   neural034-portable-provisioning-source:
+    needs: source-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -4981,6 +5089,7 @@ jobs:
           raise SystemExit(0 if result.testsRun == 16 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses else 1)
           NEURAL034_SOURCE
   rep013-purkinje-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
@@ -5139,6 +5248,7 @@ jobs:
           REP013_PUBLIC
 
   rep012-portable-paired-api-source:
+    needs: source-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -5177,6 +5287,7 @@ jobs:
           REP012_SOURCE
 
   eeg-waveform-context-export-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5227,6 +5338,7 @@ jobs:
           EEG_CONTEXT_SOURCE
 
   fly-complete-native-inspection-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5286,6 +5398,7 @@ jobs:
           FLY_SOURCE
 
   consensus35-header-operator-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5324,6 +5437,7 @@ jobs:
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B benchmarks/shared/consensus35/consensus35-header-operator/test_headers.py
 
   dunl-coupled-reconstruction-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5378,6 +5492,7 @@ jobs:
           DUNL_SOURCE
 
   neural021-deferred-grade-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5437,6 +5552,7 @@ jobs:
           NEURAL021_SOURCE
 
   generated-numerical-regressions:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -5465,6 +5581,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/test_metric_core.py -v
 
   neural042-candidate-validation-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:

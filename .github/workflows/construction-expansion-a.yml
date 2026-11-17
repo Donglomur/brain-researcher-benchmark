@@ -24,7 +24,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   construction-a-neural-011:
+    needs: source-preflight
     name: construction-a-neural-011
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -196,6 +199,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-neural-027:
+    needs: source-preflight
     name: construction-a-neural-027
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -352,6 +356,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-neural-050:
+    needs: source-preflight
     name: construction-a-neural-050
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -530,6 +535,7 @@ jobs:
                             'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
           PY
   construction-a-neural-disc-20261114-worm-propagation:
+    needs: source-preflight
     name: construction-a-neural-disc-20261114-worm-propagation
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -691,6 +697,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-candidate-20261114-dpad:
+    needs: source-preflight
     name: construction-a-paper-candidate-20261114-dpad
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -830,6 +837,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-005:
+    needs: source-preflight
     name: construction-a-paper-find-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1002,6 +1010,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-add-005:
+    needs: source-preflight
     name: construction-a-paper-find-add-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1158,6 +1167,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-rep-007:
+    needs: source-preflight
     name: construction-a-paper-find-rep-007
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1319,6 +1329,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-root-add-006:
+    needs: source-preflight
     name: construction-a-paper-root-add-006
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1481,6 +1492,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-root-add-025:
+    needs: source-preflight
     name: construction-a-paper-root-add-025
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1642,6 +1654,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-012:
+    needs: source-preflight
     name: construction-a-paper-method-012
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1842,6 +1855,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-029:
+    needs: source-preflight
     name: construction-a-paper-method-029
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2003,6 +2017,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-033:
+    needs: source-preflight
     name: construction-a-paper-method-033
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2164,6 +2179,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-add-003:
+    needs: source-preflight
     name: construction-a-paper-method-add-003
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2326,6 +2342,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-replacement-005:
+    needs: source-preflight
     name: construction-a-paper-method-replacement-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2492,6 +2509,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-signal-add-001:
+    needs: source-preflight
     name: construction-a-paper-signal-add-001
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2672,6 +2690,7 @@ jobs:
                             'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
           PY
   construction-a-paper-signal-add-017:
+    needs: source-preflight
     name: construction-a-paper-signal-add-017
     runs-on: ubuntu-24.04
     timeout-minutes: 6

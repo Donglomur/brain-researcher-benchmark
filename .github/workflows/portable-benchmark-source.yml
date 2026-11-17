@@ -15,7 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   neural061-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -58,6 +61,7 @@ jobs:
           exec(compile(source, str(p), 'exec'), {'__name__':'__main__', '__file__':str(p)})
           PY
   cbramod-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -100,6 +104,7 @@ jobs:
           exec(compile(source, str(p), 'exec'), {'__name__':'__main__', '__file__':str(p)})
           PY
   neural029-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -149,6 +154,7 @@ jobs:
           raise SystemExit(module.main())
           PY
   find050-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -198,6 +204,7 @@ jobs:
           raise SystemExit(module.main())
           PY
   neural030-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
@@ -292,6 +299,7 @@ jobs:
                             'scientific_execution': False, 'scientific_qualification': False}), flush=True)
           PY
   neural078-portable-source:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
