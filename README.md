@@ -115,7 +115,8 @@ uses the full original 35-bin held-in observation window and one complete candid
 prediction set for co-smoothing and ten-bin future prediction. Its improvement
 successor preserves the original panel and four metrics. The retained
 [source-matched author routes](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
-serve author reproduction and calibration. Author calibration is partial: the
+serve author reproduction and calibration. At the 2026-11-17 08:49 UTC checkpoint,
+author calibration was partial: the
 complete causal author reference has produced and frozen predictions using the
 original 192 particles × 32 repeats on the full MC_Maze 20-ms panel. The noncausal
 author run is in progress; both scores remain pending. This is author-reference
