@@ -1,0 +1,1118 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Standalone reproduction of the adopted original encoding-and-attribution family is meaningful independently of the narrower Figure 2 prediction-improvement component. This v2 declaration records actual participant-specific encoding, permutation/noise-ceiling, attribution-map and source ROI-summary quantities as unresolved indexed families, retaining the genuine categorical comparison separately. Authentic spatial/ROI support and identities, numerical references, complete computation, source-specific agreement/uncertainty criteria and the exact shape companion remain unresolved. Unknown array rank, shape, coordinate identities, dtypes, reference/program/policy hashes and criteria are null rather than invented. This declaration is not complete native reproduction, a qualified comparison, an outcome binding or complete core benchmark work.",
+  "source_paper": {
+    "title": "Distributed representations of behaviour-derived object dimensions in the human visual system",
+    "url": "https://www.nature.com/articles/s41562-024-01980-y"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+      "locator": "Figure 2; Methods: Linear regression on fMRI single-trial estimates; Data availability",
+      "supports": "Original ordered task predicts single-trial voxel responses from 66 dimensions in three THINGS-fMRI participants using leave-one-session-out evaluation."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_linregcv.py",
+      "locator": "find_embedding_fmritrials and main",
+      "supports": "Author joins image dimensions to response rows, globally z-scores dimensions, and invokes LinRegCVPermutation."
+    },
+    {
+      "id": "metric",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/glm.py",
+      "locator": "LinRegCVPermutation.__init__, fit_predict_eval, make_splits and fit_and_permute",
+      "supports": "Author default is unshuffled 12-fold linear regression with intercept, Pearson correlation per fold, then arithmetic average across folds."
+    },
+    {
+      "id": "varpart",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_varpart.py",
+      "locator": "make_dimensions_model and main",
+      "supports": "Variance-partition branch selects category-diagnostic dimensions, residualizes predictors/responses, clips negative correlations before squaring, and compares to category/combined models; it is distinct from signed R2."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-005/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "POLICY, GATES, grouped_folds, ridge_predict, fit_scores and variance_partition",
+      "supports": "Current local evaluator uses a new image-family/category split and nested ridge and explicitly lacks native 12-session replication."
+    },
+    {
+      "id": "pearson-source",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/utils.py",
+      "locator": "pearsonr_nd, lines 29–50 in acquired immutable source; raw SHA256 be7cb9cfc0ce008f8da17df35de144fe083c8505fac5e9c7df73fcb9b12a61d1",
+      "supports": "Signed Pearson on centered columns; zero-variance division remains undefined. The acquired source function was exercised only on generated software controls."
+    },
+    {
+      "id": "figure6",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+      "locator": "Abstract: dimensions superior to categories at predicting brain responses; Figure 6; Methods describing variance partitioning between category and dimension models",
+      "supports": "The abstract states the original qualitative superiority of behaviour-derived dimensions over categories. The separate category-versus-dimension comparison uses 30 category-diagnostic dimensions and 52 categorical regressors; participant/voxel and reported ROI summaries require their original masks and aggregation."
+    },
+    {
+      "id": "shape-companion",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+      "locator": "Exploratory object-shape comparison: Supplementary Figure 6 and Supplementary Methods 2; supplement 41562_2024_1980_MOESM1_ESM.pdf",
+      "supports": "The primary article identifies a shape companion. The cached investigation did not recover its descriptor construction, numerical quantities or complete implementation; existence is supported, details remain unresolved."
+    },
+    {
+      "id": "native-data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/20492835/versions/2",
+      "locator": "THINGS-data: fMRI Single Trial Responses (table format); sub-{01,02,03}_ResponseData.h5, VoxelMetadata.csv and StimulusMetadata.csv",
+      "supports": "Named original response and identity artifacts are known from source inventory, but authentic byte hashes, full masks and row/session binding have not been admitted."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The original enrolled single-trial empirical family includes full object-dimension encoding and category-versus-dimension variance attribution in three source participants. Preserve complete participant-specific encoding and attribution maps, source ROI summaries and indispensable comparisons. Figure 2 prediction is a valid nested empirical component, not an unrelated proxy. Raw-fMRI preprocessing, the separate time-series/HRF route and automatic every-figure obligations remain outside this scope.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "metric",
+        "varpart",
+        "figure6"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "THINGS-fMRI, article-linked OpenNeuro ds004192 version 1.0.5 and Figshare collection 6161151, with published single-trial estimates, noise ceilings and image-wise dimension files. Exact artifact hashes and row-order/session alignment have not been admitted.",
+      "evidence_ids": [
+        "paper",
+        "fit"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All three source participants, each viewing 8,740 unique images from 720 object categories over 12 sessions; participant-specific voxels and original inclusion masks must be retained.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original leave-one-session-out 12-fold protocol. Author code uses unshuffled 12-fold KFold over ordered rows; exact session-to-row correspondence must be verified before declaring equivalence. The legacy five-fold image-family/category partition is an extension.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "legacy"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Use the original single-trial response tables and image-wise full 66-dimensional embedding for encoding. The separately enrolled attribution route also requires original category labels, secondary-object label unions, the source category-AUC-selected dimension subset and its original response/predictor transformations. Retain original voxel/ROI masks, noise ceilings and the source-supported shape companion; exact authentic identities, shape descriptors and optional face/body invocation remain unresolved.",
+      "evidence_ids": [
+        "fit",
+        "varpart",
+        "figure6",
+        "shape-companion",
+        "native-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve source filename joins, full repeated single-trial rows, global encoding-feature standardization and the original intercept-OLS author route. Attribution separately uses original category construction and deduplicated category-AUC dimension selection, global feature/response residualization against the opposite block, and the source clipping/squaring conventions. Train-only normalization, nested regularization and ordinary same-target predictive commonality are changed comparisons rather than silent source replacements.",
+      "evidence_ids": [
+        "fit",
+        "metric",
+        "varpart",
+        "figure6"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Encoding reports signed per-voxel Pearson correlation within each original source fold followed by an equally weighted arithmetic mean across 12 folds; preserve its native permutation companion and the distinct Figure 2 noise-ceiling-corrected map convention. Attribution reports the source joint, unique-dimension, unique-category and shared residualized-response quantities, with negative mean correlations clipped before squaring where the source does so and shared equal to joint minus both unique quantities. Original ROI summaries remain separate. Publication conversion, masks, exact ROI normalization/statistics and source-specific comparison criteria are unresolved; pooled correlation, signed SSE/SST R2 and newly pooled paper-win scalars are not substitutes.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "varpart",
+        "figure6"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain separate participant-specific encoding and attribution maps for all three original participants. Encoding uses equal arithmetic weighting of the original 12 source folds per voxel; attribution follows the distinct native joint/unique/shared map derivations and original ROI summaries. Do not pool participants/voxels or infer an ROI statistic, display scaling or complete-family superiority order. The exact source ROI roster, masks, published-comparable conversion and numerical reference summaries remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "varpart",
+        "figure6"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the original enrolled single-trial encoding AND category-versus-dimension attribution family in participants 01, 02 and 03 separately, with every original repeated trial, eligible voxel and source ROI identity. Encoding retains the full 66-dimensional embedding, the original 12 ordered session folds, signed per-fold Pearson maps and their arithmetic fold means, the native permutation companion and Figure 2 noise-ceiling convention. Attribution is a distinct enrolled result: preserve source category construction and secondary-object unions, the category-AUC-selected dimension subset, global feature/response residualization, clipping/squaring conventions, and the joint, unique-dimension, unique-category and shared maps with original ROI summaries. Figure 2 prediction is a named partial component; its gain does not compute attribution or establish complete-family success. Retain source-supported exploratory shape companions with their unresolved descriptor/supplement recipe; require optional face/body branches only when their actual source role and invocation are authenticated. Original masks, numerical maps, ROI identities, source row-to-session correspondence and criteria remain unresolved; this is a required-output inventory rather than a recovered complete numerical panel. Raw-fMRI preprocessing, the separate time-series/HRF route and automatic every-figure obligations are outside this scope. New image-family/category holdouts and altered normalization or regularization are explicitly declared candidate/prospective comparisons. The v2 indexed families below declare concrete known source map/ROI quantities without inventing their unknown support. Exact shape-companion quantities remain unrecovered and mandatory where source-supported; their omission from indexed members is a source gap, not permission to omit that companion.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "metric",
+        "varpart",
+        "figure6",
+        "shape-companion",
+        "native-data"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Recreate the approved original encoding-and-attribution analysis using the same source paper, three-participant inputs, identities and authorized non-code resources in both information conditions; only pinned author code is the extra information in paper_data_author_code. Preserve original image/trial and session support, full repeated responses and source transformations. Encoding predictions require the original held-out session separation. The source attribution analysis uses global response/feature residualization and source label/dimension selection; declare that original access explicitly instead of silently changing it to train-only transforms or claiming it proves prospective protection. Authentic access/exposure manifests and a separately protected independent verifier remain absent; source-defined full-data transformations do not establish authorized submitted execution. No private reference maps, other-condition outputs or historical solver answers are supplied as candidate answers.",
+      "evidence_ids": [
+        "fit",
+        "metric",
+        "varpart",
+        "native-data"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "behaviour-derived-dimensions-superior-to-categories",
+      "kind": "categorical",
+      "description": "Retain the original qualitative dimension-versus-category predictive comparison as a genuine scientific statement. The indexed encoding, attribution-map and ROI-summary families remain separately mandatory and cannot be replaced by repeating this category. Source-supported shape and applicable category/face/body companions remain subject to authentic source-role recovery. Neither this statement nor a Figure 2 prediction gain establishes complete-family reproduction.",
+      "status": "verified",
+      "expected": "dimensions_superior_to_categories",
+      "units": "qualitative direction of the source dimension-versus-category comparison",
+      "aggregation": "Adjudication must follow the original participant-specific variance-partition maps and reported ROI summaries under source identities; the complete numerical evidence and source-specific inferential rule must be recovered. No newly pooled across-voxel or across-participant statistic is defined.",
+      "evidence_ids": [
+        "paper",
+        "figure6",
+        "varpart"
+      ],
+      "categories": [
+        "dimensions_superior_to_categories",
+        "no_dimension_advantage",
+        "categories_superior_to_dimensions"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is the paper's categorical comparative finding. It supplies no tolerance for required numerical maps or ROI quantities; those remain unresolved and cannot be replaced by category agreement.",
+        "evidence_ids": [
+          "paper",
+          "figure6"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source-specific evidential/inferential rule for the dimension-versus-category conclusion and its complete numerical companion panel before assigning a reproduction criterion.",
+        "independent_unit": "Participant for between-person inference; repeated sessions/stimuli within each original participant for conditional analyses. Voxels and overlapping CV folds are not independent participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The published qualitative statement is known from the permitted paper. Repeating it does not establish computation, evidence of its direction, numerical magnitude or uncertainty; no p-value cutoff, posterior threshold, confidence level or independent-unit minimum is invented.",
+        "evidence_ids": [
+          "paper",
+          "figure6",
+          "varpart"
+        ]
+      }
+    },
+    {
+      "id": "original-encoding-maps",
+      "kind": "indexed_array_family",
+      "description": "All three original participants: full-embedding signed fold-mean Pearson maps, original permutation probability maps and the distinct Figure 2 noise-ceiling map convention.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "original-encoding-maps",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "sub-01-encoding-mean-fold-pearson",
+            "manifest_key": "sub-01-encoding-mean-fold-pearson",
+            "source_quantity": "Original participant 01 full-66-dimension encoding fold-mean signed Pearson map, saved by run_linregcv.py as sub-01_r.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "signed Pearson correlation r",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source intercept-OLS held-out predictions are compared with original observed single-trial responses within each of 12 contiguous source folds; arithmetic mean of signed per-voxel Pearson values. Preserve all repetitions, source mask and undefined-value policy. Actual row/session equivalence, map geometry and coordinates are not authenticated.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "pearson-source",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-01-encoding-permutation-companion",
+            "manifest_key": "sub-01-encoding-permutation-companion",
+            "source_quantity": "Original participant 01 encoding permutation probability map, saved by run_linregcv.py as sub-01_p.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source uncorrected empirical upper-tail probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the original held-out-row permutation procedure, common source permutation-index construction across folds, arithmetic mean of permuted fold scores and uncorrected empirical upper-tail fraction. The reviewed default uses 10000 permutations without a plus-one correction. Original random identities, complete null scores, mask and exact output values remain unresolved; no new significance or reproduction threshold is selected.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-01-figure2-noise-corrected-encoding",
+            "manifest_key": "sub-01-figure2-noise-corrected-encoding",
+            "source_quantity": "Original participant 01 Figure 2 noise-ceiling-corrected encoding map, distinct from the saved signed mean-Pearson map.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source noise-ceiling-corrected explained-variance/display quantity; exact scaling unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the published source map convention using original encoding outputs, voxel noise-ceiling data and inclusion/display masks. Exact conversion, normalization and geometry are not authenticated; no formula, scalar reduction or percent scaling is inferred here.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-encoding-mean-fold-pearson",
+            "manifest_key": "sub-02-encoding-mean-fold-pearson",
+            "source_quantity": "Original participant 02 full-66-dimension encoding fold-mean signed Pearson map, saved by run_linregcv.py as sub-02_r.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "signed Pearson correlation r",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source intercept-OLS held-out predictions are compared with original observed single-trial responses within each of 12 contiguous source folds; arithmetic mean of signed per-voxel Pearson values. Preserve all repetitions, source mask and undefined-value policy. Actual row/session equivalence, map geometry and coordinates are not authenticated.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "pearson-source",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-encoding-permutation-companion",
+            "manifest_key": "sub-02-encoding-permutation-companion",
+            "source_quantity": "Original participant 02 encoding permutation probability map, saved by run_linregcv.py as sub-02_p.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source uncorrected empirical upper-tail probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the original held-out-row permutation procedure, common source permutation-index construction across folds, arithmetic mean of permuted fold scores and uncorrected empirical upper-tail fraction. The reviewed default uses 10000 permutations without a plus-one correction. Original random identities, complete null scores, mask and exact output values remain unresolved; no new significance or reproduction threshold is selected.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-figure2-noise-corrected-encoding",
+            "manifest_key": "sub-02-figure2-noise-corrected-encoding",
+            "source_quantity": "Original participant 02 Figure 2 noise-ceiling-corrected encoding map, distinct from the saved signed mean-Pearson map.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source noise-ceiling-corrected explained-variance/display quantity; exact scaling unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the published source map convention using original encoding outputs, voxel noise-ceiling data and inclusion/display masks. Exact conversion, normalization and geometry are not authenticated; no formula, scalar reduction or percent scaling is inferred here.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-encoding-mean-fold-pearson",
+            "manifest_key": "sub-03-encoding-mean-fold-pearson",
+            "source_quantity": "Original participant 03 full-66-dimension encoding fold-mean signed Pearson map, saved by run_linregcv.py as sub-03_r.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "signed Pearson correlation r",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source intercept-OLS held-out predictions are compared with original observed single-trial responses within each of 12 contiguous source folds; arithmetic mean of signed per-voxel Pearson values. Preserve all repetitions, source mask and undefined-value policy. Actual row/session equivalence, map geometry and coordinates are not authenticated.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "pearson-source",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-encoding-permutation-companion",
+            "manifest_key": "sub-03-encoding-permutation-companion",
+            "source_quantity": "Original participant 03 encoding permutation probability map, saved by run_linregcv.py as sub-03_p.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source uncorrected empirical upper-tail probability",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the original held-out-row permutation procedure, common source permutation-index construction across folds, arithmetic mean of permuted fold scores and uncorrected empirical upper-tail fraction. The reviewed default uses 10000 permutations without a plus-one correction. Original random identities, complete null scores, mask and exact output values remain unresolved; no new significance or reproduction threshold is selected.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "fit",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-figure2-noise-corrected-encoding",
+            "manifest_key": "sub-03-figure2-noise-corrected-encoding",
+            "source_quantity": "Original participant 03 Figure 2 noise-ceiling-corrected encoding map, distinct from the saved signed mean-Pearson map.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source noise-ceiling-corrected explained-variance/display quantity; exact scaling unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the published source map convention using original encoding outputs, voxel noise-ceiling data and inclusion/display masks. Exact conversion, normalization and geometry are not authenticated; no formula, scalar reduction or percent scaling is inferred here.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "metric",
+              "native-data"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "fit",
+          "metric",
+          "native-data"
+        ]
+      },
+      "required_granular_output_ids": [
+        "sub-01-encoding-mean-fold-pearson",
+        "sub-01-encoding-permutation-companion",
+        "sub-01-figure2-noise-corrected-encoding",
+        "sub-02-encoding-mean-fold-pearson",
+        "sub-02-encoding-permutation-companion",
+        "sub-02-figure2-noise-corrected-encoding",
+        "sub-03-encoding-mean-fold-pearson",
+        "sub-03-encoding-permutation-companion",
+        "sub-03-figure2-noise-corrected-encoding"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Source-faithful comparison of complete authentic participant-specific outputs against a separately qualified source-equivalent numerical reference; reference, identity correspondence and comparison/criterion program are not yet available.",
+        "independent_unit": "Original participant for between-person claims; sessions and repeated stimuli are dependent within each participant. Voxels and overlapping folds are not independent people.",
+        "dependence": "Preserve repeated image trials, shared training data across source folds, participant-specific voxel/ROI dependence and common source transformations; no independent-cell assumption.",
+        "multiplicity": "No family-wise scientific comparison or multiplicity rule has been selected. All declared source support and indispensable controls must remain visible; no favorable member or voxel selection.",
+        "rationale": "The numerical-equivalence comparison class is supported by v2, but authentic reference artifacts and justified source-specific agreement/uncertainty criteria are absent. This is source_unresolved, not schema_blocked merely because source evidence is missing.",
+        "evidence_ids": [
+          "paper",
+          "fit",
+          "metric",
+          "native-data"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "metric",
+        "native-data"
+      ]
+    },
+    {
+      "id": "original-category-dimension-attribution-maps",
+      "kind": "indexed_array_family",
+      "description": "All three original participants: native joint, unique-dimension, unique-category and shared category-versus-dimension attribution maps; preserve the different target transformations.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "original-category-dimension-attribution-maps",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "sub-01-figure6-joint",
+            "manifest_key": "sub-01-figure6-joint",
+            "source_quantity": "Original participant 01 Figure 6 joint variance-attribution map, source output sub-01_r2_comb.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Joint prediction from the source combined category and selected-dimension model; clip negative fold-mean Pearson to zero then square as source code defines. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-unique-dimension",
+            "manifest_key": "sub-01-figure6-unique-dimension",
+            "source_quantity": "Original participant 01 Figure 6 unique-dimension variance-attribution map, source output sub-01_r2u_dim.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Selected-dimension features and responses are globally residualized against the category block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-unique-category",
+            "manifest_key": "sub-01-figure6-unique-category",
+            "source_quantity": "Original participant 01 Figure 6 unique-category variance-attribution map, source output sub-01_r2u_cat.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Category features and responses are globally residualized against the selected-dimension block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-shared",
+            "manifest_key": "sub-01-figure6-shared",
+            "source_quantity": "Original participant 01 Figure 6 shared variance-attribution map, source output sub-01_r2_shared.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source shared quantity equals the joint squared-correlation map minus the unique-dimension and unique-category maps; do not impose extra clipping or ordinary same-target commonality. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-joint",
+            "manifest_key": "sub-02-figure6-joint",
+            "source_quantity": "Original participant 02 Figure 6 joint variance-attribution map, source output sub-02_r2_comb.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Joint prediction from the source combined category and selected-dimension model; clip negative fold-mean Pearson to zero then square as source code defines. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-unique-dimension",
+            "manifest_key": "sub-02-figure6-unique-dimension",
+            "source_quantity": "Original participant 02 Figure 6 unique-dimension variance-attribution map, source output sub-02_r2u_dim.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Selected-dimension features and responses are globally residualized against the category block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-unique-category",
+            "manifest_key": "sub-02-figure6-unique-category",
+            "source_quantity": "Original participant 02 Figure 6 unique-category variance-attribution map, source output sub-02_r2u_cat.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Category features and responses are globally residualized against the selected-dimension block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-shared",
+            "manifest_key": "sub-02-figure6-shared",
+            "source_quantity": "Original participant 02 Figure 6 shared variance-attribution map, source output sub-02_r2_shared.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source shared quantity equals the joint squared-correlation map minus the unique-dimension and unique-category maps; do not impose extra clipping or ordinary same-target commonality. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-joint",
+            "manifest_key": "sub-03-figure6-joint",
+            "source_quantity": "Original participant 03 Figure 6 joint variance-attribution map, source output sub-03_r2_comb.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Joint prediction from the source combined category and selected-dimension model; clip negative fold-mean Pearson to zero then square as source code defines. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-unique-dimension",
+            "manifest_key": "sub-03-figure6-unique-dimension",
+            "source_quantity": "Original participant 03 Figure 6 unique-dimension variance-attribution map, source output sub-03_r2u_dim.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Selected-dimension features and responses are globally residualized against the category block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-unique-category",
+            "manifest_key": "sub-03-figure6-unique-category",
+            "source_quantity": "Original participant 03 Figure 6 unique-category variance-attribution map, source output sub-03_r2u_cat.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Category features and responses are globally residualized against the selected-dimension block using source intercept OLS; compute source mean-fold Pearson, clip negative mean to zero and square. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-shared",
+            "manifest_key": "sub-03-figure6-shared",
+            "source_quantity": "Original participant 03 Figure 6 shared variance-attribution map, source output sub-03_r2_shared.nii.gz.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless native squared-correlation attribution quantity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source shared quantity equals the joint squared-correlation map minus the unique-dimension and unique-category maps; do not impose extra clipping or ordinary same-target commonality. Preserve source category unions and category-AUC-selected dimensions, original eligible voxels and all original folds. Spatial shape, coordinates, masks and numerical reference values remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "varpart",
+              "figure6",
+              "metric",
+              "native-data"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "varpart",
+          "figure6",
+          "native-data"
+        ]
+      },
+      "required_granular_output_ids": [
+        "sub-01-figure6-joint",
+        "sub-01-figure6-unique-dimension",
+        "sub-01-figure6-unique-category",
+        "sub-01-figure6-shared",
+        "sub-02-figure6-joint",
+        "sub-02-figure6-unique-dimension",
+        "sub-02-figure6-unique-category",
+        "sub-02-figure6-shared",
+        "sub-03-figure6-joint",
+        "sub-03-figure6-unique-dimension",
+        "sub-03-figure6-unique-category",
+        "sub-03-figure6-shared"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Source-faithful comparison of complete authentic participant-specific outputs against a separately qualified source-equivalent numerical reference; reference, identity correspondence and comparison/criterion program are not yet available.",
+        "independent_unit": "Original participant for between-person claims; sessions and repeated stimuli are dependent within each participant. Voxels and overlapping folds are not independent people.",
+        "dependence": "Preserve repeated image trials, shared training data across source folds, participant-specific voxel/ROI dependence and common source transformations; no independent-cell assumption.",
+        "multiplicity": "No family-wise scientific comparison or multiplicity rule has been selected. All declared source support and indispensable controls must remain visible; no favorable member or voxel selection.",
+        "rationale": "The numerical-equivalence comparison class is supported by v2, but authentic reference artifacts and justified source-specific agreement/uncertainty criteria are absent. This is source_unresolved, not schema_blocked merely because source evidence is missing.",
+        "evidence_ids": [
+          "paper",
+          "varpart",
+          "figure6",
+          "native-data"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "varpart",
+        "figure6",
+        "native-data"
+      ]
+    },
+    {
+      "id": "original-attribution-roi-summaries",
+      "kind": "indexed_array_family",
+      "description": "Original participant-specific ROI summaries of the four enrolled attribution quantities; actual ROI identities, masks, statistic, scaling and numeric references remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "original-attribution-roi-summaries",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "sub-01-figure6-roi-joint",
+            "manifest_key": "sub-01-figure6-roi-joint",
+            "source_quantity": "Original participant 01 Figure 6 ROI summaries of the joint attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-roi-unique-dimension",
+            "manifest_key": "sub-01-figure6-roi-unique-dimension",
+            "source_quantity": "Original participant 01 Figure 6 ROI summaries of the unique-dimension attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-roi-unique-category",
+            "manifest_key": "sub-01-figure6-roi-unique-category",
+            "source_quantity": "Original participant 01 Figure 6 ROI summaries of the unique-category attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-01-figure6-roi-shared",
+            "manifest_key": "sub-01-figure6-roi-shared",
+            "source_quantity": "Original participant 01 Figure 6 ROI summaries of the shared attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-roi-joint",
+            "manifest_key": "sub-02-figure6-roi-joint",
+            "source_quantity": "Original participant 02 Figure 6 ROI summaries of the joint attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-roi-unique-dimension",
+            "manifest_key": "sub-02-figure6-roi-unique-dimension",
+            "source_quantity": "Original participant 02 Figure 6 ROI summaries of the unique-dimension attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-roi-unique-category",
+            "manifest_key": "sub-02-figure6-roi-unique-category",
+            "source_quantity": "Original participant 02 Figure 6 ROI summaries of the unique-category attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-02-figure6-roi-shared",
+            "manifest_key": "sub-02-figure6-roi-shared",
+            "source_quantity": "Original participant 02 Figure 6 ROI summaries of the shared attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-roi-joint",
+            "manifest_key": "sub-03-figure6-roi-joint",
+            "source_quantity": "Original participant 03 Figure 6 ROI summaries of the joint attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-roi-unique-dimension",
+            "manifest_key": "sub-03-figure6-roi-unique-dimension",
+            "source_quantity": "Original participant 03 Figure 6 ROI summaries of the unique-dimension attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-roi-unique-category",
+            "manifest_key": "sub-03-figure6-roi-unique-category",
+            "source_quantity": "Original participant 03 Figure 6 ROI summaries of the unique-category attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          },
+          {
+            "id": "sub-03-figure6-roi-shared",
+            "manifest_key": "sub-03-figure6-roi-shared",
+            "source_quantity": "Original participant 03 Figure 6 ROI summaries of the shared attribution map, with the original ROI identities and membership masks.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source ROI attribution-summary quantity; exact statistic and percent convention unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original source ROI summary of the corresponding native attribution map. The complete ROI roster, identity/membership masks, summary statistic and scaling convention are unrecovered. No mean, median, coordinate sequence or across-ROI reduction is invented.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "figure6",
+              "varpart",
+              "paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "figure6",
+          "varpart"
+        ]
+      },
+      "required_granular_output_ids": [
+        "sub-01-figure6-roi-joint",
+        "sub-01-figure6-roi-unique-dimension",
+        "sub-01-figure6-roi-unique-category",
+        "sub-01-figure6-roi-shared",
+        "sub-02-figure6-roi-joint",
+        "sub-02-figure6-roi-unique-dimension",
+        "sub-02-figure6-roi-unique-category",
+        "sub-02-figure6-roi-shared",
+        "sub-03-figure6-roi-joint",
+        "sub-03-figure6-roi-unique-dimension",
+        "sub-03-figure6-roi-unique-category",
+        "sub-03-figure6-roi-shared"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Source-faithful comparison of complete authentic participant-specific outputs against a separately qualified source-equivalent numerical reference; reference, identity correspondence and comparison/criterion program are not yet available.",
+        "independent_unit": "Original participant for between-person claims; sessions and repeated stimuli are dependent within each participant. Voxels and overlapping folds are not independent people.",
+        "dependence": "Preserve repeated image trials, shared training data across source folds, participant-specific voxel/ROI dependence and common source transformations; no independent-cell assumption.",
+        "multiplicity": "No family-wise scientific comparison or multiplicity rule has been selected. All declared source support and indispensable controls must remain visible; no favorable member or voxel selection.",
+        "rationale": "The numerical-equivalence comparison class is supported by v2, but authentic reference artifacts and justified source-specific agreement/uncertainty criteria are absent. This is source_unresolved, not schema_blocked merely because source evidence is missing.",
+        "evidence_ids": [
+          "paper",
+          "figure6",
+          "varpart"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "figure6",
+        "varpart"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authentic original participant, trial/repetition, stimulus, row/session, spatial-voxel, ROI, mask, embedding, category and noise-ceiling identities/manifests remain unbound. Unshuffled 12-fold rows are not authenticated source sessions merely because a declaration labels them so.",
+    "Known source map and ROI quantities are declared as indexed families, but actual spatial/ROI shape, coordinate identities, dtypes, support/domain/derivation manifests and reference values remain null/unresolved. No anatomical grid, flattened order, ROI roster or reference hash is invented.",
+    "The Figure 2 noise-ceiling conversion and the original Figure 6 ROI summary statistic/normalization remain source gaps; the source-known output quantities do not establish their complete numerical derivation.",
+    "The published shape comparison is retained, but its exact descriptors, recipe, output quantities and implementation are unrecovered. It is not represented by a fabricated indexed member or scalar. Optional face/body flags do not establish universally required published branches; authenticate their actual roles and invocation.",
+    "The accepted scorer consumes supplied held-out predictions and computes signed per-fold/per-voxel Pearson and arithmetic means. It neither executes/authenticates submitted fitting nor implements original permutations, Figure 2 noise-ceiling conversion, Figure 6 residualized attribution, ROI summaries or shape analysis.",
+    "Original author/candidate held-out predictions, coefficients/intercepts, complete folds, permutation identities/null scores, category-AUC selection, residualized arrays and independent map/ROI recomputation are not qualified. Source URLs, filenames and historical generated parity cannot replace authentic computation.",
+    "No source-equivalent numerical reference manifest, independent comparison program, justified agreement tolerance or uncertainty/multiplicity policy is frozen. Printed values, original significance and categorical agreement are not completed computational reproduction.",
+    "The standalone primary scope differs from the narrower prediction-improvement target. Keep full-primary pairing unavailable; do not impose false eight-anchor equality or promote a prediction gain to attribution or complete-family success.",
+    "Source transformation access, common input/exposure/code manifests, protected execution, cumulative budgets and actual new analysis receipts remain unresolved. The original global attribution residualization must not be silently changed to train-only transforms or misrepresented as protected prospective evaluation.",
+    "Optional admission_policy is omitted because no authentic evaluator/data/identity/computation-verifier set is qualified. All scientific outcomes remain unknown."
+  ]
+}

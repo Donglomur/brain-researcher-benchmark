@@ -1,0 +1,3430 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-add-004",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Standalone source-grounded empirical primary with actual indexed numerical quantities and printed scalar targets. Authentic original observations,identities,source-reference arrays,figure/model reductions,comparison criteria and independent computation verification are unresolved. Numerical source representation is possible without a full-primary improvement pair; neither synthetic accuracy nor stability-as-truth is substituted.",
+  "source_paper": {
+    "title": "iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385"
+  },
+  "evidence": [
+    {
+      "id": "empirical_paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results2.8; Figure7A-G; S12-S14; Methods4.1.2,4.5,4.8,4.10",
+      "supports": "Original Allen empirical area-ordering/sampling,unit comparison,duration/trial sensitivity and directly related failure/inclusion/quality family; biological truth is unknown."
+    },
+    {
+      "id": "area_paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Figure7B; S12B-D; Methods4.5; Results2.8",
+      "supports": "Eight area timescales across four methods; six cortical-area anatomical hierarchy coordinates;95% source intervals;50 trial-resampling analyses. Pooled valid area ACF fitting starts at lag2, not averaging fitted unit taus."
+    },
+    {
+      "id": "unit_notebook",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+      "locator": "Git blob461c2b0aa62f8b23e28d164ad2bb1dc399389e26; cells6,19-21,26-30,50-52",
+      "supports": "Native method labels; tau bins times50ms; first saved trial iteration; four-method all-column missingness/nonnegativeR2 common mask; source covariates and long tables. Current-code/publication equivalence remains unresolved."
+    },
+    {
+      "id": "unit_models",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/r_scripts/mice_taus_units_4methods.R",
+      "locator": "Lines15-38 and52-58; companion mice_trial_methods_fr_lv.R lines15-46",
+      "supports": "Source Gaussian REML unit-intercept models:log10 timescale and log10 trial pseudo-error; exact12 and6 fixed-effect terms and repeated-row R scaling. Source has no mouse random effect; profile intervals/lmerTest/native parity remain unqualified."
+    },
+    {
+      "id": "duration_notebook",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_signal_len.ipynb",
+      "locator": "Git blob39a7c6f36822c69907a1bc007da459641b0dccb5; source binding duration_trial_source_semantics and documented_source_conflicts",
+      "supports": "Source1,5,10,20 minute conditions and30 minute references; two continuous methods; inclusion bounds100,75,50,25 percent. Caption/all-level support,reference and notebook row-index conflicts remain unresolved; prospective policy is not historical replay."
+    },
+    {
+      "id": "trial_notebook",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_n_trials.ipynb",
+      "locator": "Git blob1a4b7180f30f55f76d1f67854958f8221814357e; source binding duration_trial_source_semantics and documented_source_conflicts",
+      "supports": "40,60,80,100 one-second trials,two trial methods,first saved iteration. Original draws missing; iSTTC40 reference differs from later counts;100-trial log response copies40-trial errors; masks and figure parity unresolved."
+    },
+    {
+      "id": "sensitivity_models",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/r_scripts/mice_taus_unit_duration_effect.R",
+      "locator": "Companion mice_taus_unit_n_trials_effect.R; Figure7D/F andS13A/B; source binding I7-PREDICTION-ORDER",
+      "supports": "Source repeated-unit sensitivity models and predictions; design-column-order mismatch between fitted coefficients and prediction multiplication requires reconciliation. Unknown authentic prediction grids and complete model output remain unresolved."
+    },
+    {
+      "id": "resampling_paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results2.8; S13C-D captions",
+      "supports": "Original50-1000 iteration trial-resampling analysis,standard error of median timescale and percentage within source5%-15% tolerance ranges. Exact iteration/tolerance grids and native values remain unauthenticated."
+    },
+    {
+      "id": "quality_paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "S12A; S14A-D captions; Figure7A and Results2.8",
+      "supports": "Area unit counts/FR/Lv; failed-fit versus negativeR2 exclusions; three trial-failure overlap groups; ACF decline,95%CI excluding zero,R2>=.5 indicators; R2/FR/Lv densities and original denominators."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The retained empirical Figure 7 result family and its directly related S12–S14 robustness support: source-selected Allen spontaneous recordings, area-level timescale ordering and sampling stability, four-estimator matched-unit comparisons, duration/trial sensitivity, complete failure/inclusion and quality support. Preserve original area versus unit fitting recipes and panel-specific eligible sets. Source 5,775 units are nested in 26 mice and eight areas; 50 resamplings are repeated sampling analyses, not independent animals. Mouse identities remain necessary, while historical mouse-bootstrap, held-out parameter and development-selected cutoff policies are prospective unless separately source-authenticated. No every-figure requirement is inferred.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Source-selected Allen Visual Coding Neuropixels Functional Connectivity spontaneous recordings used for the empirical Figure7/S12-S14 family. Retain original recordings,30-minute reference data,source-derived shorter prefixes and original one-second trial windows; new windows or data are extensions.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source population is5775 units nested in26 mice across V1,LM,AL,RL,AM,PM,LGN,LP. Authentic unit/session/mouse/area roster and source QC remain unresolved; paper amplitude cutoff0.01 differs from retained loader0.1. Counts are source design statements,not authenticated current identities.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "No published train/test learner split is inferred. Reuse original empirical continuous observations,1/5/10/20-minute conditions with30-minute references,40/60/80/100 one-second trial draws,original saved iteration and50 area resamplings. Historical window draws and ordering remain unresolved. New fixed RNG or protected tuning partitions are prospective extensions.",
+      "evidence_ids": [
+        "empirical_paper",
+        "duration_notebook",
+        "trial_notebook"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original source spike times,unit/session/mouse/area/covariate identities and condition-specific durations/trial structure. Both information conditions receive the same original scientific observations and source paper; only the author-code condition adds frozen source code. Evaluator original fits and empirical references are not leaked into a trial-only submitted analysis. Public source exposure must be recorded.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper settings include50ms bins/lags,25ms STTC tolerance,20 lags and source trial padding. Unit exponential fits start at lag1; area fits start at lag2 on pooled valid area ACFs,not means of fitted unit taus. Preserve source NaNs,failures and panel-specific eligibility. Publication/current-source fitter and uncertainty parity remain unresolved.",
+      "evidence_ids": [
+        "empirical_paper",
+        "area_paper",
+        "unit_notebook"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Empirical timescale and source uncertainty in milliseconds; area ordering against original anatomical hierarchy; four-method and trial pseudo-REE distributions; original sensitivity predictions,inclusion percentages,resampling standard errors and failure/quality summaries. Pseudo-REE references are estimated full-duration fits,not biological truth. Figure-specific signed/absolute formulas,reference assignments and source defects require reconciliation; no stability-as-accuracy criterion is introduced.",
+      "evidence_ids": [
+        "empirical_paper",
+        "unit_notebook",
+        "duration_notebook",
+        "trial_notebook"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve source area pooled-ACF fits and panel-specific unit support: reported3053 Figure7C,5674 Figure7D/E,4588 Figure7F/G,with full failure denominators. Do not use one common favorable subset. Recover original unit-intercept source models and repeated-row covariate scaling;50 trial resamplings are not independent animals. No original mouse bootstrap or equal-mouse estimand is inferred.",
+      "evidence_ids": [
+        "empirical_paper",
+        "area_paper",
+        "unit_models",
+        "duration_notebook",
+        "trial_notebook"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The retained empirical Figure 7 result family and its directly related S12–S14 robustness support: source-selected Allen spontaneous recordings, area-level timescale ordering and sampling stability, four-estimator matched-unit comparisons, duration/trial sensitivity, complete failure/inclusion and quality support. Preserve original area versus unit fitting recipes and panel-specific eligible sets. Source 5,775 units are nested in 26 mice and eight areas; 50 resamplings are repeated sampling analyses, not independent animals. Mouse identities remain necessary, while historical mouse-bootstrap, held-out parameter and development-selected cutoff policies are prospective unless separately source-authenticated. No every-figure requirement is inferred. Required indexed source quantities below preserve the named empirical findings and directly relevant controls. Synthetic known-truth REE,finite synthetic programme,summary arithmetic,runtime and aABC remain separately retained evidence,not automatic primary obligations. Missing source array references and numerical/scientific criteria prevent qualification.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Same original empirical source observations and paper in paper_data and paper_data_author_code; only a frozen author-code allowlist is added in the latter. Match source cohort,conditions and access budgets; isolate evaluator reference outputs and complete source fit/model records. No paired protocol,authentic input manifest or exposure/budget enforcement is yet bound.",
+      "evidence_ids": [
+        "empirical_paper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "empirical_full_method",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: full iSTTC versus ACF coefficient; reported95%CI[-0.023,0.085],p=0.264. Nonrejection does not establish equivalence.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_pearsonr_vs_acf",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: PearsonR trial estimate versus full ACF coefficient.",
+      "status": "verified",
+      "expected": 0.655,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_isttc_trials_vs_acf",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: iSTTC trial estimate versus full ACF coefficient.",
+      "status": "verified",
+      "expected": 0.624,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trial_pseudo_ree",
+      "kind": "scalar",
+      "description": "Fig7C/S12F: trial iSTTC versus PearsonR pseudo-REE coefficient; reported95%CI[-0.117,-0.024].",
+      "status": "verified",
+      "expected": -0.071,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_duration_method",
+      "kind": "scalar",
+      "description": "Fig7D/S13A: method effect across original continuous durations.",
+      "status": "verified",
+      "expected": -0.031,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trialcount_method",
+      "kind": "scalar",
+      "description": "Fig7F/S13B: method effect across original trial counts; reported95%CI[-0.054,0.004],p=0.0894. Nonrejection is not reproduction evidence.",
+      "status": "verified",
+      "expected": -0.025,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and original unit grouping and separately retained mouse identities; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_four_method_support",
+      "kind": "scalar",
+      "description": "Fig7C: reported all-four-method single-unit analysis support; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 3053,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_duration_support",
+      "kind": "scalar",
+      "description": "Fig7D: reported support shared across both methods and all original signal lengths; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 5674,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trialcount_support",
+      "kind": "scalar",
+      "description": "Fig7F: reported support shared across both methods and all original trial counts; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 4588,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_pearsonr_trial_rejection",
+      "kind": "scalar",
+      "description": "S14A: paper-reported pearsonr trial rejection fraction.",
+      "status": "verified",
+      "expected": 40.6,
+      "units": "percent",
+      "aggregation": "Original empirical denominator and failed/negative-R2 classification; retain all5775 units and exact mouse/area identities.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_isttc_trial_rejection",
+      "kind": "scalar",
+      "description": "S14A: paper-reported isttc trial rejection fraction.",
+      "status": "verified",
+      "expected": 28.3,
+      "units": "percent",
+      "aggregation": "Original empirical denominator and failed/negative-R2 classification; retain all5775 units and exact mouse/area identities.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_acf_decline",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting ACF-like decline in50-200ms.",
+      "status": "verified",
+      "expected": 5.3,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_ci_excludes_zero",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting 95%CI excludes zero.",
+      "status": "verified",
+      "expected": 3.6,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_r_squared",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting R2>=0.5.",
+      "status": "verified",
+      "expected": 4.7,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original source model or descriptive reduction and justify reproduction uncertainty separately. Prospective whole-mouse bootstrap,protected tuning and stronger significance are not historical source parity.",
+        "independent_unit": "Original source model/denominator as appropriate,with units nested in26 mice and repeated conditions/windows. Source unit-intercept models and pooled area fits do not establish original mouse-clustered uncertainty;50 resamplings are not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Actual published scalar target retained; source model/denominator and complete original support must be independently authenticated. No numerical acceptance or animal-level sampling rule is supplied.",
+        "evidence_ids": [
+          "empirical_paper"
+        ]
+      }
+    },
+    {
+      "id": "empirical_area_timescale_hierarchy",
+      "kind": "indexed_array_family",
+      "description": "Figure7B andS12B-D: original area timescales,source95% intervals,anatomical hierarchy coordinates and50 trial-sampling analyses.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_area_timescale_hierarchy",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "area_tau",
+            "manifest_key": "empirical_area_timescale_hierarchy.area_tau",
+            "source_quantity": "Original area-level fitted timescale",
+            "membership": "fixed",
+            "shape": [
+              8,
+              4
+            ],
+            "axes": [
+              {
+                "name": "area",
+                "units": "paper area label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "LM",
+                    "AL",
+                    "RL",
+                    "AM",
+                    "PM",
+                    "LGN",
+                    "LP"
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original valid ACFs pooled within each area and source method; exponential fit begins at lag2. Retain exact source pooling and95% interval construction; never average single-unit taus or replace with a mouse bootstrap.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "area_paper"
+            ]
+          },
+          {
+            "id": "area_tau_interval",
+            "manifest_key": "empirical_area_timescale_hierarchy.area_tau_interval",
+            "source_quantity": "Original area timescale95% confidence interval endpoints",
+            "membership": "fixed",
+            "shape": [
+              8,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "area",
+                "units": "paper area label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "LM",
+                    "AL",
+                    "RL",
+                    "AM",
+                    "PM",
+                    "LGN",
+                    "LP"
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original valid ACFs pooled within each area and source method; exponential fit begins at lag2. Retain exact source pooling and95% interval construction; never average single-unit taus or replace with a mouse bootstrap.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "area_paper"
+            ]
+          },
+          {
+            "id": "trial_resample_tau",
+            "manifest_key": "empirical_area_timescale_hierarchy.trial_resample_tau",
+            "source_quantity": "Trial-method area timescales for all50 original trial sampling repetitions",
+            "membership": "fixed",
+            "shape": [
+              8,
+              2,
+              50
+            ],
+            "axes": [
+              {
+                "name": "area",
+                "units": "paper area label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "LM",
+                    "AL",
+                    "RL",
+                    "AM",
+                    "PM",
+                    "LGN",
+                    "LP"
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "trial_resampling",
+                "units": "original sampling identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Paper specifies50 samples; exact original sample labels/order/window identities are missing. No invented0-based sample IDs or seeds."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original valid ACFs pooled within each area and source method; exponential fit begins at lag2. Retain exact source pooling and95% interval construction; never average single-unit taus or replace with a mouse bootstrap. Original first sampling iteration/black dots remain associated with the baseline area fits;50 draws are not50 animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "area_paper"
+            ]
+          },
+          {
+            "id": "cortical_hierarchy_score",
+            "manifest_key": "empirical_area_timescale_hierarchy.cortical_hierarchy_score",
+            "source_quantity": "Original anatomical hierarchy score used in S12D for six cortical areas",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "cortical_area",
+                "units": "paper cortical area label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "LM",
+                    "AL",
+                    "RL",
+                    "AM",
+                    "PM"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "original source anatomical hierarchy score",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve the exact score mapping cited by the paper and original area identity; numerical score values/native crosswalk remain missing. Do not invent equally spaced ranks.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "area_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "area_paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "area_acf_fit_records",
+        "area_sampling_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare the complete authenticated original area-tau,interval,hierarchy-score and sampling-output references only under a separately justified policy. Numerical declaration alone does not establish the scientific hierarchy/stability conclusion.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "area_paper"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "area_paper"
+      ]
+    },
+    {
+      "id": "empirical_matched_unit_and_models",
+      "kind": "indexed_array_family",
+      "description": "Figure7A/C andS12A/E/F: matched-unit timescales,pseudo-error,covariates,source models and inclusion summaries.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_matched_unit_and_models",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "unit_tau",
+            "manifest_key": "empirical_matched_unit_and_models.unit_tau",
+            "source_quantity": "Source unit timescales for the four estimator comparison",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source four-method notebook removes units with any missing column or any negativeR2 across all four methods;R2=0 retained. Decline is diagnostic,not a filter. Published3053 Figure7C support must be authenticated; complete original failures remain in source fit records. Array support and source missing-value policy are unresolved; retain native fits and common-mask derivation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook"
+            ]
+          },
+          {
+            "id": "trial_pseudo_ree",
+            "manifest_key": "empirical_matched_unit_and_models.trial_pseudo_ree",
+            "source_quantity": "Trial-method pseudo-REE against source full-duration estimated references",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source four-method notebook removes units with any missing column or any negativeR2 across all four methods;R2=0 retained. Decline is diagnostic,not a filter. Published3053 Figure7C support must be authenticated; complete original failures remain in source fit records. Pinned Figure7C notebook uses absolute error,with PearsonR referenced toACF and trial iSTTC tofull iSTTC; global paper/source reference parity remains unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook",
+              "unit_models"
+            ]
+          },
+          {
+            "id": "figure7c_support",
+            "manifest_key": "empirical_matched_unit_and_models.figure7c_support",
+            "source_quantity": "Original Figure7C common eligibility mask keyed to the full unit roster",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source inclusion indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source four-method notebook removes units with any missing column or any negativeR2 across all four methods;R2=0 retained. Decline is diagnostic,not a filter. Published3053 Figure7C support must be authenticated; complete original failures remain in source fit records.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook",
+              "empirical_paper"
+            ]
+          },
+          {
+            "id": "fr_hz",
+            "manifest_key": "empirical_matched_unit_and_models.fr_hz",
+            "source_quantity": "Original per-unit spontaneous firing-rate covariate",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Hz",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source fr_hz_spont_30min covariate; retain exact spike/recording-derived value and area identity for Figure7A/S12A.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook",
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "local_variation",
+            "manifest_key": "empirical_matched_unit_and_models.local_variation",
+            "source_quantity": "Original per-unit local-variation covariate",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source lv covariate; alpha_s in R is the standardized Lv variable,not Hawkes excitation strength.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook",
+              "unit_models"
+            ]
+          },
+          {
+            "id": "area_unit_count",
+            "manifest_key": "empirical_matched_unit_and_models.area_unit_count",
+            "source_quantity": "Original cohort count by paper area",
+            "membership": "fixed",
+            "shape": [
+              8
+            ],
+            "axes": [
+              {
+                "name": "area",
+                "units": "paper area label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1",
+                    "LM",
+                    "AL",
+                    "RL",
+                    "AM",
+                    "PM",
+                    "LGN",
+                    "LP"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source S12A unit counts before panel-specific fit masks; population count does not establish authentic unit identities.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "tau_model_coefficients",
+            "manifest_key": "empirical_matched_unit_and_models.tau_model_coefficients",
+            "source_quantity": "Figure7C-left/S12E log10-timescale source fixed effects",
+            "membership": "fixed",
+            "shape": [
+              12
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "R fixed-effect column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "(Intercept)",
+                    "methodisttc_full",
+                    "methodpearsonr_trial_avg",
+                    "methodsttc_trial_concat",
+                    "fr_s",
+                    "alpha_s",
+                    "methodisttc_full:fr_s",
+                    "methodpearsonr_trial_avg:fr_s",
+                    "methodsttc_trial_concat:fr_s",
+                    "methodisttc_full:alpha_s",
+                    "methodpearsonr_trial_avg:alpha_s",
+                    "methodsttc_trial_concat:alpha_s"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "log10 millisecond response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source log_tau_ms ~ method*(fr_s+alpha_s)+(1|unit_id),REML. Retain exact repeated-row R scaling and unit-intercept source model; no mouse random effect is claimed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_models"
+            ]
+          },
+          {
+            "id": "tau_model_intervals",
+            "manifest_key": "empirical_matched_unit_and_models.tau_model_intervals",
+            "source_quantity": "Original95% interval endpoints for S12E source fixed effects",
+            "membership": "fixed",
+            "shape": [
+              12,
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "R fixed-effect column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "(Intercept)",
+                    "methodisttc_full",
+                    "methodpearsonr_trial_avg",
+                    "methodsttc_trial_concat",
+                    "fr_s",
+                    "alpha_s",
+                    "methodisttc_full:fr_s",
+                    "methodpearsonr_trial_avg:fr_s",
+                    "methodsttc_trial_concat:fr_s",
+                    "methodisttc_full:alpha_s",
+                    "methodpearsonr_trial_avg:alpha_s",
+                    "methodsttc_trial_concat:alpha_s"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "log10 millisecond response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover original profile interval/lmerTest specification and native output. Prospective bootstrap intervals are not original reference.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_models",
+              "empirical_paper"
+            ]
+          },
+          {
+            "id": "pseudo_error_model_coefficients",
+            "manifest_key": "empirical_matched_unit_and_models.pseudo_error_model_coefficients",
+            "source_quantity": "Figure7C-middle/S12F log10 pseudo-error source fixed effects",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "R fixed-effect column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "(Intercept)",
+                    "methodsttc_trial_concat",
+                    "fr_s",
+                    "alpha_s",
+                    "methodsttc_trial_concat:fr_s",
+                    "methodsttc_trial_concat:alpha_s"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "log10 percent pseudo-error response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source log_tau_diff ~ method*(fr_s+alpha_s)+(1|unit_id),REML and source reference pairing; zero-error/log domain and original support remain explicit,without epsilon.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_models"
+            ]
+          },
+          {
+            "id": "pseudo_error_model_intervals",
+            "manifest_key": "empirical_matched_unit_and_models.pseudo_error_model_intervals",
+            "source_quantity": "Original95% interval endpoints for S12F fixed effects",
+            "membership": "fixed",
+            "shape": [
+              6,
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "R fixed-effect column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "(Intercept)",
+                    "methodsttc_trial_concat",
+                    "fr_s",
+                    "alpha_s",
+                    "methodsttc_trial_concat:fr_s",
+                    "methodsttc_trial_concat:alpha_s"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "log10 percent pseudo-error response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover source profile intervals; biological mouse uncertainty is not silently substituted for original unit-model inference.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_models",
+              "empirical_paper"
+            ]
+          },
+          {
+            "id": "trial_error_bound_inclusion",
+            "manifest_key": "empirical_matched_unit_and_models.trial_error_bound_inclusion",
+            "source_quantity": "Figure7C-right original proportions within source pseudo-REE bounds",
+            "membership": "fixed",
+            "shape": [
+              2,
+              4
+            ],
+            "axes": [
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "pseudo_error_bound",
+                "units": "percent",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    100,
+                    75,
+                    50,
+                    25
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent of source eligible units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain exact source reference,threshold inclusivity,common support and denominators; bound grid100,75,50,25 comes from reviewed notebook semantics,not a new success tolerance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "unit_notebook",
+              "empirical_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "unit_notebook",
+          "unit_models"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "unit_acf_fit_records",
+        "unit_long_tables",
+        "source_model_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "A future reference comparison must authenticate original unit support,source long tables,scaling,full model/design and inferential outputs; matching selected coefficients or publication numbers is insufficient.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "unit_notebook",
+          "unit_models"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "unit_notebook",
+        "unit_models"
+      ]
+    },
+    {
+      "id": "empirical_duration_sensitivity",
+      "kind": "indexed_array_family",
+      "description": "Figure7D/E andS13A: source duration/trial estimates,pseudo-REE,inclusion and complete model/prediction outputs.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_duration_sensitivity",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "unit_tau",
+            "manifest_key": "empirical_duration_sensitivity.unit_tau",
+            "source_quantity": "Original condition-specific unit timescales",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "recording_duration",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    5,
+                    10,
+                    20
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "duration_notebook"
+            ]
+          },
+          {
+            "id": "reference_tau",
+            "manifest_key": "empirical_duration_sensitivity.reference_tau",
+            "source_quantity": "Full30-minute ACF and iSTTC estimated reference timescales",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. These are estimates,not biological truth; authenticate the reference actually used in each source panel.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "duration_notebook"
+            ]
+          },
+          {
+            "id": "pseudo_ree",
+            "manifest_key": "empirical_duration_sensitivity.pseudo_ree",
+            "source_quantity": "Original condition-specific pseudo-REE values",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "recording_duration",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    5,
+                    10,
+                    20
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Preserve signed/absolute formula,reference and log-domain choices. Trial100 copied40-trial log errors and reference inconsistencies are unresolved source defects,not silently repaired.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "duration_notebook"
+            ]
+          },
+          {
+            "id": "support",
+            "manifest_key": "empirical_duration_sensitivity.support",
+            "source_quantity": "Original panel-specific common eligible-unit mask",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source inclusion indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "duration_notebook"
+            ]
+          },
+          {
+            "id": "error_bound_inclusion",
+            "manifest_key": "empirical_duration_sensitivity.error_bound_inclusion",
+            "source_quantity": "Original source pseudo-error-bound inclusion percentages",
+            "membership": "fixed",
+            "shape": [
+              4,
+              2,
+              4
+            ],
+            "axes": [
+              {
+                "name": "recording_duration",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    5,
+                    10,
+                    20
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              },
+              {
+                "name": "pseudo_error_bound",
+                "units": "percent",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    100,
+                    75,
+                    50,
+                    25
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent of original panel support",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Preserve source100/75/50/25 bounds and original denominators; these descriptive bounds are not reproduction acceptance tolerances.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "duration_notebook"
+            ]
+          },
+          {
+            "id": "prediction_coordinate",
+            "manifest_key": "empirical_duration_sensitivity.prediction_coordinate",
+            "source_quantity": "Original displayed prediction coordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "minutes",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Recover source predictor grid and scaling; source model-matrix column ordering is unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "predicted_pseudo_ree",
+            "manifest_key": "empirical_duration_sensitivity.predicted_pseudo_ree",
+            "source_quantity": "Original plotted pseudo-REE prediction curves",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent pseudo-REE on original figure response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Figure7D/F y display uses log10 scale; native response transformation and prediction order must be authenticated rather than guessed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "prediction_intervals",
+            "manifest_key": "empirical_duration_sensitivity.prediction_intervals",
+            "source_quantity": "Original95% confidence bands for prediction curves",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2,
+              2
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "minutes",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent pseudo-REE on original figure response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Retain original model/design/covariance-based uncertainty; no new bootstrap or tolerance is inferred.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "model_coefficients",
+            "manifest_key": "empirical_duration_sensitivity.model_coefficients",
+            "source_quantity": "S13 source sensitivity-model fixed effects",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "source model design column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original fitted-term order and prediction design reconciliation remain unqualified; no invented coefficient list."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "original model transformed-response coefficient scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Full source coefficients/covariance/design required; Figure7D/F source model uses unit intercepts,not original mouse random effects.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "model_intervals",
+            "manifest_key": "empirical_duration_sensitivity.model_intervals",
+            "source_quantity": "Original95% confidence intervals for S13 model fixed effects",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "source model design column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original fitted-term order and prediction design reconciliation remain unqualified; no invented coefficient list."
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "original model transformed-response coefficient scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7D/E andS13A support is separately reported as5674 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Recover native source inferential convention and every original term.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "sensitivity_models"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "duration_notebook",
+          "sensitivity_models"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "sensitivity_fit_records",
+        "sensitivity_source_tables",
+        "source_model_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare the complete source condition tables,model coefficients and original prediction curves under separately authenticated references and criteria. Report source-defect/corrected-policy differences explicitly; neither available prospective policy is silently selected as historical reproduction.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "duration_notebook",
+          "sensitivity_models"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "duration_notebook",
+        "sensitivity_models"
+      ]
+    },
+    {
+      "id": "empirical_trial_count_sensitivity",
+      "kind": "indexed_array_family",
+      "description": "Figure7F/G andS13B: source duration/trial estimates,pseudo-REE,inclusion and complete model/prediction outputs.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_trial_count_sensitivity",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "unit_tau",
+            "manifest_key": "empirical_trial_count_sensitivity.unit_tau",
+            "source_quantity": "Original condition-specific unit timescales",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "trial_count",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    40,
+                    60,
+                    80,
+                    100
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "trial_notebook"
+            ]
+          },
+          {
+            "id": "reference_tau",
+            "manifest_key": "empirical_trial_count_sensitivity.reference_tau",
+            "source_quantity": "Full30-minute ACF and iSTTC estimated reference timescales",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. These are estimates,not biological truth; authenticate the reference actually used in each source panel.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "trial_notebook"
+            ]
+          },
+          {
+            "id": "pseudo_ree",
+            "manifest_key": "empirical_trial_count_sensitivity.pseudo_ree",
+            "source_quantity": "Original condition-specific pseudo-REE values",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "trial_count",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    40,
+                    60,
+                    80,
+                    100
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Preserve signed/absolute formula,reference and log-domain choices. Trial100 copied40-trial log errors and reference inconsistencies are unresolved source defects,not silently repaired.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "trial_notebook"
+            ]
+          },
+          {
+            "id": "support",
+            "manifest_key": "empirical_trial_count_sensitivity.support",
+            "source_quantity": "Original panel-specific common eligible-unit mask",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source inclusion indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "trial_notebook"
+            ]
+          },
+          {
+            "id": "error_bound_inclusion",
+            "manifest_key": "empirical_trial_count_sensitivity.error_bound_inclusion",
+            "source_quantity": "Original source pseudo-error-bound inclusion percentages",
+            "membership": "fixed",
+            "shape": [
+              4,
+              2,
+              4
+            ],
+            "axes": [
+              {
+                "name": "trial_count",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    40,
+                    60,
+                    80,
+                    100
+                  ]
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "pseudo_error_bound",
+                "units": "percent",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    100,
+                    75,
+                    50,
+                    25
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent of original panel support",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Preserve source100/75/50/25 bounds and original denominators; these descriptive bounds are not reproduction acceptance tolerances.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "trial_notebook"
+            ]
+          },
+          {
+            "id": "prediction_coordinate",
+            "manifest_key": "empirical_trial_count_sensitivity.prediction_coordinate",
+            "source_quantity": "Original displayed prediction coordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "one-second trials",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Recover source predictor grid and scaling; source model-matrix column ordering is unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "predicted_pseudo_ree",
+            "manifest_key": "empirical_trial_count_sensitivity.predicted_pseudo_ree",
+            "source_quantity": "Original plotted pseudo-REE prediction curves",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent pseudo-REE on original figure response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Figure7D/F y display uses log10 scale; native response transformation and prediction order must be authenticated rather than guessed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "prediction_intervals",
+            "manifest_key": "empirical_trial_count_sensitivity.prediction_intervals",
+            "source_quantity": "Original95% confidence bands for prediction curves",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2,
+              2
+            ],
+            "axes": [
+              {
+                "name": "prediction_coordinate",
+                "units": "one-second trials",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original figure prediction grid,ordering and transformed/native coordinate crosswalk are not authenticated; do not equate an interpolated display grid to the four measured conditions."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent pseudo-REE on original figure response scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Retain original model/design/covariance-based uncertainty; no new bootstrap or tolerance is inferred.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "empirical_paper",
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "model_coefficients",
+            "manifest_key": "empirical_trial_count_sensitivity.model_coefficients",
+            "source_quantity": "S13 source sensitivity-model fixed effects",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "source model design column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original fitted-term order and prediction design reconciliation remain unqualified; no invented coefficient list."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "original model transformed-response coefficient scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Full source coefficients/covariance/design required; Figure7D/F source model uses unit intercepts,not original mouse random effects.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "sensitivity_models"
+            ]
+          },
+          {
+            "id": "model_intervals",
+            "manifest_key": "empirical_trial_count_sensitivity.model_intervals",
+            "source_quantity": "Original95% confidence intervals for S13 model fixed effects",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "source_term",
+                "units": "source model design column",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original fitted-term order and prediction design reconciliation remain unqualified; no invented coefficient list."
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "original model transformed-response coefficient scale",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original Figure7F/G andS13B support is separately reported as4588 units. Caption requires paired methods at every source level; notebook masks/references and row-index alignment conflict with the paper. No Figure7C R2 mask or prospective common-mask fix is automatically source law. Recover native source inferential convention and every original term.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "sensitivity_models"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "trial_notebook",
+          "sensitivity_models"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "sensitivity_fit_records",
+        "sensitivity_source_tables",
+        "source_model_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare the complete source condition tables,model coefficients and original prediction curves under separately authenticated references and criteria. Report source-defect/corrected-policy differences explicitly; neither available prospective policy is silently selected as historical reproduction.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "trial_notebook",
+          "sensitivity_models"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "trial_notebook",
+        "sensitivity_models"
+      ]
+    },
+    {
+      "id": "empirical_trial_resampling_convergence",
+      "kind": "indexed_array_family",
+      "description": "S13C-D: original trial-resampling standard-error-of-median and inclusion curves.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_trial_resampling_convergence",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "iteration_grid",
+            "manifest_key": "empirical_trial_resampling_convergence.iteration_grid",
+            "source_quantity": "Original evaluated resampling-count coordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "resampling_count",
+                "units": "sampling iterations",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source range50-1000 iterations; exact original evaluated count grid/native coordinates are not authenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "iterations",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover original saved iteration-count grid and source windows; do not invent50-step arithmetic coordinates.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          },
+          {
+            "id": "tolerance_grid",
+            "manifest_key": "empirical_trial_resampling_convergence.tolerance_grid",
+            "source_quantity": "Original S13C tolerance coordinates",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_tolerance",
+                "units": "percent",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "S13C source tolerance range5%-15%; exact plotted threshold grid and correspondence remain unresolved. These are original descriptive coordinates,not reproduction acceptance criteria."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover source5%-15% evaluated tolerance coordinates and their meaning; do not invent endpoints-only or unit-step grid.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          },
+          {
+            "id": "unit_median_standard_error",
+            "manifest_key": "empirical_trial_resampling_convergence.unit_median_standard_error",
+            "source_quantity": "Original per-unit standard error of median estimated timescale",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "resampling_count",
+                "units": "sampling iterations",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source range50-1000 iterations; exact original evaluated count grid/native coordinates are not authenticated."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all source units and original resampling/error estimator; original repeats are within units,not independent mice.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          },
+          {
+            "id": "inclusion_fraction",
+            "manifest_key": "empirical_trial_resampling_convergence.inclusion_fraction",
+            "source_quantity": "Source percentage satisfying the S13C median-standard-error tolerance",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "resampling_count",
+                "units": "sampling iterations",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source range50-1000 iterations; exact original evaluated count grid/native coordinates are not authenticated."
+                }
+              },
+              {
+                "name": "source_tolerance",
+                "units": "percent",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "S13C source tolerance range5%-15%; exact plotted threshold grid and correspondence remain unresolved. These are original descriptive coordinates,not reproduction acceptance criteria."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent of source units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source denominator,tolerance normalization and method-specific failures; exact reference implementation remains unqualified.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          },
+          {
+            "id": "mean_standard_error",
+            "manifest_key": "empirical_trial_resampling_convergence.mean_standard_error",
+            "source_quantity": "S13D reported mean standard error of median timescale",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "resampling_count",
+                "units": "sampling iterations",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source range50-1000 iterations; exact original evaluated count grid/native coordinates are not authenticated."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source mean across its original support; do not reinterpret as whole-mouse population uncertainty.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          },
+          {
+            "id": "mean_standard_error_interval",
+            "manifest_key": "empirical_trial_resampling_convergence.mean_standard_error_interval",
+            "source_quantity": "S13D original95% interval endpoints",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2,
+              2
+            ],
+            "axes": [
+              {
+                "name": "resampling_count",
+                "units": "sampling iterations",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source range50-1000 iterations; exact original evaluated count grid/native coordinates are not authenticated."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "interval_endpoint",
+                "units": "source interval endpoint",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "lower",
+                    "upper"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "milliseconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover the source interval construction and original supports; do not derive a confidence rule from the displayed95% interval.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "resampling_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "resampling_paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "resampling_unit_outputs",
+        "resampling_summary_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover original numerical curves and their source units/windows before any numerical-reference comparison. A distributional stability claim or new resampling protocol is not automatically covered by this declaration.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "resampling_paper"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "resampling_paper"
+      ]
+    },
+    {
+      "id": "empirical_fit_quality_and_failure",
+      "kind": "indexed_array_family",
+      "description": "S14A-D: complete original fit failures,quality pass summaries and associated parameter/fit distributions.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "empirical_fit_quality_and_failure",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "fit_r_squared",
+            "manifest_key": "empirical_fit_quality_and_failure.fit_r_squared",
+            "source_quantity": "Original per-unit/method exponential-fit R2 values",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original negative and missing values under a recovered domain policy; no blanket positive-fit clipping.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "exclusion_indicators",
+            "manifest_key": "empirical_fit_quality_and_failure.exclusion_indicators",
+            "source_quantity": "Original failed-fit and negativeR2 exclusion classifications",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "exclusion_reason",
+                "units": "source reason",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "failed_exponential_fit",
+                    "negative_r_squared"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve every original unit/method and source reason; do not convert missing results into successes or conflate exclusion with a different panel support.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "exclusion_count",
+            "manifest_key": "empirical_fit_quality_and_failure.exclusion_count",
+            "source_quantity": "Source excluded-fit counts by method and reason",
+            "membership": "fixed",
+            "shape": [
+              4,
+              2
+            ],
+            "axes": [
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "exclusion_reason",
+                "units": "source reason",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "failed_exponential_fit",
+                    "negative_r_squared"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "fits",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "S14A reported excluded totals are1214 ACF,1290 full iSTTC,2345 PearsonR,1632 trial iSTTC; exact reason split/native masks remain unresolved. These are source counts,not measured outputs.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "quality_indicators",
+            "manifest_key": "empirical_fit_quality_and_failure.quality_indicators",
+            "source_quantity": "Original three quality predicates by unit/method",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4,
+              3
+            ],
+            "axes": [
+              {
+                "name": "unit",
+                "units": "source unit identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact ordered original unit/session/mouse/area identity is unmaterialized;5775 is the paper population count,not a current output-shape measurement."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "quality_criterion",
+                "units": "source criterion",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_decline_50_200_ms",
+                    "95pct_ci_excludes_zero",
+                    "r_squared_ge_0.5"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover original ACF ordinates,fit-CI and R2 predicates; undefined source values and denominator rules must be explicit. These indicators do not automatically filter Figure7C or sensitivity.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "quality_pass_fraction",
+            "manifest_key": "empirical_fit_quality_and_failure.quality_pass_fraction",
+            "source_quantity": "S14C-D original quality pass percentages",
+            "membership": "fixed",
+            "shape": [
+              4,
+              3
+            ],
+            "axes": [
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "quality_criterion",
+                "units": "source criterion",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_decline_50_200_ms",
+                    "95pct_ci_excludes_zero",
+                    "r_squared_ge_0.5"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent of original source denominator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain all original source denominators and missing/failed treatment; paper5.3/3.6/4.7 percentage-point trial differences are separately printed targets,not new improvement outcomes.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "quality_denominators",
+            "manifest_key": "empirical_fit_quality_and_failure.quality_denominators",
+            "source_quantity": "Original denominators underlying each source quality percentage",
+            "membership": "fixed",
+            "shape": [
+              4,
+              3
+            ],
+            "axes": [
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              },
+              {
+                "name": "quality_criterion",
+                "units": "source criterion",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_decline_50_200_ms",
+                    "95pct_ci_excludes_zero",
+                    "r_squared_ge_0.5"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "units or fits as defined by original source",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Authenticate exact denominator identity and unit-versus-fit convention for every method/criterion; no successful-fit-only substitution.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "trial_failure_overlap_count",
+            "manifest_key": "empirical_fit_quality_and_failure.trial_failure_overlap_count",
+            "source_quantity": "Original trial-method exclusion-overlap counts",
+            "membership": "fixed",
+            "shape": [
+              3
+            ],
+            "axes": [
+              {
+                "name": "trial_failure_overlap",
+                "units": "source trial failure group",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "both_trial_methods",
+                    "pearsonr_only",
+                    "isttc_only"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "S14B reports1412 both,933 PearsonR-only,220 iSTTC-only; source unit identities/reason membership must be independently verified.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "fr_density_grid",
+            "manifest_key": "empirical_fit_quality_and_failure.fr_density_grid",
+            "source_quantity": "Original firing-rate coordinates for S14B density curves",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "fr_density_coordinate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14B firing-rate density grid and bandwidth are not authenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Hz",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original density-grid and kernel/bandwidth configuration.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "fr_density",
+            "manifest_key": "empirical_fit_quality_and_failure.fr_density",
+            "source_quantity": "S14B firing-rate densities by trial-failure group",
+            "membership": "fixed",
+            "shape": [
+              null,
+              3
+            ],
+            "axes": [
+              {
+                "name": "fr_density_coordinate",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14B firing-rate density grid and bandwidth are not authenticated."
+                }
+              },
+              {
+                "name": "trial_failure_overlap",
+                "units": "source trial failure group",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "both_trial_methods",
+                    "pearsonr_only",
+                    "isttc_only"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "density per Hz",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Derive from exact excluded-unit groups,original covariates and source kernel settings; no selected peak substitutes.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "lv_density_grid",
+            "manifest_key": "empirical_fit_quality_and_failure.lv_density_grid",
+            "source_quantity": "Original Lv coordinates for S14B density curves",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "lv_density_coordinate",
+                "units": "dimensionless",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14B Lv density grid and bandwidth are not authenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original density-grid and kernel/bandwidth configuration.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "lv_density",
+            "manifest_key": "empirical_fit_quality_and_failure.lv_density",
+            "source_quantity": "S14B Lv densities by trial-failure group",
+            "membership": "fixed",
+            "shape": [
+              null,
+              3
+            ],
+            "axes": [
+              {
+                "name": "lv_density_coordinate",
+                "units": "dimensionless",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14B Lv density grid and bandwidth are not authenticated."
+                }
+              },
+              {
+                "name": "trial_failure_overlap",
+                "units": "source trial failure group",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "both_trial_methods",
+                    "pearsonr_only",
+                    "isttc_only"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "density per unit local variation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Derive from exact excluded-unit groups and source Lv/kernels; no selected peak substitutes.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "r_squared_density_grid",
+            "manifest_key": "empirical_fit_quality_and_failure.r_squared_density_grid",
+            "source_quantity": "Original R2 coordinates for S14D density curves",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "r_squared_density_coordinate",
+                "units": "dimensionless",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14D R2 density grid and bandwidth are not authenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover source R2 support and density-grid/kernel configuration.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          },
+          {
+            "id": "r_squared_density",
+            "manifest_key": "empirical_fit_quality_and_failure.r_squared_density",
+            "source_quantity": "S14D R2 distributions across original methods",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4
+            ],
+            "axes": [
+              {
+                "name": "r_squared_density_coordinate",
+                "units": "dimensionless",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original S14D R2 density grid and bandwidth are not authenticated."
+                }
+              },
+              {
+                "name": "method",
+                "units": "source method identifier",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "acf_full",
+                    "isttc_full",
+                    "pearsonr_trial_avg",
+                    "sttc_trial_concat"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "density per unit R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain full source distributions and negative/missing fit handling,not only a median or favorable tail.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "quality_paper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "empirical_paper",
+          "quality_paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_observations",
+        "unit_acf_fit_records",
+        "fit_quality_support_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Only a future independently specified numerical comparison of authenticated complete native masks/counts/curves can assess reference agreement; no ad hoc norm,distributional test or pass threshold is assigned here.",
+        "independent_unit": "Retain original units nested in26 mice and areas; original source model/fit inference must be reconstructed. No independent-animal sample size is inferred from units,seeds,windows or50 resamplings.",
+        "dependence": "Repeated windows,conditions and resampling iterations within unit; units within mice; pooled area fits and unit-intercept models have distinct source supports. No prospective mouse bootstrap is substituted for historical inference.",
+        "multiplicity": "Complete declared named empirical family and directly relevant source controls; exact source comparison multiplicity and any simultaneous reproduction criterion remain unresolved.",
+        "rationale": "These are actual numerical source quantities. An independently justified numerical source-reference comparison is not yet specified; no all-close rule,tolerance,interval-overlap rule,reference hash or successful scientific criterion is invented. A separately chosen relational/distributional claim rule would need its own reviewed comparison class rather than being inferred from this declaration.",
+        "evidence_ids": [
+          "empirical_paper",
+          "quality_paper"
+        ]
+      },
+      "evidence_ids": [
+        "empirical_paper",
+        "quality_paper"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authentic original empirical unit/session/mouse/area roster,recordings and window draws remain unresolved; source5775/26/eight counts are not a manifest. Paper amplitude cutoff0.01 and retained loader0.1 conflict.",
+    "Figure7C,7D/E and7F/G require distinct original eligibility and full failure denominators. Original area pooled ACF fitting,unit covariance/source models and native uncertainty must be reconstructed. Prospective masks/windows/bootstrap are not authenticated historical replay.",
+    "Source duration/trial notebook reference assignments,all-level masks,100-trial log-error copying,index alignment and R prediction column order conflict with intended source figures. No global formula or corrected policy is declared publication-equivalent.",
+    "Exact original sampling identities,anatomical hierarchy score values,native plot/prediction/KDE grids,density kernels,source model outputs and source reference arrays are not authenticated. Known scientific axes do not establish actual array or support identity.",
+    "All structured reference manifests,dtypes,domain/derivation identities and numerical comparison/uncertainty criteria remain unresolved. Scalar tolerance/uncertainty also remains unresolved; printed values and generated software checks are not reproduced science.",
+    "Existing empirical interfaces cover only parts of the family; complete original area/hierarchy,resampling,quality/density and Figure7D/F source prediction production plus independent granular derivation verification are missing. No admission policy hashes are invented.",
+    "V2 supports numerical-reference-equivalence declarations only. No unsupported relational/distributional hierarchy or stability rule is silently emulated; choosing such a scientific assessment would require a separately reviewed comparison class. Current numerical criteria are absent source/criterion gaps,not evidence of scientific ineligibility.",
+    "Full-primary pairing to the current synthetic-focused improvement contract is unavailable. This standalone empirical reproduction remains independently assessable; synthetic accuracy evidence is preserved separately. Missing empirical superiority criteria do not invalidate reproduction."
+  ]
+}
