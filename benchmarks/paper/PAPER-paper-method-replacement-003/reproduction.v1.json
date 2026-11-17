@@ -1,0 +1,2324 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-replacement-003",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Reproduction of the original C4 findings is a first-class outcome independent of same-task improvement. The original LOO/transfer/confidence endpoint is identified and granular internal capture code exists, but the complete authentic panel, source result vector, companion decomposition, submitted-analysis execution interface and independently justified criteria remain unresolved. Existing generated controls establish software behavior only.",
+  "source_paper": {
+    "title": "A deep learning strategy to identify cell types across species from high-density extracellular recordings",
+    "url": "https://doi.org/10.1016/j.cell.2025.01.041"
+  },
+  "evidence": [
+    {
+      "id": "c4-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12191827/",
+      "locator": "Figures 5C\u2013F and 6; STAR Methods, Cell-type classification",
+      "supports": "Original LOO classification, confidence/coverage, external expert-label comparison and paper/source identity."
+    },
+    {
+      "id": "c4-deep",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_deep_classifier.py",
+      "locator": "cross_validate, lines 685\u2013826; ensemble_prediction",
+      "supports": "LOO versus five-fold choices, ten runs, probability averaging and training-only oversampling."
+    },
+    {
+      "id": "c4-dataset",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/dataset_init.py",
+      "locator": "LABELLING; WAVEFORM_SAMPLES; prepare_classification_dataset",
+      "supports": "Class ontology and waveform/ACG preparation route; current loader is not a verified original data manifest."
+    },
+    {
+      "id": "c4-features",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/feat.py",
+      "locator": "h5_feature_extraction, lines 1528\u20131537",
+      "supports": "Engineered-feature baseline reads the target class and applies a 10 ms refractory edit specifically to PkC_cs; this requires separate calibration labeling."
+    },
+    {
+      "id": "c4-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/TARGET_BLIND_PROTOCOL.md",
+      "locator": "Scope and preserved estimands; Why the literal baseline remains separate; Evidence and qualification",
+      "supports": "The local source explicitly preserves literal unit-LOO reconstruction separately from its inactive grouped target-blind successor and leaves original scientific qualification unresolved."
+    },
+    {
+      "id": "c4-local-panel",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/002a5092dfbedb497dde79b531d6695fff564f6b/benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/programme/programme.py",
+      "locator": "OBLIGATIONS; ScientificDriver.classify, transfer and score_captured; programme/driver.py and programme/baselines.py",
+      "supports": "Existing internal source retains full LOO, both external populations, classifier ablations, original baselines and explicit missing companion producers; it is not scientific execution evidence."
+    },
+    {
+      "id": "c4-local-capture",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/002a5092dfbedb497dde79b531d6695fff564f6b/benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/DENOMINATOR_INTEGRITY.md",
+      "locator": "programmes evaluation.py, captured_prediction.py and artifacts.py; CAPTURE_LINEAGE_CONTRACT.md; source/public/OUTPUT_SCHEMA.json",
+      "supports": "Accepted generated controls verify duplicate identity rejection and actual capture/readback arithmetic. The historical participant schema remains narrower than the complete internal producer and no authentic submitted-analysis/verifier interface is qualified."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Five-class cerebellar cell-type prediction; external mouse and macaque expert-label agreement remains a separate panel.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Public C4 HDF5 release is identified, but exact paper unit/source and checkpoint membership are not authenticated here.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset",
+        "c4-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "202 ground-truth classifier units; three granule cells are excluded from classification. Preserve full external mouse/macaque panels and distinguish optogenetic truth from expert labels.",
+      "evidence_ids": [
+        "c4-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original classifier uses leave-one-unit-out with ten initializations per unit; external predictions average all 2020 members. Animal-held-out nesting is a separate extension.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Waveform, 3D autocorrelogram and cerebellar layer; no-layer ablation is a distinct original condition.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-dataset"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover exact QC, alignment, VAE exposure and original checkpoint/configuration lineage. The label-conditioned engineered feature route cannot be presented as target-blind prediction.",
+      "evidence_ids": [
+        "c4-dataset",
+        "c4-features",
+        "c4-registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-class correct predictions among retained units, together with retained fraction. Confidence is the largest mean class probability divided by the second largest; original threshold is 2 and threshold-0 results are also reported.",
+      "evidence_ids": [
+        "c4-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve all classwise confusion/coverage and external population results; a single macro-score and ordered joint acceptance rule have not been source-recovered.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete five-class 202-unit ground-truth LOO panel, ten initializations per held unit, all 2020 deep members on both full external expert mouse and macaque populations, and original confidence-zero and confidence-two classwise accuracy/retained-fraction outputs. Required companion panels include original no-layer and all-photoactivated conditions, all three engineered-feature author baselines with their disclosed label-conditioned preprocessing, independent Purkinje truth comparisons and latent congruence. Exact companion cell definitions, thresholds, denominators and complete numerical figure/supplement outputs remain unbound; the declared primary cells are not an assertion of complete panel recovery. Retain F1-F4 source/QC/ground-truth provenance and distinguish descriptive F7 analyses from the classification endpoint.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-features",
+        "c4-local-panel"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original waveform, 3D ACG and layer observations with the separate no-layer condition; all observations of a left-out unit excluded from its classifier fit, training-only oversampling, and the original independent 3090-unit unlabeled VAE exposure. Preserve separate optogenetic ground truth and external expert labels. Recover exact preprocessing, VAE/checkpoint membership and protected-target ownership before paired delivery. Literal label-conditioned engineered-feature reproduction must be disclosed and operator-owned; it is not a target-blind candidate input. Both AI conditions receive the same paper and authentic data; verified author source is the only information addition.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep",
+        "c4-dataset",
+        "c4-features",
+        "c4-local-capture"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ground_truth_loo_confidence0_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence0_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "ground_truth_loo_confidence2_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, original 202-unit mouse ground-truth LOO; ten held-unit probability members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "original 202-unit mouse ground-truth LOO; ten held-unit probability members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence0_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_mouse_confidence2_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, complete external expert-labelled mouse population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled mouse population; all 2020 deep-model members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class GoC; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MLI; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MFB; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_ss; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence0_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 0.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_cs; confidence 0; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_GoC_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for GoC, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_GoC_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for GoC, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class GoC; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_MLI_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MLI, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_MLI_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MLI, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MLI; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_MFB_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for MFB, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_MFB_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for MFB, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class MFB; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_PkC_ss_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_ss, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_PkC_ss_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_ss, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_ss; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_PkC_cs_correct_fraction_retained",
+      "kind": "scalar",
+      "description": "Deep classifier correct fraction retained for PkC_cs, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Correct predictions divided by retained units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    },
+    {
+      "id": "external_macaque_confidence2_PkC_cs_retained_fraction",
+      "kind": "scalar",
+      "description": "Deep classifier retained fraction for PkC_cs, complete external expert-labelled macaque population; all 2020 deep-model members, at original confidence condition 2.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction",
+      "aggregation": "complete external expert-labelled macaque population; all 2020 deep-model members; class PkC_cs; confidence 2; equal-member mean probabilities precede the largest/second-largest probability ratio. Retained units divided by all eligible units of this true class. Preserve the complete classwise confusion counts and denominators; undefined empty strata are not zero-filled or omitted. Original paper strict-survival and released inclusive-prediction boundary conventions must remain separately identified.",
+      "evidence_ids": [
+        "c4-paper",
+        "c4-deep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The complete original numeric cell and denominator are unrecovered; source precision and justified reproduction variability are unknown. The greater-than-95-percent headline and historical grader tolerances are not substituted.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source-level dependence and original inferential scope before freezing a reproduction criterion; do not treat ten fits or 2020 transfer members as independent biological observations.",
+        "independent_unit": "Biological animals/recordings and their nested units; exact source grouping and dependence remain unresolved for each ground-truth or external cohort.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No authenticated complete source roster, full numerical target vector or independently justified equivalence criterion is available. No sample minimum, interval rule or tolerance is invented.",
+        "evidence_ids": [
+          "c4-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate all five original HDF5 sources, complete biological/QC dispositions, original 202-unit classifier panel and independent 3090-unit VAE membership, full external mouse/macaque panels and distinct truth provenance.",
+    "Recover the full original classwise confidence/coverage results, exact confidence-boundary convention, all confusion denominators and unavailable/undefined cells. No headline accuracy or single macro score can replace this vector.",
+    "Recover and separately enumerate every original no-layer, all-photoactivated, three-baseline, independent Purkinje-truth and latent-congruence companion output with exact metric, condition, numerical target and source locator. The sixty declared main cells do not close this companion-panel gap.",
+    "Resolve source-to-paper QC, waveform/ACG, layer, notebook/checkpoint and three-bit versus released head lineage; retain disclosure of label-conditioned engineered features and keep the grouped target-blind extension separate.",
+    "Freeze source-supported tolerances and uncertainty for every main and companion result after recovering biological dependence. Every expected value and criterion remains unresolved; no scientific minimum or tolerance is inferred from software tests.",
+    "Provide a runnable AI submitted-analysis interface and independent execution lineage using authentic complete inputs. The historical JSON prediction interface has only mouse LOO and ten-member monkey transfer, omits external mouse and lacks the full controls; it cannot serve as the complete reproduction interface.",
+    "Provide an independent source-native verifier of complete per-member probabilities, source-derived preparation/masks, fold/model identities, truth joins and all companion outputs; existing hash/readback and duplicate checks do not establish that a submitted program computed from authentic data.",
+    "Bind immutable cohort/split/full-panel/observation/metric/aggregation and data/interface/verifier manifests, common paired delivery and actual exposure/cumulative budgets. Static paper/code exports do not qualify participant isolation or data/target authority."
+  ]
+}
