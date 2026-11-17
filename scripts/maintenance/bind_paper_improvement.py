@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = "benchmarks/registry.json"
 SNAPSHOT = "docs/provenance/registrations/paper-pre-improvement-v1.json"
 VERSION = "paper-improvement/v1"
+INITIAL_VERSION = "paper-improvement/initial-v1"
 OBJECTIVE = "surpass_source_paper_same_task"
 HISTORY = "historical/task.pre-improvement.v1.json"
 EXPECTED_COUNT = 116
@@ -104,7 +105,12 @@ def validate_pin(value, relative, body, label):
             and value["sha256"] == hashlib.sha256(body).hexdigest(), "stale pin: " + label)
 
 
-def task_rows(registry, expected_count):
+def is_initial(row):
+    revision = row.get("specification_revision")
+    return isinstance(revision, dict) and revision.get("version") == INITIAL_VERSION
+
+
+def task_rows(registry, expected_count, *, allow_initial=False):
     require(type(expected_count) is int and expected_count > 0, "positive expected count required")
     rows = registry.get("tasks")
     require(isinstance(rows, list), "registry tasks must be a list")
@@ -117,8 +123,11 @@ def task_rows(registry, expected_count):
     require(len(ids) == len(set(ids)) and len(ids) == len({i.casefold() for i in ids}),
             "registry task IDs must be unique, including case")
     paper = [row for row in rows if row.get("track") == "paper"]
-    require(len(paper) == expected_count,
-            f"paper registration count must be exactly {expected_count}; found {len(paper)}")
+    historical = [row for row in paper if not (allow_initial and is_initial(row))]
+    require(len(historical) == expected_count,
+            f"historical paper registration count must be exactly {expected_count}; found {len(historical)}")
+    if not allow_initial:
+        require(not any(is_initial(row) for row in paper), "historical registry cannot contain initial paper registrations")
     for row in paper:
         identifier = row["id"]
         directory = "benchmarks/paper/" + identifier
@@ -158,6 +167,53 @@ def load_validator(root):
     exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
     require(callable(getattr(module, "contract_validate", None)), "contract_validate API is required")
     return module.contract_validate
+
+
+def validate_initial_rows(root, registry, rows, validate):
+    """Preserve first-definition registrations using the shared strict lineage API.
+
+    These are new identities after the original paper revision. They are not
+    inputs to the historical task rewriter and never acquire invented history.
+    """
+    initial = [row for row in rows if is_initial(row)]
+    if not initial:
+        return
+    require(type(registry.get("schema_version")) is int and registry["schema_version"] == 1
+            and registry.get("kind") == "neuroscience_benchmark_registry",
+            "initial paper registration requires the current registry schema")
+    tasks = registry["tasks"]
+    require(all(row.get("track") in ("paper", "neural")
+                and row.get("registration_class") in ("canonical", "expansion") for row in tasks),
+            "initial paper registration requires complete current roster classifications")
+    expected_counts = {"paper": sum(row["track"] == "paper" for row in tasks),
+                       "neural": sum(row["track"] == "neural" for row in tasks), "total": len(tasks),
+                       "canonical_specifications": sum(row["registration_class"] == "canonical" for row in tasks),
+                       "expansion_drafts": sum(row["registration_class"] == "expansion" for row in tasks)}
+    counts = registry.get("source_counts")
+    require(type(counts) is dict and all(type(counts.get(key)) is int and counts[key] == value
+                                        for key, value in expected_counts.items()),
+            "initial paper registration current roster counts disagree")
+    # Load the reviewed framework beside this maintenance script, including in
+    # compact test roots. This imports no implementation and creates no pycache.
+    path = safe_path(ROOT, "src/neurobench/repository_checks.py")
+    spec = importlib.util.spec_from_file_location("_paper_initial_binding_lineage", path)
+    require(spec is not None and spec.loader is not None, "cannot load initial paper lineage validator")
+    checker = importlib.util.module_from_spec(spec)
+    exec(compile(path.read_bytes(), str(path), "exec"), checker.__dict__)
+    reader = checker.Reader(root)
+    checker.paper_initial_registry(reader, registry, registry["tasks"])
+    for row in initial:
+        home, identifier = row["task_directory"], row["id"]
+        require(not safe_path(root, home + "/" + HISTORY).exists(),
+                "initial paper registration cannot contain a fabricated predecessor: " + identifier)
+        document, _ = reader.document(home + "/task.json")
+        validate_identity(row, document)
+        checker.paper_initial_members(reader, row, document)
+        contract, _ = reader.document(home + "/improvement.v1.json")
+        errors = validate(contract, task_id=identifier)
+        require(isinstance(errors, list) and all(isinstance(error, str) for error in errors),
+                "invalid contract validator result")
+        require(not errors, "invalid initial improvement contract " + identifier + ": " + "; ".join(errors))
 
 
 def implementation_rows(registry, registered_ids):
@@ -227,7 +283,9 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
     """Return all deterministic output bytes after a complete read-only preflight.
 
     ``expected_count`` and ``validator`` support bounded metadata test fixtures;
-    the command line always requires all 116 registrations and the real validator.
+    the command line always requires the original 116 historical registrations
+    and the real validator. Explicit initial registrations are validated and
+    preserved separately; they never change that historical roster requirement.
     """
     root = Path(root).absolute()
     require(root.is_dir() and not root.is_symlink(), "repository root must be a real directory")
@@ -235,14 +293,16 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
     require(all(not parent.is_symlink() for parent in root.parents), "repository root has a symlink ancestor")
     current_bytes = read_file(root, REGISTRY)
     current = strict_json(current_bytes, REGISTRY)
-    rows = task_rows(current, expected_count)
-    current_by_id = {row["id"]: row for row in rows}
+    rows = task_rows(current, expected_count, allow_initial=True)
+    historical_rows = [row for row in rows if not is_initial(row)]
+    current_by_id = {row["id"]: row for row in historical_rows}
     metadata = current.get("paper_improvement")
     snapshot_path = safe_path(root, SNAPSHOT)
     if metadata is not None:
         require(isinstance(metadata, dict) and metadata.get("schema_version") == VERSION
                 and metadata.get("objective") == OBJECTIVE and metadata.get("coverage_required") is True
-                and metadata.get("registered_count") == expected_count, "invalid paper improvement coverage metadata")
+                and type(metadata.get("registered_count")) is int
+                and metadata.get("registered_count") == len(rows), "invalid paper improvement coverage metadata")
         snapshot_bytes = read_file(root, SNAPSHOT)
         validate_pin(metadata.get("pre_improvement_registry"), SNAPSHOT, snapshot_bytes, "pre-improvement registry")
     elif snapshot_path.exists():
@@ -250,10 +310,12 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
         require(snapshot_bytes == current_bytes, "refusing to clobber unrelated pre-improvement registry snapshot")
     else:
         snapshot_bytes = current_bytes
+    require(not any(is_initial(row) for row in rows) or metadata is not None,
+            "initial paper registrations require the preserved historical coverage metadata")
     original_registry = strict_json(snapshot_bytes, SNAPSHOT)
     require("paper_improvement" not in original_registry, "historical registry must predate improvement binding")
     originals = task_rows(original_registry, expected_count)
-    require([row["id"] for row in originals] == [row["id"] for row in rows], "paper registration IDs/order changed from historical registry")
+    require([row["id"] for row in originals] == [row["id"] for row in historical_rows], "paper registration IDs/order changed from historical registry")
     registered_ids = {row["id"] for row in current["tasks"]}
     old_ids = {row["id"] for row in original_registry["tasks"]}
     implementations = implementation_rows(current, registered_ids)
@@ -262,12 +324,14 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
             "historical implementation removed from current registry")
     old_impl_by_id = {row["id"]: row for row in old_implementations}
     paper_ids = set(current_by_id)
+    all_paper_ids = {row["id"] for row in rows}
     task_root = root / "benchmarks/paper"
     require(task_root.is_dir() and not task_root.is_symlink(), "paper task directory is missing or linked")
     for filename in ("task.json", "improvement.v1.json"):
         actual = {path.parent.name for path in task_root.glob("*/" + filename)}
-        require(actual == paper_ids, filename + " must cover exactly the registered paper IDs")
+        require(actual == all_paper_ids, filename + " must cover exactly the registered paper IDs")
     validate = validator if validator is not None else load_validator(root)
+    validate_initial_rows(root, current, rows, validate)
     outputs = {SNAPSHOT: snapshot_bytes}
     registry = copy.deepcopy(current)
     registry_rows = {row["id"]: row for row in registry["tasks"]}
@@ -360,7 +424,7 @@ def build_outputs(root=ROOT, expected_count=EXPECTED_COUNT, *, validator=None):
                 "Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.").strip()
     registry["paper_improvement"] = {
         "schema_version": VERSION, "objective": OBJECTIVE, "coverage_required": True,
-        "registered_count": expected_count, "pre_improvement_registry": pin(SNAPSHOT, snapshot_bytes),
+        "registered_count": len(rows), "pre_improvement_registry": pin(SNAPSHOT, snapshot_bytes),
     }
     outputs[REGISTRY] = encode(registry)
     # Validate every destination before returning a plan, including absent parents.
@@ -409,9 +473,12 @@ def write_or_check(root=ROOT, check=False, *, expected_count=EXPECTED_COUNT, val
     counts = {}
     for row in registry["tasks"]:
         if row.get("track") == "paper":
-            disposition = row["paper_improvement"]["disposition"]
+            # Both historical rewrites and preserved initial registrations have
+            # authenticated this value against their actual contract. A display
+            # summary is optional for initial profiles and is not a count source.
+            disposition = row["scientific_readiness"]
             counts[disposition] = counts.get(disposition, 0) + 1
-    return {"status": "current" if check else "written", "paper_registrations": expected_count,
+    return {"status": "current" if check else "written", "paper_registrations": sum(counts.values()),
             "dispositions": dict(sorted(counts.items())), "changed_files": len(stale),
             "pre_improvement_registry": registry["paper_improvement"]["pre_improvement_registry"]}
 
