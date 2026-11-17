@@ -13,6 +13,7 @@
 - [Task scope and qualification](science/task-scope.md).
 - [Paper scope assessment](science/paper-scope/SCIENTIFIC_SCOPE.md).
 - [Paired study templates](science/study-design/README.md) and [reporting](science/paired-study-reporting.md).
+- [Measured difficulty pilot: eight agent attempts](science/difficulty-pilot-20261117.md).
 
 ## Development
 
