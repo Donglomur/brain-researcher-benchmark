@@ -23,7 +23,7 @@ signal filenames. This repair does not newly authenticate the archive body or
 claim that its original table is misordered. The exact archive pin, source
 revision, all six branches, original source split, fitting criteria and companion
 controls remain unchanged. The preserved predecessor is
-`historical/source_inputs.pre-demographic-identity-v2.py` at the task root.
+`historical/source_inputs.pre-demographic-identity-v2.py` within this implementation.
 
 Generated tests exercise the actual parser, identity substitutions, reordered
 rows, incomplete cohorts, malformed CSV/headers, nonfinite ages and the existing
