@@ -34,7 +34,7 @@ Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 
 | [NEURAL-022](../neural/NEURAL-022/README.md) | [Active-versus-passive sensory coding](../neural/NEURAL-022/task.json) | canonical_source_specification | 4 | not included |
 | [NEURAL-023](../neural/NEURAL-023/README.md) | [Continuous reaching across recording days](../neural/NEURAL-023/task.json) | canonical_source_specification | 4 | [manifest](../neural/NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](../neural/NEURAL-024/README.md) | [Stable population dynamics across days](../neural/NEURAL-024/task.json) | canonical_source_specification | 4 | [manifest](../neural/NEURAL-024/implementations/registered-runtime/manifest.json) |
-| [NEURAL-025](../neural/NEURAL-025/README.md) | [Fine reach-kinematics decoding from calcium](../neural/NEURAL-025/task.json) | canonical_source_specification | 2 | not included |
+| [NEURAL-025](../neural/NEURAL-025/README.md) | [Fine reach-kinematics decoding from calcium](../neural/NEURAL-025/task.json) | canonical_source_specification | 6 | not included |
 | [NEURAL-026](../neural/NEURAL-026/README.md) | [Fine-joint information beyond reach phase](../neural/NEURAL-026/task.json) | canonical_source_specification | 4 | not included |
 | [NEURAL-027](../neural/NEURAL-027/README.md) | [Visual stimulus decoding across learning phases](../neural/NEURAL-027/task.json) | canonical_source_specification | 2 | not included |
 | [NEURAL-028](../neural/NEURAL-028/README.md) | [Reward-free versus rewarded cortical learning](../neural/NEURAL-028/task.json) | canonical_source_specification | 2 | not included |

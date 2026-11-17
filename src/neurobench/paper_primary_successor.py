@@ -297,3 +297,168 @@ def project(base_dual_task, authenticated):
     result["provenance"]["scientific_contract"] = _pin("primary_scientific")
     result["provenance"]["primary_policy_revision"] = authenticated.descriptor_pin
     return result
+
+
+# The continuous revision is a fixed SMC policy selection. It deliberately
+# retains, and first authenticates, the complete temporal revision above.
+CONTINUOUS_VERSION = "smc-continuous-current-binding/v1"
+CONTINUOUS_DESCRIPTOR = HOME + "/continuous-outcomes-binding.v1.json"
+CONTINUOUS_ARCHIVE = HOME + "/docs/pre-continuous-outcomes-v1/task.json"
+CONTINUOUS_SOURCE = "cec4f1bb6646e88670864884d277fa36ddd94821"
+CONTINUOUS_ROOT = (5065, "39d1f05ccbcfe49190676dcc2ba6b71ad6218059adc5762ea616df40dee214da")
+CONTINUOUS_PACKAGE = HOME + "/implementations/continuous-outcomes-v1/"
+_CONTINUOUS_APPROVED = {
+    "retained_task": (CONTINUOUS_ARCHIVE, 12119,
+        "b88feedacaa4cda6de9a1a3c012c29c5a6a1e48dff92b16e68d0fc1dc130020d",
+        "ce8dbb0b80fa79a7b764c2e1974765da2ed6b2c38dbe9ac5ad7f461970e9a208"),
+    "source_predecessor": (CONTINUOUS_PACKAGE + "predecessor.task.json", 12119,
+        "b88feedacaa4cda6de9a1a3c012c29c5a6a1e48dff92b16e68d0fc1dc130020d",
+        "ce8dbb0b80fa79a7b764c2e1974765da2ed6b2c38dbe9ac5ad7f461970e9a208"),
+    "policy": (CONTINUOUS_PACKAGE + "policy.json", 6527,
+        "1e04f61dedded47ed5de763bb328d2aa15dc2c26e3869b76f68d9af51fea61d0",
+        "9608439822105acdcb3e4cc4867652340e1016f40c284ecf415c4d8bc6defc05"),
+    "amendment": (CONTINUOUS_PACKAGE + "TASK_AMENDMENT.json", 10611,
+        "3e6b72322ec1dbdb3dc01aae807a13619f640d02ada64f672d0b738d651b1b93",
+        "f63642b8feca38c1c21ac066a3bb1e0a0503410766f96867074f152401aa3c1e"),
+    "proposal": (CONTINUOUS_PACKAGE + "proposed-task.json", 15092,
+        "b3306fc5757863b295fd70d3915daee9e5535e7aa6dd92ce2173d25aed91f6e3",
+        "6a18cd365b66147dddcd5633cf2ea1339516966abcf16899e046a582463e5b6e"),
+    "retained_outcomes": (HOME + "/outcomes.v1.json", 2016,
+        "08c2f18db8639516c9cfa91c42956ad704e78a177d87ad687e6779691c7cb088",
+        "a373873de3ee628bb8d104fa9db8a552fdff3aa2c09cee867f341c691affacd6"),
+}
+_CONTINUOUS_FIELDS = frozenset((
+    "/admission", "/continuous_outcomes_v1", "/evaluation/candidate_interface",
+    "/evaluation/continuous_assessment", "/evaluation/contracts", "/evaluation/operator_entrypoint",
+    "/evaluation/paired_protocol", "/evaluation/retained_pre_continuous_contracts",
+    "/evaluation/retained_pre_continuous_paired_protocol", "/evaluation/scorer_ref",
+    "/holds", "/next_implementation_action", "/primary_outputs", "/provenance/continuous_policy",
+    "/provenance/continuous_predecessor", "/resources/participant_access_budget",
+    "/resources/participant_resource_budget", "/status_basis", "/success_criteria",
+))
+
+
+def continuous_pin(name):
+    path, size, raw_hash, _ = _CONTINUOUS_APPROVED[name]
+    return {"path": path, "bytes": size, "sha256": raw_hash}
+
+
+def continuous_entrypoint():
+    return {"path": CONTINUOUS_PACKAGE + "benchmark.py", "bytes": 37418,
+            "sha256": "c671872e30cbb5c0723e29dda37d71c66e3175e84420a1cb9dcca813c3574488"}
+
+
+def continuous_descriptor(root_decision_text):
+    _need(type(root_decision_text) is str, "continuous root decision text required")
+    raw = root_decision_text.encode("utf-8")
+    _need((len(raw), hashlib.sha256(raw).hexdigest()) == CONTINUOUS_ROOT,
+          "unreviewed continuous root decision")
+    return {"schema_version": CONTINUOUS_VERSION, "task_id": TASK, "source_commit": CONTINUOUS_SOURCE,
+            "root_decision": {"text": root_decision_text, "bytes": CONTINUOUS_ROOT[0], "sha256": CONTINUOUS_ROOT[1]},
+            "inputs": {name: continuous_pin(name) for name in _CONTINUOUS_APPROVED},
+            "retained_temporal_revision": {"path": DESCRIPTOR, "bytes": 6921,
+                "sha256": "9b4b13fe3b5bdeee0ac7bcbba9cdd9936c0472e8410b4345108425be53fd80e2"},
+            "entrypoint": continuous_entrypoint(), "paired_protocol": None,
+            "result_status": "not_attempted", "legacy_binary_admission": "not_applicable"}
+
+
+class _ContinuousAuthenticated:
+    __slots__ = ("_payload", "_seal")
+
+    def __init__(self, payload, seal):
+        object.__setattr__(self, "_payload", payload)
+        object.__setattr__(self, "_seal", seal)
+
+    def __setattr__(self, name, value):
+        raise AttributeError("Authenticated SMC continuous metadata is immutable")
+
+    def __delattr__(self, name):
+        raise AttributeError("Authenticated SMC continuous metadata is immutable")
+
+    def snapshot(self):
+        return json.loads(self._payload)
+
+    @property
+    def members(self):
+        # Component files already have their artifact owner; never enroll them a
+        # second time as task metadata merely because this descriptor reads them.
+        return [self.snapshot()["descriptor_pin"], continuous_pin("retained_task")]
+
+
+def authenticate_continuous(*, revision_pin, temporal, temporal_task, read_pin):
+    _need(type(temporal) is _Authenticated and temporal._seal is _SEAL,
+          "authenticated retained temporal policy required")
+    _require_pin(revision_pin, CONTINUOUS_DESCRIPTOR)
+    declaration = read_pin(copy.deepcopy(revision_pin), "SMC continuous policy revision")
+    _need(type(declaration) is dict and type(declaration.get("root_decision")) is dict,
+          "continuous descriptor required")
+    expected = continuous_descriptor(declaration["root_decision"].get("text"))
+    _need(_canonical(declaration) == _canonical(expected), "unreviewed continuous descriptor")
+    _need(temporal.descriptor_pin == expected["retained_temporal_revision"],
+          "continuous selection must preserve exact temporal revision")
+    documents = {}
+    for name, approved in _CONTINUOUS_APPROVED.items():
+        document = read_pin(continuous_pin(name), "SMC continuous " + name)
+        _need(type(document) is dict and _digest(document) == approved[3],
+              "continuous parsed identity mismatch: " + name)
+        documents[name] = document
+    _need(_digest(temporal_task) == _CONTINUOUS_APPROVED["retained_task"][3]
+          and _canonical(temporal_task) == _canonical(documents["retained_task"])
+          and _canonical(documents["source_predecessor"]) == _canonical(temporal_task),
+          "continuous preimage must be the authenticated temporal projection")
+    _need(documents["retained_outcomes"].get("original_task_sha256") == continuous_pin("retained_task")["sha256"],
+          "retained outcomes must remain bound to the temporal task")
+    _need(documents["policy"].get("schema") == "smc_continuous_measurement_policy_v1"
+          and documents["policy"].get("task_id") == TASK
+          and documents["policy"].get("root_adoption_sha256") == CONTINUOUS_ROOT[1],
+          "continuous policy identity mismatch")
+    return _ContinuousAuthenticated(_canonical({"documents": documents, "descriptor_pin": revision_pin,
+                                                "descriptor": declaration}), _SEAL)
+
+
+def project_continuous(temporal_task, authenticated):
+    _need(type(authenticated) is _ContinuousAuthenticated and authenticated._seal is _SEAL,
+          "authenticated continuous handle required")
+    captured = authenticated.snapshot()
+    documents = captured["documents"]
+    _need(_canonical(temporal_task) == _canonical(documents["retained_task"]),
+          "continuous projection cannot replace its retained task")
+    amendment = documents["amendment"]
+    _need(amendment.get("schema") == "smc_continuous_task_amendment_proposal_v1"
+          and set(amendment.get("set_by_json_pointer", {})) == _CONTINUOUS_FIELDS,
+          "unexpected continuous amendment fields")
+    result = copy.deepcopy(temporal_task)
+    for pointer, value in amendment["set_by_json_pointer"].items():
+        keys = pointer[1:].split("/")
+        target = result
+        for key in keys[:-1]:
+            _need(type(target.get(key)) is dict, "continuous projection parent is absent")
+            target = target[key]
+        target[keys[-1]] = copy.deepcopy(value)
+    _need(_canonical(result) == _canonical(documents["proposal"]), "continuous projection differs from accepted proposal")
+    # The accepted proposal has sorted JSON keys. Return that exact ordering so
+    # the existing binder serializer reproduces b330, without reordering b88.
+    raw = (json.dumps(result, sort_keys=True, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
+    proposal_pin = continuous_pin("proposal")
+    _need(len(raw) == proposal_pin["bytes"] and hashlib.sha256(raw).hexdigest() == proposal_pin["sha256"],
+          "continuous raw projection differs from accepted proposal")
+    return json.loads(raw)
+
+
+def continuous_public_selection(authenticated):
+    _need(type(authenticated) is _ContinuousAuthenticated and authenticated._seal is _SEAL,
+          "authenticated continuous handle required")
+    captured = authenticated.snapshot()
+    evaluation = captured["documents"]["proposal"]["evaluation"]
+    return {"policy": continuous_pin("policy"), "entrypoint": continuous_entrypoint(),
+            "revision": captured["descriptor_pin"], "paired_protocol": None, "result_status": "not_attempted",
+            "outcomes": ["reproduction", "improvement"], "conditions": ["paper_data", "paper_data_author_code"],
+            "continuous_assessment": copy.deepcopy(evaluation["continuous_assessment"]),
+            "operator_entrypoint": copy.deepcopy(evaluation["operator_entrypoint"]),
+            "candidate_interface": copy.deepcopy(evaluation["candidate_interface"]),
+            "author_reproduction_routes": copy.deepcopy(evaluation["author_reproduction_routes"]),
+            "retained_temporal": {"role": "retained_pre_continuous_policy_and_outcome_binding",
+                "task": continuous_pin("retained_task"), "reproduction": _pin("reproduction"),
+                "improvement": _pin("primary_improvement"), "outcomes": continuous_pin("retained_outcomes"),
+                "revision": captured["descriptor"]["retained_temporal_revision"]},
+            "construction_requires_AI_attempt": False, "legacy_binary_admission": "not_applicable"}

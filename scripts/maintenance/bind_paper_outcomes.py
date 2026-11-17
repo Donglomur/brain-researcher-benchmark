@@ -301,6 +301,20 @@ def build_outputs(root=ROOT):
         if successor is not None:
             projected = module.project(projected, successor)
             updated_rows[identifier]["title"] = projected["title"]
+        if already_bound and binding.has_continuous_outcomes(row):
+            # The continuous SMC selection is explicit in the adopted row. Its
+            # retained temporal sidecars keep their old task identity; never
+            # infer activation merely because an additive component exists.
+            continuous_pin = row["paper_outcomes"]["continuous_policy_revision"]
+            continuous = module.authenticate_continuous(
+                revision_pin=continuous_pin, temporal=successor,
+                temporal_task=projected, read_pin=planned_read)
+            projected = module.project_continuous(projected, continuous)
+            new_binding["continuous_policy_revision"] = copy.deepcopy(continuous_pin)
+            immediate_raw, immediate_pin = raw(reader, module.CONTINUOUS_ARCHIVE)
+            binding.need(immediate_pin == module.continuous_pin("retained_task"),
+                         "Continuous SMC archive differs from its exact temporal preimage")
+            outputs[module.CONTINUOUS_ARCHIVE] = immediate_raw
         current_body = binding.encode(projected)
         current_pin = binding.pin(home + "/task.json", current_body)
         updated_rows[identifier]["specification"] = current_pin

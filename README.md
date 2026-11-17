@@ -58,7 +58,7 @@ create extra task IDs or duplicate an execution count.
 
 | Outcome | Success and comparison |
 | --- | --- |
-| **Paper reproduction** | Faithfully recover the task's complete original result under declared source, data and evaluation conditions, including required companion results and a justified agreement rule. Reproduction is a first-class outcome. |
+| **Paper reproduction** | Assess faithful recovery of the task's complete original result under declared source, data and evaluation conditions, including required companion results. Report original metrics and discrepancies; any binary agreement or equivalence claim requires a justified rule. Reproduction is a first-class outcome. |
 | **Paper improvement** | Surpass the source result on the same original task, with fixed observations, cohort, split, evaluation and required controls. Candidates may change architecture, inference or optimization within the declared observation and budget boundary. |
 | **Native neural interpretation** | Infer the specified target directly without arbitrary analysis tools, or use only the typed image-navigation actions of a separately declared viewer condition. Each condition has explicit representation, demonstration and action limits. |
 | **Neural tool/model building** | Create or adapt a tool, model, investigation procedure or frozen programme to solve the neural task under declared data, tool and resource access, with attributable participant contributions. |
@@ -119,10 +119,13 @@ Their preparation and software-control reports are available through `evidence
 PAPER-paper-method-003` and `evidence PAPER-paper-method-013`; neither reports model
 inference. Author-model equivalence and paper improvement remain unresolved.
 
-The [SMC-RNN offline outcome route](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md)
-uses the full original 35-bin held-in observation window and one complete candidate
-prediction set for co-smoothing and ten-bin future prediction. Its improvement
-successor preserves the original panel and four metrics. The retained
+The selected [SMC-RNN continuous outcome route](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/continuous-outcomes-v1/README.md)
+reports both source methods' eight reproduction findings and one offline candidate's
+four original metrics, with reference values and discrepancies. It preserves the
+full original 35-bin held-in observation window, co-smoothing and ten-bin future
+prediction. It introduces no binary reproduction pass or improvement win; gains
+over the SMC method reference remain distinct from the paper's LFADS/NDT comparisons.
+Current material preparation and operator-path validation remain required. The retained
 [source-matched author routes](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
 serve author reproduction and calibration. The [completed author calibration](docs/science/smc-author-calibration-20261117.md)
 records both full MC_Maze 20-ms prediction runs at the original 192 particles ×

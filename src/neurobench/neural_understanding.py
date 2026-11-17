@@ -407,6 +407,18 @@ def _current(original, contract, binding, source_id):
         current["complete_scope"]["complete_compact_representation"] = " ".join(observations["inputs"]) + " " + observations["coverage"]
         current["machine_output"]["coverage"] = observations["coverage"]
         current["resources_and_remaining_gates"]["planning"] = contract["access_modes"]["direct_observation"]["boundary"]
+    # The adopted calcium successor supplies prospective code while retaining
+    # the historical author-method limitation and authentic qualification holds.
+    if contract["task_id"] == "NEURAL-025" and any(
+            item.get("id") == "v2-condition"
+            and item.get("kind") == "local_source"
+            and item.get("path") == "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v2/source_condition.py"
+            and item.get("sha256") == "c7ce9b2e464c262550e6e224d7d81becb1094306ff5aeedf819068eb8d14ce11"
+            for item in contract["evidence"]):
+        current["holds"][0]["requirement"] = "Qualify supplied native clock/ROI correction and calcium-derived feature provenance; the separately named prospective decoder already fits variance selection and PCA on declared training trials only. Authentic reference/control competence remains unverified."
+        current["holds"][1]["requirement"] = "Historical author decoder PCA precedes CV; retain this restriction for any author-parity baseline. The separately named prospective v2 decoder uses train-only fitting and still requires authentic competence qualification; it does not establish author Figure5 reproduction."
+        current["holds"][7]["requirement"] = "The measured-target evaluator and generated negative/control source exist. Independently qualify scoring, complete-support failure handling and controls on authentic inputs under a protected target boundary and externally frozen protocol."
+        current["next_implementation_action"][0] = "Provision and authenticate supported original/locked inputs, verify native grid/trial/ROI and separately recorded exposure provenance, then qualify complete-cohort reference/control execution under the adopted v2 processed-input condition."
     return current
 
 

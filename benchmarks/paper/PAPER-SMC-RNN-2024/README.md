@@ -12,28 +12,34 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
+Both first-class outcomes use continuous fixed-panel measurements under the same typed policy. Reproduction reports both original source methods and all eight findings; improvement reports one complete offline four-metric vector with separate reference differences. No binary reproduction or improvement pass is assigned.
 
-### Current primary improvement policy
+**Matched episode protocol:** Not instantiated. **Participant results:** Not attempted. An AI attempt is not required for benchmark construction; actual bound materials and matched episode settings remain separate requirements.
 
-**Disposition:** design\_ready.
+### Current continuous measurement policy
 
-The candidate source interface accepts one complete offline prediction set over the full 35-bin panel. Source selectors do not authenticate an episode policy, source comparator, execution or scientific outcome.
+**Disposition:** continuous\_measurement.
 
-- [Selected current improvement contract](improvement.temporal-scope.v1.json)
-- [Authenticated policy revision](primary-successor.v1.json)
-- [Current scientific contract](docs/scientific-contract.temporal-scope.v1.json)
-- [Reviewed task projection](docs/temporal-scope-projection.v1.json)
+- [Shared reproduction and improvement policy](implementations/continuous-outcomes-v1/policy.json)
+- [Authenticated continuous revision](continuous-outcomes-binding.v1.json)
+- [Reviewed task amendment](implementations/continuous-outcomes-v1/TASK_AMENDMENT.json)
+- [Continuous operator entrypoint](implementations/continuous-outcomes-v1/benchmark.py): `prepare`, `inspect`, `freeze`, `score`.
 
-| Candidate source | Selector |
-| --- | --- |
-| Delivery | [delivery.py](implementations/offline-nlb-outcomes-v1/delivery.py) |
-| Scorer | [scorer.py](implementations/offline-nlb-outcomes-v1/scorer.py) |
-| Policy | [policy.py](implementations/offline-nlb-outcomes-v1/policy.py) |
+The source route produces continuous fixed-panel measurements. Materials admission, runtime enforcement, participant authorship and scientific claims remain separately evidenced.
+
+### Retained pre-continuous policies
+
+These policies and the archived task preserve their prior scope; they do not impose binary thresholds on current continuous measurements.
+
+- [Pre-continuous task](docs/pre-continuous-outcomes-v1/task.json)
+- [Retained reproduction policy](reproduction.v1.json)
+- [Retained temporal improvement policy](improvement.temporal-scope.v1.json)
+- [Retained outcome binding](outcomes.v1.json)
+- [Retained temporal revision](primary-successor.v1.json)
 
 ### Retained author-source reproduction routes
 
-Both author recipes remain available as source routes: causal-proposal, noncausal-proposal. Author calibration is not a qualified submitted AI reproduction; source-matched receipts cannot be relabeled as offline candidate receipts.
+causal-proposal, noncausal-proposal. Author calibration is not a qualified submitted AI reproduction; source-matched receipts cannot be relabeled as offline candidate receipts.
 
 | Author source | Selector |
 | --- | --- |
@@ -41,24 +47,20 @@ Both author recipes remain available as source routes: causal-proposal, noncausa
 | Scorer | [scorer.py](implementations/source-matched-nlb-v1/scorer.py) |
 | Protocol | [protocol.json](implementations/source-matched-nlb-v1/protocol.json) |
 
-Both source routes remain scientifically unknown; these selectors do not authorize execution.
-
-- [Original-finding reproduction contract](reproduction.v1.json)
-- [Paired outcome protocols](outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
-| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
-| --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
-| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
-| Improvement | Paper data | design\_ready | unresolved | unresolved | Unknown |
-| Improvement | Paper data author code | design\_ready | unresolved | unresolved | Unknown |
+| Outcome | Information condition | Assessment | Episode protocol | Participant result |
+| --- | --- | --- | --- | --- |
+| Reproduction | Paper data | Continuous measurement | Not instantiated | Not attempted |
+| Reproduction | Paper data author code | Continuous measurement | Not instantiated | Not attempted |
+| Improvement | Paper data | Continuous measurement | Not instantiated | Not attempted |
+| Improvement | Paper data author code | Continuous measurement | Not instantiated | Not attempted |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained author-source policy
+## Retained original registration policy
 
-This original registration contract remains attached to the author-source reproduction and calibration routes. The selected current policy above defines the offline candidate interface; the retained author restrictions do not govern that candidate.
+This original contract preserves its registration scope. The shared continuous policy above governs both current outcomes; this retained audit does not set current measurement thresholds.
 
 **Disposition:** design\_ready. The complete original endpoint, author code/checkpoints and original scorer are recovered. Source preparation and qualification have executable routes; no full author score match, candidate superiority or final admission policy is established.
 
@@ -80,7 +82,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12119 bytes; SHA-256 `b88feedacaa4cda6de9a1a3c012c29c5a6a1e48dff92b16e68d0fc1dc130020d`.
+- Specification identity: 15092 bytes; SHA-256 `b3306fc5757863b295fd70d3915daee9e5535e7aa6dd92ce2173d25aed91f6e3`.
 - [Registration and provenance](../../../docs/provenance/registrations/paper-initial/PAPER-SMC-RNN-2024.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
@@ -97,6 +99,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Reviewed source for the offline whole-trial NLB outcome successor, including policy, delivery, scoring and generated controls. It reuses retained source-matched scorer, delivery and protocol dependencies. Registration does not activate a runtime or qualify reproduction or improvement; trusted episode policy, authentic execution, receipt provenance and numerical scientific outcomes remain separately required and unestablished. Existing task definitions, histories and retained source artifacts are preserved.
 - [Source matched nlb v1](implementations/source-matched-nlb-v1) — Original panel preparation, paired materials and frozen prediction scoring.
   Scope: Source-matched MC\_Maze 20-ms preparation and paired paper/data versus paper/data/official-code exports, selected author-checkpoint inference and frozen-prediction scoring for both original proposal arms with all companion metrics. Complete author-score calibration, equal participant budgets, joint superiority admission and scientific qualification remain unestablished. Source delivery and engineering controls are not solver performance; original targets are publicly exposed.
+- [Continuous outcomes v1](implementations/continuous-outcomes-v1) — Reviewed continuous outcome source.
+  Scope: Bounded paired-material preparation, outcome-specific CPU profiles and complete continuous reproduction/improvement measurement preserve the exact prior task and original evaluator. The proposed current task is not activated by artifact registration; exact context/CLI/binder adoption and separately admitted authentic export remain required. AI results are separate from construction readiness, and no binary reproduction or superiority claim is inferred.
 - [Paired reproduction v1](implementations/paired-reproduction-v1) — Joint original source method reproduction evaluation.
   Scope: Joint freeze and scoring interface for two complete original-method prediction sets and all eight source findings through the unchanged evaluator. This source component does not supply an agreement policy, establish original-method execution or qualify AI reproduction, historical source linkage, candidate isolation or scientific performance.
 

@@ -85,6 +85,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Delivery source](implementations/delivery-source) — Calibration only.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original inputs v1](implementations/original-inputs-v1) — Reviewed source component.
+  Scope: Original 196-member, 14-session input and 224-result prediction construction retains the source Figure 3 reducer and original population distinctions. Authentic source preparation, historical numerical reference parity, unit joins and protected same-task candidate custody remain separate; generated callbacks are not model results.
 - [Original figure3 v1](implementations/original-figure3-v1) — Reviewed source component.
   Scope: Original Figure 3 output reduction. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

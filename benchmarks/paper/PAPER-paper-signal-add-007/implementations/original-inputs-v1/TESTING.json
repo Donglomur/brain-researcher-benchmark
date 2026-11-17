@@ -1,0 +1,217 @@
+{
+  "schema": "icnet-original-inputs-observed-controls/v1",
+  "production_files_sha256": {
+    "source.py": "9533cb8fc55f0185a80522081af258122f4788fb973fee7011551efd43b3284c",
+    "predictions.py": "84b0215d549c282f0d8a7683b49214c5b146d1ebab0d3d8395ea2571cb468b94",
+    "grade.py": "34a4c29fa0ed08124dcc5cf1cbd54568ed984d3742bde020493f6e8afe4b99c7"
+  },
+  "independent_test_file": {
+    "path": "benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/tests/test_original_inputs.py",
+    "sha256": "3f684aa9bca04b44e55698840e687566ae5105cf7a69f6f44b64df5deabde6bd",
+    "negative_cf_v2_executed_test_file_sha256": "86a5fd9de300717df0be0926155ad6a9c5b949afaf690296bac9e6640e885b10",
+    "final_time_mapping_v3_executed_test_file_sha256": "3f684aa9bca04b44e55698840e687566ae5105cf7a69f6f44b64df5deabde6bd",
+    "resource_safeguard": "Added unittest.skipUnless(ICNET_FIXTURE_ROOT) to the complete-geometry class so default discovery does not create a 1.33GB fixture. The large fixture was not repeated; subsequent v3 execution selected only the two changed mapping controls.",
+    "reviewer_owned_repository_files_added": 1,
+    "production_files_modified_by_reviewer": 0,
+    "reviewer_commits_or_pushes": 0
+  },
+  "independent_review_decision": "ACCEPT_COMPONENT_WITH_SCIENTIFIC_HOLDS",
+  "independent_review_sha256": "bcb9d25d8fa09e2d201c90344f55e62634a55953b207884a45c74207324dadf1",
+  "historical_pre_correction_files": {
+    "source.py": "1edb06afa248fa064a09117d139981687b68fcbfe53f6ec724812dd5f13d88c4",
+    "predictions.py": "3711c6dc9aa90f3a242e05ab3158158bc6bfd4d4ab0d0b2d047f705414b5d0b9",
+    "grade.py": "4eea144b07fe6254b30fdba1522a962c1f7edb950454ef01859f759fb86fd396",
+    "tests/test_original_inputs.py": "9d38e46caebb8bfcf8a9afb2b55a94c5b25793aab3a025fd1125a9b4680905c9"
+  },
+  "revision_specific_test_pins": {
+    "negative_cf_revision_production_files_for_v2_test_run": {
+      "source.py": "9919926ae11ab3a8c30ac7af8b6a5090bdf105a44fc01e08d944b508343eb7e3",
+      "predictions.py": "84b0215d549c282f0d8a7683b49214c5b146d1ebab0d3d8395ea2571cb468b94",
+      "grade.py": "34a4c29fa0ed08124dcc5cf1cbd54568ed984d3742bde020493f6e8afe4b99c7"
+    }
+  },
+  "tests": [
+    {
+      "pool_id": "icnet-independent-small-v1",
+      "revision_scope": "pre-correction positive-infinity generated fixture; unaffected controls retained, affected controls superseded by v2",
+      "status": "succeeded",
+      "test_count": 27,
+      "test_seconds": 0.95,
+      "wrapper_wall_seconds": 1.102376,
+      "peak_child_rss_bytes": 69632000,
+      "log_path": "parallel-build-v1/test-pool/runs/icnet-independent-small-v1.log",
+      "log_sha256": "82df0f54b9f51c8807de761fe54a8be3e552a6a7e7ab7cf90f52a202c4efa86c",
+      "controls": [
+        "Independent MAT-v5 writer and numeric Fortran-order decoding, including a small-name scalar",
+        "Bad headers, compression, complex/logical/nonnumeric flags, unknown or duplicate variables, extent and inventory failures",
+        "Publisher size and digest checks, mutation detection, symlink/hardlink/FIFO refusal, bounded duplicate/nonfinite JSON",
+        "Source animal identity, both sample rates, trial metadata agreement, explicit mapping/mask policy and exact mask census",
+        "Independent original-column permutation restoration, weighted expectations, distinct categorical draws, chunk-partition invariance and per-case/trial seeds",
+        "Invalid probabilities and column identities, public/private schema separation and original-duration refusal",
+        "Fixed NPY headers, extents, hashes and paths checked before allocation",
+        "Generated eight-bin runtime with all seven animals, four sounds, both trials, original 512 columns and 3476 selected units",
+        "All 56 predictor requests and all 112 sampled/expected arrays join to unchanged source-equation scoring",
+        "Unpatched production rejects reduced-time runtime artifacts; incomplete trials, gaps, mismatched pins/times, mask substitution and forged publisher scope fail"
+      ],
+      "runtime_geometry": {
+        "time_bins": 8,
+        "audio_samples": 256,
+        "animals": 7,
+        "animal_sound_cases": 28,
+        "trials_per_case": 2,
+        "columns_per_animal": 512,
+        "source_eligible_units": 3476,
+        "module_constants_patched_only_inside_generated_control": true,
+        "full_original_duration_runtime": false,
+        "real_model_run": false
+      }
+    },
+    {
+      "pool_id": "icnet-independent-full-geometry-v1",
+      "revision_scope": "historical complete original geometry with generated positive-infinity exclusions under pre-correction code; no final-code full-size rerun",
+      "status": "succeeded",
+      "test_count": 1,
+      "test_seconds": 20.557,
+      "wrapper_wall_seconds": 20.657054,
+      "peak_child_rss_bytes": 345030656,
+      "log_path": "parallel-build-v1/test-pool/runs/icnet-independent-full-geometry-v1.log",
+      "log_sha256": "c4b85d36c4eb7cbced469afb359f5a9a06cc2fa1ca784a0abaa4c0a8f5109d50",
+      "controls": [
+        "All three generated MAT files have the exact original byte sizes and numeric geometry",
+        "Actual MAT parser, hash authentication and source preparation run without patched production geometry",
+        "Every value of all 56 prepared response arrays is checked independently in bounded blocks",
+        "All four complete audio arrays, seven CF arrays, source mask positions, times, original unit identities, output hashes and file modes are checked",
+        "Observed generated counts greater than four remain intact",
+        "Generated digest injection is internal only and provenance remains generated_test_descriptors",
+        "The public artifact contains no recorded response arrays or eligibility mask"
+      ],
+      "source_geometry": {
+        "time_bins": 22784,
+        "audio_samples": 729088,
+        "animals": 7,
+        "animal_sound_cases": 28,
+        "trials_per_case": 2,
+        "columns_per_animal": 512,
+        "source_eligible_units": 3476,
+        "full_original_duration_source_preparation": true,
+        "source_values_generated": true,
+        "predictor_or_scorer_run_at_full_duration": false
+      }
+    },
+    {
+      "pool_id": "icnet-independent-negative-cf-v2",
+      "status": "succeeded",
+      "test_count": 10,
+      "test_seconds": 0.925,
+      "wrapper_wall_seconds": 1.096496,
+      "peak_child_rss_bytes": 65667072,
+      "log_path": "parallel-build-v1/test-pool/runs/icnet-independent-negative-cf-v2.log",
+      "log_sha256": "dcb1e4c2547738c02882c633f14e17ef6531821938df210e422a22f63319d163",
+      "revision_scope": "negative-CF v2 production pins; only affected controls plus two new source/refusal tests; predates the later explicit-permutation source change",
+      "controls": [
+        "Generated source export accepts 108 negative-infinity exclusions, retains all original columns and writes all 28 cases and both trials at eight bins; the MAT boundary and temporal constants are explicitly mocked",
+        "Source metadata failures still reject positive infinity, NaN, finite nonpositive CFs, wrong census, wrong rates/animals, trial mismatch and negative measurement times",
+        "All-28-case/two-trial reduced-time prediction and scoring orchestration passes with negative-infinity CFs",
+        "Positive-infinity public CF values fail before any predictor is called and fail the scoring join",
+        "Changed source mask, forged publisher scope, incomplete support, gaps, bad pins and altered times remain rejected",
+        "Production code without patched temporal constants still rejects reduced-time artifacts"
+      ],
+      "full_original_duration_runtime": false,
+      "authentic_numeric_payload_or_model_run": false
+    },
+    {
+      "pool_id": "icnet-independent-time-mapping-v3",
+      "status": "succeeded",
+      "test_count": 2,
+      "test_seconds": 0.031,
+      "wrapper_wall_seconds": 0.212439,
+      "peak_child_rss_bytes": 45531136,
+      "log_path": "parallel-build-v1/test-pool/runs/icnet-independent-time-mapping-v3.log",
+      "log_sha256": "d248804730e6beff4bde8c8c3910b424c2ac4cf9886259224d07cf5e95069cc9",
+      "revision_scope": "final production and test pins; only the two changed existing mapping controls rerun",
+      "controls": [
+        "A complete explicit sound-name permutation is accepted; missing, duplicate, foreign and nonstring names are rejected",
+        "Generated eight-bin producer receives the reversed sound-column mapping and exports correctly joined times for both trials of all 28 cases",
+        "Named sound/response array identities and original column values remain unchanged while time columns follow the explicit policy",
+        "The generated source metadata uses 108 negative-infinity exclusions; the MAT boundary and temporal constants are explicitly mocked"
+      ],
+      "authentic_mapping_verified": false,
+      "full_original_duration_runtime": false,
+      "authentic_numeric_payload_or_model_run": false
+    }
+  ],
+  "test_summary": {
+    "passed_test_executions": 40,
+    "distinct_test_methods": 30,
+    "negative_cf_revision_affected_test_executions": 10,
+    "final_time_mapping_revision_affected_test_executions": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unchanged_successful_suites_repeated": 0,
+    "python": "3.11.6",
+    "numpy": "1.26.3",
+    "pool_slots": 2,
+    "thread_environment": 1,
+    "declared_ram_limit_bytes": 1073741824,
+    "timeout_seconds": 180,
+    "pool_limits_are_cooperative_not_os_hard_memory_limits": true
+  },
+  "original_metadata_observation": {
+    "pool_id": "icnet-original-metadata-v1",
+    "evidence_sha256": "1261a5a8feed1c4760ef4521793cdaa20d2dc097cb2782fcc358cb7565ef748a",
+    "whole_files_publisher_md5_and_sha256_authenticated": true,
+    "numeric_scope": "CFs, animal IDs, both trial measurement-time matrices and rates only",
+    "authentic_response_or_audio_numeric_processing": false,
+    "new_complete_file_download_bytes": 0,
+    "excluded_CF_marker": "negative infinity",
+    "eligible_units": 3476,
+    "excluded_units": 108,
+    "measurement_time_sound_column_mapping_verified": false
+  },
+  "validation_limits": [
+    "The full original-size generated preparation pass ran before the CF-marker correction and used positive infinity. Its exact earlier source pins are retained.",
+    "After authentic metadata revealed negative infinity, only the ten affected/new small controls reran. They test the corrected metadata path and the full seven-animal/four-sound/two-trial runtime at eight generated bins.",
+    "A final source-only mapping correction uses the explicitly declared permutation of time columns rather than hardcoding sound listing order. Two affected generated controls subsequently passed; historical executed source pins remain explicit.",
+    "There was no second original-size pass after that correction and no full-duration prediction or scoring pass.",
+    "The narrow negative-CF source control mocks the MAT boundary and temporal constants; the earlier full-geometry pass separately tested real MAT parsing.",
+    "The exact original metadata inspection is distinct from generated numerical controls. No authentic neural-response or waveform numeric preparation, model, training or scientific score was executed."
+  ],
+  "reproduction_commands_from_component_directory": {
+    "small_controls": "python -B tests/test_original_inputs.py DirectoryControls MetadataBoundaryControls ProbabilityControls PublicBoundaryControls ReducedTimeAllCasesRuntimeControls -v",
+    "full_generated_source_control": "ICNET_FIXTURE_ROOT=/operator/reserved-generated-fixture python -B tests/test_original_inputs.py FullOriginalGeometryControl -v",
+    "full_control_resource_note": "Reserve at least 1536 MiB for cumulative source and prepared fixture writes; the observed original pass created and reclaimed 1330314367 bytes. Requires an independently approved local resource budget."
+  },
+  "dependencies_observed": {
+    "python": "3.11.6",
+    "numpy": "1.26.3"
+  },
+  "artifact_accounting": {
+    "full_geometry_reservation": "icnet-full-fixture-v1",
+    "reservation_owner": "complete_icnet",
+    "reserved_full_geometry_bytes": 1610612736,
+    "full_generated_raw_and_prepared_logical_bytes_created_and_reclaimed": 1330314367,
+    "reduced_runtime_logical_bytes_including_replaced_manifests_created_and_reclaimed": 4462210,
+    "corrected_negative_cf_source_fixture_created_and_reclaimed": 631280,
+    "corrected_negative_cf_runtime_created_and_reclaimed": 5014324,
+    "permuted_time_source_fixture_created_and_reclaimed": 631280,
+    "metered_fixture_logical_bytes_total": 1341053461,
+    "small_tiny_unit_fixture_overhead": "not individually metered; retained evidence and conservative parent lane accounting are separate",
+    "retained_fixture_bytes": 0,
+    "full_geometry_accounting_sha256": "03004c3a29958fe92039839a211888a9bef2f8a60cfff9c6fea15a60223df5fb",
+    "reduced_runtime_accounting_sha256": "5f3073392223469b8a3f8904a4231bda1cf765bd1a8796cafb8a382375e0b400",
+    "negative_cf_source_accounting_sha256": "f405ba1edb404bbdcdd081ed2fc06f005b61d9e55c0ce47f8867cf925d83d59b",
+    "negative_cf_runtime_accounting_sha256": "c113c08d226708598ff839da29b0b099c8a8509238d0de0e4b8c5372bd6b6c7d",
+    "permuted_time_source_accounting_sha256": "406dbfc4c0d6c8a9d7c4e7f33d623fbca44e36b00ec05babe5c64fc2017b011c",
+    "reservation_closed_by_reviewer": false
+  },
+  "readiness": {
+    "component_review_accepted": true,
+    "authentic_input_admission_complete": false,
+    "native_author_baseline_reproduced": false,
+    "full_duration_prediction_run_complete": false,
+    "paper_reproduction_evaluated": false,
+    "paper_improvement_evaluated": false,
+    "scientifically_qualified_benchmark": false,
+    "new_benchmark_ids_created": 0
+  }
+}

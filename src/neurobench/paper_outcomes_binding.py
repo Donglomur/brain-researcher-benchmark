@@ -172,6 +172,21 @@ def has_primary_successor(row):
     return True
 
 
+def has_continuous_outcomes(row):
+    """Recognize only the fixed SMC current selector; context proves its bytes."""
+    declared = row.get("paper_outcomes")
+    if not isinstance(declared, dict) or "continuous_policy_revision" not in declared:
+        return False
+    need(row.get("id") == PRIMARY_SUCCESSOR_TASK and row.get("track") == "paper",
+         "Continuous outcome selection is restricted to the reviewed SMC task")
+    need(has_primary_successor(row), "Continuous SMC must retain its temporal predecessor selectors")
+    require_pin(declared["continuous_policy_revision"],
+                primary_successor_module().CONTINUOUS_DESCRIPTOR, "SMC continuous policy revision")
+    need(0 < declared["continuous_policy_revision"]["bytes"] <= 65536,
+         "SMC continuous revision must be bounded")
+    return True
+
+
 def declaration_gap_module():
     """Load only the fixed reviewed metadata authenticator, never task code."""
     path = Path(__file__).resolve().with_name("paper_declaration_gaps.py")
@@ -504,6 +519,7 @@ def coverage(registry, read_pin):
         need(has_source_declaration_gap(row) == (row["id"] in required_gaps),
              "Original source declaration gap task cannot omit its adopted route")
         successor_selected = has_primary_successor(row)
+        has_continuous_outcomes(row)
         for field in PRESERVED_ROW_FIELDS:
             if field == "title" and successor_selected and row["id"] == PRIMARY_SUCCESSOR_TASK:
                 # This one title is deferred, not accepted: context() must prove
@@ -593,8 +609,11 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                                               improvement_contract=improvement_contract)
     base_keys = {"schema_version", "previous_specification", "outcomes"}
     successor_selected = has_primary_successor(row)
+    continuous_selected = has_continuous_outcomes(row)
     allowed_keys = ((base_keys | {"reproduction_contract"} | PRIMARY_SUCCESSOR_FIELDS,)
                     if successor_selected else (base_keys, base_keys | {"reproduction_contract"}))
+    if continuous_selected:
+        allowed_keys = tuple(keys | {"continuous_policy_revision"} for keys in allowed_keys)
     need(type(binding) is dict and set(binding) in allowed_keys
          and binding["schema_version"] == VERSION, "Invalid paper outcome task binding")
     prior = previous_rows[identifier]
@@ -640,6 +659,15 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     if successor is not None:
         projected = successor_module.project(projected, successor)
         need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
+    retained_current = pin(home + "/task.json", encode(projected))
+    continuous = None
+    continuous_selection = None
+    if continuous_selected:
+        continuous = successor_module.authenticate_continuous(
+            revision_pin=binding["continuous_policy_revision"], temporal=successor,
+            temporal_task=projected, read_pin=read_pin)
+        projected = successor_module.project_continuous(projected, continuous)
+        continuous_selection = successor_module.continuous_public_selection(continuous)
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
@@ -671,8 +699,10 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         module = engine(reproduction)
         errors = module.outcomes_validate(outcomes, reproduction, improvement)
         need(not errors, "Invalid paper outcome contracts for " + identifier + ": " + "; ".join(errors))
-        need(outcomes["task_id"] == identifier and outcomes["original_task_sha256"] == expected_current["sha256"],
-             "Paper outcomes must bind the raw current task identity")
+        outcome_identity = retained_current if continuous is not None else expected_current
+        need(outcomes["task_id"] == identifier and outcomes["original_task_sha256"] == outcome_identity["sha256"],
+             "Paper outcomes must bind the raw current task identity" if not continuous_selected else
+             "Retained paper outcomes must bind the exact temporal task identity")
         if primary_correction is not None:
             need(reproduction["eligibility"] == "source_unresolved"
                  and improvement["disposition"] != "improvement_ready",
@@ -680,14 +710,32 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         result = module.summary(outcomes, reproduction, improvement)
     need(not result["errors"] and result["task_count"] == 1,
          "Invalid independent paper outcome summary")
+    retained_temporal_summary = result if continuous is not None else None
+    if continuous is not None:
+        for member in continuous.members:
+            need(member["path"] not in members, "Duplicate continuous task metadata member")
+            members.add(member["path"])
+        result = {"task_id": identifier, "task_count": 1, "errors": [],
+                  "cells": [{"outcome": outcome, "condition": condition,
+                             "eligibility": None, "endpoint_eligible": None,
+                             "pairing_status": "uninstantiated", "condition_available": False,
+                             "scientific_outcome": "unknown", "receipt": None, "result_status": "not_attempted"}
+                            for outcome in ("reproduction", "improvement")
+                            for condition in ("paper_data", "paper_data_author_code")],
+                  "paired_metadata_admitted": {"reproduction": False, "improvement": False},
+                  "assurance": "Authenticated continuous measurement policy and source routes; no instantiated episode, submitted result, binary pass or scientific qualification."}
     return {"previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
             "improvement_contract": improvement, "improvement_contract_pin": improvement_pin,
             "retained_improvement_contract": retained_improvement,
             "retained_improvement_contract_pin": retained_improvement_pin,
-            "primary_policy_revision": successor.descriptor_pin if successor else None,
-            "primary_policy_provenance": successor_provenance,
-            "candidate_interface": successor.candidate_interface if successor else None,
-            "author_reproduction_routes": successor.author_reproduction_routes if successor else None,
+            "primary_policy_revision": continuous_selection["revision"] if continuous else successor.descriptor_pin if successor else None,
+            "primary_policy_provenance": {"amendment": successor_module.continuous_pin("amendment"),
+                                          "policy": successor_module.continuous_pin("policy")} if continuous else successor_provenance,
+            "candidate_interface": continuous_selection["candidate_interface"] if continuous else successor.candidate_interface if successor else None,
+            "author_reproduction_routes": continuous_selection["author_reproduction_routes"] if continuous else successor.author_reproduction_routes if successor else None,
+            "continuous_outcomes_v1": continuous_selection,
+            "continuous_policy": continuous.snapshot()["documents"]["policy"] if continuous else None,
+            "retained_temporal_summary": retained_temporal_summary,
             "reproduction_contract": reproduction,
             "outcomes": outcomes, "summary": result, "availability": "unavailable" if unavailable else "available",
             "primary_scope_correction": primary_correction,
@@ -750,6 +798,24 @@ def public_primary_scope_correction(entry, scope_pin, task_id):
 def public_summary(row, bound):
     """Expose declarations without treating metadata consistency as performance."""
     binding = row["paper_outcomes"]
+    if bound.get("continuous_outcomes_v1") is not None:
+        continuous = bound["continuous_outcomes_v1"]
+        return {"schema_version": VERSION, "objective": OBJECTIVE, "availability": "available",
+                "previous_specification": copy.deepcopy(binding["previous_specification"]),
+                "reproduction_contract": copy.deepcopy(continuous["policy"]),
+                "improvement_contract": copy.deepcopy(continuous["policy"]), "outcomes": None,
+                "reproduction_eligibility": None, "reproduction_blocking_issues": [],
+                "improvement_disposition": "continuous_measurement",
+                "cells": copy.deepcopy(bound["summary"]["cells"]),
+                "scientific_outcomes": {"reproduction": "unknown", "improvement": "unknown"},
+                "assurance": bound["summary"]["assurance"],
+                "retained_improvement_contract": copy.deepcopy(bound["retained_improvement_contract_pin"]),
+                "retained_improvement_role": "retained_pre_outcomes_policy",
+                "primary_policy_revision": copy.deepcopy(bound["primary_policy_revision"]),
+                "primary_policy_provenance": copy.deepcopy(bound["primary_policy_provenance"]),
+                "candidate_interface": copy.deepcopy(bound["candidate_interface"]),
+                "author_reproduction_routes": copy.deepcopy(bound["author_reproduction_routes"]),
+                "continuous_outcomes_v1": copy.deepcopy(continuous)}
     if bound["availability"] == "source_declaration_unavailable":
         gap = bound["source_declaration_gap"]
         return {"schema_version": VERSION, "objective": OBJECTIVE,

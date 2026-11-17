@@ -70,6 +70,8 @@ def public_summary(catalog):
         if outcomes.get('primary_policy_revision') is not None:
             selected.append({'task_id': row['id'], 'improvement_contract': outcomes['improvement_contract'],
                              **{field: outcomes[field] for field in public_catalog_module().PRIMARY_SUCCESSOR_PUBLIC_FIELDS}})
+            if outcomes.get('continuous_outcomes_v1') is not None:
+                selected[-1]['continuous_outcomes_v1'] = outcomes['continuous_outcomes_v1']
     if selected:
         result['selected_primary_policies'] = selected
     return result
@@ -465,6 +467,10 @@ def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
     gap = binding.get('availability') == 'source_declaration_unavailable'
     if gap and not allow_unavailable:
         raise ValueError('Paired paper outcome admission is unavailable without a source-grounded reproduction declaration: ' + task_id)
+    continuous = binding.get('continuous_outcomes_v1') is not None
+    if continuous and not allow_unavailable:
+        raise ValueError('Continuous measurements do not use legacy binary outcome admission; '
+                         'use the authenticated continuous operator entrypoint.')
     outcome_binding = builder.companion_module('paper_outcomes_binding')
     parser = builder.improvement_module().loads_contract
     documents = {}
@@ -476,7 +482,7 @@ def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
             continue
         raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
         documents[name] = parser(raw.decode('utf-8'))
-    if gap:
+    if gap or continuous:
         return task, binding, documents, None
     engine = outcome_binding.engine(documents['reproduction'])
     if unavailable:
@@ -491,7 +497,8 @@ def paper_outcomes(task_id, root=ROOT):
     """Inspect one task's four declared cells without supplying or inferring runs."""
     task, binding, documents, engine = _paper_outcome_documents(task_id, root, allow_unavailable=True)
     summary = ({'task_id': task_id, 'task_count': 1, **binding}
-               if binding.get('availability') in ('unavailable', 'source_declaration_unavailable') else
+               if binding.get('availability') in ('unavailable', 'source_declaration_unavailable')
+               or binding.get('continuous_outcomes_v1') is not None else
                engine.summary(documents['outcomes'], documents['reproduction'], documents['improvement']))
     if 'primary_scope_correction' in binding:
         summary['primary_scope_correction'] = binding['primary_scope_correction']
@@ -499,6 +506,8 @@ def paper_outcomes(task_id, root=ROOT):
             ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')}
     if binding.get('availability') == 'source_declaration_unavailable':
         pins.update(source_declaration_gap=binding['source_declaration_gap'], original_task=binding['original_task'])
+    if binding.get('continuous_outcomes_v1') is not None:
+        pins['continuous_outcomes_v1'] = binding['continuous_outcomes_v1']
     if binding.get('primary_policy_revision') is not None:
         for field in public_catalog_module().PRIMARY_SUCCESSOR_PUBLIC_FIELDS:
             summary[field] = binding[field]
@@ -566,6 +575,9 @@ def recorded_evidence(task_id=None, root=ROOT):
 
 def compare_paper(task_id, result_path, root=ROOT):
     contract = paper_contract(task_id, root)
+    if contract.get('schema') == 'smc_continuous_measurement_policy_v1':
+        raise ValueError('Continuous measurements do not use legacy binary comparison; '
+                         'use the authenticated continuous operator entrypoint.')
     # Result evidence is public aggregate metadata, not prediction or target data.
     path = Path(result_path).absolute()
     limit = 2 * 1024 * 1024

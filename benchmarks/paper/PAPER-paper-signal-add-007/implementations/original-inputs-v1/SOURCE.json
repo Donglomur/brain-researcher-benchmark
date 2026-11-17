@@ -1,0 +1,108 @@
+{
+  "schema": "icnet-original-input-source-provenance/v1",
+  "scope": "complete public seven-animal Figure 4 evaluation input and prediction interface",
+  "data_release": {
+    "url": "https://zenodo.org/records/12636772",
+    "doi": "10.5281/zenodo.12636772",
+    "license": "CC-BY-4.0",
+    "description_snapshot_sha256": "dc7656fdc50294f13832005611a6f2e093b0e082c66d037f9afc67ce67bcf9a9",
+    "files": [
+      {
+        "filename": "IC_data_trial1.mat",
+        "bytes": 326661096,
+        "md5": "440fe9fda52e09540b8d78379cdf96ed",
+        "sha256": "0a412f6188b650b7220de74e7539778563ce8889121c4709114b4499e9ca54ee"
+      },
+      {
+        "filename": "IC_data_trial2.mat",
+        "bytes": 326661096,
+        "md5": "34d6a3fab17cdd4157a06383299e40ab",
+        "sha256": "9bbfbba3fb746b3d28a0d7c0559e228c4669dacaeed632c389a75d68291cb97a"
+      },
+      {
+        "filename": "sound_data.mat",
+        "bytes": 11665880,
+        "md5": "835b3e1ff6815b16ad086eb7f8dcc6d6",
+        "sha256": "ee48a624bb829441d4c3d708323614e2e2ebf43fc3f21bbeb4bf9aad690eb532"
+      }
+    ],
+    "source_files_total_bytes": 664988072,
+    "acquisition": "Existing complete files reauthenticated against publisher MD5 and local SHA256; no duplicate complete-file acquisition.",
+    "format": "uncompressed little-endian MATLAB v5 numeric variables",
+    "recorded_response_shape_per_sound_and_trial": [7, 22784, 512],
+    "recorded_response_dtype": "int8",
+    "sound_shape": [1, 729088],
+    "sound_dtype": "float32",
+    "fs_audio_hz": 24414.0625,
+    "fs_neural_hz": 762.939453125,
+    "duration_seconds": 29.86344448,
+    "animal_ids": [3, 4, 5, 6, 7, 8, 9],
+    "sounds": ["speech_in_quiet", "speech_in_noise", "moving_ripples", "music"],
+    "trials": 2,
+    "animal_sound_cases": 28,
+    "bounded_metadata_observation": {
+      "trial_CFs_identical": true,
+      "positive_finite_CFs_by_animal": [505, 512, 455, 499, 498, 512, 495],
+      "negative_infinity_markers_by_animal": [7, 0, 57, 13, 14, 0, 17],
+      "positive_infinity_markers": 0,
+      "nan_CFs": 0,
+      "nonpositive_finite_CFs": 0,
+      "eligible_units": 3476,
+      "mask_C_order_uint8_sha256": "0745761778231fb21c58cd913255d2774e9afdf0e28f94b6801cf101877b199b",
+      "CFs_C_order_little_float64_sha256": "229c034904dc63d0348d940f11b75fa8d268387ba7813db8521e5a3a0c106bf9",
+      "response_or_audio_numeric_values_processed": false,
+      "measurement_time_sound_column_mapping_independently_verified": false
+    }
+  },
+  "author_interface": {
+    "repository": "https://github.com/fotisdr/ICNet",
+    "commit": "7a631f1779662ee70b1819ac0c9ce0191bcaf158",
+    "functions_sha256": "71f991df7fdc9d697cf6ab21c0da207d6e98d8e37520f81964f39b7e798eea19",
+    "example_sha256": "f161f62fe8b060d129241bffc951e5883fa80f36dc25d4917984acbed6e6f75f",
+    "license": "UCL Academic License; author code not vendored in this component",
+    "characteristic_frequency_metadata": {
+      "path_in_pinned_repository": "DNN/channel_CFs.mat",
+      "bytes": 37064,
+      "sha256": "66708828ec17430477630c229a2c5644e57b6d3b0bf79dd0bdc199c252100936",
+      "git_blob_sha1": "89230c1fefea507500aa4a7a78084a579348f545",
+      "native_shape": [1, 4608],
+      "logical_grouping": "Nine contiguous 512-value animal blocks, as sliced by the pinned helper",
+      "original_trial_metadata_join": "All 512 values, including negative-infinity signs, match the corresponding author block for each animal 3 through 9 in both trials",
+      "finite_mask_mismatches": 0,
+      "numeric_value_mismatches_including_infinity_sign": 0
+    },
+    "notebook_mapping_search": {
+      "sha256": "e02119f05d0c52a26148e3a3d8700f410f10a70b15351cedcf21d0e09815b9f6",
+      "git_blob_sha1": "e979bf7ef61f208cdb81b1a32c266caaa36a63ad",
+      "source_cells_inspected": 18,
+      "original_measurement_time_sound_column_binding_found": false,
+      "notebook_executed": false
+    },
+    "observations": [
+      "animal_X selects source decoder X; public evaluation uses animals 3 through 9",
+      "Measurement time is supplied in seconds; an hours docstring does not override the implementation and example",
+      "CF-assisted author output sorts columns; original-column identity must be retained even when CF values tie",
+      "The helper samples categorical counts and discards probabilities; expected-count metrics require access before sampling",
+      "Demo context padding is not independent evidence of the historical evaluation crop"
+    ]
+  },
+  "equation_scorer": {
+    "path": "../source-equations-v1/scorer.py",
+    "sha256": "ee2f1d5e3d927c142ab3ec70aec212dfa7d70a8a7253905dd10016b85d6eea5e",
+    "changed": false,
+    "equations": [3, 4, 5],
+    "variance_ddof": "explicit 0 or 1; historical author choice not recovered"
+  },
+  "remaining_scientific_gates": [
+    "Original evaluation-code binding of the four unlabeled measurement-time columns",
+    "Paper-era waveform context/crop and exact independent reliability-mask provenance",
+    "Original non-evaluation training and development data access",
+    "Qualified author probability-output bridge and LNP comparison on the same complete panel",
+    "Historical variance convention and paper scalar reduction with undefined-value policy",
+    "Protected candidate execution, paired paper/data and paper/data/code delivery, and authorized authentic scientific runs"
+  ],
+  "authentic_preparation_executed": false,
+  "authentic_model_or_scoring_executed": false,
+  "paper_reproduction_qualified": false,
+  "paper_improvement_qualified": false
+}

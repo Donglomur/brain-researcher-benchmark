@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Runs an owner-side NuCLR Bugeon linear readout on supplied embeddings with train-only scaling, validation-only checkpoint selection, exact label families, three distinct split/exposure panels and matched context-ablation diagnostics. Authentic joins/splits, paper-era versus December 2025 equivalence, repeated-cell linkage, native references, optional resampling dependency, rights, protected execution and scientific qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Native inputs v1](implementations/native-inputs-v1) — Reviewed source component.
+  Scope: Complete original ZIP/member authentication and17-session/69-subrecording native activity/identity bridge preserve all nine original label/exposure projections under the explicitly adopted current-release order. The existing ninth E/I-inductive source selector still refuses; transductive balancing and historical order remain unresolved. Authentic preparation, native reference comparisons and protected participant execution are not conferred by generated source controls.
 - [Source splits v2](implementations/source-splits-v2) — Reviewed source component.
   Scope: Original Bugeon split recovery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
