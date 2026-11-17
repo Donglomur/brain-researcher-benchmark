@@ -168,6 +168,12 @@ invocation, reference and comparator-program hashes may coincide across genuinel
 independent runs. Run/trace/exposure/execution/freeze/evaluation and scientific
 comparison receipts may not be reused across the two conditions.
 
+Reproduction with author code may legitimately include executing that code;
+success does not imply invention of the method. Both conditions receive the
+paper, so their contrast measures the effect of supplied author-code access,
+not learning from the paper. A separately designed paper-context ablation could
+help address that attribution question; it is outside the current paired protocol.
+
 `summary` still reports four outcome/condition cells for one task. Author baseline
 calibration, software controls and historical attempts do not populate AI cells.
 The improvement payload remains its existing version and comparison semantics;
