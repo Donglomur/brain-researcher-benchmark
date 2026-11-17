@@ -1,0 +1,190 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-032",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "This Matters Arising reanalysis asks whether apparent prestimulus tone decoding is explained by sequence statistics and biased classifier confusions. The result is a scientific null interpretation, not an ordered prediction benchmark. Higher decoding, larger Bayes evidence for the null, or a smaller p-value cannot by itself surpass the same finding; replacing it with a tone-classification leaderboard would change the registered endpoint.",
+  "source_paper": {
+    "title": "No evidence of neural feature-specific pre-activation during the prediction of an upcoming stimulus",
+    "url": "https://www.nature.com/articles/s41467-026-73568-1"
+  },
+  "evidence": [
+    {
+      "id": "find-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13212915/",
+      "locator": "Figure 1; Discussion; Methods: data, replication, empirical null and theoretical null pipelines",
+      "supports": "Reanalysis target, reused MEG representation and sequence-dependent null rationale."
+    },
+    {
+      "id": "find-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/README.md",
+      "locator": "About; How to use steps 1-6",
+      "supports": "Open Demarchi2019 data source, Python classification and R inferential analysis."
+    },
+    {
+      "id": "find-decoding",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/reproduce_and_reorder_sound.py",
+      "locator": "Lines 17-39, 59-93, 100-146 and empirical null loop",
+      "supports": "LDA/KFold(5), time windows, condition completeness, matched denominators and original/reordered scoring."
+    },
+    {
+      "id": "find-statistics",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/postprocessing.qmd",
+      "locator": "README; load_loop_subj; correlation and cluster/Bayesian sections",
+      "supports": "Fold/group averaging, correlations and publication permutation instructions; source producer/consumer axes require matching."
+    },
+    {
+      "id": "find-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-032/task.json",
+      "locator": "evaluation; improvement; holds",
+      "supports": "Historical scientific question and unqualified methodological extension."
+    },
+    {
+      "id": "find-implementation",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/contracts/COMPLETE_SOURCE_CONTRACT.md",
+      "locator": "Complete scientific composition; Improvement and limitations",
+      "supports": "Historical profile unresolved; corrected_methods_v1 is prospective methodology, not historical improvement."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Test whether prestimulus feature-specific decoding exceeds empirical reordered-sequence and confusion-matrix theoretical nulls; sounds and omissions remain distinct.",
+      "evidence_ids": [
+        "find-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "The 2026 reanalysis reuses Demarchi2019 MEG release DOI 10.5281/zenodo.3268713, not a new recording cohort.",
+      "evidence_ids": [
+        "find-readme",
+        "find-paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Author sound code requires four conditions for every mapped participant. The registration specifies 33 participants/132 recordings, but publication-vintage participant inclusion and the full manifest join were not independently authenticated here.",
+      "evidence_ids": [
+        "find-decoding",
+        "find-implementation"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper describes stratified five-fold classification trained on random-block sounds, with testing across entropies. Pinned sound code instead uses KFold(5), 0-0.32 s training and -0.666-0.666 s testing; historical producer/version parity remains unresolved.",
+      "evidence_ids": [
+        "find-paper",
+        "find-decoding"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "MEG sensor data, sound/omission event identities and four entropy conditions, with segment reordering and transition/confusion matrices defining the controls.",
+      "evidence_ids": [
+        "find-paper",
+        "find-decoding"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper specifies provided 100 Hz, 1-30 Hz data; pinned sound code additionally filters 0.1-30 Hz and removes selected trigger events plus successors. Exact publication execution must be pinned for reconstruction.",
+      "evidence_ids": [
+        "find-paper",
+        "find-decoding"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Tone accuracy is correct predictions divided by tested trials at each train/test time. Scientific assessment compares original and null maps and entropy correlations; 0.25 alone is not a valid prestimulus null.",
+      "evidence_ids": [
+        "find-paper",
+        "find-decoding"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Author code averages fold accuracy within participants; R consumes participant matrices for group means, correlations and cluster/Bayesian inference. Time cells are not independent subjects.",
+      "evidence_ids": [
+        "find-decoding",
+        "find-statistics"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered same-task improvement endpoint established",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "No ordered numerical baseline represents the paper's negative scientific conclusion. Its accuracy, null contrasts and Bayes/cluster evidence cannot be reduced to a reward for a preferred conclusion.",
+      "evidence_ids": [
+        "find-paper",
+        "find-statistics"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "A reconstructed descriptive result is a calibration reference, not an improvement comparator.",
+      "evidence_ids": [
+        "find-paper",
+        "find-statistics"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No scientifically justified scalar improvement direction exists for this registered finding; a larger effect or smaller p-value is not automatically better.",
+      "evidence_ids": [
+        "find-paper",
+        "find-statistics"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement hypothesis is admitted. Preserve the source inferential analysis for reproduction.",
+      "independent_unit": "Participant for paired group inference; trial order and shared samples remain dependent.",
+      "rationale": "Valid uncertainty does not turn confirmation of a descriptive or null claim into an ordered performance contest.",
+      "evidence_ids": [
+        "find-paper",
+        "find-statistics"
+      ]
+    },
+    "paper_win_requires": [
+      "No same-task improvement win is admitted for confirming or strengthening this negative finding.",
+      "Retain the original empirical/theoretical controls; higher tone accuracy alone does not demonstrate anticipatory neural information.",
+      "A new classifier benchmark or corrected time/split/null protocol must be separately labelled as an extension with its own objective; numerical parity remains calibration."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; reproducing this finding establishes neither a paper win nor SOTA.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive: Original null-claim reconstruction is retained; no justified scalar improvement objective is available for the same scientific task.",
+    "candidate_freeze": "No candidate improvement episode is admitted. Preserve frozen historical reconstruction outputs separately.",
+    "final_evaluation": "Do not award surpass-source-paper success for this disposition. A separately approved replacement must supply its own original task and source baseline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Historical reference agreement remains calibration only. Authored extensions and local analytical baselines cannot substitute for the source-paper result."
+  },
+  "blocking_issues": [
+    "Original scientific endpoint lacks a defensible direction in which a method can surpass the finding.",
+    "Paper versus pinned code differ in cross-validation wording and time-window implementation; a corrected profile cannot silently stand in for the paper.",
+    "Publication-vintage complete participant/file join remains unqualified.",
+    "A replacement must identify a source-reported ordered prediction task; stronger null evidence or sensitivity alone is not one."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain full temporal-generalization matrices, empirical/theoretical nulls, group inference and historical/source reconciliation. corrected_methods_v1 and sensitivity/power studies remain methodological extensions, never paper-win substitutions."
+  }
+}

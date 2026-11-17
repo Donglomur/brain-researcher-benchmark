@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-EXP-20261113-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered Figure 4 endpoint is descriptive mapping of spontaneous firing categories, regional enrichment and hierarchy correlations. Larger enrichment or correlation is not intrinsically a better scientific result. The existing held-animal energy-score proposal changes both target and split, and the fixed-map conditional scorer reconstructs supplied categories; neither can count as surpassing the original paper.",
+  "source_paper": {
+    "title": "A prefrontal cortex map based on single-neuron activity",
+    "url": "https://www.nature.com/articles/s41593-025-02190-z"
+  },
+  "evidence": [
+    {
+      "id": "pfc-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12971490/",
+      "locator": "Figures 1-2 and 4; Methods: Data analysis and Statistics; Data/code availability",
+      "supports": "Original single-unit metrics, SOM/category map, regional enrichment and hierarchy analysis."
+    },
+    {
+      "id": "pfc-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/hejDMC/pfcmap/9ae52eddc47fbb590ef4e1b1949507334707a0f1/README.md",
+      "locator": "Data used; Figure 2; Figure 4 code inventory",
+      "supports": "Official SOM, enrichment and hierarchy workflow; source data destinations."
+    },
+    {
+      "id": "pfc-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-005/task.json",
+      "locator": "reproduction; improvement; experimental_unit",
+      "supports": "Historical registration distinguishes adapted held-animal predictive comparators from original published results."
+    },
+    {
+      "id": "pfc-implementation",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-005/implementations/pfc-conditional-portable-profile-v1/package/instructions/TASK.md",
+      "locator": "PFC Full99 conditional reconstruction participant task",
+      "supports": "Supplied learned categories and ROI memberships, exact conditional moments, and deletion sensitivity are reconstruction only."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure 4 maps spontaneous-activity category enrichment across PFC ROIs and relates it to anatomical hierarchy. It is not prospective unit-feature forecasting.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "KI recordings are associated with DANDI 000473/001260 and paper-linked Zenodo 17559037. A complete publication-vintage file/version join has not been authenticated here.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code",
+        "pfc-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The SOM uses 19,186 wide-waveform units across the original brain-wide pool. Figure 4 retains its PFC layer/ROI eligibility; do not refit only on a convenient PFC subset.",
+      "evidence_ids": [
+        "pfc-paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The selected Figure 4 analysis fits a descriptive map to the eligible cohort. It has no source held-animal forecasting train/test split.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Spontaneous spike-derived firing rate, burstiness and memory, anatomical assignments and hierarchy measurements; original categories are fitted analysis outputs.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source analysis uses eligible spontaneous epochs, unit waveform classification, metric standardization, SOM fitting and hierarchical categories before ROI enrichment.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original outputs are category enrichments relative to group-controlled shuffles and Pearson hierarchy correlations; their sign/magnitude are descriptive measurements, not a loss to optimize.",
+      "evidence_ids": [
+        "pfc-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Units form category-by-ROI counts; hierarchy correlation uses eligible GaoROIs. The source pools units for map construction, rather than averaging held-animal energy scores.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered same-task improvement endpoint established",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Figure 4 has no paper forecasting score or ordered benchmark-performance baseline. Its enrichment/correlation values are scientific findings, not targets to maximize.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "A reconstructed descriptive result is a calibration reference, not an improvement comparator.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No scientifically justified scalar improvement direction exists for this registered finding; a larger effect or smaller p-value is not automatically better.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement hypothesis is admitted. Preserve the source inferential analysis for reproduction.",
+      "independent_unit": "Mouse for biological replication; probes and units are nested. ROI correlations are spatially dependent descriptive summaries.",
+      "rationale": "Valid uncertainty does not turn confirmation of a descriptive or null claim into an ordered performance contest.",
+      "evidence_ids": [
+        "pfc-paper",
+        "pfc-code"
+      ]
+    },
+    "paper_win_requires": [
+      "No same-task performance win is admitted for this descriptive Figure 4 registration.",
+      "Do not count exact rational conditional moments, reference correlation agreement, stronger enrichment significance or animal-deletion stability as surpassing the paper.",
+      "Retain held-animal multivariate energy scoring, if pursued separately, as a new predictive extension with its own baseline and evaluation; its adapted SOM comparator is not a published forecasting result."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; reproducing this finding establishes neither a paper win nor SOTA.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive: The source endpoint has no justified performance ordering. Preserve full-cohort map reproduction and descriptive sensitivity analyses.",
+    "candidate_freeze": "No candidate improvement episode is admitted. Preserve frozen historical reconstruction outputs separately.",
+    "final_evaluation": "Do not award surpass-source-paper success for this disposition. A separately approved replacement must supply its own original task and source baseline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Historical reference agreement remains calibration only. Authored extensions and local analytical baselines cannot substitute for the source-paper result."
+  },
+  "blocking_issues": [
+    "No defensible ordered improvement endpoint is identified in the selected original Figure 4 task.",
+    "Held-animal feature-distribution prediction changes the paper target, split and aggregation.",
+    "A fixed-map conditional scorer receives learned categories and therefore cannot establish improved map learning.",
+    "Any replacement requires a source paper that reports the same ordered predictive task, not a relabelled local comparator."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain complete original-map reproduction, conditional enrichment reconstruction, numerical graders and animal-deletion sensitivity. The fair 64-draw energy-score design is an extension, not original-paper victory."
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-043",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "NeuroPictor has an ordered, source-recoverable fMRI-to-image reconstruction task and Table 1 scores for the complete four-subject test population. The paper reports eight metrics without a single primary endpoint. Inception identification is a proposed primary for this design, not a paper-declared primary; panel guardrails, effect size, uncertainty, exact image membership, checkpoint lineage and native evaluator qualification must be fixed before admission.",
+  "source_paper": {
+    "title": "NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation",
+    "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf"
+  },
+  "evidence": [
+    {
+      "id": "np-paper",
+      "kind": "paper",
+      "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+      "locator": "Sections 3.1, 4.1-4.3; Table 1, final NeuroPictor row; Table 2",
+      "supports": "Original reconstruction endpoint, four evaluation subjects, shared 982-image pool, three-trial averages, multi-subject pretraining, subject-macro aggregation and full numerical metric panel."
+    },
+    {
+      "id": "np-metrics",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+      "locator": "two_way_identification lines 101-130; pixel/SSIM lines 132-164; feature models and scoring lines 166-266",
+      "supports": "Strict pairwise Pearson identification formula, complete distractor pool, feature extractors, pixel scaling and legacy SSIM call."
+    },
+    {
+      "id": "np-loader",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+      "locator": "NSDImageDataset, constructor and __getitem__, lines 19-117",
+      "supports": "Named train/test label manifests, subject identities, normalized surface inputs, captions, image transform; val_data_fraction and available-label filtering can reduce evaluation support."
+    },
+    {
+      "id": "np-readme",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/README.md",
+      "locator": "Data Preparation; Multi-subject Pre-training; Single-subject Finetuning; fMRI-to-image Reconstruction",
+      "supports": "Released encoder/model route, source training/refining commands, four subject checkpoints and one-sample reconstruction command; release route does not prove checkpoint ancestry."
+    },
+    {
+      "id": "np-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-043/docs/initial-evaluator-v1.md",
+      "locator": "Scientific boundary and provenance; implementation evaluator.py HOLDS and validate_protocol",
+      "supports": "Existing arithmetic evaluator does not train/generate/extract features; prospective explicit 2D SSIM is not certified historical source SSIM; authentic pool and native replay remain open."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Generate the natural image viewed by a subject from that subject's fMRI; preserve both semantic and structural reconstruction assessment. Retrieval-only, caption prediction or encoder reconstruction is not the same output.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original Natural Scenes Dataset fMRI and MS-COCO image/caption pairs; source release names NSD/unique_triallabel.npy and sub1257_shared_triallabel.npy. Exact release revision, label-manifest hashes and preprocessed surface derivation are not qualified.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader",
+        "np-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All eight NSD subjects contribute training data (about 67,000 image-fMRI pairs); the main result fine-tunes and evaluates subjects 1, 2, 5 and 7, not a subject-1-only ablation.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The paper specifies the same 982 shared test images for all four evaluation subjects and each original subject training split. Exact protected image/session IDs and exclusion of these images from all pretraining sources remain unbound. Source val_data_fraction must be 1 and missing-label filtering must not silently reduce this pool.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "A normalized fMRI surface per test observation; three repeated responses to an image averaged. Training may use original image/caption supervision, UKB-pretrained fMRI encoder and Stable Diffusion 2.1 priors at declared matched access. Ground-truth test images/captions may score outputs but cannot guide generation or choose samples.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader",
+        "np-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper maps fMRI into single-channel 256x256 brain activation images and averages three trials. Pin source surface normalization, ROI mapping, reconstruction resize and every pretrained feature model. Source eval_metrics.py resizes reconstructions to 256 then pixels to 425; historical grayscale multichannel=True SSIM parity remains unresolved.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics",
+        "np-loader"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Retain all eight Table 1 metrics: mean pixel Pearson r; source SSIM; AlexNet features.4/features.11, Inception avgpool and CLIP image-feature two-way identification; EfficientNet and SwAV correlation distances. For N images, identification is mean_j [sum_(i != j) 1(corr(real_i,pred_j)<corr(real_j,pred_j))/(N-1)], with ties failing. Higher is better except the two distances. Identification arithmetic is verified from the pinned code, but native parity for the complete panel is unresolved because the historical SSIM environment and grayscale multichannel semantics are not fixed.",
+      "evidence_ids": [
+        "np-metrics",
+        "np-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "One generated sample per subject-stimulus, full 982-image distractor set within each subject, then equal-weight average of the four subject scores. No best-of-many sample selection or treating pairwise distractor comparisons as independent observations.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Proposed Inception-v3 two-way identification, with all eight Table 1 metrics retained and panel guardrails unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.945,
+      "description": "Table 1 final fine-tuned NeuroPictor row reports Inception 94.5% (fraction 0.945), averaged over subjects 1,2,5,7. Companion values are PixCorr 0.229, SSIM 0.375, AlexNet(2) 96.5%, AlexNet(5) 98.4%, CLIP 93.3%, EffNet-B 0.639 and SwAV 0.350. Table 2 subject-1 scores are separate ablation results.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author train/reconstruction/eval scripts and released checkpoints provide a route; no authenticated full-population native rerun or matching per-image predictions is established by the local arithmetic package. A released-checkpoint run must retain its pretrained-input condition, not be described as raw-pretraining reproduction.",
+      "evidence_ids": [
+        "np-readme",
+        "np-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No task-specific meaningful Inception gain or allowed degradation across semantic/structural companions has been justified. Select and freeze these from scientific utility and baseline variability before candidate evaluation; neither exceeding a rounded 94.5% by numerical noise nor maximizing a convenient subset counts.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired analysis over the identical image pool with shared image dependence across subjects and repeated training/generation seeds modeled explicitly. Subject-specific and four-subject aggregate effects must be reported; confidence level, resampling design, multiplicity and seed count remain unfrozen.",
+      "independent_unit": "Image/stimulus clusters shared across four fixed subjects for within-cohort inference; subjects for any population claim, with only four available. Distractor pairs and repeated trials are not independent units.",
+      "rationale": "The 982 common images recur across subjects and all identification comparisons share a distractor pool. Four subjects and stochastic generation cannot be converted into thousands of independent biological replicates.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and freeze the original complete train/test image and session membership, all four evaluation subjects and all eight pretraining-subject inputs.",
+      "Reproduce the final fine-tuned NeuroPictor reference with source metric parity and authenticated image/feature identity; keep the published score distinct from the rerun.",
+      "Before candidate freeze, resolve the proposed primary choice, meaningful effect, full-panel guardrails, uncertainty and matched budgets.",
+      "Exceed the source-paper baseline and matched author rerun under that fixed same-task rule. No subject-1 subset, new image split, easier prior access, best-of-many generation or prospective SSIM substitution can establish the paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper's historical competitor table is not a verified current-SOTA comparison.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source/evaluator qualification, tune on original training data with a declared development partition derived from training only; use development reconstruction feedback and retain all attempts. Original shared test stimuli receive no iterative feedback.",
+    "candidate_freeze": "Freeze model/code/weights, all four subject recipes, inference seed policy, one-sample rule, preprocessing, feature extractor versions, selected primary/guardrails, complete cohorts and budgets before final scoring.",
+    "final_evaluation": "Run frozen candidate and authenticated author reference on every original subject-stimulus pair; report the complete eight-metric panel, paired uncertainty and source-score comparison. A changed split or low-data condition is separately labeled extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Table 1, recreated author predictions and any new comparator are separate artifacts. Equalize actual pretrained encoder/diffusion/image/caption access and compute; a target-only ablation or neural-free control cannot replace NeuroPictor as the victory baseline."
+  },
+  "blocking_issues": [
+    "Exact original image/session and pretraining-overlap manifests not authenticated.",
+    "Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified.",
+    "Released model/encoder ancestry and original training configurations need authenticated receipts.",
+    "Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed.",
+    "No full-population reproduced author result or working candidate-to-native-metric evaluation established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve original task and initial arithmetic evaluator. Its explicit ssim_2d_prospective and small declared_subjects panels remain engineering/development outputs; arithmetic agreement and reconstruction of source numbers are calibration, not improvement success."
+  }
+}

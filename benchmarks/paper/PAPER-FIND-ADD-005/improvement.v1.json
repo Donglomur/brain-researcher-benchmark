@@ -1,0 +1,182 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-ADD-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original GLM has an ordered cross-validated likelihood objective, but its comparable numeric performance baseline and cohort-level reduction were not recovered. The reported modulation indices and fractions of significantly decodable cells describe biology and cannot become quantities to maximize. The local ridge/eye-covariate, blocked-fold conditional gap-direction score changes the source comparison.",
+  "source_paper": {
+    "title": "Encoding of cerebellar dentate neuron activity during visual attention in rhesus macaques",
+    "url": "https://elifesciences.org/articles/99696"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "locator": "Results: Encoding of task events, Decoding trial variables; Figures 3–4; Methods: Encoding model and Decoding model",
+      "supports": "Identifies the dentate encoding/decoding analyses, source likelihood-based model selection, and descriptive reported outputs."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/fitSingleCellGLM.m",
+      "locator": "fitSingleCellGLM, baselineTrials default and design construction around lines 139–159",
+      "supports": "Defines six event kernels and a response-derived five-trial moving-average baseline before cross-validation."
+    },
+    {
+      "id": "category",
+      "kind": "author_code",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "locator": "fit method, cvTrainSel generation, cv1NegLnL selection and cv2NegLnL evaluation around lines 496–529",
+      "supports": "Separate trial-based cross-validation assignments select regularization and evaluate goodness of fit; retained fitInfo is a possible author-baseline recovery route, not an observed score."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.1rn8pk14s",
+      "locator": "January 22, 2025 release; README Files and variables",
+      "supports": "cells4.2.mat.zip supplies per-cell trials, monkey/cell identities, spike seconds, event milliseconds and eye traces; archive also contains some Purkinje cells."
+    },
+    {
+      "id": "local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/README.md",
+      "locator": "Prospective paired models and evaluation; evaluator.py evaluate_cell/evaluate",
+      "supports": "The retained implementation uses a new conditional full-minus-reduced likelihood in nats/spike, ridge harmonics, eye inputs and guarded contiguous folds; it is not source GLM parity."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict individual dentate-neuron spike counts from trial events and category-dependent event responses; retain the original encoding problem. Behavioral decoding and modulation summaries are distinct source analyses, not interchangeable scalar victory targets.",
+      "evidence_ids": [
+        "paper",
+        "fit"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad DOI 10.5061/dryad.1rn8pk14s, January 22, 2025 cells4.2.mat.zip release. Only metadata was reviewed; no neural payload was opened.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper records 305 DN neurons from macaques Mi and Mo. Exact analysis-included cells/trials must be reconciled to the archive, whose README also notes Purkinje-cell records; all eligible source DN cells must be retained.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper specifies fivefold likelihood selection; CategorizedModel creates separate trial-based CV assignments for regularization and goodness-of-fit. Original fold realizations/random state and the compared model-stage outputs remain unrecovered; contiguous guarded folds are an extension.",
+      "evidence_ids": [
+        "paper",
+        "category"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original encoding uses fixation, C onset, delay, choice-target, saccade and reward timing with current/past trial categories. The author baseline also uses response-derived trial-rate smoothing, which must be disclosed; adding eye regressors or a training-only null changes the comparison.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "local"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Methods describe 25-ms counts and five event-basis functions over 1.5 seconds; code uses a five-trial rate baseline. Converter settings, exclusions and exact original count support need source-run reconciliation, including the registered 25-ms paper versus 50-ms converter-default mismatch.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "local"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Recover the original evaluated predictive likelihood and its normalization from cv2NegLnL. No published scalar on that exact support was recovered. Figure 3 modulation strength and Figure 4 significant-cell fraction are not predictive-accuracy objectives.",
+      "evidence_ids": [
+        "paper",
+        "category"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original figures summarize cell properties separately by monkey; no source-defined single cross-cell predictive-likelihood aggregation was recovered. A pooled nats/spike or cell-macro average must not silently become the published score.",
+      "evidence_ids": [
+        "paper",
+        "local"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original held-out Poisson predictive likelihood; exact source reduction unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No numeric source predictive-likelihood baseline was recovered; biological modulation indices and significant-cell percentages are not substitutes.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned fitSingleCellGLM/CategorizedModel provide a recovery route for original model predictions and cv2NegLnL, but no authentic author run or matched score exists in this audit.",
+      "evidence_ids": [
+        "fit",
+        "category"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A task-specific useful likelihood gain needs original likelihood normalization, baseline variability and source support; no generic nats/spike margin is adopted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty after original folds and aggregate are recovered; retain dependence among cells/trials from the same animal.",
+      "independent_unit": "Two macaques, with cells and trials nested within animal.",
+      "rationale": "Treating 305 cells or repeated folds as independent animals would overstate replication.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover a quantitative author performance baseline on the exact source DN cohort, trial exclusions, information conditions and CV outputs.",
+      "Calibrate the author implementation before testing a candidate; reproducing modulation figures is only calibration.",
+      "Compare candidate and author predictions on identical source folds and metric support, with a justified effect and dependence-aware uncertainty rule fixed before final scoring.",
+      "Do not count stronger p-values, more modulated cells, retrospective-versus-online changes, added inputs or the prospective blocked-fold conditional endpoint as surpassing the source paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was reviewed or claimed; source-paper and author-rerun comparisons are separate.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until the original predictive score is recovered. Then use only declared training/selection feedback for method iteration while preserving the original information condition.",
+    "candidate_freeze": "Freeze model, source task mapping, preprocessing, original fold manifest, metric reduction and acceptance rule before final comparisons.",
+    "final_evaluation": "Evaluate candidate and source-author baseline on the same original support once; any redesigned blocked split remains a separately labeled extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Neither the local full-minus-reduced ridge model nor its null is the source-author baseline. Published score, recovered author score and future SOTA score remain separate."
+  },
+  "blocking_issues": [
+    "Original numeric predictive likelihood, normalization and across-cell aggregation have not been recovered.",
+    "Exact original folds, complete eligible DN cohort and source converter settings remain unbound.",
+    "Response-derived moving-average inputs and the published versus converter bin-width difference require explicit same-task reconciliation.",
+    "Native MATLAB/SPAMS source baseline, working matched evaluator, meaningful effect, valid uncertainty, and concrete access/resource budgets are not qualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve all dentate reconstruction and prospective conditional-gap code. Its guarded block validation, eye covariates, ridge hierarchy and nats/spike contrast define an extension, not an original-paper success criterion."
+  }
+}
