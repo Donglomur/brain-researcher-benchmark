@@ -1,0 +1,61 @@
+{
+  "schema": "foraging_same_task_operator_protocol_v1",
+  "frozen_at_utc": "2026-11-17T05:06:16.818340+00:00",
+  "task": "PAPER-FIND-036",
+  "objective": "build and calibrate original Figure6B same-task improvement evaluator; no candidate search or scientific improvement claim",
+  "source": {
+    "doi": "10.5061/dryad.v9s4mw78c",
+    "version": 418976,
+    "file": 4552700,
+    "name": "EventClassificationData_4C.zip",
+    "bytes": 15089711,
+    "sha256": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a",
+    "author_commit": "2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678"
+  },
+  "calibration": {
+    "maximum_complete_runs": 1,
+    "maximum_fits": 200,
+    "estimator": "sklearn.naive_bayes.BernoulliNB(alpha=1.0,binarize=0.0,fit_prior=False)",
+    "split": "StratifiedKFold(n_splits=5,shuffle=True,random_state=622) on original source HW row order",
+    "features": "all original X columns, rows y in {3,4}, clip[-5,5]; 40 bins/unit; processed whole-session transductive source",
+    "target": "y==4; escape probability threshold >=0.5",
+    "metric": "pool each session complete OOF; balanced accuracy; equal arithmetic mean of40session scores",
+    "published": 0.7271,
+    "absolute_tolerance": 5e-05,
+    "tolerance_rationale": "Two-decimal percentage rounding half-unit:0.005 percentage points=0.00005. Applicable only if complete source panel and recipe equivalence authenticated; no version-drift allowance or post-hoc widening.",
+    "failure_policy": "Record mismatch or failed source admission; no narrowing, tuning, retries of fits or tolerance change"
+  },
+  "resources": {
+    "cpu_threads": 2,
+    "rss_limit_bytes": 2147483648,
+    "native_fit_wall_seconds_limit": 600,
+    "total_job_wall_seconds_limit": 600,
+    "installs": 0,
+    "gpu": false,
+    "paid_apis": false
+  },
+  "source_access": {
+    "permitted": "identified public processed archive plus source metadata/code; public source labels evaluator-only for conversion and baseline",
+    "prohibited": "earlier solver predictions, untouched private targets, other bulk archives",
+    "metadata_request_limit": 12,
+    "archive_download_attempt_limit": 2,
+    "download_received_bytes_limit": 30179422,
+    "source_expanded_bytes_limit": 268435456,
+    "member_bytes_limit": 33554432,
+    "mat_decoded_bytes_limit": 134217728,
+    "numeric_workspace_limit": 536870912,
+    "receipt_bytes_limit": 8388608
+  },
+  "candidate_policy": {
+    "executions_in_this_build": 0,
+    "final_outer_feedback_limit": 1,
+    "freeze_before_final_outer_access": true,
+    "fold_state": "separate opaque train/query delivery and isolated per-fold execution using existing engine; no other fold state",
+    "identity": "random opaque candidate case and query IDs; no source names/indices/class block order"
+  },
+  "readiness": {
+    "minimum_effect": "unresolved; must justify from behavior/decision value before candidate final testing",
+    "uncertainty": "requires authenticated rat-session map and predeclared rat-aware paired procedure; no invented independence",
+    "ready": false
+  }
+}
