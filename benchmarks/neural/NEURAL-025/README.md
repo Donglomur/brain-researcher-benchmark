@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Prospective calcium/kinematics decoder and controls](docs/train-only-decoding-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Train only decoding v1](implementations/train-only-decoding-v1) — Task implementation.
+  Scope: Complete admitted normalized five-mouse/ten-session calcium and kinematics decoder, scorer and controls with prospective training-only decoder semantics and session-local calibration. Authentic MAT/eligibility/clock identity, upstream exposure and fold safety, source-reference parity and competence, protected execution and scientific qualification remain unverified. Local new-mouse calibration is not cross-animal transfer; five-mouse uncertainty is descriptive.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

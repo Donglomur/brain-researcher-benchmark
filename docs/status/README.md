@@ -1,6 +1,6 @@
 # Current status
 
-As of **November 16, 2026**, the repository organizes task definitions and source
+As of **November 17, 2026 (UTC)**, the repository organizes task definitions and source
 under the paper and neural tracks. These counts describe the checked-in registry,
 not a leaderboard of completed scientific evaluations.
 
@@ -9,7 +9,9 @@ not a leaderboard of completed scientific evaluations.
 | Original specifications | 200 | 100 paper and 100 neural |
 | Expansion drafts | 34 | 16 paper and 18 neural |
 | Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation/source relationships | 290 | Ownership records for task and shared source, not runnable-task counts |
+| Implementation artifact records | 298 | Task and shared source records, not runnable-task counts |
+| Tasks with owned implementation source | 168 | Source ownership does not establish complete task execution |
+| Tasks without owned implementation source | 66 | Registered definitions awaiting accepted source integration |
 | Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
 
 The [registry](../../benchmarks/registry.json) is authoritative for current physical
@@ -19,6 +21,11 @@ overlapping inventories and must not be added to the task count or treated as
 current execution qualification.
 
 ## Current construction work
+
+The [November 17 construction update](construction-2026-11-17.md) adds eight
+independently reviewed components to existing tasks, with 266 generated CI test
+cases passing locally without skips. These include four first implementations
+and four extensions; they add no task IDs or scientific qualifications.
 
 The [November 16 source audit](audit-2026-11-16.md) records a targeted review of
 all 234 task definitions and 290 source relationships. Its
@@ -71,7 +78,7 @@ or qualification follows from a directory move.
 ## Evidence and limits
 
 The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 290 artifacts; the separate source-integrity checker
+ownership and layout of 298 artifact records; the separate source-integrity checker
 verifies 222 files against recorded pins in four enrolled bundles. These are software/source
 coverage counts. They are not completed scientific evaluations.
 

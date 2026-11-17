@@ -17,6 +17,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Empirical sensitivity and Figure 7C mixed models](docs/sensitivity-glm-v1.md)
+
 ## Implementation artifacts
 
 - [Isttc registration](implementations/isttc-registration) — Task implementation.
@@ -25,6 +29,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Empirical diagnostics](implementations/empirical-diagnostics) — Empirical diagnostics.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Sensitivity glm v1](implementations/sensitivity-glm-v1) — Task implementation.
+  Scope: Complete empirical sensitivity-grid production and conditional dual-reference reports, with source-formula Figure 7C balanced Gaussian REML fixed effects and variances plus separately labeled prospective mouse uncertainty. Authentic cohort/covariate identity, historical QC and window policies, native R/lme4 parity, protected references and scientific qualification remain held; source profile intervals, other figure endpoints and whole-paper reproduction are outside this component.
 - [Empirical estimation](implementations/empirical-estimation) — Empirical fit producer.
   Scope: Complete selected 5775-unit/four-estimator fit-production capability through exact external official helper bytes; all 23100 fit coordinates and scientific failures retained. Does not implement Figure 7C GLMs or whole-paper reproduction. Authentic cohort/QC admission, historical numerical parity and scientific qualification remain unverified.
 

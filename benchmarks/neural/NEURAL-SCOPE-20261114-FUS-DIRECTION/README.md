@@ -18,6 +18,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Complete-field nine-map packet delivery](docs/fullfield-delivery-v1.md)
+
 ## Implementation artifacts
 
 - [Neuroscience components](../../shared/neuroscience-components) — Mixed component collection.
@@ -26,6 +30,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fullfield preparation](implementations/fullfield-preparation) — Fullfield preparation.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Fullfield delivery v1](implementations/fullfield-delivery-v1) — Task implementation.
+  Scope: Complete held-record fold delivery as lossless common-evidence packets, each containing eight calibration maps and one query map; the complete assay still requires all 48 positive folds. Native MAT normalization, authentic clocks, Run99 lineage, geometry, matched references, provider fidelity and protected scientific execution remain unqualified.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

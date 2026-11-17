@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Conditional nested connectivity evaluation](docs/nested-connectivity-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Nested connectivity v1](implementations/nested-connectivity-v1) — Task implementation.
+  Scope: Conditional 246-feature nested participant-held-out classifier with training-only standardization and complete supplied-protocol support. Canonical feature eligibility, source/cohort/correction joins, upstream functional-connectivity extraction, the matched nuisance comparison, competent references, protected execution and whole-task scientific qualification remain held.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

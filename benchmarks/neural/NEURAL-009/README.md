@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Complete-recording event evaluator and source requirements](docs/seizure-events-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Seizure events v1](implementations/seizure-events-v1) — Task implementation.
+  Scope: Complete normalized event evaluator over 686 recordings and 23 biological people with an explicit prospective policy and alias-safe leave-one-person-out support. Authentic signals, clocks, native normalization, competent EEG-derived references, patient-paired uncertainty, protected execution and scientific qualification remain unestablished; tolerant processed-event coverage is not original clinical event count or onset timeliness.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

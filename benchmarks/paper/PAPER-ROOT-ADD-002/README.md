@@ -17,9 +17,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [V1 presented-sentence evaluation and source admission](docs/v1-transcript-evaluation-v1.md)
+
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [V1 transcript evaluation v1](implementations/v1-transcript-evaluation-v1) — Task implementation.
+  Scope: Offline evaluation of the complete declared V1 presented-sentence panel, with source per-keystroke scoring and separately labeled prospective transcript conditions. No native decoder, authenticated cohort/transcript/keystroke universe, cross-label biological equivalence, competent reference, paper headline reproduction, protected execution or scientific qualification is established.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
