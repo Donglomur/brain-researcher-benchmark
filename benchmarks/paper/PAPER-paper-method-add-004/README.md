@@ -44,6 +44,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Complete empirical sensitivity-grid production and conditional dual-reference reports, with source-formula Figure 7C balanced Gaussian REML fixed effects and variances plus separately labeled prospective mouse uncertainty. Authentic cohort/covariate identity, historical QC and window policies, native R/lme4 parity, protected references and scientific qualification remain held; source profile intervals, other figure endpoints and whole-paper reproduction are outside this component. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Empirical estimation](implementations/empirical-estimation) — Calibration only.
   Scope: Complete selected 5775-unit/four-estimator fit-production capability through exact external official helper bytes; all 23100 fit coordinates and scientific failures retained. Does not implement Figure 7C GLMs or whole-paper reproduction. Authentic cohort/QC admission, historical numerical parity and scientific qualification remain unverified. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Synthetic summary v1](implementations/synthetic-summary-v1) — Reviewed source component.
+  Scope: Original synthetic summary tables. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

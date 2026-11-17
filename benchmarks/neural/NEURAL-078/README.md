@@ -49,6 +49,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Understanding metrics v1](implementations/understanding-metrics-v1) — Measured target artifact scorer.
   Scope: Matched FCz ERP waveform target MAE in native units over exact support. Adds a direct target-error endpoint while retaining the historical195-field reconstruction grader; no native cohort run, protected-data qualification or model result is claimed.
+- [Reference audit v1](implementations/reference-audit-v1) — Reviewed source component.
+  Scope: Independent reconstruction of the fixed matched contrast. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

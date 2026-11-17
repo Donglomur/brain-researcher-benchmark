@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepared-epoch Brain Treebank word-responsiveness endpoint with five paired pre/post windows, stable pooled electrode statistics, matched minimum-p/effect output and an explicitly prospective multiplicity policy. Native timing/filtering and full word/electrode admission, temporal dependence, historical tolerances, sentence-position and time-resolved decoding, joint confound adjustment, grouped protected splits and code/media rights remain unresolved. The source family overlaps NEURAL-016 and is not an independent cohort. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Decoding curves v1](implementations/decoding-curves-v1) — Reviewed source component.
+  Scope: Brain Treebank decoding curve component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

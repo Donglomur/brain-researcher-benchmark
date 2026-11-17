@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Owner IDs are a verified subset, not an exhaustive collection-to-task mapping. Preserve all child components together pending per-child ownership refinement. No association is inferred from child folder names.
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Opaque delivery v1](implementations/opaque-delivery-v1) — Reviewed source component.
+  Scope: Opaque full-panel delivery for NEURAL-017. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

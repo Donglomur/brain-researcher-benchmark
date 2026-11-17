@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Repository-depth locator corrected after relocation; 2 local scorer dependencies are absent from the public source baseline and relocation ledger. Historical dependency names/pins remain unchanged. This bridge has not been made runnable or newly qualified by the reorganization. Other task artifacts are outside this finding.
 - [Programme](../../shared/reward-spacing/programme) — Programme.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Joined scoring v1](implementations/joined-scoring-v1) — Reviewed source component.
+  Scope: Complete paired scoring for NEURAL-046. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -37,6 +37,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: DPAD Figure 6h–i prediction-evaluation component: training-only architecture/dimension selection followed by complete candidate seven-session/fold/dimension nonlinear-locus correlations, paired summaries and the neural/behavior frontier. Exact session/electrode mapping, publication-era native configurations and preprocessing, actual DPAD fitting/prediction provenance, protected references/access parity, rights and scientific reproduction remain held; temporal-fold results are not held-session improvement. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Paired candidate v2](implementations/paired-candidate-v2) — Reviewed source component.
+  Scope: DPAD paired candidate scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

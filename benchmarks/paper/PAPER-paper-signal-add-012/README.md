@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Source-guided static integration/segregation/ISD kernel with prospective complete-roster paired-state scoring, simpler connectivity/amplitude/motion comparisons and phase-randomized controls. Original BCT/diagonal parity, native MAT population and condition mapping, all Dataset 3–5 state coverage, variable-length policy and Dataset-4 overlap remain unresolved; transition and prediction branches are absent. Authentic references, rights, protected replay and scientific qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5 scorer v1](implementations/figure5-scorer-v1) — Reviewed source component.
+  Scope: Dataset-1 Figure 5 prediction scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

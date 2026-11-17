@@ -75,6 +75,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Restrictive local macOS image-client transport with a fresh process per query, typed actions, immutable first final response and full collection auditing. Authentic 400-query scripted controls and boundary refusals are engineering evidence; no provider/model, token capacity, protected unseen population or scientific interpretation result is qualified.
 - [Visual viewer v1](implementations/visual-viewer-v1) — Visual interpretation engineering component.
   Scope: Human ERP engineering viewer with typed actions, PNG rendering, captured answers, and separate zero-shot/four-demonstration conditions. Dependency: complete-direct-condition-v1. Portable and complete-array controls do not establish model performance, harness isolation, or image delivery to a model; no model trials or mouse-seizure replication are claimed.
+- [Paired condition v1](implementations/paired-condition-v1) — Reviewed source component.
+  Scope: Complete paired condition comparison. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

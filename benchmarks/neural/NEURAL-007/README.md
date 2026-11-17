@@ -62,6 +62,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Wraps the existing frozen lifecycle with externally retained commitment/completion witnesses and exact per-person stage, source, input, process, output and complete 5450-epoch joins. No fresh authentic candidate execution, private grading, authoring-history proof, hostile-host isolation, direct neural understanding or scientific qualification is established. The audit stops before grading.
 - [Portable grading](implementations/portable-grading) — Operator provisioned external artifact grader.
   Scope: Authenticates the complete 5450-epoch exposed-development roster before private scoring, using explicit external artifact roots and the existing sleep worker in its pinned Docker image. Complete predictions and target IDs are joined before equal-person fixed-five-class macro-F1, balanced accuracy and signed reference differences. Operator preparation, source checks, authentic-input controls, programme lifecycle audit and model evaluation remain separate evidence; no untouched holdout, direct signal interpretation or complete scientific qualification is established.
+- [Finite probability diagnostics v1](implementations/finite-probability-diagnostics-v1) — Reviewed source component.
+  Scope: Finite sleep probability diagnostics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

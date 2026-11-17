@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Processes supplied parameter tables with fit QC, grouped Gaussian smoothing, participant/region age and hierarchy statistics, and separate participant-held-out prediction errors. It leaves supplied INT unchanged; authentic 13-participant coverage, native ECoG/FOOOF fitting, historical fork identity, knee-to-INT and alpha-definition conflicts, source-code rights, protected assessment and scientific qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Spectral smoothing v1](implementations/spectral-smoothing-v1) — Reviewed source component.
+  Scope: Paired spectral smoothing. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

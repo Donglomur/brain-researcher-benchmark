@@ -44,6 +44,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prepared-threshold engineering evaluator with a complete prediction/failure ledger, equal-animal metrics, paired bootstrap and separate historical/paper threshold-rule diagnostics. Authentic aggregate scoring is unavailable: the native target/support census, annotations and censoring, physical units, waveform adapters, rights, source-only baselines and protected qualification remain held. The existing components-abr-protected-fold-runner relationship is retained as related source only; its runner capabilities are not inherited by this owned evaluator.
+- [Series evaluator v2](implementations/series-evaluator-v2) — Reviewed source component.
+  Scope: ABR threshold scorer: one case per animal and stimulus. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 ## Related scientific source (different or narrower scope)
 

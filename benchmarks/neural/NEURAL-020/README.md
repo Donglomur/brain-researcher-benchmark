@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prepares the complete declared 826-trial/65-unit Area2 training-asset tensor packet, scores active/perturbed Poisson co-bps, and provides training-mean and source-derived smoothing controls. Native NWB conversion, mask/condition authenticity, prospective condition-transfer scope, authentic reference performance and protected scientific admission remain unqualified; portable byte-pinned upstream metric tests are engineering evidence only.
+- [Native spike preparation v1](implementations/native-spike-preparation-v1) — Reviewed source component.
+  Scope: Native Area2 spike preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Narratives programme](implementations/narratives-programme) — Complete programme source.
   Scope: Explicit package README identifies Narratives071 source and its full scientific contract; scientific qualification remains open. Internal source and canonical scope retained.
+- [Metadata intake v1](implementations/metadata-intake-v1) — Reviewed source component.
+  Scope: Narratives scan metadata intake. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

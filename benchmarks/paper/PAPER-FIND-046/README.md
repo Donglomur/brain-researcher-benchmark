@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Computes source-derived Figure 2 stage contrasts and serum-session dopamine AUC/correlation, retaining full declared rat/session and exclusion ledgers without selecting a cross-archive intersection. Native archive/MAT parity, exact empirical cohorts, singleton MATLAB-axis behavior, Figure 3 RPE/history endpoints, BestFits provenance, protected grouped assessment and scientific qualification remain open; stage associations are observational. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Reward history inputs v1](implementations/reward-history-inputs-v1) — Reviewed source component.
+  Scope: Figure 3k reward-history regression inputs. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

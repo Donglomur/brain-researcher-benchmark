@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neural 063](implementations/neural-063) — Task source archive.
   Scope: Source archive remains an implementation resource; relocation does not establish configured deployment or scientific qualification.
+- [Direct numeric v1](implementations/direct-numeric-v1) — Reviewed source component.
+  Scope: Direct numeric paired delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

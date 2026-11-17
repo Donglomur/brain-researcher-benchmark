@@ -38,6 +38,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Paper improvement episode v1](implementations/paper-improvement-episode-v1) — Calibration only.
   Scope: Source-matched MARBLE comparator recovery and explicit prospective-extension diagnostics. Original Figure5d support and paper/code preprocessing conflicts remain unresolved; this component cannot establish same-task paper improvement or current SOTA. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5d endpoint v1](implementations/figure5d-endpoint-v1) — Reviewed source component.
+  Scope: MARBLE Figure 5d endpoint. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

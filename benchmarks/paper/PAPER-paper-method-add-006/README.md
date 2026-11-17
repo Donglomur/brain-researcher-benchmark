@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Rat Gaussian-basis Poisson GLM, predicted-rate participation ratio and covariance geometry, with an eight-animal/eight-session CA1/PFC panel driver and a separate train-only within-session helper. Native NWB/epoch admission, authentic full-panel references, the complete 108-basis search, paper/source neuron-count and fitting discrepancies, mixed-effects trends, animal/session-held-out improvement, source/data rights and protected scientific qualification remain open. No optimal-biological-code or whole-paper claim follows. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Oof prediction replay v2](implementations/oof-prediction-replay-v2) — Reviewed source component.
+  Scope: Original rat spike-count prediction replay. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

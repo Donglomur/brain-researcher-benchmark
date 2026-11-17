@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Planning](implementations/planning) — Planning.
   Scope: Seven-module planning subset remains packaged here; complete persistent-state programme already includes the same planning modules. This is not proof that either copy is safe to delete.
+- [Participant endpoint v1](implementations/participant-endpoint-v1) — Reviewed source component.
+  Scope: NEURAL-061 participant endpoint delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

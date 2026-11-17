@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prospective within-listener nuisance, lexical and contextual matrix encoders and independent held-story variance-contrast scoring, with train-only transformations, matched effective capacity, story-family checks, crossed uncertainty and an alignment diagnostic. Authentic NEURAL-071 case equality, full Narratives population, scan/transcript/HRF timing, atlas and checkpoint lineage, competent reference, rights, protected execution and resource admission remain open. The null diagnostic is not a calibrated significance test.
+- [Fixed comparator v2](implementations/fixed-comparator-v2) — Reviewed source component.
+  Scope: Fixed comparator scoring for NEURAL-072. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

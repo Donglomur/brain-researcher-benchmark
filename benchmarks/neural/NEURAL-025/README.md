@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Train only decoding v1](implementations/train-only-decoding-v1) — Task implementation.
   Scope: Complete admitted normalized five-mouse/ten-session calcium and kinematics decoder, scorer and controls with prospective training-only decoder semantics and session-local calibration. Authentic MAT/eligibility/clock identity, upstream exposure and fold safety, source-reference parity and competence, protected execution and scientific qualification remain unverified. Local new-mouse calibration is not cross-animal transfer; five-mouse uncertainty is descriptive.
+- [Participant delivery v1](implementations/participant-delivery-v1) — Reviewed source component.
+  Scope: Participant delivery for NEURAL-025. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

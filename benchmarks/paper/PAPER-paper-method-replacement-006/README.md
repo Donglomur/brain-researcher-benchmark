@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective paired PopT-versus-BrainBERT RMS prediction evaluation for seven subjects at nested electrode counts, with ROC-AUC, separately defined F1, temporal-block uncertainty, target-free interface export and native-array binding checks. Authentic population/row-order evidence, historical splits and ranking parity, BrainBERT weight identity/rights, pretraining exposure, model execution and protected grading remain held. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original volume binding v1](implementations/original-volume-binding-v1) — Reviewed source component.
+  Scope: Original Volume row and channel binding. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

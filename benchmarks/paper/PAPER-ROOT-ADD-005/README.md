@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Binds exact stimulus/voxel identities for all three declared THINGS-fMRI participants and runs prospective nested grouped ridge comparisons across 66 dimensions, category and shape predictors, reporting signed held-out metrics and predictive commonality. Native 12-session encoding / 30-dimension residual partition, exact category/shape recipes, authentic grouping/arrays, protected execution, rights and full-cohort resource/scientific qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source session scorer v1](implementations/source-session-scorer-v1) — Reviewed source component.
+  Scope: Original session encoding score component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

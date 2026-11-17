@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective normalized-epoch recipe for localizer-to-retrieval decoding, respiration at confidence maxima and exhalation-aligned confidence–alpha/beta coupling across the pinned 18-participant roster. Native MAT extraction and complete trial/channel admission, article/archive/source discrepancies, authentic reference agreement, timing and artifact controls, participant-held-out improvement, rights and protected assessment remain unresolved. Observational coupling does not establish a causal breathing effect. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Native trial admission v1](implementations/native-trial-admission-v1) — Reviewed source component.
+  Scope: Native retrieval metadata admission. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

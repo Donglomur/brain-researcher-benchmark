@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Source-derived Figure 2f endpoint from prepared place-field binF exports: 46-by-46 near/far population correlations, six literal masks, normalized learning curves and equal-animal means/source SEM for the eleven-animal roster. Native fluorescence/Zarr export equivalence, authentic complete sessions and cell registration, independent numeric references/tolerances, direct cross-day stability, state-versus-position comparison and animal-held-out improvement remain unimplemented or unqualified. This is not a whole-paper grader. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Reward prediction v1](implementations/reward-prediction-v1) — Reviewed source component.
+  Scope: Original 2ACDC reward-prediction arithmetic. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

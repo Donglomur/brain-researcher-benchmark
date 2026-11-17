@@ -31,11 +31,15 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [source recovery v1](docs/source-recovery-v1.json)
+- [source recovery v1](docs/source-recovery-v1.md)
 
 ## Implementation artifacts
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Processed binary activity/coactivity derivation, explicit next-visit structural outcomes and fixed competing predictors fitted with leave-one-mouse-out transforms and calibration on a retrospectively adjudicated cohort. Native identity/fate conversion, complete source population, original mixed-effects/spatial/timing analyses and protected replay remain held. The endpoint is neither survival nor causal inference; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source row audit v1](implementations/source-row-audit-v1) — Reviewed source component.
+  Scope: Deposited coactivity row-order audit. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

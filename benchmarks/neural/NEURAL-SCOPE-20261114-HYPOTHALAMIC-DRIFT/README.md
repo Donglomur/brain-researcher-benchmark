@@ -42,6 +42,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Fixed origin forecast](implementations/fixed-origin-forecast) — Fixed origin forecast.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Fixed origin delivery v1](implementations/fixed-origin-delivery-v1) — Reviewed source component.
+  Scope: Fixed-origin event-history delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

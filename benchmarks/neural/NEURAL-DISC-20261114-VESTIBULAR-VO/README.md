@@ -38,6 +38,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Condition evaluator v2](implementations/condition-evaluator-v2) — Reviewed source component.
+  Scope: Distinct-pair vestibular evaluator. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Condition evaluator](implementations/condition-evaluator) — Condition evaluator.
   Scope: Complete normalized animal-by-condition evaluator with equal-repeat then equal-group MSE, frozen training-only prior comparison and separate singleton diagnostics. Authentic identities, clocks, masks, prior provenance/competence and protected execution remain external requirements; no scientific qualification.
 

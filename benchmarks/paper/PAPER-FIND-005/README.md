@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Sorted spikes and versioned trial exports to stimulus/choice/feedback single-cell sensitivity, common source masks, regional dual-test fractions and separate mouse-weighted summaries. Native IBL cohort/unit UUID/QC reconciliation, full regional manifest, paper-versus-example choice-window adjudication, authentic numerical agreement, protected references and scientific qualification remain held. Population decoding, trajectories, GLM and whole-atlas reproduction are outside this component. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Decoder score import v1](implementations/decoder-score-import-v1) — Reviewed source component.
+  Scope: Original decoding score import. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

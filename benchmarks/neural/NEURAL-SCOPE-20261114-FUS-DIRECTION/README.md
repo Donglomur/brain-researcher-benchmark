@@ -50,6 +50,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fullfield delivery v1](implementations/fullfield-delivery-v1) — Task implementation.
   Scope: Complete held-record fold delivery as lossless common-evidence packets, each containing eight calibration maps and one query map; the complete assay still requires all 48 positive folds. Native MAT normalization, authentic clocks, Run99 lineage, geometry, matched references, provider fidelity and protected scientific execution remain unqualified.
+- [Rendered references v1](implementations/rendered-references-v1) — Reviewed source component.
+  Scope: Same-packet rendered references. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

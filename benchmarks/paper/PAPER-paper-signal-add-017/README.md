@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Complete frozen selected numeric-export roster to source-aligned finger-EEG trials/windows, chronological calibration routing, target-free packets, a train-only prospective spectral reference and hard-vote trial/participant metrics with paired uncertainty. Authentic MAT conversion and complete source population, native TensorFlow EEGNet preprocessing/fine-tuning, protected numerical references, artifact controls, source rights/resources and scientific qualification remain held. Recorded replay does not reproduce closed-loop human feedback adaptation. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source preparation v1](implementations/source-preparation-v1) — Reviewed source component.
+  Scope: Original finger-EEG training input preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

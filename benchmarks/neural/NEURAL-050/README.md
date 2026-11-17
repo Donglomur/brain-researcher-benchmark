@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Bounded exported ECoG/pose arrays to prospective gamma features, grouped state/time versus gamma movement prediction, matched-event contrasts, patient/day summaries and temporal-shift diagnostics. Authentic NWB conversion, complete source population, anatomy/laterality and pose scale, stream alignment and artifact QC, frozen protocol/resources, protected targets and scientifically competent reference runs remain unqualified.
+- [Numerical clock v2](implementations/numerical-clock-v2) — Reviewed source component.
+  Scope: NEURAL-050 numerical clock repair. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

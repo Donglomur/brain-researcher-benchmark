@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Content-pinned raw human LFP segment loading, an independent rigid registration control, shared interpolation and prospective paired consistency/fidelity comparison of supplied default-DREDge/alternate shifts against fixed/no correction, with Pt01–Pt03 cohort summaries. Authentic geometry/preprocessing and current data access, native default/alternate DREDge execution, full-population qualification, figure targets, external motion truth, protected evaluation, rights and scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Manual trace agreement v1](implementations/manual-trace-agreement-v1) — Reviewed source component.
+  Scope: Human manual-trace agreement. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

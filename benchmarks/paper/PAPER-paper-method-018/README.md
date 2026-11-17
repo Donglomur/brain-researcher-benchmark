@@ -31,11 +31,14 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [ablation source recovery v1](docs/ablation-source-recovery-v1.md)
 
 ## Implementation artifacts
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepared-artifact evaluator for the complete ten-session history-versus-interaction comparison, with source neural and latent loss components, matched identities/batches and prospective session-level gains. Target-conditioned latent reconstruction is not blind forecasting. Native Allen preprocessing and eligibility, author interface/layout discrepancies, missing anatomical/condition subpanels, authentic figure references, code/data rights, grouped improvement and protected qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Ablation source audit v1](implementations/ablation-source-audit-v1) — Reviewed source component.
+  Scope: Recover the ablation notebook's actual score provenance. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
