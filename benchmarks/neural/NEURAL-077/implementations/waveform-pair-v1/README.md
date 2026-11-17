@@ -14,6 +14,15 @@ with 1,200 training labels. Target labels identify experimental target/standard
 events. They do not label physiological P3 presence. The cohort is the same two
 previously exposed development people, 200 queries each.
 
+**The scoped provider-neutral implementation is complete and validated.** One
+complete 400-query programme control and protected paired grade passed on the
+selected macOS route, reusing the accepted no-tools control. Both fixed controls
+returned balanced accuracy 0.5 and log loss 0.693147; paired differences were
+zero. These values validate the software route, not AI performance. See
+[AUTHENTIC_CONTROL.json](AUTHENTIC_CONTROL.json) and the exact
+[operator provisioning requirements](PROVISIONING.md). The pair is one
+benchmark with 400 unique cases, not two benchmarks or 800 independent cases.
+
 ## Selected source and dependencies
 
 The eleven exact dependencies in `SOURCE_BINDINGS.json` are unchanged. All are
@@ -133,16 +142,22 @@ they do not claim a real full 400-query sandbox campaign or fresh evaluator run.
 python -B -m unittest discover -s tests -v
 ```
 
-The already accepted no-tools engineering proof remains valid for its exact
-source. **The new complete programme campaign and new protected evaluator have
-not yet been authentically executed.** `control_validation.py` supplies the
-bounded one-shot fixed 0.5 protocol for that missing path. It must be separately
-admitted with the pinned frozen control, exact input/output locations and
-96 MiB artifact envelope. It executes one new programme arm, reuses the old
-no-tools proof, and checks unchanged complete paired arithmetic. It performs
-no extraction, fit, model or provider call and is not an AI result.
+The new complete programme campaign and protected evaluator executed once on
+source `5d9bf5dd800a3b922001a5d8d73ca803ae8c001b`, in 15.01 seconds. Independent
+inspection checked all 400 saved deliveries and 38,382 assertions, including
+closure, exact source/bundle/roster identities, two reference/two target attempts
+after both public validations, and all six unchanged reference comparisons.
+The old no-tools campaign was not replayed. There was no extraction, fit, model
+or provider call. Earlier generated-check failures and one corrected reviewer
+metadata assertion remain in the evidence history.
 
-Any scientific difficulty, native understanding or tool-use claim still needs
-real named-model runs under the chosen provider policy. No scientific pass
-threshold, unseen-person inference, SOTA claim or benchmark-wide completion is
-introduced by source construction or fixed-response controls.
+`control_validation.py` records the completed one-shot engineering protocol;
+it is not a command to replay an accepted result routinely. Construction and
+validation are complete for this named finite route. Selecting a live provider,
+measuring model accuracy and qualifying its no-tools/context policy are later
+study prerequisites, not reasons to relabel the delivered implementation absent.
+
+Scientific difficulty, native understanding or tool-use claims need real
+named-model runs under the chosen provider policy. The completed engineering
+control introduces no scientific pass threshold, unseen-person inference,
+SOTA claim or qualification of optional visual/adaptive conditions.
