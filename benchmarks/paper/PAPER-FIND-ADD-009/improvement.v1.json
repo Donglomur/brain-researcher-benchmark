@@ -1,0 +1,178 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-ADD-009",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The final paper has an ordered causal neural-to-voice acoustic endpoint and the author release includes session-specific decoders. A same-task design is identifiable, but the original evaluation/session training manifest, matched evaluator, uncertainty rule and budgets are not qualified. The day195 offline demonstration and control-only archive cannot be substituted for the paper evaluation, and offline replay cannot establish improved closed-loop communication. The canonical scope also includes original control trials and cross-session generalization; Fig. 2b correlation alone is insufficient for a whole-registration win until the complete scope rule is bound.",
+  "source_paper": {
+    "title": "An instantaneous voice-synthesis neuroprosthesis",
+    "url": "https://www.nature.com/articles/s41586-025-09127-3"
+  },
+  "evidence": [
+    {
+      "id": "voice-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12369848/",
+      "locator": "Results: Flexible and accurate brain-to-voice; Fig. 2b; Extended Data Figs. 2b, 4 and 5; Methods: Decoder training and Automated evaluation metrics of synthesized speech",
+      "supports": "Final-paper causal synthesis task, original aggregate acoustic result, causal training chronology, and metric definition. Original nonspeech/acoustic-contamination controls and fixed-decoder performance across later sessions are distinct source requirements."
+    },
+    {
+      "id": "voice-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.2280gb64f",
+      "locator": "May 08, 2026 version; README Overview, Files and Change log",
+      "supports": "All-session neural archive, processed feature types, per-session target features, trial metadata and original decoder availability; 2025 release was control-only."
+    },
+    {
+      "id": "voice-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Neuroprosthetics-Lab/brain-to-voice-2025/cff4875decd35ff0f98a944035377a25b43ba79c/README.md",
+      "locator": "Overview; Data setup; Training; Inference",
+      "supports": "Author training/inference route and LPCNet dependency; offline demo scope."
+    },
+    {
+      "id": "voice-demo-split",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Neuroprosthetics-Lab/brain-to-voice-2025/cff4875decd35ff0f98a944035377a25b43ba79c/configs/training_data_args.yaml",
+      "locator": "Comment at line 5 and sessions list",
+      "supports": "Released example holds out t15_day195 and trains through t15_day193; this is not evidence that it reproduces the complete paper evaluation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Causal synthesis of attempted cued speech from T15 neural activity, together with the source nonspeech/acoustic-contamination controls and cross-session generalization checks. Fig. 2b acoustic accuracy is the proposed primary prediction endpoint, not a complete replacement of the canonical task.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad DOI 10.5061/dryad.2280gb64f, May 08, 2026 release including t15_neural_data.zip; retain its distinct t15_control_experiment.zip control cohort. Payload hashes and exact evaluation manifest remain admission work.",
+      "evidence_ids": [
+        "voice-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The Fig. 2b primary vocalized cohort is T15 with 956 predetermined sentence trials. Bind the separate nonspeech/biosignal control cohorts and original later-session fixed-decoder generalization cohort before full-scope admission; mimed, own-voice and free-response cohorts cannot be pooled into the primary score.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Recover the original predetermined sessions, trial IDs and per-session training cutoffs from Supplementary Table 1 and release metadata. The paper trains each evaluation decoder on data available up to one week earlier. Do not replace this with the code example day195 holdout or random frame splits.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-demo-split"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Released trial-level spike-band-power and threshold-crossing features with historical session identity; training target acoustic features are available. Test cue text, target speech features and speech timings belong to evaluation, never inference inputs.",
+      "evidence_ids": [
+        "voice-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The release supplies log-transformed, normalized and smoothed neural features and aligned LPCNet targets. The author implementation supplies the decoder/vocoder route; preprocessing and vocalization/silence decisions must be pinned before evaluation.",
+      "evidence_ids": [
+        "voice-data",
+        "voice-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per trial, compute Pearson correlation in each of 40 Mel bands after the paper-specified silence removal and dynamic-time-warp alignment; average across bands. Keep waveform sampling, spectrogram settings and alignment frozen.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Report the mean of trial correlations over the full original 956-trial vocalized evaluation cohort, with the paper standard deviation as descriptive spread. Preserve session-level results; neither Mel bins nor sliding windows are independent replications.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Mean trial-level 40-Mel-band Pearson correlation on the original vocalized evaluation cohort",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.83,
+      "description": "Final-paper Fig. 2b/Results report 0.83 with standard deviation 0.04 for the 956-trial vocalized cohort. This closed-loop-origin acoustic result is not an offline-demo score or evidence of a reproduced author run.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The release provides original session decoders and the author repository provides training/inference notebooks. No original-cohort replay, source preprocessing equivalence or reproduction receipt is established here.",
+      "evidence_ids": [
+        "voice-data",
+        "voice-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful acoustic gain must be justified using source-matched replay variability and intelligibility relevance before candidate comparison. The reported trial standard deviation is not an improvement margin; no arbitrary correlation increment is admitted.",
+      "evidence_ids": [
+        "voice-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired comparison preserving session/trial dependence after original session IDs are recovered; jointly specify the decision rule and replication of stochastic training.",
+      "independent_unit": "Recording session with nested sentence trials in one participant",
+      "rationale": "Frame overlap and shared session decoders prevent independent-frame or independent-band significance. Any uncertainty claim is conditional on T15; clinical/person generalization requires a distinct study.",
+      "evidence_ids": [
+        "voice-paper",
+        "voice-data"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind every original vocalized evaluation trial, per-session training cutoff and original baseline decoder before candidate selection.",
+      "Use only causal neural inputs and matched non-neural resources; test text, target acoustic features and public reference predictions cannot be used to synthesize the answer.",
+      "Calibrate a source-matched evaluator against original decoder outputs, then exceed the published and reproduced author baselines by a justified effect under the predeclared uncertainty rule.",
+      "Report any replay result as an acoustic prediction comparison on recorded trials. A stronger claim about closed-loop communication additionally requires an equivalent closed-loop experiment; replay alone cannot satisfy that claim.",
+      "Day195-only, different-session, acausal, smaller-vocabulary, transcript-assisted and new-participant evaluations are separately labelled extensions, never the original paper win.",
+      "Bind and satisfy the original nonspeech checks (including cough, throat clearing, yawning and background speech) and acoustic-contamination/biosignal controls using their original cohorts and procedures; improved target correlation cannot excuse spurious or non-neural synthesis.",
+      "Recover the source fixed-decoder cross-session test (Extended Data Fig. 2b) and its original later-session population; report it as a mandatory generalization safeguard under a predeclared source-matched rule.",
+      "Fig. 2b correlation alone cannot establish success for this whole registration. Recover the original control/generalization results and approve a complete scope rule before any paper-win admission."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No contemporary speech-neuroprosthesis comparison was verified under these exact participant, sessions, latency, input and acoustic-evaluation conditions.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate causal decoder/feature choices using only the original eligible past-session training data and a declared validation allocation that preserves the paper chronology. Record every attempt and all auxiliary speech-model exposure.",
+    "candidate_freeze": "Freeze method, training recipe, seed policy, session decoder routing, vocoder, target-independent preprocessing and evaluator before the complete original evaluation is opened.",
+    "final_evaluation": "Evaluate one frozen candidate and the matched author baseline on all original evaluation trials. Preserve acoustic replay and closed-loop claims separately; no win is currently executable. The original control and fixed-decoder session-generalization requirements must also be evaluated; the primary acoustic score alone does not satisfy the canonical scope.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use original per-session author decoders or a validated exact recipe replay; keep their measured score separate from the published 0.83. The repository demo and a local authored decoder cannot replace this comparator."
+  },
+  "blocking_issues": [
+    "Original 956-trial/session manifest and Supplementary Table 1 training cutoffs have not been bound to release files.",
+    "Source-matched speech waveform, silence-removal, DTW and aggregation equivalence are not validated against the author baseline.",
+    "The current initial evaluator accepts declared arrays/cohorts but does not establish authentic original-population coverage or a scientific win.",
+    "Public target/text/checkpoint exposure needs an enforced access manifest; resources and development/final-query budgets remain unset.",
+    "Meaningful effect, valid uncertainty decision and stochastic replication plan remain unregistered.",
+    "Offline replay cannot recover participant feedback responses under a changed closed-loop decoder.",
+    "Complete original control and session-generalization manifests/results and the full-registration success rule remain unresolved."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the initial acoustic and listener-transcription evaluator, its tests and all historical materials. Its array validity, transcription arithmetic and numerical reconstruction are calibration evidence, not surpassing the source paper."
+  }
+}

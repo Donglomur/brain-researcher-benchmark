@@ -1,0 +1,167 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-013",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The source estimates physiological BOLD/metabolism relationships and tests whether response signs agree. More discordant voxels, larger metabolic contrasts or stronger significance do not constitute better method performance. Its existing CALC–CTRL reconstruction has no ordered source-paper accuracy endpoint to surpass.",
+  "source_paper": {
+    "title": "BOLD signal changes can oppose oxygen metabolism across the human cortex",
+    "url": "https://www.nature.com/articles/s41593-025-02132-9"
+  },
+  "evidence": [
+    {
+      "id": "bold-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13156032/",
+      "locator": "Results, Figs. 1–4; Methods: Participants, quantitative parameter maps and Davis model",
+      "supports": "Defines descriptive within-person hemodynamic contrasts, the main/control/replication cohorts and physiological model comparison; not an accuracy leaderboard."
+    },
+    {
+      "id": "bold-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/NeuroenergeticsLab/two_modes_of_hemodynamics/1b22c2cb03bab0d5cf70da6a45c4d720194dc523/README.md",
+      "locator": "Data; main analyses and figures; preprocessing",
+      "supports": "Author code starts from processed mqBOLD NIfTI files, identifies OpenNeuro v2.0.6 and requires notebooks in alphabetical order."
+    },
+    {
+      "id": "bold-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "SUBJECT_NUMBERS, MASK_PATHS, source_map_path, HOLDS and validate_manifest",
+      "supports": "The component fixes primary40 CALC–CTRL maps, source PLS masks and corrected/original map lineages; it does not implement PLS, mqBOLD reconstruction or spatial inferential qualification."
+    },
+    {
+      "id": "bold-local-scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1/README.md",
+      "locator": "Component scope and limitations",
+      "supports": "The local map-array calculation and descriptive participant bootstrap are calibration only; every result retains null reward and false scientific qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate agreement and sign disagreement between task-related BOLD and oxygen-metabolism changes across cortex; interpret hemodynamic mechanisms.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author repository identifies OpenNeuro ds004873 version 2.0.6; map-based reproduction starts from processed mqBOLD NIfTI derivatives. Authentic local artifact qualification is separate.",
+      "evidence_ids": [
+        "bold-code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Main analysis: 40 adults, with 30 completing CALC/MEM/CTRL/REST and ten CALC/CTRL only; distinct control n=18 and replication n=10. Dataset metadata counts cannot replace these cohorts.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The original comparison is within-person experimental contrasts, with separate control/replication studies, not a train/validation/test prediction split. Creating held-out-person prediction would be a new task.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "BOLD and quantitative CBF/OEF/CMRO2 maps plus physiological calibration; the code begins after mqBOLD processing.",
+      "evidence_ids": [
+        "bold-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source uses physiological parameter-map reconstruction and ordered notebooks before PLS/figure analysis. Preserve corrected/original CMRO2 lineage, masks and spatial geometry for calibration; exact native replay remains unqualified.",
+      "evidence_ids": [
+        "bold-code",
+        "bold-local"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Task contrasts and fractions of concordant/discordant voxels are scientific estimates. Neither a higher nor lower value is a method-quality ordering.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source reports participant and voxel summaries within fixed task contrasts and masks. Main40, full-condition30 and replication cohorts must remain separate.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No source-defined ordered prediction or estimation-performance endpoint",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Published discordance fractions and metabolic/BOLD contrast amplitudes are findings, not performance baselines. Matching them is reproduction; increasing them is not success.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "No comparative performance baseline exists for this descriptive task. Any authenticated figure reconstruction would remain calibration.",
+      "evidence_ids": [
+        "bold-code",
+        "bold-local-scope"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "The magnitude of a physiological effect is not an optimization target; no legitimate bigger-is-better margin follows.",
+      "evidence_ids": [
+        "bold-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement hypothesis is admitted. Source physiological uncertainty and spatial nulls remain requirements for reproduction, not a paper-win test.",
+      "independent_unit": "participant for paired physiological contrasts; spatial dependence must be handled for voxel claims",
+      "rationale": "Stronger significance does not improve a descriptive finding, and voxels cannot be treated as independent biological samples.",
+      "evidence_ids": [
+        "bold-paper",
+        "bold-local"
+      ]
+    },
+    "paper_win_requires": [
+      "No paper win can be awarded for this descriptive original task. Preserve its reproduction materials under calibration_only.",
+      "Do not promote larger discordance, favorable mask selection, greater significance or tighter figure matching to improvement.",
+      "A predictive or ground-truth estimation benchmark would require an explicitly separate task and source provenance; it cannot replace this paper’s original physiology endpoint."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No ordered source performance task exists here and no current-SOTA claim is made.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for the same-task improvement suite. Historical physiological reconstruction and robustness analyses remain separately labelled research/calibration work.",
+    "candidate_freeze": "Not applicable to an active improvement episode; any future calibration freezes subject eligibility, map lineage and masks before inspecting agreement.",
+    "final_evaluation": "No improvement reward. Retain descriptive comparisons and their scientific limitations without converting them into success scores.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Physiological estimates are not model-performance baselines. Existing map reductions and source figure values remain calibration evidence."
+  },
+  "blocking_issues": [
+    "Scientific incompatibility: the original endpoint has no defensible ordered performance objective.",
+    "A new prediction/ground-truth task would be a separate replacement, requiring explicit provenance and review.",
+    "Historical full physiological replay remains unqualified for authentic maps, mask derivation, spatial inference and independent replication."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 and all source-contrast evidence. The fixed primary40 map calculations reconstruct physiological results; they do not demonstrate stronger-than-paper performance."
+  }
+}

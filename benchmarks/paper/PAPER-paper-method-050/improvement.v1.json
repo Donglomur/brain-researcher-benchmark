@@ -1,0 +1,195 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-050",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success.",
+  "source_paper": {
+    "title": "Density-based longitudinal neuron tracking in high-density electrophysiological recordings",
+    "url": "https://doi.org/10.1016/j.patter.2026.101590"
+  },
+  "evidence": [
+    {
+      "id": "dant-paper-comparison",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Results2.5, Figure5A–I; Methods4.17",
+      "supports": "Original DANT/UnitMatch/EMD comparison uses41591 units,12datasets,10rats with source truncations/exclusion; DANT tracked-length estimated marginal mean8.63sessions(SE1.80), plus PETH and joint-sorting quality checks."
+    },
+    {
+      "id": "dant-paper-statistics",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Methods4.19, Equation19; Methods4.9.3, Equation11",
+      "supports": "TrackedLength mixed model has method fixed effect, dataset random intercept/slope and unit random intercept. PETH fidelity uses Fisher-transformed Pearson correlation under specific rate/day/pair-count filters."
+    },
+    {
+      "id": "dant-paper-preprocess",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Methods4.1,4.3–4.4 and4.17",
+      "supports": "Describes adult Brown-Norway rats, Neuropixels processing, original well-isolated-unit selection, waveform unwhitening, no-PETH matching and UnitMatch half-session waveform requirements."
+    },
+    {
+      "id": "dant-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/README.md",
+      "locator": "Pinned README: paper linkage and usage",
+      "supports": "Author Python implementation and tutorial are provided; README is not a complete Figure5 reconstruction or numerical rerun."
+    },
+    {
+      "id": "dant-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/20019489",
+      "locator": "Version1.0.0 file inventory and metadata; DOI10.5281/zenodo.20019489",
+      "supports": "Version-specific release contains13 processed spikeInfo datasets; the concept record20019488 is not the version pin."
+    },
+    {
+      "id": "dant-data-readme",
+      "kind": "author_data",
+      "url": "https://zenodo.org/api/records/20019489/files/README.md/content",
+      "locator": "spikeInfo fields and waveform dimensions",
+      "supports": "Describes processed animal/session IDs, spike times in milliseconds, waveforms in microvolts, channel/shank coordinates and PETH; waveform layout is declared n_channel×n_sample, requiring bridge verification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+      "evidence_ids": [
+        "dant-paper-comparison"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Use the author’s version1.0.0 processed chronic rat Neuropixels release, Zenodo20019489, as the input route. Its13datasets/11rats form the release, distinct from Figure5’s selected12datasets/10rats; the source comparator’s exact subset must be reconstructed.",
+      "evidence_ids": [
+        "dant-data",
+        "dant-paper-comparison"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure5 compares41591 well-isolated units in12datasets from10rats. Rat#2 and#4 are truncated to their first31 sessions for UnitMatch memory limits; rat#6 is excluded after EMD failure. Mapping these paper identifiers, unit filters and sessions to release files remains unfrozen. Using all13 release datasets changes the published cohort.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-preprocess"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "This is unsupervised tracking across the original available sessions with source defaults, not a supervised animal train/test split. PETH is excluded throughout matching in Figure5 and reserved for evaluation. The original ten joint-sort validation session pairs from five rats remain distinct assessment references; a held-out-animal redesign is an extension.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-preprocess"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Matching uses the same source well-isolated units and waveform/spike/session/channel inputs for all methods. Exclude PETH from DANT matching, tuning and selection for Figure5. UnitMatch requires first/second-half waveforms; their availability is a baseline execution gate.",
+      "evidence_ids": [
+        "dant-paper-preprocess",
+        "dant-data-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Retain original CatGT phase-shift/common-average processing, modified Kilosort2.5 threshold[8,3], source manual/quality curation and unwhitened waveforms. Freeze source motion/quality defaults and common populations. Author README waveform orientation conflicts with the local converter’s stated assumption; no native payload was inspected to resolve it.",
+      "evidence_ids": [
+        "dant-paper-preprocess",
+        "dant-data-readme"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Primary Figure5D endpoint is tracked length in sessions estimated by Equation19, not raw pair yield. Mandatory fidelity measures include Figure5E PETH Fisher-z correlation and5H/I precision=TP/(TP+FP), recall=TP/(TP+FN) against joint Kilosort2.5 sorting; that reference is close to ground truth, not direct neuron identity.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), followed by estimated marginal means; source8.63±1.80 is EMM±SE. PETH uses consecutive days,mean≥1Hz,peak≥5Hz,each method≥100 valid pairs/dataset,leaving8datasets,with per-dataset median Fisher-z values. Do not substitute the current all-pair mean or count repeated pairs as independent.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure5D estimated marginal mean tracked length in sessions, conditional on original matching-quality safeguards",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Published DANT estimated marginal mean tracked length8.63sessions(SE1.80) from the original12-dataset/10-rat Figure5 comparison; UnitMatch4.50(SE0.98),EMD3.63(SE0.42). This scalar is one source endpoint and cannot establish whole-paper superiority without its original fidelity checks.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "value": 8.63
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authenticated author-baseline rerun on the exact original assessment has been established; source instructions are not an executed score.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify additional correctly tracked sessions after accounting for source reference variability and matched-unit fidelity. No duration margin is valid without corresponding justified non-degradation margins for precision, recall and false-match controls; the8.63-session EMM and1.80SE alone do not supply such a decision rule.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Retain source mixed-model EMM estimation for descriptive parity, then predeclare a paired uncertainty/decision rule respecting repeated units/sessions and rats shared across datasets; jointly cover the primary improvement and fidelity safeguards. Exact interval and multiplicity choices require source artifacts and scientific justification.",
+      "independent_unit": "Rat is the biological cluster; datasets, sessions and matched unit-pairs are nested/repeated observations. Multiple tracks from one rat and ten validation pairs from five rats are not independent animals.",
+      "rationale": "Source Equation19 models dataset and unit dependence but does not by itself define a new same-task superiority decision across the correlated safeguard endpoints; recover identities and specify the improvement uncertainty rule before evaluation.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the exact original Figure5 units, sessions, exclusions and common preprocessing; reproduce8.63sessions with the original model and source DANT settings before comparison.",
+      "Exceed source DANT tracking duration by a justified meaningful margin while meeting a predeclared non-degradation rule for original matching precision, recall, PETH consistency and false-match controls; never reward over-merging.",
+      "Recover and use original Figure5H/I session pairs and joint-sort reference: published DANT precision96.0%±4.8%SD and recall81.5%±11.2%SD are safeguards, not newly chosen held-out identity labels.",
+      "Retain source Figure5E rate/day/pair-count filters, unmatched-pair analysis and Figure6 cross-shank false-match validation with their original scopes. Recover numerical reference arrays before deciding non-degradation margins.",
+      "Use the same inputs and default-policy boundary for source methods; a new animal split, all13-dataset comparison or probability-calibration task is a separately named extension.",
+      "Freeze candidate and all comparison rules before final scoring; improved p-values, engineered fixture success and local all-pair yield cannot count as surpassing the paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator and a rerun of that method are distinct from current SOTA. No current-SOTA claim or verified contemporary comparison is made.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After original cohort and independent validation recovery, develop matching using declared waveform/session information and permitted development feedback, retaining PETH and final joint-sort references outside matching/tuning. Maintain every candidate evaluation in the ledger.",
+    "candidate_freeze": "Freeze clustering/motion parameters, matching thresholds, preprocessing, eligible populations, seed policy and resource/access budgets before original final matching and fidelity assessment.",
+    "final_evaluation": "Run frozen candidate and authentic DANT/UnitMatch/EMD baselines on identical original units/sessions; estimate the original tracked-length EMM and score all original fidelity checks under the predeclared improvement rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published DANT8.63sessions is the historical anchor; an authenticated DANT rerun is separately reported. UnitMatch and EMD are original controls, not replacements for DANT. Source proxies, joint-sort validation and direct ground truth must remain explicitly distinguished."
+  },
+  "blocking_issues": [
+    "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+    "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+    "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+    "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+    "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+    "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the initial evaluator, roster and tests as conversion/calibration and extension infrastructure. Its all13-dataset paired-yield/PETH outputs are not the original12-dataset Figure5 comparison and cannot establish a paper win, probability calibration or neuron identity accuracy."
+  }
+}

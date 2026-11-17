@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-SCOPE-20261114-REM-DYNAMICS",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source supports ordered classification for the complete Figure2h and 5e family, but exact original accuracy arrays, Monte Carlo partitions and executable figure baseline are not recovered. The110-second result is a significance-onset summary, not a numeric accuracy baseline. The registered prospective held-mouse causal/Brier protocol changes inputs, preprocessing, split and metric and is an extension only.",
+  "source_paper": {
+    "title": "Low-dimensional population dynamics in the brainstem gate REM sleep",
+    "url": "https://www.nature.com/articles/s41593-026-02314-z"
+  },
+  "evidence": [
+    {
+      "id": "paper_classification",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Figure2h, Figure5d–e; Methods, Classification analysis",
+      "supports": "Defines spontaneous transition and laser-success LDA targets, Monte Carlo sampling, original accuracy and reported cohort/event counts."
+    },
+    {
+      "id": "paper_pca",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02314-z",
+      "locator": "Methods, preprocessing of Neuropixels data and Dimensionality reduction using PCA",
+      "supports": "Whole-session representation,2.5s bins, smoothing, wake exclusions, sign rules and original observation regime."
+    },
+    {
+      "id": "author_data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19462601",
+      "locator": "Ver2 published9April2026; description and lozano_hong_jin_2026.zip entry",
+      "supports": "Five-cohort Neuropixels+EEG/EMG release; archive md5 b4283da46ef2989eab44ccd20a2d77cc,22.6GB; no recording payload downloaded."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/tortugar/Npx/ded027368c37f19c837baf02b81802007886ba46/README.md",
+      "locator": "Data organization and System requirements",
+      "supports": "2.5s rate/annotation format,KCUT/EXCLUDE controls,custom sleep dependencies; example recording is not the whole cohort."
+    },
+    {
+      "id": "author_loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/tortugar/Npx/ded027368c37f19c837baf02b81802007886ba46/neuropyx.py",
+      "locator": "load_mouse lines439–508; sleep_components lines1503 onward",
+      "supports": "Loader truncates surplus sleep annotations; PCA function defaults differ from the paper parameters. Inspected module contains no LDA/LinearDiscriminantAnalysis named entrypoint."
+    },
+    {
+      "id": "registered_scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-SCOPE-20261114-REM-DYNAMICS/task.json",
+      "locator": "complete_scientific_unit; reproduction; improvement; activation_gates",
+      "supports": "Both2h and 5e are registered; proposed held-mouse causal Brier comparison is a new prospective protocol, not the source performance test."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure2h: classify NREM-to-REM versus NREM-to-Wake transitions using each of PC1–PC22 across 10s bins in the preceding 150s. Figure5e: classify whether a dmM laser trial beginning in NREM reaches REM within 60s from each PC at laser onset. Preserve both protocol strata.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo19462601 Ver2, lozano_hong_jin_2026.zip,md5 b4283da46ef2989eab44ccd20a2d77cc. Release has five cohorts and config files; only the original spontaneous and dmM cohorts feed this registered family. Metadata is verified; archive member coverage remains uninspected.",
+      "evidence_ids": [
+        "author_data",
+        "registered_scope"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source reports six spontaneous mice with 47 NREM-to-REM and 377 NREM-to-Wake transitions;5e has 45 eligible laser trials from five mice, 20 successful and 25 unsuccessful. Exact animal/session membership and all event/config joins must be recovered from the full authentic archive, not just example DL159.",
+      "evidence_ids": [
+        "paper_classification",
+        "author_readme"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source 2h repeatedly samples 70% of REM transitions for training and 30% for testing, with equal randomly sampled Wake cases in each,25 repetitions.5e pools mice then uses 70/30 trial sampling,10 repetitions. Exact draws/seeds and disjoint Wake sampling are unrecovered; held-mouse folds would change the task.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original session neural rates and sleep-state/EEG annotation needed for representation, event alignment and PC sign. Whole-recording information is part of the source analysis. This event-conditioned setting does not establish a causal110s online-warning system.",
+      "evidence_ids": [
+        "paper_pca",
+        "paper_classification"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses 2.5 s rates, z-scoring, Gaussian sigma 1.5 bins, full-recording PCA after long-wake exclusion, PC1 REM-positive and PC2 NREM-sigma-positive signs. Exact cuts, exclusions, timestamp reconciliation and nondefault author call arguments remain unbound; a causal filter/train-only PCA is a separately labelled extension.",
+      "evidence_ids": [
+        "paper_pca",
+        "author_readme",
+        "author_loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Prediction accuracy equals correctly classified held test events divided by all held test events for each PC/bin and repetition. Preserve full2h accuracy curves and 5e accuracy distributions; tsig and Bonferroni tests are descriptive source summaries, not a replacement performance objective.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source 2h presents mean accuracy across 25 resamplings with SEM and 5e box plots across 10 resamplings, using pooled events. No single scalar combining PCs, horizons or protocols is specified. Recover all accuracy arrays and freeze an original-endpoint comparison without selecting the most favorable PC/time bin.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original held-trial classification accuracy for Figure2h and 5e, reported separately across source PCs/horizons",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper reports PC2 tsig = -110 s for 2h and PC2 P = .00018,T(9) = 8.34 for 5e, but exact accuracy values are not recovered from reviewed text. Neither significance nor50% chance is the author performance baseline.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Publisher links author Npx/Lab code and authentic data, but the inspected loader/PCA module does not establish the full figure-specific LDA runner, exact settings or partitions. No author rerun performed.",
+      "evidence_ids": [
+        "author_data",
+        "author_readme",
+        "author_loader"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Specify a meaningful accuracy gain on the source curves/protocols after recovering score resolution and biological variability; more significant above-chance tests or an earlier tsig alone do not qualify.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-versus-author effects on identical source trials, with mouse-level dependence and repeated Monte Carlo reuse accounted for. Recover per-mouse support before fixing an exact small-sample interval/test and multiplicity rule.",
+      "independent_unit": "Mouse, with events/trials and repeated random partitions nested within mouse.",
+      "rationale": "The paper reports 25/10 resampling iterations, which reuse biological observations and are not independent animals. Six/five-mouse groups cannot be inflated into event-level replication.",
+      "evidence_ids": [
+        "paper_classification"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact numeric accuracy arrays and author baseline for both Figure2h and 5e on every original eligible event.",
+      "Use identical original cohort, features/observation regime, preprocessing and original train/test sampling; freeze all comparison endpoints before final labels or scores.",
+      "Show justified accuracy gains with uncertainty accounting for mice and reused events; do not use stronger significance or only an earlier110s threshold as success.",
+      "Preserve separate spontaneous and laser results and all 22-PC reference outputs; a single favorablePC/bin or supported-animal subset cannot stand in for the registered family.",
+      "Report held-mouse generalization, causal filtering, earlier calibration prefixes, Brier loss or added EEG-history predictors as extensions; beating a reimplemented LDA on those changes is not surpassing the source result."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately source-verified current-SOTA comparator has been reviewed. Source accuracy, a future author rerun and extension baselines remain distinct.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. A future same-task episode exposes only declared training/validation feedback under the original trial sampling and transductive observation regime; development trials cannot replace the original assessment population.",
+    "candidate_freeze": "Freeze complete prediction code, original input/representation access, selected primary comparison, training/tuning policy and uncertainty before owner evaluation; no final-score-directed selection among PCs or horizons.",
+    "final_evaluation": "Evaluate once against the recovered author baseline using original partitions and all eligible2h/5e cases. Retain per-mouse support and all source accuracy curves/distributions. Report significance reproduction and prospective extensions separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Pin complete author code/dependencies and original figure configuration; reproduce before comparison. Do not turn Npx example loading, local LDA reimplementation or a held-mouse baseline into the published result."
+  },
+  "blocking_issues": [
+    "Original numerical accuracy arrays and Monte Carlo partitions/seeds are not recovered.",
+    "Full archive census, exact cohort/animal/session/event mapping and exclusions are unverified;22.6GB payload was not acquired.",
+    "Complete author figure runner and source runtime closure are missing; module defaults and annotation truncation need reconciliation.",
+    "No fixed primary family-comparison rule, meaningful effect, valid mouse-level uncertainty, access/resource budgets or working protected evaluator is admitted.",
+    "The existing prospective Brier/held-mouse design is scientifically useful but not the same source task."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the original construction draft and source-faithful2h/5e reconstruction requirements. Reproduction is calibration; the historical causal held-mouse Brier proposal remains a separately labelled extension, never a paper win."
+  }
+}

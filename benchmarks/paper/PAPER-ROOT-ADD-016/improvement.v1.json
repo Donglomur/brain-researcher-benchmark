@@ -1,0 +1,171 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-016",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered task re-estimates physiological age associations and posterior summaries, not predictive performance against an unknown scientific target. Larger associations, stronger significance, altered cardiac attribution or closer posterior reconstruction are not an ordered improvement over the source finding. Adding age prediction, a new cohort or artifact-removal ground truth would change the original task.",
+  "source_paper": {
+    "title": "Age-related changes in cortical 1/f dynamics are linked to cardiac activity",
+    "url": "https://elifesciences.org/articles/100605"
+  },
+  "evidence": [
+    {
+      "id": "cardiac-paper",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Version of Record; Abstract, Results on age-related aperiodic activity and Methods: Participants",
+      "supports": "Physiological confound question; original CamCAN and Salzburg cohorts; inference varies with frequency and sensor rather than forming a performance leaderboard."
+    },
+    {
+      "id": "cardiac-cohort",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/100605.pdf",
+      "locator": "Methods: Participants; Figure 4—figure supplement 4",
+      "supports": "655 analyzed Salzburg participants from 684 collected; 627 analyzed CamCAN recordings are a different cohort."
+    },
+    {
+      "id": "cardiac-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/README.md",
+      "locator": "Repository paper link and data sources",
+      "supports": "Author code targets the final paper and identifies CamCAN and PhysioNet as distinct source datasets."
+    },
+    {
+      "id": "cardiac-salzburg-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/notebooks/%20c_1_f_age_sbg.ipynb",
+      "locator": "First source cell: 655 input files, heart_thresh/eye_thresh and brms_kwargs; Salzburg analysis notebook",
+      "supports": "Full analyzed Salzburg cohort and source Bayesian fitting prescription; these are association estimation and reconstruction inputs, not a protected performance split."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate how age relates to aperiodic MEG slopes under ECG-retained, ECG-rejected and ECG-component conditions, including the Salzburg replication of the physiological confound analysis.",
+      "evidence_ids": [
+        "cardiac-paper",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "The Salzburg resting-state MEG/ECG cohort analyzed in Figure 4—figure supplement 4; preserve its distinction from main CamCAN analyses and ECG-only PhysioNet experiments. The historical benchmark uses processed participant measurements.",
+      "evidence_ids": [
+        "cardiac-cohort",
+        "cardiac-code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All 655 analyzed Salzburg participants. This is the paper replication cohort, not the 627-person CamCAN analysis and not a newly sampled prediction cohort.",
+      "evidence_ids": [
+        "cardiac-cohort",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The original cohort-level association analysis has no held-out predictive task split. Creating one would produce an extension requiring a new scientific contract.",
+      "evidence_ids": [
+        "cardiac-paper",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Age and spectral-slope measurements derived from concurrently recorded MEG and ECG, compared across cardiac-component processing conditions. These observations support association estimates, not labelled true cardiac-free cortical signals.",
+      "evidence_ids": [
+        "cardiac-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve the paper processing-condition and frequency-range interpretation; the Salzburg notebook selects source preprocessing at heart correlation threshold 0.4 and eye threshold 0.8 before model fitting. Historical processed-CSV reconstruction omits raw signal processing.",
+      "evidence_ids": [
+        "cardiac-salzburg-code"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Regression coefficients/posterior intervals and physiological attribution are the source scientific outputs. No higher/lower scalar makes a different age association more correct; reference-summary discrepancy measures reconstruction only.",
+      "evidence_ids": [
+        "cardiac-paper",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Cohort-level association estimates compare processing conditions; retain subject identity and separate datasets. Posterior draws, channels and frequency choices are not independent people.",
+      "evidence_ids": [
+        "cardiac-paper",
+        "cardiac-cohort"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No defensible ordered same-task improvement metric for the registered physiological association analysis",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Published age-association estimates and intervals are scientific findings to reproduce or challenge, not performance scores to surpass.",
+      "evidence_ids": [
+        "cardiac-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "An author Bayesian-model replay can calibrate numerical reconstruction, but agreement with its coefficient summaries does not define scientific improvement.",
+      "evidence_ids": [
+        "cardiac-salzburg-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "A larger coefficient, narrower interval, smaller p-value or smaller reference error has no justified direction of scientific superiority for this observational claim.",
+      "evidence_ids": [
+        "cardiac-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "Retain source-model posterior uncertainty for reproduction; no same-task win test is defined.",
+      "independent_unit": "Participant for biological inference; posterior draw only for Monte Carlo precision",
+      "rationale": "More precise sampling of the same posterior is computational calibration. It does not establish a stronger physiological finding or causal cardiac removal.",
+      "evidence_ids": [
+        "cardiac-paper",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "paper_win_requires": [
+      "No current source-paper win can be admitted for this registration.",
+      "Preserve physiological association and posterior-reconstruction outputs as calibration evidence.",
+      "A proposed held-out age-prediction or artifact-removal benchmark must be separately reviewed and identified as a different task with its own ground truth and primary-source performance comparator."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No ordered source performance endpoint exists here, so a current-SOTA ranking would be scientifically undefined.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Disabled for the active improvement suite. Source reanalysis and posterior reconstruction may remain historical calibration activities under their own authorization.",
+    "candidate_freeze": "Not applicable to an improvement episode while no ordered original-task endpoint exists.",
+    "final_evaluation": "No paper-win evaluation. Existing six-model summary discrepancy and OLS/HC3 companion results remain explicitly labelled reconstruction or sensitivity analyses.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Do not turn the private reference posterior, a local Bayesian fit or an OLS model into a source-paper performance baseline. Preserve raw and separately standardized Student-t model definitions as calibration only."
+  },
+  "blocking_issues": [
+    "The source association estimand supplies no defensible performance ordering for a paper-improvement victory.",
+    "Processed spectral slopes do not provide ground truth for true neural-only activity or causal cardiac-component removal.",
+    "New prediction targets, new cohorts or external artifact-removal ground truth require a separately identified extension/replacement, not an easier reinterpretation of this registration."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain paired-execution, full-cohort-admission, matched-artifacts and six-model-summary implementations. Their 655-person admission, six-model Student-t summaries, reference-SD discrepancy, MCSE and OLS/HC3 checks are calibration/sensitivity work and cannot count as surpassing the paper."
+  }
+}
