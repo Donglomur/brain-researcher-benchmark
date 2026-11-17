@@ -1,0 +1,97 @@
+{
+  "schema": "opto-native-clock-provenance-v1",
+  "task_id": "PAPER-FIND-REP-003",
+  "source_revision": "815b610b3beddfed5a3abf611d3a465ab9e4ce5c",
+  "data": {
+    "name": "optoData.mat",
+    "article_id": 28326998,
+    "version": 1,
+    "file_id": 60332969,
+    "bytes": 9351260,
+    "sha256": "9d2be90908a05684dff9871697f5c37bb4f93522af67bf2625219f12cb4fd19c",
+    "publisher_md5": "03500e2455ed062b930a6657e407776d",
+    "url": "https://ndownloader.figshare.com/files/60332969",
+    "doi": "10.6084/m9.figshare.28326998.v1",
+    "license": "CC BY 4.0",
+    "attribution": "Grier, Harrison; Salimian, Sohrab; Kaufman, Matthew T. (2025). Data from Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping. figshare."
+  },
+  "metadata": {
+    "url": "https://api.figshare.com/v2/articles/28326998/versions/1",
+    "bytes": 7693,
+    "sha256": "fde210973f4ce1b94d06bdb4ea771cb7cdcdfdc0a9df1413ee827e3cfa26c863"
+  },
+  "source_pins": [
+    {
+      "source_path": "main/fig1/plots/plotOptoHists.m",
+      "url": "https://raw.githubusercontent.com/kaufmanlab/GSK26-public/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig1/plots/plotOptoHists.m",
+      "bytes": 2203,
+      "sha256": "2da8e29bdef0640baf2c1e97e90c2d5a0c1e343d412c30047ac5e37fd8e57f30",
+      "git_blob_sha1": "42870a8af875ee62bdc58757d67a0a5ebfc631f6",
+      "git_tree_verified": true
+    },
+    {
+      "source_path": "main/fig1/fig1_main.m",
+      "url": "https://raw.githubusercontent.com/kaufmanlab/GSK26-public/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig1/fig1_main.m",
+      "bytes": 3180,
+      "sha256": "6b5022276d148dd8d8760b9cf14c92b993d6b17d77cef463546ddb32a20350d0",
+      "git_blob_sha1": "9f8ece544b9a1e6fc857eba1ac8d00c536c3c523",
+      "git_tree_verified": true
+    },
+    {
+      "source_path": "primary_article_xml",
+      "url": "https://cdn.elifesciences.org/articles/106270/elife-106270-v1.xml",
+      "version_doi": "10.7554/eLife.106270.3",
+      "bytes": 287193,
+      "sha256": "b1af6eaac2017c1ed85c06cfa65aac6f9492a8d1b2198dbe380fb256183f6175"
+    },
+    {
+      "source_path": "preproc/loadEventTimes.m",
+      "url": "https://raw.githubusercontent.com/kaufmanlab/GSK26-public/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/preproc/loadEventTimes.m",
+      "bytes": 2139,
+      "sha256": "a4e32371dd857c2e80adb0a6d9efae1f3dca04489847e1ed32e5cf8b1ba9e215",
+      "git_blob_sha1": "231722232bc10bdd67f775a6d7440e0b6d0f44b9",
+      "git_tree_verified": true
+    }
+  ],
+  "native_fields_to_declared_endpoint": {
+    "animalID": "mouse, unchanged",
+    "date": "session, exact YYYYMMDD_HHMMSS timestamp",
+    "trialNumber": "trial_number, native positive integer, unique within animal and timestamp",
+    "success": "success, native binary",
+    "optoProblem": "optoProblem, native binary",
+    "optoTrial": "optoTrial, native binary",
+    "wrongGrabFirst": "wrongGrabFirst, native binary",
+    "grabTimeC": "native timestamp in milliseconds, no waterTime subtraction",
+    "liftTimeC": "native timestamp in milliseconds, no waterTime subtraction"
+  },
+  "clock_lineage": {
+    "native_clock_origin": "unspecified_acquisition_origin",
+    "source_plot_transform": "grabTimeC / 1000",
+    "source_plot_zero_label": "cue",
+    "native_identity_checks": [
+      "grabTimeC - waterTime == grabRT",
+      "liftTimeC - waterTime == liftRT"
+    ],
+    "paper_semantics": "Cue tone and water delivery occur simultaneously.",
+    "other_primary_code_semantics": "preproc/loadEventTimes.m lines22-23 subtract waterTime from grabTimeC for contact reaction times. This function handles the imaging event summaries; it does not change the opto plot code.",
+    "inference": "Unshifted native contact timestamps cannot be assumed to be cue-relative latency; source plot label conflicts with released clock lineage.",
+    "cue_clock_interpretation_validated": false,
+    "status": "unresolved_source_plot_vs_native_event_origin"
+  },
+  "scope": "Independent native population and clock admission; no replacement ingestion adapter, endpoint export, new scorer or solver trial",
+  "qualification": {
+    "complete_pinned_population_audited": true,
+    "source_numeric_endpoint_changed": false,
+    "scientifically_qualified": false,
+    "full_contract_complete": false,
+    "native_matlab_execution": false,
+    "new_task_id": false
+  },
+  "preserved_gates": [
+    "Resolve source plot versus water-relative event-clock interpretation without silently changing the frozen endpoint",
+    "Native MATLAB figure parity and article quantitative reproduction",
+    "Protected evaluation and candidate information boundary",
+    "Neural decoder, ten imaging sessions, detailed intervention trajectories and full-paper endpoints",
+    "Scientific qualification and source-specific exposure/rights policy"
+  ]
+}
