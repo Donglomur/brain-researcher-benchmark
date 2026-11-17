@@ -40,7 +40,10 @@ def read_submission(path,spec):
         with np.load(io.BytesIO(b),allow_pickle=False,max_header_size=4096)as f:
             values={k:f[k]for k in spec}
     for key,a in values.items():
-        if spec[key]['kind']=='numeric':need(np.isfinite(a).all()and np.all(np.abs(a)<1e100),'finite numerically bounded values')
+        if spec[key]['kind']=='numeric':
+            # Float32 cannot represent the bound; compare in the scoring dtype.
+            numeric=a.astype(np.float64,copy=False)
+            need(np.isfinite(numeric).all()and np.all(np.abs(numeric)<1e100),'finite numerically bounded values')
         else:need(a.tolist()==spec[key]['values'],'exact ordered case/unit identity')
     return values,hashlib.sha256(b).hexdigest()
 
@@ -61,7 +64,9 @@ def score_validated(candidate,digest,expected_path,spec):
             rows.append({'experiment_id':str(gid),'rmse':float(np.sqrt(np.mean(e*e))),'n_cells':int(mask.sum())})
         metrics[panel+'_equal_experiment_delta_rmse']={'value':float(np.mean([r['rmse']for r in rows])),'direction':'lower','per_experiment':rows}
     # Fig3I's direct high-minus-low comparison is distinct from either power alone.
-    e=(candidate['multiopto_hi__delta']-candidate['multiopto_lo__delta'])-(gold['multiopto_hi__delta']-gold['multiopto_lo__delta'])
+    # Promote each operand before subtraction: finite float32 contrasts may
+    # exceed float32 range, while the admitted values are safe in float64.
+    e=(candidate['multiopto_hi__delta'].astype(np.float64)-candidate['multiopto_lo__delta'].astype(np.float64))-(gold['multiopto_hi__delta'].astype(np.float64)-gold['multiopto_lo__delta'].astype(np.float64))
     grouped=[float(np.sqrt(np.mean(e[gold['multiopto__experiment_id']==g]**2)))for g in np.unique(gold['multiopto__experiment_id'])]
     metrics['multiopto_high_minus_low_delta_equal_experiment_rmse']={'value':float(np.mean(grouped)),'direction':'lower','unit':'Fig3I paired-minus-alone power contrast reconstruction'}
     metrics['multivis_cell_condition_delta_rmse']={'value':field_errors['multivis__delta']['rmse'],'direction':'lower','unit':'cell×condition reconstruction; animal mapping unresolved'}
