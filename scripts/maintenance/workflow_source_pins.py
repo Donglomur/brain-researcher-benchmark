@@ -277,10 +277,20 @@ def propose(root, changes):
                 # edit. Scalar/CLI size changes need a separately reviewed ledger.
                 pattern = rb'[\"\x27]path[\"\x27]\s*:\s*[\"\x27](?P<path>' + re.escape(old['path'].encode()) + rb')[\"\x27]\s*,\s*[\"\x27]bytes[\"\x27]\s*:\s*(?P<size>[0-9]+)\s*,\s*[\"\x27]sha256[\"\x27]\s*:\s*[\"\x27](?P<sha>[0-9a-f]{64})'
                 matches = [m for m in re.finditer(pattern, original) if m.start('sha') == occurrence['offset']]
-                require(len(matches) == 1 and int(matches[0]['size']) == old['bytes'],
+                # One reviewed CLI form authenticates a descriptor by digest
+                # alone: it has no inline source-size token to update. Its
+                # semantic source binding remains the exact occurrence ledger.
+                offset = occurrence['offset']
+                line_start = original.rfind(b'\n', 0, offset) + 1
+                digest_flag = re.search(rb"--expected-sha256[ \t]+(?P<quote>['\"])$",
+                                        original[line_start:offset])
+                digest_only = (digest_flag is not None and old['path'] == new['path']
+                               and original[offset+64:offset+65] == digest_flag['quote'])
+                require((len(matches) == 1 and int(matches[0]['size']) == old['bytes']) or digest_only,
                         'Size-changing or redirected non-dictionary pin needs manual review: ' + old['path'])
-                edits.append((matches[0].start('size'), matches[0].end('size'), str(new['bytes']).encode()))
-                edits.append((matches[0].start('path'), matches[0].end('path'), new['path'].encode()))
+                if matches:
+                    edits.append((matches[0].start('size'), matches[0].end('size'), str(new['bytes']).encode()))
+                    edits.append((matches[0].start('path'), matches[0].end('path'), new['path'].encode()))
             edits.append((occurrence['offset'], occurrence['offset'] + 64, new['sha256'].encode()))
             occurrence['source'] = new['path']
         for start, end, replacement in sorted(set(edits), reverse=True):

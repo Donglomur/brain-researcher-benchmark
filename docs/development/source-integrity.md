@@ -134,7 +134,9 @@ Planning is read-only; applying checks the complete plan again before writing.
 It changes only bound pin tokens and the corresponding literal-array byte
 aggregates, preserves all other workflow code, and updates the occurrence ledger.
 A stale plan fails. There is no recompute-all-pins option. Scalar pins support
-same-size hash corrections; size-changing or redirected computed/scalar paths
+same-size hash corrections. The reviewed digest-only `--expected-sha256` CLI
+form also permits a changed descriptor size because it has no inline size token.
+Other size-changing or redirected computed/scalar paths
 fail for explicit manual review rather than guessing which integer or expression
 to rewrite. New workflow syntax or unrelated workflow edits require review of
 both the changed workflow and its exact ledger snapshot and occurrence bindings.

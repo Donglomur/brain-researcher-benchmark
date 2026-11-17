@@ -197,6 +197,18 @@ class PinControls(unittest.TestCase):
         with self.assertRaisesRegex(ci.InvalidSource, 'non-dictionary'):
             ci.propose(self.root, self.change(self.source, b'pass # longer\n'))
 
+    def test_digest_only_cli_flag_accepts_changed_descriptor_size(self):
+        self.source = 'pkg/SOURCE.json'
+        self.body = b'{}\n'
+        self.write(self.source, self.body)
+        self.make_workflow(scalar=True)
+        self.mutate_workflow(b'pin = ', b'verify --expected-sha256 ', accept_snapshot=True)
+        body = (self.root / ci.CPU_WORKFLOW).read_bytes()
+        self.ledger['workflows'][0]['occurrences'][0]['offset'] = next(ci.SHA.finditer(body)).start()
+        self.save_ledger()
+        ledger, bodies = ci.propose(self.root, self.change(self.source, b'{"reviewed": true}\n'))
+        self.assertEqual(ci.audit(self.root, ledger=ledger, bodies=bodies)['source_bytes'], 19)
+
     def test_stale_explicit_previous_identity_fails(self):
         changes = self.change(self.source, self.body)
         changes['updates'][0]['previous']['sha256'] = '0' * 64
