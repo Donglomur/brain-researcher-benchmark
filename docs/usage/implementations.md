@@ -118,12 +118,15 @@ The guide separates zero-shot and four-demonstration conditions and preserves
 failed sessions; neither condition includes evaluator feedback.
 
 The [whole-night sleep viewer](../../benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/README.md)
-adds reviewed source for every one of the 5,450 development epochs. Typed actions
+provides observations for every one of the 5,450 development epochs. Typed actions
 show waveform images and permitted clock metadata, with past and future navigation
 within the current person, no labelled demonstrations and no evaluator feedback.
-Its construction used generated controls and existing input metadata; authentic
-viewer preparation/rendering, restricted provider transport and model performance
-remain unqualified. The canonical unsupported direct/viewer mode is unchanged.
+The [historical scripted preparation, delivery and replay](../science/sleep007-viewer-delivery-20261117.md)
+completed under renderer source `1c9357d1`, using fixed uniform responses without
+an AI participant or scientific score. The later renderer correction `39a1f84c`
+has generated-only evidence and does not inherit that authentic execution proof.
+Restricted provider transport, participant isolation and model performance remain
+unqualified. The canonical unsupported direct/viewer mode is unchanged.
 
 The sleep feature programme can learn from six training people's labels; the
 whole-night viewer is zero-shot and exposes raw waveform images plus clocks.
@@ -158,7 +161,7 @@ before running them; data, targets, checkpoints and outputs stay outside public 
 
 | Task and route | Executable source and observed coverage | Remaining comparison requirements |
 | --- | --- | --- |
-| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md) | Original MC_Maze 20-ms panel; the offline candidate uses the full 35-bin held-in observation window and one complete prediction set for co-smoothing and ten-bin future prediction. The current improvement successor retains the original panel, ordered arrays and four metrics. | At the 2026-11-17 08:49 UTC checkpoint, author calibration was partial: causal predictions using the original 192 particles × 32 repeats are frozen; the noncausal author run is in progress and both scores remain pending. The strongest retained published/reproduced comparator, matched participant budgets, behavior-guided fitting/selection policy and source-grounded uncertainty remain qualification gates. |
+| [SMC-RNN / PAPER-SMC-RNN-2024](../../benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/README.md) | Original MC_Maze 20-ms panel; the offline candidate uses the full 35-bin held-in observation window and one complete prediction set for co-smoothing and ten-bin future prediction. The current improvement successor retains the original panel, ordered arrays and four metrics. [Author calibration completed](../science/smc-author-calibration-20261117.md) both full prediction arms at 192 particles × 32 repeats and both four-metric aggregates. | The noncausal supervised scoring stage remains failed; its authenticated scalar output was accepted as recovered calibration evidence without a rerun. Calibration does not establish an AI, reproduction or improvement outcome. The strongest retained published/reproduced comparator, matched participant budgets, behavior-guided fitting/selection policy and source-grounded uncertainty remain qualification gates. |
 | [REVE / PAPER-paper-method-003](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md) | `panel.py acquire`, `inspect`, `prepare`, `predict` and `score`; all 654 official EDFs for 109 participants prepared into 9,837 epochs, preserving the 1–70 / 71–89 / 90–109 train/validation/test split | Released-code and paper filtering recipes disagree; the exact downstream classifier checkpoint, historical run aggregation and author-model performance remain unresolved. No model inference ran. |
 | [DeepCaImX / PAPER-paper-method-013](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_PANEL.md) | `source_panel.py convert-rois` and `score-segmentation`; all ten original manual ROI files authenticated and converted, preserving 1,563 masks and spatial coordinates | Exact movie crop/frame mapping, paper-equivalent full checkpoint and native assembly are unresolved. Ten videos correspond to eight donors. No movie-to-mask inference ran; segmentation arithmetic alone leaves trace/runtime obligations open. |
 
@@ -186,8 +189,10 @@ document author reproduction and calibration. Their
 [preparation evidence](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json)
 records an earlier complete paired export, excluding checkpoints, operator
 predictions and test targets. That receipt does not qualify a new offline export
-or candidate run. Both source-author arms must complete their calibration, and
-the offline comparison must select the strongest retained qualified/published
+or candidate run. Both source-author arms now have authenticated [calibration
+results](../science/smc-author-calibration-20261117.md), with the failed noncausal
+supervisor and recovered scalar output preserved. The offline comparison must
+still select the strongest retained qualified/published
 reference; a lower reproduced score cannot replace a higher published comparator.
 Strict-online and source-prefix candidates need separately named information
 policies and appropriate comparators. The source causal arm's reflect-padding
