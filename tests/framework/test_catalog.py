@@ -297,7 +297,8 @@ class PublicCatalogTests(unittest.TestCase):
              patch.object(cli, 'verified_program_runtime', side_effect=AssertionError('No verification traversal')), \
              patch.object(cli.subprocess, 'run', side_effect=AssertionError('No process execution')):
             for args in (['list'], ['list', '--track', 'paper'], ['list', '--track', 'neural'],
-                         ['status'], ['check'], ['show', 'NEURAL-001'], ['show', 'NEURAL-EXP-3-0']):
+                         ['status'], ['check'], ['show', 'NEURAL-001'], ['show', 'NEURAL-EXP-3-0'],
+                         ['implementations', 'NEURAL-001'], ['implementations', 'PAPER-001']):
                 with self.subTest(args=args), redirect_stdout(io.StringIO()) as output:
                     self.assertEqual(cli.main(args, root=self.root), 0)
                 result = json.loads(output.getvalue())
@@ -310,6 +311,55 @@ class PublicCatalogTests(unittest.TestCase):
                     self.assertIsNone(result['local_score_adapters_verified'])
                     self.assertEqual(result['scientific_readiness'], 'unknown')
                     self.assertEqual(result['runtime_manifests_present'], 1)
+
+    def test_implementation_view_exposes_programmes_without_legacy_runtimes(self):
+        catalog.generate(self.root)
+        with patch.object(cli.subprocess, 'run', side_effect=AssertionError('No process execution')):
+            with redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(cli.main(['implementations', 'PAPER-001'], root=self.root), 0)
+            result = json.loads(output.getvalue())
+            records = {record['id']: record for record in result['implementations']}
+            self.assertEqual(set(records), {'PAPER-001-programme', 'shared-family'})
+            self.assertEqual(records['PAPER-001-programme']['path'],
+                             'benchmarks/paper/PAPER-001/implementations/programme')
+            self.assertIn('no legacy runtime', records['PAPER-001-programme']['scope_notes'])
+            self.assertEqual(records['shared-family']['owner_ids'], ['NEURAL-001', 'PAPER-001'])
+            self.assertEqual(result['scientific_readiness'], 'unknown')
+            self.assertEqual(result['related_sources'], [])
+            with redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(cli.main(['show', 'PAPER-001'], root=self.root), 0)
+            shown = json.loads(output.getvalue())
+            self.assertIsNone(shown['runtime'])
+            self.assertEqual(shown['sources'], result)
+
+    def test_implementation_view_keeps_related_source_separate_and_does_not_infer_owners(self):
+        catalog.generate(self.root)
+        result = cli.public_metadata_command('implementations', self.root, task_id='NEURAL-003')
+        self.assertEqual(result['implementations'], [])
+        self.assertEqual([r['id'] for r in result['related_sources']], ['related-background'])
+        self.assertEqual(result['related_sources'][0]['owner_ids'], [])
+        self.assertEqual(result['documentation'][0]['label'], 'Rights and scientific scope')
+        empty = cli.public_metadata_command('implementations', self.root, task_id='PAPER-100')
+        self.assertEqual(empty['implementations'], [])
+        self.assertEqual(empty['related_sources'], [])
+        # A package-local ID equal to another task ID never makes it that task's source.
+        different_owner = cli.public_metadata_command('implementations', self.root, task_id='NEURAL-002')
+        self.assertEqual([r['id'] for r in different_owner['implementations']], ['NEURAL-001'])
+        with self.assertRaisesRegex(ValueError, 'Specification not yet built'):
+            cli.public_metadata_command('implementations', self.root, task_id='UNKNOWN')
+
+    def test_implementation_metadata_cannot_assert_verified_scientific_readiness(self):
+        registry = json.loads((self.root / catalog.REGISTRY).read_text())
+        artifact = next(row for row in registry['implementations'] if row['id'] == 'PAPER-001-programme')
+        artifact.update(status='ready', scientific_readiness='qualified')
+        write(self.root / catalog.REGISTRY, registry)
+        with patch.object(cli, 'verified_runtime', side_effect=AssertionError('No receipt traversal')), \
+             patch.object(cli, 'verified_program_runtime', side_effect=AssertionError('No receipt traversal')):
+            result = cli.public_metadata_command('implementations', self.root, task_id='PAPER-001')
+        record = next(row for row in result['implementations'] if row['id'] == 'PAPER-001-programme')
+        self.assertEqual(record['declared_source_status'], 'ready')
+        self.assertEqual(record['scientific_readiness'], 'unknown')
+        self.assertEqual(result['scientific_readiness'], 'unknown')
 
     def test_duplicate_missing_and_escaped_source_links_refuse(self):
         result = catalog.generate(self.root)
