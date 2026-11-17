@@ -1,0 +1,1116 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-001",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The opt-in schema represents the known source PR curve families without an invented scalar. The retained original and current definitions concern the same finite-sample participation-ratio quantity and methodological family, not competing primaries. Scientific eligibility remains independently source_unresolved because final source/support/reference/criteria, complete coverage of retained obligations and derivation verification are absent. Absence from the accepted18 scope-decision artifact is a neutral lookup fact, not evidence of a different scientific primary or a universal admission blocker.",
+  "source_paper": {
+    "title": "Estimating Dimensionality of Neural Representations from Finite Samples",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/9768645621c2cd6c5b851a06205b92cf-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "final-paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/9768645621c2cd6c5b851a06205b92cf-Paper-Conference.pdf",
+      "locator": "Sections 2, 4.2.1, 4.2.4, 4.3–4.4; Figures 1–2; Appendix C.1 and Figure S1",
+      "supports": "Defines participation ratio, noise and finite-population assumptions, known-truth linear simulation, biological convergence comparison, and separate mean-of-ratios versus ratio-of-means reductions."
+    },
+    {
+      "id": "stringer-source",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/badooki/dimensionality/f18de35818502744329f7c92bb17a80af8f48549/legacy/biology/on_Stringer.ipynb",
+      "locator": "Data loading/normalization cell; Q and P sweep cells; plotting cells",
+      "supports": "Lists seven Stringer sessions, selects natImgFN[3], removes blank images and 32 spontaneous PCs, centers neurons, uses paired repeat trials and 100 subsampling iterations; emitted summary choices must be reconciled with final-paper 50 Stringer draws."
+    },
+    {
+      "id": "legacy-runtime",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-001/implementations/registered-runtime/manifest.json",
+      "locator": "scope, grading, limits, program_execution.scope",
+      "supports": "The existing grader is one exposed session, 19 panels and 76 estimator records; full_ratio_relative_RMSE is reconstruction error with no scientific success threshold."
+    },
+    {
+      "id": "full-programme",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-001/implementations/dimensionality-programme/programme/README.md",
+      "locator": "Complete dimensionality programme; Released Majaj branch; qualification limits",
+      "supports": "Preserves all four biological branches, seven Stringer sessions and synthetic/theoretical obligations. Its BUILD_ONLY programme is not qualified and cannot be narrowed to the local reconstruction checkpoint."
+    },
+    {
+      "id": "released-synthetic",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/badooki/dimensionality/f18de35818502744329f7c92bb17a80af8f48549/examples/synthetic.py",
+      "locator": "Released linear Gaussian P and Q sweeps; generate_data, estimator calls and mean/SEM summaries",
+      "supports": "Authenticates a distinct 400-slot released recipe: one noisy observation, d50, variance0.2, 20 reset seeds, original four estimator keys. Final-paper equivalence remains unresolved."
+    },
+    {
+      "id": "released-estimator",
+      "kind": "author_code",
+      "url": "https://github.com/badooki/dimensionality/blob/f18de35818502744329f7c92bb17a80af8f48549/src/dimensionality/estimators.py",
+      "locator": "participation_ratio(Phi, Phi2=None, return_all, return_parts), docstring and named A/B outputs; retained literal_author source projection",
+      "supports": "Source-native gamma and A/B quantities; naive/row/col/both correction semantics; algebraic centering, same-identity optional repeat matrices and finite support. An inspected released API is not proof of final-paper execution."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate the participation ratio gamma=(tr K)^2/tr(K^2) of the specified neural representation under finite stimulus and neuron sampling, including the source two-repeat noise correction. Preserve the original estimator regimes and biological panels; reproducing A, B or gamma numerically is calibration.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Final Figure 2 uses Stringer mouse V1 calcium, Majaj macaque IT spiking, Papale/TVSD macaque V4 LFP and Hebart/THINGS human IT fMRI. Source-to-version/file/ROI correspondence for every final panel remains unresolved; the legacy Stringer notebook is only one pinned route.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source",
+        "full-programme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The pinned Stringer notebook lists seven sessions and selects index 3; it does not establish that this is the displayed final Figure 2 session. Preserve all registered biological cohorts and do not infer cross-animal evidence from the one-session grader.",
+      "evidence_ids": [
+        "stringer-source",
+        "legacy-runtime",
+        "full-programme"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The original experiment subsamples stimulus rows and neuron columns of the same recording, with paired repeat-trial rows, rather than a new prediction train/test split. Final Appendix C.1 specifies 50 Stringer, 500 Majaj, 250 TVSD and 50 THINGS draws; the pinned Stringer notebook uses 100. Exact panel grids and source-version correspondence must be recovered before comparison.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Candidate receives the same finite P-by-Q response observations and allowed repeat trials as the author estimator; no unobserved full-population responses or known simulation truth may enter the estimator. The source noise correction uses two trial matrices with identical stimulus/neuron identities.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Stringer source excludes blank stimuli, scales responses using spontaneous mean and standard deviation plus 1e-6, removes 32 spontaneous PCs, and centers each neuron before repeat alignment. Exact historical projector/native-backend and final-panel correspondence, plus other modality preprocessing, remain unresolved.",
+      "evidence_ids": [
+        "stringer-source",
+        "full-programme"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Source simulations assess proximity to known PR (Figure 1: d=50, additive-noise variance 0.2; P sweep at Q=100 and Q sweep at P=200). Biological Figure 2 assesses convergence to full-data estimates, explicitly not known biological truth. A source-matched numeric estimator-loss criterion and baseline have not been recovered; local reference-output relative RMSE is not that criterion.",
+      "evidence_ids": [
+        "final-paper",
+        "legacy-runtime"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Appendix C.1 and Figure S1 distinguish average of A/B from ratio of averaged A and B; their bias differs. The legacy code mixes nanmedian/nanmean and standard-deviation display choices. Freeze original per-panel reduction and retain nonfinite/failure denominators before any improvement claim.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete named original synthetic Figure1 P/Q four-estimator curves, biological Figure2 P/Q curves for Stringer V1 calcium, Majaj IT spiking, TVSD V4 LFP and THINGS IT fMRI, and linked FigureS1 Majaj V4/IT mean(A/B) versus mean(A)/mean(B) plus SD/support companions. Original grids, exact cohort/source correspondence, dispersion and noise/estimand/finite-support controls remain unresolved. This is a source-indexed declaration of known families, not verified complete-panel coverage. Preserve the wider historical programme externally for explicit scope adjudication; do not automatically promote every paper figure or prospective design.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source",
+        "full-programme",
+        "released-estimator"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Use only the original finite P-by-Q observations and source-permitted aligned repeats, with the same stimulus/neuron identities and original preprocessing. Original raw and derived input, cohort, grid, tuning/exposure and budget manifests remain unbound. Simulation truth belongs to evaluation and must not enter an estimator; biological full-population estimates are not ground truth. A single noisy released matrix is not a recovered final two-repeat recipe.",
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source",
+        "released-synthetic",
+        "released-estimator"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig1_linear_finite_sample_pr",
+      "kind": "indexed_array_family",
+      "description": "Complete named final Figure1 P/Q participation-ratio curves for the source linear Gaussian experiment. d50 is the generative truth, not a substitute scalar estimator result. Exact final draw/source mapping and numerical targets remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig1_linear_finite_sample_pr",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "fig1_pr_p",
+            "manifest_key": "fig1_pr_p",
+            "source_quantity": "Figure 1 original reported participation-ratio curve versus P with Q=100, d=50 and additive-noise variance0.2; all four finite-sample correction variants.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4
+            ],
+            "axes": [
+              {
+                "name": "P",
+                "units": "sampled stimulus rows",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original final-paper P coordinates, ordering and number of points are unrecovered. The released ten-point grid is not assigned to this axis."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-point summary of gamma=A/B across the original generated draws; final-paper mean/median, dispersion and nonfinite rules remain unresolved. The released ordinary mean over20 seeds and sample-SEM are source facts about a different unconfirmed recipe.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-synthetic",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig1_pr_q",
+            "manifest_key": "fig1_pr_q",
+            "source_quantity": "Figure 1 original reported participation-ratio curve versus Q with P=200, d=50 and additive-noise variance0.2; all four finite-sample correction variants.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              4
+            ],
+            "axes": [
+              {
+                "name": "Q",
+                "units": "sampled neuron/feature columns",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original final-paper Q coordinates, ordering and number of points are unrecovered. The released ten-point grid is not assigned to this axis."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-point summary of gamma=A/B across the original generated draws; final-paper mean/median, dispersion and nonfinite rules remain unresolved. The released ordinary mean over20 seeds and sample-SEM are source facts about a different unconfirmed recipe.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-synthetic",
+              "released-estimator"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "final-paper",
+          "released-synthetic",
+          "released-estimator"
+        ]
+      },
+      "required_granular_output_ids": [
+        "synthetic_draw_observation_ledger",
+        "synthetic_A_B_gamma_draws",
+        "synthetic_curves_dispersion_and_support",
+        "source_estimand_noise_and_finite_support_controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover source-equivalent complete original P/Q curve references and independently compare the rederived family under justified uncertainty; no released-code curve is assumed publication-equivalent.",
+        "independent_unit": "Original independent generated populations/draws; exact original replication and generator identity unresolved.",
+        "dependence": "All four estimators share observations; P/Q points and seeds may share randomness. Preserve source dependence instead of treating every plotted cell as independent.",
+        "multiplicity": "Both P and Q sweeps and all original estimator curves with source-required dispersion/control coverage; whole-family criterion unresolved.",
+        "rationale": "This is an unresolved design for reproducing the original numerical curve family on recovered source support, not a supplied scientific acceptance rule. No norm, scalar loss, all-close tolerance, per-cell or simultaneous criterion, replication count, or significance threshold is inferred. If the original claim instead requires a relational/distributional comparator, declare that unsupported class explicitly before adoption; this numerical family declaration cannot substitute for it.",
+        "evidence_ids": [
+          "final-paper",
+          "released-synthetic"
+        ]
+      },
+      "evidence_ids": [
+        "final-paper",
+        "released-synthetic",
+        "released-estimator"
+      ]
+    },
+    {
+      "id": "fig2_biological_finite_sample_pr",
+      "kind": "indexed_array_family",
+      "description": "Complete named Figure2 biological P/Q convergence families: Stringer V1 calcium, Majaj IT spikes, TVSD V4 LFP and THINGS IT fMRI. All original source-defined cohorts and required paired-trial/noise controls must be resolved; one exposed Stringer session is partial.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig2_biological_finite_sample_pr",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "fig2_stringer_v1_calcium_pr_p",
+            "manifest_key": "fig2_stringer_v1_calcium_pr_p",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Stringer mouse V1 calcium versus sampled P, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "P",
+                "units": "sampled stimulus rows",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original P coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_stringer_v1_calcium_pr_q",
+            "manifest_key": "fig2_stringer_v1_calcium_pr_q",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Stringer mouse V1 calcium versus sampled Q, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "Q",
+                "units": "sampled neuron/feature columns",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Q coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_majaj_it_spikes_pr_p",
+            "manifest_key": "fig2_majaj_it_spikes_pr_p",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Majaj macaque IT spiking versus sampled P, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "P",
+                "units": "sampled stimulus rows",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original P coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_majaj_it_spikes_pr_q",
+            "manifest_key": "fig2_majaj_it_spikes_pr_q",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Majaj macaque IT spiking versus sampled Q, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "Q",
+                "units": "sampled neuron/feature columns",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Q coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_tvsd_v4_lfp_pr_p",
+            "manifest_key": "fig2_tvsd_v4_lfp_pr_p",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Papale/TVSD macaque V4 LFP, not the available MUA branch versus sampled P, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "P",
+                "units": "sampled stimulus rows",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original P coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_tvsd_v4_lfp_pr_q",
+            "manifest_key": "fig2_tvsd_v4_lfp_pr_q",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Papale/TVSD macaque V4 LFP, not the available MUA branch versus sampled Q, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "Q",
+                "units": "sampled neuron/feature columns",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Q coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_things_it_fmri_pr_p",
+            "manifest_key": "fig2_things_it_fmri_pr_p",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Hebart/THINGS human IT fMRI versus sampled P, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "P",
+                "units": "sampled stimulus rows",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original P coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "fig2_things_it_fmri_pr_q",
+            "manifest_key": "fig2_things_it_fmri_pr_q",
+            "source_quantity": "Figure 2 original participation-ratio convergence curve for Hebart/THINGS human IT fMRI versus sampled Q, retaining every original recording/subject panel and estimator.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_recording_or_subject",
+                "units": "source recording/animal/subject identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Complete original final-panel roster and source-version/ROI/session join are unresolved. Retained candidate cohort lists are leads, not admitted coordinate manifests."
+                }
+              },
+              {
+                "name": "Q",
+                "units": "sampled neuron/feature columns",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Q coordinate identities per source recording are unknown. Shared grids, rectangularity, padding or a common full-population support are not inferred."
+                }
+              },
+              {
+                "name": "estimator_variant",
+                "units": "named source correction variant",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "naive",
+                    "row",
+                    "col",
+                    "both"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-recording per-point PR summary from permitted same-identity trial observations. Exact original mean/median, failure denominators and source dispersion remain unresolved. Full-data biological PR is an estimate, not known truth; do not replace the curve with a plateau or average across animals.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "stringer-source",
+              "released-estimator"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "final-paper",
+          "stringer-source",
+          "released-estimator"
+        ]
+      },
+      "required_granular_output_ids": [
+        "biological_original_observations_and_preprocessing",
+        "biological_subsample_repeat_ledger",
+        "biological_A_B_gamma_draws",
+        "biological_curves_dispersion_full_data_estimates_and_support",
+        "source_estimand_noise_and_finite_support_controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover original numerical convergence curves and their full-data estimate/reference roles, then justify complete-family reproduction on original support. Neither increased PR nor flatness is the reproduction criterion.",
+        "independent_unit": "Original source recordings/animals/subjects for between-recording statements; overlapping resamples of a fixed recording supply conditional variability only.",
+        "dependence": "Paired trial matrices share stimulus/neuron identities; overlapping stimulus/neuron draws and repeated observations are dependent. Preserve recording/animal nesting.",
+        "multiplicity": "Every named modality, original recording, P/Q support and estimator plus required noise/dispersion controls; no pooled or selected-session success.",
+        "rationale": "This is an unresolved design for reproducing the original numerical curve family on recovered source support, not a supplied scientific acceptance rule. No norm, scalar loss, all-close tolerance, per-cell or simultaneous criterion, replication count, or significance threshold is inferred. If the original claim instead requires a relational/distributional comparator, declare that unsupported class explicitly before adoption; this numerical family declaration cannot substitute for it.",
+        "evidence_ids": [
+          "final-paper",
+          "stringer-source"
+        ]
+      },
+      "evidence_ids": [
+        "final-paper",
+        "stringer-source",
+        "released-estimator"
+      ]
+    },
+    {
+      "id": "s1_moment_reduction_companion",
+      "kind": "indexed_array_family",
+      "description": "Original FigureS1 Majaj V4/IT mean-of-ratios versus ratio-of-means and source SD/support companions. Source-native per-draw A and B are indispensable; gamma-only records cannot derive this family.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "s1_moment_reduction_companion",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "s1_majaj_v4_mean_ratio",
+            "manifest_key": "s1_majaj_v4_mean_ratio",
+            "source_quantity": "Figure S1 original Majaj V4 mean(A/B) curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average the original per-draw A/B ratios under the original source nonfinite/failure policy; no replacement with ratio of averages.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "s1_majaj_v4_ratio_of_means",
+            "manifest_key": "s1_majaj_v4_ratio_of_means",
+            "source_quantity": "Figure S1 original Majaj V4 mean(A)/mean(B) curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Divide the original mean numerator A by original mean denominator B on the same source draws; not mean(A/B), not a finite-sample unbiased claim.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "s1_majaj_v4_mean_ratio_sd",
+            "manifest_key": "s1_majaj_v4_mean_ratio_sd",
+            "source_quantity": "Figure S1 original Majaj V4 source SD of A/B curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the original source SD/support companion for the mean-of-ratios plot; original ddof, draw support, missingness and display rule remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "s1_majaj_it_mean_ratio",
+            "manifest_key": "s1_majaj_it_mean_ratio",
+            "source_quantity": "Figure S1 original Majaj IT mean(A/B) curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average the original per-draw A/B ratios under the original source nonfinite/failure policy; no replacement with ratio of averages.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "s1_majaj_it_ratio_of_means",
+            "manifest_key": "s1_majaj_it_ratio_of_means",
+            "source_quantity": "Figure S1 original Majaj IT mean(A)/mean(B) curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Divide the original mean numerator A by original mean denominator B on the same source draws; not mean(A/B), not a finite-sample unbiased claim.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          },
+          {
+            "id": "s1_majaj_it_mean_ratio_sd",
+            "manifest_key": "s1_majaj_it_mean_ratio_sd",
+            "source_quantity": "Figure S1 original Majaj IT source SD of A/B curve over original sample fractions; same exact draw identities connect the two reductions.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": [
+              {
+                "name": "source_monkey_or_recording",
+                "units": "original Majaj recording/monkey identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original per-panel monkey/recording roster and any pooled-source rule are unresolved; no new equal-monkey reduction is imposed."
+                }
+              },
+              {
+                "name": "source_subsampling_condition",
+                "units": "source subsampling fraction / P,Q condition",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original fraction coordinates, conversion to stimulus/neuron counts, ordering and condition membership are unresolved; do not substitute the released grid."
+                }
+              },
+              {
+                "name": "source_estimator_variant",
+                "units": "named source estimator",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original Figure S1 estimator inventory/order must be recovered; do not infer every released variant was plotted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless participation ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the original source SD/support companion for the mean-of-ratios plot; original ddof, draw support, missingness and display rule remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "final-paper",
+              "released-estimator"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "final-paper",
+          "released-estimator"
+        ]
+      },
+      "required_granular_output_ids": [
+        "majaj_original_draw_and_trial_ledger",
+        "majaj_A_B_gamma_draws",
+        "s1_reductions_dispersion_and_denominators"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover source-equivalent S1 curve and dispersion references; independently recompute both reductions from identical original A/B draws and compare the complete family under justified source uncertainty.",
+        "independent_unit": "Original source monkey/recording and its conditional resampling draws; exact original cohort and aggregation unresolved.",
+        "dependence": "Both reductions use the same A/B draws; the numerator/denominator covariance and overlapping trials cannot be ignored.",
+        "multiplicity": "Both V4 and IT, both reductions, all source sample fractions/estimator variants and original SD/support companions; no selected reducer substitutes.",
+        "rationale": "This is an unresolved design for reproducing the original numerical curve family on recovered source support, not a supplied scientific acceptance rule. No norm, scalar loss, all-close tolerance, per-cell or simultaneous criterion, replication count, or significance threshold is inferred. If the original claim instead requires a relational/distributional comparator, declare that unsupported class explicitly before adoption; this numerical family declaration cannot substitute for it.",
+        "evidence_ids": [
+          "final-paper"
+        ]
+      },
+      "evidence_ids": [
+        "final-paper",
+        "released-estimator"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Final-paper Figure1 executable/source variant, centering and trial-noise recipe, original grids, draws and numerical ordinates are unresolved. The authenticated released400-slot/20-seed/single-noisy-matrix example is not confirmed final-paper output.",
+    "Final biological release/file/ROI/session/animal/subject mapping, trial alignment, preprocessing, original per-panel P/Q/fraction coordinates and source-equivalent numerical references remain unresolved. The old19-panel/76-record exposed Stringer calibration is not the full source panel.",
+    "Published draw counts inherited from earlier audit (Stringer50, Majaj500, TVSD250, THINGS50) are not coordinate identities or measured replication here. Source Stringer100 and released Majaj1000 differ; no convenient recipe is selected.",
+    "All representations, semantic/support/domain/derivation identities, allowed dtypes, unknown dimensions and coordinates remain unresolved/null. Biological and S1 shapes are null because common-grid rectangularity and exact roster joins are unverified; no padding or invented member roster is allowed.",
+    "Expected reference manifests and original-source equivalence are unrecovered. The source paper is allowed input; printed/loaded curves, a program emitting them, or calibrated author-formula values cannot prove data derivation.",
+    "Exact original summaries, uncertainty/dispersion, moment normalization, nonfinite/missingness/failure denominators and source-required noise/estimand/finite-population controls must be recovered. Keep mean(A/B) distinct from mean(A)/mean(B) with matched A/B draws.",
+    "Numerical-reference comparison is an unresolved design for the declared original curves, not an invented scientific criterion. No tolerance, norm, scalar loss, simultaneous rule, minimum effect or uncertainty hash is supplied. Other source relational/distributional claims need their own supported comparator and cannot be relabeled numerical equivalence.",
+    "No authentic complete final-data manifest, source-admitted raw-data submitted analysis, complete independent granular-output verifier or scientific comparison program is qualified. Existing direct arithmetic is a primitive and full programme is BUILD_ONLY; released author_case emits gamma only.",
+    "The retained original per-session naive/bias-corrected PR-versus-stimulus/neuron curves and repeat-trial comparison belong to the same primary quantity/family as current finite-sample gamma estimation. However, the current legacy clause explicitly preserves every full-programme source obligation while this declaration specifies named Figure1/Figure2/FigureS1 quantities. The exact relation between those named curves and all retained broader obligations remains unresolved; preserve the full42-obligation inventory and both exact definitions for explicit coverage adjudication. Do not silently narrow to these curves, automatically enroll every paper figure or prospective design, or treat missing accepted18 membership as a scientific scope conflict.",
+    "Final current task bytes remain integration-owned and on HOLD. Neither paired condition has authenticated common inputs, source-code package, identity, evaluator, exposure or cumulative budgets. Metadata validation supplies no AI result.",
+    "Final-paper descriptions are inherited from retained current-contract evidence and accepted-design/source audits. No retained full final-paper text/PDF was available for independent reread in this rollout; no new primary numerical authentication or source acquisition is claimed."
+  ]
+}

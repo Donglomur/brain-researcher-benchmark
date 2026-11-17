@@ -1,0 +1,2528 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-REP-001",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The approved empirical primary has two substantive source-derived indexed families for the Fig.2f numerical route. Native observations, exact support/identities, publication reference arrays, scientific comparison criteria and complete state/position/stability coverage are unresolved. V2 can represent the known matrices/curves, but a standalone declaration does not authenticate source derivation or establish full primary eligibility. No mixed-target pairing or admission policy is supplied.",
+  "source_paper": {
+    "title": "Learning produces an orthogonalized state machine in the hippocampus",
+    "url": "https://www.nature.com/articles/s41586-024-08548-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-08548-w",
+      "locator": "Results, Progressive decorrelation of neural activity during learning; Fig. 2e–f",
+      "supports": "Original registered result describes six population-correlation learning curves in 11 mice, with increases and decreases in different regions."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/sprustonlab/OSM_Paper_Figures/c1d1788b54c737efe24402e02762eee10da0d0d7/fig_2/Fig_2f.ipynb",
+      "locator": "List all animal names; load pre-computed place field data and calculate correlation matrices; key sections over days",
+      "supports": "Set A cohort, source binF observations, Cue Set A exclusions and region-wise correlation arithmetic. This conversion uses the retained notebook receipt and inspected implementation/documentation; no fresh raw Fig_2f notebook audit is claimed."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/sprustonlab/OSM_Paper_Figures/c1d1788b54c737efe24402e02762eee10da0d0d7/README.md",
+      "locator": "Browsing the data; Data availability; Dependencies",
+      "supports": "Author longitudinal registered-fluorescence route uses vr2p and Figshare 27273552, including multipart archives."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-001/task.json",
+      "locator": "primary_outputs; evaluation; improvement",
+      "supports": "Registered task is longitudinal population-vector/correlation reconstruction; proposed animal-held-out model comparison is an extension."
+    },
+    {
+      "id": "evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "population_correlations; region_means; normalize_learning; aggregate_animals; HOLDS",
+      "supports": "Prepared-export Fig. 2f evaluator reconstructs correlations and source summaries, with no qualified prediction task or numeric paper success threshold."
+    },
+    {
+      "id": "paper-state-context",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-08548-w",
+      "locator": "Methods population-vector analysis and Extended Data 7 description, as independently read in the accepted scope review",
+      "supports": "The empirical interpretation rests on PV correlations/angles rather than UMAP appearance. Exact source mapping for state-versus-position and stability remains unresolved; this does not specify a new decoder or cross-day statistic."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Longitudinal hippocampal population decorrelation and state-specific versus position-based representation/stability from per-cell neural activity and matched behavior, including complete source-defined regional comparisons; no automatic whole-paper or every-figure requirement.",
+      "evidence_ids": [
+        "paper",
+        "paper-state-context",
+        "registration"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original longitudinal hippocampal per-cell fluorescence/activity and matched behavior from the source learning experiment, with author Figshare article 27273552 version 1 native registered-fluorescence/place-field records. The complete native observation packet is not authenticated here; a stretched-trial subset or generated symbolic sequence is not the original longitudinal cohort.",
+      "evidence_ids": [
+        "paper",
+        "readme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The recorded Fig.2f Cue Set A roster is Tyche-A4, Tyche-A5, Tyche-A7, Tyche-B2, Tyche-B3, Tyche-B4, Tyche-B5, Tyche-C1, Tyche-D1, Tyche-F1, Tyche-F5. Each animal must retain its complete original session ledger and registered-cell/trial identities. Exact native completeness and figure-specific 97-session and first/last-session support remain unbound; 97 sessions are not 97 independent animals.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This is the original observational longitudinal analysis, not a train/test forecasting task. The retained Fig.2f route selects the initial consecutive sessions whose cue_sets are exactly [Cue Set A], stopping at the first other/mixed cue session and never restoring later Set A sessions. Native selection parity and the exact source supports for other retained contrasts remain unresolved. No held-animal predictive split is introduced.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original native registered fluorescence, behavioral position/running/trial/cue/session information and source cell eligibility are required. The existing numerical interface accepts prepared safe NPZ records containing near_binF and far_binF, each registered cells by 46 bins, plus cell_ids, for Cue Set A/{1,2}/excl_no_response/{session}/putative. Its identical ordered cell-ID condition across days is conservative and requires source/native parity review; operator-declared binF provenance is insufficient.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "code",
+        "evaluator"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source mean fluorescence in 5-cm bins for running speed strictly greater than 5 cm/s, original putative-cell/no-response eligibility and cross-day registration must be authenticated from native observations. Near/far arrays preserve source undefined values. The retained component performs no native vr2p/Zarr export or fluorescence preprocessing. No invented spatial origin, bin center, registration selection or imputation is supplied.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "evaluator"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Reproduce complete near-by-far Pearson population correlations across matched cells (46 by 46 per eligible session), six literal masked arithmetic region means, and their complete learning trajectories. This is empirical geometry, not a reward score or universal decorrelation objective. The exact original state-specific-versus-position and stability contrasts, complete numerical references and justified scientific comparison criteria remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "For each animal/region, ordinary masked means propagate NaN; remove NaN days before placing valid values evenly on [0,1] and interpolating 1000 inclusive coordinates, compressing missing-day gaps. Fewer than two valid days leaves an undefined curve. Keep all eleven animals in equal-animal group mean and source std(ddof=0)/sqrt(11) SEM, including undefined propagation. Source SEM is descriptive, not a reproduction tolerance or an uncertainty policy; 1000 interpolated coordinates and six regions are not independent animals. Exact other contrast/uncertainty aggregation remains unbound.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Require all eligible sessions of every recorded Fig.2f animal, full 46-by-46 PV matrices, all six source regions including increasing, decreasing and unchanged/end-null patterns, valid-day counts, every animal trajectory and group mean/source SEM. The two indexed families below represent that known numerical route only. Exact source mapping and indispensable sensory/task-context/registration controls for the retained state-versus-position and learning-stability claims remain mandatory unresolved coverage; the prepared evaluator does not implement direct day-to-day PV stability. Preserve distinct 97-session and first/last supports. Do not add every figure, a new decoder, a held-animal split or all model simulations. A separately claimed mechanistic model explanation requires source-defined representation/learning-dynamics comparators; reward performance alone is insufficient.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "The authentic longitudinal neural observations and matched behavior needed for source-defined descriptive/representational analyses are permitted. The empirical task is not blind forecasting. Original cell/session/trial/cue identities and source exclusions must be authenticated. The paper+data versus paper+data+author-code conditions would differ only in supplied author code under matched source input/exposure/budget policies; those protocols are unavailable. ED9 generated symbols and model reward recall remain separately named secondary simulation evidence.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "paper-state-context"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig2f_longitudinal_population_matrices",
+      "kind": "indexed_array_family",
+      "description": "Complete source near/far population geometry at each original eligible session for all eleven recorded animals. Session counts and native identities are unresolved; known 46-by-46 dimensions do not authenticate observations or reproduce the full empirical primary.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig2f_longitudinal_population_matrices",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "Tyche_A4_session_correlations",
+            "manifest_key": "animals/Tyche-A4/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-A4 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A4: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A5_session_correlations",
+            "manifest_key": "animals/Tyche-A5/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-A5 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A7_session_correlations",
+            "manifest_key": "animals/Tyche-A7/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-A7 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A7: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B2_session_correlations",
+            "manifest_key": "animals/Tyche-B2/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-B2 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B2: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B3_session_correlations",
+            "manifest_key": "animals/Tyche-B3/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-B3 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B3: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B4_session_correlations",
+            "manifest_key": "animals/Tyche-B4/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-B4 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B4: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B5_session_correlations",
+            "manifest_key": "animals/Tyche-B5/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-B5 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_C1_session_correlations",
+            "manifest_key": "animals/Tyche-C1/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-C1 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-C1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_D1_session_correlations",
+            "manifest_key": "animals/Tyche-D1/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-D1 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-D1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F1_session_correlations",
+            "manifest_key": "animals/Tyche-F1/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-F1 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-F1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F5_session_correlations",
+            "manifest_key": "animals/Tyche-F5/days/correlations_near_by_far",
+            "source_quantity": "Complete Tyche-F5 within-session near-by-far Pearson population correlations across matched cells, stacked in that animal's selected-session order; not cross-day correlations.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              46,
+              46
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-F5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "near_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              },
+              {
+                "name": "far_position_bin",
+                "units": "source zero-based bin index; physical origin/centers not bound",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 46
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One coefficient per near/far bin pair per original eligible session; no across-animal, cell-weighted, diagonal-only or selected-region reduction. Constant vectors/NaNs yield undefined values; no pairwise cell deletion or zero fill.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "code",
+          "evaluator"
+        ]
+      },
+      "required_granular_output_ids": [
+        "native_matched_observations",
+        "prepared_binf_and_registered_cells",
+        "session_population_matrices"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved. Authenticate original numerical references and source support, then justify an independently reviewed complete-family scientific agreement rule. No norm, reduction, cellwise threshold, printed-number match or significance cutoff is supplied.",
+        "independent_unit": "Biological animal for the longitudinal Fig.2f group; original within-animal session/cell/trial dependence is retained. Other figure-specific independent units remain unresolved.",
+        "dependence": "Repeated sessions, registered cells and trials are nested within animals; near/far bins, overlapping masks, six regions and interpolated learning coordinates are dependent. Do not treat them as independent replicates.",
+        "multiplicity": "Full declared family and all indispensable source companions; exact justified simultaneous comparison/uncertainty policy is unresolved. No selected peak, final ordinate or direction-only test.",
+        "rationale": "No authentic publication reference arrays, original comparison estimator or scientifically justified tolerance/uncertainty policy exists in this work. Source descriptive SEM and null-result nonrejection are insufficient. Numerical reference equivalence is an unresolved comparison intent for these numerical arrays, not a chosen acceptance method for the still-unmapped state/stability claims.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "evaluator"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "code",
+        "evaluator"
+      ]
+    },
+    {
+      "id": "fig2f_six_region_learning_trajectories",
+      "kind": "indexed_array_family",
+      "description": "All six original regional learning patterns with per-session means, valid-day counts, complete per-animal curves, equal-animal group mean and source descriptive SEM. Retain increasing, decreasing and unchanged/end-null regions; not a universal decorrelation criterion.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig2f_six_region_learning_trajectories",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "Tyche_A4_session_region_means",
+            "manifest_key": "animals/Tyche-A4/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-A4 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A4: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A4_valid_day_counts",
+            "manifest_key": "animals/Tyche-A4/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-A4 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A4_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-A4/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-A4 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A5_session_region_means",
+            "manifest_key": "animals/Tyche-A5/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-A5 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A5_valid_day_counts",
+            "manifest_key": "animals/Tyche-A5/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-A5 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A5_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-A5/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-A5 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A7_session_region_means",
+            "manifest_key": "animals/Tyche-A7/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-A7 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-A7: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A7_valid_day_counts",
+            "manifest_key": "animals/Tyche-A7/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-A7 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_A7_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-A7/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-A7 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B2_session_region_means",
+            "manifest_key": "animals/Tyche-B2/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-B2 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B2: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B2_valid_day_counts",
+            "manifest_key": "animals/Tyche-B2/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-B2 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B2_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-B2/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-B2 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B3_session_region_means",
+            "manifest_key": "animals/Tyche-B3/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-B3 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B3: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B3_valid_day_counts",
+            "manifest_key": "animals/Tyche-B3/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-B3 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B3_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-B3/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-B3 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B4_session_region_means",
+            "manifest_key": "animals/Tyche-B4/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-B4 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B4: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B4_valid_day_counts",
+            "manifest_key": "animals/Tyche-B4/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-B4 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B4_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-B4/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-B4 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B5_session_region_means",
+            "manifest_key": "animals/Tyche-B5/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-B5 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-B5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B5_valid_day_counts",
+            "manifest_key": "animals/Tyche-B5/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-B5 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_B5_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-B5/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-B5 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_C1_session_region_means",
+            "manifest_key": "animals/Tyche-C1/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-C1 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-C1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_C1_valid_day_counts",
+            "manifest_key": "animals/Tyche-C1/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-C1 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_C1_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-C1/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-C1 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_D1_session_region_means",
+            "manifest_key": "animals/Tyche-D1/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-D1 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-D1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_D1_valid_day_counts",
+            "manifest_key": "animals/Tyche-D1/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-D1 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_D1_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-D1/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-D1 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F1_session_region_means",
+            "manifest_key": "animals/Tyche-F1/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-F1 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-F1: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F1_valid_day_counts",
+            "manifest_key": "animals/Tyche-F1/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-F1 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F1_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-F1/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-F1 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F5_session_region_means",
+            "manifest_key": "animals/Tyche-F5/days/region_means",
+            "source_quantity": "All six literal-mask arithmetic means for each original eligible Tyche-F5 session, retaining undefined cases.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              6
+            ],
+            "axes": [
+              {
+                "name": "selected_native_session",
+                "units": "ordered source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Tyche-F5: complete native ledger and number/identity of initial pure Cue Set A sessions are unrecovered. No 20-session truncation, padding or guessed session coordinates."
+                }
+              },
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Each mask includes every selected matrix entry; use ordinary arithmetic mean with NaN propagation. No Fisher transform or new weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F5_valid_day_counts",
+            "manifest_key": "animals/Tyche-F5/valid_day_counts_by_region",
+            "source_quantity": "Number of non-NaN original session region means retained separately for each Tyche-F5 region before normalized interpolation.",
+            "membership": "fixed",
+            "shape": [
+              6
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "count of valid session region means",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Count original valid days per region before interpolation; a denominator/undefinedness audit quantity, not an independent sample count or acceptance threshold.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "Tyche_F5_normalized_learning_curves",
+            "manifest_key": "animals/Tyche-F5/normalized_learning_curves",
+            "source_quantity": "All six complete source-interpolated Tyche-F5 regional learning trajectories.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Delete NaN days separately per region, evenly locate remaining values on [0,1], interpolate to all 1000 inclusive normalized coordinates. Missing-day gaps are compressed. Fewer than two valid values leaves an undefined region curve.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "group_mean",
+            "manifest_key": "group/mean",
+            "source_quantity": "Complete equal-animal mean of the eleven original animal curves for all six regions and every normalized coordinate.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Ordinary equal-animal mean over all eleven curves; an undefined animal remains and propagates. No available-case animal deletion or cell weighting.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          },
+          {
+            "id": "group_source_sem",
+            "manifest_key": "group/source_sem_ddof0",
+            "source_quantity": "Complete descriptive source SEM curve from the eleven original animal curves for all six regions and every normalized coordinate.",
+            "membership": "fixed",
+            "shape": [
+              6,
+              1000
+            ],
+            "axes": [
+              {
+                "name": "source_region",
+                "units": "literal mask identity; source plot aliases do not override indices",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "off_diagonal",
+                    "pre_r2_indices_34_37",
+                    "pre_r1_indices_24_27",
+                    "initial",
+                    "indicator",
+                    "end"
+                  ]
+                }
+              },
+              {
+                "name": "normalized_learning_coordinate",
+                "units": "dimensionless normalized learning progress, not physical elapsed time",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Source construction is np.linspace(0,1,1000), including both endpoints. Authentic coordinate bytes/identity have not been staged; no replacement floating-point grid is generated. Each animal/region source interpolation uses valid days after NaN removal."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson correlation coefficient",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Population SD across eleven animals (ddof=0) divided by sqrt(11), preserving undefined animals. This is the source descriptive SEM, not a confidence interval, scientific equivalence tolerance or rule for declaring reproduction.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "code",
+              "evaluator"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "code",
+          "evaluator"
+        ]
+      },
+      "required_granular_output_ids": [
+        "session_population_matrices",
+        "source_region_masks",
+        "session_region_means",
+        "animal_valid_day_counts_and_curves",
+        "group_mean_and_source_sem"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Unresolved. Authenticate original numerical references and source support, then justify an independently reviewed complete-family scientific agreement rule. No norm, reduction, cellwise threshold, printed-number match or significance cutoff is supplied.",
+        "independent_unit": "Biological animal for the longitudinal Fig.2f group; original within-animal session/cell/trial dependence is retained. Other figure-specific independent units remain unresolved.",
+        "dependence": "Repeated sessions, registered cells and trials are nested within animals; near/far bins, overlapping masks, six regions and interpolated learning coordinates are dependent. Do not treat them as independent replicates.",
+        "multiplicity": "Full declared family and all indispensable source companions; exact justified simultaneous comparison/uncertainty policy is unresolved. No selected peak, final ordinate or direction-only test.",
+        "rationale": "No authentic publication reference arrays, original comparison estimator or scientifically justified tolerance/uncertainty policy exists in this work. Source descriptive SEM and null-result nonrejection are insufficient. Numerical reference equivalence is an unresolved comparison intent for these numerical arrays, not a chosen acceptance method for the still-unmapped state/stability claims.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "evaluator"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "code",
+        "evaluator"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The two indexed families cover the reviewed Fig.2f numerical route, not complete primary reproduction. The exact original state-specific-versus-position and learning-stability observations, contrasts, PV-correlation/angle quantities, sensory/task-context controls and panel/axis mapping remain unresolved. The retained evaluator does not implement direct day-to-day PV stability or a state-versus-continuous-position analysis. No guessed third family, decoder, contrast, held-animal split or proxy is supplied; this mandatory coverage gap prevents admission.",
+    "Authentic full animal/session/cell/trial identities, complete native ledgers, near/far definitions, source eligibility and matched behavior are not staged. Unknown per-animal session dimensions remain null and are not padded to a common shape. The recorded 11-animal roster is a source-declared requirement, not a newly observed population manifest.",
+    "Source-native fluorescence/behavior-to-binF derivation, 5-cm bins with speed strictly greater than 5 cm/s, cell eligibility and registration need independent verification. The legacy evaluator accepts operator-prepared NPZ exports; its identical cross-day ordered-cell condition is conservative and has not been established as native publication equivalence.",
+    "The 97-session comparison, first/last comparisons and eleven-animal learning summaries have distinct supports and aggregation. Exact original cohort membership, source contrasts and uncertainty calculations remain unbound. Sessions/bins/cells/interpolation coordinates are not independent animals.",
+    "No authentic publication reference matrices/curves, complete expected reference manifest, native support/axis identities, domain-policy manifest, allowed source numerical serialization, independent scientific comparator, criterion or uncertainty policy is supplied. All such bindings remain null; known source dimensions and hashes of metadata are not empirical identities.",
+    "NaN/constant-vector propagation, per-region missing-day deletion before source interpolation, compressed missing-day gaps, fewer-than-two-valid-day undefined curves, equal-animal weighting and source ddof=0 SEM must be verified from actual granular outputs. Legacy JSON null serialization is preserved as evidence, but a trusted external array/domain adapter and verifier are unavailable. No zero fill, silent deletion or default finite-only policy is inferred.",
+    "No complete native submitted-analysis runner, authentic data manifest or independent granular derivation verifier exists. The actual retained interface only computes prepared binF to PV matrices, mask means and complete curves. An independent operator must run frozen submitted code on authenticated original inputs and verify all native/export/matrix/mask/normalization/group reductions. Copied references or a declared hash do not establish computation.",
+    "The empirical Fig_2f notebook pin is a retained source receipt plus inspected implementation/documentation; it was not freshly recovered or audited during this conversion. Source-version/publication parity and exact external result mappings remain unresolved. The legacy evaluator retains its historical task hash and false qualification flags; this declaration does not repair its runtime or lineage binding.",
+    "No numerical reproduction margin, uncertainty/multiplicity rule or scientifically justified same-primary superiority ordering is frozen. More decorrelation, lower p-values, nonrejection of an end-region null, UMAP appearance or ED9 reward recall is not an admissible substitute. Source_unresolved is substantive; v2 representation alone does not resolve science or access.",
+    "ED9a generated-sequence reward prediction remains authentic secondary simulation evidence. Its recall score admits always-reward=1.0, and model/version/test-informed-selection limitations persist. The unchanged secondary improvement contract cannot be paired with this empirical primary by copied anchor strings or a hash repin. Paired primary outcomes and primary superiority remain unavailable; no outcomes bundle or admission policy is supplied.",
+    "The accepted round02 primary_scope is copied exactly as the target. Canonical filename adoption, unavailable-marker integration and final task-identity release belong to the coordinator/binding owner after independent source/schema review; all scientific outcomes remain unknown."
+  ]
+}

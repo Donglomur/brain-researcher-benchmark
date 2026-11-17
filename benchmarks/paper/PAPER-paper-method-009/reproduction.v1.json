@@ -1,0 +1,441 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-009",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Figure3 descriptive/quantitative finding panel is independently identifiable and is a valid reproduction objective, including both variability fractions and operational-time validation. Exact source identities, empirical preprocessing, most cell-level reference values, the discrepancy formula and source-derived computational verification remain unresolved; unit-adapter controls do not establish source reproduction. The source-unresolved classification follows those scientific gaps independently of the separate schema_blocked engineering coverage for full native array findings; no vector is flattened into placeholder scalars.",
+  "source_paper": {
+    "title": "A doubly stochastic renewal framework for partitioning spiking variability",
+    "url": "https://www.nature.com/articles/s41467-025-63821-4"
+  },
+  "evidence": [
+    {
+      "id": "dsr-paper",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12484930/fullTextXML",
+      "locator": "Results Sec7, Validation with intracellular voltage recordings, Par22–24 and Fig3; Methods Sec17, Intracellular voltage recordings, Par54–55",
+      "supports": "Reports the 23% discrepancy, eight PV neurons from five mice, twenty 10-second segment estimates, voltage-to-rate procedure and inconsistent 25 ms caption versus 50 ms Results/Methods."
+    },
+    {
+      "id": "dsr-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md",
+      "locator": "Project description, Features and examples; pinned revision ba0490d064ea299c975e12bb94f3d922468f6b50",
+      "supports": "Identifies the DSR simulator and estimator; example pathways use synthetic spike generation and do not supply the complete empirical Figure 3 workflow."
+    },
+    {
+      "id": "dsr-estimator",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/neuron_stat.py",
+      "locator": "_compute_bin_counts and neuron_stats",
+      "supports": "Provides the native spike-count-based irregularity estimator and defaults, which do not establish the original Figure 3 settings."
+    },
+    {
+      "id": "dsr-generator",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/time_rescaling.py",
+      "locator": "Time-rescaling spike-generation implementation",
+      "supports": "Maps operational intervals into real-time spike indices given rate; it is not the empirical membrane-voltage spline and real-to-operational validation pipeline."
+    },
+    {
+      "id": "dsr-fig3-results",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12484930/fullTextXML",
+      "locator": "Sec7 final paragraph, Fig3 caption panels a-d, and Sec17; cached paper SHA256 004fb8825cc1329c69f4e175aae5c6188964c91d8910ad847c7c33957cf0d4fa",
+      "supports": "All eight neurons have reported absolute mean operational-ISI deviation from 1 below 0.031; DSR and voltage variability fractions are 0.26 +/- 0.02 and 0.27 +/- 0.04, respectively, mean +/- SD across neurons. Fig3d uses twenty ten-second segment estimates per neuron and within-neuron SEM; Fig3c includes raw CV2, voltage-derived phi, spike-only DSR phi and a Poisson phi=1 reference. Exact cell values and the 23% discrepancy formula are not recovered."
+    },
+    {
+      "id": "pala-source-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/1304771",
+      "locator": "Original data.mat inventory: 1310739375 bytes, recorded MD5 dc333d3d03b79460f2ec1d36122206c8; not acquired or decoded in this rollout",
+      "supports": "Authentic whole-cell voltage input route. Inventory identity does not establish the eight-neuron, five-mouse, source-trial or twenty-segment mapping."
+    },
+    {
+      "id": "pala-source-unit",
+      "kind": "author_code",
+      "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Analysis.m/content",
+      "locator": "Lines 146-150; SHA256 03d3cc4ff3f49692e5f9eff69520d174c3e1ad2afd670b6213e75f2339878ef2",
+      "supports": "Deposited voltage convention is volts: the helper multiplies by 1000 for mV and uses a -0.03 V spike threshold labelled -30 mV. Original Pala exclusions are not automatically the later DSR Figure3 exclusions."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Pala/Petersen intracellular whole-cell recordings deposited at Zenodo 1304771, linked in the source paper’s Data availability; original membrane-potential data and spikes define the empirical validation. Synthetic DSR examples do not replace this dataset.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source Methods specify eight qualifying layer-2/3 barrel-cortex PV neurons from five female mice, at least 20 Hz trial-average firing and at least ten 20-second trials. Exact cell/trial identities and inclusion mapping to the deposited matrix have not been recovered.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Figure 3 divides each recording into twenty 10-second segments and reports mean/SEM across segments; these are repeated estimates, not training/test partitions. Exact segment mapping is unrecovered. Introducing prospective held trials or segment selection creates an extension, not the original validation.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Candidate estimator receives source spike trains with source trial durations and boundaries. Independent membrane-voltage-derived irregularity defines the comparator; providing its estimated target or fitted voltage model as candidate input would change the spike-only task.",
+      "evidence_ids": [
+        "dsr-paper",
+        "dsr-estimator"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source 20-kHz voltage processing detects −30 mV crossings, interpolates 3 ms before/5 ms after spikes, bins voltage/rate and fits a spline over voltage bins. Results and Methods specify 50 ms; Figure 3b specifies 25 ms. Spline, support, exact bin choice and segment use must be recovered from source-authorized evidence rather than selected for candidate advantage.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "The source reports an average discrepancy of 23% between spike-only and voltage-derived phi. The reviewed text does not resolve its denominator, signed/absolute operation and aggregation, so it is not yet an executable percentage-error score.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 3d averages twenty segment estimates per neuron and displays SEM; the eight-neuron summary is not twenty independent biological replicates per cell. The averaging rule producing 23% discrepancy remains unrecovered.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Figure3 intracellular validation requires all eight source neurons from five mice; Fig3a voltage/spike trace provenance, Fig3b voltage-rate observations and 1 mV bin means/SEM/spline, Fig3c complete per-neuron raw CV2, voltage phi and spike-only DSR phi with Poisson reference, Fig3d both per-neuron segment fraction means/SEMs, all-neuron operational-ISI normalization, both across-neuron fraction means/SD and the reported but mathematically unresolved 23% discrepancy. The full native per-neuron/segment/curve arrays have unrecovered identities and values and cannot be admitted as complete vector findings by the current scalar/categorical schema. They remain mandatory in the external computational design and are not replaced by aggregate scalars, narrative categories or invented ordinal finding slots. No synthetic Fig2 or cross-area hierarchy endpoint is substituted.",
+      "evidence_ids": [
+        "dsr-paper",
+        "dsr-fig3-results"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Preserve original spike-only estimator inputs and independent intracellular-voltage reference construction. Raw voltage may support the separately identified reference-reconstruction stage; voltage-derived phi, fitted voltage-rate curves, or reference answers must not enter the spike-only estimator. Trial clocks, durations, source row/biological identity and segment boundaries must be retained. The paper and its printed findings are exposed in both conditions; author code is the sole intended addition in the +code condition. No implemented common input manifest or stage-isolation boundary currently establishes those matched exposures.",
+      "evidence_ids": [
+        "dsr-paper",
+        "dsr-estimator",
+        "pala-source-data",
+        "pala-source-unit"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "dsr-fraction-across-neuron-mean",
+      "kind": "scalar",
+      "description": "Source-reported DSR contribution phi/CVraw2; this biological fraction is reproduced, not maximized.",
+      "status": "verified",
+      "expected": 0.26,
+      "units": "dimensionless",
+      "aggregation": "Mean across all eight original neurons, retaining the complete Fig3d segment-derived cell panel.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-equivalent full-panel reference computation and justified agreement criterion are available. Printed decimal precision is not a scientific tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Freeze a source-grounded comparison rule after authentic cell/segment identities, the source computation and source-target uncertainty are recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "dsr-fraction-across-neuron-sd",
+      "kind": "scalar",
+      "description": "Source-reported across-neuron SD of the DSR contribution; distinct from Fig3d within-neuron SEM.",
+      "status": "verified",
+      "expected": 0.02,
+      "units": "dimensionless",
+      "aggregation": "Standard deviation across all eight original neurons; population/sample SD convention remains unrecovered.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-equivalent full-panel reference computation and justified agreement criterion are available. Printed decimal precision is not a scientific tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Freeze a source-grounded comparison rule after authentic cell/segment identities, the source computation and source-target uncertainty are recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "voltage-fraction-across-neuron-mean",
+      "kind": "scalar",
+      "description": "Source-reported voltage-derived contribution phi/CVraw2; this biological fraction is reproduced, not maximized.",
+      "status": "verified",
+      "expected": 0.27,
+      "units": "dimensionless",
+      "aggregation": "Mean across all eight original neurons, retaining the complete Fig3d segment-derived cell panel.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-equivalent full-panel reference computation and justified agreement criterion are available. Printed decimal precision is not a scientific tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Freeze a source-grounded comparison rule after authentic cell/segment identities, the source computation and source-target uncertainty are recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "voltage-fraction-across-neuron-sd",
+      "kind": "scalar",
+      "description": "Source-reported across-neuron SD of the voltage-derived contribution; distinct from Fig3d within-neuron SEM.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "dimensionless",
+      "aggregation": "Standard deviation across all eight original neurons; population/sample SD convention remains unrecovered.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-equivalent full-panel reference computation and justified agreement criterion are available. Printed decimal precision is not a scientific tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Freeze a source-grounded comparison rule after authentic cell/segment identities, the source computation and source-target uncertainty are recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "spike-voltage-discrepancy",
+      "kind": "scalar",
+      "description": "The source reports 23% average discrepancy between spike-only and voltage-derived phi. Expected remains null because the denominator, signed/absolute operation and aggregation are unresolved; 23 is not an executable target.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent; exact source definition unresolved",
+      "aggregation": "Original eight-neuron Figure3 agreement summary; exact percentage-error formula and aggregation must be recovered.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-equivalent full-panel reference computation and justified agreement criterion are available. Printed decimal precision is not a scientific tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Freeze a source-grounded comparison rule after authentic cell/segment identities, the source computation and source-target uncertainty are recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "voltage-rate-relationship",
+      "kind": "categorical",
+      "description": "The source describes an increasing average subthreshold-voltage to firing-rate relationship, including the Fig3b example. This does not assert strict monotonicity of every noisy bin or supply its numerical curve.",
+      "status": "verified",
+      "expected": "increasing_average_relationship",
+      "units": "source finding category",
+      "aggregation": "Original per-neuron voltage/rate observations, 1 mV bin means and SEM, and fitted spline; exact Fig3b example identity and monotonicity decision rule remain unresolved.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [
+        "increasing_average_relationship",
+        "source_relationship_not_reproduced"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "A category does not replace the required numerical curve/interval/variability outputs; its source-specific decision rule remains unresolved.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "The published qualitative/bounded observation is retained, but no inferential or deterministic admission rule is asserted before the exact underlying computation is recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "operational-isi-normalization-bound",
+      "kind": "categorical",
+      "description": "The source reports abs(mean operational ISI - 1) < 0.031 for every original neuron. Retain this original bound without replacing the eight numerical means or normalizing them to force agreement.",
+      "status": "verified",
+      "expected": "all_eight_mean_deviations_below_0.031",
+      "units": "source finding category",
+      "aggregation": "Apply the reported strict bound separately to each of the eight original neuron means; no averaging away an outlying neuron.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [
+        "all_eight_mean_deviations_below_0.031",
+        "at_least_one_mean_deviation_not_below_0.031"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "A category does not replace the required numerical curve/interval/variability outputs; its source-specific decision rule remains unresolved.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "The published qualitative/bounded observation is retained, but no inferential or deterministic admission rule is asserted before the exact underlying computation is recovered.",
+        "independent_unit": "Five original mice; eight neurons and twenty ten-second segments per neuron are nested measurements, not independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source SEM across segments and SD across neurons describe different levels of variation; neither supplies a validated reproduction tolerance or independent-sample confidence interval.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    },
+    {
+      "id": "poisson-irregularity-reference",
+      "kind": "scalar",
+      "description": "Fig3c dashed reference: Poisson irregularity phi equals one; this is a reference control, not evidence that any observed neuron is Poisson.",
+      "status": "verified",
+      "expected": 1,
+      "units": "dimensionless",
+      "aggregation": "One analytical reference line in the Fig3c panel, not an estimated biological effect.",
+      "evidence_ids": [
+        "dsr-fig3-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "justified",
+        "absolute": 0,
+        "rationale": "The source defines the displayed Poisson reference exactly as phi=1; zero tolerance applies only to this analytical control and supplies no empirical tolerance.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "deterministic",
+        "method": "Exact source-defined analytical Poisson reference.",
+        "independent_unit": "Not applicable: analytical reference, not biological replication.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reference is defined rather than estimated from an independent empirical sample.",
+        "evidence_ids": [
+          "dsr-fig3-results"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Recover the authentic eight-neuron/five-mouse source identity map and complete original trials; matching counts cannot authenticate the cohort. The original data.mat payload/schema is unqualified.",
+    "Recover the exact twenty ten-second segments per neuron and their native estimator axis; a prospective held-trial split or selecting a convenient subset cannot reproduce this panel.",
+    "Resolve the source 25 ms Fig3b caption versus 50 ms Results/Methods, the printed voltage-bin coordinate inconsistency, spline family/smoothing/support and negative-rate handling. The accepted V-to-mV adapter fixes units only.",
+    "Recover every original per-cell Fig3c value, Fig3d fraction mean/SEM and operational-ISI mean, including the exact pooled-versus-segment and SD/SEM conventions. Do not infer numeric targets from qualitative agreement.",
+    "The retained original task explicitly requires per-neuron irregularity/fractions and segment stability, and the original Fig3 full panel contains cell vectors, segment arrays and voltage-rate curves. These must be preserved as source-native structured outputs and independently verified. Current scalar/categorical finding admission cannot represent the complete panel; classify this engineering coverage as schema_blocked and do not substitute aggregate-only or categorical-only reproduction. Separate source identity/value/pipeline gaps also remain.",
+    "The printed 0.26 +/- 0.02 and 0.27 +/- 0.04 are exposed mean/SD descriptions, not numerical tolerances or computational verification. Justified empirical tolerances and dependence-aware uncertainty are missing.",
+    "The reported 23% discrepancy lacks a recovered denominator, signed/absolute operation and aggregation. Its expected value and criterion remain unresolved, and smaller phi or larger variability fractions are not substitute success metrics.",
+    "A source-native submitted-analysis interface must produce original-row spike/voltage preparation, every voltage-bin count/mean/SEM and spline artifact, raw/operational intervals, DSR input counts/settings and estimates, all 160 original segment rows, eight-cell summaries and complete panel aggregation. No exact source-native end-to-end submitted program currently exists.",
+    "An independent verification program must authenticate those outputs against original observations and separately recompute crossings/interpolation, rate-bin/voltage-bin statistics, operational integrals/CV2, native-estimator intermediate counts, segment fraction/SEM and across-neuron mean/SD. It must verify the eventual recovered discrepancy formula and source identities; printing paper values or self-reported hashes is insufficient. That verifier and immutable output/input/interface identities are not implemented, so admission_policy is omitted.",
+    "Existing initial-evaluator-v1.evaluate and its CLI implement a declared prospective natural-cubic held-trial analysis, not the original Figure3 pipeline. Its old loader also does not apply the source V-to-mV conversion; the accepted pala-source-adapter-v2.load_pala API supplies corrected trials but has not been qualified on authentic payloads.",
+    "No matched paper+data/paper+data+author-code delivery, stage-specific permitted-observation manifest, evaluator identity, exposure policy or cumulative episode budgets have been frozen for either outcome. Both pairing protocols remain null."
+  ]
+}

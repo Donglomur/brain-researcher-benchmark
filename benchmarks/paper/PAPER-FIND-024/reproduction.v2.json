@@ -1,0 +1,733 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-024",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The accepted biological primary has real source-native electrode and regional array families. V2 can describe these without scalar substitution, while empirical identities, native source execution, original hierarchy/controls and scientific criteria remain unresolved. This is a standalone unresolved primary declaration, not a mixed-target outcome bundle.",
+  "source_paper": {
+    "title": "Temporal integration in human auditory cortex is predominantly yoked to absolute time",
+    "url": "https://www.nature.com/articles/s41593-025-02060-8"
+  },
+  "evidence": [
+    {
+      "id": "primary_paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02060-8",
+      "locator": "Final 2025 publication Fig. 3b-d paired integration windows/structure-yoking and Fig. 3e model-free noise-ceiling-normalized CCC; Methods",
+      "supports": "Defines the empirical human auditory absolute-time versus speech-structure result and its measurement, anatomical and participant/electrode controls. Final admitted condition inventory and source inference remain unresolved."
+    },
+    {
+      "id": "paper_pmc",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12586173/",
+      "locator": "Final 2025 article; independently inspected in accepted PAPER-FIND-024_REVIEW.md",
+      "supports": "Corroborates the uniform stretched/compressed speech primary and distinguishes natural-rate analyses and secondary split reliability. No local immutable paper-text pin is asserted."
+    },
+    {
+      "id": "native_ccc",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/demo_cross_context_correlation.m",
+      "locator": "D/t/S/ei/bad_stim/all_subjid and C fields; final Fig. 3e plot call",
+      "supports": "Processed participant responses and native lag/duration/electrode CCC and same-context ceilings; CU105 is a demonstration, not the complete cohort."
+    },
+    {
+      "id": "native_fits",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/demo_model_fits.m",
+      "locator": "Paired rates; modelfit_cross_context_corr, tie_shape and final Fig. 3b/c/d calls",
+      "supports": "Source gamma-window fitting parameters and paired rate-specific fitted integration windows; cached M is a reference, not empirical derivation."
+    },
+    {
+      "id": "shape_policy",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/tie_shape.m",
+      "locator": "Rate-specific nuisance minima then sum shape losses; conditional selected parameters",
+      "supports": "Shared shape across speech rates retains rate-specific integration widths; native loss generation and tie/NaN policy are separate gaps."
+    },
+    {
+      "id": "window_scatter",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/intwin_scatter.m",
+      "locator": "Concatenated source electrode widths, averaged logP_gaussfit >3, anatomical distance bins",
+      "supports": "Defines source paired width vectors and source fit-quality eligibility without a new participant average."
+    },
+    {
+      "id": "window_yoking",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/intwin_maps.m",
+      "locator": "Concatenated widths; structure_yoking log-ratio, source eligibility and M{3,i} overall width",
+      "supports": "Defines (log2(width_slow)-log2(width_fast))/log2(3) and the original overall-window/yoking map quantities."
+    },
+    {
+      "id": "regional_ccc",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/plot_ccc_annular_ROIs.m",
+      "locator": "CCC/noise_ceiling [lag,duration,rate,annular ROI], counts, pointwise normalization and j=1:3 plot loop",
+      "supports": "Pools source electrode CCC and ceilings separately by 10-mm bins before pointwise division; preserves both rates and the plotted duration support."
+    },
+    {
+      "id": "rate_selection",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/select_rate.m",
+      "locator": "Source rate selection and bad_stim handling",
+      "supports": "Original stimulus/rate membership and exclusions require source binding; no invented story or participant holdout."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Empirical human intracranial absolute-time versus speech-structure integration: source cross-context correlations and same-context ceilings, paired rate-specific integration windows and structure-yoking outputs, source shared-shape fitting and eligibility, and participant/electrode/stimulus hierarchy. The Fig. 3 uniform speech-rate manipulation is source-supported; final admitted condition inventory remains unresolved. Natural slow/fast speech is a separate source panel, not automatically required or covered.",
+      "evidence_ids": [
+        "primary_paper",
+        "paper_pmc",
+        "native_ccc",
+        "native_fits",
+        "window_yoking"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original processed broadband-gamma intracranial responses D with t/S/ei/bad_stim/all_subjid and anatomical distance/vertex/hemisphere metadata for the uniform speech-rate experiment. Authentic source MAT/version and full response-to-stimulus/anatomy identities remain unbound; cached CCC/model fits are not substitute empirical inputs.",
+      "evidence_ids": [
+        "native_ccc",
+        "native_fits",
+        "primary_paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original participants and electrodes, experiment-version-specific stimulus support and source eligibility. The author CU105 demo is not the full cohort; no Fig. 3 or split-reliability sample count is substituted for authenticated participant/electrode membership.",
+      "evidence_ids": [
+        "native_ccc",
+        "window_scatter",
+        "window_yoking",
+        "primary_paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve source rate, physical segment, context and repetition identities and original support for the biological reconstruction. No prospective story/participant holdout or opposite-split prediction target is imposed. The original nonoverlapping-segment splits belong to separately retained estimation-reliability evidence, with their own unresolved identities.",
+      "evidence_ids": [
+        "native_ccc",
+        "rate_selection",
+        "primary_paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed original neural timecourses and timestamps, stimulus/segment/context/repetition/rate metadata, original exclusions, electrode/participant and allowed anatomical information support the primary empirical analysis. Raw iEEG preprocessing is outside this retained scope. Cached fitted windows and reported results are reference evidence, not proof of empirical computation.",
+      "evidence_ids": [
+        "native_ccc",
+        "native_fits",
+        "window_scatter"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve native rate selection, alignment, pair weighting, same-context ceilings, gamma prediction/loss/fit-quality computation and shared-shape policy. Widths remain rate-specific. Native TCI closure, exact original cohort fitting and hierarchy inference remain unresolved; prospective Python interpolation/averaging and corrected source choices cannot silently substitute.",
+      "evidence_ids": [
+        "native_ccc",
+        "native_fits",
+        "shape_policy",
+        "regional_ccc"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Reconstruct original paired per-electrode slow/fast integration windows and structure_yoking=(log2(width_slow)-log2(width_fast))/log2(3), with source fit eligibility, overall-window mapping and model-free regional CCC/ceiling corroboration. The scientific original-result criterion and hierarchy-aware comparison remain to justify; no single scalar score, larger yoking effect or secondary Spearman improvement defines success.",
+      "evidence_ids": [
+        "window_yoking",
+        "window_scatter",
+        "regional_ccc",
+        "primary_paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve source concatenation by participant/electrode for window maps/scatter and source regional electrode sums/counts separately for CCC and ceilings before pointwise division. Source hierarchy uncertainty is distinct from those descriptive plots and remains unresolved. Do not impose equal-participant averaging, mean electrode ratios or an invented yoking summary.",
+      "evidence_ids": [
+        "window_scatter",
+        "window_yoking",
+        "regional_ccc",
+        "primary_paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the bounded Fig. 3 uniform-rate biological family with rate-specific window/yoking outputs, native fit eligibility, anatomical context and indispensable model-free CCC/ceiling corroboration. Full source cohort, final condition/figure support and required time-versus-structure discrimination controls remain to bind. Natural slow/fast speech is a separate panel; not every figure is automatically required. Three split-reliability scalars remain secondary empirical evidence.",
+      "evidence_ids": [
+        "primary_paper",
+        "paper_pmc",
+        "native_fits",
+        "regional_ccc"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both prospective primary information conditions must share the same original processed empirical responses and source metadata/observation support; author code alone would be the information addition. Actual delivery/exposure/resource manifests are absent. This primary reconstruction does not reuse the secondary opposite-split evaluator-target access boundary or authorize access to historical private target arrays.",
+      "evidence_ids": [
+        "native_ccc",
+        "native_fits",
+        "primary_paper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "paired_integration_window_yoking_family",
+      "kind": "indexed_array_family",
+      "description": "Source Fig. 3 paired rate-specific integration-window and structure-yoking arrays, original fit-quality eligibility and overall-window map quantity. These arrays preserve the biological primary and do not turn it into cross-split estimation reliability.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "paired_integration_window_yoking_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "slow_tied_integration_width",
+            "manifest_key": "slow_tied_integration_width",
+            "source_quantity": "M{1,i}.best_intper_sec_tiedshape concatenated in the original participant/electrode order.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "native_fits",
+              "shape_policy",
+              "window_scatter",
+              "window_yoking"
+            ]
+          },
+          {
+            "id": "fast_tied_integration_width",
+            "manifest_key": "fast_tied_integration_width",
+            "source_quantity": "M{2,i}.best_intper_sec_tiedshape concatenated on the same original participant/electrode support.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "native_fits",
+              "shape_policy",
+              "window_scatter",
+              "window_yoking"
+            ]
+          },
+          {
+            "id": "structure_yoking",
+            "manifest_key": "structure_yoking",
+            "source_quantity": "(log2(iw_stretched)-log2(iw_compressed))/log2(3) for the same source paired electrode estimates.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless log-width ratio",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation. The 0/1 time/structure interpretation is not a benchmark tolerance or scalar target.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "window_yoking",
+              "primary_paper"
+            ]
+          },
+          {
+            "id": "mean_rate_fit_quality",
+            "manifest_key": "mean_rate_fit_quality",
+            "source_quantity": "Mean of M{1,i}.logP_gaussfit and M{2,i}.logP_gaussfit on each original electrode.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source logP_gaussfit scale; native statistical definition unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation. Preserve raw per-rate quality values in derivation; do not infer their generative or uncertainty procedure from the field name.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "window_scatter",
+              "window_yoking"
+            ]
+          },
+          {
+            "id": "source_fit_eligibility",
+            "manifest_key": "source_fit_eligibility",
+            "source_quantity": "Original elec_above_thresh = mean_rate_fit_quality > 3; author comments describe p < .001.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source Boolean eligibility indicator",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation. This is the source fit eligibility, not a benchmark reproduction threshold or a rule allowing candidate-selected omission.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "window_scatter",
+              "window_yoking"
+            ]
+          },
+          {
+            "id": "overall_integration_width",
+            "manifest_key": "overall_integration_width",
+            "source_quantity": "M{3,i}.best_intper_sec concatenated for the source overall integration-window map, distinct from the two tied-shape rate widths.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_participant_electrode",
+                "units": "source participant/electrode key",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original M participant order and within-participant electrode identities, anatomical join and full eligible/ineligible/undefined row roster are unresolved. This is the source concatenation used by scatter/maps, not invented electrode IDs."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "seconds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve all original participant/electrode rows before selection with explicit source eligibility/undefined statuses and linked anatomical metadata. Source maps/scatter use the retained eligibility mask. Do not discard candidate-dependent failures, create a scalar mean or infer biological independence from concatenation. Native construction of this third fit entry is unresolved and must not be replaced by an invented mean of the two rate widths.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "window_yoking"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "primary_paper",
+          "native_fits",
+          "shape_policy",
+          "window_scatter",
+          "window_yoking"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original-observations-and-identities",
+        "native-participant-rate-ccc-ceilings",
+        "native-gamma-predictions-losses-fit-quality",
+        "paired-window-yoking-eligibility",
+        "source-anatomical-hierarchy"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Potential numerical reference comparison for the complete identified original arrays only. No norm, default all-close rule, tolerance, scalar reduction or significance rule is chosen. The original biological predominance/hierarchy claim additionally requires its source inferential quantities and a justified comparison; array matching alone is not declared sufficient.",
+        "independent_unit": "Original participant, with nested electrodes and repeated source conditions; exact roster and hierarchy procedure unresolved.",
+        "dependence": "Preserve paired rates, within-participant electrode dependence, shared stimuli/segments/contexts/repetitions, source fitting and anatomical membership. No lag, electrode, plot curve or both rates become independent participants.",
+        "multiplicity": "Complete admitted source family and indispensable controls; exact inferential and simultaneous-coverage rules unresolved. No favorable rate, duration, electrode or ROI selection.",
+        "rationale": "Structured numerical outputs are genuine source quantities, but references, original inference and scientific criteria are missing. If the recovered biological/inferential comparison requires an unsupported relational/distributional class, retain that explicit schema limitation rather than force numerical equivalence into scientific eligibility.",
+        "evidence_ids": [
+          "primary_paper",
+          "native_fits",
+          "shape_policy",
+          "window_scatter",
+          "window_yoking"
+        ]
+      },
+      "evidence_ids": [
+        "primary_paper",
+        "native_fits",
+        "shape_policy",
+        "window_scatter",
+        "window_yoking"
+      ]
+    },
+    {
+      "id": "regional_model_free_ccc_ceiling_family",
+      "kind": "indexed_array_family",
+      "description": "Source Fig. 3e anatomical regional CCC/ceiling corroboration of the time-versus-structure interpretation, with separate raw pooled quantities, complete source plotted rate/duration curves and electrode counts. Full original participant-level arrays remain required derivation evidence.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "regional_model_free_ccc_ceiling_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "regional_ccc_mean",
+            "manifest_key": "regional_ccc_mean",
+            "source_quantity": "Author CCC array after source electrode sum/count reduction.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_lag",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Native lag_t values and complete source response/plot support unresolved; displayed xlim does not authorize truncating computational arrays."
+                }
+              },
+              {
+                "name": "source_segment_duration",
+                "units": "milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original unique_segs order/values and final figure support unresolved; do not substitute seconds or a uniform duration grid."
+                }
+              },
+              {
+                "name": "source_speech_rate",
+                "units": "dimensionless rate factor",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "slow/stretched: 1/sqrt(3)",
+                    "fast/compressed: sqrt(3)"
+                  ]
+                }
+              },
+              {
+                "name": "source_annular_roi",
+                "units": "dimensionless source bin index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original lag/duration/rate/ROI axes. For each source ROI, sum electrode CCC and ceiling across participants, divide each by the same electrode count, then normalize pointwise. This is not equal-participant averaging or a mean of electrode-wise ratios; source undefined/zero-denominator policy and exact final support remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "native_ccc",
+              "regional_ccc"
+            ]
+          },
+          {
+            "id": "regional_ceiling_mean",
+            "manifest_key": "regional_ceiling_mean",
+            "source_quantity": "Author noise_ceiling array after separate source electrode sum/count reduction.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              null,
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_lag",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Native lag_t values and complete source response/plot support unresolved; displayed xlim does not authorize truncating computational arrays."
+                }
+              },
+              {
+                "name": "source_segment_duration",
+                "units": "milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original unique_segs order/values and final figure support unresolved; do not substitute seconds or a uniform duration grid."
+                }
+              },
+              {
+                "name": "source_speech_rate",
+                "units": "dimensionless rate factor",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "slow/stretched: 1/sqrt(3)",
+                    "fast/compressed: sqrt(3)"
+                  ]
+                }
+              },
+              {
+                "name": "source_annular_roi",
+                "units": "dimensionless source bin index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless same-context repeat correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original lag/duration/rate/ROI axes. For each source ROI, sum electrode CCC and ceiling across participants, divide each by the same electrode count, then normalize pointwise. This is not equal-participant averaging or a mean of electrode-wise ratios; source undefined/zero-denominator policy and exact final support remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "native_ccc",
+              "regional_ccc"
+            ]
+          },
+          {
+            "id": "regional_normalized_plot_curves",
+            "manifest_key": "regional_normalized_plot_curves",
+            "source_quantity": "Pointwise CCC(:,j,q,k)/noise_ceiling(:,j,q,k) in the original plot loop j=1:3, q=1:2, k=1:3; original curve data retain lag_t support.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              3,
+              2,
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_lag",
+                "units": "seconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Native lag_t values and complete source response/plot support unresolved; displayed xlim does not authorize truncating computational arrays."
+                }
+              },
+              {
+                "name": "plotted_source_segment_duration",
+                "units": "milliseconds",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "The retained plotting helper indexes unique_segs(1:3); exact source values and final publication condition correspondence remain unresolved."
+                }
+              },
+              {
+                "name": "source_speech_rate",
+                "units": "dimensionless rate factor",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "slow/stretched: 1/sqrt(3)",
+                    "fast/compressed: sqrt(3)"
+                  ]
+                }
+              },
+              {
+                "name": "source_annular_roi",
+                "units": "dimensionless source bin index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless CCC / same-context ceiling",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original lag/duration/rate/ROI axes. For each source ROI, sum electrode CCC and ceiling across participants, divide each by the same electrode count, then normalize pointwise. This is not equal-participant averaging or a mean of electrode-wise ratios; source undefined/zero-denominator policy and exact final support remain unresolved. The retained helper plot xlim is [-.1,.45] seconds; graphical clipping is not a newly inferred evaluation clock or support mask.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "regional_ccc",
+              "primary_paper"
+            ]
+          },
+          {
+            "id": "regional_electrode_counts",
+            "manifest_key": "regional_electrode_counts",
+            "source_quantity": "Source counts accumulated per accepted 10-mm annular bin before the plotting helper clears that variable.",
+            "membership": "fixed",
+            "shape": [
+              3
+            ],
+            "axes": [
+              {
+                "name": "source_annular_roi",
+                "units": "dimensionless source bin index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "number of source electrode rows",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain original lag/duration/rate/ROI axes. For each source ROI, sum electrode CCC and ceiling across participants, divide each by the same electrode count, then normalize pointwise. This is not equal-participant averaging or a mean of electrode-wise ratios; source undefined/zero-denominator policy and exact final support remain unresolved. Counts must be recomputed from authenticated original distances/roster and are not participant sample sizes.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "regional_ccc"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "primary_paper",
+          "native_ccc",
+          "regional_ccc"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original-observations-and-identities",
+        "native-participant-rate-ccc-ceilings",
+        "regional-pooling-and-normalization",
+        "source-anatomical-hierarchy"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Potential numerical reference comparison for the complete identified original arrays only. No norm, default all-close rule, tolerance, scalar reduction or significance rule is chosen. The original biological predominance/hierarchy claim additionally requires its source inferential quantities and a justified comparison; array matching alone is not declared sufficient.",
+        "independent_unit": "Original participant, with nested electrodes and repeated source conditions; exact roster and hierarchy procedure unresolved.",
+        "dependence": "Preserve paired rates, within-participant electrode dependence, shared stimuli/segments/contexts/repetitions, source fitting and anatomical membership. No lag, electrode, plot curve or both rates become independent participants.",
+        "multiplicity": "Complete admitted source family and indispensable controls; exact inferential and simultaneous-coverage rules unresolved. No favorable rate, duration, electrode or ROI selection.",
+        "rationale": "Structured numerical outputs are genuine source quantities, but references, original inference and scientific criteria are missing. If the recovered biological/inferential comparison requires an unsupported relational/distributional class, retain that explicit schema limitation rather than force numerical equivalence into scientific eligibility.",
+        "evidence_ids": [
+          "primary_paper",
+          "native_ccc",
+          "regional_ccc"
+        ]
+      },
+      "evidence_ids": [
+        "primary_paper",
+        "native_ccc",
+        "regional_ccc"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "This standalone contract restores the accepted biological primary and deliberately differs from the unchanged secondary fixed-untied-target improvement contract. No outcomes_validate pairing, mixed-target outcomes file, primary receipt or same-primary superiority is authorized.",
+    "Immutable original empirical/anatomical inputs, participant/electrode/stimulus/context/repetition/rate roster, original eligibility and final figure/condition inventory remain unbound. CU105 alone, cached L/M or printed paper values cannot establish primary reproduction.",
+    "Native participant/rate CCC and ceiling arrays are ragged by participant electrode roster and possibly source support. Their exact per-record native shapes, clocks and identities remain indispensable granular evidence. Do not invent participant names, pad a common tensor, flatten with inferred correspondence or label fixed acquisition membership as data-dependent discovery. Exact separate fixed source members can be declared only after the roster is recovered.",
+    "Native TCI alignment/pair weighting, gamma predictions, loss/fit-quality generation, complete dependency closure, original tie/NaN and median-delay behavior remain unresolved. The Python selector consumes a grid; the prospective CCC engine does not establish native parity.",
+    "The source third M entry for overall integration width is visible but its generation is unresolved. Mean-rate logP >3 is a source selection criterion, not a recovered statistical model or reproduction success threshold. Preserve raw values and authenticate original eligibility instead of candidate-driven dropping.",
+    "Original participant/electrode hierarchy inference, exact biological contrast/uncertainty outputs and their source-derived comparison are not yet recovered. These missing primary components remain full-panel blockers; no unknown inferential array, p-value rule, larger effect or surrogate scalar is invented.",
+    "The original model-free regional helper pools electrode CCC and ceilings before dividing; prospective equal-participant summaries and mean electrode ratios are different. Final source axis/domain policy is unbound, including plotted first-three-duration correspondence, zero/nonfinite ceiling behavior and the plot_ccc_annular_ROIs filename versus ccc_annular_ROIs function-name mismatch.",
+    "Source time-versus-structure discrimination controls remain indispensable where needed for this primary interpretation, but their exact dependent inventory and source outputs must be recovered. No simulation score substitutes for the human result, and no unrelated model training or natural-rate panel is imposed.",
+    "Expected original arrays, original-source reference equivalence, authentic interface/data/verifier and scientific comparator identities, and justified equivalence/uncertainty criteria are absent. Numeric reference equivalence remains a possible unresolved representation, not proof that the biological inference can be discharged by matching arrays.",
+    "No common source input/delivery, author-code-only addition, exposure/accounting or matched cumulative resource protocol is frozen. Admission policy is omitted; all scientific outcomes remain unknown. Final canonical task identity and unavailable binding are integration-owned.",
+    "Three genuine empirical split-reliability correlations remain archived secondary evidence with separate split/cohort/target/reduction gaps. They do not satisfy the biological primary; no source scalar is relabeled a primary result."
+  ]
+}
