@@ -1,0 +1,992 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-013",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Root-adjudicated primary biological/mechanistic scope. These are partial source-supported summary findings; full original magnitudes, animal outputs, inhibition branches, model controls, computational verifier and justified reproduction criteria remain incomplete. Secondary Figure 6b agreement cannot qualify this primary outcome.",
+  "source_paper": {
+    "title": "Synaptic plasticity rules driving representational shifting in the hippocampus",
+    "url": "https://www.nature.com/articles/s41593-025-01894-6"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6",
+      "locator": "Published article and data/code availability",
+      "supports": "Original empirical CA1/CA3 findings and plasticity-model interpretation; processed observations and official Matlab analysis are supplied separately."
+    },
+    {
+      "id": "fig1",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/1",
+      "locator": "Figure 1a-c, original regional/familiarity comparisons and sample-size control",
+      "supports": "Original four regional/environment populations, regression slopes/directions and CA1-to-CA3 resampling control."
+    },
+    {
+      "id": "opto",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/1",
+      "locator": "Figure 1d(ii-iii)",
+      "supports": "Nine-mouse pooled inhibition/control comparison reports p=0.5 for median absolute slopes and p=0.004 for the reduced significantly shifting fraction."
+    },
+    {
+      "id": "stdp",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/2",
+      "locator": "Figure 2c-f and its source-linked firing-rate/width controls",
+      "supports": "Four STDP model variants and firing-rate/field-width sweep are compared with CA1N; realistic firing is a required constraint."
+    },
+    {
+      "id": "btsp_ca1",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/3",
+      "locator": "Figure 3f-h",
+      "supports": "BTSP model comparisons retain both CA1 environments, shift distributions and directions, missed extreme shifts and parameter dependence."
+    },
+    {
+      "id": "btsp_ca3",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/4",
+      "locator": "Figure 4a-b",
+      "supports": "CA3 requires the original rule-asymmetry sweep and both environment-specific model comparisons."
+    },
+    {
+      "id": "regional_code",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis_LinRegBootstrapStats.m",
+      "locator": "Lines 374-393, 417-532 and original preprocessing/selection",
+      "supports": "Bootstrap medians of absolute per-PF slopes, familiar-minus-new contrasts and separately derived direction proportions; numerical targets and final branch remain unbound."
+    },
+    {
+      "id": "animal_code",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis.m",
+      "locator": "Lines 1421-1565: source animal assignments, within-animal slopes/proportions and paired t tests",
+      "supports": "Animal-level variation has distinct support and denominators. Literal P_bckCA1/P_bckCA3 are scalar paired-test outputs, but final-paper mapping and numerical values are not authenticated here."
+    },
+    {
+      "id": "opto_code",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Opto/OptoCOMtraj_Pooled.m",
+      "locator": "Pooling and original timing/interval, slope/proportion and mouse-displacement analyses",
+      "supports": "First and later inhibition branches must both be joined; pooled and per-mouse contrast orientations differ and remain explicit."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/README.txt",
+      "locator": "Author figure-to-source map, December 2024",
+      "supports": "Maps empirical, inhibition, STDP and BTSP routes; it is not itself a qualified complete result-producing model/configuration manifest."
+    },
+    {
+      "id": "secondary_fig6b",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01894-6/figures/6",
+      "locator": "Figure 6b, separately named secondary empirical modeling result",
+      "supports": "Complete paired linear/nonlinear fit comparison uses empirical fields. It cannot satisfy primary biological/mechanistic reproduction."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Reproduce the central CA1/CA3 representational-shift findings, animal-level variation and optogenetic effects, with the empirical comparisons and mechanistic controls needed for the reported STDP/BTSP interpretation. Figure 6b is a separately named secondary empirical modeling result and does not discharge this primary outcome.",
+      "evidence_ids": [
+        "fig1",
+        "opto",
+        "stdp",
+        "btsp_ca1",
+        "btsp_ca3",
+        "animal_code",
+        "secondary_fig6b"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original processed CA1/CA3 COM observations and both source optogenetic timing branches, joined to source-defined STDP/BTSP configurations and empirical comparator inputs. The accepted secondary adapter covers only the two COM assets; the complete primary input/branch manifest is unbound.",
+      "evidence_ids": [
+        "paper",
+        "regional_code",
+        "opto_code",
+        "readme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preserve all source-eligible CA1 familiar/new and CA3 familiar/new fields and their original animal, environment, plane and exclusion identities; retain all nine source optogenetic mice and both session-timing branches. Field, mouse and simulated-repeat populations remain distinct. Final model/control membership and exact primary input joins remain unqualified.",
+      "evidence_ids": [
+        "fig1",
+        "opto",
+        "animal_code",
+        "opto_code",
+        "readme"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This is original observational/experimental reconstruction, not a new prediction split. Preserve original field-span selection, source animal pairing, inhibition/control interval eligibility, pooled branch memberships and model repeats. Do not replace them with a convenient held-field subset or collapse source controls.",
+      "evidence_ids": [
+        "fig1",
+        "opto_code",
+        "animal_code",
+        "stdp",
+        "btsp_ca1",
+        "btsp_ca3"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Retain original COM samples and lap gaps, source identity/animal maps, inhibition timing and interval support, and source-defined model inputs/parameters. A published summary or supplied fitted-value vector is not evidence that an analysis used these inputs.",
+      "evidence_ids": [
+        "regional_code",
+        "animal_code",
+        "opto_code",
+        "readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Keep source-specific COM conversion/centering and lap coordinates, original span and interval rules, significance/undefined handling and source aggregation. Main/helper pooled versus animal classification thresholds and denominators require reconciliation. The separate Figure 6b two/three-parameter, missing-lap and raw/clipped R-squared alternatives remain unresolved.",
+      "evidence_ids": [
+        "regional_code",
+        "animal_code",
+        "opto_code",
+        "secondary_fig6b"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Original per-field linear slopes, fit/significance classifications, direction fractions, original regional/familiarity bootstrap and sample-size controls, per-animal outputs, inhibition contrasts and source-native model-versus-data comparisons are required. No single fit score, stronger effect or smaller p value substitutes for this biological panel.",
+      "evidence_ids": [
+        "fig1",
+        "opto",
+        "regional_code",
+        "animal_code",
+        "stdp",
+        "btsp_ca1",
+        "btsp_ca3"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve separate four-group field distributions, per-animal paired summaries, pooled inhibition comparisons and per-mouse companion outputs, and original model-configuration/repeat distributions. Familiar-minus-new regional contrasts, source animal tests and treatment/control orientations cannot be silently pooled or reversed.",
+      "evidence_ids": [
+        "regional_code",
+        "animal_code",
+        "opto_code",
+        "stdp",
+        "btsp_ca1",
+        "btsp_ca3"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "This partial contract retains all primary obligations: complete Figure 1 regional/familiarity slope and classification distributions; sample-size resampling; source animal-level slopes/proportions and variation; both inhibition timing branches with original pooled and mouse-level controls; Figure 2 STDP variants, dynamic-input comparisons and firing-rate/field-width realism controls; Figures 3 and 4 BTSP empirical distributions, direction proportions, parameter/rule-asymmetry comparisons and indispensable source-linked alternative-rule controls. Complete source-defined curves, coordinates, numerical magnitudes, uncertainties, configuration/repeat identities and final supplementary-control mapping are not yet represented by scalar findings. No generic whole-paper/every-figure requirement is inferred. The separate full Figure 6b comparison is preserved as secondary evidence, including its unresolved source branches.",
+      "evidence_ids": [
+        "fig1",
+        "opto",
+        "stdp",
+        "btsp_ca1",
+        "btsp_ca3",
+        "animal_code",
+        "readme",
+        "secondary_fig6b"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both AI reproduction conditions require the same original paper, authorized complete primary observations, common interface and budget/feedback policy; only the author-code condition adds pinned official source. Primary matched delivery, independent submitted-analysis execution, granular verification and numerical criteria are not bound. Prior private targets or historical fitted outputs are not AI evidence.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "regional_code",
+        "animal_code",
+        "opto_code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ca1_familiarity_absolute_speed",
+      "kind": "categorical",
+      "description": "Original familiarity result for absolute shifting speed in CA1; a nonsignificant comparison is not a claim of equality.",
+      "status": "verified",
+      "expected": "absolute_shift_speed_decreases",
+      "units": "source categorical comparison",
+      "aggregation": "Familiar versus new source field populations, with complete absolute-slope distributions and original bootstrap retained.",
+      "categories": [
+        "absolute_shift_speed_decreases",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca1_backward_fraction_familiarity",
+      "kind": "categorical",
+      "description": "Source-reported backward-shift fraction change in CA1; direction alone cannot replace its magnitude and uncertainty.",
+      "status": "verified",
+      "expected": "fraction_decreases_with_familiarity",
+      "units": "source categorical comparison",
+      "aggregation": "Original three-way direction classification, group denominators and familiarity comparison; source reports weaker forward effect in CA1 than CA3.",
+      "categories": [
+        "fraction_decreases_with_familiarity",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca1_forward_fraction_familiarity",
+      "kind": "categorical",
+      "description": "Source-reported forward-shift fraction change in CA1; direction alone cannot replace its magnitude and uncertainty.",
+      "status": "verified",
+      "expected": "fraction_increases_with_familiarity",
+      "units": "source categorical comparison",
+      "aggregation": "Original three-way direction classification, group denominators and familiarity comparison; source reports weaker forward effect in CA1 than CA3.",
+      "categories": [
+        "fraction_increases_with_familiarity",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca1_new_median_absolute_slope",
+      "kind": "scalar",
+      "description": "Source-defined median absolute per-field slope; numerical target is not authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "cm per lap",
+      "aggregation": "CA1 new complete eligible Tok field group; median(abs(COM_slope)), preserving undefined entries and the exact source statistic. This single scalar does not replace the group distribution or bootstrap draws.",
+      "categories": [],
+      "evidence_ids": [
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca1_familiar_median_absolute_slope",
+      "kind": "scalar",
+      "description": "Source-defined median absolute per-field slope; numerical target is not authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "cm per lap",
+      "aggregation": "CA1 familiar complete eligible Tok field group; median(abs(COM_slope)), preserving undefined entries and the exact source statistic. This single scalar does not replace the group distribution or bootstrap draws.",
+      "categories": [],
+      "evidence_ids": [
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca1_animal_backward_fraction_paired_test_p",
+      "kind": "scalar",
+      "description": "Source P_bckCA1 paired-test p value for animal-level backward-shift fractions; final result linkage and target unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "probability",
+      "aggregation": "Literal ttest(diff(PropBck_CA1)) over source-ordered [new; familiar] animal fractions; retain all individual animal operands, undefined outcomes, threshold/denominator differences and source pairing. No code-comment p value is promoted to an authenticated target.",
+      "categories": [],
+      "evidence_ids": [
+        "animal_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "animal_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "animal_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_familiarity_absolute_speed",
+      "kind": "categorical",
+      "description": "Original familiarity result for absolute shifting speed in CA3; a nonsignificant comparison is not a claim of equality.",
+      "status": "verified",
+      "expected": "source_reports_no_significant_speed_change",
+      "units": "source categorical comparison",
+      "aggregation": "Familiar versus new source field populations, with complete absolute-slope distributions and original bootstrap retained.",
+      "categories": [
+        "source_reports_no_significant_speed_change",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_backward_fraction_familiarity",
+      "kind": "categorical",
+      "description": "Source-reported backward-shift fraction change in CA3; direction alone cannot replace its magnitude and uncertainty.",
+      "status": "verified",
+      "expected": "fraction_decreases_with_familiarity",
+      "units": "source categorical comparison",
+      "aggregation": "Original three-way direction classification, group denominators and familiarity comparison; source reports weaker forward effect in CA1 than CA3.",
+      "categories": [
+        "fraction_decreases_with_familiarity",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_forward_fraction_familiarity",
+      "kind": "categorical",
+      "description": "Source-reported forward-shift fraction change in CA3; direction alone cannot replace its magnitude and uncertainty.",
+      "status": "verified",
+      "expected": "fraction_increases_with_familiarity",
+      "units": "source categorical comparison",
+      "aggregation": "Original three-way direction classification, group denominators and familiarity comparison; source reports weaker forward effect in CA1 than CA3.",
+      "categories": [
+        "fraction_increases_with_familiarity",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_new_median_absolute_slope",
+      "kind": "scalar",
+      "description": "Source-defined median absolute per-field slope; numerical target is not authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "cm per lap",
+      "aggregation": "CA3 new complete eligible Tok field group; median(abs(COM_slope)), preserving undefined entries and the exact source statistic. This single scalar does not replace the group distribution or bootstrap draws.",
+      "categories": [],
+      "evidence_ids": [
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_familiar_median_absolute_slope",
+      "kind": "scalar",
+      "description": "Source-defined median absolute per-field slope; numerical target is not authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "cm per lap",
+      "aggregation": "CA3 familiar complete eligible Tok field group; median(abs(COM_slope)), preserving undefined entries and the exact source statistic. This single scalar does not replace the group distribution or bootstrap draws.",
+      "categories": [],
+      "evidence_ids": [
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "ca3_animal_backward_fraction_paired_test_p",
+      "kind": "scalar",
+      "description": "Source P_bckCA3 paired-test p value for animal-level backward-shift fractions; final result linkage and target unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "probability",
+      "aggregation": "Literal ttest(diff(PropBck_CA3)) over source-ordered [new; familiar] animal fractions; retain all individual animal operands, undefined outcomes, threshold/denominator differences and source pairing. No code-comment p value is promoted to an authenticated target.",
+      "categories": [],
+      "evidence_ids": [
+        "animal_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "animal_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "animal_code"
+        ]
+      }
+    },
+    {
+      "id": "regional_sample_size_control",
+      "kind": "categorical",
+      "description": "The source regional comparison survives its CA1-to-CA3 sample-size control.",
+      "status": "verified",
+      "expected": "ca3_outside_source_ca1_resampled_distributions",
+      "units": "source categorical control result",
+      "aggregation": "Original pooled-environment CA1 sample-size resampling and every source statistic; exact distributions, rank/tail rules and uncertainties remain required.",
+      "categories": [
+        "ca3_outside_source_ca1_resampled_distributions",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "fig1",
+        "regional_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "fig1",
+          "regional_code"
+        ]
+      }
+    },
+    {
+      "id": "opto_absolute_slope_comparison",
+      "kind": "categorical",
+      "description": "The source reports similar median absolute slopes under inhibition and control; this is not an equivalence claim.",
+      "status": "verified",
+      "expected": "source_reports_no_detected_difference",
+      "units": "source categorical experimental comparison",
+      "aggregation": "Original pooled nine-mouse inhibition/control field populations and both source timing branches; retain full slopes and bootstrap differences.",
+      "categories": [
+        "source_reports_no_detected_difference",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "opto",
+        "opto_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      }
+    },
+    {
+      "id": "opto_absolute_slope_p",
+      "kind": "scalar",
+      "description": "Published bootstrap exact-test p for the absolute-slope comparison.",
+      "status": "verified",
+      "expected": 0.5,
+      "units": "probability",
+      "aggregation": "Original Figure 1d(ii) comparison; no effect magnitude or equivalence threshold is inferred from this p value.",
+      "categories": [],
+      "evidence_ids": [
+        "opto",
+        "opto_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      }
+    },
+    {
+      "id": "opto_significantly_shifting_fraction",
+      "kind": "categorical",
+      "description": "Inhibition reduces the source fraction of significantly shifting fields.",
+      "status": "verified",
+      "expected": "fraction_reduced_under_inhibition",
+      "units": "source categorical experimental comparison",
+      "aggregation": "Original Figure 1d(iii) membership and denominator, separately retaining source mouse-level companions.",
+      "categories": [
+        "fraction_reduced_under_inhibition",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "opto",
+        "opto_code"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      }
+    },
+    {
+      "id": "opto_shifting_fraction_p",
+      "kind": "scalar",
+      "description": "Published bootstrap exact-test p for the shifting-fraction comparison.",
+      "status": "verified",
+      "expected": 0.004,
+      "units": "probability",
+      "aggregation": "Original Figure 1d(iii) comparison; neither a smaller p nor a larger inhibition effect is an improvement criterion.",
+      "categories": [],
+      "evidence_ids": [
+        "opto",
+        "opto_code"
+      ],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Source-defined scalar target or reported precision is insufficient to establish a justified reproduction tolerance; no numerical agreement band is invented.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "opto",
+          "opto_code"
+        ]
+      }
+    },
+    {
+      "id": "stdp_empirical_distribution_mismatch",
+      "kind": "categorical",
+      "description": "The tested STDP variants do not recover the original CA1 shifting distribution.",
+      "status": "verified",
+      "expected": "source_variants_fail_full_ca1_shift_pattern",
+      "units": "source categorical mechanistic comparison",
+      "aggregation": "All four source variants versus the complete CA1N comparator; retain slope distributions, mean/uncertainty and direction fractions, not the best variant alone.",
+      "categories": [
+        "source_variants_fail_full_ca1_shift_pattern",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "stdp"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "stdp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "stdp"
+        ]
+      }
+    },
+    {
+      "id": "stdp_firing_rate_realism_control",
+      "kind": "categorical",
+      "description": "The source firing-rate sweep limits the STDP explanation under realistic output rates.",
+      "status": "verified",
+      "expected": "consistent_modest_backward_shift_requires_unrealistic_rates",
+      "units": "source categorical model-control finding",
+      "aggregation": "Original input-rate/width configurations, repeats, output-rate distributions and empirical reference conversion; full quantitative realism and shifting controls remain required.",
+      "categories": [
+        "consistent_modest_backward_shift_requires_unrealistic_rates",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "stdp"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "stdp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "stdp"
+        ]
+      }
+    },
+    {
+      "id": "btsp_ca1_distribution_comparison",
+      "kind": "categorical",
+      "description": "The source BTSP comparisons qualitatively recover CA1 shifting variability and directions while missing the largest shifts.",
+      "status": "verified",
+      "expected": "qualitative_ca1_agreement_with_extreme_shift_mismatch",
+      "units": "source categorical model-data comparison",
+      "aggregation": "Both source CA1 environments, original BTSP versions, all repeat slope/classification distributions and parameter-sensitivity controls; qualitative agreement is not full numerical reproduction.",
+      "categories": [
+        "qualitative_ca1_agreement_with_extreme_shift_mismatch",
+        "source_pattern_not_reproduced"
+      ],
+      "evidence_ids": [
+        "btsp_ca1"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "This is a documentary source claim only; required magnitudes, complete outputs and computational evidence remain separate.",
+        "evidence_ids": [
+          "btsp_ca1"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original support and statistic and independently justify a prospective reproduction criterion; preserve source bootstrap, pairing and simulation roles without treating them as new biological replication.",
+        "independent_unit": "Biological animals, within-animal fields and simulated repeats have different dependence. Preserve each source-defined unit; no minimum number of independent biological units is inferred.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Documentary direction or p value does not establish numerical equivalence, biological effect magnitude or a new significance acceptance rule.",
+        "evidence_ids": [
+          "btsp_ca1"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "This primary reproduction and the unchanged secondary Figure 6b improvement target are different result scopes. Do not force shared descriptions or finalize a same-target four-cell bundle; canonical binding owner must keep the bundle unavailable until scope-consistent contracts exist.",
+    "The scalar/categorical findings are partial. Full regional slope/direction distributions, animal-level values/variation, every source sample-size statistic, complete inhibition/control outputs and numerical STDP/BTSP comparisons remain mandatory outside the finding list. No vector family is represented as a scalar or replaced by a qualitative label.",
+    "Authenticate the original primary source-to-result panel, input and control manifest, including both optogenetic session branches, timing joins, source mouse identities, all model configurations/repeats and indispensable supplementary controls. The README family map alone is insufficient; do not expand silently to every paper figure.",
+    "Resolve literal pooled versus helper/animal significance boundaries and denominators, undefined/zero-slope rows, familiar/new orientation, per-animal pairing and optogenetic contrast directions. Regional and optogenetic source COM conversions differ; no convenient unified preprocessing is admitted.",
+    "Animal-level targets and exact final-paper numerical linkage are unbound. Pooled fields are not animals; nine optogenetic mice and regional source-assigned animal labels do not establish independent field samples or a new uncertainty rule.",
+    "Source-native STDP/BTSP numerical distributions, realistic firing-rate/field-width constraints, dynamic-input/alternative-rule controls and parameter/rule-asymmetry sweeps are unqualified. Do not select a favorable branch or use better empirical regression fit as mechanistic proof.",
+    "The accepted Figure 6b observation/scoring utility is secondary and scores supplied values. It is not a primary submitted-analysis runner or independently bound empirical/model verifier. Require actual frozen-program execution and per-field/animal/interval/configuration derivation before accepting printed paper summaries.",
+    "All numerical tolerances and inferential criteria remain unresolved. Reported p values, source bootstrap confidence intervals, rounding and qualitative agreement do not justify invented equivalence bands, effect thresholds, independent-unit minima or model-selection rules.",
+    "Retain the separate secondary Figure 6b complete vector and two-versus-three-parameter, compressed missing-lap timing and raw-versus-clipped R-squared conflicts. Its exact predecessor sidecars and accepted implementation remain preserved externally and locally without promotion to primary evidence.",
+    "No immutable primary analysis interface, authentic common packet/code-only addition, independent granular verifier or cumulative resource/access protocol is bound. No eligible admission policy, AI execution result or successful scientific outcome is asserted."
+  ]
+}
