@@ -1,0 +1,211 @@
+"""Generated export controls; no authentic neural data or source weights."""
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+import types
+import unittest
+from unittest.mock import patch
+
+import h5py
+import numpy as np
+
+
+spec = importlib.util.spec_from_file_location("smc_delivery", Path(__file__).with_name("delivery.py"))
+delivery = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(delivery)
+
+
+class DeliveryTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self.inputs = self.root / "prepared"
+        self.author = self.root / "author"
+        self.author.mkdir()
+        self.output = self.root / "pair"
+        self.paper = self.root / "paper.pdf"
+        self.paper.write_bytes(b"%PDF-1.4\nGenerated fixture; not a scientific paper.\n")
+        self.protocol = self.root / "protocol.json"
+        self.protocol.write_text(json.dumps({"metrics": {"primary": "co-bps"},
+                                             "budget": {"cumulative_cpu_seconds": 7200}}))
+        self.source_manifest = self.root / "source_manifest.json"
+        self.source = {"schema": "smc_source_manifest_v1", "source_commit": delivery.contract.AUTHOR_COMMIT,
+                       "source_repo": "https://github.com/mackelab/smc_rnns", "license": "Apache-2.0", "files": []}
+        for name, data, role in (("LICENSE", b"Generated license fixture", "source"),
+                                 ("vi_rnn/vae.py", b"# Generated implementation fixture\n", "source"),
+                                 ("models/checkpoints/best/weights.pkl", b"FORBIDDEN-CHECKPOINT", "checkpoint")):
+            path = self.author / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+            self.source["files"].append({"path": name, "bytes": len(data),
+                                          "sha256": delivery.contract.sha256(path), "role": role})
+        self.source_manifest.write_text(json.dumps(self.source))
+        self.references = {}
+        for phase in ("val", "test"):
+            self.references[phase] = self.make_phase(phase)
+        self.patches = [patch.object(delivery, "REFERENCE_TEST", self.references["test"]),
+                        patch.object(delivery, "REFERENCE_VAL", self.references["val"]),
+                        patch.object(delivery, "SOURCE_MANIFEST", self.source_manifest),
+                        patch.object(delivery, "PROTOCOL", self.protocol),
+                        patch.object(delivery, "PAPER_SHA256", delivery.contract.sha256(self.paper))]
+        for item in self.patches:
+            item.start()
+
+    def tearDown(self):
+        for item in reversed(self.patches):
+            item.stop()
+        self.tmp.cleanup()
+
+    def make_phase(self, phase):
+        root = self.inputs / "mc_maze" / phase
+        root.mkdir(parents=True)
+        ntrain, neval = (4, 2) if phase == "val" else (6, 4)
+        panel = {
+            "schema": "smc_nlb_panel_v1", "dataset": "mc_maze_20", "phase": phase,
+            "source_commit": delivery.contract.AUTHOR_COMMIT, "dandiset": "000128",
+            "dandi_version": "0.220113.0400", "bin_ms": 20,
+            "n_train": ntrain, "n_eval": neval, "n_bins": 35, "forward_bins": 10,
+            "n_heldin": 137, "n_heldout": 45, "condition_count": 108,
+            "trial_indices_sha256": "1" * 64, "neuron_indices_sha256": "2" * 64,
+            "conditions_sha256": "3" * 64, "split_counts": {"train": 4, "val": 2, "test": 4},
+            "tensor_trial_indices_sha256": "4" * 64, "condition_membership_sha256": "5" * 64,
+            "nwb_sources": [{"name": "generated_fixture", "sha256": "6" * 64}],
+            "inputs_sha256": {}, "input_content_sha256": {},
+            "expected_shapes": {key: [ntrain if key.startswith("train_") else neval,
+                                      10 if key.endswith("_forward") else 35,
+                                      137 if "heldin" in key else 45] for key in delivery.contract.RATE_KEYS},
+        }
+        for filename, keys in (("train_input_20ms.h5", delivery.TRAIN_KEYS),
+                               ("eval_input_20ms.h5", {"eval_spikes_heldin"})):
+            with h5py.File(root / filename, "w") as handle:
+                for name in sorted(keys):
+                    n = ntrain if name.startswith("train_") else neval
+                    shape = (n, 10 if name.endswith("_forward") else 35,
+                             2 if name == "train_behavior" else (45 if "heldout" in name else 137))
+                    item = handle.create_dataset(name, data=np.ones(shape))
+                    panel["input_content_sha256"][filename + ":" + name] = delivery.canonical_content_hash(item)
+            panel["inputs_sha256"][filename] = delivery.contract.sha256(root / filename)
+        if phase == "val":
+            panel["validation_target_shapes"] = {}
+            with h5py.File(root / "eval_target_20ms.h5", "w") as handle:
+                group = handle.create_group("mc_maze_20")
+                for name in delivery.VAL_TARGET_KEYS:
+                    if name.endswith("cond_idx"):
+                        shape = (108,)
+                    elif name == "psth":
+                        shape = (108, 35, 182)
+                    else:
+                        n = ntrain if name.startswith("train_") else neval
+                        shape = (n, 10 if name.endswith("_forward") else 35,
+                                 2 if name.endswith("behavior") else (45 if "heldout" in name else 137))
+                    group.create_dataset(name, shape=shape, dtype="f8", fillvalue=1)
+                    panel["validation_target_shapes"][name] = list(shape)
+            panel["validation_target_sha256"] = delivery.contract.sha256(root / "eval_target_20ms.h5")
+        (root / "panel.json").write_text(json.dumps(panel))
+        reference = self.root / ("reference_" + phase + ".json")
+        reference.write_text(json.dumps(panel))
+        return reference
+
+    def export(self):
+        return delivery.export_pair(self.inputs, self.author, self.paper, self.output,
+                                    source_manifest=self.source_manifest, protocol=self.protocol)
+
+    def test_pair_has_identical_observations_and_only_source_difference(self):
+        # Explicit unrelated secrets in both source trees must never be copied.
+        (self.author / "cached_prediction.h5").write_bytes(b"FORBIDDEN-PREDICTION")
+        (self.inputs / "unrelated_secret.bin").write_bytes(b"FORBIDDEN-UNRELATED")
+        result = self.export()
+        self.assertEqual(result["status"], "participant_materials_prepared")
+        self.assertFalse(result["episode_executed"])
+        for name, digest in result["shared_files"].items():
+            for condition in delivery.CONDITIONS:
+                self.assertEqual(delivery.contract.sha256(self.output / condition / name), digest)
+        self.assertIn("inputs/mc_maze/val/eval_target_20ms.h5", result["shared_files"])
+        self.assertNotIn("inputs/mc_maze/test/eval_target_20ms.h5", result["shared_files"])
+        self.assertFalse((self.output / "paper_only" / "official_source").exists())
+        all_files = [path for path in self.output.rglob("*") if path.is_file()]
+        self.assertFalse(any(path.suffix == ".pkl" for path in all_files))
+        self.assertFalse(any("cached_prediction" in path.name for path in all_files))
+        for path in all_files:
+            if path.suffix == ".json":
+                self.assertNotIn(str(self.root), path.read_text())
+
+    def test_source_checkpoint_cannot_be_relabeled_code(self):
+        self.source["files"][-1]["role"] = "source"
+        self.source_manifest.write_text(json.dumps(self.source))
+        with self.assertRaisesRegex(delivery.contract.ContractError, "non-code payload"):
+            self.export()
+        self.assertFalse(self.output.exists())
+
+    def test_modified_author_source_is_rejected(self):
+        (self.author / "vi_rnn" / "vae.py").write_text("changed")
+        with self.assertRaisesRegex(delivery.contract.ContractError, "source bytes differ"):
+            self.export()
+
+    def test_symlinked_author_source_is_rejected(self):
+        path = self.author / "vi_rnn" / "vae.py"
+        path.unlink()
+        path.symlink_to(self.paper)
+        with self.assertRaisesRegex(delivery.contract.ContractError, "symlinks"):
+            self.export()
+
+    def test_original_test_target_in_input_tree_rejects_export(self):
+        (self.inputs / "mc_maze" / "test" / "eval_target_20ms.h5").write_bytes(b"forbidden")
+        with self.assertRaisesRegex(delivery.contract.ContractError, "test targets must not"):
+            self.export()
+
+    def test_false_input_filename_does_not_hide_targets(self):
+        path = self.inputs / "mc_maze" / "test" / "eval_input_20ms.h5"
+        with h5py.File(path, "a") as handle:
+            handle.create_dataset("eval_spikes_heldout", data=np.ones((4, 35, 45)))
+        # Even a bad operator-signed file hash cannot bypass the member allowlist.
+        for manifest_path in (path.parent / "panel.json", self.references["test"]):
+            panel = json.loads(manifest_path.read_text())
+            panel["inputs_sha256"][path.name] = delivery.contract.sha256(path)
+            manifest_path.write_text(json.dumps(panel))
+        with self.assertRaisesRegex(delivery.contract.ContractError, "HDF5 input members"):
+            self.export()
+
+    def test_changed_phase_manifest_does_not_redefine_cohort(self):
+        path = self.inputs / "mc_maze" / "val" / "panel.json"
+        panel = json.loads(path.read_text())
+        panel["n_eval"] = 1
+        path.write_text(json.dumps(panel))
+        with self.assertRaisesRegex(delivery.contract.ContractError, "trusted native reference"):
+            self.export()
+
+    def test_validation_target_must_match_admitted_hash(self):
+        with (self.inputs / "mc_maze" / "val" / "eval_target_20ms.h5").open("ab") as handle:
+            handle.write(b"changed")
+        with self.assertRaisesRegex(delivery.contract.ContractError, "validation target has not been admitted"):
+            self.export()
+
+    def test_paper_must_be_original_pinned_bytes(self):
+        self.paper.write_bytes(b"%PDF-1.4\nDifferent paper")
+        with self.assertRaisesRegex(delivery.contract.ContractError, "pinned original publication"):
+            self.export()
+
+    def test_private_paths_in_protocol_are_rejected(self):
+        self.protocol.write_text(json.dumps({"operator_path": "/Users/private/targets.h5"}))
+        with self.assertRaisesRegex(delivery.contract.ContractError, "private absolute paths"):
+            self.export()
+
+    def test_payload_export_inside_git_is_rejected(self):
+        (self.root / ".git").mkdir()
+        with self.assertRaisesRegex(delivery.contract.ContractError, "outside public Git"):
+            self.export()
+
+    def test_free_disk_floor_is_enforced(self):
+        with patch.object(delivery.shutil, "disk_usage", return_value=types.SimpleNamespace(free=59 * 1024**3)):
+            with self.assertRaisesRegex(delivery.contract.ContractError, "free-disk floor"):
+                self.export()
+
+    def test_existing_delivery_is_not_overwritten(self):
+        self.output.mkdir()
+        with self.assertRaisesRegex(delivery.contract.ContractError, "already exists"):
+            self.export()
+
+
+if __name__ == "__main__":
+    unittest.main()
