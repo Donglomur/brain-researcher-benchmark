@@ -1,0 +1,65 @@
+{
+  "task_id": "PAPER-paper-method-042",
+  "canonical_contract": {
+    "path": "benchmarks/paper/PAPER-paper-method-042/task.json",
+    "bytes": 128221,
+    "sha256": "a136bac3f4f192ace492257181f68638b4f8c73a4f7e0e4d7793756b3215e455"
+  },
+  "endpoint_selection": "Prospective source-grounded REC grounding component; canonical specification and whole-paper scope remain unchanged.",
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2404.07202v2",
+      "version": "18 July 2024 v2",
+      "sections": ["4.1", "4.4", "B.1", "B.2", "C.2"],
+      "supports": "Four subjects, 982 shared images, 5829 boxes, REC, strict IoU thresholds and salience groups."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/weihaox/UMBRAE/8c1795c434a41cdd38ce6628b7e1a774f31d9483/umbrae/inference_rec.py",
+      "revision": "8c1795c434a41cdd38ce6628b7e1a774f31d9483",
+      "supports": "S1/S2/S5/S7, test order, repeat averaging, category-conditioned queries, extracted nested response format."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/weihaox/BrainHub/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/eval_bbox_rec.py",
+      "revision": "4838666f1a04d0521c2184fa50b5b77e7e7ac5ee",
+      "supports": "First GT box and first predicted group/box; query-mean IoU; strict threshold; missing predictions retained as failures.",
+      "inspection_reconstruction": {
+        "method": "GitHub pinned blob rawLines joined with newline plus final newline; not asserted to be original raw response bytes",
+        "bytes": 5760,
+        "sha256": "92a96308ece9e4c835868013a3d242f3912d4072708543322a326163eb5980f1"
+      },
+      "snapshot_note": "Newly pinned current source snapshot; not asserted to be paper-time revision."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/weihaox/BrainHub/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/data/processing/coco/coco_categorized_labels.json",
+      "supports": "Fixed category partition: All80, Salient28, Creatures11, Objects17, Inconspicuous52.",
+      "inspection_reconstruction": {
+        "method": "GitHub pinned blob rawLines without added trailing newline; not asserted to be original raw response bytes",
+        "bytes": 2088,
+        "sha256": "d8a431828a6b90ecdfb5dcb733cb7aa7575bae6de66ef8cc93ca1a3902908e46"
+      }
+    },
+    {
+      "url": "https://huggingface.co/api/datasets/weihaox/brainx/tree/77d4f8e1c1d6d417a363ac32c380f12924bd92c8?recursive=true&expand=false",
+      "response_bytes": 4133,
+      "response_sha256": "c01139e7472806902aa7f56a5881c4ce1ed2ac5e9310fd14f7d83eb695d01e2b",
+      "artifact": "all_images.pt",
+      "reported_size": 772277419,
+      "reported_lfs_sha256": "1a313a2d4796f14aa4a930afb0ce94a1080ae9ea0482862f597a1b0afd539078",
+      "payload_acquired": false,
+      "identity_status": "Source-reported content identity; no local byte verification or membership/order qualification."
+    }
+  ],
+  "native_annotation": {
+    "url": "https://github.com/weihaox/BrainHub/blob/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/data/bbox/coco_bbox_categorized.json",
+    "content_sha256": null,
+    "membership_verified": false,
+    "exposure": "One metadata-seeking annotation blob HTML page was accessed by independent contract worker and discarded; it may embed annotation text. No annotations extracted, persisted or scored."
+  },
+  "rights": {
+    "umbrae_code": "Apache-2.0 source; no author code vendored",
+    "brainhub_code": "MIT source; no author code vendored",
+    "separate_holds": ["NSD participant and stimulus terms", "COCO annotation/stimulus terms", "pretrained model terms", "independent actual exposure audit"]
+  },
+  "scientific_qualification": "unknown",
+  "native_scientific_runs": 0
+}
