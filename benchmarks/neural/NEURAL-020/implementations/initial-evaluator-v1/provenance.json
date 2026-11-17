@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "task_id": "NEURAL-020",
+  "implementation_id": "initial-evaluator-v1",
+  "construction_status": "engineering_component_scientific_admission_held",
+  "canonical_contract": {
+    "path": "benchmarks/neural/NEURAL-020/task.json",
+    "bytes": 16329,
+    "sha256": "8b922ac0214da6a1cb1ca5c0320cab90aaf6dab0e51f8ce44a552b0ecfcc718a"
+  },
+  "source_identity": {
+    "source_id": "D-N064",
+    "dandiset": "000127",
+    "version": "0.220113.0359",
+    "subject": "Han",
+    "source_training_trial_rows": 826,
+    "source_units": 65,
+    "data_scope": "public_development_only"
+  },
+  "primary_code_sources": [
+    {
+      "path": "nlb_tools/evaluation.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "source_url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "bytes": 18292,
+      "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476",
+      "git_blob_sha1": "5b50ef05f6fb0865fc0f84242473e0e51afcf3bb",
+      "git_blob_verified": true
+    },
+    {
+      "path": "nlb_tools/make_tensors.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "source_url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/make_tensors.py",
+      "bytes": 61667,
+      "sha256": "e79badd983e37fa0c8f0ddbdeb74972ed505ba4672035daca4e8af16a7bc2d9d",
+      "git_blob_sha1": "9612215fead264b6e92d502f434145553dfdf387",
+      "git_blob_verified": true
+    },
+    {
+      "path": "nlb_tools/nwb_interface.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "source_url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/nwb_interface.py",
+      "bytes": 39359,
+      "sha256": "5f77fe3d25d120934c44c8ac1c26f07303eeec9db4821c69406726b141f66121",
+      "git_blob_sha1": "814636488fc8bf6ae1f57c6d81189fbe361b790a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "examples/baselines/smoothing/run_smoothing.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "source_url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/examples/baselines/smoothing/run_smoothing.py",
+      "bytes": 6346,
+      "sha256": "a68f2349534a4898566de5985ddf7af40b18b39616b777619486196be3abf4ed",
+      "git_blob_sha1": "7e05cfc722f42be62b8b31bf9b019287c2714bb6",
+      "git_blob_verified": true
+    },
+    {
+      "path": "LICENSE",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "source_url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/LICENSE",
+      "bytes": 1071,
+      "sha256": "6b79a9e581f330f2ec31a227b162f5b7950021fd9152203729ec7ad5bc2d9f7f",
+      "git_blob_sha1": "937446530ea312867a306db3ecd00699ebebd390",
+      "git_blob_verified": true
+    }
+  ],
+  "primary_paper": {
+    "doi": "10.7554/eLife.48198",
+    "url": "https://doi.org/10.7554/eLife.48198",
+    "primary_xml_repository": "https://github.com/elifesciences/elife-article-xml",
+    "commit": "79428cdf06b29babdb8d69f4c002284976991dc2",
+    "path": "articles/elife-48198-v1.xml",
+    "bytes": 217662,
+    "sha256": "685f7468aa76372e4877f996e4968e55a1720ecb558c23570f5db049a0085527",
+    "interpretation": "Active center-out versus center-hold perturbations support condition distinction. Paper first120ms/success filtering does not replace NLB window or task population. Exact Han release-session bridge remains DANDI-contract based."
+  },
+  "semantic_mapping": [
+    {
+      "behavior": "poisson_bits_per_spike",
+      "source": "nlb_tools/evaluation.py:209-276",
+      "meaning": "evaluation per-neuron mean null; exact zero rates 1e-9; target NaN masking; expected counts per bin"
+    },
+    {
+      "behavior": "Area2 tensor geometry and private condition labels",
+      "source": "nlb_tools/make_tensors.py area2_bump defaults; nwb_interface.py units heldout and resampling",
+      "meaning": "move_onset_time [-100,500)ms;5/20ms; ctr_hold_bump 0/1; source heldout mask"
+    },
+    {
+      "behavior": "smoothing_reference",
+      "source": "examples/baselines/smoothing/run_smoothing.py:9-16,56-129",
+      "meaning": "30ms Gaussian; normalized per-trial convolution; log1e-4; train-only heldout PoissonRegressor alpha.01; native iteration retry and clipping"
+    },
+    {
+      "behavior": "full source roster and fixed unit-mask binding",
+      "source": "canonical contract input_assets.readiness_records[0].recording_contract",
+      "meaning": "826 rows/65 units preserved; exclusions explicit; raw conversion not executed"
+    },
+    {
+      "behavior": "active and perturbed primary reports",
+      "source": "canonical contract evaluation.observable_endpoints",
+      "meaning": "prospective subgroup null recomputation; official pooled metric retained diagnostic"
+    },
+    {
+      "behavior": "whole blocks/window disjointness and public projection",
+      "source": "canonical contract split.policy, allowed_inputs.allowed_context_policy, controls",
+      "meaning": "no movement labels or private targets in query; fixed opaque IDs; no automatic leave-condition-out claim"
+    }
+  ],
+  "prospective_policies": [
+    "Subgroup null is recomputed independently within active and perturbed conditions.",
+    "Both condition populations and observed coverage of every heldout unit required; all-zero spike group explicitly undefined.",
+    "Finite nonnegative predictions required even at fixed missing target cells; malformed/noninteger observed counts reject.",
+    "Train/eval source windows and continuous blocks must not overlap; conflicting native splits reject without dropping trials.",
+    "Complete 826-row training-asset scope only; this is not an NWB importer or separately verified test-asset population.",
+    "Smoothing fails unsupported missingness/all-zero training units/final nonconvergence; no imputation or hidden alternate fit.",
+    "One session supports descriptive outputs only; no between-animal uncertainty or latent-causal inference."
+  ],
+  "scientific_admission": {
+    "research_qualified": false,
+    "submission_ready": false,
+    "authentic_reference_executed": false,
+    "native_conversion_executed": false,
+    "new_dataset_payload_reads": 0,
+    "scientific_campaigns": 0
+  },
+  "rights": {
+    "data": "DANDI version metadata CC-BY-4.0; payload release review remains open",
+    "code": "MIT; source notice retained in NLB_LICENSE",
+    "source_retrieval": "small commit-pinned GitHub Contents API base64 reads; decoded Git blob hashes verified; no dataset archives"
+  },
+  "retained_gates": [
+    "native time/rate conversion and bump/heldout-mask verification",
+    "full source payload and public/private equality",
+    "prospective condition-transfer scope and exact split/access/resource freeze",
+    "authentic signal-derived and independently checked reference",
+    "independent scientific reproduction/admission",
+    "public development contamination exposure",
+    "single biological case",
+    "rights attribution and release review"
+  ]
+}
