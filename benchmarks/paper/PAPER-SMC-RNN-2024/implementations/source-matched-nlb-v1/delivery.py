@@ -225,7 +225,7 @@ def export_pair(prepared_root, author_source, paper, output, *,
     no_private_paths(protocol_data)
     paper = Path(paper)
     require(paper.is_file() and not paper.is_symlink() and 0 < paper.stat().st_size <= 4 * 1024 * 1024,
-            "provide the original paper PDF, at most4MiB")
+            "provide the original paper PDF, at most 4 MiB")
     with paper.open("rb") as handle:
         require(handle.read(5) == b"%PDF-", "paper must be a local PDF")
     require(contract.sha256(paper) == PAPER_SHA256, "paper differs from the pinned original publication")
@@ -241,10 +241,10 @@ def export_pair(prepared_root, author_source, paper, output, *,
     estimated_export_bytes = 2 * (input_bytes + paper.stat().st_size)
     estimated_export_bytes += sum(row["bytes"] for _, _, row in code) + 4 * 1024**2
     require(shutil.disk_usage(output.parent).free - estimated_export_bytes >= 60 * 1024**3,
-            "export would violate the60GiBfree-disk floor")
+            "export would violate the 60 GiB free-disk floor")
     task = {
         "schema": "smc_participant_task_v1", "task_id": "PAPER-SMC-RNN-2024",
-        "objective": "Improve the matching original Table2 SMC-RNN co-bps result on the complete MC_Maze20ms test panel; report every companion metric.",
+        "objective": "Improve the matching original Table 2 SMC-RNN co-bps result on the complete MC_Maze 20-ms test panel; report every companion metric.",
         "metrics": protocol_data["metrics"], "allowed_observations": {
             "train": "All original training spikes and behavior, including forward bins.",
             "validation": "Original validation held-in inputs and separately labeled validation targets; permitted for selection.",
@@ -254,14 +254,14 @@ def export_pair(prepared_root, author_source, paper, output, *,
         "prediction_abi": {"format": "HDF5", "group": contract.DATASET,
             "required_arrays": {key: test["expected_shapes"][key] for key in sorted(contract.REQUIRED_KEYS)},
             "optional_arrays": {key: test["expected_shapes"][key] for key in sorted(contract.OPTIONAL_KEYS)},
-            "values": "Finite nonnegative expected spike counts per20ms bin, original trial and neuron order. Original scorer clips zero rates to1e-9.",
+            "values": "Finite nonnegative expected spike counts per 20-ms bin, original trial and neuron order. Original scorer clips zero rates to 1e-9.",
             "submission": "submission.h5", "freeze": "Operator freezes submission, panel and protocol hashes before accessing test targets.",
             "method_report": "Report method, arm, selection procedure, seed(s), resources and all data/source exposure. Do not include test truths."},
         "budgets": {"operator_source_qualification": protocol_data["budget"],
             "candidate_episode": None,
             "scope": "No candidate run is launched or authorized by this materials export. A runner must freeze equal candidate budgets before a paired comparison."},
-        "exposure": "Original test targets became public inJanuary2026. Local exclusion does not make this an untouched holdout.",
-        "interpretation": "Reproduction is calibration. A positive point difference alone is not an improvement finding; prespecify uncertainty and companion non-regression before candidate scoring. Exceeding SMC-RNN is not currentSOTA.",
+        "exposure": "Original test targets became public in January 2026. Local exclusion does not make this an untouched holdout.",
+        "interpretation": "Reproduction is calibration. A positive point difference alone is not an improvement finding; prespecify uncertainty and companion non-regression before candidate scoring. Exceeding SMC-RNN does not establish current SOTA.",
     }
     with tempfile.TemporaryDirectory(prefix=".smc-pair-", dir=output.parent) as temporary:
         staging = Path(temporary) / "pair"
@@ -273,14 +273,14 @@ def export_pair(prepared_root, author_source, paper, output, *,
             write_json(destination / "paper.json", {"url": PAPER_URL, "sha256": contract.sha256(paper),
                        "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
                        "authors": ["Matthijs Pals", "A Erdem Sagtekin", "Felix Pei", "Manuel Gloeckler", "Jakob H Macke"],
-                       "publication": "NeurIPS2024", "source_locations": ["SupplementB.5/Table2", "SupplementD.7"]})
+                       "publication": "NeurIPS 2024", "source_locations": ["Supplement B.5/Table 2", "Supplement D.7"]})
             copy_verified(protocol, destination / "protocol.json", contract.sha256(PROTOCOL))
             write_json(destination / "task.json", task)
             write_json(destination / "attribution.json", {
-                "dataset": "Mark Churchland and Matthew Kaufman(2022), MC_Maze: macaque primary motor and dorsal premotor cortex spiking activity during delayed reaching",
+                "dataset": "Mark Churchland and Matthew Kaufman (2022), MC_Maze: macaque primary motor and dorsal premotor cortex spiking activity during delayed reaching",
                 "dataset_url": "https://doi.org/10.48324/dandi.000128/0.220113.0400", "dataset_license": "CC-BY-4.0",
-                "nlb_tools": "neurallatents/nlb_tools0.0.3, MIT; source tensor recipe preserved",
-                "data_transform": "20ms binning and original train/validation/test tensors; validation targets included, test targets excluded",
+                "nlb_tools": "neurallatents/nlb_tools 0.0.3, MIT; source tensor recipe preserved",
+                "data_transform": "20-ms binning and original train/validation/test tensors; validation targets included, test targets excluded",
             })
             for phase, panel, root in (("val", val, val_root), ("test", test, test_root)):
                 target_dir = destination / "inputs" / "mc_maze" / phase
