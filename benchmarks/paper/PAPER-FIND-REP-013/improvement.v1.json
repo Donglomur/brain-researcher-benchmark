@@ -1,0 +1,172 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-013",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "Comparative dendrite/spine/regional anatomy has no ordered source-paper performance endpoint to surpass. The existing branch-length RMSE evaluates reconstruction of a local numerical reference and cannot turn a larger species contrast or narrower subset into a scientific win.",
+  "source_paper": {
+    "title": "Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum",
+    "url": "https://doi.org/10.7554/eLife.105013.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/105013/figures",
+      "locator": "Figure 1 cell reconstructions and dendritic morphology; Figure 2 spine morphology; Figures 4\u20136 regional analyses",
+      "supports": "Source endpoints are species differences in measured dendrite/branch/Sholl and spine/regional morphology, not predictive method scores. Figure 1 reports five cells per species from three human and two mouse individuals."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15066697",
+      "locator": "Version v3; Dendrite reconstructions.zip, Spine and neurite reconstructions.zip, Regional slice reconstructions.zip",
+      "supports": "Versioned author archive contains morphology reconstructions and analysis code; metadata reviewed without downloading reconstruction archives."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/15066697/files/HumanvsMousePaperAnalysis.Rmd?download=1",
+      "locator": "Figure 1 Cell Reconstructions at line 204; species summaries/tests around lines 367\u2013470; branch/Sholl comparisons around 1131\u20131221; spine analysis from 1694",
+      "supports": "Author source derives comparative morphological summaries and tests and joins by Animal_ID, CellID and Species. It does not define held-out predictive method evaluation."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-013/task.json",
+      "locator": "primary_outputs; implementations/registered-runtime/program-v1/TASK.md and numeric_score.py",
+      "supports": "Local task explicitly describes exposed-data reconstruction, equal-cell branch-length RMSE, retrospective subset selection, H13Split1 mismatch and uncertain caliber convention; it disclaims new scientific advance."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Species differences in Purkinje dendritic geometry, branching, Sholl profiles and spines, plus regional distribution of multi-compartment cells. These are measured biological estimands.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author morphology archive Zenodo 15066697 v3 with dendrite, spine/neurite and regional slice reconstructions and RMarkdown/MATLAB analysis. The source archive defines distinct panel inputs; the local ten-SWC subset is not the entire paper.",
+      "evidence_ids": [
+        "archive",
+        "code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 1: five reconstructed Purkinje cells per species from three human and two mouse individuals. Spine and regional panels have their own sampling designs and must not be collapsed into these ten cells.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The source performs comparative anatomical estimation on measured specimens; it does not designate train/validation/test sets for an ordered predictive endpoint. Local retrospective source-consistency filtering is not a held-out split.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Dendritic tree reconstructions and their annotations, Sholl summaries, spine/neurite measurements and regional slice reconstructions appropriate to each source panel.",
+      "evidence_ids": [
+        "archive",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author RMarkdown provides reconstruction joins and branch/section calculations, but the local audit records an unresolved H13Split1 export mismatch and radius-to-diameter state ambiguity. Neither dropping the cell nor choosing the convention best matching the paper recovers an exact source procedure.",
+      "evidence_ids": [
+        "code",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Dendritic length, branch count/order, arbor dimensions, diameter, Sholl profiles and spine/regional contrasts. These describe anatomy; greater species difference, more branching or a smaller p-value is not method-performance improvement.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source morphology summaries group cells/species and compare anatomical distributions; donor-level interpretation must respect the three-human/two-mouse sampling hierarchy. Branches and spines are not independent donors. Local equal-cell RMSE only measures reconstruction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered performance endpoint for comparative Purkinje anatomy.",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "The registered source estimands are biological measurements or associations, not an ordered algorithm-performance baseline. Numerical source findings must be reproduced or challenged on scientific grounds, not exceeded as a benchmark score.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Retain the source-consistent morphology audit and equal-cell branch-length RMSE evaluator as public development calibration. All ten SWCs/components, exposed author summaries, both caliber conventions, the H13Split1 discrepancy and retrospective subset exclusions remain visible; no new species or computational advantage follows from better numerical agreement.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No meaningful positive improvement margin is defined for this descriptive source target; greater effect size or stronger significance does not establish a better method.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement-comparison uncertainty rule: this task is excluded from active performance improvement. Preserve the source analysis uncertainty when reproducing its estimands.",
+      "independent_unit": "Donor/animal for biological inference, with reconstructed cells, branches and spines nested; mouse cell-to-donor assignments remain unavailable locally.",
+      "rationale": "The source sampling hierarchy must not be converted into independent benchmark test examples. Descriptive uncertainty is not a rule for surpassing the paper.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "The current registered descriptive target cannot admit a same-task paper-performance win.",
+      "Matching published values or the local numerical reference is calibration only.",
+      "A predictive or reconstruction endpoint with an ordered source baseline would require separately reviewed registration; a new split, narrowed cohort or changed endpoint is an extension, never a victory on this task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed for this descriptive task.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for this ineligible task; retain the original analysis as a calibration/reproduction component.",
+    "candidate_freeze": "No active improvement candidate is admitted. Any separately registered performance task must freeze its method and source-matched evaluation before final scoring.",
+    "final_evaluation": "No scientific improvement reward is issued from the existing descriptive or reference-reconstruction evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve published descriptive results, any author reruns and local reconstruction references as distinct artifacts; none is promoted to a paper-performance baseline."
+  },
+  "blocking_issues": [
+    "The registered anatomical estimands lack a better-than-paper performance direction.",
+    "H13Split1 source/export disagreement and ambiguous caliber conversion prevent full original-procedure calibration.",
+    "Missing mouse cell-to-individual assignments preclude treating reconstructed branches or cells as independent donor evidence; the retrospectively retained subset cannot replace the source cohort."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the source-consistent morphology audit and equal-cell branch-length RMSE evaluator as public development calibration. All ten SWCs/components, exposed author summaries, both caliber conventions, the H13Split1 discrepancy and retrospective subset exclusions remain visible; no new species or computational advantage follows from better numerical agreement."
+  }
+}

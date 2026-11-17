@@ -1,0 +1,173 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-018",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper reports an ordered Allen test-NLL result, but the split, metric normalization and model flags needed to reproduce that number disagree with the available code path. The local equal-session interaction-gain endpoint is prospective and cannot substitute for exceeding the published full-model task.",
+  "source_paper": {
+    "title": "Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/ac643478c07baa8432690555e4702b65-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "glm-paper",
+      "kind": "paper",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/ac643478c07baa8432690555e4702b65-Paper-Conference.pdf",
+      "locator": "Section 3 Training; Section 4.5; Appendix A Table S1; Appendix G",
+      "supports": "Source task, Allen cohort, trial preprocessing, posterior-mean inference and published full-model test NLL."
+    },
+    {
+      "id": "glm-loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/DataLoader.py",
+      "locator": "Allen_dataloader_multi_session.__init__ and _split_data, lines 120\u2013217",
+      "supports": "Code defaults train=.7, val=.1, remainder test, with condition-dependent integer allocations, unlike paper train/test/validation=.7/.1/.2."
+    },
+    {
+      "id": "glm-loss",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/GLMTransformer.py",
+      "locator": "loss_function, lines 437\u2013445; encoder/decoder and sample_a_latent",
+      "supports": "Released loss averages Poisson terms and adds scaled KL; this does not directly identify Table S1 total test NLL."
+    },
+    {
+      "id": "glm-infer",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/model_trainer.py",
+      "locator": "train and predict, lines 245\u2013355",
+      "supports": "Validation loss selects checkpoint; predict uses posterior means and defaults self-history/coupling off, so exact evaluation flags and batch membership matter."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-infer"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Allen Institute Visual Coding Neuropixels data used by the authors; six visual areas, all available trial types, 121,679 400-ms trials reported. Exact retrieved recording content remains unbound.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All ten source sessions: 757216464, 798911424, 715093703, 719161530, 721123822, 737581020, 739448407, 742951821, 743475441, 744228101. Do not omit sessions or anatomical groups to obtain a lower loss.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper says training/test/validation 70/10/20%; pinned loader uses training/validation/test 70/10/remainder with special 15-trial allocations. Original Table S1 memberships, seed/state, eligibility and native inference batches must be recovered before a same-task score.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source neural spike trains and within-trial self/cross-population history with target-conditioned latent inference; preserve posterior-mean test inference and the same source conditioning. Removing target conditioning changes the task.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-infer"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses 2-ms bins and 400-ms trials: concatenate short contiguous presentations, truncate longer discrete trials and segment long stimuli without overlap. Exact neuron QC, invalid-time exclusion, padding, source/code axis layout and historical artifact identities are not reconciled.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loader"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Table S1 names test negative log likelihood. Poisson NLL is sum(exp(eta)-y*eta+log(y!)); pinned loss_function instead averages the first two terms and adds beta times KL. Recover the exact total, constant, KL and model-flag convention that produced 4.218e7.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loss"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper Table S1 gives total-scale test NLL and SE; native trainer trial-weights batch mean variational loss. The local evaluator\u2019s equal-session mean interaction gain has different units and weighting. Historical aggregation and replicate units remain unresolved.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loss",
+        "glm-infer"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Allen Visual Coding Table S1 full-model test negative log likelihood",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "verified",
+      "value": 42180000,
+      "description": "Table S1: full GLM-Transformer Allen test NLL 4.218 \u00d7 10^7, SE 3.8 \u00d7 10^4. This number is verified as reported; comparability to the released evaluation route is unresolved.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No same-task author rerun. The released loss and split require scientific version reconciliation; a local history-versus-interaction gain is not this baseline.",
+      "evidence_ids": [
+        "glm-loader",
+        "glm-loss",
+        "glm-infer"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No meaningful NLL gain can be specified until the scored observations, normalization and baseline uncertainty are recovered.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the authors\u2019 Table S1 replicate definition first; then predeclare paired uncertainty preserving whole-animal/session and within-session trial dependence with matched training-seed replication. No alpha or margin is invented.",
+      "independent_unit": "Animal/session for biological replication, with trials clustered and shared-model training dependence accounted for.",
+      "rationale": "Neither individual spikes nor bins are independent replicates; the paper SE does not identify an executable uncertainty design by itself.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Reconcile the exact Table S1 dataset, split, preprocessing, model flags, posterior inference and total-NLL reduction before any active improvement episode.",
+      "Beat the full GLM-Transformer source result and its calibrated author rerun; increasing a local history-to-interaction difference does not establish that result.",
+      "Retain all ten sessions and the same available inputs; a new split or different target-conditioning rule is an extension.",
+      "Require predeclared meaningful effect and valid uncertainty; causal-interaction claims require separate evidence."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is distinct from current SOTA; no current-SOTA search or claim is admitted by this contract.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active improvement episode until paper/code metric and split identities are recovered; then use only source training/validation feedback for iteration.",
+    "candidate_freeze": "Freeze model, source data/axes, trial memberships, inference batches, conditioning flags, normalization and original author baseline before final scoring.",
+    "final_evaluation": "Evaluate the complete original Table S1 held-out observations using its recovered score convention; local prospective gains remain separately labeled.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The source full-model Table S1 score is the comparator. Reproduction of paper components, ablation reconstruction or generated engineering controls is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Paper/code validation-test split naming and original memberships are unresolved.",
+    "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
+    "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
+    "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain initial-evaluator-v1 unchanged. Its equal-session interaction gain, altered history flags and generated controls are prospective/calibration components; they cannot be compared numerically with Table S1 full-model NLL or called blind prediction."
+  }
+}

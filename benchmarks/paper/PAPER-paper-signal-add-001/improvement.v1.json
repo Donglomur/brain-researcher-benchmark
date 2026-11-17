@@ -1,0 +1,175 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The full paper contains original ordered category-decoding evaluations in Fig. 6 and Extended Data Fig. 7a. The exact source task/condition, full eligible cohort, split artifacts and matching baseline are not yet bound, so this task is source-unresolved. Legacy PAC curves and cell-selection inference remain descriptive calibration.",
+  "source_paper": {
+    "title": "Control of working memory by phase\u2013amplitude coupling of human hippocampal neurons",
+    "url": "https://www.nature.com/articles/s41586-024-07309-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 2d; Methods: Patients, LFP preprocessing, Phase\u2013amplitude coupling, Selection of PAC neurons",
+      "supports": "Original PAC curves, modulation indices and Poisson-model selection characterize load-dependent biology; likelihood-ratio tests select PAC neurons, not an out-of-sample performance benchmark."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "NWB_samplePAC_LFP.m sample_sub=4, sample_ses=1, range=49 and stratTrials loading; NWB_samplePAC_SU.m",
+      "supports": "Author release demonstrates Fig. 2d on sub-4_ses-1_P60CS/channel row 49 with stored balanced clean correct-trial masks. It provides examples, not an independent improvement benchmark."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "DANDI 000673, version 0.240118.2135; author README Installation (Data)",
+      "supports": "The source links NWB electrophysiology data to DANDI 000673; exact figure-level eligibility cannot be inferred from archive participant/session counts alone."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-001/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: HOLDS, epoch_lfp, tort, comodulogram",
+      "supports": "The registered scope is Fig. 2d/example PAC and single-unit models, with a separately labelled patient extension. The independent evaluator has no authentic native qualification and explicitly prospective spike/LFP alignment repair."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 6; Extended Data Fig. 7a; Methods: Noise correlations and population category decoding; Results: PAC neurons do not code for category",
+      "supports": "The original paper evaluates five-category linear-SVM decoding: correct load-1 maintenance trials, 80/20 trial training/testing, category balancing and 500 repetitions for session ensembles. Extended Data Fig. 7a separately tests encoding pseudo-populations and reports category-neuron accuracies of 72.77% in hippocampus and 88.71% in amygdala; these are condition-specific scores, not a universal baseline."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Original five-category neural decoding is an ordered source-paper candidate: Fig. 6 maintenance/session ensembles with intact/removed noise correlations, or the distinct Extended Data Fig. 7a encoding pseudo-populations. Select and bind one exact original task/condition before claiming a paper comparison.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author NWB dataset DANDI 000673, with registration conservatively fixed to version 0.240118.2135 and source code revision a25e8cc3f61630a428f190381745257d4506f148. Later schema revisions must not silently replace it.",
+      "evidence_ids": [
+        "data",
+        "code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper source cohort is 36 patients/44 sessions, but original decoder eligibility differs by region, session, neuron ensemble and analysis. Recover the complete original selected condition roster; the Fig. 2d single-channel example is not the decoder cohort.",
+      "evidence_ids": [
+        "paper",
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Fig. 6 methods train one-versus-one linear SVMs on 80% of trials and test 20%, balance five categories, and repeat 500 times; noise-removal shuffles trials within category. Extended Data Fig. 7a pseudo-populations have a distinct repetition/selection protocol. Exact original draws and selected candidate protocol remain unbound.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original candidate inputs are source neuron firing rates and category labels, with correct-trial/load/region/session/ensemble restrictions appropriate to the selected source panel. Neither LFP-only Fig. 2d curves nor a newly created patient prediction task is equivalent.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover the chosen source panel\u2019s spike-count window, z-scoring, category subsampling, pseudo-population construction or simultaneous-session ensemble selection, and intact/removed noise-correlation condition. Do not transfer Fig. 2d LFP preprocessing as a decoder recipe.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Original five-category decoding accuracy is ordered higher-is-better, but the primary source condition and aggregation must be bound. Hippocampal 72.77% and amygdala 88.71% refer specifically to encoding category-neuron pseudo-populations, not the Fig. 6 maintenance condition.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig. 6 averages repeated trial-selection decoding and assesses contributions across eligible session ensembles; Extended Data Fig. 7a summarizes separate pseudo-population repetitions. Recover the exact original score/condition and independent biological units; repetitions are not independent patients.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original five-category SVM decoding accuracy for a source-matched panel/condition; selection unresolved.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source reports 72.77% hippocampal and 88.71% amygdala accuracy for encoding category-neuron pseudo-populations. These condition-specific values are recorded as evidence only; no single scalar is admitted before choosing the matching original task, cohort and aggregation. They must not be used as Fig. 6 maintenance baselines.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No reproduced author score for the original decoding candidate is established. The existing descriptive/reference-reconstruction implementation remains calibration only and cannot supply this baseline.",
+      "evidence_ids": [
+        "registration",
+        "ordered_candidates"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect cannot be justified until one original decoding endpoint, its metric scale, source baseline and original sampling design are bound. No generic margin is assigned.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the original evaluation units and dependence structure, then predeclare paired uncertainty for the bound original decoder comparison; no confidence threshold is invented.",
+      "independent_unit": "Must be recovered for the chosen task: patient/session for biological generalization; pseudo-population repetitions, shuffled trials and folds are dependent.",
+      "rationale": "Repeated folds, random subsamples, overlapping windows or decoder repetitions are not independent biological replicates. Exact original protocol and eligible units must be recovered before admission.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "paper_win_requires": [
+      "Select and bind one original paper decoder endpoint, including encoding versus maintenance, brain region, cell population and intact/removed-correlation condition.",
+      "Preserve the complete eligible source cohort, original 80/20 or other documented panel-specific protocol, balancing, preprocessing and aggregation; recover its matching published result and author rerun route.",
+      "Freeze candidate and meaningful effect/uncertainty/access/resource rules before final evaluation. Stronger PAC, a new patient split, an easier neuron subset or a score from another panel cannot count as this source-task win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed; any later SOTA assessment requires its own primary-source verification.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending recovery and binding of an ordered decoding endpoint actually evaluated in this source paper. Once admitted, iterate only with the original permitted training/validation access.",
+    "candidate_freeze": "Freeze the selected original endpoint, full cohort, source split, preprocessing, baseline route, candidate method and resource/access budgets before final scoring.",
+    "final_evaluation": "Compare on the same original source-paper task and evaluation protocol only after baseline recovery; no local descriptive reconstruction score or newly invented split can earn a paper win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep paper-reported scores, a source-authorized author rerun, local descriptive calibration and any later SOTA comparator distinct. No original score is inferred from local numerical agreement. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Which original decoding endpoint/condition is active remains unbound; encoding pseudo-population and maintenance session-ensemble results must not be conflated.",
+    "Exact eligible sessions/neurons, original split draws, preprocessing/ensemble selection and source baseline artifacts are unrecovered.",
+    "The current Fig. 2d/PAC evaluator does not implement the original category-decoding comparison or its valid grouped uncertainty."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the Fig. 2d phase-bin/comodulogram and single-unit PAC reconstruction evaluator as calibration only. Native MATLAB equivalence, trial/channel eligibility and spike/LFP alignment remain unqualified; the proposed patient-level extension cannot be relabelled same-task improvement."
+  }
+}

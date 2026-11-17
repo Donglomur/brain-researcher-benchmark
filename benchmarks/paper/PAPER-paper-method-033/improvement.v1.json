@@ -1,0 +1,194 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-033",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original subject-7 adaptation task has ordered reconstruction endpoints and recoverable published comparisons at all three source calibration budgets. Its target-aware best-of-eight reconstruction selection differs scientifically from the existing fixed-index evaluator, which cannot establish a source-paper win. Exact adaptation subset identities, exposure manifests, competent author replay, meaningful effect, uncertainty and execution budgets remain unqualified.",
+  "source_paper": {
+    "title": "MindBridge: A Cross-Subject Brain Decoding Framework",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.html"
+  },
+  "evidence": [
+    {
+      "id": "mb-paper",
+      "kind": "paper",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.pdf",
+      "locator": "CVPR 2024 final paper, Sections 3.1, 4.1, 4.2; Tables 1 and 2 (printed page 11339 for Table 2)",
+      "supports": "Original subjects, common-image test split, four-subject reconstruction results and subject-7 adaptation conditions."
+    },
+    {
+      "id": "mb-supp",
+      "kind": "paper",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/supplemental/Wang_MindBridge_A_Cross-Subject_CVPR_2024_supplemental.pdf",
+      "locator": "CVPR 2024 final supplement, sections A and B, page 1",
+      "supports": "GLMSingle/session normalization, NSDGeneral ROI, repeat handling and target-aware best-of-eight generation selection."
+    },
+    {
+      "id": "mb-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/README.md",
+      "locator": "Preparation / Training / Reconstructing and evaluating",
+      "supports": "Author uses MindEye webdataset_avg_split, releases subject 1/2/5/7 checkpoints, and distinguishes single, bridge and adaptation workflows."
+    },
+    {
+      "id": "mb-eval",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/eval.py",
+      "locator": "two_way_identification lines 11-31; CLIP lines 145-156; cal_metrics",
+      "supports": "Pearson all-pairs two-way identification, strict ties, CLIP ViT-L/14 and resize/normalization, image averaging."
+    },
+    {
+      "id": "mb-adapt",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/scripts/adapt_bridge.sh",
+      "locator": "Source/target/length and optimization arguments",
+      "supports": "Pinned author route uses subjects 1/2/5, target 7 and 4000 calibration images; this is not evidence that exact published subset IDs were recovered."
+    },
+    {
+      "id": "mb-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-033/docs/initial-evaluator-v1.md",
+      "locator": "Source and material distinctions; Computation; What remains held",
+      "supports": "Local evaluator explicitly substitutes fixed candidate index, uses prospective curve summary and does not execute MindBridge or reproduce published scores."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Reconstruct viewed images for original target subject 7 after adapting a model pretrained on subjects 1, 2 and 5, retaining all Table 2 calibration conditions (500, 1500 and 4000 images). The 4000-image condition is nominated as primary by this design; the paper did not designate a single primary. New target subjects or sessions are extensions.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-adapt"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Natural Scenes Dataset with COCO stimuli; author-designated MindEye webdataset_avg_split representation. Exact asset hashes and dataset snapshot still require execution admission.",
+      "evidence_ids": [
+        "mb-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original Table 2 cohort: source subjects 01, 02 and 05; fixed target subject 07. Preserve the complete original target-7 evaluation at every original calibration budget. The four-subject Table 1 aggregate is a separate experiment and cannot serve as this target-specific baseline.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-adapt"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source uses 982 common test images and 8859 training images per subject; Table 2 adapts target subject 7 on 500, 1500 and 4000 training images. Exact immutable memberships and the published calibration subset-selection procedure remain to be recovered. Retain each full original budget condition; replacement subsets or splits are extensions.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-readme",
+        "mb-adapt"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Target-7 NSDGeneral fMRI, original calibration images/captions at each budget, source-subject 1/2/5 pretraining data and author image-generation priors. Operator scoring must apply the source target-aware selection to eight frozen candidates; true test stimuli must not reach model fitting or candidate generation.",
+      "evidence_ids": [
+        "mb-supp",
+        "mb-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "GLMSingle betas normalized within session, NSDGeneral masking, random single training repeat and averaging test repetitions. Author preprocessing includes adaptive pooling; native feature transforms and model weights must be pinned for replay.",
+      "evidence_ids": [
+        "mb-supp",
+        "mb-eval"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Nominated primary is Table 2 target-7 CLIP two-way identification at 4000 calibration images: for predicted image j, fraction of other real-image features with strictly lower Pearson correlation than its true image; average across j. Use source CLIP ViT-L/14 transforms. Retain all eight paper metrics and all three budget conditions; the primary nomination is a benchmark design choice.",
+      "evidence_ids": [
+        "mb-eval",
+        "mb-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Mean identification across the complete original target-7 test-image set, separately at 500, 1500 and 4000 calibration images. The nominated primary is the 4000-image mean. Do not substitute a cross-subject average, selected test subset or local adaptation-benefit AUC.",
+      "evidence_ids": [
+        "mb-eval",
+        "mb-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Table 2 target-subject-7 mean CLIP two-way identification at 4000 calibration images (proportion)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.925,
+      "description": "MindBridge (Ours), Table 2 target subject 7 at 4000 calibration images: CLIP = 92.5%. Preserve source scores 86.7% at 500 and 91.0% at 1500 as separate required budget conditions. Table 1 94.7% is a different four-subject aggregate, not this baseline.",
+      "evidence_ids": [
+        "mb-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated complete native author run is established. Pinned training/adaptation/inference scripts and released checkpoints provide a source-authorized route; the local feature evaluator is not a rerun.",
+      "evidence_ids": [
+        "mb-readme",
+        "mb-adapt",
+        "mb-local"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Specify a practically meaningful gain on the original CLIP identification scale after author calibration and measurement variability are known, while predeclaring acceptable behavior of the remaining paper metrics. No universal percent gain is justified.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-author uncertainty over unique target-7 test-image identities, retaining pairing across all three calibration budgets, plus independent training/generation replications. Fixed-gallery image resampling alone cannot estimate new-subject or fitting variability.",
+      "independent_unit": "Unique stimulus identity for conditional target-7 uncertainty; independent fitted run for training variability. One target participant does not support a new-subject population claim.",
+      "rationale": "Repeated fMRI trials, eight reconstruction candidates, calibration-budget repetitions and pairwise identification competitors are not independent participants. Interval level, replication and decision rule remain unset.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-supp",
+        "mb-local"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and freeze original target-7 test split, all 500/1500/4000 calibration memberships, preprocessing, generation/extractor weights and complete source-subject exposure ledger.",
+      "Calibrate authenticated author baselines for all three original Table 2 conditions, pretrained on subjects 1/2/5, using the source best-of-eight target-aware rule under operator-only scoring.",
+      "Freeze candidate method, all eight output candidates and resource/access accounting before final source-protocol evaluation; retain the entire original target-7 test set at each budget.",
+      "At the nominated 4000-image primary condition, exceed published CLIP 0.925 and a competent matched author rerun by a predeclared meaningful amount with valid paired uncertainty. Report all eight metrics at all three original budgets and predeclare how other budget results constrain any adaptation-efficiency claim.",
+      "Do not count a fixed-index protocol, new sessions/splits/calibration subsets, a four-subject Table 1 score or a new curve aggregate as surpassing this original subject-7 task; label these separately."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source paper comparison is historical. No current-SOTA review or claim is made.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate using the original source-subject training/development inputs and target-7 calibration access at 500/1500/4000 images. Keep the original target, each full source budget condition and image-prior exposure fixed; do not inspect final test outcomes during iteration.",
+    "candidate_freeze": "Bind code, hyperparameters, preprocessing, priors, checkpoints, seeds, candidate count, selection evaluator and all final generated images before operator scoring.",
+    "final_evaluation": "One protected replay on the complete original 982-image target-7 test set at each of 500, 1500 and 4000 calibration images, with unchanged source scoring. The 4000-image CLIP condition is the nominated primary; all other source conditions and metrics remain reported. Exact final replay service is not yet qualified.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep Table 2 published scores (0.867/0.910/0.925 CLIP at 500/1500/4000), authenticated author reruns and candidate scores separate. Table 1 0.947 is a different experiment. The local fixed-index evaluator is calibration/extension infrastructure, not the published baseline. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact immutable test/training and adaptation subset memberships need recovery.",
+    "Source target-aware candidate selection is incompatible with the current fixed-index scorer; source-protocol scoring must be implemented without exposing targets to fitting.",
+    "Feature/prior weight identities, image exposure and NSD/stimulus/code rights are not fully authenticated.",
+    "No competent native replay of all original target-7 calibration conditions, justified effect, complete uncertainty decision or fixed concrete episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the existing evaluator and engineering tests. Its fixed-index feature scores and prospective adaptation AUC do not reproduce Table 2 source values or constitute improvement success; the separate Table 1 cohort result cannot replace this target-7 task."
+  }
+}

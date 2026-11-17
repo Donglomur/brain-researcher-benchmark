@@ -1,0 +1,170 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original four-class PhysioNet-MI endpoint, participant split and numeric REVE-Base result are recoverable. A same-task design is defensible, but historical preprocessing, run aggregation and checkpoint/recipe parity remain unresolved; the extensive local source proposal is not an executed author baseline.",
+  "source_paper": {
+    "title": "REVE: A Foundation Model for EEG \u2013 Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/20a917f77773ac0fa8bea2bdd6606b66-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "reve-paper",
+      "kind": "paper",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/20a917f77773ac0fa8bea2bdd6606b66-Paper-Conference.pdf",
+      "locator": "Section 3.3; Tables 2, 3 and 12; Appendix C.5",
+      "supports": "Defines the PhysioNet-MI classification task, participant split, declared preprocessing and REVE-Base score."
+    },
+    {
+      "id": "reve-data",
+      "kind": "author_data",
+      "url": "https://physionet.org/content/eegmmidb/1.0.0/",
+      "locator": "Dataset description; version 1.0.0; Experimental Protocol",
+      "supports": "Identifies the original 109-participant EEG motor movement/imagery dataset and 64 EEG channels."
+    },
+    {
+      "id": "reve-preprocess",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/preprocessing/preprocessing_physio.py",
+      "locator": "tasks; files_dict; EDF conversion and event-to-label loop, lines 33\u201344 and 127\u2013158",
+      "supports": "Pins the six imagery runs, participant split, channel order and released preprocessing; exposes a difference from the paper\u2019s intermediate 128 Hz step."
+    },
+    {
+      "id": "reve-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/README.md",
+      "locator": "Downstream training, Optuna search and saved checkpoint evaluation; src/dt.py and src/eval_dt.py routes",
+      "supports": "Author route exists for preprocessing, linear-probe/full fine-tuning and evaluation; exact historical run/checkpoint identities are not supplied by these commands."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-preprocess"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "PhysioNet EEG Motor Movement/Imagery Dataset v1.0.0; paper reports 9,837 four-second examples. Raw/derived content manifests still need admission.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All 109 source participants, with no extra subject exclusions or smaller cohort; imagery runs 04, 06, 08, 10, 12 and 14.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-preprocess"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Source participants 1\u201370 train, 71\u201389 validation and 90\u2013109 test. Retain this complete participant partition; a new subject/montage split is an extension.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-preprocess"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "The same 64-channel four-second EEG windows and electrode positions. Match the released REVE-Base pretrained access and original downstream label availability; no additional target-person calibration may enter this comparison.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-preprocess"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper C.5 specifies loading at 128 Hz after a 64 Hz low-pass then resampling to 200 Hz. Pinned released script instead average-references, high-passes at 0.3 Hz, notches 60 Hz and resamples directly to 200 Hz. Resolve which historical recipe produced Table 12, including bad-channel interpolation, event/window completeness and geometry.",
+      "evidence_ids": [
+        "reve-paper",
+        "reve-preprocess"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and weighted F1 are separately reported supporting metrics, not substitute winning endpoints.",
+      "evidence_ids": [
+        "reve-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Table 12 reports REVE-Base 0.6480 \u00b1 0.0140 as mean \u00b1 standard deviation. Original seed/run roster and exact pooled-test versus participant reduction must be bound; the registration\u2019s participant-level wording alone cannot establish paper parity.",
+      "evidence_ids": [
+        "reve-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "PhysioNet-MI four-class balanced accuracy",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.648,
+      "description": "Table 12 REVE-Base, PhysioNet-MI balanced accuracy 0.6480 \u00b1 0.0140 (reported standard deviation); this is a published aggregate, not a local rerun.",
+      "evidence_ids": [
+        "reve-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author preprocessing/training/evaluation routes are identified, but no authenticated same-protocol downstream checkpoint or rerun result is established. Local spectral/ridge/NCM helpers cannot replace REVE-Base.",
+      "evidence_ids": [
+        "reve-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A practically meaningful gain must be set after historical run variability and classification error impact are quantified; the published standard deviation is not a minimum-effect threshold.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Before admission, freeze paired candidate/author evaluation over the original test participants and matched training seeds; retain original paper score aggregation and report participant-cluster uncertainty. Exact confidence rule and replication remain unresolved.",
+      "independent_unit": "Participant for generalization; training seed is a separate algorithmic-variation axis.",
+      "rationale": "Epochs within a participant are dependent; source aggregate standard deviation does not establish independent participant uncertainty.",
+      "evidence_ids": [
+        "reve-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and bind the precise Table 12 preprocessing, all eligible epochs, original run aggregation and REVE-Base access.",
+      "Exceed the source-paper balanced accuracy and a calibrated author rerun under identical original subjects, runs, labels, preprocessing and inputs, by the predeclared justified effect with uncertainty.",
+      "Freeze candidate and hyperparameters using only participants 1\u201389 before final evaluation on all source test participants 90\u2013109.",
+      "Do not treat better frozen-feature, few-shot, altered-montage, smaller-cohort or new-split results as a Table 12 paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is distinct from current SOTA; no current-SOTA search or claim is admitted by this contract.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on original training and validation participants; retain adaptation curves only as separately identified source endpoints.",
+    "candidate_freeze": "Freeze model/checkpoint, preprocessing, class/window manifests, label/pretraining access, hyperparameters, seeds, stopping rules and metric aggregation before test scoring.",
+    "final_evaluation": "One protected evaluation phase on the complete original test partition after exact author calibration and uncertainty/effect policies are accepted.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
+    "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
+    "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
+    "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win."
+  }
+}

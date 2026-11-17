@@ -1,0 +1,167 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-020",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered task estimates source ERP\u2013prediction-error associations. Its coefficients and contrasts have no monotone scientific improvement direction. The existing coefficient-to-reference RMSE rewards numerical reconstruction; a proposed held-out choice log-loss task would change the endpoint and split.",
+  "source_paper": {
+    "title": "Separable neural signals for reward and emotion prediction errors",
+    "url": "https://www.nature.com/articles/s41467-025-63135-5"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-63135-5",
+      "locator": "Fig. 3; Methods: Participants, Psychophysiological recording and processing, Analyses; Data availability",
+      "supports": "The paper tests dissociation of reward, valence and arousal PE associations with FRN/P3a/P3b and choices in 41 participants; it reports mixed-effects inference rather than a held-out ERP/choice prediction benchmark."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/jpheffne/2025_epe_eeg/blob/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/analysis/eeg_epe_ms.Rmd",
+      "locator": "Setup input tables; Figure 3 data bind_cols and fig3a_model, fig3b_model, fig3c_model",
+      "supports": "Version-pinned author RMarkdown joins ERP tables to behavior by row order, filters missing valence predictions, uses source-scaled columns and fits separate mixed-effects ERP models."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-020/task.json",
+      "locator": "primary_outputs; implementations/registered-runtime/public_contract.json primary and row_selection",
+      "supports": "Local scored endpoint is equal-model coefficient RMSE in reference standard errors, with fixed conditional REML models and row-order correspondence assumed. It explicitly disclaims independent improvement."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Distinct relationships of reward and emotion prediction errors with FRN, P3a and P3b amplitudes, and associations with subsequent social choices; registered central scope reconstructs the fixed mixed-effects coefficients and uncertainty.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author processed behavior and ERP CSVs in 2025_epe_eeg at revision 4f5767df1516e0ec3c234d51ba36e4b741eb60e8; continuous cleaned EEG is a separate input level and raw-to-ERP reproduction is outside the registered numerical component.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "41 participants, 180 repeated Ultimatum Game trials each and 36 partners per participant. Author analyses exclude invalid/missing affect reports and use model-specific complete cases; the local contract counts 6,403 rows but this is not a published predictive test set.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The source central models fit the measured participant cohort with participant random effects. There is no published held-out participant/partner split for the registered coefficient-dissociation endpoint.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial reward and affect expectations/experiences, choices, participant identifiers, and extracted offer-locked FRN/P2/P3a/P3b and baseline ERP amplitudes. Source PE values are experience minus expectation.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "500-Hz EEG; average reference, eye-artifact correction, 0.1\u201340-Hz filtering, offer epochs \u2212200\u2013800 ms and artifact rejection. Single-trial windows: FRN 315\u2013415 ms, P3a 363\u2013463 ms and P3b 530\u2013630 ms with source ROIs/covariates. PE standardization preserves meaningful zero; author CSV joins are positional.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source fixed-effect estimates and uncertainty for PE terms in participant mixed-effects ERP models, including contrasts across PE coefficients; these are inferential estimands, not a predictive accuracy target.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Separate FRN/P3a/P3b models retain participant random effects over trials. Participant is the independent sampling unit; the local equal-model coefficient RMSE is only reference-reconstruction aggregation.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered source-performance endpoint for the registered mixed-effects ERP coefficient dissociation.",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "The registered source estimands are biological measurements or associations, not an ordered algorithm-performance baseline. Numerical source findings must be reproduced or challenged on scientific grounds, not exceeded as a benchmark score.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "The qualified local numerical component scores equal-model coefficient RMSE normalized by reference coefficient standard errors for three fixed REML models, with secondary covariance/contrast consistency checks. These diagnose reconstruction, not better-than-paper neural prediction; all existing runs and references remain calibration evidence.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No meaningful positive improvement margin is defined for this descriptive source target; greater effect size or stronger significance does not establish a better method.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement-comparison uncertainty rule: this task is excluded from active performance improvement. Preserve the source analysis uncertainty when reproducing its estimands.",
+      "independent_unit": "Participant (41), with repeated trials and partner interactions nested.",
+      "rationale": "The source sampling hierarchy must not be converted into independent benchmark test examples. Descriptive uncertainty is not a rule for surpassing the paper.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "The current registered descriptive target cannot admit a same-task paper-performance win.",
+      "Matching published values or the local numerical reference is calibration only.",
+      "A predictive or reconstruction endpoint with an ordered source baseline would require separately reviewed registration; a new split, narrowed cohort or changed endpoint is an extension, never a victory on this task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed for this descriptive task.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for this ineligible task; retain the original analysis as a calibration/reproduction component.",
+    "candidate_freeze": "No active improvement candidate is admitted. Any separately registered performance task must freeze its method and source-matched evaluation before final scoring.",
+    "final_evaluation": "No scientific improvement reward is issued from the existing descriptive or reference-reconstruction evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve published descriptive results, any author reruns and local reconstruction references as distinct artifacts; none is promoted to a paper-performance baseline."
+  },
+  "blocking_issues": [
+    "The central source estimands are coefficient/contrast inference, not an ordered predictive benchmark.",
+    "No original held-out predictive split or source score exists for the proposed log-loss extension.",
+    "Independent ERP/behavior trial-key correspondence and continuous-to-ERP extraction provenance are not established by the positional CSV joins."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The qualified local numerical component scores equal-model coefficient RMSE normalized by reference coefficient standard errors for three fixed REML models, with secondary covariance/contrast consistency checks. These diagnose reconstruction, not better-than-paper neural prediction; all existing runs and references remain calibration evidence."
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-EXP-20261113-002",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original six-speed decoding task is ordered, but complete Figure 2h/4d,e accuracy matrices, original split realizations and exact figure-producing settings are not recovered. The source correctly uses different within-time and cross-time CV protocols. The existing chronological pooled-state protocol changes source splits and input permissions and remains an extension.",
+  "source_paper": {
+    "title": "Flexible neural population dynamics govern the speed and stability of sensory encoding in mouse visual cortex",
+    "url": "https://www.nature.com/articles/s41467-024-50563-y"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-50563-y",
+      "locator": "Results Figures 2h and 4d,e; Methods: Independent-neuron decoding of binned spike counts, Cross-time decoding of binned spike counts; equation 21. Methods cross-time text internally calls the panel Figure 5d,e.",
+      "supports": "Original six-speed state-specific decoding in five mice: diagonal-covariance within-time three-fold CV versus cross-time two-fold CV with five repeats; relative-generalization equation."
+    },
+    {
+      "id": "within",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/processSession_decoding.m",
+      "locator": "normal state criteria; unit filtering; options.kfold=3; GammaOpt/GammaOne sections",
+      "supports": "Normal state criteria, unit filtering, within-time three-fold CV and GammaOne diagonal-covariance route consistent with the original independent-neuron decoder; exact run configuration still needs authentication."
+    },
+    {
+      "id": "cross",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/processSession_crossTimeDecoding.m",
+      "locator": "lines 14\u201332, 163\u2013181, 240\u2013320",
+      "supports": "State/trial/unit eligibility and two-way random splits with five repetitions; these match the source cross-time split design. Exact subsampling and saved run membership require binding."
+    },
+    {
+      "id": "metric",
+      "kind": "author_code",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/NeuralDataAnalysis/do_cvDA.m",
+      "locator": "lines 99\u2013130",
+      "supports": "Prediction accuracy is proportion correct, averaged over folds, with per-class accuracy also returned."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/26031226/versions/1",
+      "locator": "version 1 metadata; code link and sole data archive",
+      "supports": "Versioned preprocessed Horrocks et al. 2024 data deposit; no payload or labels inspected."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode one of six visual speeds from V1 activity within each behavioral state; retain within-time accuracy and the original cross-time generalization endpoints.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Figshare 26031226 version 1, DOI 10.6084/m9.figshare.26031226.v1, paired with the publication-tag code snapshot.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The five primary mice and their original sessions; the separate Allen extension is outside this registered scope. Retain all qualifying state/class cells.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Within-time Figure 2h uses random stratified three-fold CV repeated five times, diagonal covariance and inner five-fold delta tuning. Cross-time uses half train/half test, five repeats, nonoverlapping 100 ms windows and inner five-fold gamma/delta tuning. The source/code two-fold cross-time design agrees; actual memberships, seeds and figure-producing population settings remain unbound.",
+      "evidence_ids": [
+        "paper",
+        "cross",
+        "within"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Binned V1 spike-count vectors, with stationary and locomotion analyses fitted separately as in the paper. Removing state dispatch or pooling states changes the information condition.",
+      "evidence_ids": [
+        "within",
+        "cross"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source normal state criteria, full-contrast 573-dot trials, duration tolerance, minimum trial balancing and quality/rate unit filters are retained. Source uses isi_viol<=0.1, amplitude_cutoff<=0.1, amplitude>=50 and dm_fr>=1. Within-time windows are 100 ms wide at 10 ms steps; cross-time windows are nonoverlapping 100 ms.",
+      "evidence_ids": [
+        "cross",
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Accuracy = correct predictions / test trials; chance is 1/6. Equation 21 separately normalizes cross-time accuracy above chance by within-time accuracy above chance.",
+      "evidence_ids": [
+        "paper",
+        "metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Keep every original state/train-time/test-time cell and source repeat/mouse weighting. No validated single source-paper aggregate or full numeric matrix has been recovered.",
+      "evidence_ids": [
+        "paper",
+        "metric"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original state-specific six-class accuracy and Figure 4 cross-time generalization",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Full Figure 2h/4d accuracy matrices are unrecovered. Figure 4e reports relative cross-time performance stationary 0.25 +/- 0.04 and locomotion 0.58 +/- 0.07 (SEM, five mice); preserve this state vector without inventing a scalar accuracy baseline. Chance 1/6 is only a sanity check.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No complete author rerun with original memberships/settings and authenticated figure output exists. The two-fold cross-time script is consistent with the paper; frozen-coefficient transport establishes neither the original MATLAB reference nor its numerical scores.",
+      "evidence_ids": [
+        "within",
+        "cross",
+        "metric"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Requires task-specific accuracy improvement and protected retention of cross-time behavior after recovering the baseline; neither stronger state effects nor the chronological extension\u2019s balanced-accuracy delta supplies the margin.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired mouse-level uncertainty with original repeats retained as repeated measurements, and a fixed rule covering both state/time endpoints.",
+      "independent_unit": "Mouse (five primary animals).",
+      "rationale": "Windows, trials and CV repeats must not inflate biological replication; no ungrounded alpha or minimum delta is imposed.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact figure-producing MATLAB settings, original partitions and full accuracy matrices, preserving the distinct within-time and cross-time source protocols.",
+      "Compare source-author LDA and candidate on the same five-mouse, state-specific, six-speed task with unchanged features and trial support.",
+      "Retain both within-time and cross-time endpoints; a favorable time cell or smaller neuron subset is insufficient.",
+      "The pooled-state chronological calibration extension and its local LDA baselines cannot claim a source-paper win.",
+      "Freeze candidate method, meaningful effect, paired uncertainty and concrete budgets before final source-task evaluation.",
+      "Preserve original cross-time and within-time scores; increasing the relative-performance ratio by degrading its within-time denominator is not scientific improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; source-paper reproduction and same-task improvement are separate outcomes.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Disabled until source baseline and partition identity are resolved; later optimization uses only the corresponding original train/development data.",
+    "candidate_freeze": "Hash candidate and tuning policy before final accuracy matrices are released.",
+    "final_evaluation": "Evaluate complete original state/time/class support against the authenticated paper route; no replacement with a convenient chronological split.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source-paper, rerun author and candidate scores remain separate. Coefficient transport and newly authored pooled-state LDA are calibration/extension components. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Complete Figure 2h/4d accuracy matrices and executable original aggregation remain unrecovered; the reported Figure 4e state vector is not a substitute scalar baseline.",
+    "Exact saved random memberships, source seeds, population-subsampling settings and authenticated paper-producing configuration require recovery; no two-fold versus three-fold source contradiction is claimed.",
+    "No complete same-task evaluator/reference, meaningful effect, uncertainty rule or fixed budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The original reconstruction contract and frozen-decoder component remain calibration only. The prior chronological improvement proposal remains separately labelled extension evidence."
+  }
+}

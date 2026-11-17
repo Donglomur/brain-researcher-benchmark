@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-046",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered target is estrous/hormone modulation of dopamine and reward-history associations. The paper explicitly avoids calling the behavioral modulation better or worse because the optimized costs/benefits are unobserved. A greater dopamine contrast or smaller P value cannot surpass that finding; fitting a new predictor would change the task.",
+  "source_paper": {
+    "title": "Estrogen modulates reward prediction errors and reinforcement learning",
+    "url": "https://www.nature.com/articles/s41593-025-02104-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672371/",
+      "locator": "Results: Estrogen levels predict enhanced learning, final paragraph; Figures 2\u20133; Methods: Behavioral model",
+      "supports": "Descriptive behavioral interpretation, dopamine stage contrasts and model-derived RPE associations."
+    },
+    {
+      "id": "fig2",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/ProcessData_Figure2.m",
+      "locator": "lines 14\u201328, 71\u201388, 97\u2013116",
+      "supports": "Proestrus/diestrus comparisons; 500 ms dopamine AUC; post-violation exclusion and serum linkage."
+    },
+    {
+      "id": "fig3",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/ProcessData_Figure3.m",
+      "locator": "lines 19, 65\u201390, 111\u2013130",
+      "supports": "Supplied BestFits, RPE regressions and gain/learning-rate simulations; these are not heldout model scores."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/README.md",
+      "locator": "Data; Demos; Code dependencies",
+      "supports": "Separate figure deposits and process/visualization roles."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/16912311",
+      "locator": "Figure 2 data record metadata",
+      "supports": "Figure-2 source archive identity; other figures require their own deposited inputs."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate proestrus-versus-diestrus dopamine response differences and estradiol/RPE/reward-history associations.",
+      "evidence_ids": [
+        "paper",
+        "fig2",
+        "fig3"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo 16912311 for Figure 2; author README assigns 16912773 to Figure 3 and 16903822 to Figures 1/5/6. These are distinct deposits, not interchangeable inputs.",
+      "evidence_ids": [
+        "readme",
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original figure-specific rat/session populations and their joins. The reviewed process files define rat lists and serum inputs, but complete cross-deposit inclusion parity has not been established.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "These source stage contrasts and within-rat regressions do not define a heldout prediction competition. New longitudinal train/test partitions would be an extension.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed photometry/behavior structures, estrous stage and serum records; Figure 3 additionally loads supplied BestFits. Fitted parameters must not masquerade as newly predicted targets.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve exclusion of post-violation trials, alignment and the 0.5-second AUC window. Stage definitions and source-specific baseline corrections must remain unchanged.",
+      "evidence_ids": [
+        "fig2"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Dopamine AUC contrasts and RPE/reward-history regression coefficients are biological estimands. AUC here means integrated fluorescence, not classifier ROC-AUC.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source summaries are rat-level stage contrasts with nested sessions/trials; serum and photometry cohorts remain distinct unless their joins are authenticated.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered model-performance endpoint in the registered estrous/dopamine contrasts",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "The reported dopamine effects and their tests are findings to reproduce, not a score to maximize.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "An author process-file rerun can calibrate Figure 2/3 analysis. Supplied BestFits or the initial evaluator do not constitute a new predictive baseline.",
+      "evidence_ids": [
+        "fig2",
+        "fig3"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "Larger hormone effects or stronger significance cannot define scientific performance improvement for this estimand.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No improvement decision rule applies; any reproduction uncertainty retains rat/session hierarchy and nonrandomized stage interpretation.",
+      "independent_unit": "Rat; repeated sessions and trials are nested.",
+      "rationale": "The same rat observed at two stages is paired; sessions are not independent animals.",
+      "evidence_ids": [
+        "fig2",
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "No paper win is admitted for the registered descriptive associations.",
+      "Preserve the biological estimands, population and exclusions; stronger RPE modulation or lower P values are not success.",
+      "A new heldout behavior/dopamine predictor must be separately registered and compared with a task-matched source baseline."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; source-paper reproduction and same-task improvement are separate outcomes.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active improvement loop for the registered hormonal association task.",
+    "candidate_freeze": "Freezing a regression implementation supports reproducibility but does not create ordered paper performance.",
+    "final_evaluation": "Evaluate Figure 2 contrasts only as calibration; Figure 3 refitting is not implied by supplied BestFits.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published estimates, source reconstruction and any future longitudinal prediction extension distinct."
+  },
+  "blocking_issues": [
+    "The registered source question has no ordered algorithm-performance endpoint.",
+    "Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the initial evaluator for Figure 2 stage/AUC/serum calibration and all original Figure 3 provenance. It does not fit models or reproduce all paper results."
+  }
+}
