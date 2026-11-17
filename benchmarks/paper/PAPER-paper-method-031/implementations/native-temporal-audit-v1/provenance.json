@@ -1,0 +1,86 @@
+{
+  "task_id": "PAPER-paper-method-031",
+  "implementation": "native-temporal-audit-v1",
+  "qualification": "source_arithmetic_component_only",
+  "paper_outcomes": {
+    "reproduction": "first_class_outcome_not_yet_scored_or_qualified",
+    "exceed_original": "separate_first_class_outcome_not_yet_scored_or_qualified",
+    "participant_conditions": "Keep paper+data and paper+data+author-code paired and distinct; this source-code-derived oracle is operator-side by default."
+  },
+  "source_commit": "6f92663f7a36589507cac57c8d24cfd8adbce7b1",
+  "source_access": "Existing local pinned author code cache; bytes independently SHA256 checked. No network acquisition.",
+  "sources": [
+    {
+      "path": "test.py",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test.py",
+      "bytes": 3718,
+      "sha256": "19e4a667fb4f4a841e68d7fec4d66949ea6fe54da3bd7db40bd561ef2d949d8c",
+      "supports": "goTesting centers complete augmented stack; calls only j+C<=T windows; recursively halves overlap; restores mean; saves T frames with clip/cast uint16."
+    },
+    {
+      "path": "test_in_gui.py",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test_in_gui.py",
+      "bytes": 5962,
+      "sha256": "566ed050ccf8173ef24eebe5724dfc61f2c601986e7a113ea62957b20518e046",
+      "supports": "goTesting calls all T starts, including reflected-tail windows; uses same sequential overlap and original-frame-only export."
+    },
+    {
+      "path": "datasets/dataset.py",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/datasets/dataset.py",
+      "bytes": 4071,
+      "sha256": "79e18bff65f5c1c956696beaccd9566855829b49b77ddddd504b30470fb909eb",
+      "supports": "_get_test_item appends flip(0)[:100], while returned t remains original frame count."
+    },
+    {
+      "path": "params.json",
+      "url": "https://github.com/FDU-donglab/FAST/blob/6f92663f7a36589507cac57c8d24cfd8adbce7b1/params.json",
+      "bytes": 659,
+      "sha256": "32e3f0f34c268d90c4b61064b67b8de20e4f730327a965cf2c2e6813bec6bc25",
+      "supports": "Pinned default miniBatch_size=4 and batch_size=1; exact figure settings are not inferred."
+    },
+    {
+      "url": "https://www.nature.com/articles/s41467-025-64681-8",
+      "cached_fulltext_sha256": "a8c2314a9a62d17ec37676e3b341b6206c9dccf00281e329df9373acdb6fa1de",
+      "locator": "Figure 3d-f; Training and inference; System latency and pipeline integration",
+      "supports": "Original voltage comparison is pixel fluorescence versus simultaneous electrophysiology; 4982 frames; same-stack self-supervised training; pipeline latency is distinct from kernel speed."
+    }
+  ],
+  "inspected_prior_components": [
+    {
+      "name": "initial-evaluator-v1",
+      "role": "Prospective group-disjoint measurement remains separate from source same-stack task."
+    },
+    {
+      "name": "legacy complete FAST operator native_fast.py",
+      "sha256": "5d5b61f1914bd33eb93d11964bd5b4afde1137182db65644762fc8b8f0ec2172",
+      "role": "Existing CLI native model runner inspected, not executed or copied. New component adds GUI/CLI arithmetic distinction and model-independent ancestry oracle."
+    }
+  ],
+  "contract_pins_at_construction": {
+    "task.json": "226d7b77017d7fef1864401a0fc84598ea69a2fd6a425b8ef7ae7a2995a99381",
+    "improvement.v1.json": "6fd7b561ecd8acd666f675bbc3be96bb742801b653f9c0c666d195167603d627"
+  },
+  "preserved_conditions": [
+    "No new cohort, split, ROI, normalization, temporal smoothing, lag alignment or target is selected.",
+    "Source same-stack self-supervised adaptation is not classified as forbidden target exposure.",
+    "All original frames are represented; reflected positions are input augmentation only, never independent observations.",
+    "Real electrophysiology remains a temporal comparator, not a clean fluorescence image.",
+    "CLI and GUI are separately named source routes; neither is asserted to be the exact paper route.",
+    "No biological uncertainty or scalar improvement score is estimated."
+  ],
+  "known_limits": [
+    "Float64 algebraic oracle is not a bitwise PyTorch float32 emulator.",
+    "Temporal dimensions alone do not establish network compatibility, exact figure settings or native completeness.",
+    "Global mean requires full-spatial sums; diagnostic pixel traces cannot stand in for those sums.",
+    "Necessary acquisition bounds exclude model fitting and other pipeline costs; no latency result is measured.",
+    "Source pixel roster, sync, baseline, aggregation and complete registered calcium/voltage support remain unresolved."
+  ],
+  "resources": {
+    "new_download_bytes": 0,
+    "dependency_installs": 0,
+    "native_data_preparations": 0,
+    "model_executions": 0,
+    "scientific_trials": 0,
+    "runtime_dependencies": "Python standard library only"
+  }
+}
