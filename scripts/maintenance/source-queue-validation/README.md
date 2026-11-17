@@ -1,6 +1,6 @@
 # Scoped source commit queue
 
-This package implements the local agent-commit/root-integration workflow in `tools/neurobench_source_queue.py`. The operational commands and publication rules are in `docs/neuroscience-benchmarks/GIT_WORKFLOW.md`.
+This package implements the local agent-commit/root-integration workflow in `scripts/maintenance/neurobench_source_queue.py`. The operational commands and publication rules are in `docs/development/source-queue.md`.
 
 The source utility accepts an externally reviewed and exactly pinned JSON member list. It supports common proposal keys (`files`, `members`, `author_files`, `owned_files`, `review_members`, `exact_files`, `paths`, `proposal_files`, `proposed_members`, `include`, `path_allowlist`); ambiguous proposals require `--member-key`. Members need a repository-relative `path` (or `source`), integer `bytes`, SHA-256 `sha256`, and optionally regular-file `git_mode` 100644 or 100755. Dictionary members map paths to pin records. Deletions, symbolic links, submodules and source outside explicit prefixes are unsupported.
 

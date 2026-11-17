@@ -13,8 +13,8 @@ import unittest
 from unittest.mock import patch
 
 HERE=Path(__file__).absolute().parent
-ROOT=HERE.parents[3]
-SPEC=importlib.util.spec_from_file_location('source_queue',ROOT/'tools/neurobench_source_queue.py')
+ROOT=HERE.parents[2]
+SPEC=importlib.util.spec_from_file_location('source_queue',ROOT/'scripts/maintenance/neurobench_source_queue.py')
 Q=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(Q)
 BRANCH='refs/heads/build/neuroscience-200'
 
@@ -148,7 +148,7 @@ m.RefTransaction.commit=lambda self:os._exit(73)
 m.integrate(r,records,manifest,prefixes,a['ref'],a['commit'],'crash control',a['branch'],True)
 """
         args={'repo':str(self.root),'manifest':manifest,'prefixes':prefixes,'ref':ref,'commit':result['commit'],'branch':BRANCH}
-        child=subprocess.run([sys.executable,'-I','-S','-B','-c',code,str(ROOT/'tools/neurobench_source_queue.py'),json.dumps(args)],capture_output=True,timeout=10)
+        child=subprocess.run([sys.executable,'-I','-S','-B','-c',code,str(ROOT/'scripts/maintenance/neurobench_source_queue.py'),json.dumps(args)],capture_output=True,timeout=10)
         self.assertEqual(child.returncode,73);self.assertTrue(self.repo.journal.exists())
         self.assertEqual(git(self.root,'rev-parse','HEAD'),before[0])
         self.assertNotEqual((self.root/'.git/index').read_bytes(),before[1])
