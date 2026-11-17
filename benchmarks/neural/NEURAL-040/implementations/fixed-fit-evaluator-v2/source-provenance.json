@@ -1,0 +1,53 @@
+{
+  "task_id": "NEURAL-040",
+  "implementation": "fixed-fit-evaluator-v2",
+  "scope": "Recompute the preserved fixed encoder before private scoring; require complete three-family numerical claims.",
+  "predecessor": {
+    "path": "../initial-evaluator-v1/evaluator.py",
+    "sha256": "19d1f793b0c59200420dcfd0570be911202c402698f488a3b75ae5a128f6db98",
+    "behavior": "Numerical encoder and estimator are reused unchanged from hash-verified source bytes."
+  },
+  "scientific_contract": {
+    "path": "../../understanding.v1.json",
+    "sha256": "f053c5014ab7ff2de528f162b4c4bd76969228729b86da7c1fe8b5835b9d4c14",
+    "addressed_missing_component": "Complete three-family claims and independent recomputation of the fixed encoder before comparing claims with held-target effects."
+  },
+  "primary_source_lineage": {
+    "dataset_commit": "96750e7017b30cb02f011c11561a3df897695853",
+    "source": "https://github.com/courtois-neuromod/algonauts_2025.competitors/tree/96750e7017b30cb02f011c11561a3df897695853",
+    "retained_mapping": "../initial-evaluator-v1/source-provenance.json",
+    "retained_mapping_sha256": "7a5dfaed0579cae7b34a35ae5ba2923e8309464ba6ba10ef5c9f988c6463a712",
+    "new_source_acquisition": false
+  },
+  "preserved_endpoint": {
+    "participants": ["sub-01", "sub-02", "sub-03", "sub-05"],
+    "parcels_per_person": 1000,
+    "tr_seconds": 1.49,
+    "arms": ["full", "no_audio", "no_visual", "no_language"],
+    "estimator": "guarded_samples_Pearson_within_film_then_equal_film_parcel_person_means",
+    "contrasts": "Signed full-minus-ablated mean Pearson for audio, visual and language; not a quantity to maximize.",
+    "claim_tolerance_absolute": 1e-8
+  },
+  "numerical_verification": {
+    "prediction_rtol": 1e-10,
+    "prediction_atol": 1e-12,
+    "scored_arrays": "Recomputed arrays only, never tolerated submitted perturbations.",
+    "private_target_order": "Complete claims and all four-arm prediction arrays must pass before the operator evaluation loader is invoked.",
+    "trust_boundary": "Operator must freeze authentic reference inputs; numeric equality does not authenticate source lineage or prove target isolation."
+  },
+  "resources": {
+    "download_bytes": 0,
+    "dependency_installs": 0,
+    "authentic_preparations": 0,
+    "model_trials": 0,
+    "control_scope": "Generated software checks only; execution receipts remain external."
+  },
+  "qualification": "software_component_only_not_scientifically_qualified",
+  "remaining_gaps": [
+    "Authentic full selected source payload and feature-target alignment, identities and hashes.",
+    "Feature/extractor/media rights, contexts, exposure and matched upstream conditions.",
+    "Nuisance/time-only companion, authentic competent reference and independent numerical reproduction.",
+    "Frozen scientific protocol, participant access/isolation and protected evaluation.",
+    "Four-person inference, multiplicity and scientific admission policy."
+  ]
+}
