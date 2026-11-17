@@ -270,11 +270,28 @@ class Delivery(unittest.TestCase):
         with self.assertRaises(ValueError):grade.admit(value,item,{},argv,p)
 
     def test_byte_and_link_boundaries(self):
+        global WRITES
         path=self.out/'x';p=write(path,b'generated')
         with self.assertRaises(ValueError):common.capture(path,2)
         with self.assertRaises(ValueError):common.capture(path,100,dict(p,sha256='0'*64))
         linked=self.out/'linked';linked.symlink_to(path)
         with self.assertRaises(ValueError):common.capture(linked,100)
+        from transport import bounds
+        control=self.out/'mode-control';control.mkdir(mode=0o700)
+        meter=bounds.Meter(1024,1024,time.monotonic()+10)
+        old_umask=os.umask(0o077)
+        try:
+            for name in ('REQUEST.json','POLICY.json'):
+                bounds.publish(control/name,b'{}\n',meter,mode=0o444)
+            bounds.publish(control/'private.json',b'{}\n',meter)
+            counted_publish(control/'private-record.json',b'{}\n')
+        finally:
+            WRITES+=meter.write_bytes
+            os.umask(old_umask)
+        self.assertEqual(tuple((control/name).stat().st_mode&0o777 for name in
+                               ('REQUEST.json','POLICY.json','private.json','private-record.json')),
+                         (0o444,0o444,0o600,0o400))
+        self.assertEqual(control.stat().st_mode&0o777,0o700)
 
     def test_native_candidate_complete_transport_wiring(self):
         from transport.contract import validate_request,validate_exposure
@@ -313,7 +330,7 @@ class Delivery(unittest.TestCase):
     def test_standalone_grader_lifecycle_and_failure_cleanup(self):
         # Generated operator source/data files only. Exercise actual mount construction,
         # private hashing, phase sequencing, stopped/report order and cleanup dispatch.
-        pred=self.out/'predictions.json';pred_pin=write(pred,common.encoded(self.predictions))
+        pred=self.out/'predictions.json';pred_pin=counted_publish(pred,common.encoded(self.predictions),0o444)
         packet={'files':self.files};config={'docker_binary':'/generated/docker','docker_socket':'/generated/socket'}
         snapshot=self.out/'snapshot';snapshot.mkdir(mode=0o700)
         for name in common.PACKET:

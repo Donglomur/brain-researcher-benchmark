@@ -274,6 +274,10 @@ m.cleanup_group(Process(),False)
 
 
 if __name__=='__main__':
-    result=unittest.main(verbosity=2,exit=False)
+    suite=unittest.defaultTestLoader.loadTestsFromTestCase(Controls)
+    if suite.countTestCases()!=28:
+        raise SystemExit('Expected exactly 28 EXP003 bootstrap controls')
+    result=unittest.TextTestRunner(verbosity=2).run(suite)
     print('Temporary logical artifact bytes before cleanup:',TRANSIENT_LOGICAL_BYTES)
-    raise SystemExit(0 if result.result.wasSuccessful() else 1)
+    raise SystemExit(0 if result.testsRun==28 and result.wasSuccessful()
+                     and not result.skipped and not result.expectedFailures else 1)
