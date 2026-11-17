@@ -1,0 +1,87 @@
+{
+  "schema_version": "io-model-source-recovery/v1",
+  "task_id": "PAPER-FIND-ADD-015",
+  "qualification": "original_source_recovered_and_visually_inspected; native_fit_and_benchmark_not_qualified",
+  "source_paper_doi": "10.1073/pnas.2318837121",
+  "retrieval": {
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11551350/supplementaryFiles",
+    "response_media_type": "application/zip",
+    "response_bytes": 3207571,
+    "response_sha256": "6d346e078936eec8cc08304c4959d18d41a809ed2dbc2cb3b5dec0133e8f5e1f",
+    "member": "pnas.2318837121.sapp.pdf",
+    "member_bytes": 2718644,
+    "member_sha256": "a5feee7d7ad15b88969768c045f3f03ea3ffcc8bc4ea5c8cf7b1382be83c3086",
+    "total_response_body_bytes_including_failed_routes": 3234846,
+    "maximum_authorized_response_body_bytes": 8388608
+  },
+  "s11": {
+    "pdf_page_one_based": 12,
+    "printed_page": "12",
+    "target": "Estimated IO function from the source pooled-cell LOESS/integration route",
+    "fit_method_stated": "least squares regression",
+    "metric_label": "R^2",
+    "direction": "higher",
+    "numeric_precision": "published plot labels rounded to three decimal places; full-precision values not recovered",
+    "transcription_method": "Visual inspection of complete rendered page; labels are absent from pypdf text extraction",
+    "models": [
+      {"function": "Ricciardi", "published_r_squared": 0.999, "fit_parameter_count_stated": 3},
+      {"function": "threshold-linear", "published_r_squared": 0.994, "fit_parameter_count_stated": 2},
+      {"function": "power law", "published_r_squared": 0.974, "fit_parameter_count_stated": 2},
+      {"function": "logistic", "published_r_squared": 0.984, "fit_parameter_count_stated": 3},
+      {"function": "stretched exponential", "published_r_squared": 0.998, "fit_parameter_count_stated": 3}
+    ],
+    "exact_metric_formula_recovered": false,
+    "full_precision_baseline_recovered": false,
+    "held_out_partition_recovered": false
+  },
+  "s12": {
+    "pdf_page_one_based": 13,
+    "printed_page": "13",
+    "bootstrap_repetitions": 1000,
+    "samples_per_repetition_stated": 364,
+    "published_mean_ricciardi_r_squared": 0.975,
+    "role": "bootstrap-fit summary; distinct from the S11 pooled-curve fit value",
+    "parameter_distribution_labels": ["sigma_A", "tau_rp", "theta", "tau_A", "V_r"],
+    "same_free_fixed_parameter_policy_as_s11_verified": false
+  },
+  "cached_primary_sources": [
+    {
+      "role": "main article XML, Methods IO Function Estimation",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11551350/fullTextXML",
+      "bytes": 170832,
+      "sha256": "ed48697436c8f568ac9696ff4cc5621a29298b536d91a09bc16744a22bcf7ad3"
+    },
+    {
+      "role": "original deposited Fig2/4 notebook; source inspected without interpreting outputs",
+      "url": "https://zenodo.org/records/13851356",
+      "archive_member": "IOfunction-PNAS-2024/IO-fig2-fig4-attenuation-IO-fxn.ipynb",
+      "bytes": 383045,
+      "sha256": "9d3b8bce730a9488ad2e24425e69e56c11159b8f52e3410eeeb1acd3ef774f9c",
+      "cell_count": 28,
+      "code_cell_count": 19,
+      "source_fit_implementation_present": false,
+      "last_nonempty_cell": 26
+    }
+  ],
+  "source_fidelity_limits": [
+    "S11 R-squared denominator, weighting and exact fit/evaluation grid are not supplied by the recovered caption or labels.",
+    "Free/fixed parameter choices and fit constraints need branch-specific recovery; S11 states three Ricciardi fit parameters while S12 displays five parameter distributions.",
+    "Official Fig2/4 notebook stops at normalized integration and does not implement source Ricciardi/alternative fits or propagation of bootstrap fits.",
+    "Notebook x-axis tick relabeling is not an x-coordinate normalization procedure.",
+    "The inspected main XML logistic MathML lacks a one-plus term; no corrected function was inferred as source-author code.",
+    "Original pooled-cell bootstrap does not establish independent-animal replication; per-cell animal joins remain unverified.",
+    "No held-out split, independent IO truth, complexity-matched improvement rule or meaningful-effect threshold is admitted by this recovery."
+  ],
+  "outcome_boundaries": {
+    "reproduction": "Original IO-fit reproduction becomes more concretely specified but still needs the full source fitting route and numerical qualification.",
+    "improvement": "Separate from reproduction; requires source-matched observations, support and complexity policy plus meaningful effect and valid uncertainty.",
+    "paired_conditions": ["paper+data", "paper+data+author-code"],
+    "legacy_reconstruction": "Existing Figure2/3 processed-trace reconstruction is a separate scoped reproduction outcome; source fidelity must be retained and full IO-model reproduction is not implied.",
+    "canonical_contract_changed": false,
+    "new_candidate_trials": 0,
+    "native_data_preparations": 0,
+    "model_or_fit_runs": 0,
+    "software_tests_run": 0,
+    "new_scientific_scores": 0
+  }
+}

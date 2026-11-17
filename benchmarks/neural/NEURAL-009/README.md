@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Seizure events v1](implementations/seizure-events-v1) — Task implementation.
   Scope: Complete normalized event evaluator over 686 recordings and 23 biological people with an explicit prospective policy and alias-safe leave-one-person-out support. Authentic signals, clocks, native normalization, competent EEG-derived references, patient-paired uncertainty, protected execution and scientific qualification remain unestablished; tolerant processed-event coverage is not original clinical event count or onset timeliness.
+- [Seizure diagnostics v1](implementations/seizure-diagnostics-v1) — Reviewed source component.
+  Scope: Seizure-event diagnostic supplement. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

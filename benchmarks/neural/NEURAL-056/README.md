@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Four programmes source v1](../../shared/four-programmes/_four_programmes_source_v1) — Shared source distribution.
   Scope: NEURAL-056 is a documented dependency, not a new primary runtime registration. CriticalInit is named in the notice, but its exact registered-ID relationship is not inferred here. Keep combined-distribution license and provenance records attached to the closed source tree.
+- [Precision v1](implementations/precision-v1) — Reviewed source component.
+  Scope: Precision-preserving correlation and scorer/reference arithmetic. The successor source requires consistent scorer and reference use; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

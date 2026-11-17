@@ -17,6 +17,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = Path('benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1')
 SCORING = PACKAGE / 'runtime/mintbench/scoring.py'
+RECIPE = PACKAGE / 'runtime/mintbench/bindings.py'
 VALIDATION = PACKAGE / 'runtime/mintbench/validation.py'
 BINDINGS = Path('benchmarks/integrity/current-closures/numeric-motormint/SOURCE_BINDINGS.json')
 HISTORICAL_SCORING = {
@@ -168,7 +169,7 @@ class MotorMintPearsonTests(unittest.TestCase):
         self.assertFalse(bindings['execution_authority'])
         self.assertFalse(bindings['scientific_qualification'])
         self.assertEqual(bindings['historical_scoring'], dict(path=str(SCORING), **HISTORICAL_SCORING))
-        self.assertEqual([row['path'] for row in bindings['current_sources']], [str(SCORING)])
+        self.assertEqual([row['path'] for row in bindings['current_sources']], [str(SCORING), str(RECIPE)])
         for group in ('current_sources', 'unchanged_dependencies', 'historical_manifests',
                       'unchanged_contracts', 'regression_tests'):
             for pin in bindings[group]:
@@ -179,6 +180,13 @@ class MotorMintPearsonTests(unittest.TestCase):
         manifest = json.loads((ROOT / PACKAGE / 'SOURCE_MANIFEST.json').read_bytes())
         self.assertEqual(manifest['files']['runtime/mintbench/scoring.py'], HISTORICAL_SCORING)
         self.assertEqual(manifest['runtime_files']['mintbench/scoring.py'], HISTORICAL_SCORING)
+        historical_recipe = bindings['historical_recipe']
+        preserved = (ROOT / historical_recipe['path']).read_bytes()
+        recipe_pin = {key: historical_recipe[key] for key in ('bytes', 'sha256')}
+        self.assertEqual(len(preserved), recipe_pin['bytes'])
+        self.assertEqual(hashlib.sha256(preserved).hexdigest(), recipe_pin['sha256'])
+        self.assertEqual(manifest['files']['runtime/mintbench/bindings.py'], recipe_pin)
+        self.assertEqual(manifest['runtime_files']['mintbench/bindings.py'], recipe_pin)
         status = json.loads((ROOT / PACKAGE / 'PUBLIC_STATUS.json').read_bytes())
         self.assertEqual(status['canonical_task'], 'PAPER-paper-method-011')
         self.assertEqual(status['deployment'], 'disabled')

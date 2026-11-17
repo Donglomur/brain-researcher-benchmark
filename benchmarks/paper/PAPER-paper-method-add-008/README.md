@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Reduces complete native exports for four sorters into source curation distributions and a full Kilosort4 Bombcell-good raster. A3702 source-path identity, native sorter/curation execution, configuration and preprocessing discrepancies, model/dependency rights, numeric drift and cross-sorter agreement, protected references and scientific qualification remain open; yield/quality are not universal spike accuracy. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Simulation counts v1](implementations/simulation-counts-v1) — Reviewed source component.
+  Scope: Original Figure 7 native-count reduction. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

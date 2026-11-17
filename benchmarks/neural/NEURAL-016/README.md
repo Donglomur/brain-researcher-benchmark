@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prospective evaluator for paired nuisance/full held-out predictions, with separate incremental explained variance and R², declared person/movie and temporal split checks, complete recording accounting, participant summaries, paired uncertainty and a temporal control utility. Native Brain Treebank preprocessing, actual fit-lineage and privacy verification, electrode and population admission, competent references, rights and protected scientific evaluation remain unresolved. This shares the Brain Treebank source family with PAPER-paper-method-replacement-011, not an independent cohort.
+- [Bound nuisance v1](implementations/bound-nuisance-v1) — Reviewed source component.
+  Scope: Operator-bound nuisance scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

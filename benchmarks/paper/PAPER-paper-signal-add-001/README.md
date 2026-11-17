@@ -31,11 +31,14 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [decoder source recovery v1](docs/decoder-source-recovery-v1.md)
 
 ## Implementation artifacts
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Pinned 2024 example-recording numerical path to load-dependent LFP Tort comodulograms and phase-bin curves, source-style single-unit count/Poisson comparisons, and a separately prospective patient-grouped load contrast. Authentic recordings and full eligibility, explicit single-unit timing-repair acceptance, native MATLAB numerical/fit parity, figure targets, protected evaluation, component rights and scientific qualification remain held; archive file/participant counts do not establish eligible PAC populations. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Geometry reproduction v1](implementations/geometry-reproduction-v1) — Reviewed source component.
+  Scope: Released geometry example: numerical reproduction component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

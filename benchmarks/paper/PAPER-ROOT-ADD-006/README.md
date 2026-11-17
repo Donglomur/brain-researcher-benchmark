@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Primitive numeric exports to three localizer-trained outcome decoders, response-time-censored probability/reward reactivation effects and a prospective nested participant-held-out behavioral-parameter comparison. Native MATLAB/MCOS extraction, authentic event/channel/participant joins, author scaling/solver and behavioral-fit equivalence, independent target-fit provenance, protected references, grading targets, rights and scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Localizer evaluation v2](implementations/localizer-evaluation-v2) — Reviewed source component.
+  Scope: Localizer accuracy component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

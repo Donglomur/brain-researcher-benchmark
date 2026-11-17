@@ -5,8 +5,9 @@ Use the explicit
 to inspect the repaired source for this [existing task](../task.json).
 The [historical package guide](../implementations/paper-method-011/full-motormint-v1/README.md),
 `SOURCE_MANIFEST.json`, `RUNTIME_MANIFEST.json` and `RUNTIME_BINDINGS.json`
-retain their original contents. The separate current binding names the three
-reviewed replacements: `run.py`, `central_sources.py` and the numerical scorer.
+retain their original contents. The separate current binding names the four
+reviewed replacements: `run.py`, `central_sources.py`, the numerical scorer and
+the phase-column recipe validator.
 It does not rewrite the historical source record.
 
 Run from the repository root with Python 3.11 or later and the standard library,
@@ -15,8 +16,8 @@ on a POSIX host supporting `O_NOFOLLOW`, `O_DIRECTORY` and nonblocking file open
 ```sh
 python3 -I -S -B \
   benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/run.py \
-  --source-bytes 1255 \
-  --source-sha256 d6253a4b299532e07c5ddfde75bcf1a6656168550f562951d78d86dd41178ce5 \
+  --source-bytes 1591 \
+  --source-sha256 e91a3cf17849e1a713cc18a55194b1d5cc2a4e19baa9d8fcbfc125132cb7d651 \
   --current-source-binding "$PWD/benchmarks/integrity/current-closures/numeric-motormint/CURRENT_INSPECTION.json" \
   inspect
 ```
@@ -30,8 +31,13 @@ be absolute and pass the command's ordinary-file and non-following path checks.
 Inspection captures all 62 selected public source files, verifies the 39 runtime
 bodies within that set, and checks the declared nine datasets, 17 analysis modules
 and 17 scientific gates. Its report distinguishes historical manifest identities
-from the current numerical-scorer replacement. These counts describe source scope,
-not verified datasets or completed analyses.
+from the current numerical-scorer and phase-recipe replacements. These counts
+describe source scope, not verified datasets or completed analyses.
+
+The recipe repair requires circular metrics on the original phase dimensions
+and linear metrics on non-phase dimensions. It does not authenticate native phase
+units, branch cuts, interpolation or source-data parity. The exact predecessor
+validator is retained in the [phase-repair history](../implementations/behavior-recipe-v1/historical/bindings.before-phase-repair.py).
 
 This binding is **inspection only**. The command rejects its use with `prepare`,
 `run` or other execution commands before opening a protected review. Historical

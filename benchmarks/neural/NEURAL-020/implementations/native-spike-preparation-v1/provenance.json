@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "task_id": "NEURAL-020",
+  "implementation_id": "native-spike-preparation-v1",
+  "scope": "Complete source-native spike preparation into the preserved condition-wise co-smoothing packet; generated controls only",
+  "historical_target_sha256": "8b922ac0214da6a1cb1ca5c0320cab90aaf6dab0e51f8ce44a552b0ecfcc718a",
+  "predecessor": {
+    "path": "../initial-evaluator-v1/evaluator.py",
+    "sha256": "4a6263059ca21aadfeec97bf405ba4f8a454da6a1d92d7f205cb468a25916d23",
+    "modified": false
+  },
+  "source": {
+    "dandiset": "000127",
+    "version": "0.220113.0359",
+    "asset_id": "ded26b6c-418d-43f5-8a37-dfd072c2dbd4",
+    "asset_url": "https://api.dandiarchive.org/api/assets/ded26b6c-418d-43f5-8a37-dfd072c2dbd4/download/",
+    "bytes": 1822876234,
+    "sha256": "639b1a03ab813f96fec76681110a1634942476badc0fd4c93d406c24701f5db2",
+    "trial_rows": 826,
+    "units": 65,
+    "new_payload_reads": 0,
+    "separate_test_asset_accessed": false
+  },
+  "organizer_code": [
+    {
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/nwb_interface.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "sha256": "5f77fe3d25d120934c44c8ac1c26f07303eeec9db4821c69406726b141f66121",
+      "bytes": 39359,
+      "vendor_path": "vendor/nlb_nwb_interface.py",
+      "methods": ["load", "resample", "make_trial_data", "_make_midx"],
+      "license": "MIT; NLB_LICENSE retained",
+      "retrieval": "reused previously byte-verified local public-source cache"
+    },
+    {
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/make_tensors.py",
+      "source_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "sha256": "e79badd983e37fa0c8f0ddbdeb74972ed505ba4672035daca4e8af16a7bc2d9d",
+      "bytes": 61667,
+      "role": "Area2 movement-onset [-100,500) defaults and distinct training/evaluation overlap policy",
+      "retrieval": "read previously byte-verified local public-source cache; not vendored"
+    }
+  ],
+  "source_conventions": {
+    "initial_grid": "0-based 1ms global clock; spike seconds*1000 rounded to 6 decimals then truncated",
+    "resampling": "sum observed 1ms counts, zero-fill missing milliseconds, restore NaN from first millisecond only",
+    "interval_group_constraint": "within-heldin and within-heldout interval lists must each be equal, matching upstream first-unit mask assumption",
+    "alignment": "source-global ceil grid with the upstream 1us endpoint guard; incomplete 600ms rows fail",
+    "source_count_precision": "reject any 1ms or rebinned count not represented exactly by upstream float16 storage",
+    "blocks": "union of source observation intervals; no candidate-authored per-trial block IDs",
+    "overlap": "complete fixed windows retained, matching registered boundary and upstream evaluation mode; upstream training truncation is not reproduced"
+  },
+  "scientific_limits": [
+    "No authentic native file or historical private target was read by this builder.",
+    "No authentic split mapping is asserted; native train/val membership can conflict with the original whole-block requirement and then preparation rejects.",
+    "Full fixed-window training preparation requires separate scientific admission relative to upstream overlap truncation.",
+    "No data/model workload, fitting, inference, participant trial or protected-holdout claim.",
+    "Single Han session and public development source retain all original interpretation and contamination limitations."
+  ],
+  "resources": {
+    "new_download_bytes": 0,
+    "new_dependency_installs": 0,
+    "native_execution_count": 0,
+    "model_trial_count": 0,
+    "test_policy": "generated controls through the reviewed shared two-slot pool only, one thread, declared 512MiB, at most 180 seconds per command"
+  },
+  "generated_control_environment": {
+    "python": "3.9.6",
+    "numpy": "1.26.3",
+    "pandas": "1.3.4",
+    "h5py": "3.11.0",
+    "architecture": "x86_64",
+    "source_patch_or_compatibility_shim": false,
+    "prior_failed_environment": "pandas3.0 makes upstream resample to_numpy output read-only; direct ARM launch cannot import existing x86_64 wheels; both failures retained externally"
+  },
+  "generated_control_result": {
+    "tests": 12,
+    "passed": 12,
+    "skipped": 0,
+    "test_seconds": 2.369,
+    "pool_run_id": "neural04-n020-native-05",
+    "source_count_and_clock_parity": "exact counts, clock agreement within 1e-9 ms at both 5 and 20ms with integer and fractional alignment events",
+    "qualification": "generated software controls only"
+  },
+  "research_qualified": false,
+  "authentic_preparation_executed": false,
+  "authentic_reference_executed": false,
+  "submission_ready": false
+}

@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Source-derived Figure 2 spatial-stability and context-specificity kernels over prepared spike-count/occupancy tables and frozen classifications, with full declared roster checks and prospective mouse-level age contrasts. Native classification and ingestion, authoritative population membership, locomotion/quality adjustment, the paper-versus-notebook smoothing discrepancy, mixed-effects and broader remapping endpoints, authentic reference tolerances, rights and protected grading remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5i score v1](implementations/figure5i-score-v1) — Reviewed source component.
+  Scope: Figure 5i position-decoding score component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

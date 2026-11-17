@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Computes the fixed 40-participant CALC-CTRL map contrast, corrected primary and explicitly mixed-lineage original sensitivity, distinct source median reductions and descriptive paired-participant summaries. Authentic maps/masks/geometry, physiological correction, native PLS, figure parity, geometry-preserving spatial nulls, protected references and scientific qualification remain held; data CC0 and upstream code CC BY-NC-SA 4.0 terms remain distinct. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5 baseline v1](implementations/figure5-baseline-v1) — Reviewed source component.
+  Scope: Figure 5 baseline regressions. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

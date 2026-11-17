@@ -111,7 +111,7 @@ def main(argv=None):
     need(type(manifest['files']) is dict and 1<=len(manifest['files'])<=512,'complete bounded portable closure')
     if current_binding is not None:
         overrides=current_binding[0]['overrides']
-        allowed={'run.py','central_sources.py','runtime/mintbench/scoring.py'}
+        allowed={'run.py','central_sources.py','runtime/mintbench/scoring.py','runtime/mintbench/bindings.py'}
         need(type(overrides) is list and len(overrides)==len(allowed)
              and all(type(row) is dict and set(row)=={'path','historical','current'} for row in overrides)
              and {row['path'] for row in overrides}==allowed,'exact current inspection replacement members')

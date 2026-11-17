@@ -1,0 +1,67 @@
+{
+  "schema": "dentate-source-score-recovery-v1",
+  "task_id": "PAPER-FIND-ADD-005",
+  "source_revision": "130f5e64f86bd63980f70bb839c02cd264782aef",
+  "source_acquisition": "existing locally cached public author source; no new downloads",
+  "source_files": [
+    {
+      "path": "CategorizedModel.m",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/CategorizedModel.m",
+      "bytes": 32365,
+      "sha256": "eb712ad14d1b9465ddbaa84c460657eac9cfa7f3f7772212c3fdcbd543287ded",
+      "git_blob_sha": "b536c9bf9af13e428e37b077c9485e93dd530d6a",
+      "locators": {
+        "poisson_log_likelihood": "97-100",
+        "cross_validation_prediction_stitching": "152-174",
+        "inherited_parent_fit_info": "448-452",
+        "local_cv_assignments": "496-499",
+        "cv1_fit_info_overwrite": "507-516",
+        "cv2_prediction_and_save": "523-541",
+        "joint_prediction_bin_mapping": "545-580"
+      }
+    },
+    {
+      "path": "fitSingleCellGLM.m",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/fitSingleCellGLM.m",
+      "bytes": 13624,
+      "sha256": "f68ed5aa0ea6409881083ae628b50416c332808603f180dcedcebef8058e8787",
+      "git_blob_sha": "2e5bb0fc7791ba04e1d8792a747fe65e9d2ef42c",
+      "locators": {
+        "source_model_support": "trial selection and experiment.selectedTrials",
+        "response_derived_baseline": "meanRate movingAverage before regress",
+        "final_model_selection": "buildHierarchicalModel uses relativeLikelihood; maxRelLikeli=0.1"
+      }
+    },
+    {
+      "path": "neuroGLM/+buildGLM/compileSparseDesignMatrix.m",
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/neuroGLM/+buildGLM/compileSparseDesignMatrix.m",
+      "bytes": 2945,
+      "sha256": "690a984dae0453530a1cbb4970a81e363f0068fa7e85369c2d659ac9d1363699",
+      "git_blob_sha": "69d3607e8833dd01ede12e44de0eb89614572dd6",
+      "locators": {
+        "original_bin_identity": "trialBins and trialX; per-trial ceil(duration/binSize)"
+      }
+    }
+  ],
+  "recovered_endpoint": {
+    "formula": "LL=sum_bins(-prediction+target*log(prediction)-gammaln(target+1))",
+    "cv2NegLnL": "negative of LL",
+    "normalization": "none",
+    "prediction_units": "expected spike count per source bin",
+    "final_hierarchy": "assemble final leaves at original source bin positions, then compute LL",
+    "cross_cell_aggregation": "unresolved"
+  },
+  "construction": {
+    "authentic_neural_payloads_read": 0,
+    "new_download_bytes": 0,
+    "new_model_or_candidate_trials": 0,
+    "native_matlab_executions": 0,
+    "dependency_installs": 0,
+    "generated_controls_passed": 16,
+    "generated_test_pool_run_id": "paper04-dentate-score-replay-02",
+    "generated_test_child_cpu_seconds": 0.074055,
+    "generated_test_child_peak_rss_bytes": 27688960,
+    "canonical_task_or_contract_modified": false,
+    "qualification": "source-grounded software component only"
+  }
+}

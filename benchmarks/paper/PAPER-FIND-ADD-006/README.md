@@ -38,6 +38,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Original hierarchy](implementations/original-hierarchy) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. The hierarchy execution chain requires the exact 7,012-byte DMFC engine source pinned by QUALIFIED\_IMPORTS.json, which was absent from the public baseline. A different retained donor engine is not an interchangeable replacement. Current source checks do not remove this execution hold. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure4d prediction scoring v1](implementations/figure4d-prediction-scoring-v1) — Reviewed source component.
+  Scope: Figure 4D prediction scoring component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

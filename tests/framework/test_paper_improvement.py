@@ -151,6 +151,21 @@ class ContractTests(unittest.TestCase):
         result["reproduced_author_baseline"]["value"] = 77
         self.assertFalse(paper.compare(contract, result)["comparison_admitted"])
 
+    def test_tiny_source_baseline_does_not_round_inside_tolerance(self):
+        # abs(Decimal) obeys the ambient precision and would round 1+1e-30
+        # down to 1. The declared absolute distance must remain exact.
+        for target, valid in ((0.0, True), (1e-30, False)):
+            contract, _ = fixture()
+            contract["comparison"]["published_baseline"]["value"] = target
+            contract["comparison"]["reproduced_author_baseline"]["value"] = -1.0
+            contract["admission_policy"]["author_baseline"]["tolerance"] = 1.0
+            contract["admission_policy"]["metric_domain"]["minimum"] = None
+            with self.subTest(target=target):
+                errors = paper.contract_validate(contract)
+                self.assertEqual(not errors, valid, errors)
+                if not valid:
+                    self.assertTrue(any("exceeds predeclared reproduction tolerance" in error for error in errors))
+
     def test_missing_or_registration_only_primary_evidence_rejected(self):
         for mutation in (
             lambda c: c["same_task"]["split"].update(evidence_ids=[]),
@@ -345,6 +360,29 @@ class ComparisonTests(unittest.TestCase):
         contract["admission_policy"]["effect_operator"] = ">="
         refreeze(contract, result)
         self.assertTrue(paper.compare(contract, result)["comparison_admitted"])
+
+    def test_published_and_pinned_baseline_tolerances_preserve_tiny_differences(self):
+        for baseline in ("published", "pinned"):
+            for offset, admitted in ((0.0, True), (1e-30, False)):
+                contract, result = fixture()
+                published = offset if baseline == "published" else 0.0
+                pinned = None if baseline == "published" else offset
+                contract["comparison"]["published_baseline"]["value"] = published
+                contract["comparison"]["reproduced_author_baseline"].update(
+                    status="unresolved" if pinned is None else "verified", value=pinned)
+                contract["admission_policy"]["author_baseline"].update(route="source_authorized_route", tolerance=1.0)
+                contract["admission_policy"]["metric_domain"]["minimum"] = None
+                result["measurement"]["published_value"] = published
+                result["reproduced_author_baseline"]["value"] = -1.0
+                result["uncertainty"].update(published_value=published, reproduced_value=-1.0, comparator_value=published)
+                refreeze(contract, result)
+                with self.subTest(baseline=baseline, offset=offset):
+                    self.assertEqual(paper.contract_validate(contract), [])
+                    decision = paper.compare(contract, result)
+                    self.assertEqual(decision["comparison_admitted"], admitted, decision)
+                    if not admitted:
+                        reason = "outside declared tolerance" if baseline == "published" else "frozen reproduced baseline beyond tolerance"
+                        self.assertTrue(any(reason in error for error in decision["errors"]), decision)
 
     def test_extra_prose_requirement_needs_supported_machine_binding(self):
         contract, result = fixture()

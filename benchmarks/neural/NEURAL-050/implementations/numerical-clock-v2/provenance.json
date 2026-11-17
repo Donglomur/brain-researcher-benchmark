@@ -1,0 +1,52 @@
+{
+  "task_id": "NEURAL-050",
+  "implementation": "NEURAL-050-numerical-clock-v2",
+  "scope": "Numerical correction of the existing prospective half-open gamma feature preparation; scientific estimator and operator access mode unchanged.",
+  "predecessor": {
+    "path": "../initial-evaluator-v1/evaluator.py",
+    "sha256": "736bf6c0b9573dba13985e88564ad18175746041118b9590d34fb12a9f0052a6",
+    "generated_tests_sha256": "520938a2db9096da1b951ead25fb4647ca648233af3b8779a27bcead3873172a"
+  },
+  "source_evidence_reused": [
+    {
+      "url": "https://github.com/BruntonUWBio/ajile12-nwb-data/blob/f44ca6f6c51251b62b6f47492bba400472d4a7ba/Example_AJILE12_exploratory_analysis.ipynb",
+      "revision": "f44ca6f6c51251b62b6f47492bba400472d4a7ba",
+      "sha256": "fdbb46e18438f7cdc68fee8493f660f6ff8763b9225824fa7d6b71d338ab3aa4",
+      "role": "Existing primary-source interface and 80–100 Hz illustration; not the prospective periodogram estimator. Cached bytes rehashed and relevant source cells inspected."
+    },
+    {
+      "url": "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/",
+      "revision": "0.220127.0436",
+      "sha256": "a6e815ed95bbe39fde4e4440bab7585d3110b79db7a0f7b8cc1700df22276d32",
+      "role": "Reused and rehashed release metadata describing 500 Hz ECoG, 30 Hz pose, 12 patients and 55 files; payload clocks remain unverified."
+    }
+  ],
+  "numerical_repair": {
+    "sample_rate": "Full observed endpoint span divided by sample intervals, retaining the actual timestamp origin.",
+    "band": "80 <= f < 100 Hz; integer-bin endpoint selection with propagated binary64 roundoff correction only.",
+    "scope_boundary": "Floating-point representation correction does not establish source synchronization, calibration or signal validity. Existing feature packets require preparation again to receive the correction."
+  },
+  "qualification": "software_component_only; authentic scientific qualification not established",
+  "generated_software_validation": {
+    "status": "passed",
+    "new_controls": 15,
+    "unchanged_predecessor_controls": 24,
+    "successful_pool_run_id": "neural02-n050-clock-v2-check03",
+    "receipt_sha256": "3807dca11636e12545491541e3b80c5ba4a85ea27ec9ea036e7d6118ce255c21",
+    "log_sha256": "da50e6bc4854df8a5d79ab5071e99669723bdc281f9c38eb9fc51c5d75938043",
+    "prior_attempts": [
+      {"id": "neural02-n050-clock-v2-check01", "status": "pool_busy_no_child"},
+      {"id": "neural02-n050-clock-v2-check02", "status": "runtime_missing_pytest_no_tests_run"}
+    ],
+    "cumulative_child_user_cpu_seconds": 1.475841,
+    "cumulative_child_system_cpu_seconds": 0.369449,
+    "peak_child_rss_bytes": 202539008,
+    "resource_scope": "Pool children including failed runtime attempt; peak RSS is maximum child, not concurrent process-tree total. One thread and 512 MiB declared; shared pool wrapper enforces the time deadline."
+  },
+  "new_source_download_bytes": 0,
+  "authentic_payload_reads": 0,
+  "genuine_data_preparations": 0,
+  "scientific_runs": 0,
+  "model_api_calls": 0,
+  "dependency_installs": 0
+}

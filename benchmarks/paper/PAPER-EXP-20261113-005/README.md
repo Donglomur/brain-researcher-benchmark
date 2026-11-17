@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Offline access profile retains its explicit dependency on the Science2 source package; repair relative sibling locators and new live pins together. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Science2 package](implementations/science2-package) — Calibration only.
   Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source qerror v1](implementations/source-qerror-v1) — Reviewed source component.
+  Scope: Original SOM quantization-error component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

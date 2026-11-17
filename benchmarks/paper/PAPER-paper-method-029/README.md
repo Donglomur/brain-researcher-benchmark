@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Deeprecon converter inference and complete five-subject/20-directed-pair/six-ROI pattern and profile correlation evaluation for content-loss versus brain-loss converters, with strict optional source noise-ceiling joins. Authentic neural/features/decoder/weight bundle and training lineage, trusted native H5 ingestion, independently accepted ceiling artifacts, matched refitting, figure targets/tolerances, protected improvement data, rights and scientific qualification remain held; fitting converters is outside this evaluator. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Published reference v1](implementations/published-reference-v1) — Reviewed source component.
+  Scope: Published Figure 2 reference. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

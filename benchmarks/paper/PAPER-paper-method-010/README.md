@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Evaluates both complete declared processed hippocampal and mouse source populations using prospective held-out neighborhood retention, behavior-to-superneuron prediction and paired tie-aware order stability. Native Rastermap fitting/preprocessing, source paper/tutorial differences, zero-variance exclusions, empirical baselines, protected execution, rights and full-population quadratic runtime/memory qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure1 scorer v1](implementations/figure1-scorer-v1) — Reviewed source component.
+  Scope: Figure 1 five-module simulation scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

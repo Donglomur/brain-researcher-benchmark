@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Scores identity-bound MindEye2 retrieval embeddings with corrected image/brain directions and 30 frozen 300-candidate pools, plus reconstruction feature kernels, post-model repeat averaging and exposure-ledger audits. Complete native adaptation/reconstruction, authentic four-subject/trial identities, paper/notebook orientation and historical RNG parity, checkpoint/image exposure, rights and protected scientific qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Bounded retrieval v2](implementations/bounded-retrieval-v2) — Reviewed source component.
+  Scope: Bounded MindEye2 retrieval scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

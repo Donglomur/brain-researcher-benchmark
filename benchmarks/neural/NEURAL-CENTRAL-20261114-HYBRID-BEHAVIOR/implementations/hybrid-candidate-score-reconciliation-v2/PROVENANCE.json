@@ -1,0 +1,26 @@
+{
+  "task_id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
+  "component": "hybrid-candidate-score-reconciliation-v2",
+  "source_role": "Operator-side complete score arithmetic reconciliation; no source data preparation",
+  "source_repository": "https://github.com/simonedambrogio/HybridModellingProject",
+  "source_revision": "3d343beb6dc7f1b7c6c7521ebec61f7dcef35b12",
+  "source_data_path": "Data/list/data.rds",
+  "source_paper": "https://www.nature.com/articles/s41593-026-02342-9",
+  "source_review_scope": "Existing task, understanding contract, prior source review, and task-local implementation code; no new external source retrieval or scientific data inspection",
+  "predecessor": "../hybrid-frozen-model-candidate",
+  "predecessor_sha256": {
+    "source_binding.py": "1079a68cb275a35543f02dff2ad973ef2ae2e89b85c72fab9263d00eee89c3ce",
+    "result_contract.py": "f23846ae3825f05caff9e8ec7d268db9690b4cb67fcfa9ae66380f4b9b5129ed",
+    "runner/consumer.py": "c5876452457f05c3f9fe69015f7e6cff565dcfa43b6a7b9e8921b096cdd1d00b",
+    "runner/scoring.py": "c2b90aff66015aa33aaa3f73660a628d2b4b4ac021026a3d8129e2ee15f745db"
+  },
+  "terminal_action_rule": "runner/consumer.py validate_decisions: exactly one class-3/4 decision, at the end of each completed trial",
+  "primary_metric": "Decision NLL within held session; equal four sessions per participant; equal 20 participants",
+  "primary_units": "nats per decision with participant/session balancing",
+  "uncertainty": "Existing paired participant percentile bootstrap; 10000 draws; seed 20261114",
+  "qualification": "Generated controls passed; replacement source not yet bound into the protected runner",
+  "new_download_bytes": 0,
+  "new_authentic_data_preparation": 0,
+  "new_model_trials": 0,
+  "new_fits": 0
+}

@@ -1,0 +1,80 @@
+{
+  "task_id": "PAPER-paper-signal-add-013",
+  "component": "figure5-baseline-v1",
+  "scope": "Two source baseline regression cells: aligned CTRL maps to original concatenated voxel rows and fitted OLS diagnostics",
+  "source": {
+    "repository": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+    "revision": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+    "path": "F_Fig4_5.ipynb",
+    "bytes": 159052,
+    "sha256": "b0badd997e88c9a602b7405a1f06cb53ffb78bae76f7556e1f68b4812a619e84",
+    "git_blob_sha1": "ac1005a3ee3506d9d3c56f58834877d3be595778",
+    "authentication": "GitHub embedded rawLines reconstructed with final newline; full Git blob hash equals pinned tree entry",
+    "tree_url": "https://api.github.com/repos/NeuroenergeticsLab/two_modes_of_hemodynamics/git/trees/1b22c2cb03bab0d5cf70da6a45c4d720194dc523?recursive=1",
+    "tree_sha256": "575a75edb354cc66453059f45510056ca0dd894363fc7bb169f314181680a137",
+    "tree_truncated": false,
+    "notebook_execution": false,
+    "upstream_code_bundled": false,
+    "recorded_license": "CC BY-NC-SA 4.0"
+  },
+  "data_identity": {
+    "dataset": "ds004873",
+    "version": "2.0.6",
+    "git_revision": "eef50ff140a9863c412428b0bd1a14f46f5cd342",
+    "primary_participants": 40,
+    "condition": "control",
+    "baseline_path_patterns": {
+      "cmro2": "derivatives/{subject}/qmri/{subject}_task-control_space-MNI152_desc-orig_cmro2.nii.gz",
+      "oef": "derivatives/{subject}/qmri/{subject}_task-control_space-MNI152_oef.nii.gz",
+      "cbf": "derivatives/{subject}/qmri/{subject}_task-control_space-MNI152_cbf.nii.gz",
+      "cbv": "derivatives/{subject}/qmri/{subject}_task-control_space-MNI152_cbv.nii.gz"
+    },
+    "mask_path_patterns": {
+      "concordant_negative": "results/negBOLD_negCMRO2_{contrast}_GMmask.nii.gz",
+      "concordant_positive": "results/posBOLD_posCMRO2_{contrast}_GMmask.nii.gz",
+      "discordant_negative": "results/negBOLD_posCMRO2_{contrast}_GMmask.nii.gz",
+      "discordant_positive": "results/posBOLD_negCMRO2_{contrast}_GMmask.nii.gz"
+    },
+    "contrast_order": ["calccontrol", "memcontrol"],
+    "native_artifact_authentication": false,
+    "authentic_data_prepared_or_scored": false
+  },
+  "source_semantics": [
+    {"cells": [4, 9], "meaning": "Exact primary40; unscaled CBF divided by .75; per-voxel subject nanmedian; ordered concatenation of four masks per stratum, preserving cross-task voxel repetitions"},
+    {"cells": [10], "meaning": "Invalidate whole rows for CMRO2>350 or OEF>1 before any predictor centering"},
+    {"cells": [13, 14, 16, 17], "meaning": "Center each predictor across available source rows; then statsmodels formula OLS with intercept and joint complete-case rows"},
+    {"cells": [30, 31, 37, 38, 40, 41], "meaning": "Unimplemented task-change branch: first30 both tasks, semiquantitative OEF/CMRO2, percent changes, two centered predictors; source/code population-lineage discrepancy and drop-index ambiguity remain unresolved"}
+  ],
+  "published_baseline": {
+    "paper": "https://www.nature.com/articles/s41593-025-02132-9",
+    "primary_fulltext": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC13156032/unicode",
+    "locator": "Results: Baseline OEF predicts different hemodynamic response types; Figure5 caption",
+    "concordant": {"r_squared": 0.91, "f_statistic_rounded": 72070, "df_model": 3, "df_residual": 21809, "implied_fit_rows": 21813},
+    "discordant": {"r_squared": 0.91, "f_statistic_rounded": 48390, "df_model": 3, "df_residual": 14544, "implied_fit_rows": 14548},
+    "fit_row_inference": "N=df_residual+3+1 for the reported full-rank model with intercept; not an authentic row identity or independent biological sample size",
+    "new_author_fit": false
+  },
+  "qualification": {
+    "baseline_software_component": "nine_generated_controls_passed",
+    "full_figure5_reproduction": false,
+    "paper_improvement": false,
+    "native_author_baseline": false,
+    "participant_delivery": false,
+    "new_candidate_trials": 0,
+    "new_scientific_runs": 0
+  },
+  "engineering_validation": {
+    "pool_run_id": "paper04-bold-tests02",
+    "test_count": 9,
+    "exit_code": 0,
+    "test_scope": "generated factorial-design and adversarial software controls only",
+    "new_dependencies_installed": 0
+  },
+  "remaining_gaps": [
+    "Authenticate complete original NIfTI maps, geometry, masks, row identities and native author baseline",
+    "Resolve Figure5 task-change 40/30 population and fully quantitative versus semiquantitative map lineage",
+    "Recover adjacent author notebook and resolve source drop-index ambiguity without silently changing source behavior",
+    "Freeze independent reproduction tolerances and complete paired paper+data versus paper+data+code delivery",
+    "Scientifically justify meaningful improvement beyond fitting a Fick-derived target; no fitted-R2 increment alone earns improvement"
+  ]
+}

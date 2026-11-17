@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective intracellular bridge for Pala MATLAB fields, 20-kHz spike detection/interpolation, calibration-only voltage-rate splines at both 25 and 50 ms, operational-time CV², paired pinned DSRP spike estimates and segment summaries. Authentic eight-neuron/five-mouse identity and trial admission, spline and bin-policy reconciliation, the published twenty-segment mapping, native reference agreement, protected grading and empirical resources remain unqualified. Exact MIT upstream estimator bytes and notice are preserved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Pala source adapter v2](implementations/pala-source-adapter-v2) — Reviewed source component.
+  Scope: Pala voltage source adapter. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

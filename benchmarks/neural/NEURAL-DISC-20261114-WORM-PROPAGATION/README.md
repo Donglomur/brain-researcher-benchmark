@@ -44,6 +44,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Trace-packet conditional receiver-response reconstruction with training-only pair means, persistence and regularized convolution, separate development worms, target-free held exports, exact declared roster checks and hierarchical raw/normalized errors, correlation, area and paired worm uncertainty. Complete release/OSF condition reconciliation, missing segmentation partners, original trace extraction, independently authenticated worm/ROI joins, rights/exposure and protected scientific qualification remain held; post-stimulation source responses do not establish forecasting or direct synaptic edges.
+- [Participant transport v2](implementations/participant-transport-v2) — Reviewed source component.
+  Scope: Complete worm-response participant transport. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

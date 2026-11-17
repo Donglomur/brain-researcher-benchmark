@@ -33,6 +33,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neuroscience components](../../shared/neuroscience-components) — Mixed component collection.
   Scope: Owner IDs are a verified subset, not an exhaustive collection-to-task mapping. Preserve all child components together pending per-child ownership refinement. No association is inferred from child folder names.
+- [Figure2h score v1](implementations/figure2h-score-v1) — Reviewed source component.
+  Scope: Figure 2h held-event accuracy. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

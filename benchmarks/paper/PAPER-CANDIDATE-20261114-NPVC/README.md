@@ -33,6 +33,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Signed motifs](implementations/signed-motifs) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Fde equations v1](implementations/fde-equations-v1) — Reviewed source component.
+  Scope: NPvC Figure 2 likelihood component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

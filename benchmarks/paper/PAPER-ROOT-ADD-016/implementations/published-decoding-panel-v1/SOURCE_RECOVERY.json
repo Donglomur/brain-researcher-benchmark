@@ -1,0 +1,85 @@
+{
+  "schema": "cardiac_published_source_recovery_v1",
+  "task_id": "PAPER-ROOT-ADD-016",
+  "scope": "Original Figure 3C,D public author ECG-reconstruction score panel; no substituted cohort or endpoint",
+  "qualification": "published_source_panel_recovered_not_author_execution_or_improvement",
+  "paper": {
+    "url": "https://doi.org/10.7554/eLife.100605.3",
+    "xml_url": "https://cdn.elifesciences.org/articles/100605/elife-100605-v1.xml",
+    "cached_xml_bytes": 302540,
+    "cached_xml_sha256": "27d8af129613a7d1b6461ca7fc70620690b04c46dd946a65df835a2f70314940",
+    "locators": ["Figure 3C,D", "MEG/EEG processing - temporal response functions", "Data availability"]
+  },
+  "published_score_source": {
+    "project": "jcekr",
+    "osf_file_id": "68a49277efbebd00c8e764bb",
+    "name": "dec_r_ecg.csv",
+    "version": 1,
+    "metadata_version_download_url": "https://osf.io/download/fm5t8/?revision=1",
+    "actual_acquisition_request_url": "https://osf.io/download/fm5t8/?version=1",
+    "bytes": 5222,
+    "sha256": "97ce1f3546cbc7cf447cdc6efa785b87037853039d0df88bc4de62d475797368",
+    "metadata_url": "https://api.osf.io/v2/files/68a49277efbebd00c8e764bb/",
+    "metadata_response_bytes": 2154,
+    "metadata_response_sha256": "3e2b53ef42d2c6ea30770fa321dae05e9fafc5b8640afa3ac3f51374590d40b9",
+    "versions_response_bytes": 648,
+    "versions_response_sha256": "d502e21f07e525176cb945ed97e5af034dd683057d51163a0a7257c718ddb40e",
+    "prior_complete_listing_sha256": "adb87a4130d57ed3655e405fd9574c6f14193578785293cbd56ee646d94e7d83",
+    "rows": 120,
+    "released_participant_id_count": 20,
+    "released_ids": "numeric strings 0 through 19; mapping to original recording IDs unrecovered",
+    "devices": ["eeg", "meg"],
+    "conditions": ["ECG_components", "ECG_not_rejected", "ECG_rejected"],
+    "score_unit": "dimensionless Pearson correlation r per participant and condition",
+    "independent_unit": "participant",
+    "role": "Public author result scores, not time-series decoder inputs or private solver targets"
+  },
+  "author_code": {
+    "repository": "https://github.com/schmidtfa/cardiac_1_f",
+    "commit": "4562c0dc318930c46b77732b73d85504b2b471c4",
+    "files": [
+      {
+        "path": "notebooks/eeg_meg_1f_trf.py",
+        "bytes": 12003,
+        "sha256": "b645bf7832b19981e77f8f63fdfd833e3586c292f0ec67641ebed7a8d0f8a611",
+        "git_blob_sha1": "45d661419a908effbb402be20281a398a97647fe",
+        "role": "Backward model .r extraction, three conditions per modality, plotting, source selection and disabled run block"
+      },
+      {
+        "path": "notebooks/eeg_meg_1f_preprocessing.py",
+        "bytes": 5428,
+        "sha256": "0029709e915a8f5ea39ea0bf5cbd52fe6ebb05eb5c25ddeb246299312361efc0",
+        "git_blob_sha1": "62b24bef1388faba926a2fa2d80adb4b1daf573e",
+        "role": "Salzburg selection, modality channels, EEG reference, filtering/resampling, ECG-informed ICA and saved input structure"
+      }
+    ],
+    "authentication": "Official contents API at the pinned commit; decoded bytes verified against API size and Git blob SHA-1, then SHA-256 frozen",
+    "cached_environment": {
+      "path_in_source": "environment.yml",
+      "sha256": "90233c63ee7b720c493fff319aff2c359c4e8274de4abd7381e1b1383fb2950a",
+      "declared_versions": {"eelbrain": "0.38", "mne": "1.2.0", "pandas": "1.4.3", "seaborn": "0.11.2"},
+      "execution_parity": "not verified"
+    }
+  },
+  "acquisition": {
+    "http_attempts": 10,
+    "successful_responses": 5,
+    "tls_failures_without_response_bodies": 4,
+    "official_api_rate_limit_responses": 1,
+    "response_body_bytes_including_failure": 34706,
+    "additional_decoded_source_bytes": 17431,
+    "new_dependencies": 0,
+    "model_or_native_recording_runs": 0,
+    "recovery_limit": "Helper source request returned HTTP403 API rate limit; not retried. Raw host TLS checks were not bypassed."
+  },
+  "remaining_source_gaps": [
+    "Original recording/session file identities, channels and immutable recording files",
+    "Mapping released numeric IDs to source participant IDs and exact CSV exporter",
+    "Original temporal fold membership, edges, artifact exclusions and partition-to-.r aggregation",
+    "Final executed Eelbrain/library environment and full checked author decoder run",
+    "Preprocessing ECG exposure and source plain/suffixed filename join",
+    "Exact plot confidence-interval realization and source random-state choices",
+    "Frozen candidate outputs and paired six-condition improvement decision; paired paper-access participant trials"
+  ],
+  "integration_proposal": "Recover published vector availability only; retain overall source_unresolved and keep reproduction and improvement qualification separate."
+}

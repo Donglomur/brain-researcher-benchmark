@@ -23,6 +23,7 @@ delivery dispositions do not establish scientific qualification.
 ## Design a comparison
 
 - [Four outcomes: paper reproduction and improvement; native neural interpretation and tool/model building](design/four-outcomes.md).
+- [Paper reproduction and improvement metadata contracts](design/paper-reproduction-outcome.md), with independent outcomes and reviewed task-by-task adoption.
 - [Scientific design overview](science/README.md).
 - [Currently implemented same-task paper-improvement contract](science/paper-improvement/README.md).
 - [Task scope and qualification](science/task-scope.md).

@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prospective train-only matched-rank multimodal ridge encoder and separate held-out film/parcel/person Pearson scorer, with modality ablations, numerical-claim checks and descriptive uncertainty/null diagnostics for four participants and 1000 parcels each. Organizer fitting and trimming are not reproduced; authentic full input and parcel alignment, feature/model exposure and rights, matched reference execution and protected assessment remain unqualified.
+- [Fixed fit evaluator v2](implementations/fixed-fit-evaluator-v2) — Reviewed source component.
+  Scope: NEURAL-040 fixed-fit evaluator v2. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -9,7 +9,7 @@ scientific qualification.
 python3 -I -S -B scripts/check_repository.py
 ```
 
-This checker validates the declared ownership and current layout of all 364
+This checker validates the declared ownership and current layout of all 593
 implementation artifact records against
 [benchmarks/integrity/source-ownership.json](../../benchmarks/integrity/source-ownership.json)
 and the task registry. It checks the published source organization; it does not
@@ -51,6 +51,18 @@ source pins define coverage; these checks do not run authentic-data campaigns. T
 [NEURAL-047 clock workflow](../../.github/workflows/neural047-clock-arithmetic.yml)
 adds 22 generated arithmetic and source-authentication controls while preserving
 the task's external native-clock and deployment requirements.
+
+The [parallel source workflow](../../.github/workflows/parallel-source-controls.yml)
+uses a [reviewed command manifest](../../benchmarks/integrity/parallel-source-controls.v1.json)
+to run generated software controls in explicit, pinned Python and dependency
+environments. Required public source fixtures have exact byte and hash identities;
+their acquisition has fixed byte and time limits and writes outside the checkout.
+The launcher requires each declared test count, rejects skipped controls, and
+checks the complete expected result for structured JSON controls. These checks
+establish software behavior within their declared scope and do not promote
+authentic-data, native-execution or scientific readiness. Use Python 3.11 for the
+historical four-programme exact-AST controls, whose recorded structure depends on
+that interpreter version.
 
 Run both commands from the repository root using Python 3.11 or later.
 

@@ -1,0 +1,41 @@
+{
+  "task_id": "PAPER-paper-method-replacement-005",
+  "component": "source-split-replay-v1",
+  "source_commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+  "source": {
+    "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+    "bytes": 7120,
+    "sha256": "7583a5a2aea415506bf2294e34d84027fb1b7a652c18a1b711de69afb2a3f7fe",
+    "git_blob": "508b8acceca953477dc2b899284e18ad3ea0c015",
+    "locators": {
+      "seed": "line 26: global np.random.seed(42) before session loop",
+      "session_execution": "lines 80-160: source iteration and skips before split",
+      "partition": "lines 162-176: choice permutation, windows, literal float floor boundaries"
+    },
+    "acquisition": "Reused retained source bytes; no new request. Prior independent official Git blob check recorded in initial-evaluator-v1/provenance.json."
+  },
+  "dependencies": {
+    "cohort": "../initial-evaluator-v1/cohort.json",
+    "cohort_sha256": "2f68e7934f7b7c5071c8e8e4763a0f3503669fe0671fd7a0ad3349fe8e0ecda5",
+    "runtime": "Python and existing NumPy; exact test version recorded in test output; no install"
+  },
+  "changes": [
+    "Replay legacy source RNG consumption across ordered split events rather than resetting each session.",
+    "Support exact supplied pre-split MT19937 state, preserving final state and state hashes.",
+    "Emit original ordered trial identities with literal source train/validation/test floor partitions.",
+    "Check exact ordered partitions against existing evaluator session identities.",
+    "Compute cross-split physical support overlap without dropping or reassigning trials."
+  ],
+  "source_algorithm_controls": "Seven generated controls plus optional eighth SHA-verified original-source AST parity oracle; source code not vendored.",
+  "new_source_bytes": 0,
+  "authentic_data_preparation": false,
+  "native_model_runs": 0,
+  "scientific_qualification": "unqualified; conditional source split replay only",
+  "remaining_gaps": [
+    "Authentic original object revisions and trial identity/stimulus-time join",
+    "Original process grouping, successful-session order and RNG consumption or captured state",
+    "Original eligibility, units, camera lineage and preprocessing discrepancies",
+    "Authenticated animal/probe joins and full original cohort preparation",
+    "Native author baseline and complete nine-endpoint candidate comparison"
+  ]
+}

@@ -4,6 +4,11 @@
       "bytes": 16828,
       "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/scoring.py",
       "sha256": "f29e57bd7ab408f1e257ba80a23174bf3af6658fd4b8ba6ea932e16ea10f7535"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/bindings.py",
+      "bytes": 15992,
+      "sha256": "e5c62ff7f95c525df54326c76131992d992f191626c1462b50e4a923243cb681"
     }
   ],
   "execution_authority": false,
@@ -32,17 +37,27 @@
   },
   "regression_tests": [
     {
-      "bytes": 10078,
       "path": "tests/benchmarks/test_numeric_motormint.py",
-      "sha256": "3beabc6517d06e31ccfe046c26d2c8d30def320b289067fb7686647e5d0103b5"
+      "bytes": 10676,
+      "sha256": "42760eb3c9ccb1d7791efa19d4cf4a13ab4b0d1896438b3f872c4cf6d69a7988"
+    },
+    {
+      "path": "tests/benchmarks/test_numeric_motormint_inspection.py",
+      "bytes": 10955,
+      "sha256": "a0cf39d4adfa51c5a742437766b0a893694664f2e3675de04bf70872f05939c0"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/behavior-recipe-v1/test_phase_recipe.py",
+      "bytes": 7446,
+      "sha256": "d389db8970cc4816c72eb03c691f07c9aad7d1081187ed2f3967ffbc549cf135"
     }
   ],
   "schema": "motormint_current_numeric_source_bindings_v1",
   "scientific_qualification": false,
-  "scope": "Secondary linear Pearson diagnostic arithmetic only; original MAE, circular/constant policy, validation, full population and all disabled native gates retained.",
-  "source_version": "pearson-overflow-repair-2026-11-16",
+  "scope": "Secondary linear Pearson diagnostic arithmetic and original phase-column recipe binding; original MAE, numerical banks, validation, full population and all disabled native gates retained.",
+  "source_version": "pearson-overflow-and-phase-recipe-repair-2026-11-17",
   "task_id": "PAPER-paper-method-011",
-  "test_scope": "Generated stdlib numerical controls execute only named AST-extracted scoring/validation functions; no native bank, package initialization, campaign, authentic data or protected reference access.",
+  "test_scope": "Generated scorer controls execute AST-selected public functions. Phase-recipe controls import task-local modules and execute both frozen pure-Python numerical banks. Inspection authenticates the complete selected source without executing runtime modules. None of these controls invokes native methods or campaigns, or reads authentic data or protected references.",
   "unchanged_contracts": [
     {
       "bytes": 27841,
@@ -98,5 +113,14 @@
         "sha256": "defbd488d449535899d03a28db052cb6ab30e1af04e2fc99c4de4a7d1302c1bb"
       }
     }
+  ],
+  "historical_recipe": {
+    "path": "benchmarks/paper/PAPER-paper-method-011/implementations/behavior-recipe-v1/historical/bindings.before-phase-repair.py",
+    "bytes": 14920,
+    "sha256": "ef68a00a3bfb28a10cb88d9686b1fdd8bdf905f9899d1e21fd92718162fe7e1a"
+  },
+  "finding_ids": [
+    "A04-MINT-PEARSON-001",
+    "PAPER011-PHASE-ASSIGNMENT-001"
   ]
 }

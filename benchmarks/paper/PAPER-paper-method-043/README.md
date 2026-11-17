@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepared-tensor arithmetic panel for eight reconstruction metrics with identity-bound pretrained, target-only and neural-free comparisons; SSIM is explicitly a prospective 2D endpoint. NeuroPictor training, diffusion inference, resizing and feature extraction are not implemented. Authentic 982-stimulus/session membership, checkpoint/pretraining ancestry, native metric parity, NSD/COCO/UKB/model rights, primary grading policy, reference competence, protected evaluation and full-population resources remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Bounded panel v2](implementations/bounded-panel-v2) — Reviewed source component.
+  Scope: NeuroPictor bounded prepared-panel scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

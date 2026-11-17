@@ -1,0 +1,65 @@
+{
+  "schema": "find032_pipeline1_score_sources_v1",
+  "task_id": "PAPER-FIND-032",
+  "scope": "Prediction-count arithmetic and full-panel signed paired accuracy comparison; original scientific execution remains unqualified",
+  "source_revision": "a454439aec8936ff9de2199ab255472c7d140b8c",
+  "source_retrieval_this_component": "Pinned sound producer and postprocessing.qmd recovered through the official GitHub contents API; retained outside Git. Raw host TLS failed with zero response bytes; omissions entrypoint returned 404 and base/README hit the unauthenticated API rate limit. No auth bypass or further retry.",
+  "acquired_primary_sources": [
+    {
+      "url": "https://api.github.com/repos/romquentin/predictive_activity/contents/reproduce_and_reorder_sound.py?ref=a454439aec8936ff9de2199ab255472c7d140b8c",
+      "accept": "application/vnd.github.raw+json",
+      "bytes": 11882,
+      "sha256": "e9259c1abb54520d883705d9e61fb9c7c5ddabbd00a764fba1414130ca59ae8a",
+      "supports": "KFold(5); source train/test window settings; original and reordered scoring by correct/tested accuracy; equal-fold mean; exact asymmetric held-out boundary trimming; matched event count before epoch construction",
+      "locators": "lines 20-27, 94-100, 111-160, 166-220"
+    },
+    {
+      "url": "https://api.github.com/repos/romquentin/predictive_activity/contents/postprocessing.qmd?ref=a454439aec8936ff9de2199ab255472c7d140b8c",
+      "accept": "application/vnd.github.raw+json",
+      "bytes": 62202,
+      "sha256": "df704b3008a0b421ed85af56ab734917fd3cca9587878905898a044a18b7a001",
+      "supports": "load_loop_subj averages folds when a fold axis is present, then gives participants equal weight; 33x135 sound and 141x141 omission arrays remain distinct; cv_ versus producer newcv_ filenames leave execution-vintage parity unresolved",
+      "locators": "lines 203-252"
+    }
+  ],
+  "acquisition_response_body_bytes": 74783,
+  "failed_response_body_bytes": 699,
+  "source_urls": [
+    "https://www.nature.com/articles/s41467-026-73568-1",
+    "https://doi.org/10.5281/zenodo.3268713",
+    "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/reproduce_and_reorder_sound.py",
+    "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/reproduce_and_reorder_omissions.py",
+    "https://raw.githubusercontent.com/romquentin/predictive_activity/a454439aec8936ff9de2199ab255472c7d140b8c/postprocessing.qmd"
+  ],
+  "reviewed_local_contracts": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-032/task.json",
+      "sha256": "95b8608b78900edb69f8eb467a27818140baef66296d3dfced156a2c27f8b625",
+      "supports": "Original four-tone decoder accuracy target; full source participant/time/entropy support; required source controls; no changed-task victory"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-032/improvement.v1.json",
+      "sha256": "a39197e8322abb5a0fba6d87cd794adb774d322a8f75214d7367502bc67102cc",
+      "supports": "Percent-correct endpoint; participant as independent unit; original decoder baseline distinct from chance/null conclusion; unresolved source timing/folds"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/source/find032/decoding.py",
+      "sha256": "05dd3c3f697d19b655952c39704041c6b7b4e4a71a086f650feb7279e9c73de8",
+      "supports": "Existing implementation's correct/tested counts, true/predicted confusion axes, equal-fold mean accuracy; this prospective source is not claimed as authenticated original publication execution"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/source/find032/roster.py",
+      "sha256": "3db4ab469f31cd105005db1f21413a50e47c02144820108f085caa4e9d8fd3c9",
+      "supports": "Declared 33-participant roster and four ordered entropy conditions; not empirical eligibility proof"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/contracts/PROFILE_SOURCE_COMPARISON.md",
+      "sha256": "771d593480e9a1643fb29d121743a34f49c1275b4bf98d7ebe10ea9a1dc1a423",
+      "supports": "Historical/current/corrected timing and fold discrepancies must remain explicit; authentic cohort/split/support qualification remains open"
+    }
+  ],
+  "input_boundary": "Targets, original trial/fold support, and original source time axes are operator inputs. The scorer is not an authenticity issuer or a predictor-training enforcement boundary.",
+  "aggregation": "Mean correct/tested over frozen folds for each person and condition/time cell; then equal-person mean. Report all pipelines, conditions and train/test cells separately.",
+  "units": {"accuracy": "percent correct", "gain": "percentage points", "time_axes": "source observed seconds", "confusion_counts": "trials"},
+  "qualification": "software_component_only; no scientific execution, historical parity, paper improvement or current SOTA established"
+}

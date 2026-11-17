@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Understanding metrics v1](implementations/understanding-metrics-v1) — Measured target artifact scorer.
   Scope: Measured held-out angle errors on all50cases from5mice against independently fixed nuisance predictions. Arbitrary candidate predictions receive their measured scores; legacy reconstruction remains separate. Generated numerical controls establish implementation behavior, not authentic-data or model performance.
+- [Paired preparation v2](implementations/paired-preparation-v2) — Reviewed source component.
+  Scope: Roster-bound paired preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

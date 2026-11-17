@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prepares exposure-aware Neuropixels exports with stimulus-family/repeat/time guards, computes train-only rate/state controls, and scores exact predictions with mouse-macro Poisson bits per spike. Authentic recording/presentation identity, SDK/NWB and clock compatibility, complete allowed stimulus inputs, protected execution, competent stimulus-transfer references, rights and scientific qualification remain held.
+- [Complete roster evaluator v2](implementations/complete-roster-evaluator-v2) — Reviewed source component.
+  Scope: Complete declared-roster scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

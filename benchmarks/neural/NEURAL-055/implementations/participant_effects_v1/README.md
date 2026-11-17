@@ -1,0 +1,13 @@
+# Ten-person endpoint retention
+
+The existing paired report retains grand means and resampling intervals but omits the ten participant effects required by `understanding.v1.json`. This operator-side extension publishes each person's scores and matched contrasts under their existing opaque case ID. Seeds and 200 shared images remain repeated observations within ten people.
+
+`endpoint.participant_endpoints(reporting, system, expected, terminals, outcomes, pairing, contrast_registry)` consumes the protected operator's already-scored outcomes. It calls the preserved `reporting.complete_conditions` to retain the original query identity join and within-person replicate averaging. A missing required cell makes the whole condition unavailable. It validates that each person retains one case across all conditions and that distinct people do not alias one case. It emits no query IDs, individual query outcomes, source-person IDs, or targets.
+
+`endpoint.paired_report(reporting, system, expected, terminals, outcomes, pairing, schedule, contrast_registry, interpretation_records, guard)` is the explicit successor reporting API. The first argument is the authenticated original reporting module. It calls the original report once, preserves every existing field, and adds `participant_endpoints`. The original 32 contrasts, F/I and T0/T1 conditions, neural-control arms, independent-query comparison, infinite-loss conventions, and fixed-panel interpretation remain unchanged. Positive-infinite NLL remains infinite; infinity minus infinity remains undefined.
+
+This component is callable source, not a newly selected campaign runtime. An integration owner must bind the added source and this explicit call in a successor protected runtime manifest before scientific use; the preserved `protected.py` still calls its original report. No manifest, canonical contract, history, target, or prior result is changed here. This extension cannot establish direct/viewer interpretation, native containment, author-baseline competence, or any of the outstanding scientific gates.
+
+The generated standard-library controls exercise the actual original aggregation and contrast functions over the complete 960-cell registry. Their arithmetic expectations are hand-computed. The adapter test replaces only the expensive bootstrap-bearing report call and checks that original numerical fields survive unchanged; it does not qualify bootstrap numerical agreement. Run `test_endpoint.py` through the coordinator's reviewed two-slot pool.
+
+Source bindings are recorded in `SOURCE_BINDINGS.json`. No authentic EEG, image payload, checkpoint, private target, fitting, solver trial, or model call is used by this component's controls.

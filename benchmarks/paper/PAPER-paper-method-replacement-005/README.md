@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Explicitly partitioned binned IBL trials to target-free task masks, a train-only prospective ridge reference, nine separate source-derived neural/behavior endpoints and paired comparisons retaining all 74 training and 10 heldout source session IDs. Exact ONE object membership/revisions, authenticated animal/probe joins, native eligibility/preprocessing/split and NEDS model parity, actual matched budgets, protected targets/tolerances, rights and scientific qualification remain held; complete generated coverage is not authentic population evidence. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source split replay v1](implementations/source-split-replay-v1) — Reviewed source component.
+  Scope: Source trial partition replay. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
