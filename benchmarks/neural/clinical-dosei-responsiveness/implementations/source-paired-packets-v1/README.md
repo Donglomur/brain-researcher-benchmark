@@ -62,3 +62,36 @@ Any rejected or interrupted input permanently invalidates that builder. It
 cannot resume with a different row after pruning history. Previously emitted
 packets remain provisional and must be discarded from publication if the full
 stream fails; the driver must retain a complete failure/coverage report.
+
+## Compact indices and on-demand observations
+
+`indexed_windows.py` provides a pure metadata-based alternative to copying
+overlapping windows. Its immutable `NativeClock` represents the already verified
+first/last timestamp, row count, 4-ms increments and at most one source duplicate
+per recording. It does not infer these facts from sample counts. A future driver
+must authenticate that complete clock evidence and the source annotation joins.
+
+`make_case_index` stores exact private half-open row bounds and the existing
+private case binding. `project_window` accepts only the indexed slice, validates
+every row/time/value/mask and returns the same public observation as the full
+stream core. It checks exact slice completion; bounded file seeks, source
+authentication and isolated delivery remain driver obligations. Neither helper
+reads an original or saved signal file by itself. No actual source case indices
+or participant packets have been constructed with these functions.
+
+## Complete prediction coverage
+
+`prediction_contract.py` validates both workflows against one caller-authenticated
+public manifest of case IDs and actual observation payload hashes. It requires
+one output per case: five probabilities in category order `[1, 2, 3, 4, 5]`, or
+explicit abstention with null probabilities. Missing, duplicate, extra, unknown
+or mismatched-input cases fail validation. Probabilities are checked without
+renormalization; abstentions remain visible. No label is read and no score or
+abstention penalty is calculated.
+
+The full case population and ordering must be frozen independently of either
+model's actions. On-demand host projection records each actual observation hash
+before participant access and reuses it across workflows. A source/index recipe
+hash must not be presented as the hash of a materialized observation. The
+contract accepts already-decoded objects; a future transport must enforce
+bounded, duplicate-safe JSON decoding and full-manifest source authentication.
