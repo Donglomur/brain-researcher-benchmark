@@ -115,11 +115,26 @@
     "scientific_results": false
   },
   "schema": "neural018_programme_lineage_v1",
+  "holder_guard_repair": {
+    "prior_component_commit": "368000e383375733bd4f62350c6519d3acc1e14e",
+    "memory_bytes": 268435456,
+    "cpu_quota_to_period": "1/4, both strictly positive",
+    "scope": "Align actual holder startup guards with the existing provider and registered runtime profile; all other holder guards and scientific code unchanged",
+    "native_qualification": false
+  },
   "transport_changes": [
     "provider.py holder memory 128 to256MiB",
-    "holder CPU1 to0.25, same constant in create/admit/receipt",
+    "provider.py holder CPU1 to0.25, same constant in create/admit/receipt",
+    "holder.py actual startup guards aligned from128MiB/1CPU to256MiB/0.25CPU",
+    "bounds.py explicitly requested public 0444 finalized on owned fd after complete writes; private 0600 default unchanged",
     "two numerical threads, original six thread environment variables"
   ],
+  "publication_repair": {
+    "common.py": "Explicit public 0444 finalized on owned fd after flush; private 0400 default unchanged",
+    "transport/bounds.py": "Explicit public 0444 finalized on owned fd after complete writes; private 0600 default unchanged",
+    "preserved": "0700 parents, workflow umask, all native guards and numerical code",
+    "native_qualification": false
+  },
   "unchanged_numerical_sources": {
     "absence.py": {
       "bytes": 1902,
@@ -141,9 +156,7 @@
   "unchanged_transport_modules": [
     "__init__.py",
     "archive.py",
-    "bounds.py",
     "contract.py",
-    "engine.py",
-    "holder.py"
+    "engine.py"
   ]
 }

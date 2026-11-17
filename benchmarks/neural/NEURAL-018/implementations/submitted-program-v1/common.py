@@ -72,6 +72,8 @@ def publish(path, body, mode=0o400):
     with os.fdopen(fd, 'wb') as stream:
         stream.write(body)
         stream.flush()
+        if mode == 0o444:
+            os.fchmod(stream.fileno(), mode)
         os.fsync(stream.fileno())
     return pin(body)
 

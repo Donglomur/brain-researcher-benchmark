@@ -1,14 +1,17 @@
 """Generated controls only; no authentic packet, Docker or model execution."""
 import copy
+from contextlib import ExitStack
 import io
 import json
 import os
 from pathlib import Path
 import platform
+import stat
 import subprocess
 import sys
 import tempfile
 import time
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -18,7 +21,7 @@ sys.path.insert(0, str(HERE))
 import common
 import grade
 import run
-from transport import provider
+from transport import bounds, holder, provider
 from transport.contract import validate_request, validate_exposure
 sys.path.insert(0, str(common.SCORER))
 import scoring_core
@@ -89,6 +92,154 @@ class Controls(unittest.TestCase):
         for key in grade.THREADS:
             self.assertEqual(provider.fixed_environment(False)[key], '2')
         self.assertEqual(run.LIMITS['max_file_bytes'], scoring_core.MAX_PREDICTIONS)
+
+    def holder_start(self, cpu, memory, accepted):
+        """Actual main/guard and policy parser; generated kernel views, no container."""
+        cgroup = self.root / 'cgroup'
+        for name, value in {'cpu.max': cpu, 'memory.max': memory,
+                            'memory.swap.max': '0', 'pids.max': '64'}.items():
+            save(cgroup / name, (value + '\n').encode('ascii'))
+        ready = self.root / 'ready'
+        ready.mkdir(mode=0o700, exist_ok=True)
+        policy = {'schema': 'osl_holder_policy_v1', 'phase_id': 'generated',
+                  'role': 'A', 'file_cap': 35651584, 'total_cap': 41943040,
+                  'files': 3, 'directories': 1}
+        policy_path = self.root / 'POLICY.json'
+        policy_pin = save(policy_path, common.encoded(policy))
+        mountinfo = self.root / 'mountinfo'
+        save(mountinfo, (
+            '1 0 0:1 / /capture ro,noexec,nosuid,nodev - tmpfs tmpfs ro\n'
+            f'2 0 0:2 / {ready} rw,noexec,nosuid,nodev - tmpfs tmpfs rw\n'
+        ).encode('utf-8'))
+        real_lstat = Path.lstat
+
+        def kernel_path(value):
+            return {'/sys/fs/cgroup': cgroup,
+                    '/proc/self/mountinfo': mountinfo}.get(value, Path(value))
+
+        def kernel_lstat(path):
+            result = real_lstat(path)
+            if path == ready:
+                fields = {name: getattr(result, name) for name in holder.FIELDS}
+                fields.update(st_uid=65534, st_gid=65534)
+                return SimpleNamespace(**fields)
+            return result
+
+        def kernel_statvfs(path):
+            self.assertIn(path, (Path('/capture'), ready))
+            return SimpleNamespace(f_blocks=41943040 if path == Path('/capture') else 4096,
+                                   f_frsize=1)
+
+        class HoldStarted(Exception):
+            pass
+
+        owner = 'osl-' + 'a' * 24 + '/holder'
+        argv = ['holder.py', 'hold', '--owner-token', owner, '--role', 'A',
+                '--policy', str(policy_path), '--policy-sha256', policy_pin['sha256']]
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(holder, 'Path', side_effect=kernel_path))
+            stack.enter_context(patch.object(holder, 'READY_ROOT', ready))
+            stack.enter_context(patch.object(holder, 'POLICY', None))
+            stack.enter_context(patch.object(Path, 'lstat', kernel_lstat))
+            stack.enter_context(patch.object(holder.os, 'getuid', return_value=65534))
+            stack.enter_context(patch.object(holder.os, 'statvfs', side_effect=kernel_statvfs))
+            stack.enter_context(patch.object(sys, 'argv', argv))
+            publish = stack.enter_context(patch.object(holder, 'publish_ready'))
+            sleep = stack.enter_context(patch.object(holder.time, 'sleep', side_effect=HoldStarted))
+            with self.assertRaises(HoldStarted if accepted else ValueError):
+                holder.main()
+            if accepted:
+                publish.assert_called_once_with(Path('/capture'), owner)
+                sleep.assert_called_once_with(1)
+            else:
+                publish.assert_not_called()
+                sleep.assert_not_called()
+
+    def test_holder_quarter_cpu_256mib_profiles_reach_readiness(self):
+        for cpu in ('25000 100000', '250000 1000000', '1 4'):
+            with self.subTest(cpu=cpu):
+                self.holder_start(cpu, '268435456', True)
+
+    def test_holder_old_and_independent_mismatches_refuse_before_readiness(self):
+        for cpu, memory in (('100000 100000', '134217728'),
+                            ('100000 100000', '268435456'),
+                            ('25000 100000', '134217728')):
+            with self.subTest(cpu=cpu, memory=memory):
+                self.holder_start(cpu, memory, False)
+
+    def test_holder_unlimited_nonpositive_and_malformed_cpu_refuse_readiness(self):
+        for cpu in ('max 100000', '0 100000', '25000 0', '0 0', '-1 -4',
+                    '-25000 100000', '25000 -100000', '25001 100000',
+                    '', '25000', '25000 100000 extra', '25000.0 100000', 'invalid'):
+            with self.subTest(cpu=cpu):
+                self.holder_start(cpu, '268435456', False)
+
+    def test_holder_unlimited_nonpositive_and_malformed_memory_refuse_readiness(self):
+        for memory in ('max', '0', '-1', '268435455', '268435457', '', 'invalid'):
+            with self.subTest(memory=memory):
+                self.holder_start('25000 100000', memory, False)
+
+    def test_committed_public_program_mode_under_private_umask(self):
+        program = self.generated_program()
+        original = program.read_bytes()
+        destination = self.root / 'attempt'
+        real_fchmod, calls = os.fchmod, []
+
+        def finalize(fd, mode):
+            before = os.fstat(fd)
+            self.assertTrue(stat.S_ISREG(before.st_mode))
+            self.assertEqual(stat.S_IMODE(before.st_mode), 0o400)
+            self.assertEqual(before.st_size, len(original))
+            calls.append(mode)
+            real_fchmod(fd, mode)
+
+        previous = os.umask(0o077)
+        try:
+            with patch.object(common.os, 'fchmod', side_effect=finalize):
+                identity = run.commit(program, destination, self.source, {})
+            self.assertEqual(os.umask(0o077), 0o077)
+        finally:
+            os.umask(previous)
+        self.assertEqual(calls, [0o444])
+        self.assertEqual(identity, common.pin(original))
+        self.assertEqual((destination / 'program.py').read_bytes(), original)
+        self.assertEqual(stat.S_IMODE((destination / 'program.py').stat().st_mode), 0o444)
+        self.assertEqual(stat.S_IMODE((destination / 'COMMIT.json').stat().st_mode), 0o400)
+        self.assertEqual(stat.S_IMODE(destination.stat().st_mode), 0o700)
+
+    def test_public_request_policy_and_private_transport_modes_under077(self):
+        global WRITTEN
+        control = self.root / 'control'
+        meter = bounds.Meter(1024, 4096, time.monotonic() + 10)
+        real_fchmod, calls = os.fchmod, []
+        payload = b'{"generated":"transport metadata"}\n'
+
+        def finalize(fd, mode):
+            before = os.fstat(fd)
+            self.assertTrue(stat.S_ISREG(before.st_mode))
+            self.assertEqual(stat.S_IMODE(before.st_mode), 0o400)
+            self.assertEqual(before.st_size, len(payload))
+            calls.append(mode)
+            real_fchmod(fd, mode)
+
+        previous = os.umask(0o077)
+        try:
+            control.mkdir(mode=0o700)
+            with patch.object(bounds.os, 'fchmod', side_effect=finalize):
+                for name in ('REQUEST.json', 'POLICY.json'):
+                    self.assertEqual(bounds.publish(control / name, payload, meter, mode=0o444),
+                                     common.pin(payload))
+                bounds.publish(control / 'OWNERSHIP.json', payload, meter)
+            self.assertEqual(os.umask(0o077), 0o077)
+        finally:
+            os.umask(previous)
+            WRITTEN += meter.write_bytes
+        self.assertEqual(calls, [0o444, 0o444])
+        for name in ('REQUEST.json', 'POLICY.json'):
+            self.assertEqual((control / name).read_bytes(), payload)
+            self.assertEqual(stat.S_IMODE((control / name).stat().st_mode), 0o444)
+        self.assertEqual(stat.S_IMODE((control / 'OWNERSHIP.json').stat().st_mode), 0o600)
+        self.assertEqual(stat.S_IMODE(control.stat().st_mode), 0o700)
 
     def test_complete_public_mounts_never_include_private_assets(self):
         mounts = run.public_mounts('/generated/assets')
@@ -318,9 +469,11 @@ class Controls(unittest.TestCase):
     def test_source_freeze_and_transport_copied_closure(self):
         self.assertEqual(common.authenticate(self.source),self.source)
         source = common.decode(common.capture(HERE/'PROVENANCE.json',65536))
-        for name in ('__init__.py','archive.py','bounds.py','contract.py','engine.py','holder.py'):
+        for name in ('__init__.py','archive.py','contract.py','engine.py'):
             original=common.REPO/'benchmarks/neural/NEURAL-007/implementations/whole-night-programme/program/vendor_transport'/name
             self.assertEqual((HERE/'transport'/name).read_bytes(),original.read_bytes())
+        self.assertNotIn('holder.py', source['unchanged_transport_modules'])
+        self.assertNotIn('bounds.py', source['unchanged_transport_modules'])
         self.assertEqual(source['historical_accounting']['charged_seconds'],910)
 
     def test_configuration_preserves_old_charges_and_requires_new_amendment(self):

@@ -83,11 +83,11 @@ def mount_guard(root, capacity, readonly):
 def guard(role, root=Path('/capture')):
     p = profile(role)
     cg = Path('/sys/fs/cgroup')
-    need(os.getuid() == 65534 and (cg / 'memory.max').read_text().strip() == '134217728'
+    need(os.getuid() == 65534 and (cg / 'memory.max').read_text().strip() == '268435456'
          and (cg / 'memory.swap.max').read_text().strip() == '0'
          and (cg / 'pids.max').read_text().strip() == '64', 'observed holder cgroup bounds')
     quota, period = map(int, (cg / 'cpu.max').read_text().split())
-    need(quota == period and period > 0, 'observed holder one CPU')
+    need(quota > 0 and period > 0 and 4 * quota == period, 'observed holder quarter CPU')
     mount_guard(root, p['total_cap'], True)
     mount_guard(READY_ROOT, 4096, False)
     sr = READY_ROOT.lstat()
