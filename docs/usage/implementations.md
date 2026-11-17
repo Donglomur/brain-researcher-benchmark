@@ -13,7 +13,8 @@ remaining limits. The [registry](../../benchmarks/registry.json) records these
 relationships; it is not a claim that every registered source package is ready to run.
 
 ```sh
-python3 -I -S -B scripts/neurobench.py show NEURAL-030
+python3 -I -S -B scripts/neurobench.py show NEURAL-077
+python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
 ```
@@ -24,12 +25,33 @@ The compact `implementations` view resolves current package paths, roles and sco
 limits, including programmes without a legacy runtime registration. Assigned
 implementations and related scientific sources are listed separately. `show`
 includes the same view alongside the task definition. These commands inspect
-metadata without importing implementation code or opening datasets or receipts.
+metadata without importing implementation code or opening datasets or raw runtime receipts.
+The selected public reports shown by `evidence` retain their reported conditions,
+metrics and limits; they do not qualify the currently checked-out runtime.
 Use the package matching the selected task contract and access condition; ownership
 alone does not select a new scientifically preferred route. The
 [shared-source index](../../benchmarks/shared/README.md) distinguishes multi-task
 programmes, related-only sources and families without an assigned task owner;
 location in that directory does not create a task binding.
+
+## Separate the question from the access condition
+
+For paper tasks, inspect `paper-contract TASK_ID` before selecting a scorer.
+Historical `score` and `run` routes require `--calibration`; their outputs cannot
+establish the current improvement objective. Candidates may change architecture,
+inference or optimization while preserving the contract's permitted observations,
+cohort, split, evaluation, required controls and resource budget. The author-source
+recipe defines the baseline comparison.
+
+For neural tasks, select the specific direct-observation, typed-viewer,
+tool-assisted or frozen-programme condition named by the current definition.
+Prepared feature inputs, raw waveforms and rendered images expose different
+information. A prediction-programme result cannot be reported as direct or viewer
+interpretation. The [NEURAL-007 and NEURAL-077 pilot](../science/difficulty-pilot-20261117.md)
+contains programme attempts on exposed development people; the separate NEURAL-077
+[waveform](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json)
+and [viewer](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json)
+reports describe software controls without model evaluation.
 
 ## Portable programme sources
 

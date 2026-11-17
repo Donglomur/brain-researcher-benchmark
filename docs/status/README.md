@@ -1,125 +1,105 @@
-# Current status
+# Current status and recorded evidence
 
-As of **November 17, 2026 (UTC)**, the repository organizes task definitions and source
-under the paper and neural tracks. These counts describe the checked-in registry,
-not a leaderboard of completed scientific evaluations.
+The repository contains usable source and scoped execution evidence. Complete
+scientific qualification requires additional evidence for each task's declared
+population, access condition, comparator and evaluation boundary. Registration,
+source availability, software verification and model performance are reported
+separately.
 
-| Inventory | Count | Interpretation |
-| --- | ---: | --- |
-| Original specifications | 200 | 100 paper and 100 neural |
-| Expansion drafts | 34 | 16 paper and 18 neural |
-| Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation artifact records | 372 | Task and shared source records, not runnable-task counts |
-| Tasks with owned implementation source | 234 | Source ownership does not establish complete task execution |
-| Tasks without owned implementation source | 0 | Every registered task has at least one scoped source package |
-| Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
+From the repository root:
 
-The [registry](../../benchmarks/registry.json) is authoritative for current physical
-locations and task relationships. Its source-base counters also retain 95 historical
-runtime declarations and 73 component-lineage entries. Those are different,
-overlapping inventories and must not be added to the task count or treated as
-current execution qualification.
+```sh
+python3 -I -S -B scripts/neurobench.py status
+python3 -I -S -B scripts/neurobench.py evidence
+python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
+python3 -I -S -B scripts/neurobench.py implementations NEURAL-007
+```
 
-All **116 paper registrations** now bind versioned source-grounded improvement
-contracts. Active paper success requires surpassing an explicitly named original
-source-paper endpoint or complete panel on the same task. Historical reproduction
-graders and pilot attempts are calibration only. The
-[live paper catalog](../../benchmarks/catalog/paper.md) separates source-grounded
-designs, unresolved source comparisons, ineligible papers and improvement-ready
-tasks; coverage is not readiness. The current audit establishes **zero
-improvement-ready tasks** and no new empirical paper wins.
+`status` derives inventory and contract counts from the current registry and counts
+records within an explicit set of public reports. `evidence TASK_ID` returns the
+reported condition, scope, metrics, comparators, limitations and source hashes.
+Neither command opens private inputs or reruns an experiment.
 
-The [same-task improvement guide](../science/paper-improvement/README.md) explains
-the executable contract, conditional comparison admission, preserved definitions
-and calibration dispatch. The [next-build shortlist](../science/paper-improvement/next-builds.md)
-identifies concrete original endpoints and the remaining native-baseline work.
+## What has been observed
 
-## Current construction work
+| Evidence | Recorded scope | What it establishes |
+| --- | --- | --- |
+| [Difficulty pilot](../science/difficulty-pilot-20261117.md) | Eight scored attempts on four task IDs: four historical paper-calibration attempts and four neural prediction-programme attempts | Outcomes for the exact reported development endpoints and conditions, with baseline comparisons; no whole-task qualification or paper improvement |
+| [NEURAL-077 waveform preparation](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json) | All 400 query waveforms and four demonstrations compared with pinned raw samples | Authentic-input materialization; no model execution or scoring |
+| [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |
+| [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
-The [66-task construction expansion](expansion-2026-11-17.md) fills the remaining
-source-ownership gaps. All 234 registered tasks now have owned implementation
-source. Package coverage varies: a component may implement only a defined
-endpoint within a larger task contract. This does not establish 234 complete,
-deployable or scientifically qualified benchmarks. The expansion adds 1,161
-generated test cases, passing locally without skips.
+These reports overlap. Together they reference **five distinct registered task
+IDs**; the three historical profiles and two engineering reports are not five
+additional benchmarks or agent attempts. Within the selected reports, there are
+**no direct-interpretation or viewer-interpretation model attempts**. The neural
+pilot evaluated programmes on exposed development people, so its results do not
+measure unseen-population generalization or direct reading of neural signals.
 
-The [November 17 construction update](construction-2026-11-17.md) adds eight
-independently reviewed components to existing tasks, with 266 generated CI test
-cases passing locally without skips. These include four first implementations
-and four extensions; they add no task IDs or scientific qualifications.
+The reports and their original limits remain available even when a task definition
+or runtime changes. Source hashes identify the published report being read; they
+do not independently authenticate the original executed environment.
 
-The [November 16 source audit](audit-2026-11-16.md) records a targeted review of
-all 234 task definitions and 290 source relationships. Its
-[machine-readable census](audits/2026-11-16.json) preserves the review scope,
-findings and unreviewed areas for each item. The resulting repairs address input
-validation, numerical stability, source resolution, process cleanup and CI
-coverage. The audit recorded a clock-boundary defect in NEURAL-047 and withdrew
-an initial normalization because timestamp precision had not been established.
-The subsequent [clock arithmetic repair](clock-arithmetic-2026-11-17.md) fixes
-comparisons of the supplied values without inventing a tolerance. Authentic native
-clock lineage remains unresolved.
+## Current scientific definitions
 
-The audit does not establish scientific readiness. At its baseline, 164 tasks had
-owned source relationships and 70 had none. Authentic-data validation, protected
-evaluation and task-specific qualification remain separate work.
+Paper success requires an improvement over the source paper's original endpoint or
+complete panel, under the task's fixed observations, cohort, split, metric and
+aggregation, with the required controls. Candidates may change architecture,
+inference or optimization within the permitted observation and budget boundary.
+The author-source recipe defines the baseline comparison. Historical reconstruction
+graders and the pilot's paper attempts remain calibration evidence.
 
-Four new components extend existing tasks: complete-support Helsinki EEG scoring
-and causal packets, vestibular condition scoring, matched laser-EEG evidence
-packets, and empirical iSTTC four-estimator fit production. The
-[construction component guide](../usage/construction-components.md) gives their
-interfaces, generated test commands and required external inputs.
+The [paper catalog](../../benchmarks/catalog/paper.md) reports dispositions from the
+current contracts. At the comprehensive revision's starting point, all 116 paper
+registrations had contracts: 20 source-grounded designs, 87 unresolved source
+comparisons and nine ineligible papers, with **zero improvement-ready tasks**.
+Contract coverage establishes neither a qualified comparator nor an empirical win.
+Use `status` for current counts as source preparation and baseline work develop.
+The [improvement guide](../science/paper-improvement/README.md) describes the
+comparison rule; the [next-build shortlist](../science/paper-improvement/next-builds.md)
+identifies original endpoints and remaining native-baseline work.
 
-These are implemented source capabilities with generated-data checks and
-independent source review. They add no task IDs or qualified scientific results.
-Authentic source normalization, reference competence, controlled execution and
-empirical agreement still require evidence specific to each task. A small iSTTC
-check called the pinned author helpers on invented spikes; it establishes limited
-interface compatibility, not paper reproduction.
+For neural tasks, direct observation, typed-viewer interpretation, tool-assisted
+investigation and frozen prediction programmes are distinct conditions. Available
+programme source cannot supply missing observation access, a working viewer or
+competent interpretation controls. Each task's current definition and assigned
+implementation scope identify which condition the source actually supports.
 
-The same update repairs malformed-input handling in the cardiac scorer, enforces
-the existing EEG trial-ID length limit, and restores REP012's exact public scoring
-dependency. REP012's protected reference remains unavailable. The CLI's
-`implementations TASK_ID` command now resolves package paths and scope limits
-without executing them.
+## Inventory and execution
 
-## What the reorganization establishes
+The [current registry](../../benchmarks/registry.json) and
+[generated catalog](../../benchmarks/catalog/README.md) give current task totals,
+implementation ownership and physical paths. The original roster contains 100
+paper and 100 neural specifications. Expansion registrations, implementation
+artifacts, historical runtime declarations and component collections are counted
+separately; overlapping counts must not be added together.
 
-Each task's authoritative definition is at `benchmarks/<track>/<ID>/task.json`.
-Existing implementation packages now live with their owning task or under
-[shared source](../../benchmarks/shared/README.md), which also retains related-only
-sources and families without an assigned task owner. Generic framework code,
-commands, guides and provenance have
-separate locations. The [relocation ledger](../provenance/relocations/2026-11-16.json)
-records the pure move of the original public files; later source repairs and
-current manifests are separate changes.
+Task definitions live at `benchmarks/<track>/<ID>/task.json`. Implementations live
+with their task or under [shared source](../../benchmarks/shared/README.md), which
+also identifies related-only sources and families without assigned owners.
+The [implementation guide](../usage/implementations.md) gives concrete command
+routes and their required inputs. An implementation may cover a named endpoint
+within a larger task; a task-to-source link does not establish complete execution.
 
-Task ownership does not choose a new scientifically preferred implementation.
-Retained predecessors, alternative scopes and unresolved source relationships keep
-their stated roles. No dataset, model run, paper reproduction, frontier improvement
-or qualification follows from a directory move.
+The [source checks](../development/source-integrity.md) verify their declared
+ownership, source pins and behavior. Generated controls test software behavior;
+authentic-input controls additionally test the declared data path. Model results,
+protected evaluation and scientific qualification require their own evidence.
+Known gaps include the qualified-imports programme's DMFC dependency, private
+scorer inputs for NEURAL-008, NEURAL-023, NEURAL-046 and NEURAL-096, and the absent
+historical NEURAL-035 manifest. Consult each task's current scope before running it.
 
-## Evidence and limits
+## Earlier construction reports
 
-The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 372 artifact records; the separate source-integrity checker
-verifies 222 files against recorded pins in four enrolled bundles. These are software/source
-coverage counts. They are not completed scientific evaluations.
+The [November 16 source audit](audit-2026-11-16.md) and its
+[machine-readable census](audits/2026-11-16.json) preserve the scope and findings of
+that review. The [clock arithmetic repair](clock-arithmetic-2026-11-17.md) corrects
+comparisons of supplied timestamps; authentic native clock lineage remains open.
+The [construction update](construction-2026-11-17.md) and
+[source-ownership expansion](expansion-2026-11-17.md) record source additions and
+generated checks at their respective revisions. Their historical counts do not
+override the current registry or establish new scientific results.
 
-Representative known gaps include unavailable dependencies. These include the
-qualified-imports programme's DMFC dependency and private scorer inputs for
-NEURAL-008, NEURAL-023, NEURAL-046 and NEURAL-096; NEURAL-035 also lacks its historical
-manifest. The affected registry records preserve these limits. Public source
-organization does not establish deployability. Campaign commands refuse execution
-without explicit campaign authority and required private inputs.
-
-Source checks establish the consistency and behavior they explicitly test. Generated
-fixtures do not establish neural understanding or authentic-data agreement. A
-scientifically qualified task needs its full input population, access conditions,
-metric and comparator, functioning protected evaluation, and independent evidence
-for the complete declared contract.
-
-The [implementation guide](../usage/implementations.md) identifies usable source
-routes and their requirements. The [provenance index](../provenance/README.md)
-retains dated construction reports and historical execution projections, with their
-original limits. Earlier counts describe those snapshots; they do not override
-this registry or establish new results.
+The [provenance index](../provenance/README.md) links earlier releases and execution
+reports. The [relocation ledger](../provenance/relocations/2026-11-16.json) records
+the original physical moves; later source revisions retain their own lineage.
