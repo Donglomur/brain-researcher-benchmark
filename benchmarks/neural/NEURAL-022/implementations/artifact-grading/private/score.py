@@ -27,29 +27,38 @@ def read_json(path,cap=32768):
  finally:os.close(fd)
  return candidate.strict(raw)
 
-def assess(package,op,submission,submission_root):
- phase='candidate';loads=0
+def capture_submission(submission,submission_root):
+ io.need(type(submission)is dict and set(submission)=={'schema_version','task_id','file'}and type(submission['schema_version'])is int and submission['schema_version']==1 and submission['task_id']=='NEURAL-022','Exact committed artifact manifest')
+ row=submission['file'];io.need(type(row)is dict and set(row)=={'path','bytes','sha256'}and type(row['bytes'])is int and 0<row['bytes']<=candidate.MAX_SUBMISSION_BYTES,'Exact bounded prediction descriptor')
+ return locked(submission_root,row,candidate.MAX_SUBMISSION_BYTES)
+
+def _assess_captured(package,op,raw):
+ loads=0
  try:
-  io.need(type(submission)is dict and set(submission)=={'schema_version','task_id','file'}and type(submission['schema_version'])is int and submission['schema_version']==1 and submission['task_id']=='NEURAL-022','Exact committed artifact manifest')
-  row=submission['file'];io.need(type(row)is dict and set(row)=={'path','bytes','sha256'}and type(row['bytes'])is int and 0<row['bytes']<=candidate.MAX_SUBMISSION_BYTES,'Exact bounded prediction descriptor')
-  raw=locked(submission_root,row,candidate.MAX_SUBMISSION_BYTES)
-  phase='operator';public=candidate.strict(locked(package,op['public']['cases.json'],16384))
+  public=candidate.strict(locked(package,op['public']['cases.json'],16384))
   def private_loader():
    nonlocal loads
    loads+=1;io.need(loads==1,'Exactly one private load')
    body=locked(package,op['private'],65536);return packet.private_lists(io.npz(body,io.schema('private',candidate.METHODS)))
   result=candidate.evaluate(raw,public,private_loader,held_scorer.score,op['expected_fixed_reference'])
   return dict(task_id='NEURAL-022',status=result['status'],score=result['primary_score'],higher_is_better=False,result=result,target_loader_calls=loads,candidate_code_executed=False,producer_absence_verified=False,scientific_success=None)
- except Exception as e:return dict(task_id='NEURAL-022',status='invalid_submission'if phase=='candidate'else'operator_error',score=None,error=type(e).__name__+': '+str(e)[:500],target_loader_calls=loads,candidate_code_executed=False)
+ except Exception as e:return dict(task_id='NEURAL-022',status='operator_error',score=None,error=type(e).__name__+': '+str(e)[:500],target_loader_calls=loads,candidate_code_executed=False)
+
+def assess(package,op,submission,submission_root):
+ try:raw=capture_submission(submission,submission_root)
+ except Exception as e:return dict(task_id='NEURAL-022',status='invalid_submission',score=None,error=type(e).__name__+': '+str(e)[:500],target_loader_calls=0,candidate_code_executed=False)
+ return _assess_captured(package,op,raw)
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--submission',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
- try:submission=read_json(a.submission)
+ try:
+  submission=read_json(a.submission)
+  raw=capture_submission(submission,a.submission.absolute().parent)
  except Exception as e:r=dict(task_id='NEURAL-022',status='invalid_submission',score=None,target_loader_calls=0,error=type(e).__name__+': '+str(e)[:500],candidate_code_executed=False)
  else:
   try:op=read_json(PACKAGE/'private/operator_manifest.json')
   except Exception as e:r=dict(task_id='NEURAL-022',status='operator_error',score=None,target_loader_calls=0,error=type(e).__name__+': '+str(e)[:500],candidate_code_executed=False)
-  else:r=assess(PACKAGE,op,submission,a.submission.absolute().parent)
+  else:r=_assess_captured(PACKAGE,op,raw)
  io.need(all(not x.is_symlink()for x in [a.output,*a.output.parents]),'Unlinked fresh report')
  body=io.encoded_json(r);io.need(len(body)<=65536,'Original bounded report size')
  with a.output.open('xb')as f:f.write(body)
