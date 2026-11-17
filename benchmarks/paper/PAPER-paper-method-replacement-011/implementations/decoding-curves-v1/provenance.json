@@ -1,0 +1,79 @@
+{
+  "schema": "treebank-decoding-component-provenance/v1",
+  "task_id": "PAPER-paper-method-replacement-011",
+  "component": "decoding-curves-v1",
+  "implementation_origin": "independent code; no author source vendored",
+  "outcome_scope": "mathematical decoding endpoint component supporting separate original-finding reproduction and same-task improvement outcomes",
+  "source_revision": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "sha256": "fa1b8d890e6d758baaeb01104cf4c768d875678f330b840b455d652363d2467d",
+      "bytes": 274595,
+      "locators": ["Fig. 4", "Appendix A.5", "Appendix A.9", "Figs. 5-7"],
+      "supports": "single-electrode ROC-AUC curves; original shared participant train/test splits; five-fold training-CV contact selection; primary and companion decoding tasks"
+    },
+    {
+      "url": "https://api.github.com/repos/czlwang/brain_treebank_code_release/contents/regression_runner.py?ref=c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "decoded_content_sha256": "8bfe5a7ccce6c4a6c164295e13768140c732828ee0bf2d3bfa91639ee23ea919",
+      "decoded_content_bytes": 5694,
+      "verified_git_blob_sha1": "6b46b63d144b09fb7c0a291f54fc12e21b1eb093",
+      "locator": "RegressionRunnerTestSet.split_and_train_and_test",
+      "supports": "five-fold ROC-AUC arithmetic mean; source logistic pipeline and held-out positive-class probability AUC"
+    },
+    {
+      "url": "https://api.github.com/repos/czlwang/brain_treebank_code_release/contents/run_time_tests.py?ref=c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+      "decoded_content_sha256": "af4b735daae1ee6c374fcc595f16b763e8cb74c7f4a1190e05beb046c94f034a",
+      "decoded_content_bytes": 8877,
+      "verified_git_blob_sha1": "3575d622b4cbc05e7730d83a55aeb7a6255efe67",
+      "locator": "run_subject_test; write_summary",
+      "supports": "source computes arange(start,end,step) windows and disables end-extent assertion; exact historical final-window support remains unresolved; generic summary does not implement figure aggregation"
+    }
+  ],
+  "software_controls": {
+    "pool_run_id": "paper02-replacement011-controls02",
+    "tests_passed": 11,
+    "test_suite_elapsed_seconds": 0.095,
+    "pool_wall_seconds_including_wait": 1.191729,
+    "user_cpu_seconds": 0.104233,
+    "system_cpu_seconds": 0.031099,
+    "peak_child_rss_bytes": 22642688,
+    "declared_ram_bytes": 1073741824,
+    "threads": 1,
+    "scope": "generated inputs only; independent pairwise AUC oracle, fold-pooling counterexample, test-only selection trap, original exclusion semantics, overlapping lobe/anatomical groups, inventory/identity/window checks, paired-condition separation and CLI checks",
+    "prior_control_run": {"id": "paper02-replacement011-controls01", "tests_passed": 10, "user_cpu_seconds": 0.108515, "system_cpu_seconds": 0.036592},
+    "source_verification_run": "paper02-replacement011-sourceverify01"
+  },
+  "source_acquisition": {
+    "reservation_bytes": 1048576,
+    "response_body_bytes": 297082,
+    "retained_source_headers_and_decoded_bytes": 314854,
+    "failed_routes": [
+      {"route": "pinned raw.githubusercontent.com regression_runner.py", "error": "curl TLS SSL_ERROR_SYSCALL", "payload_bytes": 0},
+      {"route": "pinned raw.githubusercontent.com run_time_tests.py", "error": "curl TLS SSL_ERROR_SYSCALL", "payload_bytes": 0}
+    ],
+    "successful_routes": "official arXiv HTML and official GitHub contents API at exact code revision",
+    "data_archives": 0,
+    "installs": 0
+  },
+  "qualification": {
+    "source_text_recovered": true,
+    "software_controls_passed": true,
+    "authentic_data_prepared": false,
+    "source_examples_and_splits_recovered": false,
+    "source_window_grid_verified": false,
+    "author_baseline_reproduced": false,
+    "paper_reproduction_established": false,
+    "paper_improvement_established": false,
+    "scientific_model_runs": 0,
+    "solver_trials": 0
+  },
+  "preserved_limits": [
+    "Operator-declared metadata and source-manifest hash do not authenticate the original panel.",
+    "Exact example construction, label polarity, original recording/transcript versions, splits/seeds, native preprocessing and window endpoints remain to recover.",
+    "Native single-electrode observation/fitting provenance and protected participant delivery are not verified by score-table identity checks.",
+    "Exact regional and hemisphere groups, top-ten identities, historical cutoff-tie handling and published figure arrays remain unresolved.",
+    "No numerical reproduction tolerance, meaningful improvement threshold or participant-aware uncertainty rule is established.",
+    "Separate paper-plus-data and author-code access conditions are labeled; no paired participant trials were conducted."
+  ]
+}
