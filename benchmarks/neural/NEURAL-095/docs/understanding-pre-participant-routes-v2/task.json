@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-095",
+  "track": "neural",
+  "title": "Produced-interval prediction from DMFC spikes",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N065"
+    ],
+    "titles": [
+      "Sohn-Jazayeri DMFC interval-reproduction acquisition"
+    ],
+    "overlap_groups": [
+      "sohn-dmfc-rsg"
+    ],
+    "task_family": "timing_computation"
+  },
+  "scientific_question": "At observed Set, do strictly pre-Set DMFC counts improve prediction of released behavioral tp relative to the same competent procedure using known cues and elapsed session clock?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Released behavioral tp in milliseconds for every original258 validation/query trial. Do not replace it with Go-minus-Set or a neural-speed correlation."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/000130",
+      "https://doi.org/10.1016/j.neuron.2019.06.012",
+      "https://github.com/neurallatents/nlb_tools",
+      "https://neurallatents.github.io/datasets",
+      "https://neurallatents.github.io/",
+      "https://arxiv.org/abs/2109.04463"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N065",
+        "ledger": "catalog/datasets_nonfmri_noneeg.json",
+        "record_sha256": "8870bbfc2b90be9aa1406207cce9f22eb119a4504e86ff42708856117f3a95da",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "inputs": [
+      "Cue view: case_id, condition, context, nominal_ts_ms and clock_seconds; training adds tp_ms and fixed chronological fold.",
+      "Neural view adds uint32 counts with axes[case,4,40], half-open bins[-.2,-.15,-.1,-.05,0] seconds relative to Set.",
+      "All common NPY members, IDs, folds and training targets are byte-identical between views; source held-in units include all40 without activity selection."
+    ],
+    "forbidden_inputs": [
+      "Query tp, Go time, response-dependent masks or lengths, outlier flags and full original NWB in producer inputs",
+      "Held-out-unit spikes, evaluator references/targets or opposite-view outputs",
+      "Query-fitted preprocessing/hyperparameter selection under the strict default; any transduction requires prior explicit review"
+    ],
+    "case_identity": "Converter maps source integer trial IDs to dmfc-{id:06d}, represented as Unicode U11. Exact748 train and258 query ID rosters derive from pinned original NWB split fields, ordered chronologically by Set. No source trial IDs are fabricated or published here.",
+    "split": "Original train=748 and val/query=258 from1160 source rows;154 split=none rows are outside this fixed panel. Five contiguous chronological training folds; all original train/val rows retained including two historically problematic early-response training rows. No query labels inform fitting.",
+    "coverage": "All258 queries in each of frozen_program__cue_only, frozen_program__neural, case_adaptive__cue_only and case_adaptive__neural. The current external gate uses the same fixed batch actor in all four labels, so these labels do not establish distinct realized strategies. All40 conditions and8 contexts receive reports; four cells remain one registered task."
+  },
+  "biological_unit": "One exposed animal/session: Haydn20161211. Trials and40 conditions are repeated observations, not independent animals.",
+  "case_definition": "One trial at observed Set, with four50ms pre-Set bins from40 held-in units.",
+  "split": {
+    "policy": "Original train=748 and val/query=258 from1160 source rows;154 split=none rows are outside this fixed panel. Five contiguous chronological training folds; all original train/val rows retained including two historically problematic early-response training rows. No query labels inform fitting.",
+    "coverage": "All258 queries in each of frozen_program__cue_only, frozen_program__neural, case_adaptive__cue_only and case_adaptive__neural. The current external gate uses the same fixed batch actor in all four labels, so these labels do not establish distinct realized strategies. All40 conditions and8 contexts receive reports; four cells remain one registered task."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/neurallatents/nlb_tools",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned NLB NWB/tensor/evaluation source. Its response-aligned neural-speed metric is retrospective; direct prospective interval prediction needs a separately qualified packet and scorer.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1016/j.neuron.2019.06.012",
+    "data_url": "https://dandiarchive.org/dandiset/000130"
+  },
+  "controls": [
+    "Predict at observed Set, with strictly pre-Set bins and source support gate; do not rescue a post-Set policy by censoring early responders.",
+    "Predeclare estimator, cue/neural features, train preprocessing, grid/folds/loss/tie rule, missing-group policy, seed and allowed view-specific changes.",
+    "Review matched methodology; identical programme hashes are insufficient and a deliberately weak cue fit invalidates neural-benefit interpretation.",
+    "Charge programme authoring, adaptive tool use and failures; keep all four outputs inaccessible across cells and freeze before any grade feedback.",
+    "Keep session-clock drift and exact cue/condition baselines; neural gain is conditional on their declared measurement."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Possible fixed per-trial4x40 count display with known cues and a declared training/demo policy; the shipped complete task currently delivers arrays to programmes.",
+      "boundary": "Any no-tools arm must produce all258 numeric tp predictions with the same allowed information and its own authenticated transport.",
+      "evidence_ids": [
+        "dmfc095-0"
+      ],
+      "missing": [
+        "No complete direct-observation model transport or outcome."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential count-raster/heatmap rendering of only the four pre-Set bins and known cues.",
+      "boundary": "No raw evaluator arrays, query tp or response timestamps through typed tools; aggregation must not reveal hidden labels.",
+      "evidence_ids": [
+        "dmfc095-4"
+      ],
+      "missing": [
+        "No095 typed viewer actions or response collector."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Protocol scaffolding exposes allowlisted numerical tools and sequential case replies, but the provided external-candidate gate fixes offline_actor.py in all cells. That actor calls one frozen full-query numerical batch and returns258 cached predictions.",
+      "boundary": "Generic protocol retains fresh-cell state across all258 cases and exposes the full unlabeled query batch; it is not isolated per-case investigation. TRAIN-only fitting and no query target feedback remain required.",
+      "evidence_ids": [
+        "dmfc095-7",
+        "dmfc095-9",
+        "dmfc095-10"
+      ],
+      "missing": [
+        "An actual adaptive investigator actor/transport and explicitly chosen full-batch versus per-case memory condition.",
+        "Selected-runtime authentic numerical qualification and actual adaptive candidate/model trials."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Frozen numerical programme with TRAIN-only preparation and fixed full-query prediction batch. The supplied external gate uses that same offline actor for all four cell labels.",
+      "boundary": "One source and reviewed method, no label feedback or opposite-view outputs; full258 IDs in each view.",
+      "evidence_ids": [
+        "dmfc095-6",
+        "dmfc095-4",
+        "dmfc095-3",
+        "dmfc095-7",
+        "dmfc095-8",
+        "dmfc095-9",
+        "dmfc095-10"
+      ],
+      "missing": [
+        "Selected-runtime compatibility/isolation and matched candidate execution qualification."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "mean absolute error of released tp in milliseconds",
+      "direction": "lower",
+      "aggregation": "Mean over all258 required query trials per arm; report paired cue-minus-neural per-trial errors within each mode.",
+      "rationale": "Measures the behavioral quantity directly and retains absolute competency alongside neural increments; a weak cue procedure cannot by itself establish useful neural understanding."
+    },
+    "secondary": [
+      "RMSE_ms and unweighted eight-context macro MAE.",
+      "All40 condition MAEs and all8 context MAEs, with complete support.",
+      "Paired cue-minus-neural MAE and equal-context macro increment, computed from per-trial errors; positive means lower neural error.",
+      "Signed candidate-minus-each-fixed-reference differences; negative means better candidate error."
+    ],
+    "comparators": [
+      {
+        "name": "nominal sample interval",
+        "inputs": "Known nominal_ts_ms",
+        "procedure": "Implemented fixed nonneural reference predicts the nominal sampled interval."
+      },
+      {
+        "name": "exact-condition training median",
+        "inputs": "Training tp and known condition",
+        "procedure": "Implemented training-only median within all40 exact conditions."
+      },
+      {
+        "name": "cue-clock ridge",
+        "inputs": "Known cue/context and elapsed clock",
+        "procedure": "Implemented fixed saved reference; source/procedure and unchanged saved reference artifacts are pinned. Competency remains visible in every arm."
+      },
+      {
+        "name": "cue-clock total-spike and temporal-spike ridge",
+        "inputs": "Same cues/clock plus total spike counts or time-resolved pre-Set counts",
+        "procedure": "Two implemented fixed neural references, not SOTA claims; all five comparisons use the same complete panel."
+      }
+    ],
+    "nuisance_controls": [
+      "Predict at observed Set, with strictly pre-Set bins and source support gate; do not rescue a post-Set policy by censoring early responders.",
+      "Predeclare estimator, cue/neural features, train preprocessing, grid/folds/loss/tie rule, missing-group policy, seed and allowed view-specific changes.",
+      "Review matched methodology; identical programme hashes are insufficient and a deliberately weak cue fit invalidates neural-benefit interpretation.",
+      "Charge programme authoring, adaptive tool use and failures; keep all four outputs inaccessible across cells and freeze before any grade feedback.",
+      "Keep session-clock drift and exact cue/condition baselines; neural gain is conditional on their declared measurement."
+    ],
+    "uncertainty": "No population confidence interval, p-value or scientific pass floor is defined for one exposed session. Report finite-panel errors and all context/condition support; any within-session resampling is descriptive and must respect temporal dependence.",
+    "failure_policy": "All four exact complete-ID NPZ artifacts are captured and publicly validated before private decoding. Reject duplicate/missing/extra IDs, object dtypes, nonfinite/oversized submissions; valid finite negative predictions remain scored. Preserve finite poor errors and overflow as explicit failure, never clipping or dropping cases.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "ce35928e69ccd8d188feafdf0c9359d14626f72b75b3deb8f0b21d50f914ff74",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "a45557252af0002cd7cbdd3642212b4905475ce57dead569a39f0d460078a441"
+    }
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Verify event columns and units in DANDI 000130; one monkey/session, public former test targets remain development."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Independent cognitive-timing study; one monkey and two files in current 15.7 MB release. 2024 archive update is not a new cohort. Original paper and NLB wrapper are separately cited. Source audit only; not execution-qualified."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-N065",
+      "construction_gates": [
+        "Small train14,119,912B header/schema/trial metadata intake under separate authorization",
+        "Verify interval units, gap/trial boundaries, support, unit IDs and outlier semantics",
+        "Freeze target-independent prefix and exposure masks",
+        "Build direct prediction scorer separate from original neural-speed correlation",
+        "Run independent references and nuisance tests; no cross-animal claim"
+      ]
+    }
+  ],
+  "next_implementation_action": [
+    "Training metadata inspection completed: two early Go responses block the predeclared Set+200 ms policy, and ts/tp semantics remain unresolved. The exact 800 ms prior overlap occurs in all 12 recorded groups; no spike values, model or scientific reference was evaluated."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "reason": "The original NLB inputs are response-aligned for retrospective analysis and cannot be reused unchanged for prospective interval prediction.",
+    "remaining_gates": [
+      "Verify actual trial fields, units, gaps and earliest-response support.",
+      "Keep any outcome-dependent eligibility private and prespecified.",
+      "Retain the one-session scope and public-answer development status."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/dmfc-v1/audit.md",
+        "sha256": "4323109af6631a579bb0d7654934b5d7eedc76f9cc91ca63f9ac8a2332dfbf34"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-N065",
+      "name": "DMFC Ready–Set–Go",
+      "assignment_ids": [
+        "NEURAL-095",
+        "NEURAL-096"
+      ],
+      "checked_on": "2026-10-30",
+      "audit_path": "authoring/neural-source-audits/dmfc-v1/audit.json",
+      "narrative_path": "authoring/neural-source-audits/dmfc-v1/audit.md",
+      "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "construction_implication": "Training metadata inspection completed: two early Go responses block the predeclared Set+200 ms policy, and ts/tp semantics remain unresolved. The exact 800 ms prior overlap occurs in all 12 recorded groups; no spike values, model or scientific reference was evaluated.",
+      "remaining_gates": [
+        "Small train14,119,912B header/schema/trial metadata intake under separate authorization",
+        "Verify interval units, gap/trial boundaries, support, unit IDs and outlier semantics",
+        "Freeze target-independent prefix and exposure masks",
+        "Build direct prediction scorer separate from original neural-speed correlation",
+        "Run independent references and nuisance tests; no cross-animal claim"
+      ],
+      "explicit_response_body_bytes": 324426,
+      "request_attempts": 10,
+      "request_wall_seconds_sum": 3.070618956000544,
+      "independent_source_cap_bytes": 2000000,
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false,
+      "input_metadata_followup": {
+        "summary_path": "authoring/dmfc-timing/schema-v2/RESULT_SUMMARY.json",
+        "narrative_path": "authoring/dmfc-timing/schema-v2/RESULTS.md",
+        "independent_saved_metadata_review": "authoring/dmfc-timing/schema-v2-review-v1/audit.json",
+        "review_execution_receipt": "authoring/dmfc-timing/schema-v2-review-v1/execution.json",
+        "status": "metadata_interface_qualified_primary_prefix_blocked_target_semantics_unresolved",
+        "metadata_inspection_executed": true,
+        "training_asset_bytes_acquired_in_separate_intake": 14119912,
+        "training_asset_sha256": "6212aaee2c978d1cd53fbfb433d11f418ed27cd83017b8b2befa4a1d7add5198",
+        "trial_count": 1160,
+        "split_counts": {
+          "none": 154,
+          "train": 748,
+          "val": 258
+        },
+        "primary_cutoff_ms": 200,
+        "primary_feasibility_status": "blocked_early_or_at_cutoff_response_no_exclusions_allowed",
+        "early_response_count": 2,
+        "cutoff_substituted": false,
+        "trials_excluded_to_rescue": false,
+        "ts_tp_semantics_resolved": false,
+        "tp_min_ms": -2400,
+        "max_tp_event_residual_ms": 5322.000000000298,
+        "shared_recorded_prior_interval_ms": 800,
+        "support_groups": 12,
+        "common_support_counts_before_eligibility": {
+          "train": 150,
+          "val": 54,
+          "none": 31
+        },
+        "common_support_is_qualified_scientific_contrast": false,
+        "spike_values_decoded": false,
+        "test_asset_accessed": false,
+        "models_run": 0,
+        "reference_executed": false,
+        "independent_empirical_recomputation": false,
+        "original_source_audit_and_gates_preserved": true,
+        "remaining_gate": "Resolve trial/event/target semantics and missingness, censoring and eligibility before a new observation contract. Do not infer the early-response/outlier intersection from aggregate counts or replace the failed primary with a sensitivity cutoff.",
+        "accounting_scope": "Separate training-file intake and metadata reader; the full file includes spike bytes but no spike values were decoded. The original source-audit transfer totals and zero scientific-reference counts remain unchanged.",
+        "conservative_cumulative_seconds": 89.07061895600054,
+        "cumulative_limit_seconds": 90
+      }
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "851a50933caa57403e6d00f331de10dc65120f7c1a51b3f5ccb94248e2570709",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
+        "bytes": 82580,
+        "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
+      },
+      {
+        "path": "authoring/neural-source-audits/dmfc-v1/audit.json",
+        "bytes": 4590,
+        "sha256": "700e9e1f4a743600fb2ec925fce84f432c199b374ee64318817e22585d7a397b"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
+}

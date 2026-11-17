@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Observed context A=0 or B=1 for each fixed30-second window. This is an experimental context label, not a ground-truth memory strength or causal astrocyte mechanism.
 
-**Source delivery:** delivered\_named\_scope. A portable programme path and exact140-probability scorer exist for the complete selected seven-mouse subset. Scientific interpretation remains limited by processed-ROI selection, behavior polarity, context/day-order confounding, historical exposure and unqualified relocated runtime; a probability score alone cannot establish neural contribution.
+**Source delivery:** delivered\_named\_scope. A portable programme path, exact140-probability scorer and restricted active-fold image transport source exist for the complete selected seven-mouse subset. Scientific interpretation remains limited by processed-ROI selection, behavior polarity, context/day-order confounding, historical exposure and unqualified authentic/provider execution; combined calcium/behavior accuracy alone cannot establish neural contribution.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -22,7 +22,7 @@ Observed context A=0 or B=1 for each fixed30-second window. This is an experimen
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
 | Direct observation | not\_delivered | Proposed no-tools numeric or visual presentation of the active held-mouse30-second calcium window. No such participant transport is present. Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation. | Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance. |
-| Typed viewer | not\_delivered | Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer. Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable. | Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here. |
+| Typed viewer | source\_available | Existing complete calcium-plus-behavior PNG viewer with restricted local typed training/query/inspect/gain/respond/finish transport; all120training windows and20queries in each of seven held-mouse folds. Participant sees image bytes and allowed labels only. Fresh process and empty read-only state per fold, no raw packets/other folds/private targets, immutable first responses and complete seven-fold restricted collection. Protocol-only diagnostics cannot collect as restricted transport. | Complete authentic scripted transport validation under separately admitted resources; no inference result follows from that future software control.; Fresh external provider conversation/cache, genuine image content delivery, declared model/tool budget and scientific evaluation remain unqualified. |
 | Tool assisted | not\_delivered | Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget. Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback. | No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode. |
 | Frozen program | source\_available | One frozen Python programme over seven fresh held-mouse folds, fitting only each active training set. Commit source and allowed fitting recipe before query access; no target feedback or source updates; require complete case coverage before protected grading. | Authentic external inputs and current runtime qualification remain required.; Other folds’ training targets must never enter the active candidate workspace. |
 
@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 22379 bytes; SHA-256 `429408cf4c26bfcfc90b30089e6f2e09bfbbebab555df0397049e86eec9b450f`.
+- Specification identity: 23693 bytes; SHA-256 `124452ea7b6f68ce05e527bbb155a4f302b410b91b2c8df1d70e48e9b431bf59`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -40,6 +40,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 ## Task documentation
 
 - [Current source provisioning and result inspection](docs/current-source-and-results.md)
+- [Before participant-route source adoption: task.json](docs/understanding-pre-participant-routes-v2/task.json)
+- [Before participant-route source adoption: understanding.v1.json](docs/understanding-pre-participant-routes-v2/understanding.v1.json)
 
 ## Implementation artifacts
 
@@ -49,6 +51,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fold viewer v1](implementations/fold-viewer-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Viewer transport v1](implementations/viewer-transport-v1) — Reviewed source component.
+  Scope: Restricted seven-fold image transport preserves all seven mice, 120 training and 20 query windows per fold and the original scorer. Five portable protocol controls are distinct from 13 locally exercised macOS boundary methods. Complete authentic transport, provider/image-consumption qualification and scientific performance remain separate; the exposed seven-mouse calcium-plus-behavior panel does not isolate neural contribution or qualify unseen populations.
 - [Result integrity v2](implementations/result-integrity-v2) — Reviewed source component.
   Scope: Complete comparator inspection for NEURAL-034. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -282,6 +282,41 @@ class UnderstandingBindingTests(unittest.TestCase):
         unrelated["task_id"] = "NEURAL-UNRELATED"
         self.assertEqual(engine._current(original, unrelated, {}, "NEURAL-UNRELATED")["holds"], original["holds"])
 
+    def test_neural095_selected_routes_preserve_history_and_require_exact_evidence(self):
+        home = ROOT / "benchmarks/neural/NEURAL-095"
+        original_body = (home / engine.HISTORY).read_bytes()
+        original = json.loads(original_body)
+        saved = copy.deepcopy(original)
+        prior = home / "docs/understanding-pre-participant-routes-v2"
+        old_body = (prior / engine.CONTRACT).read_bytes()
+        old_contract = json.loads(old_body)
+        old = engine._current(original, old_contract,
+            engine._binding(old_body, original_body), "NEURAL-095")
+        self.assertEqual(engine._bytes(old), (prior / "task.json").read_bytes())
+        body = (home / engine.CONTRACT).read_bytes()
+        contract = json.loads(body)
+        current = engine._current(original, contract,
+            engine._binding(body, original_body), "NEURAL-095")
+        self.assertEqual(engine._bytes(current), (home / "task.json").read_bytes())
+        self.assertEqual(current["next_implementation_action"], contract["implementation"]["missing"])
+        self.assertFalse(current["operator_route"]["execution_authority"])
+        self.assertEqual(current["operator_route"]["selection"], "explicit_opt_in_source_route_only")
+        self.assertEqual(current["admission"], old["admission"])
+        self.assertEqual(contract["scientific_target"], old_contract["scientific_target"])
+        self.assertEqual(contract["evaluation"], old_contract["evaluation"])
+        for field, wrong in (("id", "unselected-route"), ("kind", "local_review"),
+                             ("path", "benchmarks/neural/NEURAL-095/other.json"), ("sha256", "0" * 64)):
+            changed = copy.deepcopy(contract)
+            route = next(row for row in changed["evidence"] if row["id"] == "dmfc095-current-route-v1")
+            route[field] = wrong
+            refused = engine._current(original, changed, {}, "NEURAL-095")
+            self.assertNotIn("operator_route", refused)
+            self.assertEqual(refused["next_implementation_action"], original["next_implementation_action"])
+        unrelated = copy.deepcopy(contract)
+        unrelated["task_id"] = "NEURAL-UNRELATED"
+        self.assertNotIn("operator_route", engine._current(original, unrelated, {}, "NEURAL-UNRELATED"))
+        self.assertEqual(original, saved)
+
     def test_current_admission_cannot_be_promoted(self):
         self.apply()
         path = self.root / self.home / "task.json"
