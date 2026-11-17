@@ -6,7 +6,7 @@ The immutable task SHA256 is `fcd65edd8550ca28997a59ad5199df24179aea1c304ad41401
 
 ## Commands and dependencies
 
-Python 3.11+, NumPy and h5py are required; no package installation is performed. The checked environment has `/opt/homebrew/bin/python3.11`, NumPy 2.4.6 and h5py 3.16.0. The default framework Python lacks h5py.
+Python 3.11+, NumPy and h5py are required; no package installation is performed. Controls were tested with Python 3.11, NumPy 2.4.6 and h5py 3.16.0. Use an existing interpreter with these dependencies available; `python3` in the commands below denotes that selected interpreter.
 
 From this task's implementation directory:
 
