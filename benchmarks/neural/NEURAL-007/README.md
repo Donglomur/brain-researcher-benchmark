@@ -70,6 +70,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Finite sleep probability diagnostics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Viewer transport v1](implementations/viewer-transport-v1) — Complete person waveform participant transport.
   Scope: Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. The accepted f1-source scripted software control completed all 5450 epochs; its earlier failed attempt and declared versus observed resources are retained. This is not model interpretation or provider-delivery qualification, and scientific qualification remains unestablished.
+- [Viewer provider reasoning v1](implementations/viewer-provider-reasoning-v1) — Reviewed source component.
+  Scope: Current-turn reasoning provider source preserves opaque reasoning and full usage privately, exposes only the visible assistant phase and does not replay prior-turn opaque state. Generated controls do not establish live provider behavior or scientific performance. Original viewer, rolling history, canonical memory condition and runtime selection are unchanged.
+- [Viewer provider v1](implementations/viewer-provider-v1) — Reviewed source component.
+  Scope: Bounded image/action provider seam for the existing Sleep viewer, with explicit policy and source bindings. Generated controls and the separately proposed finite last32-turn delivery do not establish actual provider execution, context/cache reset, model interpretation or scientific qualification. Existing viewer source, canonical memory condition and runtime selectors are unchanged.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -42,6 +42,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Current source provisioning and result inspection](docs/current-source-and-results.md)
 - [Before participant-route source adoption: task.json](docs/understanding-pre-participant-routes-v2/task.json)
 - [Before participant-route source adoption: understanding.v1.json](docs/understanding-pre-participant-routes-v2/understanding.v1.json)
+- [Complete seven-fold scripted transport control scope](docs/transport-control-20261117/README.md)
+- [Complete seven-fold scripted transport control receipt](docs/transport-control-20261117/RECEIPT.json)
 
 ## Implementation artifacts
 
@@ -51,8 +53,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fold viewer v1](implementations/fold-viewer-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Modality viewer controls v1](implementations/modality-viewer-controls-v1) — Reviewed source component.
+  Scope: Additive matched calcium-only, behavior-only and combined modality viewer controls preserve the selected seven-mouse panel and original endpoint. Generated source controls do not establish authentic modality comparison, model/provider image consumption, neural contribution or unseen-population qualification. The separate earlier complete transport receipt remains evidence for its exact executed source.
 - [Viewer transport v1](implementations/viewer-transport-v1) — Reviewed source component.
-  Scope: Restricted seven-fold image transport preserves all seven mice, 120 training and 20 query windows per fold and the original scorer. Five portable protocol controls are distinct from 13 locally exercised macOS boundary methods. Complete authentic transport, provider/image-consumption qualification and scientific performance remain separate; the exposed seven-mouse calcium-plus-behavior panel does not isolate neural contribution or qualify unseen populations.
+  Scope: Restricted seven-fold image transport preserves all seven mice, 120 training and 20 query windows per fold and the original scorer. The accepted exact-source scripted control completed 140 fixed-probability predictions and 2940 views including replays on the exposed seven-mouse development panel. Five portable protocol controls and thirteen macOS boundary methods remain separately scoped. No model calls, private target reads or scientific grading occurred; remote-provider context, actual image consumption, Ubuntu isolation, neural contribution and unseen-population performance remain unqualified.
 - [Result integrity v2](implementations/result-integrity-v2) — Reviewed source component.
   Scope: Complete comparator inspection for NEURAL-034. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

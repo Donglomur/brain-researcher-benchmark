@@ -9,7 +9,7 @@ scientific qualification.
 python3 -I -S -B scripts/check_repository.py
 ```
 
-This checker validates the declared ownership and current layout of all 655
+This checker validates the declared ownership and current layout of all 664
 implementation artifact records against
 [benchmarks/integrity/source-ownership.json](../../benchmarks/integrity/source-ownership.json)
 and the task registry. It checks the published source organization; it does not
@@ -183,3 +183,28 @@ the registered task predecessor redirects into the workflow plan above. Run both
 preflight commands and the affected package validators after integration. A
 passing source audit still does not establish authentic-data execution or
 scientific qualification.
+
+
+### SMC long-owner platform coverage
+
+The Ubuntu source-control roster selects 12 named metadata/mock methods in `long-owner-v1/test_process_owner.py` and all 29 methods in `test_owner_bridge.py`. The following six actual-process methods retain observed macOS evidence and are not selected in this hosted cutoff. These observations do not establish Linux compatibility or execution; the corresponding Linux prerequisite remains separate. No skipped method is counted as passing.
+
+- `ProcessOwnerTests.test_launch_fsynced_owner_before_fixed_child_and_channel_transfer`
+- `ProcessOwnerTests.test_owned_group_interrupt_closes_fixture_channel`
+- `ProcessOwnerTests.test_nonmatching_leader_does_not_receive_a_signal`
+- `ProcessOwnerTests.test_modified_grant_cannot_be_recovered_as_same_invocation`
+- `ProcessOwnerTests.test_bootstrap_alarm_uses_original_absolute_cutoff`
+- `ProcessOwnerTests.test_reaped_or_unknown_zombie_identity_does_not_authorize_signal`
+
+The retained process handoff is `PROCESS_OWNER_HANDOFF.json`, 16,307 bytes, SHA-256 `d102576e56fbeae8e7dec8c911ab375ffc077e7370b0553682744a2e2497de79`. Its proof is composite incremental macOS evidence, not one final full-suite invocation. The following retained attempts include earlier failures; these hashes preserve that history and do not claim Linux execution.
+
+| Retained process attempt | Receipt SHA-256 | Log SHA-256 |
+| --- | --- | --- |
+| `smc-long-owner-process-generated-01` | `80c874f9d8ac79acb97fecf1856a10667daf500ca57b4dcd931f030e73095913` | `d3f6414702dba45a2c950be1c6ccf4a64dd02a582f6d328cd43eff6cd844d4c3` |
+| `smc-long-owner-process-generated-02` | `40b3329da110aaa75820213df65582ab4704cafd9470c26dabbd128679920357` | `681007ec105e7f8fe80ec056c49ac6fc8f235b944eaa4bdacf8f6a7027470c9f` |
+| `smc-long-owner-process-generated-03` | `4cd89a88fd90f03ad91fe47707796c44cf62596a2376201a55214e9102aa13ff` | `8ac064449b48766e6170860cfe6d745ba32c99874e23c3d926dde8b87c3b2e71` |
+| `smc-long-owner-process-generated-04` | `fa064b093d0d79d40345f132ffffd0a3e428dde0dda5ec3560e35419b1f3f765` | `9f82f0c6752805efd43155e2f4b838f07a847845604a37fd62afce587ff3e401` |
+| `smc-long-owner-process-generated-05` | `897ebbcbab7a7c96a614a10774137fb305034098d60588a3e4d2b0a34889e073` | `5760fdebb712fa3c70f58f1273a87b4afa53d5ac23ddf2ca9c03f4d246c3ae64` |
+| `smc-long-owner-process-generated-06` | `2895ea3b0532979b5b0d69fa69f81711652ee8bf804a6fb616fe4c917504e8cf` | `bc95d726679d652d01a8ea9b2bfa82e307b940340eaf56cd21defb6956d2d435` |
+
+All 15 frozen component files remain unchanged. This coverage split does not qualify Linux pidfd/subreaper custody, Docker lifecycle, host-loss recovery, authentic candidate execution or scientific performance.
