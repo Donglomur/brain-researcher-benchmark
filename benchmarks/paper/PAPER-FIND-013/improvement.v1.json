@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-FIND-013",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The registered endpoints quantify CA1/CA3 place-field shifts and mechanistic agreement of BTSP/STDP models, not an ordered predictive benchmark. Increasing slope significance, directional proportions or in-sample trajectory R² does not surpass the biological finding. The reviewed source does not establish a single original predictive-loss task; a new held-animal task would be an extension.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The final paper contains an original ordered reconstruction task: Fig.6b compares linear and bounded plateauing-exponential fits to the same2649 empirical place-field trajectories using unadjusted R2. In-sample model fit is a valid source endpoint; no new predictive holdout is required. Exact source fit vectors, original observation support, full-panel aggregation and a defensible fixed-complexity superiority rule remain unrecovered. Descriptive biological effects and mechanistic claims remain distinct.",
   "source_paper": {
     "title": "Synaptic plasticity rules driving representational shifting in the hippocampus",
     "url": "https://www.nature.com/articles/s41593-025-01894-6"
@@ -28,129 +28,130 @@
       "kind": "author_code",
       "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis.m",
       "locator": "15-lap and 30-lap eligibility; animal assignments; COM conversion/centering and trajectory fits",
-      "supports": "Original descriptive trajectory units, preprocessing and fits."
+      "supports": "Original trajectory input units, eligibility, preprocessing and empirical linear/exponential fitting route; exact Fig.6b source-output parity remains unqualified."
     },
     {
       "id": "models",
       "kind": "author_code",
       "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/BTSP/SummaryBTSPmodels_vs_CA1data.m",
       "locator": "Comparison CA1 vs best models; P(CS) dynamic models",
-      "supports": "Slope distributions, directional proportions and mean-squared-displacement comparisons, without a recovered ordered held-out model score."
+      "supports": "Separate mechanistic slope-distribution and displacement comparisons; these do not replace the original empirical trajectory-fit endpoint."
+    },
+    {
+      "id": "fit_paper",
+      "kind": "paper",
+      "url": "https://antoinemadar.github.io/assets/pdf/natneuro2025.pdf",
+      "locator": "Final published Fig.6b caption; Methods, Analysis of PF trajectories, Eq.2 and goodness-of-fit comparison paragraph",
+      "supports": "All2649 PFs are compared by linear versus three-parameter bounded plateauing-exponential unadjusted R2; the stated goal is description of the observed PF, not out-of-sample prediction."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Describe familiar/novel CA1 and CA3 place-field center-of-mass shifts and compare their dynamics with STDP/BTSP mechanisms, including separate optogenetic effects.",
+      "description": "Original Fig.6b reconstruction of each empirical onset-centered PF center-of-mass trajectory as a function of lap, comparing linear with plateauing-exponential fits. This is same-observation description, not prediction of unseen animals.",
       "evidence_ids": [
-        "abstract",
-        "readme",
-        "models"
+        "fit_paper"
       ]
     },
     "dataset": {
-      "status": "verified",
-      "description": "Author-supplied CA1_COM_withPFs.mat and CA3_COM_withPFs.mat reuse Dong et al. 2021 recordings; optogenetic experiments are separate source materials.",
+      "status": "unresolved",
+      "description": "Author-supplied CA1_COM_withPFs.mat and CA3_COM_withPFs.mat reuse Dong et al.2021 recordings; authenticate their exact versions and Fig.6b fit-input/output linkage. Separate optogenetic data cannot substitute.",
       "evidence_ids": [
-        "readme"
+        "readme",
+        "fit_paper"
       ]
     },
     "cohort": {
       "status": "unresolved",
-      "description": "Source assigns animals explicitly and groups fields by region/environment. The complete animal roster across reused recordings, optogenetics and model analyses is not authenticated by this audit.",
+      "description": "Fig.6b reports all2649 PFs. Recover the complete PF-to-animal/region/environment mapping and original inclusion/support before computing a comparison; neither example trajectories nor significant-fit subsets suffice.",
       "evidence_ids": [
-        "com",
-        "readme"
+        "fit_paper",
+        "com"
       ]
     },
     "split": {
-      "status": "not_applicable",
-      "description": "Reviewed descriptive COM analysis fits observed trajectories; no source-held-animal predictive benchmark is defined for the registered endpoints.",
+      "status": "verified",
+      "description": "Original fits and unadjusted R2 evaluate the same observed PF trajectory. The paper explicitly targets within-trajectory description. Preserve that access; a newly held-lap or held-animal score would be a separate extension.",
       "evidence_ids": [
-        "com",
-        "models"
+        "fit_paper"
       ]
     },
     "inputs": {
       "status": "verified",
-      "description": "Processed place-field COM trajectories, onset laps and source animal/environment assignments; model simulations supply mechanism comparisons.",
+      "description": "Original lap indices and observed onset-centered COM trajectories, with source support/animal/environment identities. All source-used fit observations remain available to both author and candidate methods.",
       "evidence_ids": [
         "com",
-        "models"
+        "fit_paper"
       ]
     },
     "preprocessing": {
-      "status": "verified",
-      "description": "Author analyses convert positions to centimeters, center at onset and apply trajectory support requirements (15 laps for selected analyses, 30 for specified displacement comparisons); linear/exponential fits and interpolation have distinct roles.",
+      "status": "unresolved",
+      "description": "Recover exact Fig.6b lap support, missing-value/interpolation handling and onset centering from the result-producing source. Methods distinguishes interpolation for PCA/diffusion and eligibility from regression; do not transfer the15-lap PCA truncation or30-lap diffusion subset automatically to this fit task.",
       "evidence_ids": [
-        "com"
+        "com",
+        "fit_paper"
       ]
     },
     "metric": {
-      "status": "not_applicable",
-      "description": "Slopes, shift-direction proportions, trajectory R² and displacement statistics characterize data and mechanisms. There is no defensible uniformly ordered paper-win metric for these registered findings.",
+      "status": "verified",
+      "description": "Original unadjusted coefficient of determination R2 for each PF fit, with higher values indicating better reconstruction of the same observations. Source compares a two-parameter line with Amp*(1-exp(-n/tau))+epsilon; do not replace this metric by significance or adjusted R2.",
       "evidence_ids": [
-        "com",
-        "models"
+        "fit_paper"
       ]
     },
     "aggregation": {
-      "status": "verified",
-      "description": "Some original comparisons pool fields and others average animal summaries. These are distinct scientific estimands and must not be swapped to produce a larger effect.",
+      "status": "unresolved",
+      "description": "Preserve all2649 paired source fit results and region/environment membership. Fig.6b shows a full paired fit comparison; recover the exact score vector and predeclare a scientifically justified aggregate/decision without selecting favorable PFs.",
       "evidence_ids": [
-        "com",
-        "models"
+        "fit_paper",
+        "com"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "No ordered performance metric for the registered place-field findings",
-    "direction": "unresolved",
+    "primary_metric": "Original Fig.6b full2649-PF unadjusted reconstruction R2 comparison; scalar aggregation unresolved",
+    "direction": "higher",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Descriptive biological statistics are not source performance scores.",
+      "description": "The original paired linear/plateau-exponential R2 result exists, but its complete numerical vector and a valid scalar baseline are not recovered. Example-PF scores and the Wilcoxon statistic are not substitutes.",
       "evidence_ids": [
-        "abstract",
-        "com",
-        "models"
+        "fit_paper"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "No author performance baseline applies to the descriptive registration; numerical COM reconstruction remains calibration.",
+      "description": "No authentic full2649-PF author rerun is qualified. Methods uses nonlinear least squares/trust region; starts [14,2,0] for positive linear slope and [-15,2,0] otherwise; bounds absolute Amp200cm, tau100laps and absolute epsilon25cm. Recover exact outputs, stopping and observation support before replay.",
       "evidence_ids": [
-        "abstract",
-        "com",
-        "models"
+        "fit_paper",
+        "com"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "No ordered improvement endpoint exists for this registered descriptive finding.",
+      "rationale": "A meaningful reconstruction gain requires a predeclared source-comparable complexity and selection budget, original residual scale and uncertainty. Arbitrarily flexible interpolation can raise in-sample R2 without a defensible scientific improvement; no invented numeric margin is imposed.",
       "evidence_ids": [
-        "abstract",
-        "com",
-        "models"
+        "fit_paper"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No paper-win inference admitted.",
-      "independent_unit": "Not defined for a paper-win comparison.",
-      "rationale": "Descriptive confidence or significance is not algorithmic superiority.",
+      "status": "unresolved",
+      "method": "Predeclare a paired comparison of the original PF fit vector accounting for fields nested within animal and model-selection/fitting variation; preserve the original reconstruction estimand.",
+      "independent_unit": "Animals for biological inference; PFs and laps are nested observations, not2649 independent animals.",
+      "rationale": "A stronger signed-rank significance alone is not better reconstruction. Exact PF/animal provenance and a valid uncertainty/decision rule remain unresolved.",
       "evidence_ids": [
-        "abstract",
-        "com",
-        "models"
+        "fit_paper",
+        "com"
       ]
     },
     "paper_win_requires": [
-      "This registration cannot admit a paper win while it retains only descriptive COM/mechanistic endpoints.",
-      "Reconsider eligibility only with an explicitly recovered original ordered model-performance endpoint, complete source cohort and comparator; do not silently create held-animal prediction.",
-      "Do not count better R², stronger P values, changed inclusion or larger shifts as superiority over the paper."
+      "Recover the exact original2649-PF input and paired linear/nonlinear fit-score vector; reproduce the bounded author plateau-exponential reference on the same observations.",
+      "Preserve original lap support, centering, missingness/interpolation, cohort and unadjusted R2; a new holdout or selected-PF subset cannot replace this reconstruction task.",
+      "Freeze a source-comparable model-capacity and search/selection policy before candidate feedback. Document the original three-parameter nonlinear fit and two-parameter linear comparator; unrestricted interpolation or added effective degrees of freedom cannot earn a paper win.",
+      "Predeclare complete-panel aggregation, meaningful effect and dependence-aware uncertainty; require improved reconstruction against the original author result, not merely a larger effect or smaller p value.",
+      "Retain broader empirical/model/optogenetic outputs as separately assessed historical obligations. A qualified Fig.6b reconstruction gain must be labelled with that scope and cannot establish a plasticity mechanism or every paper claim."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -159,21 +160,23 @@
     }
   },
   "episode": {
-    "improvement_loop": "No active improvement loop is admitted for the descriptive registration. Preserve reconstruction and mechanistic review separately.",
-    "candidate_freeze": "Not applicable until a source-supported ordered task is recovered and reviewed.",
-    "final_evaluation": "No same-task superiority evaluation is currently defined.",
+    "improvement_loop": "After source recovery and fixed-complexity admission, iterate using the original allowed observed COM inputs and declared fit-feedback budget. Original same-data fitting is intentional; no new predictive split is introduced.",
+    "candidate_freeze": "Freeze candidate family, parameterization, capacity, fitting/search budget, preprocessing and full-panel decision before final scoring.",
+    "final_evaluation": "Replay the frozen candidate and original author route on the complete original2649-PF reconstruction support. Report full paired scores and predeclared aggregation; protect scoring provenance without pretending source-observed trajectories are unseen data.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "The source COM/statistical pipeline is a calibration reference, not a performance rival."
+    "baseline_policy": "Published full-vector fits, fresh author reruns and local reconstruction controls are distinct. Source mean/median thresholds are not invented; budgets and exact replay must be qualified before activation."
   },
   "blocking_issues": [
-    "No source-defined ordered performance endpoint for the registered biological findings.",
-    "The original complete empirical/model/optogenetic scope is larger than the local bounded CA trajectory scorer.",
-    "A newly invented predictive split would change the question rather than surpass the original result."
+    "Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved.",
+    "Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication.",
+    "No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement.",
+    "Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved.",
+    "Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "The registered-runtime METHODS.md explicitly defines numerical reconstruction of processed trajectories and separate error/coverage scores. Preserve all OLS/trajectory graders and evidence as calibration only; they do not test a mechanism or an algorithmic paper win."
+    "notes": "Preserve all processed-trajectory OLS/error/coverage graders and mechanism summaries as calibration. The original paper also contains a valid ordered in-sample fit comparison; these local reconstruction controls do not yet reproduce its complete2649-PF score vector or establish superiority."
   }
 }
