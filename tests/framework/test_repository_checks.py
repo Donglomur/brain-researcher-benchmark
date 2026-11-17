@@ -177,6 +177,64 @@ class RepositoryChecksTests(unittest.TestCase):
                 path.write_bytes(original)
         self.assertEqual(self.check()["source_check"], "passed")
 
+    def test_exp003_control_group_is_exactly_owned_and_content_bound(self):
+        baseline = self.build()
+        for relative in checks.EXP003_CONTROL_SOURCES:
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("raise AssertionError('EXP controls must only be hashed')\n")
+        result = self.build()
+        self.assertEqual(result["source_files"], baseline["source_files"] + 3)
+        self.assertEqual(result["artifacts"], baseline["artifacts"])
+        self.assertFalse(result["scientific_qualification"])
+        records = {item["path"]: item for item in json.loads(
+            (self.root / checks.INVENTORY).read_text())["files"]}
+        for relative in checks.EXP003_CONTROL_SOURCES:
+            with self.subTest(path=relative):
+                path = self.root / relative
+                original = path.read_bytes()
+                self.assertEqual(records[relative]["owner"], "generated-exp003-r-controls")
+                self.assertEqual(records[relative]["bytes"], len(original))
+                self.assertEqual(records[relative]["sha256"], hashlib.sha256(original).hexdigest())
+                path.write_bytes(original + b" ")
+                with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
+                    self.check()
+                path.write_bytes(original)
+        self.assertEqual(self.check()["source_check"], "passed")
+
+    def test_exp003_control_group_refuses_partial_alias_and_unknown_metadata(self):
+        workflow = self.root / checks.EXP003_CONTROL_WORKFLOW
+        workflow.parent.mkdir(parents=True, exist_ok=True)
+        workflow.write_text("name: fixture\n")
+        with self.assertRaisesRegex(ValueError, "Missing source path"):
+            self.build()
+        workflow.unlink()
+        for relative in checks.EXP003_CONTROL_SOURCES:
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("source fixture\n")
+        self.build()
+        target = self.root / "alias-target.py"
+        target.write_text("source alias must be refused\n")
+        for relative in checks.EXP003_CONTROL_SOURCES:
+            with self.subTest(path=relative):
+                path = self.root / relative
+                original = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(ValueError, "Missing source path"):
+                    self.build()
+                path.symlink_to(target)
+                with self.assertRaisesRegex(ValueError, "ordinary single-link file"):
+                    self.build()
+                path.unlink()
+                path.write_bytes(original)
+        unexpected = self.root / "benchmarks/integrity/exp003-generated-r.environment.v2.json"
+        unexpected.write_text("{}")
+        with self.assertRaisesRegex(ValueError, "Orphan source file"):
+            self.build()
+        unexpected.unlink()
+        self.assertEqual(self.check()["source_check"], "passed")
+
     def test_versioned_paper_metadata_is_owned_and_preserves_historical_bytes(self):
         row = self.revise_paper()
         result = self.build()

@@ -11,7 +11,7 @@ These families retain scientific source used by, related to, or not yet assigned
 
 Scientific and submission readiness remain **unknown**. Stable artifact IDs and original paths remain in [catalog metadata](../catalog/catalog.json).
 
-## Family folders (21)
+## Family folders (22)
 
 These links group current physical locations for browsing; folder names do not assign scientific ownership.
 
@@ -25,6 +25,7 @@ These links group current physical locations for browsing; folder names do not a
 - [Functional balance](functional-balance)
 - [GraspBox](graspbox)
 - [Helsinki](helsinki)
+- [Langevinflow](langevinflow)
 - [Neuroscience components](neuroscience-components)
 - [NIDER](nider)
 - [Program execution](program-execution)
@@ -55,7 +56,7 @@ These links group current physical locations for browsing; folder names do not a
 | --- | --- | --- | --- |
 | [Background classification runner](abr/background-classification-runner) | None assigned | [NEURAL-SCOPE-20261114-ABR-TRANSFER](../neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Alternative released background classification diagnostic: 104-animal background classification is not the registered primary cross-laboratory threshold-transfer endpoint; shared cohort establishes relatedness only. |
 
-## Unbound scientific families (18 artifacts)
+## Unbound scientific families (19 artifacts)
 
 | Scientific source | Explicit task owners | Related tasks | Role and scientific scope |
 | --- | --- | --- | --- |
@@ -77,6 +78,7 @@ These links group current physical locations for browsing; folder names do not a
 | [Construction](retina-coding/construction) | None assigned | None assigned | Construction: No registered owner is established in the234-ID inventory by the reviewed documentation; preserve a clearly labeled source-family holding without adding a task ID. |
 | [Study binding validator](../../src/neurobench/study_binding_validator) | None assigned | None assigned | Paired study description binding validator: Validates study descriptions only; not execution, scientific artifact authentication or scientific qualification. |
 | [Finite forecast](zapbench/finite-forecast) | None assigned | None assigned | Finite forecast: No registered owner is established in the234-ID inventory by the reviewed documentation; preserve a clearly labeled source-family holding without adding a task ID. |
+| [Complete nlb panel v1](langevinflow/complete-nlb-panel-v1) | None assigned | None assigned | Bounded structural guard source: Unregistered shared structural-guard source, with no task owner or related task IDs. Freeze validates structure and bytes, not prediction values or complete authentic ordered trial/unit/mask coverage. The accepted README clarification preserves the NaN limitation and unmet DMFC-speed qualification. This source family is not eight task IDs. |
 
 ## Unresolved ownership (5 artifacts)
 
