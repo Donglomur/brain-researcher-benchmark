@@ -28,6 +28,10 @@ Existing reproduction graders and pilot scores remain calibration evidence. They
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Original Figure 6B endpoint checker (source-only; author replay unresolved)](docs/paper-endpoint.md)
+
 ## Implementation artifacts
 
 - [Foraging programme](implementations/foraging-programme) — Calibration only.

@@ -8,9 +8,16 @@ controls and companion quality metrics.
 
 | Priority and contract | Original reported result | Smallest remaining construction |
 | --- | --- | --- |
-| 1. [Foraging decoder](../../../benchmarks/paper/PAPER-FIND-036/improvement.v1.json) | Figure 6B retrospective avoidance-versus-escape balanced accuracy **0.7271**, equal mean over **40 sessions** after pooling each session's five out-of-fold predictions. | Authenticate all 40 session members and rat joins; reproduce source row ordering and fivefold seed-622 behavior; implement the native scorer and qualify author replay, rat-aware inference and fixed budgets. |
+| 1. [Foraging decoder](../../../benchmarks/paper/PAPER-FIND-036/improvement.v1.json) | Figure 6B retrospective avoidance-versus-escape balanced accuracy **0.7271**, equal mean over **40 sessions** after pooling each session's five out-of-fold predictions. | Authenticate all 40 session members and rat joins; reproduce source row ordering and fivefold seed-622 behavior; qualify the new original-endpoint checker and author replay, rat-aware inference and fixed budgets. |
 | 2. [DeepCaImX](../../../benchmarks/paper/PAPER-paper-method-013/improvement.v1.json) | Segmentation F1 **0.847 ± 0.037 SD** across the **ten original Allen experimental videos**, strict IoU > 0.5, macro-video aggregation. | Authenticate original movies, ROI transforms and full-model checkpoint; qualify source tiling/assembly/matching and frame indexing; replay per-video metrics, then fix exposure policy, dependence-aware uncertainty and budgets. |
 | 3. [REVE](../../../benchmarks/paper/PAPER-paper-method-003/improvement.v1.json) | PhysioNet-MI four-class balanced accuracy **0.6480 ± 0.0140**, original 109 participants with train 1–70, validation 71–89 and test 90–109. | Reconcile paper 128-Hz intermediate processing with released direct 200-Hz processing; authenticate 9,837 epochs, checkpoint and run aggregation; qualify native replay, participant-level inference and fixed episode limits. |
+
+The new [Foraging endpoint checker](../../../benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/PAPER_ENDPOINT.md)
+computes pooled session balanced accuracy and the equal-session mean through the
+existing protected result/collection/preparation chain. It separates the published
+0.7271 from an operator BNB equation reconstruction; actual author replay remains
+null. The bounded archive access attempt was denied (403/401), so no authentic
+roster, rat joins, labels, fits or new empirical results were obtained.
 
 Foraging has a compact processed source archive, `EventClassificationData_4C.zip`
 (15.09 MB in source metadata), in the [Dryad release](https://datadryad.org/dataset/doi:10.5061/dryad.v9s4mw78c),
