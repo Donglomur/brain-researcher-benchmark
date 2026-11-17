@@ -95,9 +95,15 @@ ownership, modes, sizes and hashes against the reviewed source ownership
 inventory, including newly admitted packages without legacy predecessors. Its
 existing per-file, total-read and link constraints apply unchanged. The gate
 installs no benchmark dependencies and executes no benchmark pipeline.
-The controls also inspect imports inside the DeepCaImX source-panel test methods
-and require the enrolled CI job to declare those dependencies as pinned wheels.
-This catches a missing dependency even when the local interpreter already has it.
+The controls also inspect imports inside the DeepCaImX source-panel and SMC test
+methods, including SMC's unchanged vendored original evaluator, and require each
+enrolled CI job to declare those dependencies as pinned wheels. This catches a
+missing dependency even when the local interpreter already has it. SMC's 44
+generated controls run in the existing MEG environment with authenticated h5py;
+the newer CI dependencies establish generated compatibility, not source-native
+calibration. The OpenMIIR support controls use only the standard library. The
+existing numerical job requires all 34 NEURAL096 controls on Linux, including
+the wider-floating-point rejection that is unavailable on some macOS builds.
 
 The [reviewed occurrence ledger](../../scripts/maintenance/workflow_source_pins.json)
 binds every literal SHA256 occurrence to a repository source path or an explicit

@@ -115,23 +115,37 @@ class PinControls(unittest.TestCase):
     def test_source_panel_ci_declares_lazy_test_dependencies(self):
         # Inspect imports inside test methods too: a developer interpreter can
         # otherwise hide a missing h5py wheel in the selected CI environment.
-        directory = 'benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests'
+        self.assert_ci_dependencies('benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests')
+
+    def test_smc_ci_declares_original_evaluator_dependencies(self):
+        directory = 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1'
+        self.assert_ci_dependencies(directory,
+                                    extra_sources=('third_party/nlb_tools_0_0_3/evaluation.py',),
+                                    local_modules=('native_guard',))
+
+    def assert_ci_dependencies(self, directory, *, extra_sources=(), local_modules=()):
         sources = sorted((ROOT / directory).glob('test_*.py'))
         self.assertTrue(sources)
+        sources.extend(ROOT / directory / name for name in extra_sources)
+        for name in local_modules:
+            self.assertTrue((ROOT / directory / (name + '.py')).is_file())
+        distributions = {'sklearn': 'scikit-learn'}
         required = set()
         for path in sources:
             for node in ast.walk(ast.parse(path.read_text())):
                 names = ([item.name for item in node.names] if isinstance(node, ast.Import)
                          else [node.module] if isinstance(node, ast.ImportFrom) and node.module else [])
-                required.update(name.split('.')[0] for name in names
-                                if name.split('.')[0] not in sys.stdlib_module_names)
+                required.update(distributions.get(name.split('.')[0], name.split('.')[0]) for name in names
+                                if name.split('.')[0] not in sys.stdlib_module_names
+                                and name.split('.')[0] not in local_modules)
         jobs = []
         for path in (ROOT / '.github/workflows').glob('*.yml'):
             workflow = path.read_text().split('\njobs:\n', 1)[1]
             jobs.extend((name, body) for name, body in re.findall(
                 r'^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)', workflow, re.M | re.S)
-                        if '-m unittest discover -s ' in body and directory in body)
-        self.assertEqual(len(jobs), 1, 'Source panel needs exactly one generated CI enrollment')
+                        if ('-m unittest discover -s ' in body or 'unittest.defaultTestLoader.discover(' in body)
+                        and directory in body)
+        self.assertEqual(len(jobs), 1, 'Package needs exactly one generated CI enrollment')
         name, body = jobs[0]
         declared = set(re.findall(r'^\s+([a-zA-Z0-9_-]+)==[^\s]+ --hash=sha256:', body, re.M))
         self.assertTrue(required <= declared,

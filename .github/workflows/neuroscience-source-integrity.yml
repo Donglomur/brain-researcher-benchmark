@@ -53,6 +53,11 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/eeg-direct-response-${{ github.run_id }}-${{ github.run_attempt }}/
+      - name: Check original OpenMIIR stimulus support with generated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/neural/NEURAL-082/implementations/openmiir-support-v1/test_support.py -v
 
   pfc-science2-package-source-tests:
     needs: source-preflight
@@ -5584,6 +5589,23 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-078/implementations/understanding-metrics-v1/test_score.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_metrics.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_panel.py -v
+      - name: Run complete NEURAL096 numerical controls on Linux
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-096/implementations/full-set-go-v1', pattern='test_core.py')
+          assert suite.countTestCases() == 34, 'All 34 NEURAL096 controls must load'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 34, 'All 34 NEURAL096 controls must execute'
+          assert not result.skipped and not result.expectedFailures, 'All Linux numerical controls must complete'
+          print(json.dumps({'tests_run': result.testsRun, 'skipped': len(result.skipped),
+                            'generated_controls_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
 
   neural042-candidate-validation-source:
     needs: source-preflight

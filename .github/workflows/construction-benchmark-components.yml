@@ -903,6 +903,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > "${RUNNER_TEMP}/construction-meg-controls-requirements.txt" <<'REQUIREMENTS'
+          h5py==3.16.0 --hash=sha256:fb1720028d99040792bb2fb31facb8da44a6f29df7697e0b84f0d79aff2e9bd3
           numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
           scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
           scikit-learn==1.9.1 --hash=sha256:52a0703bbc07ad27f560fa63fa68e4c54dd735bfbbf65b4dd3c225dc7547b6df
@@ -914,7 +915,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
           import importlib.metadata
           import json
-          expected = {'numpy': '2.4.6', 'scipy': '1.17.1', 'scikit-learn': '1.9.1', 'joblib': '1.5.3', 'narwhals': '2.23.0', 'threadpoolctl': '3.6.0'}
+          expected = {'h5py': '3.16.0', 'numpy': '2.4.6', 'scipy': '1.17.1', 'scikit-learn': '1.9.1', 'joblib': '1.5.3', 'narwhals': '2.23.0', 'threadpoolctl': '3.6.0'}
           actual = {name: importlib.metadata.version(name) for name in expected}
           assert actual == expected, actual
           print(json.dumps({'verified_dependency_versions': actual}))
@@ -937,6 +938,32 @@ jobs:
           assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
           print(json.dumps({'test_file': 'tests/construction/test_meg_nested.py', 'tests_run': result.testsRun,
                             'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+      - name: Generated SMC controls with the authenticated original evaluator
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1', pattern='test_*.py')
+          def test_ids(node):
+              if isinstance(node, unittest.TestSuite):
+                  return {name for child in node for name in test_ids(child)}
+              return {node.id()}
+          required = 'test_scorer.ScorerTests.test_original_scorer_generated_numerical_control'
+          assert required in test_ids(suite), 'Authenticated original evaluator control is mandatory'
+          assert suite.countTestCases() == 44, 'All 44 generated SMC controls must load'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 44, 'All 44 generated SMC controls must execute'
+          assert not result.skipped and not result.expectedFailures, 'Complete unskipped controls required'
+          print(json.dumps({'tests_run': result.testsRun, 'skipped': len(result.skipped),
+                            'original_evaluator_control_required': True,
+                            'generated_dependency_compatibility_only': True,
                             'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
