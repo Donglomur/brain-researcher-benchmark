@@ -81,3 +81,23 @@ Shared-host programme lifecycle enforcement is not an authoring security sandbox
 Raw inputs, private targets, candidate predictions and local operator receipts
 remain outside the public source tree. Package documentation describes the exact
 commands, source pins, evidence scope and remaining qualification gates.
+
+## Companion source integration
+
+Three reviewed companions extend these preparations without adding benchmark IDs.
+The [EEG portable grader](../../benchmarks/neural/NEURAL-077/implementations/portable-grading/README.md)
+accepts explicit external artifact/runtime locations and validates all 400 IDs
+before permitting the unchanged private scoring stage. Admission of a completed
+NPZ does not establish that its method was frozen before development execution.
+The [sleep attempt audit](../../benchmarks/neural/NEURAL-007/implementations/finite-attempt-audit/README.md)
+uses independently retained commitment/completion pins to verify the existing
+lifecycle's complete source, input, per-person process and 5,450-epoch submission
+history. It stops before grading and remains trusted operator orchestration.
+
+The [native optogenetic clock audit](../../benchmarks/paper/PAPER-FIND-REP-003/docs/initial-evaluator-v1.md)
+checks the exact complete released file and event-minus-`waterTime` identities.
+It neither shifts the source histogram's values nor resolves its cue-relative
+interpretation. It is a calibration/provenance component, never active paper
+improvement success. Existing native control receipts are retained as earlier
+engineering evidence; this integration performs no new authentic candidate or
+private grading execution.
