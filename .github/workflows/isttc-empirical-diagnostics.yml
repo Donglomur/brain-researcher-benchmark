@@ -11,7 +11,7 @@ jobs:
   source-and-relocation:
     needs: source-preflight
     runs-on: ubuntu-24.04
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -20,4 +20,5 @@ jobs:
         with:
           python-version: '3.11'
       - name: Check complete generated support and relocated CLI
+        timeout-minutes: 3
         run: python3 -I -S -B benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/test_public_package.py
