@@ -21,7 +21,7 @@ calibration evidence and establish no source-paper improvement or current-SOTA r
 | Track | Scientific question | Controlled comparison |
 | --- | --- | --- |
 | **Paper improvement** | Can an agent surpass the source paper on the same original scientific task? | Paper + data versus paper + data + official code under fixed matched budgets. Original dataset, cohort, split, inputs, metric and aggregation must match. Reproduction is calibration only. |
-| **Neural-data understanding** | Can an agent interpret neural or behavioral observations and make useful predictions? | A prediction program written in advance versus case-by-case investigation, with explicit tool and scientific-context access. |
+| **Neural-data understanding** | Can an agent interpret neural or behavioral observations and make useful predictions? | A prediction program written in advance versus case-by-case investigation or visual interpretation through a viewer, with explicit information and tool access. |
 
 Each track contains **100 original specifications**. Later expansion drafts bring
 the registered inventory to **116 paper and 118 neural tasks**. These are task

@@ -9,7 +9,7 @@ not a leaderboard of completed scientific evaluations.
 | Original specifications | 200 | 100 paper and 100 neural |
 | Expansion drafts | 34 | 16 paper and 18 neural |
 | Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation artifact records | 371 | Task and shared source records, not runnable-task counts |
+| Implementation artifact records | 372 | Task and shared source records, not runnable-task counts |
 | Tasks with owned implementation source | 234 | Source ownership does not establish complete task execution |
 | Tasks without owned implementation source | 0 | Every registered task has at least one scoped source package |
 | Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
@@ -101,7 +101,7 @@ or qualification follows from a directory move.
 ## Evidence and limits
 
 The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 371 artifact records; the separate source-integrity checker
+ownership and layout of 372 artifact records; the separate source-integrity checker
 verifies 222 files against recorded pins in four enrolled bundles. These are software/source
 coverage counts. They are not completed scientific evaluations.
 

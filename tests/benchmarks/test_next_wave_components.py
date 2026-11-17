@@ -1,4 +1,4 @@
-"""Run the four delivery/lifecycle packages' generated portable controls in CI.
+"""Run delivery, lifecycle and viewer generated portable controls in CI.
 
 These software tests do not run candidates, load authentic private assets, or
 qualify a scientific endpoint. Numerical/native preparation checks remain in
@@ -15,6 +15,7 @@ SUITES = {
     "opto_delivery": "benchmarks/paper/PAPER-FIND-REP-003/implementations/authentic-delivery-v1/tests/test_contract.py",
     "neural077_direct": "benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/test_portable.py",
     "frozen_lifecycle": "benchmarks/shared/frozen-neural-lifecycle-v1/tests/test_lifecycle.py",
+    "neural077_viewer": "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/test_viewer.py",
 }
 
 
