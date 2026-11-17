@@ -1,10 +1,18 @@
 # Maintenance and historical reconstruction
 
-The public benchmark catalog comes from `benchmarks/registry.json`. Use `python3 -I -S -B scripts/catalog.py --check` to verify its generated views. These maintenance builders do not discover or register current benchmarks.
+The public benchmark catalog comes from `benchmarks/registry.json`. Use `python3 -I -S -B scripts/catalog.py --check` to verify its generated views.
+
+`bind_paper_improvement.py` maintains the authorized current paper overhaul. It
+requires one validated source-grounded contract per registered paper, preserves
+original task/registry bytes, and binds current same-task superiority criteria.
+`refresh_paper_integrity.py --write` preserves legacy calibration source closures
+against those historical bytes and refreshes their explicit workflow pins. Both
+support `--check`; neither executes a model or promotes scientific readiness.
+See the [paper improvement guide](../../docs/science/paper-improvement/README.md).
 
 The `build_*` scripts reconstruct earlier construction metadata from an **external input tree in its original directory layout**. The private construction rosters and audits are not included in this public repository. Historical path strings in these builders identify those original inputs; they are not fallback discovery paths for the current catalog.
 
-Every builder CLI requires explicit inputs and a separate staging destination:
+Every historical `build_*` CLI requires explicit inputs and a separate staging destination:
 
 ```sh
 python3 -I -S -B scripts/maintenance/build_paper_delivery_manifests.py \

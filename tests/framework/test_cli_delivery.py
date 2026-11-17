@@ -105,6 +105,32 @@ class DeliveryTests(unittest.TestCase):
         self.assertIs(result['paper_win'], False)
         self.assertIs(result['executed'], False)
 
+    def test_comparison_cli_exit_status_reflects_admission_not_paper_victory(self):
+        for admitted, exit_code in ((False, 2), (True, 0)):
+            result = {'comparison_admitted': admitted, 'paper_win': None if admitted else False,
+                      'paper_win_verification': 'unverified'}
+            stdout = io.StringIO()
+            with self.subTest(admitted=admitted), \
+                 patch.object(module, 'compare_paper', return_value=result), \
+                 patch.object(module.subprocess, 'run', side_effect=AssertionError('Metadata only')), \
+                 redirect_stdout(stdout):
+                self.assertEqual(module.main(['compare-paper', 'PAPER-example', '--result', 'result.json']), exit_code)
+            self.assertEqual(json.loads(stdout.getvalue()), result)
+
+    def test_alternative_dispatchers_cannot_bypass_paper_improvement_role(self):
+        paper = {'id': 'PAPER-example', 'track': 'paper'}
+        for filename in ('campaign.py', 'conditions.py', 'campaign_conditions.py'):
+            spec = importlib.util.spec_from_file_location('paper_guard_' + filename[:-3], SOURCE.with_name(filename))
+            dispatcher = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(dispatcher)
+            base = dispatcher if filename == 'campaign.py' else dispatcher.base
+            arguments = ['PAPER-example'] + ([] if filename == 'campaign.py' else ['condition']) + ['candidate', 'output', self.root]
+            with self.subTest(dispatcher=filename), \
+                 patch.object(base, 'specifications', return_value=({}, {'PAPER-example': paper})), \
+                 patch.object(base, 'runtime_manifests', side_effect=AssertionError('No legacy adapter inspection')), \
+                 self.assertRaisesRegex(ValueError, 'calibration only'):
+                dispatcher.run_command(*arguments)
+
     def test_inconsistent_declared_roster_rejected(self):
         self.registry['source_counts']['total'] = 200
         self.save_registry()

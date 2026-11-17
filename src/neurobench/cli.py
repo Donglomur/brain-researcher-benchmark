@@ -401,16 +401,27 @@ def paper_contract(task_id, root=ROOT):
     if not improvement:
         raise ValueError('No current paper improvement contract is bound for ' + task_id)
     pin = improvement['contract']
-    path = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'])
-    return read(path)
+    raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
+    return builder.improvement_module().loads_contract(raw.decode('utf-8'))
 
 
 def compare_paper(task_id, result_path, root=ROOT):
     contract = paper_contract(task_id, root)
     # Result evidence is public aggregate metadata, not prediction or target data.
-    path = Path(result_path)
-    if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= 2 * 1024 * 1024:
+    path = Path(result_path).absolute()
+    limit = 2 * 1024 * 1024
+    if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
         raise ValueError('Comparison result must be bounded ordinary JSON metadata')
+    before = path.stat()
+    if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or not 0 < before.st_size <= limit:
+        raise ValueError('Comparison result must be bounded ordinary JSON metadata')
+    with path.open('rb') as stream:
+        raw = stream.read(limit + 1)
+    after = path.stat()
+    if (len(raw) != before.st_size or len(raw) > limit
+            or (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+            != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)):
+        raise ValueError('Comparison result changed during bounded read')
     def pairs(items):
         result = {}
         for key, value in items:
@@ -418,7 +429,7 @@ def compare_paper(task_id, result_path, root=ROOT):
                 raise ValueError('Duplicate comparison evidence key')
             result[key] = value
         return result
-    doc = json.loads(path.read_text(), object_pairs_hook=pairs,
+    doc = json.loads(raw, object_pairs_hook=pairs,
                      parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite comparison evidence')))
     return public_catalog_module().improvement_module().compare(contract, doc)
 
@@ -426,7 +437,7 @@ def compare_paper(task_id, result_path, root=ROOT):
 def require_paper_role(row, calibration):
     if row['track'] == 'paper' and not calibration:
         raise ValueError('Paper success requires same-task source-paper superiority under its improvement contract. '
-                         'Historical score/run adapters are calibration only; use --calibration explicitly, '
+                         'Historical score/run adapters are calibration only; use scripts/neurobench.py score/run --calibration explicitly, '
                          'or paper-contract and compare-paper for the current objective.')
 
 
@@ -577,6 +588,8 @@ def main(argv=None, root=None):
         if args.calibration:
             result.update(evaluation_role='calibration_only', paper_win=False)
     print(json.dumps(result, indent=2, ensure_ascii=False))
+    if args.action == 'compare-paper' and result.get('comparison_admitted') is not True:
+        return 2
     return 0
 
 

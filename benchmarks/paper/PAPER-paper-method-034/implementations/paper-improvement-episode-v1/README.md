@@ -2,6 +2,10 @@
 
 **Same-task paper improvement is source unresolved.** This additive component belongs to existing `PAPER-paper-method-034`; it creates no task ID and changes no original task, score, heldout or grader. Reproduction is calibration, not success. A different split or local baseline cannot count as surpassing the paper.
 
+The original task dependency is pinned at `../../historical/task.pre-improvement.v1.json`.
+The current authoritative task binds `../../improvement.v1.json`; this extension
+component retains the original bytes as calibration provenance.
+
 This release makes the available preparation work executable: it authenticates the selected public source dependencies, emits exact ordered output-support metadata, checks an operator-supplied official source checkout against existing pins, and compares complete paired reports from the existing grader. It cannot launch models, read labels, load checkpoints or award historical-paper/SOTA improvement.
 
 Read [SOURCE_FINDINGS.md](SOURCE_FINDINGS.md) for the primary-source findings. [BASELINE_MANIFEST.json](BASELINE_MANIFEST.json) identifies official author code and checkpoint routes while retaining missing result/provenance fields. [CURRENT_COMPARATOR.json](CURRENT_COMPARATOR.json) keeps current-best status unknown and records a concrete later comparator that fails exact-task comparability. [EPISODE.json](EPISODE.json) freezes the old extension's support, permitted changes, access conditions and prospective resource ceilings. Its four-rat chronological clean/half-neuron comparison is explicitly separate from the published Figure5d comparison.

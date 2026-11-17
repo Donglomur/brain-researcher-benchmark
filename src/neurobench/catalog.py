@@ -73,8 +73,13 @@ class Reader:
              'Expected bounded ordinary public metadata: ' + str(path.relative_to(self.root)))
         self.bytes += info.st_size
         need(self.bytes <= READ_LIMIT, 'Public metadata read limit exceeded')
-        raw = path.read_bytes()
-        need(len(raw) == info.st_size, 'Public metadata changed during read')
+        with path.open('rb') as stream:
+            raw = stream.read(4 * 1024 * 1024 + 1)
+        after = path.stat()
+        need(len(raw) == info.st_size and len(raw) <= 4 * 1024 * 1024
+             and (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns)
+             == (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns),
+             'Public metadata changed during read')
         def pairs(items):
             result = {}
             for key, value in items:
@@ -227,6 +232,29 @@ def discover(root=ROOT):
     rows = registry['tasks']
     need(isinstance(rows, list) and all(isinstance(row, dict) for row in rows), 'Registry tasks must be objects')
     need(len({row['id'] for row in rows}) == len(rows), 'Duplicate registered task ID')
+    improvement_meta = registry.get('paper_improvement')
+    previous_rows = None
+    if improvement_meta is not None:
+        need(isinstance(improvement_meta, dict)
+             and improvement_meta.get('schema_version') == 'paper-improvement/v1'
+             and improvement_meta.get('objective') == 'surpass_source_paper_same_task'
+             and improvement_meta.get('coverage_required') is True
+             and type(improvement_meta.get('registered_count')) is int
+             and improvement_meta['registered_count'] == sum(row['track'] == 'paper' for row in rows),
+             'Invalid current paper improvement registry binding')
+        previous_pin = improvement_meta['pre_improvement_registry']
+        need(previous_pin['path'] == 'docs/provenance/registrations/paper-pre-improvement-v1.json',
+             'Unexpected pre-improvement registry location')
+        previous_registry = checked_pin(reader, previous_pin, 'Pre-improvement registry')
+        need(previous_registry.get('schema_version') == 1
+             and previous_registry.get('kind') == 'neuroscience_benchmark_registry',
+             'Unsupported pre-improvement registry')
+        previous_rows = {row['id']: row for row in previous_registry['tasks']}
+        need(len(previous_rows) == len(previous_registry['tasks'])
+             and set(previous_rows) <= {row['id'] for row in rows}
+             and {row['id'] for row in previous_rows.values() if row['track'] == 'paper'}
+             == {row['id'] for row in rows if row['track'] == 'paper'},
+             'Paper overhaul must preserve the original registration roster')
     historical = registry['historical_registries']
     need(isinstance(historical, list), 'Historical registries must be a list')
     historical_paths = set()
@@ -253,12 +281,20 @@ def discover(root=ROOT):
             need(all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
                  'Task definition differs from its preserved original identity')
         else:
+            need(previous_rows is not None, 'Revised paper task requires its authenticated original registry')
             need(track == 'paper' and revision.get('version') == 'paper-improvement/v1',
                  'Unsupported task specification revision')
             previous = revision['previous_specification']
             need(previous['path'] == directory + '/historical/task.pre-improvement.v1.json'
                  and all(previous.get(key) == original.get(key) for key in ('bytes', 'sha256')),
                  'Revised task does not preserve its original identity')
+            prior_row = previous_rows[identifier]
+            need(prior_row['track'] == 'paper'
+                 and all(prior_row['specification'].get(key) == previous.get(key) for key in ('bytes', 'sha256'))
+                 and original == prior_row['original_specification']
+                 and row['specification_id'] == prior_row['specification_id']
+                 and row['specification_alias'] == prior_row['specification_alias'],
+                 'Revised paper lineage differs from original registry')
             checked_pin(reader, previous, 'Historical paper specification')
             pin = revision['improvement_contract']
             need(pin['path'] == directory + '/improvement.v1.json', 'Improvement contract is outside its task')

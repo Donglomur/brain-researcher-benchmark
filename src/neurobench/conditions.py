@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run a named information condition with the existing qualified task wrappers.
 
-Legacy dispatcher and frozen runtime sources remain unchanged. Conditions are
-not additional task IDs. Metadata and --dry-run never execute candidate code.
+Frozen runtime sources remain historical evidence. Paper conditions are calibration
+only. Conditions are not additional task IDs; metadata and --dry-run execute no candidate.
 """
 import argparse
 import importlib.util
@@ -30,11 +30,14 @@ def condition_document(doc, condition):
 
 def list_conditions(root=ROOT):
     rows = []
+    _, canonical = base.specifications(root)
     for ident, (path, doc) in base.runtime_manifests(root).items():
         for condition in base._object(doc.get('program_conditions', {}), 'Program conditions'):
             selected = condition_document(doc, condition)
             rows.append({'id': ident, 'condition': condition,
                          'qualified': base.verified_program_runtime(path, selected, root),
+                         'evaluation_role': 'calibration_only' if canonical[ident]['track'] == 'paper' else 'declared_condition',
+                         'paper_win': False,
                          'additional_task': False})
     return rows
 
@@ -43,6 +46,7 @@ def run_command(task_id, condition, program, output, root=ROOT, *, review=None, 
     _, canonical = base.specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    base.require_paper_role(canonical[task_id], calibration=False)
     runtime = base.runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is implemented for ' + task_id)
