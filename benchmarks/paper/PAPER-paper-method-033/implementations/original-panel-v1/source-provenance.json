@@ -1,0 +1,45 @@
+{
+  "schema": "mindbridge-original-panel-provenance/v1",
+  "task_id": "PAPER-paper-method-033",
+  "scope": "Complete original Table2 scoring source: two arms times three calibration budgets times eight metrics; no original-input, model or scientific execution claimed",
+  "author_revision": "2a3943ff5b619db6f85f16a5e7ff1331d25def55",
+  "source_retrieval": "Existing exact author-source cache and source manifests; primary dependency documentation consulted separately; no dataset or model acquired",
+  "author_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/eval.py",
+      "bytes": 9654,
+      "sha256": "bde3c051c6f1c3be47c7075986ba2854a16561ff8702b3cbbf412edfcdf5c180",
+      "locators": {"identification": "13-34", "reconstruction_clamp_dtype": "47-53", "pixcorr": "59-77", "ssim": "84-102", "alexnet": "106-131", "inception": "137-154", "clip": "161-173", "effnet": "181-200", "swav": "208-225"}
+    },
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/requirements.txt",
+      "bytes": 226,
+      "sha256": "0663573385a47f9277a7847ad525c2957d652f3c1fc2376e87853b6530caa1b7",
+      "finding": "torch2.0.1 and torchvision0.15.2 pinned; numpy/scipy/skimage/CLIP/Transformers unpinned"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/models.py",
+      "bytes": 18341,
+      "sha256": "5f2481b82fdcb547a9b9ce1902290930312de3301a0e17a7dca721ca82873e13",
+      "finding": "Selection hidden-token Clipper is distinct from final metric CLIP encode_image"
+    }
+  ],
+  "dependency_evidence": [
+    {"url": "https://raw.githubusercontent.com/pytorch/vision/v0.15.2/torchvision/transforms/transforms.py", "finding": "Integer Resize uses shorter edge; source metric paths bilinear without center crop; omitted tensor antialias means false in this version"},
+    {"url": "https://raw.githubusercontent.com/pytorch/vision/v0.15.2/torchvision/models/efficientnet.py", "finding": "EfficientNet_B1_Weights.DEFAULT is IMAGENET1K_V2, not V1"},
+    {"url": "https://raw.githubusercontent.com/pytorch/vision/v0.15.2/torchvision/models/inception.py", "finding": "Inception_V3_Weights.DEFAULT is V1; passing weights implicitly enables transform_input=True"},
+    {"url": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.19.3/skimage/_shared/utils.py", "finding": "Legacy multichannel=True maps to channel_axis=-1; original grayscale input therefore receives columnwise spatial interpretation"},
+    {"url": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.20.0/skimage/metrics/_structural_similarity.py", "finding": "Legacy multichannel keyword is unused; original grayscale input receives two-dimensional interpretation"},
+    {"url": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.20.0/skimage/color/colorconv.py", "finding": "rgb2gray coefficients0.2125/0.7154/0.0721 preserve supported floating precision"}
+  ],
+  "source_shapes": {"original_gallery": 982, "calibration_budgets": [500, 1500, 4000], "arms": ["vanilla", "mindbridge"], "selection_candidates": 8, "selection_embedding_shape": [257, 768], "finding_cells": 48},
+  "runtime_limits": {
+    "historical_SSIM_version": "unresolved",
+    "historical_SwAV_code_and_complete_weights": "unresolved",
+    "offline_native_transform_runtime": {"torch": "2.0.1", "torchvision": "0.15.2"},
+    "generated_hosted_SSIM_test_version": "0.25.2; engineering backend qualification only, never a historical author version assertion",
+    "outer_execution_and_independent_model_weight_authentication": "required but not provided by this component"
+  },
+  "scientific_outcomes": {"reproduction": "unknown", "improvement": "unknown"},
+  "redistribution": "Independent implementation of mathematical/source operations; no upstream code or paper content copied. Author source cache reports no license file; upstream model/data/stimulus rights remain distinct requirements."
+}
