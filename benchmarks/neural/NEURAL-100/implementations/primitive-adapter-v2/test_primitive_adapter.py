@@ -82,7 +82,12 @@ class AdapterControls(unittest.TestCase):
             if isinstance(shape, tuple) and len(shape) == 3 and shape[-1] == 100:
                 raise AssertionError('count buffer allocated before validation')
             return original_empty(shape, *args, **kwargs)
-        with patch.object(np, 'empty', side_effect=deny_count_buffer):
+        class AdapterNumpy:
+            def __getattr__(self, name):
+                return deny_count_buffer if name == 'empty' else getattr(np, name)
+        # Only the adapter sees this spy. NumPy's own validation/lazy imports
+        # must retain the real np.empty, including its function metadata.
+        with patch.object(self.new, 'np', AdapterNumpy()):
             with self.assertRaisesRegex(ValueError, pattern):
                 self.new.normalized(self.row, arrays)
 
@@ -188,6 +193,10 @@ class AdapterControls(unittest.TestCase):
 
     def test_count_memory_cap_before_allocation(self):
         with patch.object(self.new, 'MAX_COUNT_BYTES', 1):
+            self.rejected(self.arrays, 'memory cap')
+        # A valid uncapped input reaches count allocation, proving the spy
+        # would still catch an allocation moved before the production cap.
+        with self.assertRaisesRegex(AssertionError, 'count buffer allocated before validation'):
             self.rejected(self.arrays, 'memory cap')
 
     def npy_members(self, version=(1, 0)):
