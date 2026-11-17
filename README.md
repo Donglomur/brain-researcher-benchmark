@@ -1,7 +1,7 @@
 # Neuroscience Research Benchmarks
 
-Can AI agents surpass published neuroscience methods on their original tasks and
-understand neural data?
+Can AI agents reproduce and improve published neuroscience results, interpret
+neural observations directly, and build effective tools or models for those observations?
 
 Use this repository to inspect task definitions, prepare supported inputs, and
 compare submissions under explicit scientific and information-access rules.
@@ -48,12 +48,22 @@ using fixed outputs, with no new solver attempt or model call.
 The [implementation guide](docs/usage/implementations.md) connects other task
 definitions to their available preparation and grading routes.
 
-## What each track measures
+## Four outcomes across two tracks
 
-| Track | Success and comparison |
+The [four-outcome design](docs/design/four-outcomes.md) treats each outcome as a
+separate scientific result within its task. Outcomes and access conditions do not
+create extra task IDs or duplicate an execution count.
+
+| Outcome | Success and comparison |
 | --- | --- |
-| **Paper improvement** | Surpass the source paper on the same original endpoint or complete panel. Match the dataset, cohort, split, permitted observations, metric, aggregation and required controls; compare paper + data with paper + data + official code under matched budgets. Candidates may change architecture, inference or optimization within that observation and budget boundary. Reproduction supplies calibration evidence. |
-| **Neural-data understanding** | Infer specified targets from permitted neural or behavioral observations. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes are separate conditions, each with its own delivered inputs, controls and competent comparators. |
+| **Paper reproduction** | Faithfully recover the task's complete original result under declared source, data and evaluation conditions, including required companion results and a justified agreement rule. Reproduction is a first-class outcome. |
+| **Paper improvement** | Surpass the source result on the same original task, with fixed observations, cohort, split, evaluation and required controls. Candidates may change architecture, inference or optimization within the declared observation and budget boundary. |
+| **Native neural interpretation** | Infer the specified target directly from permitted observations or through a typed viewer, with explicit representation, demonstration and action limits. |
+| **Neural tool/model building** | Create or adapt a tool, model, investigation procedure or frozen programme to solve the neural task under declared data, tool and resource access, with attributable participant contributions. |
+
+Paper + data and paper + data + official code remain distinct access conditions.
+Reproduction and improvement are assessed separately in either condition; one
+result does not establish the other.
 
 A programme score does not establish direct or viewer interpretation. The existing
 neural pilot uses exposed development people and prepared feature inputs. Separate
@@ -71,8 +81,11 @@ reports 13 delivered named scopes, 94 partial deliveries, seven designs and four
 target mismatches. These counts describe source coverage; the revision confers no
 scientific qualification.
 
-Every current paper definition binds a source-grounded
-[improvement contract](docs/science/paper-improvement/README.md). The
+The current 117 paper definitions still bind
+[improvement contracts](docs/science/paper-improvement/README.md) with their existing
+objective and schema. Reviewed per-task reproduction definitions are the next
+coverage requirement; the new design does not promote historical calibration
+attempts or inference probes to qualified reproductions. The
 [paper catalog](benchmarks/catalog/paper.md) distinguishes designs, unresolved source
 comparisons, ineligible papers and improvement-ready tasks. The current contracts
 establish no empirical paper improvement. A changed split, easier subset or different
@@ -82,6 +95,13 @@ now cover the complete REVE PhysioNet input panel and DeepCaImX manual ROI panel
 Their preparation and software-control reports are available through `evidence
 PAPER-paper-method-003` and `evidence PAPER-paper-method-013`; neither reports model
 inference. Author-model equivalence and paper improvement remain unresolved.
+
+The new [SMC-RNN registration](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
+adds the complete original MC_Maze 20-ms input panel and paired paper/data materials.
+Two author-checkpoint inference probes measured native cost; they produced no
+complete prediction set or scientific score. Full author calibration, enforceable
+temporal access and equal participant budgets remain unresolved. The original 116
+paper registrations remain preserved; the current roster is 117 paper and 118 neural.
 
 ## Find source and understand the counts
 

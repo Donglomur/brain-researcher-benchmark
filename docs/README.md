@@ -5,7 +5,7 @@
 - [Browse the paper and neural tracks](../benchmarks/README.md).
 - [Inspect recorded evidence and current status](status/README.md).
 - [Inspect EEG/sleep inputs, prepare packets and grade submissions](operator-routes.md).
-- [Prepare the original REVE and DeepCaImX endpoints](usage/implementations.md#prepare-original-paper-endpoints).
+- [Prepare the original SMC-RNN, REVE and DeepCaImX endpoints](usage/implementations.md#prepare-original-paper-endpoints).
 - [Use the restricted EEG image transport](../benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/README.md).
 - [Find implementation routes](usage/implementations.md) or [grade a finished artifact](usage/artifact-grading.md).
 - [Use task-specific preparation, estimation and evaluation components](usage/construction-components.md).
@@ -22,8 +22,9 @@ delivery dispositions do not establish scientific qualification.
 
 ## Design a comparison
 
+- [Four outcomes: paper reproduction and improvement; native neural interpretation and tool/model building](design/four-outcomes.md).
 - [Scientific design overview](science/README.md).
-- [Same-task paper improvement](science/paper-improvement/README.md).
+- [Currently implemented same-task paper-improvement contract](science/paper-improvement/README.md).
 - [Task scope and qualification](science/task-scope.md).
 - [Paper scope assessment](science/paper-scope/SCIENTIFIC_SCOPE.md).
 - [Paired study templates](science/study-design/README.md) and [reporting](science/paired-study-reporting.md).
@@ -31,9 +32,12 @@ delivery dispositions do not establish scientific qualification.
 - [Authentic EEG/sleep operator controls](status/operator-controls-20261116.json).
 - [Fresh-checkout validation of the operator repair](status/operator-controls-rename-20261116.json).
 
-Paper reconstruction is calibration evidence. Neural programme, investigation and
-interpretation conditions need separate access rules and controls; success in one
-does not establish success in the others.
+Paper reproduction and improvement are separate first-class outcomes. Existing
+historical reconstruction records retain their scoped calibration role until a
+reviewed reproduction definition and evidence qualify them. Native neural
+interpretation and tool/model building also need separate access rules and results;
+a programme score does not establish native interpretation. The four-outcome design
+describes the goal while current task contracts document delivered support and gaps.
 
 ## Develop and verify source
 
