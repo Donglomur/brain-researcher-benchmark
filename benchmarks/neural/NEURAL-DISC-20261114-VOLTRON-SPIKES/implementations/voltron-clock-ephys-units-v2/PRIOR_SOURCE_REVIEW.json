@@ -1,0 +1,27 @@
+{
+  "schema": "voltron-four-entry-units-source-review-v1",
+  "verdict": "ACCEPT_SOURCE_ONLY",
+  "sources": [
+    {
+      "file": "decoder.py",
+      "bytes": 12837,
+      "sha256": "aa6873ebd7e738f750ace213adcc4da635e4202e61152a1ecd3ff3853704f411"
+    },
+    {
+      "file": "test_decoder.py",
+      "bytes": 9070,
+      "sha256": "dfef6757d768c6d881f2d6cd0f60758e6599ef896cb7ba1db9ac86ee29fdf046"
+    },
+    {
+      "file": "README.md",
+      "bytes": 3010,
+      "sha256": "5bc74c51f5658f3012abb07fe0caac8a377433fe0844e6b45fdb4a46ab168b16"
+    }
+  ],
+  "finding": "One retained electrical NPZ has four entries: time.npy, voltage.npy, stimulus.npy and units.npy. Its central extent is exact; the old three-entry expectation caused the recorded refusal.",
+  "change": "The additive decoder requires exactly those four names and validates the152-byte NPY units metadata as s/mV/pA before processing the three numerical channels. Existing numerical and ZIP integrity limits remain unchanged; the old profile and failed intake are preserved.",
+  "verification": "Fourteen author test methods passed in one suite execution after a preserved command-wrapper syntax failure. Eleven additional generated checks and one retained string-metadata CRC/schema check passed in one independent invocation. Exact source/delta/retained-directory joins also passed.",
+  "limitations": "This qualifies source and one file's metadata only. No authentic signal vector, other228 electrical-file profiles, clock alignment, spike truth or optical input is qualified. No benchmark-readiness or count increase is claimed.",
+  "execution_authority": "No actual intake or retry is selected. Later execution requires a separately reviewed exact caller/binding and explicit root selection.",
+  "private_evidence_transitively_selected": false
+}

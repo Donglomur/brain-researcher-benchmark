@@ -1,0 +1,246 @@
+"""Voltron clock/ephys structural decoder. No I/O or scientific reference rule.
+
+Four-entry NPZ profile: three signal vectors plus exact observed units metadata.
+Only one retained NPZ directory and its tiny string-only units record have been
+observed. Signal decoding by this successor remains unrun on authentic data.
+"""
+import ast
+import hashlib
+import math
+import struct
+import zlib
+
+MIB = 1024 * 1024
+OUTER_MEMBER_CAP = 2453723
+HEADER_CAP = 16384
+VECTOR_FILE_CAP = 12 * MIB
+INNER_TOTAL_CAP = 32 * MIB
+EXPECTED = ('time.npy', 'voltage.npy', 'stimulus.npy')
+UNITS_MEMBER = 'units.npy'
+ARCHIVE_EXPECTED = EXPECTED + (UNITS_MEMBER,)
+UNITS_FILE_BYTES = 152
+
+
+class Refusal(ValueError):
+    pass
+
+
+def need(condition, reason):
+    if not condition:
+        raise Refusal(reason)
+
+
+def npy_view(body):
+    """Return header and a bytes view; never unpickle or import NumPy."""
+    need(type(body) is bytes and 10 <= len(body) <= VECTOR_FILE_CAP, 'NPY file cap/type')
+    need(body[:6] == b'\x93NUMPY', 'NPY magic')
+    version = tuple(body[6:8])
+    need(version in ((1, 0), (2, 0), (3, 0)), 'NPY version')
+    prefix = 10 if version == (1, 0) else 12
+    need(len(body) >= prefix, 'NPY header prefix')
+    hlen = int.from_bytes(body[8:prefix], 'little')
+    need(0 < hlen <= HEADER_CAP and prefix + hlen <= len(body), 'NPY header cap/extent')
+    header = body[prefix:prefix + hlen]
+    need(header.endswith(b'\n'), 'NPY header terminator')
+    try:
+        text = header.decode('utf-8' if version == (3, 0) else 'latin1')
+        node = ast.parse(text.strip(), mode='eval').body
+        need(isinstance(node, ast.Dict) and len(node.keys) == 3, 'NPY exact header fields')
+        keys = [ast.literal_eval(k) for k in node.keys]
+        need(len(set(keys)) == 3 and set(keys) == {'descr', 'fortran_order', 'shape'},
+             'NPY duplicate/unknown header fields')
+        value = ast.literal_eval(node)
+    except (SyntaxError, TypeError, ValueError, UnicodeError) as exc:
+        raise Refusal('invalid literal NPY header') from exc
+    descr, shape = value['descr'], value['shape']
+    need(type(descr) is str and descr in ('<f4', '<f8', '>f4', '>f8'),
+         'unqualified NPY dtype/endian')
+    need(type(value['fortran_order']) is bool, 'NPY order type')
+    need(type(shape) is tuple and len(shape) == 1 and type(shape[0]) is int and shape[0] > 0,
+         'NPY must be a nonempty one-dimensional vector')
+    width = int(descr[-1]); count = shape[0]
+    need(count * width == len(body) - prefix - hlen, 'NPY exact payload extent')
+    return {'version': list(version), 'dtype': descr, 'fortran_order': value['fortran_order'],
+            'count': count, 'header_bytes': hlen, 'file_bytes': len(body),
+            'sha256': hashlib.sha256(body).hexdigest()}, memoryview(body)[prefix + hlen:]
+
+
+def describe_vector(body, *, axis=False, expected_count=None):
+    header, payload = npy_view(body)
+    if expected_count is not None:
+        need(type(expected_count) is int and header['count'] == expected_count,
+             'declared frame/channel count mismatch')
+    fmt = header['dtype'][0] + ('f' if header['dtype'][-1] == '4' else 'd')
+    first = last = low = high = prev = step_low = step_high = None
+    for (value,) in struct.iter_unpack(fmt, payload):
+        need(math.isfinite(value), 'nonfinite vector sample')
+        if first is None:
+            first = low = high = value
+        else:
+            low = min(low, value); high = max(high, value)
+        if prev is not None and axis:
+            need(value > prev, 'time vector is not strictly increasing')
+            step = value - prev
+            need(math.isfinite(step) and step > 0, 'unrepresentable time difference')
+            step_low = step if step_low is None else min(step_low, step)
+            step_high = step if step_high is None else max(step_high, step)
+        prev = last = value
+    # Hex preserves the represented binary scalar exactly, including float32
+    # values exactly promoted to binary64. Differences are diagnostics only.
+    header.update(first_hex=first.hex(), last_hex=last.hex(), minimum_hex=low.hex(),
+                  maximum_hex=high.hex(), axis_strictly_increasing=axis,
+                  minimum_step_hex=step_low.hex() if step_low is not None else None,
+                  maximum_step_hex=step_high.hex() if step_high is not None else None)
+    return header
+
+
+def describe_frame_times(body, declared_frames):
+    need(len(body) <= 800128, 'complete-census frame member maximum')
+    return describe_vector(body, axis=True, expected_count=declared_frames)
+
+
+def extra_fields(raw):
+    fields = {}; pos = 0
+    while pos < len(raw):
+        need(pos + 4 <= len(raw), 'ZIP extra prefix')
+        kind, size = struct.unpack_from('<HH', raw, pos); pos += 4
+        need(kind not in fields and pos + size <= len(raw), 'ZIP extra duplicate/extent')
+        fields[kind] = raw[pos:pos+size]; pos += size
+    return fields
+
+
+def inner_directory(body):
+    """Exact four-entry NPZ profile; no general archive extraction."""
+    need(type(body) is bytes and 22 <= len(body) <= OUTER_MEMBER_CAP, 'NPZ outer file cap/type')
+    need(body[-22:-18] == b'PK\x05\x06', 'NPZ exact terminal EOCD')
+    disk, cd_disk, disk_count, count, cd_size, cd_start, comment = struct.unpack('<4H2IH', body[-18:])
+    need((disk, cd_disk, disk_count, count, comment) == (0, 0, 4, 4, 0),
+         'NPZ exact four-entry single-disk profile')
+    need(cd_start + cd_size == len(body) - 22, 'NPZ exact central extent')
+    pos = cd_start; rows = []
+    for _ in range(4):
+        need(pos + 46 <= len(body)-22, 'NPZ central prefix')
+        fields = struct.unpack_from('<4s6H3I5H2I', body, pos)
+        sig, made, ver, flags, method, tm, date, crc, cs, us, nl, xl, cl, disk, ia, ea, off = fields
+        need(sig == b'PK\x01\x02' and disk == 0 and cl == 0 and
+             ver in (10, 20, 45) and method in (0, 8), 'NPZ central format')
+        allowed_flags = 0x808 | (6 if method == 8 else 0)
+        need(flags & ~allowed_flags == 0 and (method != 8 or ver >= 20), 'NPZ unsupported flags/version')
+        need(0 < us <= VECTOR_FILE_CAP and 0 < cs <= len(body), 'NPZ entry expansion cap')
+        need(pos+46+nl+xl <= len(body)-22, 'NPZ central variable extent')
+        name = body[pos+46:pos+46+nl]
+        need(name in tuple(x.encode('ascii') for x in ARCHIVE_EXPECTED), 'NPZ exact raw member name')
+        if name == UNITS_MEMBER.encode('ascii'):
+            need(us == UNITS_FILE_BYTES, 'NPZ exact units metadata size')
+        extras = extra_fields(body[pos+46+nl:pos+46+nl+xl])
+        need(1 not in extras, 'NPZ central ZIP64 outside bounded profile')
+        need(((ea >> 16) & 0o170000) in (0, 0o100000) and not ea & 16, 'NPZ nonregular entry')
+        rows.append(dict(name=name, version=ver, flags=flags, method=method, time=tm, date=date,
+                         crc=crc, compressed=cs, decoded=us, offset=off))
+        pos += 46 + nl + xl
+    need(pos == cd_start+cd_size and {x['name'] for x in rows} == {x.encode('ascii') for x in ARCHIVE_EXPECTED}, 'NPZ complete unique directory')
+    need(sum(x['decoded'] for x in rows) <= INNER_TOTAL_CAP, 'NPZ total inner expansion cap')
+    rows.sort(key=lambda x:x['offset'])
+    need(rows[0]['offset'] == 0 and len({x['offset'] for x in rows}) == 4 and
+         all(x['offset'] < cd_start for x in rows), 'NPZ local offsets/prefix')
+    for i,row in enumerate(rows):
+        row['upper'] = rows[i+1]['offset'] if i+1 < len(rows) else cd_start
+    return rows
+
+
+def inner_member(body, row):
+    pos = row['offset']; upper = row['upper']
+    need(pos+30 <= upper, 'NPZ local prefix extent')
+    sig, ver, flags, method, tm, date, crc, cs, us, nl, xl = struct.unpack_from('<4s5H3I2H',body,pos)
+    need(sig == b'PK\x03\x04' and (ver,flags,method,tm,date) ==
+         tuple(row[k] for k in ('version','flags','method','time','date')), 'NPZ local/central identity')
+    start = pos+30+nl+xl
+    need(start <= upper and body[pos+30:pos+30+nl] == row['name'], 'NPZ local raw name/extent')
+    extras = extra_fields(body[pos+30+nl:start]); z64 = extras.get(1,b''); zpos = 0
+    sizes = []
+    for value in (us,cs):
+        if value == 0xffffffff:
+            need(ver >= 45 and zpos+8 <= len(z64), 'NPZ local ZIP64 size')
+            value = int.from_bytes(z64[zpos:zpos+8],'little'); zpos += 8
+        sizes.append(value)
+    need(zpos == len(z64), 'NPZ local ZIP64 extra values')
+    us,cs = sizes
+    if flags & 8:
+        need(crc in (0,row['crc']) and cs in (0,row['compressed']) and us in (0,row['decoded']),
+             'NPZ descriptor local values')
+    else:
+        need((crc,cs,us) == (row['crc'],row['compressed'],row['decoded']), 'NPZ local CRC/sizes')
+    end = start+row['compressed']; need(end <= upper, 'NPZ compressed extent overlap')
+    tail = body[end:upper]
+    if flags & 8:
+        if len(tail) in (16,24):
+            need(tail[:4] == b'PK\x07\x08', 'NPZ descriptor signature'); tail = tail[4:]
+        need(len(tail) in (12,20), 'NPZ exact descriptor extent')
+        values = struct.unpack('<III' if len(tail)==12 else '<IQQ',tail)
+        need(values == (row['crc'],row['compressed'],row['decoded']), 'NPZ descriptor values')
+    else:
+        need(not tail, 'NPZ unexplained inter-record bytes')
+    compressed = body[start:end]
+    if method == 0:
+        raw = compressed
+    else:
+        try:
+            stream = zlib.decompressobj(-15)
+            raw = stream.decompress(compressed,row['decoded']+1)
+        except zlib.error as exc:
+            raise Refusal('NPZ DEFLATE error') from exc
+        need(stream.eof and not stream.unused_data and not stream.unconsumed_tail,
+             'NPZ incomplete/trailing/oversize DEFLATE')
+    need(len(raw) == row['decoded'] and zlib.crc32(raw)&0xffffffff == row['crc'], 'NPZ inner length/CRC')
+    return raw
+
+
+def describe_units(body):
+    """Only the observed152-byte NPYv1 <U2[3] metadata; never pickle."""
+    need(type(body) is bytes and len(body) == UNITS_FILE_BYTES, 'units exact file extent')
+    need(body[:8] == b'\x93NUMPY\x01\x00', 'units exact NPY version')
+    hlen = int.from_bytes(body[8:10], 'little')
+    need(hlen == 118 and body[127:128] == b'\n', 'units exact header extent')
+    try:
+        node = ast.parse(body[10:128].decode('latin1').strip(), mode='eval').body
+        need(isinstance(node, ast.Dict) and len(node.keys) == 3, 'units exact header fields')
+        keys = [ast.literal_eval(k) for k in node.keys]
+        need(len(set(keys)) == 3 and set(keys) == {'descr', 'fortran_order', 'shape'},
+             'units duplicate/unknown header fields')
+        header = ast.literal_eval(node)
+    except (SyntaxError, TypeError, ValueError, UnicodeError) as exc:
+        raise Refusal('invalid literal units NPY header') from exc
+    need(header['descr'] == '<U2' and type(header['descr']) is str and
+         header['fortran_order'] is False and type(header['shape']) is tuple and
+         len(header['shape']) == 1 and type(header['shape'][0]) is int and
+         header['shape'] == (3,), 'units exact string dtype/order/shape')
+    try:
+        units = [body[pos:pos+8].decode('utf-32-le').rstrip('\0') for pos in (128, 136, 144)]
+    except UnicodeError as exc:
+        raise Refusal('invalid UTF-32 units metadata') from exc
+    need(units == ['s', 'mV', 'pA'], 'units exact time-voltage-stimulus semantics')
+    return {'version': [1, 0], 'dtype': '<U2', 'count': 3, 'header_bytes': hlen,
+            'file_bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest(),
+            'channel_order': ['time', 'voltage', 'stimulus'], 'values': units}
+
+
+def describe_sweep(body):
+    """Serial, complete CRC/stream and vector QC; no reference generation."""
+    rows = inner_directory(body); result = {}
+    unit_row = next(row for row in rows if row['name'] == UNITS_MEMBER.encode('ascii'))
+    units = describe_units(inner_member(body, unit_row))
+    for row in rows:
+        if row['name'] == UNITS_MEMBER.encode('ascii'):
+            continue
+        raw = inner_member(body,row); name = row['name'].decode('ascii')[:-4]
+        result[name] = describe_vector(raw,axis=(name=='time'))
+        del raw
+    count = result['time']['count']
+    need(count >= 2 and all(v['count'] == count for v in result.values()), 'NPZ equal nontrivial channel lengths')
+    return {'outer_bytes':len(body),'outer_sha256':hashlib.sha256(body).hexdigest(),
+            'inner_file_bytes':sum(x['decoded']for x in rows),'channels':result,
+            'time_unit':'s','voltage_unit':'mV','stimulus_unit':'pA',
+            'units_basis':'exact NPZ units metadata plus retained author notebook; caller must join sweep metadata',
+            'units_metadata':units,
+            'clock_offsets_applied':0,'sample_rate_reconstruction':False,
+            'events_generated':False,'physical_support_qualified':False}

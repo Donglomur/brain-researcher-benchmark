@@ -1,0 +1,49 @@
+{
+  "schema": "benchmark_authored_component_provenance_v1",
+  "task_id": "NEURAL-SCOPE-20261114-LASER-EEG-REPORT",
+  "component": "matched-context-reference-v1",
+  "source_scope": "Fixed per-packet energy/context ridge and median controls using the existing complete packet and scorer ABIs. No native data processing, author inference or model trials.",
+  "original_paper": {
+    "doi": "10.1038/s41597-025-05900-1",
+    "url": "https://www.nature.com/articles/s41597-025-05900-1",
+    "role": "Collection design only; does not establish prediction reference competence."
+  },
+  "retained_source_audit": {
+    "official_code_revision": "daf9f0b83df047c506cc4714d39551b99980d537",
+    "url": "https://github.com/XiangyueZhao/Supplement-Data/tree/daf9f0b83df047c506cc4714d39551b99980d537",
+    "retained_article_xml_sha256": "630ab49596fbbfdf8eecbf7eaf5d80248c5cee44a750da34ce363d77c9aa96bc",
+    "scope": "Reused existing task-local and retained source review; no new download or authentic payload read."
+  },
+  "dependencies": [
+    {
+      "path": "../condition-packets/packets.py",
+      "sha256": "f119fb643a179917116c5203325137aa34c11792fcc0bda8a4ab94a8509f36e7",
+      "role": "Existing complete packet ABI; fixture integration uses this producer."
+    },
+    {
+      "path": "../full-assay-scorer/scorer.py",
+      "sha256": "c886d3de54818dd01d8c2d632a58e7fe50f437a4bcc4c52ca6ae3bb34d6f883c",
+      "role": "Existing full-assay aggregation, trusted comparator completeness and failure policy; unchanged."
+    },
+    {
+      "path": "../../historical/task.pre-understanding.v1.json",
+      "sha256": "6bbfc392294eee7faa551f1db548b482e9adff2e182242047924744617335b70",
+      "role": "Preserved original task defines same ten examples, lambda=1 context reference and reported-intensity target."
+    }
+  ],
+  "benchmark_choices": [
+    "Fit ten-example observed-energy mean imputation, categorical vocabularies and ddof=0 feature scaling without query input.",
+    "Categorical stimulated side, calibration category, device, reference and rating protocol with missing/unseen indicators; documented calibration category never substituted for actual Joules.",
+    "Sum-squared-error ridge with unpenalized intercept and lambda exactly 1, no tuning; deterministic prediction projection to registered [0,10] scale.",
+    "All query/fold coverage and frozen body hashes required; incomplete trusted comparator refuses."
+  ],
+  "qualification": {
+    "source_implementation": true,
+    "authentic_preparation": false,
+    "reference_competence": false,
+    "native_interpretation": false,
+    "scientific": false,
+    "new_model_trials": 0
+  },
+  "rights": "Project-authored source and generated fixtures under repository MIT license. No author code or biological observations redistributed."
+}
