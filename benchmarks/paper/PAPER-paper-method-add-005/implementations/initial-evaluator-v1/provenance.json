@@ -1,0 +1,123 @@
+{
+  "task_id": "PAPER-paper-method-add-005",
+  "contract": {
+    "path": "../../task.json",
+    "bytes": 77749,
+    "sha256": "98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253"
+  },
+  "source_revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+  "sources": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11573898/",
+      "doi": "10.1016/j.patter.2024.101047",
+      "retrieval": "primary article via web tool",
+      "sections": "Figure 3; imputation results; experimental procedures AJILE12 and neural decoder",
+      "derived_summary": "Twelve human participants; participant-specific imputation; 250 Hz, 4-second windows; first six days training and seventh evaluation. Published endpoints include channelwise correlation, spectral comparisons and rest/movement random-forest classification. Dropout rates are 50%, 70%, 90%, with five masks each. Mean imputation and a learned deterministic imputer are comparators. PSD similarity alone does not establish samplewise fidelity. Exact figure reproduction and deterministic model execution remain held."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/datasets.py",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "symbols": [
+        "AJILE_LFP",
+        "load_ajile_data"
+      ],
+      "line_region": "331-460 (zero-based tool labels)",
+      "derived_summary": "Read events/channels/time from processed participant NetCDF, exclude final label channel; inclusive [-2,2] selection; last sorted unique event-day held out. Labels subtract one. Per-channel training ranges determine 25/75 percentile fences extended by five IQRs; zero ranges and strict outside-fence ranges are invalid. All training ranges enter percentile fitting. Repeat quality masks across time. Masked training mean/population standard deviation over event and time axes standardize both partitions. Last-day code differs from fixed first-six/seventh prose when metadata has fewer/more days. Code assertion mistakenly checks train shape twice; prospective implementation must validate actual test shape."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "symbols": [
+        "conditional_ajile_imputation_experiment",
+        "imputation_experiment_loop"
+      ],
+      "derived_summary": "Observed channel count uses NumPy rounding of (1-dropout)*C and default_rng(seed).choice without replacement. Same channel mask applies to every held-out event. Conditioning concatenates mask and mask*signal; predicted hidden values are joined with observed values, then unstandardized. Mean imputation fills training means. Three random-forest fits on training subsets evaluate the same held-out samples; fold training permutation uses mask_seed, RF randomness uses rf_seed+fold. Function does not read dataset quality masks. Returned endpoints are average classification accuracies, not MSE or a scalar PSD error."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "derived_summary": "Default EC07; 1001 samples; +/-2 seconds; conditional training; 25/75 percentiles and IQR factor five. EC07 is a configuration default, not the full population."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/scripts/ajile_script.sh",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "participant_channels": {
+        "EC01": 94,
+        "EC02": 86,
+        "EC03": 80,
+        "EC04": 84,
+        "EC05": 106,
+        "EC06": 80,
+        "EC07": 64,
+        "EC08": 92,
+        "EC09": 126,
+        "EC10": 126,
+        "EC11": 106,
+        "EC12": 116
+      },
+      "derived_summary": "Author script enumerates all twelve participants and participant-specific channel counts. It is a training script, not evidence that training or evaluation ran."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/experiments/ajile_experiment/ajile_experiment.yaml",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "parameters": {
+        "dropout_lvls": [
+          0.5,
+          0.7,
+          0.9
+        ],
+        "num_repeat": 5,
+        "n_folds": 3,
+        "rf_n_estimators": 240,
+        "rf_max_depth": 9,
+        "batch_size": 133,
+        "mask_seed": 0,
+        "rf_seed": 0
+      }
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/utils/plotting_utils.py",
+      "revision": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "symbols": [
+        "plot_sd"
+      ],
+      "derived_summary": "Spectral plots call scipy.signal.csd(signal,signal) with supplied sampling frequency and segment length, then aggregate medians/quantiles. A fixed FFT-periodogram scalar discrepancy must be labeled a prospective scoring policy rather than historical figure reproduction."
+    }
+  ],
+  "source_pinning_limit": "Immutable author revision and path; tool-rendered retrieval, no raw-byte SHA256 asserted. Primary DOI retained.",
+  "requirements_mapping": [
+    {
+      "requirement": "Complete selected human processed ECoG population",
+      "source": "task input_assets; author script",
+      "recommendation": "Declare full EC01\u2013EC12 roster and all event rows. An EC07 engineering example must not imply full-panel completion."
+    },
+    {
+      "requirement": "Train-only normalization",
+      "source": "task evaluation.comparability; datasets.py",
+      "recommendation": "Fit mean/std and IQR fences from training only. Training target channels may be used; held-out targets cannot influence fitting or candidate-facing inputs."
+    },
+    {
+      "requirement": "Equal channels/time access",
+      "source": "task evaluation.comparability",
+      "recommendation": "Identical immutable observed sets and complete retrospective windows across candidate, mean, and train-only conditional baseline. Never advertise online forecasting."
+    },
+    {
+      "requirement": "Error and spectral fidelity",
+      "source": "task evaluation.observable_endpoints",
+      "recommendation": "Prospectively freeze target-only standardized/raw MSE and explicit spectral discrepancy. Declare aggregation and unit scaling. Report counts of complete and quality-eligible targets. Published RF/correlation/PSD comparisons remain distinct."
+    },
+    {
+      "requirement": "Human participant/session and blocked time guards",
+      "source": "task holds",
+      "recommendation": "Use explicit event-day-disjoint split, preserve all days. Guard-band/overlap certification remains held without absolute event supports; relative [-2,2] time grid cannot supply that proof."
+    },
+    {
+      "requirement": "Independent reference and scientific qualification",
+      "source": "task reproduction_evidence and admission",
+      "recommendation": "Generated controls prove algebra/interface behavior only. Native data, diffusion training, learned deterministic baseline, published RF reproduction and feasibility remain held."
+    }
+  ],
+  "construction_status": "prospective reconstruction evaluator component; full original scientific task held",
+  "scientific_qualification": "unknown",
+  "native_scientific_runs": 0
+}
