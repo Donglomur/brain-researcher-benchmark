@@ -154,6 +154,7 @@ class NeuralDispatchBoundaryTests(unittest.TestCase):
                     self.assertEqual(cli.main(args + ['--calibration'], root=self.root), 0)
                 result = json.loads(captured.getvalue())
                 self.assertEqual(result['evaluation_role'], 'calibration_only')
+                self.assertFalse(result['current_task_success'])
                 self.assertFalse(result['executed'])
         self.assertFalse(self.output.exists())
 
