@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve Figure 6 maintenance/session-ensemble five-category decoding and Extended Data Figure 7a encoding pseudo-population decoding as distinct secondary empirical alternatives, not interchangeable baselines or primary PAC outcomes. Extended Data Figure 6 simulations explain necessary PAC-selection controls; the released Figure 6f binary-geometry simulation is partial methodological support and does not establish the empirical decoder or PAC finding. Retain eligible-patient extension work as separately declared prospective scope, not exact-example reproduction. Selecting a decoder as replacement primary would require a new scientific scope decision. Reviewed source limits: Exact single-unit example identities, complete helper options/dependencies, eligible-patient roster, source-native reference outputs and numerical reproduction criteria remain unresolved; archive totals do not establish panel eligibility. Preserve the original balanced clean correct-trial selections, masks, spike/LFP alignment, maintenance window, filtering conventions, complete load-wise PAC curves/comodulograms and raw-versus-surrogate-normalized MI distinction. Do not silently redraw the example and claim exact reproduction. Preserve both full-versus-reduced single-unit model comparisons and corresponding source-defined multiplicity, pairing and selection controls; an interaction-only test can admit spurious PAC neurons. No scientifically justified same-result PAC superiority criterion is established. Larger PAC, stronger significance, more selected neurons or better in-sample fit do not establish improvement. The secondary decoder contract has not selected Figure 6 maintenance versus Extended Data Figure 7a encoding. Encoding category-neuron pseudo-population accuracies cannot serve as maintenance baselines. A Figure 6 reproduction sidecar does not restore the retained PAC primary. If the current schema cannot represent the distinct result families, the mixed primary/secondary paired bundle remains unavailable; correcting a task hash does not resolve the scope mismatch.
+
+**Primary scientific scope:** The retained empirical Figure 2d load-1/load-3 LFP phase-amplitude curves and Tort comodulograms plus registered single-unit PAC model comparisons, beginning with source-defined examples and indispensable controls. No automatic whole-paper, complete-population or every-figure claim; the declared eligible-patient extension is reported separately.
+
+**Retained secondary policy:** Preserve Figure 6 maintenance/session-ensemble five-category decoding and Extended Data Figure 7a encoding pseudo-population decoding as distinct secondary empirical alternatives, not interchangeable baselines or primary PAC outcomes. Extended Data Figure 6 simulations explain necessary PAC-selection controls; the released Figure 6f binary-geometry simulation is partial methodological support and does not establish the empirical decoder or PAC finding. Retain eligible-patient extension work as separately declared prospective scope, not exact-example reproduction. Selecting a decoder as replacement primary would require a new scientific scope decision.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The full paper contains original ordered category-decoding evaluations in Fig. 6 and Extended Data Fig. 7a. The exact source task/condition, full eligible cohort, split artifacts and matching baseline are not yet bound, so this task is source-unresolved. Legacy PAC curves and cell-selection inference remain descriptive calibration.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 20038 bytes; SHA-256 `a58420c60e7e92f336e8c1ca58115e329eafdbf7ddd4e2b67ac357f5f1ec8d47`.
+- Specification identity: 27713 bytes; SHA-256 `546faac279f1c969bd594edee1e42d85bfc391e252a4ad8c98c1f8c48b1fe6bb`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

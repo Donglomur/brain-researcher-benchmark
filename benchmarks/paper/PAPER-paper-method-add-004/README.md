@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed source coverage. Retained source scope and coverage: Preserve the genuine original synthetic known-timescale error and fit-coverage comparisons as separately named method-validation evidence, including their original realization/condition support and source-defined reference semantics. Retain finite synthetic programme, fit-summary, runtime and aABC components in their declared roles without automatically making all of them primary empirical requirements. Synthetic improvement cannot satisfy empirical reproduction or superiority; a mixed-scope four-cell bundle is unavailable as full-primary success when the schema cannot represent the distinction. Reviewed source limits: The authentic empirical unit/mouse/area roster and original trial-window draws remain unmaterialized; paper amplitude cutoff 0.01 and retained loader policy 0.1 are unreconciled. Figure 7 uses different matched-fit supports: 3,053 units for C, 5,674 for D/E and 4,588 for F/G. Complete failure/quality denominators, source masks and panel-specific eligibility cannot be replaced by one favorable subset. Unit fits begin at lag 1, area fits at lag 2 using valid ACFs within the area. Publication/current-source fitter and uncertainty parameterization, native outputs and figure reductions remain unresolved. Source 50 resamplings do not establish biological replication or original mouse-clustered uncertainty. Historical animal-grouped uncertainty and protected tuning policies must be labeled prospective unless exact native source shows otherwise. Empirical full-duration references are estimates. Lower pseudo-error, greater apparent stability or stronger area significance does not alone establish more accurate biological timescales or a justified primary improvement criterion. Signed Equation 21 versus absolute-error computation requires figure-specific formula/mask reconciliation. Do not minimize signed bias as accuracy or generalize one summary component to all source panels. Original simulation realizations, baseline curves and source-comparable improvement criteria remain unresolved. New simulations or window draws are extensions. The later synthetic inventory explicitly states metadata\_only:true and scope\_change:false. No explicit scientific instruction approving empirical-primary replacement was identified in the bounded gate and earlier curation log; component acceptance and a broad reproduction inventory are not such authority. Full-panel reproduction tolerances, native independent verification and empirical superiority remain unavailable. Useful partial or secondary evidence must not grant full-primary success through a schema workaround.
+
+**Primary scientific scope:** The retained empirical Figure 7 result family and its directly related S12–S14 robustness support: source-selected Allen spontaneous recordings, area-level timescale ordering and sampling stability, four-estimator matched-unit comparisons, duration/trial sensitivity, complete failure/inclusion and quality support. Preserve original area versus unit fitting recipes and panel-specific eligible sets. Source 5,775 units are nested in 26 mice and eight areas; 50 resamplings are repeated sampling analyses, not independent animals. Mouse identities remain necessary, while historical mouse-bootstrap, held-out parameter and development-selected cutoff policies are prospective unless separately source-authenticated. No every-figure requirement is inferred.
+
+**Retained improvement contract coverage:** Preserve the genuine original synthetic known-timescale error and fit-coverage comparisons as separately named method-validation evidence, including their original realization/condition support and source-defined reference semantics. Retain finite synthetic programme, fit-summary, runtime and aABC components in their declared roles without automatically making all of them primary empirical requirements. Synthetic improvement cannot satisfy empirical reproduction or superiority; a mixed-scope four-cell bundle is unavailable as full-primary success when the schema cannot represent the distinction.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary outcome pairing decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained improvement contract
+
+This preserved contract retains the declared coverage described above. Complete primary-outcome pairing remains unavailable, so the contract cannot admit a primary outcome under this marker.
 
 **Disposition:** source\_unresolved. Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales.
 
@@ -24,13 +46,15 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31646 bytes; SHA-256 `76cac31a182c2f29dc25778f29932ef04510756ab7304a0920d20daebf3a24cc`.
+- Specification identity: 41234 bytes; SHA-256 `57587bc69ff079b9c8ceab0ed1877681aa6e7569f36823f7f49957d4d0301e57`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Task documentation
 
 - [Empirical sensitivity and Figure 7C mixed models](docs/sensitivity-glm-v1.md)
+- [Pre-scope reproduction source role](docs/provenance/reproduction.pre-scope.role.json)
+- [Preserved pre-scope reproduction declaration](docs/provenance/reproduction.pre-scope.v1.json)
 
 ## Implementation artifacts
 

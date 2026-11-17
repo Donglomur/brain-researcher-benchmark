@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Poisson known-truth estimator experiments, including the eight synthetic analytical reference values, remain separate source components and cannot substitute for empirical CA1. Other simulation branches are not selected. The linear/RBF real/shuffled empirical decoder contrasts belong to the PRIMARY result family; a standalone decoder optimization score is only partial evidence and cannot establish complete primary reproduction or improvement. Reviewed source limits: The primary panel is selected now, but authentic payload identity, animal/FOV/session membership, complete original reference outputs and trusted computation remain unresolved. Preserve and reconcile the source spatial-bin and dataset-label discrepancies without silently selecting a favorable interpretation. Resolve five-versus-two outer decoding folds separately from the source optimization-fold settings; exact original partitions and nested-validation provenance remain unresolved. The retained author source comments out direct MI while later reading its output cells, and swaps shuffled linear/RBF result assignments. No silent repair or source-parity claim is authorized. Numerical reproduction tolerances and a defensible same-result superiority criterion remain unresolved. Larger empirical MI, stronger significance, larger biological effects or lower variance alone do not establish improvement. Incomplete scalar or structured evidence cannot establish the complete selected family; keep affected outcome admission unavailable until source, representation and comparison requirements are satisfied. Reviewed hashes identify retained article/Appendix text extractions and a CA1 rawLines transcription, not newly authenticated original PDF or Git transport bytes.
+
+**Primary scientific scope:** The complete named Figure 2C empirical CA1 correlation-coding family, including direct pair/single-neuron information, redundancy/synergy and information breakdown, together with the original linear/RBF population comparisons using real versus conditionally shuffled responses. Preserve the source-defined animal/field-of-view support, discretization, corrections and nested validation. This is an explicit selection now, not a retroactive historical selection or an all-paper requirement.
+
+**Retained secondary policy:** Poisson known-truth estimator experiments, including the eight synthetic analytical reference values, remain separate source components and cannot substitute for empirical CA1. Other simulation branches are not selected. The linear/RBF real/shuffled empirical decoder contrasts belong to the PRIMARY result family; a standalone decoder optimization score is only partial evidence and cannot establish complete primary reproduction or improvement.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. MINT contains original ordered synthetic-estimator and held-out population-decoder comparisons, so the paper is not categorically ineligible. The current CA1 direct-information reference is descriptive calibration only. The exact original improvement branch, numeric author baseline, binning and fold correspondence must be recovered before admission; larger empirical direct MI or stronger significance cannot substitute for that recovery.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 37805 bytes; SHA-256 `b94cddab58e870567cc2b23c58a0fa02051c9c40cc64b2e3260d8b3948ad8ae2`.
+- Specification identity: 44278 bytes; SHA-256 `ab98fef914e47985d6d4a15d6c94430fe8a77349930c4b7e68f3974a41a30b2d`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: source\_companion\_or\_separate\_result: Learning HFB S2K–M, supplied-grid associations and rest/grid/HFB results remain separately identified source evidence; include a companion only where its source-grounded role in the selected claim is established. Figure 5 rest HFB is not the learning HFB condition. partial\_primary\_support: Existing three-phase reconstruction remains partial until the remainder of the selected Figure 2C–E panel and its controls are verified. Reviewed source limits: Root selected the panel explicitly on 2026-11-17; historical ambiguity is preserved. Exact selected-panel observation and indispensable-companion bindings remain unresolved. Authenticate original cohort, source rows, first-session provenance, behavioral joins, figure/version crosswalk and source inferential parity. Preserve original error/phase/null and trial-count controls; the three saved slope outputs do not cover the full proposed result. Numerical reference values, justified equivalence criteria, trusted computation and matched code exposure remain unresolved. No reviewed original computational-superiority endpoint is established; biological effect magnitude or significance is not an improvement metric. All same-result superiority criteria remain unresolved. Source-faithful reproduction can be useful independently; this remains partial toward the user's requested benchmark supporting both outcomes.
+
+**Primary scientific scope:** The selected Figure 2C–E result with source phase, outcome, trial-count and analysis-specific subject/contact controls, original eligibility, first-learning-session provenance and behavioral joins. Learn-R's rank correlation/Fisher transformation remains distinct from a fitted trial slope. No automatic Figures 2–5, raw ripple-detection or independent orientation-fitting requirement.
+
+**Retained secondary policy:** source\_companion\_or\_separate\_result: Learning HFB S2K–M, supplied-grid associations and rest/grid/HFB results remain separately identified source evidence; include a companion only where its source-grounded role in the selected claim is established. Figure 5 rest HFB is not the learning HFB condition. partial\_primary\_support: Existing three-phase reconstruction remains partial until the remainder of the selected Figure 2C–E panel and its controls are verified.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** ineligible. A whole-paper review found no originally evaluated computational-performance endpoint that can be surpassed on the same neural-data task. Figures 2-5 report biological effects and associations; the odd/even grid analysis estimates held-half modulation rather than predictive error. Participant behavioral accuracy is ordered but describes the original human cohort, not an author computational method. Replacing those participants with a machine solver changes the population. This conclusion is not restricted to the legacy ripple-model reconstruction.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16176 bytes; SHA-256 `ca1d955a957567c55e70293af01c0e001a1e0db62b726b9c0407bfcfd01a91c2`.
+- Specification identity: 21029 bytes; SHA-256 `647fde2a4313a1c630873e67844588cc000a553ec8ba8a99da82e35a802079cd`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The complete Figure 6b linear/nonlinear fit comparison is a genuine secondary empirical modeling result, not a simulation. It does not discharge the primary biological/mechanistic outcome. Reviewed source limits: Preserve the original regional/familiarity populations, sample-size controls, inhibition/control conditions and indispensable model controls; do not infer an every-figure requirement. Author branches differ in parameter count, missing-lap handling and raw versus clipped R-squared; no favorable recipe is selected. A better fit alone does not identify a biological plasticity rule or supply a primary superiority criterion.
+
+**Primary scientific scope:** Central CA1/CA3 representational shifts, animal-level variation and optogenetic effects with the empirical comparisons and mechanistic controls needed for the STDP/BTSP interpretation.
+
+**Retained secondary policy:** The complete Figure 6b linear/nonlinear fit comparison is a genuine secondary empirical modeling result, not a simulation. It does not discharge the primary biological/mechanistic outcome.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The final paper contains an original ordered reconstruction task: Fig.6b compares linear and bounded plateauing-exponential fits to the same2649 empirical place-field trajectories using unadjusted R2. In-sample model fit is a valid source endpoint; no new predictive holdout is required. Exact source fit vectors, original observation support, full-panel aggregation and a defensible fixed-complexity superiority rule remain unrecovered. Descriptive biological effects and mechanistic claims remain distinct.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 20979 bytes; SHA-256 `c249a2c52a77318e7d4a0f8c532702f6f4332eaf10cfe324652731c3e2fece0c`.
+- Specification identity: 23692 bytes; SHA-256 `fd8367b63886e2e5caf89257fe9588286804f1eecc09ef4b3f02d2d6ecf6ffe1`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve the genuine original Figure 7 simulated ground-truth spike-accuracy comparison across the five seeded static/drifting realizations and four sorters, with its source-defined companion error/runtime results. Its simulated population and accuracy estimand differ from the retained empirical primary; it cannot satisfy primary reproduction or improvement. Reviewed source limits: The retained DANDI inventory does not freeze a selected recording population; neither all 31 assets nor all three Figure 8 datasets are automatically required. The prospective A3702 DANDI asset and the author's session-qualified source filename have not been established as the same recording. Source-supported curation tables and a drift raster do not by themselves define quantitative drift robustness or cross-sorter spike agreement; historical prose cannot create a published estimand. Source preprocessing-order differences, motion defaults, dependency versions and curation-model identities remain unresolved; silently normalizing them would not establish original-paper reproduction. Exact empirical reference outputs and a scientifically defensible superiority criterion remain unresolved. Simulation matching, source baseline arrays and aggregation also remain unresolved. Final-paper bytes and every panel/metric assignment were not newly authenticated in this review. A mixed empirical-primary/simulation-secondary outcome bundle must remain unavailable as full-primary success if the schema cannot represent the distinction.
+
+**Primary scientific scope:** The retained empirical four-sorter comparison on the original DANDI000939-linked recording scope: complete unit yields and source-defined curation-quality outputs, with source-supported drift/agreement outputs and their indispensable controls once authenticated. This does not automatically select every Figure 8 dataset or every asset in the DANDI inventory. Empirical superiority remains unavailable without an independently justified criterion; more units or more favorable curation labels alone do not establish better spike recovery.
+
+**Retained secondary policy:** Preserve the genuine original Figure 7 simulated ground-truth spike-accuracy comparison across the five seeded static/drifting realizations and four sorters, with its source-defined companion error/runtime results. Its simulated population and accuracy estimand differ from the retained empirical primary; it cannot satisfy primary reproduction or improvement.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The same source paper evaluates end-to-end spike sorting against known simulated spike trains in Figure 7 and Figure 7 supplement 1. This is a legitimate ordered original-paper task even though the historical local implementation covers only real-data curation. The source generator and five-seed protocol are recovered, but exact published accuracy/count arrays, dependency-bound matching defaults and figure aggregation are not yet pinned, so no improvement episode is admitted.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 43949 bytes; SHA-256 `04e695a46c75f81900c6d36e8848d02cb3dcac9ec7e67feddb8eb6ba5e109064`.
+- Specification identity: 49797 bytes; SHA-256 `53230b201db7161f54333460b35ec94799fab4abca189c8c5e6de8653772fdba`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

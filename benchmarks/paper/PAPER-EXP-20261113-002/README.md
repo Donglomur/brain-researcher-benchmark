@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve source-native state-specific six-class decoding accuracy and cross-time generalization as a legitimate, separately named empirical method-performance comparison on the original inputs, support and protocols. It is not preprocessing or simulation; a qualified method-performance gain must not automatically become improved biological explanation or current SOTA. Preserve the chronological pooled-state calibration/decoding protocol as a distinct prospective adaptation. Preserve scientific opportunities to challenge the original state/time finding; do not require a candidate to increase the locomotion effect or force agreement with its direction. Reviewed source limits: Exact original partitions, seeds, population settings, trial/unit identities and figure-producing invocation remain unbound. Preserve the distinct within-time three-fold/five-repeat diagonal-covariance route and cross-time half-split/five-repeat route; the chronological pooled-state extension is not interchangeable. Retain full original state/time/class support and mouse-level outputs, including cross-time numerator and within-time denominator. Four published mean/SEM scalars do not establish the complete panel, an authentic computational reference or agreement of submitted analysis with it. The independent biological unit remains the mouse: five primary animals. Trials, neurons, time windows and CV repeats are repeated measurements. No arbitrary scalar aggregate, numerical agreement tolerance, meaningful superiority margin or simultaneous state/time decision rule is established. A higher-accuracy candidate can preserve, attenuate or challenge the biological state/time pattern. Primary scientific superiority is unavailable until a justified interpretation and comparison is established; neither a larger state effect nor a ratio gain obtained by weakening the denominator establishes it. Existing reducers and structured-output proposals remain useful source/engineering evidence. Authentic native-array/run linkage, independent submitted-analysis execution, input-use proof, granular verification and paired delivery/budget manifests remain unresolved. Correct calibration-only current wording for first-class reproduction. Where the schema cannot distinguish primary biological outcomes from secondary decoder-method outcomes, keep the mixed bundle unavailable rather than allowing higher generic accuracy to satisfy the primary scientific claim. All scientific outcomes remain unknown.
+
+**Primary scientific scope:** The complete original five-mouse Figure 2h/4d,e empirical state/time decoding finding, preserving within-time curves, state/train/test-time matrices, relative cross-time generalization and its numerator/denominator, paired mouse-level effects and source-required controls. The Allen extension and other figures remain outside this task.
+
+**Retained secondary policy:** Preserve source-native state-specific six-class decoding accuracy and cross-time generalization as a legitimate, separately named empirical method-performance comparison on the original inputs, support and protocols. It is not preprocessing or simulation; a qualified method-performance gain must not automatically become improved biological explanation or current SOTA. Preserve the chronological pooled-state calibration/decoding protocol as a distinct prospective adaptation. Preserve scientific opportunities to challenge the original state/time finding; do not require a candidate to increase the locomotion effect or force agreement with its direction.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The original six-speed decoding task is ordered, but complete Figure 2h/4d,e accuracy matrices, original split realizations and exact figure-producing settings are not recovered. The source correctly uses different within-time and cross-time CV protocols. The existing chronological pooled-state protocol changes source splits and input permissions and remains an extension.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 9420 bytes; SHA-256 `5c131b9c18b1f71aced93995dfc64ea8cec68d9316e568be0a34d71ac6cf7e0e`.
+- Specification identity: 18499 bytes; SHA-256 `2445fbe65c82ab17b943efa6d7808fb595dc3705216dc5acc1c26ea066e74d9d`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

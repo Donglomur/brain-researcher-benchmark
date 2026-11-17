@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: New-candidate representational alignment against the original reference models under the source metric and layer-selection rule, retained as a separate empirical performance outcome. Higher candidate RSA may be scientifically useful but does not establish reproduction or improvement of the original comparative findings. An explicit revision to the original model-ranking question would be a legitimate alternative primary choice, not a decision inferred from this entry. Reviewed source limits: Authentic derivative/video/checkpoint, participant/ROI and source layer identities remain unqualified. Historical preprocessing, reduction, dependency settings and exact original numerical profiles remain unresolved. The existing candidate/reference comparator is descriptive and does not independently authenticate input observations, source feature extraction, RDMs, RSA or original reference values. Candidate freeze, permitted public-panel feedback, selection-aware uncertainty, meaningful effect and a predeclared across-ROI decision rule remain unresolved; the public panel is not an unseen test. Stronger family contrasts, smaller p-values or higher candidate fit do not by themselves establish improvement of the comparative scientific findings or a biological mechanism. Scalar summaries do not cover the retained profile and curve families. Mixed primary-reproduction and separate candidate-performance targets remain unavailable as a same-target bundle when the schema cannot represent the distinction. The official pinned ICLR PDF was inspected through a bounded web read; no local manuscript content digest is claimed. Prior component reviews and the assistant-derived all-figure inventory do not establish named-result revision authority.
+
+**Primary scientific scope:** The retained comparative participant/regional RSA profiles and declared temporal-model versus classification-task and architecture/layer findings on the original ten-participant, 102 repeated-test-video panel. Preserve complete source-defined support for each named result and its necessary controls; do not infer a requirement for all 22 figures or substitute the separate training-video analysis.
+
+**Retained secondary policy:** New-candidate representational alignment against the original reference models under the source metric and layer-selection rule, retained as a separate empirical performance outcome. Higher candidate RSA may be scientifically useful but does not establish reproduction or improvement of the original comparative findings. An explicit revision to the original model-ranking question would be a legitimate alternative primary choice, not a decision inferred from this entry.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Original model-brain RSA is ordered, but the exact paper model/layer/ROI result vectors and historical native settings are not recovered. Descriptive temporal-model family differences and figure assembly are not themselves improvable performance endpoints. A prospective candidate must be compared against the original full reference catalog, not an arbitrary local model or selected ROI.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 486250 bytes; SHA-256 `232a77bac2d8d7603d638dc8d995ebf542e6a697834cf73278bdc95a0f07f94b`.
+- Specification identity: 492743 bytes; SHA-256 `ef10bae655a6e895870be85e631f5604e25331c34984f9f051e602e301ae7f57`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

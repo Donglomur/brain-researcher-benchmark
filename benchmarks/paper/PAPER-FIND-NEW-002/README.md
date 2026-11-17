@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: simulation\_method: RNN full32 prescribed-output loss and complete paired response curves remain a separate source-model demonstration. Preserve null rows, exact readout/time/reduction definitions and unresolved source-recipe differences; they do not reproduce empirical animal/context findings. partial\_empirical\_support: Preserve existing Figure2C reconstruction and empirical notebook outputs as partial support; they do not establish the complete original empirical panel. Reviewed source limits: No inspected explicit reviewed authority replaces the empirical primary with the RNN task; restore the historical Figure2/3 scope consistently in canonical goals and admission. Final-paper/release panel numbering, experiment membership, cell identities, clocks and response windows remain unresolved. Code frame windows need reconciliation with final Methods300ms. Empirical notebooks cover examples and selected outputs; complete population reconstruction, required controls and animal/experiment joins remain unqualified. RNN final-paper target scaling0.9 differs from notebook0.5;500 versus600epochs and control/scrambled versus null-input exposure remain unresolved. Final Figure4A–C versus notebook PanelL/M and archived empirical Figure4 labels require an explicit publication crosswalk. Source numerical targets, stochastic realizations, uncertainty, equivalence criteria, granular independent computation and matched exposure remain unresolved. Primary same-result superiority lacks a justified ordered comparison; larger biological effects, smaller p values and better simulated fit do not substitute. Mixed primary-reproduction/secondary-improvement admission remains unavailable.
+
+**Primary scientific scope:** Original Figure 2 sequence-order population contrasts and required middle-pattern, nonstimulated-cell, single-pattern and spatial companions; original Figure 3 matched/unmatched incremental optogenetic responses relative to corresponding visual baselines, with opto-only comparisons across source experiments. Resolve final-paper/release identities; no automatic whole-paper or Figure5 mechanism requirement.
+
+**Retained secondary policy:** simulation\_method: RNN full32 prescribed-output loss and complete paired response curves remain a separate source-model demonstration. Preserve null rows, exact readout/time/reduction definitions and unresolved source-recipe differences; they do not reproduce empirical animal/context findings. partial\_empirical\_support: Preserve existing Figure2C reconstruction and empirical notebook outputs as partial support; they do not establish the complete original empirical panel.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The legacy empirical contrast is descriptive, but the source also trains an RNN to match prescribed time-varying readout targets and releases that original model. Whole-paper eligibility therefore remains unresolved until its original fit/evaluation criterion, complete conditions and author result are recovered. No new heldout response predictor or invented loss is substituted.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 24109 bytes; SHA-256 `ed5f2c86d12f6b919ed3231347a72b0094a2a86175c39c00af19c76c6953d56b`.
+- Specification identity: 30353 bytes; SHA-256 `5dceca9a9c1fa5f7f12573617964c53ea5d7669f6802a5457ab7543ecd2d6056`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

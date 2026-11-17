@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Source-code Figure 4 per-guide/fold/donor AUROC is a genuine empirical but explicitly partial result pending final-paper mapping. No active narrowed primary scope is selected by this decision. Reviewed source limits: Do not assert that all four lines belong to Figure 4 or that two WT donor strata exhaust the main result. Whole-plate/FDR redesigns are prospective extensions, not authenticated original-paper requirements. Retain both complementary well folds, eligible guide/donor/well/plate identities and source comparisons; a plotted 0.8 line is not a reproduction tolerance or FDR rule.
+
+**Primary scientific scope:** Original main CRISPRi activity phenotyping and its source-defined comparisons/negative controls; complete final-paper panel and code/data version mapping remain unresolved.
+
+**Retained secondary policy:** Source-code Figure 4 per-guide/fold/donor AUROC is a genuine empirical but explicitly partial result pending final-paper mapping. No active narrowed primary scope is selected by this decision.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The original guide-versus-control AUROC is ordered, but the complete final-paper baseline vector and its archive/version mapping are unrecovered. The installed whole-plate, four-line evaluation changes the original Figure 4 split and population and cannot establish a same-task paper win.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 9820 bytes; SHA-256 `31ce7dcff8df58f00f95886b4af310de0dffc753cbeb700147d100a9142eeffd`.
+- Specification identity: 13241 bytes; SHA-256 `9c7618cd1fc164c7a5ad2b985b519984f5e95a829c05c65a755dc34dbe24ec32`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

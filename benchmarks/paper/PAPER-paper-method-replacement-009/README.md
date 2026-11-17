@@ -10,6 +10,33 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Separate paper outcomes
+
+Reproduction is a first-class goal, but its source-grounded declaration and matched paired protocols have not been adopted. The unchanged improvement contract remains independently inspectable under its original criteria. All scientific outcomes remain unknown.
+
+**Source declaration gap:** The retained evidence supports a source-specific unresolved structured proposal for complete Figure 5A–D, but not a complete exact-member adoption declaration. Original method-by-target/region/session incidence, fitted-prior preparation, dynamic R2 meaning and author-vector provenance remain partly unknown. A rectangular target-by-region-by-session-by-method tensor or a generic Figure 5 wrapper would invent support rather than recover the missing declaration.
+
+**Remaining source limits:**
+
+- Exact source method-by-target/region/session incidence and original trial, temporal, session, animal and region support are not recovered. Ten sessions and twenty target/region families are inventory descriptions, not authenticated axes, complete scalar findings or separate tasks.
+- Choice requires source continuous-prediction AUC and original class orientation; the fitted behavioral prior requires its authentic preparation and Pearson correlation. Argmax accuracy and block probability are not substitutes.
+- Original wheel-speed and whisker-motion-energy R2 reduction is unresolved. Flattened and uniform-output recipes remain separate diagnostics, not two authenticated original endpoints or permission to select one.
+- Complete masks, denominators, native author result vectors and plotted aggregation/uncertainty remain unverified. Combined/state-space conditions must not be invented for dynamic targets, and failed or undefined cases cannot disappear through available-case averaging.
+- The score\_case and summarize\_group component operates on caller-supplied values and a supplied census. It neither authenticates original data, fits source decoders nor independently executes and verifies submitted analysis. Its software hash is not an input, native producer or scientific verifier identity.
+- The authentic full-panel input manifest, submitted-analysis interface/runtime/invocation, source-native derivation verifier, publication-equivalent reference and independently justified scientific comparison remain absent. Paired access and final current-task binding remain unresolved.
+
+- [Source declaration gap record](../../../docs/provenance/paper-outcome-source-declaration-gaps.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Paired protocol | Scientific outcome |
+| --- | --- | --- | --- |
+| Reproduction | Paper data | Not established | Unknown |
+| Reproduction | Paper data author code | Not established | Unknown |
+| Improvement | Paper data | Not established | Unknown |
+| Improvement | Paper data author code | Not established | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
 ## Current paper-improvement objective
 
 **Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
@@ -24,7 +51,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29997 bytes; SHA-256 `6980d89c75ef3ed7566f4e860761946caaa4d6892119ce75095e3fb0961105c5`.
+- Specification identity: 37729 bytes; SHA-256 `d74484fb6db56aeafe29c176af793ad0ece6b6fc197a6b41cdbe18e459854ce8`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Figure 4/S11–S12 IO-curve estimation and comparison of the source function families as a separate empirical modeling result. Its fit criterion is not equivalent to reproduction or improvement of the primary attenuation and heterogeneity findings. Reviewed source limits: Exact eligible cell, experiment and animal identities and complete source arrays/joins remain unqualified. Original model-comparison weighting, evaluation grids, numerical precision and acceptance rules remain unresolved. Branch-specific fixed/free parameter policy, including S11 three-parameter fitting versus S12 displayed parameter distributions, requires source reconciliation; do not choose the favorable branch. Pooled-cell bootstrap evidence must not be treated as independent-animal replication. Primary same-result superiority requires an independently justified criterion; greater attenuation, greater variability or stronger significance are not success rules. Mixed primary-reproduction and secondary-improvement bundles remain unavailable if their distinct targets cannot be represented faithfully. No numerical tolerance, superiority margin or scientific outcome is established.
+
+**Primary scientific scope:** The retained cellular attenuation/visual-stimulation comparison and response heterogeneity findings, with Figures 2–3 visual-state and power comparisons and Figure 5/S13 variability controls insofar as they support those named findings. Preserve source-defined analysis populations, response subtraction/windows and fluorescence adjustment. This is not an every-figure, acquisition or raw-movie requirement.
+
+**Retained secondary policy:** Figure 4/S11–S12 IO-curve estimation and comparison of the source function families as a separate empirical modeling result. Its fit criterion is not equivalent to reproduction or improvement of the primary attenuation and heterogeneity findings.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The source includes an original IO-function estimation and Ricciardi-versus-alternative-function comparison (Methods and Supplementary Figure S11), so descriptive attenuation alone does not justify categorical ineligibility. However, its exact ordered model-comparison criterion, complete original fitting protocol and numeric baseline are unrecovered. The existing local artifact scorer measures numerical reconstruction and cannot supply that comparator. A new held-out response-prediction task would remain an extension.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 33445 bytes; SHA-256 `b95d7614aea5c3720aef569df087bd0de1823f3e831c617082149daf2e4f95d1`.
+- Specification identity: 38484 bytes; SHA-256 `f64dc932b8189368a279e5f7b8202c7b981bf4084fbc003410cb7ae8fec06323`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

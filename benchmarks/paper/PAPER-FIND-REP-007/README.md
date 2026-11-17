@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Retinotopy is a supporting anatomical preprocessing route. Its retained encoding/map-preparation comparison cannot satisfy primary biological reproduction or improvement. Reviewed source limits: No automatic every-figure or universal-cohort requirement; preserve the actual cohort and observations for each named result. No authenticated ordered same-result superiority endpoint is established; larger effects or smaller p-values are not improvement. Do not replace the empirical findings with an artificial-network task or anatomical map score.
+
+**Primary scientific scope:** Original biological stimulus selectivity/decorrelation, reward-predictive activity and pretraining-related learning findings with each result's source-defined cohorts and indispensable controls.
+
+**Retained secondary policy:** Retinotopy is a supporting anatomical preprocessing route. Its retained encoding/map-preparation comparison cannot satisfy primary biological reproduction or improvement.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Whole-paper review identifies an original input-to-neural-response fitting procedure in Methods Retinotopy: a fixed 200-kernel convolutional encoding model. This source-native reconstruction route warrants further recovery, but the original evaluated performance endpoint/panel, exact score and meaningful fixed-capacity comparison are unverified. A preprocessing optimizer alone cannot activate an improvement task. Figure 5 mouse learning and descriptive neural contrasts remain distinct; no artificial pretraining experiment or new held-out benchmark is asserted.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31228 bytes; SHA-256 `37289aacfc669bb0fc4dd17dc18df8cc49515b00a69e8ec9476e2b11b8ea30a6`.
+- Specification identity: 33412 bytes; SHA-256 `553d84f275d197d5aa74fed0105679303ac27ea8f8a3774d395924e590792fe1`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

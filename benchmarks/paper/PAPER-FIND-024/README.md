@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: secondary\_empirical\_method\_result: Untied/untied, tied/tied and tied/untied opposite-split estimation-reliability correlations. The three reported scalars concern noisy-estimate agreement and cannot satisfy the primary biological result. \[coverage: partial\_secondary\_coverage\] methodological\_control: Source time-versus-structure discrimination controls may corroborate the interpretation where required; computational-control performance cannot substitute for the human result. prospective\_extension: New story or participant holdouts remain extensions unless they are authenticated as the original source evaluation. Reviewed source limits: Final figure and condition inventory, immutable input identities, source-specific participant/electrode/stimulus rosters and eligibility remain to be frozen. Original split membership, endpoint-specific roster and reduction for the reliability comparisons remain unresolved; Fig. 3 sample counts do not establish their roster. Primary numeric agreement and scientifically justified same-result superiority criteria are unresolved. Stronger yoking, smaller p-values or higher secondary reliability alone are insufficient. Three reliability scalars must not form an admitted same-primary reproduction/improvement bundle with the restored biological goal. No new immutable full-paper text byte pin was recovered by the independent review; indexed official publisher/PMC text and pinned author code support its conclusion. The 2024 preprint is not interchangeable with the final paper.
+
+**Primary scientific scope:** Empirical human intracranial absolute-time versus speech-structure integration: source cross-context correlations and same-context ceilings, paired rate-specific integration windows and structure-yoking outputs, source shared-shape fitting and eligibility, and participant/electrode/stimulus hierarchy. The Fig. 3 uniform speech-rate manipulation is source-supported; final admitted condition inventory remains unresolved. Natural slow/fast speech is a separate source panel, not automatically required or covered.
+
+**Retained secondary policy:** secondary\_empirical\_method\_result: Untied/untied, tied/tied and tied/untied opposite-split estimation-reliability correlations. The three reported scalars concern noisy-estimate agreement and cannot satisfy the primary biological result. \[coverage: partial\_secondary\_coverage\] methodological\_control: Source time-versus-structure discrimination controls may corroborate the interpretation where required; computational-control performance cannot substitute for the human result. prospective\_extension: New story or participant holdouts remain extensions unless they are authenticated as the original source evaluation.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Source-native rebinding identifies the original cross-split prediction of fixed untied integration-window estimates: tied predictor versus opposite-split untied target has reported Spearman correlation 0.668. Exact split identities, target arrays and aggregation are unresolved. Tied/tied reliability 0.716 is not truth accuracy and cannot be used when a candidate may alter both sides.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18351 bytes; SHA-256 `4e5697aafca6c9418b8ee9d688db578f53baa3359ec4098ce16e01c0721a10f4`.
+- Specification identity: 24999 bytes; SHA-256 `3e83d7dd5b1dc13d1581b144f196725453edc678eec2fb2db67cc180f59a99e0`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

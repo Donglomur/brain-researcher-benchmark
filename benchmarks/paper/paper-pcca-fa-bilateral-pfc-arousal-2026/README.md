@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Original Figure 3e/f simulation estimator recovery and its pCCA comparator remain genuine separately named methodological evidence with the complete source trial-count/endpoint conditions. Supplementary Figure 4 empirical model comparisons remain a separate source route with unresolved mapping/aggregation. The protected neural-to-pupil prediction proposal remains a prospective extension. None substitutes for the retained primary or validates a mixed-scope four-cell success claim. Reviewed source limits: Exact native data/channel/trial joins and the excluded pupil-session identity remain unresolved; published counts cannot justify selecting whichever session yields a desired result. Historical crosstalk and pupil-filter discrepancies, full empirical reference fits/matrices/prediction arrays and observation-to-output provenance remain unresolved. One-latent source mapping and degeneracy require preservation. Covariance/prediction invariants, not arbitrary loading signs or rotations, are the scientific comparison objects. The inspected publication extraction has a known hash but is not a newly authenticated complete publisher article. The pupil driver's moving-main URL does not establish a release binding. Figure 3 code blob identity is verified, while release commit-to-blob mapping, paper/code dimension-search differences, original baseline curves and justified recovery criteria remain unresolved. Signed-error cancellation is not automatically better recovery. Original one-latent and same-animal session-shuffle controls are source-defined; the protected 42-session prediction route is explicitly prospective and must not replace the 41-session original pupil result. No full-panel reproduction tolerances or same-result empirical superiority criterion are established. A schema unable to express empirical primary versus simulation secondary must leave full-primary success unavailable. A prior assistant log records intentional Figure 3 selection and a claimed owner clarification, without the underlying approval message being authenticated. Current root preservation policy governs this routine correction.
+
+**Primary scientific scope:** Original empirical Figure 4b/c covariance and Figure 6c pupil findings, with source-defined per-session/hemisphere quantities, pooled and animal-stratified comparisons, necessary one-latent and mismatched-session controls, and fixed examples preserved as illustrations rather than alternative aggregate criteria. Sessions/areas are nested within three animals. Original fitted pupil R-squared is descriptive; larger covariance, stronger significance or higher in-sample R-squared alone is not scientific improvement.
+
+**Retained secondary policy:** Original Figure 3e/f simulation estimator recovery and its pCCA comparator remain genuine separately named methodological evidence with the complete source trial-count/endpoint conditions. Supplementary Figure 4 empirical model comparisons remain a separate source route with unresolved mapping/aggregation. The protected neural-to-pupil prediction proposal remains a prospective extension. None substitutes for the retained primary or validates a mixed-scope four-cell success claim.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R² is retained only as descriptive calibration.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31881 bytes; SHA-256 `9303357e420fcce5ec110bdb3e10dd47153792769a92f6245cec83b54ec0883c`.
+- Specification identity: 39637 bytes; SHA-256 `27a48f9da7e8230af4c814c9ff9549ec5668d82566fb1410273238f1cd69927e`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
