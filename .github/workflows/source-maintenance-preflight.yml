@@ -21,5 +21,7 @@ jobs:
         run: python -I -S -B scripts/maintenance/workflow_source_pins.py --output /tmp/workflow-source-audit.json
       - name: Verify enrolled current and historical source semantics
         run: python -I -S -B scripts/check_source_integrity.py
+      - name: Verify complete current artifact ownership and source identities
+        run: python -I -S -B scripts/check_repository.py
       - name: Verify source maintenance rejection controls
         run: python -I -S -B -m unittest discover -s tests/maintenance -p 'test_workflow_source_pins.py' -v
