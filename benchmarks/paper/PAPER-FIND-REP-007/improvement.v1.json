@@ -2,161 +2,183 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-FIND-REP-007",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The registered task estimates biological changes after rewarded or unrewarded visual experience. More selective cells, larger learning contrasts, or smaller p-values are not better predictions by a candidate method. Altering the analysis to maximize these observations would change the scientific estimand; a new animal-held-out decoder would be a separately registered extension.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Whole-paper review identifies an original input-to-neural-response fitting procedure in Methods Retinotopy: a fixed 200-kernel convolutional encoding model. This source-native reconstruction route warrants further recovery, but the original evaluated performance endpoint/panel, exact score and meaningful fixed-capacity comparison are unverified. A preprocessing optimizer alone cannot activate an improvement task. Figure 5 mouse learning and descriptive neural contrasts remain distinct; no artificial pretraining experiment or new held-out benchmark is asserted.",
   "source_paper": {
     "title": "Unsupervised pretraining in biological neural networks",
     "url": "https://doi.org/10.1038/s41586-025-09180-y"
   },
   "evidence": [
     {
-      "id": "paper",
+      "id": "retinotopy",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12367527/fullTextXML",
+      "locator": "Methods: Retinotopy, steps 1-4; Extended Data Figure 1b,c",
+      "supports": "Describes original neural-response encoding Fn(img)=an*(K convolved with img)(kn,xn,yn), 200 kernels of 13x13, reference-mouse fitting and mapping of imaging mice. Reviewed text and panels do not establish a numerical performance comparator."
+    },
+    {
+      "id": "whole_paper",
       "kind": "paper",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12367527/",
-      "locator": "Results: Supervised and unsupervised plasticity; Figures 1, 4 and 5; Methods: Animals",
-      "supports": "Original outcomes are neural-selectivity, reward-activity and behavioral learning contrasts across experience conditions; the experimental units include longitudinally observed mice."
+      "locator": "Results: Faster task learning after pretraining; Figure 5 and Extended Data 9; Methods: Coding direction and similarity index; Reward-prediction neurons",
+      "supports": "Behavioral learning is an intervention in living mice. Coding and reward-neuron cross-validation estimate representations/activity; these are not an evaluated artificial pretraining learner."
     },
     {
       "id": "code",
       "kind": "author_code",
       "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/utils.py",
-      "locator": "load_spk; dprime; Get_dprime_selective_neuron; Get_selective_neuron_fraction_with_dprime; Get_dprime_rewPred_neuron; get_lick_response_in_zone",
-      "supports": "Author code computes descriptive response indices and fractions from complete recorded cell populations; the behavioral function uses the first 200 trials and the reward-zone lick response."
+      "locator": "load_retino; load_spk; dprime; Get_dprime_selective_neuron; get_lick_response_in_zone",
+      "supports": "Inspected utilities consume supplied retinotopy transforms and calculate neural/behavioral outcomes. They do not establish the complete reference-mouse encoding fit or a source performance-score replay."
+    },
+    {
+      "id": "code_scope",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/README.md",
+      "locator": "README lines 1-5",
+      "supports": "Author release documents data-processing/intermediate-output and figure-plotting notebooks; source-native retinotopy training and scoring entry points remain unbound."
     },
     {
       "id": "data",
       "kind": "author_data",
       "url": "https://api.figshare.com/v2/articles/28811129/versions/2",
       "locator": "Version 2 description and files manifest; DOI 10.25378/janelia.28811129.v2",
-      "supports": "Release supplies neural, behavioral, retinotopy and dimensionality-reduction files, including the three behavior-only pretraining cohorts. Metadata was reviewed; no array payload was read."
+      "supports": "Versioned release supplies neural, behavior, retinotopy and dimensionality-reduction files. Metadata review does not bind the original natural-image stimulus set, reference mouse or encoding fit matrices; no array payload was read."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Estimate experience-associated changes in selectivity, representations and subsequent licking behavior, preserving the original rewarded, unrewarded and control conditions.",
+      "description": "Recover the source-native retinotopy encoding fit of neural responses to natural images: Fn(img)=an*(K convolved with img)(kn,xn,yn), with positive amplitude an and each neuron's assigned kernel and spatial position. Treat resulting cross-mouse mapping as the original downstream use, not an invented decoder task.",
       "evidence_ids": [
-        "paper"
+        "retinotopy"
       ]
     },
     "dataset": {
-      "status": "verified",
-      "description": "Janelia Figshare article 28811129 version 2, DOI 10.25378/janelia.28811129.v2; all relevant original recording/behavior sessions rather than a selected cell subset.",
+      "status": "unresolved",
+      "description": "The source describes approximately 5,000 natural images for the reference fit and at least 500 images repeated three times for imaging-mouse mapping. Exact image identities, response arrays, reference dataset version and their binding to Figshare v2 are unresolved.",
       "evidence_ids": [
-        "data",
-        "code"
+        "retinotopy",
+        "data"
       ]
     },
     "cohort": {
-      "status": "verified",
-      "description": "Original longitudinal imaging mice and separate behavior-only cohorts; source Figure 5 contains natural-image pretraining, grating pretraining and no-pretraining groups. Session histories must remain attached to each animal.",
+      "status": "unresolved",
+      "description": "Recover the original reference mouse and complete imaging-mouse/eligible-neuron populations used for the retinotopy procedure. No reference identity, cell exclusion denominator or full original mapping cohort is authenticated by the reviewed metadata.",
       "evidence_ids": [
-        "paper",
+        "retinotopy",
         "data"
       ]
     },
     "split": {
-      "status": "not_applicable",
-      "description": "These registered biological contrasts do not define a candidate training/validation/test partition. Original coding-direction analysis splits do not turn the main descriptive findings into a generalization benchmark.",
+      "status": "unresolved",
+      "description": "Retinotopy describes fitting and subsequent application but no explicit predictive train/test evaluation protocol. Exact original image/repeat membership remains unbound. Preserve any recovered original fit-sample comparison; introducing held-out images, mice or trials would be a separately labelled extension.",
       "evidence_ids": [
-        "paper",
-        "code"
+        "retinotopy"
       ]
     },
     "inputs": {
       "status": "verified",
-      "description": "Calcium-derived spks with stimulus and running/corridor alignment, retinotopy area identities, and behavioral lick/reward records.",
+      "description": "Source inputs are natural images, corresponding single-neuron responses, and tissue positions for downstream map alignment. Reference fit learns the kernels; imaging-mouse mapping uses these kernels to assign neuronal receptive-field positions. Do not replace them with texture-task labels or behavioral outcomes.",
       "evidence_ids": [
-        "code",
-        "data"
+        "retinotopy"
       ]
     },
     "preprocessing": {
       "status": "verified",
-      "description": "Preserve author running/texture-frame selection, all-cell area denominators, stimulus IDs and source interpolation; author dprime uses population standard deviations with NaN-aware reductions.",
+      "description": "Reference images shown at 120x480 are downsampled to 30x120. Preserve K shape 200x13x13, positive amplitudes and original parameterization. The described alternating fit selects correlated kernel/position matches, updates aligned filters and recenters filter mass; downstream map alignment is a separate operation.",
       "evidence_ids": [
-        "code"
+        "retinotopy"
       ]
     },
     "metric": {
-      "status": "verified",
-      "description": "Descriptive dprime is 2*(mean1-mean2)/(sd1+sd2); area fractions count cells passing each threshold. Reward-zone lick probabilities and their rewarded-minus-unrewarded contrast describe animals, not candidate prediction error.",
+      "status": "unresolved",
+      "description": "Source describes correlation-based matching during fitting, but an evaluated reconstruction statistic, exact formula/normalization, numeric comparison and scored panel are not established. Do not assume a held-out R-squared, invent a loss, or treat lower internal optimizer cost as a paper-performance win.",
       "evidence_ids": [
-        "code"
+        "retinotopy"
       ]
     },
     "aggregation": {
-      "status": "verified",
-      "description": "Author fraction arrays retain visual-area, mouse/session and threshold axes; behavior-only outputs retain mouse and day. Repeated cells/trials are not independent animals.",
+      "status": "unresolved",
+      "description": "Original score aggregation over reference images/repeats, neurons and mapping mice is not specified as an evaluated performance endpoint. Retain every original eligible observation and distinguish fit quality from map alignment; no convenient neuron subset or new pooled score is admitted.",
       "evidence_ids": [
-        "code"
+        "retinotopy",
+        "data"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "No ordered candidate-performance endpoint for the registered biological contrasts",
+    "primary_metric": "Original fixed-capacity retinotopy neural-response reconstruction endpoint, if an evaluated source comparison can be recovered",
     "direction": "unresolved",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Published neural and behavioral effects are observations to estimate, not a performance score to exceed.",
+      "description": "No original evaluated encoding score or comparative panel is verified. The paper shows learned filters and maps and describes fitting; these do not supply a numerical performance baseline. First determine whether the paper reports an ordered evaluation at all.",
       "evidence_ids": [
-        "paper"
+        "retinotopy"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Replaying author indices would calibrate a reconstruction; it would not establish a competitive method baseline.",
+      "description": "Source-native fit replay requires the exact reference mouse, stimuli/responses, fitting code/settings and original scoring procedure. Re-running a newly authored fitting loss would not resolve the absent source evaluation.",
       "evidence_ids": [
-        "code"
+        "retinotopy",
+        "code",
+        "code_scope",
+        "data"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "Increasing an observed biological contrast is not an improvement objective.",
+      "rationale": "The original score and scale, meaningful fixed-capacity comparison, and variation are unrecovered. No performance margin can be justified from convergence of a preprocessing optimizer or from biological effect sizes.",
       "evidence_ids": [
-        "paper"
+        "retinotopy"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No candidate-win uncertainty rule applies. Original mouse-level descriptive inference is retained for calibration.",
-      "independent_unit": "Mouse, retaining repeated sessions and exposure history",
-      "rationale": "Cells, frames and repeated trials cannot supply independent biological replications or convert an effect estimate into method performance.",
+      "status": "unresolved",
+      "method": "After recovering an evaluated source endpoint, predeclare uncertainty that respects repeated images/trials, neurons nested within mice and any stochastic fit variation. A fit-sample comparison must be reported as such; it does not establish out-of-sample generalization.",
+      "independent_unit": "Unresolved original reference/mapping-mouse structure; images/repeats and neurons have distinct dependence",
+      "rationale": "The source mapping cohort and scored sampling units are not authenticated. Filter initializations and neurons cannot be silently counted as independent animals.",
       "evidence_ids": [
-        "paper",
-        "code"
+        "retinotopy",
+        "data"
       ]
     },
     "paper_win_requires": [
-      "No same-task paper win is admitted for this registration as currently defined.",
-      "Do not count higher dprime, more selective neurons, a larger licking contrast, or stronger significance as improvement.",
-      "A predictive method or different training intervention needs a separately reviewed task with its own source-paper comparator; an animal-held-out extension is not this paper's original comparison."
+      "First establish that the original paper evaluates an ordered retinotopy reconstruction/estimation endpoint, identify its exact panel/statistic and baseline, and verify that a meaningful fixed-capacity method comparison exists.",
+      "Recover the original reference mouse, image/repeat identities, full eligible cell populations, fitting conditions and exact score aggregation. Source description alone is not evaluator readiness.",
+      "Preserve the original 200 kernels of 13x13, source response parameterization, image processing and complete source evaluation cases; additional kernels, easier subsets or extra inputs cannot create a same-task win.",
+      "Reproduce the source-author method and original evaluated score before comparing a frozen candidate under justified effect and uncertainty requirements.",
+      "Do not invent a held-out split to supply a missing paper benchmark. Any new image-, trial- or mouse-held-out prediction evaluation is an extension; original fit-sample results must be described with their limited scope.",
+      "Do not count a lower unvalidated preprocessing loss, more favorable map, larger biological learning effect or stronger significance as surpassing the paper.",
+      "If further source recovery confirms that no ordered performance evaluation exists, reclassify this route as ineligible rather than manufacture a benchmark."
     ],
     "current_sota": {
       "status": "not_claimed",
-      "description": "No current-SOTA comparison is defined for these descriptive outcomes.",
+      "description": "No current-SOTA comparison is claimed; the original evaluated task and baseline remain unresolved.",
       "evidence_ids": []
     }
   },
   "episode": {
-    "improvement_loop": "Inactive: retain descriptive reconstruction and source-method auditing only.",
-    "candidate_freeze": "No candidate improvement program is admitted for this endpoint.",
-    "final_evaluation": "Historical selectivity/reward/lick computations are calibration outputs only.",
+    "improvement_loop": "Inactive pending source recovery and confirmation of an evaluated original endpoint. If admitted later, iterate within the original source fit conditions and fixed capacity with explicitly budgeted feedback; do not silently create a generalization task.",
+    "candidate_freeze": "Before any admitted comparison, freeze model capacity, source-compatible fit algorithm, preprocessing, initialization/selection policy and complete evaluation manifest. The original fitting/evaluation boundaries must first be recovered.",
+    "final_evaluation": "No active final evaluator exists for this route. A future owner evaluation must compare candidate and author method on the same original scored data and metric, clearly identifying any fit-sample limitation. New holdouts are extensions.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Author formulas remain reconstruction references; locally authored matched-cohort or held-animal analyses do not become paper baselines."
+    "baseline_policy": "Published evaluated score, reproduced author fit and current SOTA are separate. Existing biological-contrast evaluators calibrate reconstruction only; neither a locally defined loss nor a new held-out benchmark substitutes for an original source score."
   },
   "blocking_issues": [
-    "No defensible direction of better candidate performance exists for the registered descriptive estimands.",
-    "Existing evaluator lacks complete coding-direction and spatial-density analysis and has unresolved sequence threshold/trial-split semantics; these remain reproduction issues.",
-    "Any replacement must establish a source-backed ordered task without relabeling this biological contrast or silently narrowing the original population."
+    "Determine whether the original paper reports an ordered retinotopy performance evaluation at all; Methods optimization and Extended Data 1 filter/maps alone do not activate a benchmark.",
+    "Recover the exact evaluated score, formula, normalization, original comparator and meaningful comparison at fixed 200-kernel capacity.",
+    "Bind original reference mouse, natural-image identities, repeats, complete eligible neuronal cohort and encoding-response arrays to versioned public inputs.",
+    "Recover source-native retinotopy fitting and scoring entry points, initialization/update/stopping details, original model-selection policy and aggregation.",
+    "Before activation, justify effect and dependent-unit uncertainty, declare concrete access/resource budgets and validate source replay; do not add a holdout to conceal a missing original evaluation."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Preserve initial-evaluator-v1 and sequence/materials as source-derived calibration. Its engineered controls, endpoint calculations and prospective equal-animal summaries are not stronger-than-paper evidence."
+    "notes": "Preserve initial-evaluator-v1 and descriptive selectivity/reward/lick materials. Whole-paper recovery now tracks the unresolved original retinotopy fit as a possible source-native route. It does not assert an artificial pretraining experiment, an evaluated predictive benchmark or a same-task success from existing biological contrasts."
   }
 }

@@ -2,180 +2,210 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-paper-method-add-008",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The registered real-data scope is a curation/quality/yield comparison without ground-truth spike assignments or a defensible single performance ordering. The paper has separate simulation accuracy experiments, but substituting them would change this task and requires a separately reviewed registration.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The same source paper evaluates end-to-end spike sorting against known simulated spike trains in Figure 7 and Figure 7 supplement 1. This is a legitimate ordered original-paper task even though the historical local implementation covers only real-data curation. The source generator and five-seed protocol are recovered, but exact published accuracy/count arrays, dependency-bound matching defaults and figure aggregation are not yet pinned, so no improvement episode is admitted.",
   "source_paper": {
     "title": "Opening the black box toward a modular approach to spike sorting",
     "url": "https://doi.org/10.7554/eLife.110588.3"
   },
   "evidence": [
     {
-      "id": "real_figure",
+      "id": "simulation_paper",
       "kind": "paper",
       "url": "https://journal-symfony7.elifesciences.org/articles/110588/figures",
-      "locator": "Figure 8 caption (publisher-indexed text retrieved; direct article access challenged)",
-      "supports": "Real-data comparison uses three recordings and explicitly describes curation counts as proxy measurements."
+      "locator": "Version-of-record Figure 7 and Figure 7\u2014figure supplement 1 captions, publisher-indexed text",
+      "supports": "Original end-to-end accuracy-versus-SNR, ordered unit accuracy, runtime and unit-error-count panels for static and motion-corrected synthetic recordings."
+    },
+    {
+      "id": "metric_correction",
+      "kind": "paper",
+      "url": "https://journal-symfony7.elifesciences.org/articles/110588/peer-reviews",
+      "locator": "Author response to Reviewer 2, item 3; synthetic-benchmark diversity responses",
+      "supports": "Corrected accuracy is TPij/(Ni+Nj-TPij); authors extended simulations to 30 minutes and extra probe geometries. The first preprint formula had a sign error."
     },
     {
       "id": "figure_routes",
       "kind": "author_code",
       "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/README.md",
-      "locator": "Figure 7 and Figure 8 reproduction instructions",
-      "supports": "Simulation sorter benchmarks and real-data curation are distinct source analyses."
+      "locator": "Figure 7 and supplementary figure reproduction routes",
+      "supports": "Author source identifies sorters_simulation and sorters_simulation_other_probes as the original simulation figure routes."
     },
     {
-      "id": "real_inputs",
+      "id": "simulation_study",
       "kind": "author_code",
-      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_all_real_data.py",
-      "locator": "Dataset docstring and np1/np2/cn protocol lists",
-      "supports": "Names the IBL UCLA034, UCL AL032_2020-01-07 and Duszkiewicz A3702 inputs and motion-correction conditions."
+      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/sorters_simulation.py",
+      "locator": "preprocess; run_study; seeds; cases; main dataset_name",
+      "supports": "Five original seeds, paired static/drifting 500-unit 1800-second Neuropixels1-384 datasets, four sorters and motion-dependent correction settings."
     },
     {
-      "id": "sorter_protocols",
+      "id": "generator",
       "kind": "author_code",
-      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_one_piece_of_data.py",
-      "locator": "protocols; do_sorting; postprocessing_extensions_to_compute",
-      "supports": "Source sorter parameters and analyzer preprocessing; Kilosort common-reference/bandpass order differs from other protocols."
+      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/dataset.py",
+      "locator": "create_dataset and get_dataset",
+      "supports": "Source unit placement, firing rates, drift, templates, noise and ground-truth sorting generation/caching; library default values remain version-dependent."
     },
     {
-      "id": "curation",
+      "id": "simulation_figure_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/sorters_simulation.ipynb",
+      "locator": "Study summary; accuracy-versus-SNR, ordered accuracy and unit-count plot calls",
+      "supports": "The stored study summary names 10 datasets and 40 sorter cases; figure code groups by sorter and motion condition, averages by SNR bin and plots complete ordered accuracy."
+    },
+    {
+      "id": "other_probes",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/sorters_simulation_other_probes.py",
+      "locator": "dataset_names; seed=2205; motion_case loop",
+      "supports": "Original extra-probe conditions include Cambridge Neurotech, Neuropixels2, SiNAPS and tetrode; the tetrode drifting case is explicitly excluded."
+    },
+    {
+      "id": "legacy_curation",
       "kind": "author_code",
       "url": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/generate_curation_data.py",
-      "locator": "dataset_protocols; bombcell_labels; protocol_data; DataFrame columns",
-      "supports": "Complete unit counts, Bombcell good/MUA/noise, UnitRefine SUA/MUA/noise and number of SLAy merge groups are the reported outputs, not ground-truth spike matches."
+      "locator": "protocol_data and output columns",
+      "supports": "Real-data curation counts are distinct proxy outputs and cannot substitute for the recovered ground-truth accuracy task."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Reconstruct and compare the Figure 8 real-recording curation outputs of Kilosort4, Lupin, TriDesClous 2 and SpyKING-CIRCUS 2. These diagnostics do not define an ordered spike-accuracy objective.",
+      "description": "Recover individual unit spike trains from simulated extracellular recordings and exceed the source end-to-end sorter accuracy results under the original static and drifting conditions. This binds an actually evaluated task in the same paper, not a new proxy endpoint.",
       "evidence_ids": [
-        "real_figure",
-        "curation"
+        "simulation_paper",
+        "simulation_study"
       ]
     },
     "dataset": {
       "status": "unresolved",
-      "description": "Source names DANDI 000409 UCLA034, UCL AL032_2020-01-07 and DANDI 000939 A3702. Exact immutable bytes remain unresolved; the existing A3702 inventory filename does not establish equivalence to the source ses-191126 filename.",
+      "description": "Original main dataset Neuropixels1-384_500_1800.s with seeds 2205, 2406, 2308, 1110 and 2512. Pinned dataset.py is recovered, but exact generated-byte identity and the SpikeInterface/generator dependency revision underlying the publication remain unverified.",
       "evidence_ids": [
-        "real_inputs"
+        "simulation_study",
+        "generator"
       ]
     },
     "cohort": {
       "status": "verified",
-      "description": "Figure 8 includes three real recordings spanning chronic Neuropixels 2.0, acute Neuropixels 1.0 and chronic 64-channel Cambridge Neurotech recordings. A single-recording curation component cannot represent the whole source comparison.",
+      "description": "Main study: five 500-unit realizations, each with matched static and drifting recordings and all four source sorters. Retain supplement cases cambridgeneurotech#ASSY-158-H5_140_1800.s, Neuropixels2-128_250_1800.s, sinaps-128_250_1800s and tetrode_10_1800.s at seed 2205; source omits drifting tetrode.",
       "evidence_ids": [
-        "real_figure",
-        "real_inputs"
+        "simulation_study",
+        "other_probes"
       ]
     },
     "split": {
-      "status": "not_applicable",
-      "description": "The source Figure 8 analysis is a whole-recording sorter/curation comparison with no supervised train/test accuracy split; introducing a new labeled holdout changes this task.",
+      "status": "verified",
+      "description": "The original unsupervised sorting evaluation scores whole simulated recordings against evaluator-held ground truth. It has paired static/drifting conditions rather than a supervised train/test split. Preserve original seeds and complete recordings; any new-seed generalization panel is a separately labeled extension.",
       "evidence_ids": [
-        "real_inputs",
-        "curation"
+        "simulation_study",
+        "generator",
+        "other_probes"
       ]
     },
     "inputs": {
       "status": "verified",
-      "description": "Raw extracellular recordings, probe geometry, the four source sorter protocols, and source curation tools/models. UnitRefine consumes pretrained classifiers; their exact weights remain an execution hold.",
+      "description": "Candidates receive the original simulated extracellular traces, probe geometry and the source-allowed metadata. True spike assignments/templates are evaluator-side for the end-to-end task; the paper\u2019s component benchmarks with perfect templates or true peak times do not grant those oracle inputs here.",
       "evidence_ids": [
-        "real_inputs",
-        "sorter_protocols",
-        "curation"
+        "simulation_study",
+        "generator",
+        "simulation_paper"
       ]
     },
     "preprocessing": {
       "status": "unresolved",
-      "description": "Source uses motion correction for IBL and no-motion protocols for UCL/Duszkiewicz. Analyzer pipelines reverse common-reference and bandpass order between Kilosort and other sorters; effective dependency defaults and common-condition comparability remain unqualified.",
+      "description": "Source study applies 150\u20139000 Hz Bessel bandpass, float32 and 35 ms margin before sorting. Correction is enabled only for drifting cases; Lupin uses wobble matching. Exact source library/sorter versions, remaining defaults and generated trace equivalence must be reconciled before replay.",
       "evidence_ids": [
-        "sorter_protocols",
-        "real_inputs"
+        "simulation_study",
+        "generator"
       ]
     },
     "metric": {
-      "status": "verified",
-      "description": "Per-sorter counts: total units; Bombcell good plus non_soma_good, MUA plus non_soma_MUA, noise; UnitRefine SUA/MUA/noise; count of proposed SLAy merge groups. Increasing good-unit yield alone need not improve true spike assignments.",
+      "status": "unresolved",
+      "description": "Corrected per-ground-truth-unit spike accuracy is TPij/(Ni+Nj\u2212TPij), higher is better. Source figure also reports well-detected, false-positive, redundant and overmerged counts. Exact native matching tolerance, assignment/default thresholds and their publication-version binding still require recovery; the erroneous first-preprint denominator must not be used.",
       "evidence_ids": [
-        "curation"
+        "metric_correction",
+        "simulation_figure_code"
       ]
     },
     "aggregation": {
-      "status": "verified",
-      "description": "Each recording/sorter produces its own curation row; the source does not define a single ranking combining quality proxies, drift visualization and sorter agreement.",
+      "status": "unresolved",
+      "description": "Source plots SNR-bin average accuracy and ordered unit accuracies grouped by sorter and static/drifting condition, plus unit-error counts and runtime. Exact figure result arrays, bin boundaries and weighting must be recovered; no source-authorized scalar across conditions/probes has been installed.",
       "evidence_ids": [
-        "curation",
-        "real_figure"
+        "simulation_paper",
+        "simulation_figure_code"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "No defensible ordered accuracy endpoint for the registered real-recording proxy comparison",
-    "direction": "unresolved",
+    "primary_metric": "Original Figure 7 and supplement ground-truth unit-accuracy panels; exact scalar or joint panel superiority rule unresolved",
+    "direction": "higher",
     "published_baseline": {
-      "status": "not_applicable",
-      "description": "Figure 8 reports descriptive proxy counts rather than a scalar accuracy baseline to surpass. The source simulation accuracy study is a different registered scope.",
+      "status": "unresolved",
+      "description": "Published per-sorter accuracy curves and error-count arrays are not recovered as exact numerical artifacts. Approximate graph readings and relative prose such as the reported drift losses are not a numeric baseline. Preserve Lupin and all source comparators, including Kilosort4, for the matching condition.",
       "evidence_ids": [
-        "real_figure",
-        "figure_routes"
+        "simulation_paper",
+        "simulation_figure_code"
       ],
       "value": null
     },
     "reproduced_author_baseline": {
       "status": "unresolved",
-      "description": "No audited native sorter/curator reference is established; reproducing curation counts would calibrate the analysis only.",
+      "description": "The pinned study scripts define an author replay route, but no original simulation, native sorter execution or audited score replay was run. The legacy real-data table is not a baseline for this task.",
       "evidence_ids": [
-        "curation"
+        "simulation_study",
+        "generator",
+        "legacy_curation"
       ],
       "value": null
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "A meaningful increase in accuracy cannot be defined from a yield or curation-label count alone.",
+      "rationale": "A meaningful accuracy gain and permitted trade-offs against false-positive/overmerged/redundant units require source-result recovery and reference variability. No universal margin or yield-only improvement is admitted.",
       "evidence_ids": [
-        "real_figure",
-        "curation"
+        "simulation_paper"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No paper-win inference for this ineligible endpoint.",
-      "independent_unit": "Recordings for descriptive comparisons; units and spikes within a recording are dependent.",
-      "rationale": "Uncertainty on proxy counts does not supply missing ground truth or a valid success ordering.",
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-versus-author comparisons across the original simulated realizations, keeping static/drifting pairing and separate probe strata. Resolve joint panel inference before any final feedback.",
+      "independent_unit": "Independently generated recording realization; static/drifting versions share their spike trains, and neurons/spikes within a realization are nested measurements.",
+      "rationale": "The five main seeds do not become thousands of independent replicates by counting units. Supplement probe cases share seed 2205 and have a different design; do not pool them as interchangeable seeds.",
       "evidence_ids": [
-        "real_inputs",
-        "curation"
+        "simulation_study",
+        "other_probes"
       ]
     },
     "paper_win_requires": [
-      "This registration cannot award a same-task paper win from larger yields, improved curation labels, a visually stable raster, or a lower p-value.",
-      "Any proposed replacement must be separately reviewed and tied to the original source simulation benchmark, exact generator/ground-truth conditions and source accuracy metric; do not relabel the existing A3702 analysis as that task.",
-      "Retain all source recordings and sorter conditions when reproducing Figure 8; restricting to the bounded local component is calibration only."
+      "Recover the exact publication-compatible generator and native evaluator dependencies, complete original seed/probe/condition manifest and published score arrays before admission.",
+      "Compare a frozen end-to-end method with the original source methods, including Lupin and the strongest matching comparator, on the same complete recordings with identical scoring and permitted inputs.",
+      "Predeclare meaningful effects, protected error-count outcomes, condition/probe aggregation and dependence-aware uncertainty; no favorable SNR, unit, seed or motion-condition subset may define victory after results.",
+      "Keep true spike assignments and other oracle component inputs out of end-to-end candidate inference. A perfect-template or true-peak component benchmark cannot replace end-to-end sorting.",
+      "Original public-seed performance and any newly protected-seed extension must be reported separately; the extension cannot become a same-task paper win.",
+      "The legacy Figure 8 curation/yield/raster implementation remains calibration only and cannot establish simulation accuracy."
     ],
     "current_sota": {
       "status": "not_claimed",
-      "description": "No current-SOTA comparison is established by curation counts or by this source review.",
+      "description": "Source-paper comparators are being recovered; no separate present-day SOTA comparison has been verified.",
       "evidence_ids": []
     }
   },
   "episode": {
-    "improvement_loop": "Inactive for paper-win scoring because the registered Figure 8 diagnostics do not define an ordered accuracy target. Historical table reconstruction can still be calibrated.",
-    "candidate_freeze": "Any future eligible replacement must freeze its own exact source task and comparator before candidate development.",
-    "final_evaluation": "No final paper-win evaluation is admitted for this registration.",
+    "improvement_loop": "After source recovery and admission, use a predeclared development process for full sorter improvements under a common information and compute budget. Original public benchmark exposure must be recorded; newly generated development seeds cannot redefine the final source comparison.",
+    "candidate_freeze": "Freeze algorithm, code/dependencies, effective parameters, seeds/probe/condition manifest, preprocessing, oracle-access exclusions, source comparator, metric aggregation and uncertainty rule before final scoring.",
+    "final_evaluation": "Score the fixed candidate and qualified author replay against the original complete simulation ground truth; report numerical source reproduction separately from meaningful superiority, with all original panels retained.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Keep author real-data proxy outputs distinct from ground-truth simulation accuracy. A local count table or generated engineering control is not an author performance baseline."
+    "baseline_policy": "Published simulation results, rerun author sorter results and current SOTA remain separate. Real-recording quality proxies and local generated controls cannot replace the simulation source baseline."
   },
   "blocking_issues": [
-    "Registered real-data proxies do not establish ground-truth sorting accuracy.",
-    "Native reference results, source-recording byte identity, sorter/default versions and curation-model hashes are not verified.",
-    "The existing evaluator covers only A3702 post-native curation/raster analysis; the source real-data figure uses three recordings."
+    "Exact published Figure 7/supplement accuracy and unit-error-count arrays are not pinned.",
+    "Publication-compatible SpikeInterface, generator, sorter versions and effective matching/default rules are unresolved.",
+    "Original simulated byte identity, source binning/weighting and numerical author replay have not been qualified.",
+    "A scalar or joint panel decision rule, meaningful effect, dependence-aware uncertainty and common episode budgets are not fixed.",
+    "Historical evaluator only reconstructs real-data curation/raster outputs; a working source-compatible simulation scorer is still required."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Existing curation table reconstruction, Bombcell-good raster export and generated controls remain calibration components. Their successful execution is not surpassing the paper."
+    "notes": "Preserve the historical real-recording four-sorter curation and raster implementation and its controls as calibration only. It does not constrain the whole-paper scope: the original Figure 7/supplement ground-truth task is now identified, without changing historical files or claiming readiness."
   }
 }

@@ -3,7 +3,7 @@
   "task_id": "PAPER-FIND-003",
   "objective": "surpass_source_paper_same_task",
   "disposition": "ineligible",
-  "disposition_reason": "The current original findings estimate ripple-rate learning effects and ripple/grid/behavior associations. Their coefficients and p-values are not performance measures that can be improved by exceeding the reported value. Turning these into a new decoder or detector would change the task.",
+  "disposition_reason": "A whole-paper review found no originally evaluated computational-performance endpoint that can be surpassed on the same neural-data task. Figures 2-5 report biological effects and associations; the odd/even grid analysis estimates held-half modulation rather than predictive error. Participant behavioral accuracy is ordered but describes the original human cohort, not an author computational method. Replacing those participants with a machine solver changes the population. This conclusion is not restricted to the legacy ripple-model reconstruction.",
   "source_paper": {
     "title": "Human hippocampal ripples align new experiences with a grid-like schema",
     "url": "https://doi.org/10.1016/j.neuron.2025.07.028"
@@ -13,8 +13,8 @@
       "id": "ripple-paper",
       "kind": "paper",
       "url": "https://doi.org/10.1016/j.neuron.2025.07.028",
-      "locator": "Summary; Results: Task and intracranial recordings, Hippocampal ripple activity increases as learning progresses; Fig. 4G,H",
-      "supports": "The study reports learning-related ripple effects and associations between rest ripples, grid modulation and inference; these are scientific estimands, not a benchmarked prediction algorithm."
+      "locator": "Results and Figures 2-5; STAR Methods: Robust regression and partial correlation analyses; Task and intracranial recordings",
+      "supports": "Whole-paper findings are learning/rest ripple effects, grid modulation, and behavior/HFB associations. Reported human behavioral accuracy is an observed cohort outcome, not an evaluated neural-data algorithm baseline."
     },
     {
       "id": "ripple-learning",
@@ -36,16 +36,37 @@
       "url": "https://zenodo.org/records/16950716",
       "locator": "Version v2, published August 27 2025; description and file inventory",
       "supports": "Released processed neural/behavioral data; large HFB and contact files are on Zenodo and smaller complementary files are in the author repository."
+    },
+    {
+      "id": "ripple-grid-validation",
+      "kind": "paper",
+      "url": "https://doi.org/10.1016/j.neuron.2025.07.028",
+      "locator": "STAR Methods grid-code analysis, Eqs. 5-7; Figure 4E,F; Figure S3",
+      "supports": "Odd/even halves estimate orientation on training trials and fit a second modulation model on test trials; averaging beta1/orientation estimates tests grid modulation, not out-of-sample predictive error or recovery against known grid orientation."
+    },
+    {
+      "id": "ripple-whole-paper-limits",
+      "kind": "paper",
+      "url": "https://www.cell.com/neuron/pdf/S0896-6273%2825%2900555-0.pdf",
+      "locator": "Discussion: content-specific replay and proposed temporal decoding linear models; STAR Methods: Hippocampal ripples detection",
+      "supports": "Content-specific replay decoding is proposed for future work. Ripple detection is a threshold-based analysis procedure; the reviewed paper does not evaluate detector accuracy against ground-truth ripple annotations."
+    },
+    {
+      "id": "ripple-regression",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/liulab-repository/ripple-representation-learning/f143b0b7dca77bf9b09d5c7f39352fc5332c83c0/ripple/R_scripts/LearnR_predict_performance.R",
+      "locator": "Full-table robust-regression fitting and coefficient-table export",
+      "supports": "The author Learn-R prediction script fits associations and exports regression coefficients, without a held-out predictive-error evaluation."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Estimate learning-phase and accuracy effects on hippocampal ripple rates and their association with inference, HFB and estimated grid modulation. These observational effects have no source-defined direction that an alternative algorithm should maximize.",
+      "description": "Whole-paper targets are learning/rest ripple effects, grid-like modulation and its relationships to behavior, and ripple-aligned cortical HFB associations. Review also considered the original ripple detector and participant inference task. No originally evaluated computational prediction/recovery accuracy target was found; this is not a restriction imposed by the legacy registration.",
       "evidence_ids": [
         "ripple-paper",
-        "ripple-learning",
-        "ripple-grid"
+        "ripple-grid-validation",
+        "ripple-whole-paper-limits"
       ]
     },
     "dataset": {
@@ -65,10 +86,9 @@
     },
     "split": {
       "status": "not_applicable",
-      "description": "The registered rate/behavior association endpoint is inferential, without a held-out predictive-performance target. The paper's grid-orientation cross-validation supports estimating grid modulation, not optimizing the learning-rate association or scoring the supplied coefficient table as a decoder.",
+      "description": "No computational-performance test split is supplied for the association endpoints. For grid analysis, the original odd/even split estimates orientation on one half, then fits beta0 and beta1 on the other half, swaps halves and averages estimates. This evaluates modulation strength; it is not a fixed trained predictor scored by held-out loss, and changing the output to prediction error would introduce an unreported endpoint.",
       "evidence_ids": [
-        "ripple-paper",
-        "ripple-grid"
+        "ripple-grid-validation"
       ]
     },
     "inputs": {
@@ -89,10 +109,11 @@
     },
     "metric": {
       "status": "not_applicable",
-      "description": "Mixed-model coefficients, covariance, Learn-R, partial correlations and their uncertainty are estimates to reproduce or challenge. A larger positive slope, correlation or smaller p-value is not a scientifically ordered performance improvement.",
+      "description": "Source outputs include mixed-model coefficients, Learn-R, robust partial correlations and grid beta1/orientation estimates. Maximizing these is not algorithm improvement. Human feature/inference accuracy is an observed participant outcome, while the paper provides neither an author machine-solver score under matched exposure nor a ground-truth detector/recovery benchmark.",
       "evidence_ids": [
-        "ripple-learning",
-        "ripple-grid"
+        "ripple-paper",
+        "ripple-grid-validation",
+        "ripple-whole-paper-limits"
       ]
     },
     "aggregation": {
@@ -104,23 +125,27 @@
     }
   },
   "comparison": {
-    "primary_metric": "No eligible ordered performance metric for the registered ripple-rate and grid-association findings",
+    "primary_metric": "No eligible original computational-performance metric recovered from the whole paper",
     "direction": "unresolved",
     "published_baseline": {
       "status": "not_applicable",
       "value": null,
-      "description": "Reported effects and correlations are not algorithm-performance baselines to exceed.",
+      "description": "Figures 2-5 report biological effects and associations; grid cross-validation reports modulation coefficients. Human behavioral accuracy is not recast as an author neural-data-method score, and no original detection/replay prediction baseline is established.",
       "evidence_ids": [
-        "ripple-paper"
+        "ripple-paper",
+        "ripple-grid-validation",
+        "ripple-whole-paper-limits",
+        "ripple-regression"
       ]
     },
     "reproduced_author_baseline": {
       "status": "not_applicable",
       "value": null,
-      "description": "A faithful mixed-model or coefficient-table reconstruction is calibration, not a baseline whose scientific value increases when exceeded.",
+      "description": "An author association/grid-estimation rerun would reproduce estimates, not establish a computational-performance comparator. A new predictive error scored from those fits would be a new endpoint.",
       "evidence_ids": [
         "ripple-learning",
-        "ripple-grid"
+        "ripple-grid",
+        "ripple-grid-validation"
       ]
     },
     "minimum_effect": {
@@ -142,9 +167,11 @@
       ]
     },
     "paper_win_requires": [
-      "No active same-task paper win is admitted for these descriptive endpoints.",
-      "Retain source effects, nulls and uncertainty without rewarding their magnitude or significance.",
-      "Any proposed held-patient behavior decoder, raw ripple detector or re-estimated grid-orientation benchmark needs its own source-backed original task and baseline; it cannot retroactively replace this task."
+      "No active same-task computational paper win is admitted on the basis of this whole-paper review; the legacy reconstruction does not determine eligibility.",
+      "Do not reward larger ripple slopes, correlations, grid modulation, smaller p-values or better agreement with supplied coefficients as performance improvement.",
+      "Do not convert the odd/even grid coefficient analysis into an unreported predictive-loss or orientation-recovery benchmark.",
+      "Do not replace the original human participants with a machine solver and compare its score to their behavioral accuracy as the same neural-data task.",
+      "Any subsequently recovered computational endpoint actually evaluated in this same source paper may reopen eligibility; an invented held-patient decoder or the paper's proposed future replay analysis is an extension."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -153,17 +180,18 @@
     }
   },
   "episode": {
-    "improvement_loop": "Inactive for this ineligible descriptive task. Existing fitting/reconstruction can assess computational calibration only.",
+    "improvement_loop": "Inactive after review of the whole source paper, including grid cross-validation, ripple detection, behavioral outcomes and HFB associations. Existing reconstruction remains calibration only; a future original computational endpoint could reopen admission.",
     "candidate_freeze": "For any retained calibration run, freeze the source estimand, inclusion and fitting choices before comparing reference estimates; this does not create a performance episode.",
     "final_evaluation": "Report reconstruction fidelity and scientific sensitivity separately, with no stronger-than-paper reward.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Neither reference coefficient agreement nor a larger effect/smaller p-value is source-paper improvement. No author predictive-performance baseline was identified."
+    "baseline_policy": "Whole-paper eligibility is independent of the legacy registration. Descriptive association estimates, human behavioral outcomes, author-method computational performance and new predictive extensions must not be interchanged."
   },
   "blocking_issues": [
-    "The registered scientific target is a descriptive association with no defensible ordered performance endpoint.",
-    "Raw-sEEG ripple detection and fresh grid estimation are outside the demonstrated processed inputs.",
-    "A different supervised decoder would require a distinct source-grounded task; it is not a repair by changing this task's success metric."
+    "Whole-paper computational analyses assess biological effects, associations and modulation, without an eligible ordered original algorithm-performance endpoint.",
+    "The odd/even grid procedure refits modulation on its test half and reports beta1; no predictive-loss or known-orientation recovery baseline is supplied.",
+    "The reported human behavioral accuracy cannot become a machine-solver baseline without changing the scientific population and intervention.",
+    "The threshold ripple detector is not evaluated against ground-truth event labels, and content-specific replay decoding is discussed as future work; neither provides an original task baseline."
   ],
   "legacy": {
     "role": "calibration_only",

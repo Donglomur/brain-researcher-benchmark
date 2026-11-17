@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-paper-method-010",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The registered mouse sensorimotor and rat CA1 scope is an empirical visualization/reconstruction task. The source paper benchmarks ordered performance on simulations with known ground truth, not on this combined empirical scope. Its empirical displays do not define a paper score to surpass. The local held-out neighborhood, linear behavior-prediction and perturbation-stability endpoints change the scientific task; beating them cannot establish a source-paper win.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source paper has a defensible ordered task: recover the original within-module ordering in its Figure 1 five-module simulation benchmark. The original generator, population, ten realization IDs and metric implementations are recoverable, but the published numeric Rastermap score panel and original result artifact have not been recovered and pinned. No scientific run establishes an author replay. The legacy empirical evaluator is not the simulation scorer and cannot establish this paper win.",
   "source_paper": {
     "title": "Rastermap: a discovery method for neural population recordings",
     "url": "https://www.nature.com/articles/s41593-024-01783-4"
@@ -13,174 +13,195 @@
       "id": "r-paper",
       "kind": "paper",
       "url": "https://www.nature.com/articles/s41593-024-01783-4",
-      "locator": "Results: Benchmarking with known ground truth; Figures 1h-j, 3 and 4a; Methods: Spontaneous activity in sensorimotor areas; Rat hippocampus data",
-      "supports": "Separates simulated ordering benchmarks from empirical illustrations and describes the original empirical preprocessing."
+      "locator": "Results: Benchmarking with known ground truth; Figure 1h-j; Methods: Simulations / Simulation with different modules; Benchmarking embedding algorithms",
+      "supports": "The original source evaluates ordering and module separation on simulated neural activity. Figure 1i-j report ten simulations, separately for five modules."
     },
     {
-      "id": "r-mouse",
+      "id": "r-generator",
       "kind": "author_code",
-      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/notebooks/rastermap_largescale.ipynb",
-      "locator": "Introduction; Load data; Run Rastermap; Neural activity prediction from behavior",
-      "supports": "The demonstration uses a half-recording, 200-neuron bins and a nonlinear PC predictor; these are not automatically the paper figure protocol."
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/simulations.py",
+      "locator": "psth_to_spks; powerlaw_module; stim_tuning_module; stim_sustained_module; sequence_module; make_full_simulation, lines 19-220",
+      "supports": "Original five-module generator, spike/noise model and neuron permutation."
     },
     {
-      "id": "r-rat",
+      "id": "r-notebook",
       "kind": "author_code",
-      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/notebooks/rastermap_singleneurons.ipynb",
-      "locator": "Introduction; Run Rastermap; compute tuning curves; Visualization",
-      "supports": "137-neuron processed CA1 demonstration with 200 ms bins, full-matrix z-scoring and time_lag_window=15."
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/fig1.ipynb",
+      "locator": "make simulations and run embedding algorithms cells, lines 25-62",
+      "supports": "Runs make_full_simulation with n_per_module=1000 and random_state=0..9, then embedding_performance."
     },
     {
-      "id": "r-loader",
+      "id": "r-run",
       "kind": "author_code",
-      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/loaders.py",
-      "locator": "load_hippocampus_data, lines 89-156; tuning-curve helper preceding it",
-      "supports": "Maze-epoch spike binning and direction-aware track-position construction."
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/simulations.py",
+      "locator": "run_algos and embedding_performance, lines 324-439",
+      "supports": "Fits original simulation inputs, compares seven embeddings, and saves scores_all and embs_all to sim_performance.npz."
     },
     {
       "id": "r-metrics",
       "kind": "author_code",
       "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/metrics.py",
-      "locator": "triplet_order; embedding_contamination; embedding_quality, lines 21-138",
-      "supports": "Ground-truth order metrics and the native maximum-2000-point neighborhood calculation."
+      "locator": "triplet_order; embedding_contamination; benchmarks, lines 21-79",
+      "supports": "Exact sampled triplet order and module-contamination formulas, including reversal invariance and sampling details."
+    },
+    {
+      "id": "r-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/fig1.py",
+      "locator": "panels_scores; fig1, including sim_performance.npz loading at lines 384-393",
+      "supports": "Uses source result arrays for the original per-module score panels; no new weighted cross-module score is implied."
+    },
+    {
+      "id": "r-empirical",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/notebooks/rastermap_largescale.ipynb",
+      "locator": "Neural activity prediction from behavior cells, lines 192-340",
+      "supports": "A separate source-author nonlinear neural-PC prediction route exists. Its variance-explained diagnostic is distinct from local linear prediction and from Figure 1 ordering scores."
     },
     {
       "id": "r-local",
       "kind": "registration",
       "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-010/implementations/initial-evaluator-v1/evaluator.py",
       "locator": "temporal_split; knn_indices; behavior_prediction; HOLDS",
-      "supports": "Historical implementation explicitly labels its 60/20/20 split and linear behavior prediction prospective, and disclaims paper qualification."
+      "supports": "Historical empirical evaluator uses prospective temporal, neighborhood and linear-prediction endpoints; it does not implement the original five-module simulation benchmark."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Visualize neural population ordering and its behavioral/position relationships in the registered empirical scope; no source-defined ordered scalar evaluates the combined displays.",
-      "evidence_ids": [
-        "r-paper"
-      ]
-    },
-    "dataset": {
-      "status": "unresolved",
-      "description": "Mouse spontaneous-activity and rat CA1 processed archives are identified, but the mouse notebook explicitly truncates to half the recording. Its data and settings cannot be assumed identical to Figure 3. Exact paper-figure assets remain unbound.",
-      "evidence_ids": [
-        "r-mouse",
-        "r-rat"
-      ]
-    },
-    "cohort": {
-      "status": "verified",
-      "description": "The demonstrated populations are 34,086 mouse sensorimotor neurons and all 137 rat CA1 neurons during linear-track traversal. These are recordings, not thousands of independent biological replicates.",
-      "evidence_ids": [
-        "r-mouse",
-        "r-rat"
-      ]
-    },
-    "split": {
-      "status": "unresolved",
-      "description": "The CA1 demonstration fits all timepoints. The mouse notebook obtains itest from PredictionNetwork.train_model; the registered 60/20/20 chronological split is a new extension and is not a recovered paper split.",
-      "evidence_ids": [
-        "r-rat",
-        "r-mouse",
-        "r-local"
-      ]
-    },
-    "inputs": {
-      "status": "verified",
-      "description": "Neurons-by-time spks; mouse aligned camera/neural clocks, behavioral keypoints and running; rat loc_signed and cell-type flags for interpretation.",
-      "evidence_ids": [
-        "r-mouse",
-        "r-rat"
-      ]
-    },
-    "preprocessing": {
-      "status": "unresolved",
-      "description": "Rat source loader bins at 0.2 s and retains the maze epoch. The paper specifies rat time_lag_window=0 while the reviewed notebook uses 15; paper mouse bins contain 50 neurons while the notebook uses 200. Exact figure processing must be reconciled for calibration.",
-      "evidence_ids": [
-        "r-loader",
-        "r-paper",
-        "r-rat",
-        "r-mouse"
-      ]
-    },
-    "metric": {
-      "status": "not_applicable",
-      "description": "No ordered paper performance metric exists for this registered combined empirical visualization. Triplet accuracy and module contamination require simulated ground-truth modules; transferring them or inventing a downstream score changes the task.",
+      "description": "Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
       "evidence_ids": [
         "r-paper",
         "r-metrics"
       ]
     },
-    "aggregation": {
-      "status": "not_applicable",
-      "description": "There is no source-defined combined mouse/rat scalar or cross-recording performance aggregation for these empirical figures.",
+    "dataset": {
+      "status": "verified",
+      "description": "Original make_full_simulation source at b37644ea52c4cd81f143a9c2cec90286ffd61c49 and Figure 1 notebook recipe: sim_0.npz through sim_9.npz. Each realization contains 6,000 neurons over 50,000 timepoints. Serialized original artifact checksums and software environment still need recovery.",
       "evidence_ids": [
+        "r-generator",
+        "r-notebook"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All five modules: tuning, sustained responses, two sequences with 1,000 neurons each, and 2,000 power-law neurons. Preserve shared spontaneous contribution 0.75, Poisson spike sampling and independent Poisson noise mean 0.03. Do not substitute power-law-only, noise-free or smaller simulations.",
+      "evidence_ids": [
+        "r-generator"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The original task fits an unsupervised embedding to each complete simulation; it has no supervised train/test time split. The final comparison must retain the original ten random_state values 0..9. Additional seeds or temporal splits are supplemental generalization assessments, not substitutes for the paper-score comparison.",
+      "evidence_ids": [
+        "r-notebook",
+        "r-run"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "The algorithm receives only the shuffled spks activity matrix. xi_all contains module/position ground truth for evaluation; iperm, latent rates and stimulus-generation outputs must not be candidate supervision or side-channel inputs.",
+      "evidence_ids": [
+        "r-generator",
+        "r-run"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Retain pinned run_algos input processing and author defaults. Original Rastermap uses 100 clusters, 200 PCs, locality 0.8, time_lag_window 10, grid_upsample 10 and time_bin 10. Source comparison methods consume model.Usv. The local empirical 60/20/20 split and train-only transformation are not this protocol.",
+      "evidence_ids": [
+        "r-run",
+        "r-local"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-module fraction of sampled triples with the correct relative order, allowing reversal (higher is better), and sampled between-neuron contamination by other modules (lower is better). Preserve the exact metrics.py draw counts, qualifying-pair rule and interval slicing; report percentages as in Figure 1.",
+      "evidence_ids": [
+        "r-metrics",
         "r-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Retain separate results for each metric and each of the five modules across all ten original simulations; reproduce the displayed means and standard errors. The source provides no single weighted cross-module superiority score. A joint decision rule must be justified before evaluation.",
+      "evidence_ids": [
+        "r-paper",
+        "r-run",
+        "r-figure"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "No admissible ordered metric for the registered empirical visualization scope",
-    "direction": "unresolved",
+    "primary_metric": "Figure 1i per-module correctly ordered triplets (%); Figure 1j per-module contamination (%) is a required lower-is-better companion endpoint",
+    "direction": "higher",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "The paper does not give a benchmark score for this combined empirical scope; simulation scores do not transfer to these recordings.",
+      "description": "Exact Rastermap values in Figure 1i-j and sim_performance.npz are not recovered. Approximate visual readings of plot coordinates must not become exact published baselines. Preserve all five modules and both metrics when recovering the score panel.",
       "evidence_ids": [
-        "r-paper"
+        "r-paper",
+        "r-figure"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Native figure reconstruction would calibrate the historical task, not create a missing published improvement endpoint.",
+      "description": "A source-author route is identified: the pinned notebook generator, run_algos and metrics.benchmarks. It has not been executed or numerically reconciled with the published panel. A rerun score must remain distinct from the source-paper score.",
       "evidence_ids": [
-        "r-local"
+        "r-notebook",
+        "r-run",
+        "r-metrics"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "A meaningful performance margin cannot be assigned to a descriptive raster or a newly invented task.",
+      "rationale": "Meaningful changes in triplet accuracy and contamination, and the joint superiority/non-degradation rule over the original panel, require source-score recovery and replay variability. No arbitrary margin or new weighted metric is imposed.",
       "evidence_ids": []
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No superiority test is admitted for this ineligible scope.",
-      "independent_unit": "Recording/animal for biological inference; neuron perturbations are not independent animals.",
-      "rationale": "Uncertainty around an extension metric cannot supply an absent source-paper success endpoint.",
+      "status": "unresolved",
+      "method": "Specify a paired comparison over complete simulation realizations after recovering original results; separately account for randomized metric sampling and algorithm seeds.",
+      "independent_unit": "The ten simulation realizations for the original simulated-data claim; sampled neuron triples, neurons and within-realization algorithm restarts are not additional independent realizations.",
+      "rationale": "Paper figure standard errors describe simulation variation. They do not by themselves define a candidate-versus-author superiority rule or establish biological generalization.",
       "evidence_ids": [
-        "r-local"
+        "r-paper",
+        "r-notebook",
+        "r-metrics"
       ]
     },
     "paper_win_requires": [
-      "This registration cannot award a same-task paper win while retaining only its empirical visualization endpoint.",
-      "Any replacement based on the original simulation protocol requires separate reviewed registration with its complete source generator, metrics and baseline; it must not silently replace the empirical task.",
-      "New temporal splits, behavior regressors, neuron subsamples or stability scores remain explicitly labeled extensions."
+      "Recover exact original published Rastermap scores and reproduce the source generator, original ten realizations and both per-module scoring panels.",
+      "Surpass Rastermap itself under the same source simulation condition; beating t-SNE, UMAP, random sorting or a locally authored baseline is insufficient.",
+      "Declare meaningful improvement, guardrails and paired uncertainty before candidate evaluation; retain every original module and both metrics rather than choosing a favorable subset.",
+      "Freeze candidate code and all tuning before final scoring; prohibit access to xi_all, iperm and latent generator outputs as model inputs, and disclose that the public generator and original seeds are exposed.",
+      "New seeds, altered noise, fewer neurons, power-law-only simulations, new splits or empirical behavior prediction can be separately reported source conditions or extensions, but cannot replace this Figure 1 score comparison."
     ],
     "current_sota": {
       "status": "not_claimed",
-      "description": "No current-SOTA comparison was performed.",
+      "description": "No current-SOTA comparison was verified; source-paper Rastermap is the target comparator.",
       "evidence_ids": []
     }
   },
   "episode": {
-    "improvement_loop": "Inactive for this ineligible empirical scope; historical author reconstruction may still be used for calibration.",
-    "candidate_freeze": "No active improvement candidate is admissible until a separately reviewed compatible task is registered.",
-    "final_evaluation": "The legacy evaluator may report prospective extension measurements, but cannot return source-paper victory.",
+    "improvement_loop": "After recovering the original baseline, iterate on explicitly declared development feedback while keeping the original ten-realization final roster fixed. Any additional development simulations must retain their provenance and may not substitute for the original final condition.",
+    "candidate_freeze": "Freeze algorithm, hyperparameters, source access, preprocessing, evaluator RNG policy, joint metric rule and budgets before scoring on the original final realizations.",
+    "final_evaluation": "Run the calibrated source Rastermap and frozen candidate on every original Figure 1 simulation using identical activity inputs and source metric semantics; report published agreement and candidate gains separately. Preserve the full ten-by-five-by-two result panel.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Keep the original figures, author code and historical implementation intact. Do not promote the local linear-regression or neighborhood baseline to the paper baseline."
+    "baseline_policy": "Keep original published scores, author reruns, alternative algorithms and later SOTA scores distinct. Existing empirical reconstruction and local synthetic unit controls remain calibration only."
   },
   "blocking_issues": [
-    "Registered empirical figures lack a source-defined ordered success endpoint.",
-    "Mouse half-recording demo and paper-figure input identity are not reconciled.",
-    "Paper/notebook rat lag and mouse superneuron-bin settings disagree.",
-    "A simulation-based replacement is a different registered task and requires separate review."
+    "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
+    "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
+    "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
+    "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
+    "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Preserve the existing Rastermap evaluator and all controls. Its prospective split, full-population KNN and linear behavior model can support engineering checks or separately named extensions only."
+    "notes": "Preserve all empirical artifacts and the original evaluator. They do not constrain the paper-wide improvement objective to a descriptive subanalysis. The source also provides nonlinear128-PC behavior prediction; its authentic score route may be separately reviewed, but local linear prediction is not equivalent."
   }
 }
