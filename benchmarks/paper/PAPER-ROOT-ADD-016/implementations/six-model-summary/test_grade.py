@@ -93,6 +93,19 @@ class PortableGradeTests(unittest.TestCase):
         self.submission.write_text('{"schema_version":1,' + self.submission.read_text()[1:])
         self.assert_no_reference_read()
 
+    def test_deep_candidate_json_rejected_before_reference(self):
+        payload = b"[" * 1500 + b"0" + b"]" * 1500
+        self.assertLess(len(payload), self.core.MAX_BYTES)
+        self.submission.write_bytes(payload)
+        self.assert_no_reference_read()
+
+    def test_deep_reference_json_remains_operator_failure(self):
+        payload = b"[" * 1500 + b"0" + b"]" * 1500
+        self.assertLess(len(payload), self.core.MAX_BYTES)
+        self.reference.write_bytes(payload)
+        with self.assertRaises(RecursionError):
+            self.evaluate()
+
     def test_fifo_candidate_refuses_before_reader_dispatch(self):
         self.submission.unlink()
         os.mkfifo(self.submission)

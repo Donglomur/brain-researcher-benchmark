@@ -1,5 +1,6 @@
 """Focused stdlib-only destination tests; NumPy serialization is not executed."""
 import contextlib
+import hashlib
 import importlib.util
 import io
 import json
@@ -11,9 +12,40 @@ import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parent / "portable"
+PACKAGE = ROOT.parent
+REPOSITORY = PACKAGE.parents[4]
+CURRENT_PINS = REPOSITORY / "benchmarks/integrity/current-closures/neural077-direct-response/SOURCE_PINS.json"
+
+
+def verify_current_source():
+    current = json.loads(CURRENT_PINS.read_text())
+    if (current.get("schema") != "neural077_direct_response_current_source_v1"
+            or current.get("package") != PACKAGE.relative_to(REPOSITORY).as_posix()):
+        raise ValueError("Exact current source descriptor required")
+    predecessor = (PACKAGE / "SOURCE_PINS.json").read_bytes()
+    if (len(predecessor) != current["predecessor"]["bytes"]
+            or hashlib.sha256(predecessor).hexdigest() != current["predecessor"]["sha256"]):
+        raise ValueError("Historical source descriptor changed")
+    original = json.loads(predecessor)
+    if set(current["members"]) != set(original["members"]):
+        raise ValueError("The complete original member roster is required")
+    changed = {name for name, pin in current["members"].items()
+               if pin != original["members"][name]}
+    if changed != {"portable/response_contract.py", "test_collector_destination.py"}:
+        raise ValueError("Only the response validator and its controls may change")
+    for name, pin in current["members"].items():
+        if Path(name).is_absolute() or ".." in Path(name).parts:
+            raise ValueError("Source member must remain inside the package")
+        body = (PACKAGE / name).read_bytes()
+        if len(body) != pin["bytes"] or hashlib.sha256(body).hexdigest() != pin["sha256"]:
+            raise ValueError("Current source member changed: " + name)
 
 
 class CollectorDestinationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        verify_current_source()
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
@@ -105,6 +137,40 @@ class CollectorDestinationTests(unittest.TestCase):
             self.invoke(target)
         self.assertFalse(target.exists())
         self.assertEqual(self.calls, [])
+
+    def test_response_identity_length_boundaries(self):
+        parse = self.module.complete.__globals__["parse"]
+        for identifier in ("x", "x" * 48):
+            body = json.dumps({"trial_id": identifier, "target_probability": 0.25}).encode()
+            self.assertEqual(parse(body, identifier), 0.25)
+        for identifier in ("", "x" * 49):
+            body = json.dumps({"trial_id": identifier, "target_probability": 0.25}).encode()
+            with self.assertRaisesRegex(ValueError, "1 through 48"):
+                parse(body, identifier)
+
+    def test_invalid_identity_panel_prevents_output_creation(self):
+        for label, replacements in (("empty", [""]),
+                                    ("truncation_collision", ["x" * 48 + "a", "x" * 48 + "b"])):
+            with self.subTest(label=label):
+                ids = self.ids.copy()
+                ids[:len(replacements)] = replacements
+                self.manifest.write_text(json.dumps({"development_ids": ids}))
+                self.responses.write_text("".join(json.dumps({"trial_id": identifier,
+                    "target_probability": 0.25}) + "\n" for identifier in ids))
+                target = self.root / (label + ".npz")
+                with self.assertRaisesRegex(ValueError, "1 through 48"):
+                    self.invoke(target)
+                self.assertFalse(target.exists())
+                self.assertEqual(self.calls, [])
+
+    def test_maximum_length_panel_preserves_all_identities(self):
+        ids = ["x" * 44 + f"{index:04d}" for index in range(400)]
+        self.manifest.write_text(json.dumps({"development_ids": ids}))
+        self.responses.write_text("".join(json.dumps({"trial_id": identifier,
+            "target_probability": 0.25}) + "\n" for identifier in reversed(ids)))
+        result = json.loads(self.invoke(self.root / "maximum.npz"))
+        self.assertEqual(result["rows"], 400)
+        self.assertEqual(self.calls[0][1]["trial_ids"], (ids, "<U48"))
 
 
 if __name__ == "__main__":
