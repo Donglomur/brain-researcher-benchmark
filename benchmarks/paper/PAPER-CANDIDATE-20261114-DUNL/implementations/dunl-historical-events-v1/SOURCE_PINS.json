@@ -1,0 +1,57 @@
+{
+  "schema": "dunl_historical_event_source_pins_v1",
+  "repository": "https://github.com/btolooshams/dunl-compneuro",
+  "commit": "23a34f40b122c3ccf3715995f0dd19fcbbcb46a2",
+  "qualification": "current_source_mathematical_endpoint_only",
+  "source_acquisition": "existing locally retained official source; no new download",
+  "sources": [
+    {
+      "path": "dunl/utils.py",
+      "sha256": "468884da26e48de24a406375afbd02c51f8d9f7b060826c86640c4d787a43bad",
+      "locator": "compute_hit_rate",
+      "supports": "Positive binarization, inclusive neighborhood union, row denominators, empty-denominator replacements and row mean. Selected nonnegative domain only."
+    },
+    {
+      "path": "dunl/preprocess_scripts/preprocess_data_whisker_into_dataformat.py",
+      "sha256": "ec6665b0413bb35cb57caf8bc9ad20845fde81e97d47c98552bb6ba6ef3d0ca2",
+      "locator": "init_params and main",
+      "supports": "50 trials, first 30 training, eleven allocations, ten source pairs, 3000 samples at 1 ms, 5 ms bins and public programmed schedule."
+    },
+    {
+      "path": "dunl/postprocess_scripts/plot_hitrate_whisker_thalamus.py",
+      "sha256": "f23023ce325d26ddf044c94d19382e4120cf01fe1189bdfdc1ee3c43ffb23909",
+      "locator": "main, plot_miss_false and get_data",
+      "supports": "Separate train/test calls, standard trial/channel reshape, repeated target rows and clipping after aggregate hit mean."
+    },
+    {
+      "path": "dunl/postprocess_scripts/plot_hitrate_whisker_thalamus_groupneuralfiringsp.py",
+      "sha256": "6d09549352d0be85fc6f4cb13fcd1759ac200ab001678efe8252dd8bd43a4512",
+      "locator": "main, plot_miss_false and get_data",
+      "supports": "Channelwise norm before repetition over channels, separate split reporting, and clipping after mean."
+    },
+    {
+      "path": "dunl/preprocess_scripts/prepare_data_and_save.py",
+      "sha256": "d84ffd69812486db1358e51df5e60cf6b7bc2fa79893d9819fe28883c8b59807",
+      "locator": "main: x tensor allocation and event onset assignment",
+      "supports": "Target code axis is trials by kernels by (binned trial length minus kernel length plus one); the selected whisker configuration implies 576 samples. Global command defaults concern another assay and must not be used as a whisker invocation."
+    },
+    {
+      "path": "config/whisker_groupneuralfirings_config.yaml",
+      "sha256": "5d870999098f6c1f221922a833f3a1ee86548abbbda793a65f26762742390ba4",
+      "locator": "kernel and code settings",
+      "supports": "Group route also uses one length-25 kernel and nonnegative codes; its disclosed top-k assistance is 18."
+    },
+    {
+      "path": "config/whisker_config.yaml",
+      "sha256": "5c38c50d13b101c7bf721d34ea2efc62c172f1a106e76d38feff08f2b2786728",
+      "locator": "kernel and code settings",
+      "supports": "One kernel of length 25, stride 1, nonnegative codes and disclosed top-k16 assistance."
+    }
+  ],
+  "not_established": [
+    "Original-paper numeric event point, cohort, split and complete source-to-file join",
+    "Bitwise Torch runtime parity, including group-norm rounding",
+    "Author output-producer, checkpoint and trained-method lineage",
+    "Native preparation, complete baseline curve, biological uncertainty or empirical superiority"
+  ]
+}
