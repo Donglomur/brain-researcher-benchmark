@@ -21,14 +21,14 @@ The fixed shape order is `square, rectangle, isoTrapezoid, parallelogram, losang
 
 ## Inputs and use
 
-Use an existing Python environment with NumPy and SciPy; pytest is needed only for tests and MNE only for native adapters. No dependencies were installed. In the construction environment `/opt/homebrew/bin/python3` has these packages; the bare `python3` in this worktree resolves to another environment without SciPy/pytest.
+Use an existing Python 3 environment with NumPy and SciPy; pytest is needed only for tests and MNE only for native adapters. Activate that environment so `python3` resolves to its interpreter. No dependencies are installed automatically.
 
 From this implementation directory, the CLI is:
 
 ```text
-/opt/homebrew/bin/python3 sensor_rsa.py export-epochs CLEAN+META_EPOCHS.fif sub-01 sub-01.npz
-/opt/homebrew/bin/python3 sensor_rsa.py import-models SYMBOLIC.csv CORNET_IT.csv models.json
-/opt/homebrew/bin/python3 sensor_rsa.py evaluate packet.json result.json
+python3 sensor_rsa.py export-epochs CLEAN+META_EPOCHS.fif sub-01 sub-01.npz
+python3 sensor_rsa.py import-models SYMBOLIC.csv CORNET_IT.csv models.json
+python3 sensor_rsa.py evaluate packet.json result.json
 ```
 
 The export adapter requires already-cleaned metadata-bearing epochs, selects `reference` through MNE, requests `as_type("mag")`, and selects magnetometers. Run identity comes from metadata, never trial position. It writes a new NPZ and prints a receipt containing the source FIF hash, output hash, subject and MNE version. Keep that receipt with upstream provenance. The adapter does not certify filtering, event timing or trial retention. Outputs are created exclusively and never overwrite existing files.
@@ -65,7 +65,7 @@ Reports retain per-subject time × pair RDMs, model correlations, group means/SE
 Run bounded generated controls from the repository root:
 
 ```text
-PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/bin/python3 -m pytest -q -p no:cacheprovider benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests
+PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/tests
 ```
 
 Independent hand-derived controls distinguish pooled-trial crossvalidation from equal-run averaging, preserve negative distances, verify channel normalization, compare whitened correlation against a fixed numeric oracle distinct from Pearson, check quadratic smoothing including boundaries, and enforce 20 subjects/158 runs/301 times. Additional controls run the complete cohort numerical path on generated arrays, verify model axis alignment and hashes, reject missing populations/cells/timing, guard extreme-value overflow, and compare native negative-control t statistics with the direct formula. Generated controls are not scientific observations, baseline competence or reproduction evidence.
