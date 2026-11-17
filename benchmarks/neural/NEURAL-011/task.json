@@ -162,13 +162,15 @@
     "primary": {
       "name": "patient_macro_event_f1",
       "direction": "higher",
-      "aggregation": "Aggregate event counts by held PN patient, then equal-patient mean; report undefined metrics explicitly.",
+      "aggregation": "Current score_manifest uses _mean_defined: equal mean over only patients whose metric is nonnull, with defined/undefined ID lists. This differs from an all-selected-person denominator. Full14 inference requires the operator to verify complete annotation support and defined endpoints for all14; otherwise report the selected defined-only result and mark the full-cohort comparison incomplete.",
       "rationale": "Requires event coverage across complete monitoring while compulsory false-alarm and sensitivity metrics expose threshold tradeoffs."
     },
     "secondary": [
       "Patient-macro event sensitivity and false alarms per 24 observed hours",
       "Per-patient event counts, observed duration and paired difference from fixed line-length/timing references",
-      "Clock-profile sensitivity for unresolved source/header origins before one source interpretation is selected"
+      "Clock-profile sensitivity for unresolved source/header origins before one source interpretation is selected",
+      "Mandatory f1_defined_patients, f1_undefined_patients, sensitivity_undefined_patients and paired-bootstrap excluded identities alongside every denominator.",
+      "Proposed predicted-positive time fraction companion to expose long-tolerance constant/extended-event credit; current source does not emit this occupancy metric."
     ],
     "comparators": [
       {
@@ -184,7 +186,7 @@
       {
         "name": "Constant detector",
         "inputs": "Complete support with fixed probability",
-        "procedure": "Necessary degenerate control retained with sensitivity and occupancy; no constant-output rejection as a shortcut."
+        "procedure": "Proposed degenerate detector control on complete support. Current scorer reports constant_scores and event metrics; predicted-positive occupancy is a required companion diagnostic still to implement, not a delivered output."
       }
     ],
     "nuisance_controls": [
@@ -193,13 +195,13 @@
       "Resolve midnight wrapping and inconsistent clock origins explicitly; do not score unreviewed ambiguous annotations as certain.",
       "Fit normalization and thresholds exclusively on training patients."
     ],
-    "uncertainty": "Implemented paired patient bootstrap summarizes F1 differences descriptively. Retain all selected patients and full 14-person roster before interpreting a complete-cohort effect; overlapping fitted models and clinical selection limit generalization.",
+    "uncertainty": "Current paired_bootstrap includes only people with defined F1 in both arms and explicitly reports excluded IDs; fewer than two supported people yields insufficient_independent_patients. This is descriptive selected-support uncertainty. Full14 inference additionally requires independently verified complete annotations and defined paired endpoints for all14; current code does not enforce that complete-cohort criterion. Shared training and clinical selection further limit generalization.",
     "failure_policy": "Reject patient overlap, missing recordings, nonfinite/incomplete scores and prohibited channels. Clock/source ambiguity blocks the affected scientific evaluation rather than silently dropping the file.",
     "neural_understanding": {
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "ea96dc879117b3921c99d58f73290530e728fc8bff21370d69e9a645bb78ce93",
+      "contract_sha256": "0986c9408ba2674afb834caef988a89f090626996d8ca263a64ee45df83695fd",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "044340155db14895d22a711e2a892261d0377603714125502e911dd7181fd0ea"
     }

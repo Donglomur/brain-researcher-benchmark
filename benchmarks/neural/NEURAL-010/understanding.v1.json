@@ -38,9 +38,10 @@
       "name": "EEG_minus_matched_no_EEG_patient_macro_event_F1",
       "direction": "two_sided",
       "aggregation": "Compute paired person F1 differences on all 23 people, then equal-person mean; preserve missing/undefined support.",
-      "rationale": "This signed scientific contrast can be positive, zero or negative; larger apparent neural contribution is not greater correctness of understanding. Any detector ranking uses absolute held-target event quality against a fixed independent competent comparator, with false-alarm burden and all absolute arms retained. Submitted numerical-claim accuracy is error against the independently computed signed contrast, not reward for its sign."
+      "rationale": "This signed scientific contrast can be positive, zero or negative; larger apparent neural contribution is not greater correctness of understanding. Any detector ranking uses absolute held-target event quality against an independently selected, frozen and operator-owned competent comparator, with false-alarm burden and all absolute arms retained. Candidate-controlled degradation of a nuisance arm cannot earn improvement. Submitted numerical-claim accuracy is error against the independently computed signed contrast, not reward for its sign. Historical report reconstruction remains numerical calibration."
     },
     "secondary": [
+      "Mandatory absolute event F1, sensitivity and false alarms per24 observed hours for candidate, fixed no-EEG, montage-only and signal-reference arms, with full person support; a delta alone is insufficient.",
       "Paired event-sensitivity and false-alarms-per-24-observed-hours changes",
       "Montage-stratified paired contrasts with person support, including single-person flags",
       "Exact false-alarm locations and durations; reconstruction tolerance as a separate software-calibration outcome",
@@ -50,7 +51,7 @@
       {
         "name": "Matched no-EEG method",
         "inputs": "Same allowed nonsignal metadata and training labels; EEG removed",
-        "procedure": "Source programme defines matched candidate family/selection budget; must be observed under the same full nested split."
+        "procedure": "Operator selects and freezes the matched learner family, nine-setting search and inner-person selection before candidate evaluation. references/learners.py fixes joint/noEEG family and feature exclusion; the candidate cannot supply or weaken the comparator stream. Actual independent fitting and stream ownership must be authenticated."
       },
       {
         "name": "Montage-only method",
@@ -67,7 +68,8 @@
       "Keep identical recording hours and event processing across arms.",
       "Group biological identity aliases and freeze training-only selection.",
       "Do not label false alarms as movement/electrode artifacts without independent annotations.",
-      "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient."
+      "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient.",
+      "The independent operator owns fixed no-EEG predictions and their fit/selection lineage; candidate-authored nuisance predictions do not establish incremental neural value."
     ],
     "uncertainty": "Source reports paired person means and standard errors descriptively; repetition of analyst prompts does not increase biological n. An inferential superiority claim additionally needs a predeclared paired procedure accounting for nested training dependence.",
     "failure_policy": "Require all 686 recordings, all expected analyst contexts and exact report support; reject malformed report scalars/IDs. A scientifically missing detector stream must remain a failed condition, never become a perfect reconstructed table."
@@ -78,7 +80,8 @@
       "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/grading.py",
       "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/schedule.py",
       "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/references/features.py",
-      "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/observation/observer.py"
+      "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/observation/observer.py",
+      "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/references/learners.py"
     ],
     "scorer_target": "analysis_core.grade returns maximum_scaled_reconstruction_error against a deterministic report reconstructed from annotations and arm intervals. grading.grade_all adds a matched diagnostic and explicitly sets native_waveform_understanding_established=false.",
     "target_fidelity": "different_target",
@@ -86,7 +89,8 @@
     "missing": [
       "Bind completed authentic detector streams and grade their fixed neural-versus-nonneural outcomes as the scientific primary.",
       "Release a target-withholding investigation view rather than the current answer-bearing reconstruction table.",
-      "Establish actual nested-fit and source/channel provenance plus signal reference competence."
+      "Establish actual nested-fit and source/channel provenance plus signal reference competence.",
+      "Bind the primary to an independently frozen operator-owned no-EEG reference and require all absolute arm metrics; the historical reconstruction score remains unchanged."
     ],
     "execution_evidence": "Source graph and scorer inspected; no new analyst, detector, native source or model campaign was run."
   },
@@ -177,6 +181,13 @@
       "url": "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO",
       "locator": "Biological identity metadata",
       "supports": "chb01/chb21 alias grouping; folder names are not independent people."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-010/implementations/programme-source/implementation-v1/program/references/learners.py",
+      "sha256": "1e425297c7cd324aac06b0b5409b61b3823924e6b05624fec5472262cd45e437",
+      "supports": "Fixed matched joint/noEEG family, feature exclusion and source fit definitions; independent observed reference ownership still requires qualification."
     }
   ],
   "empirical_claims": {
@@ -194,7 +205,8 @@
     "date": "2026-11-16",
     "summary": [
       "Demote reconstruction error to calibration and define the genuine held-person EEG contribution as the primary endpoint.",
-      "Make montage/patient confounding and unsupported artifact attribution explicit."
+      "Make montage/patient confounding and unsupported artifact attribution explicit.",
+      "Require independent comparator ownership and all absolute arm endpoints to prevent a participant increasing the reported gap by degrading its no-EEG arm."
     ],
     "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
   }

@@ -114,7 +114,8 @@
     "Keep identical recording hours and event processing across arms.",
     "Group biological identity aliases and freeze training-only selection.",
     "Do not label false alarms as movement/electrode artifacts without independent annotations.",
-    "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient."
+    "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient.",
+    "The independent operator owns fixed no-EEG predictions and their fit/selection lineage; candidate-authored nuisance predictions do not establish incremental neural value."
   ],
   "access_conditions": {
     "direct_observation": {
@@ -159,9 +160,10 @@
       "name": "EEG_minus_matched_no_EEG_patient_macro_event_F1",
       "direction": "two_sided",
       "aggregation": "Compute paired person F1 differences on all 23 people, then equal-person mean; preserve missing/undefined support.",
-      "rationale": "This signed scientific contrast can be positive, zero or negative; larger apparent neural contribution is not greater correctness of understanding. Any detector ranking uses absolute held-target event quality against a fixed independent competent comparator, with false-alarm burden and all absolute arms retained. Submitted numerical-claim accuracy is error against the independently computed signed contrast, not reward for its sign."
+      "rationale": "This signed scientific contrast can be positive, zero or negative; larger apparent neural contribution is not greater correctness of understanding. Any detector ranking uses absolute held-target event quality against an independently selected, frozen and operator-owned competent comparator, with false-alarm burden and all absolute arms retained. Candidate-controlled degradation of a nuisance arm cannot earn improvement. Submitted numerical-claim accuracy is error against the independently computed signed contrast, not reward for its sign. Historical report reconstruction remains numerical calibration."
     },
     "secondary": [
+      "Mandatory absolute event F1, sensitivity and false alarms per24 observed hours for candidate, fixed no-EEG, montage-only and signal-reference arms, with full person support; a delta alone is insufficient.",
       "Paired event-sensitivity and false-alarms-per-24-observed-hours changes",
       "Montage-stratified paired contrasts with person support, including single-person flags",
       "Exact false-alarm locations and durations; reconstruction tolerance as a separate software-calibration outcome",
@@ -171,7 +173,7 @@
       {
         "name": "Matched no-EEG method",
         "inputs": "Same allowed nonsignal metadata and training labels; EEG removed",
-        "procedure": "Source programme defines matched candidate family/selection budget; must be observed under the same full nested split."
+        "procedure": "Operator selects and freezes the matched learner family, nine-setting search and inner-person selection before candidate evaluation. references/learners.py fixes joint/noEEG family and feature exclusion; the candidate cannot supply or weaken the comparator stream. Actual independent fitting and stream ownership must be authenticated."
       },
       {
         "name": "Montage-only method",
@@ -188,7 +190,8 @@
       "Keep identical recording hours and event processing across arms.",
       "Group biological identity aliases and freeze training-only selection.",
       "Do not label false alarms as movement/electrode artifacts without independent annotations.",
-      "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient."
+      "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient.",
+      "The independent operator owns fixed no-EEG predictions and their fit/selection lineage; candidate-authored nuisance predictions do not establish incremental neural value."
     ],
     "uncertainty": "Source reports paired person means and standard errors descriptively; repetition of analyst prompts does not increase biological n. An inferential superiority claim additionally needs a predeclared paired procedure accounting for nested training dependence.",
     "failure_policy": "Require all 686 recordings, all expected analyst contexts and exact report support; reject malformed report scalars/IDs. A scientifically missing detector stream must remain a failed condition, never become a perfect reconstructed table.",
@@ -196,7 +199,7 @@
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "f5ed274600740efa4cd37bb94d9d28f3f043d47d70b6c17e1ce21616a249220b",
+      "contract_sha256": "ae0fa3c908fe623435f081d8a49374c3dbc621fd1b3191019d04975595f4a012",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "408ea0b41c55ec7f2b04f088c3c35507e59d5f655945786a044f7908073f4260"
     }
