@@ -125,3 +125,12 @@ These CLI modes are artifact operations, not a lifecycle or proof that a program
 Nominal pooled-spine p values do not establish mouse-level inference. Caption-p discrepancies, deposit-version equivalence, missing supplementary Methods, prior answer exposure, source-defined eligibility and the broader compartment/intervention claims remain explicit. Correct scalar outputs alone do not prove fresh computation, data use, code-access benefit, protected improvement, SOTA, a complete paper investigation or submission readiness. Historical baseline and cost records remain external evidence with their original contexts, not new observations.
 
 Only generated relocation/admission checks are selected for this source package. Runtime/whole-owner qualification and authentic paired execution remain external and unqualified by this delivery.
+
+
+## Output transport correction
+
+The reviewed source successor replaces Docker `cp` from `/output`, which is a container tmpfs, with one fixed namespace-reader `docker exec`. The reader runs as the participant UID65534 with Python `-I -S -B`, reads only `/output/result.json`, and emits a bounded frame containing exact payload bytes and their SHA256. The file must be an ordinary single-link file readable by that UID and at most32KiB. Missing files remain explicit; unreadable files, symlinks, changed metadata, truncated frames and transport errors fail closed. No capability or writable host mount is added.
+
+Capture takes place while the container is live, as in the previous metadata/copy/metadata sequence. The reader checks path/FD metadata before and after reading, and the host authenticates the complete frame. This is not an atomic paused-filesystem snapshot or a proof against every hostile concurrent process. The unchanged stop/remove/absence barrier must succeed before `FROZEN.json` and paired grading admission. Capture consumes the original condition clock and receives at most five seconds.
+
+The four scientific endpoints, packet identities, two access conditions, runtime image, resource limits, private scorers and model-token budget are unchanged. Generated controls validate this source correction; no Docker, authentic packet, model or native runtime execution is claimed. Original source pins are retained in `CAPTURE_TRANSPORT_REVISION.json`.

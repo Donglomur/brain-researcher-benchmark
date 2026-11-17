@@ -5,8 +5,8 @@ daemon window. This source does not grant native execution or model authority.
 Candidate input is only ever an argv operand inside its own container.
 """
 import ast
+import base64
 import hashlib
-import io
 import json
 import os
 from pathlib import Path
@@ -14,7 +14,6 @@ import re
 import selectors
 import stat
 import subprocess
-import tarfile
 import threading
 import time
 import types
@@ -257,42 +256,49 @@ def verify_inspect(row,repo,arm,nonce,cid):
     return True
 
 
-# This root-only fixed probe reads metadata only. It needs no DAC override to
-# stat a mode0600 result; the daemon reads its contents separately. Full inode,
-# nanosecond and link-count joins bracket that copy and detect concurrent writes.
-OUTPUT_PROBE = r'''import os,stat,json
+# Docker cp does not read a container's tmpfs contents. This fixed reader runs
+# inside the live namespace as the same unprivileged UID as the participant.
+# It captures a bounded ordinary file, not an atomic paused-filesystem snapshot.
+OUTPUT_CAPTURE = r'''import os,stat,json,base64,hashlib
 p='/output/result.json'
+schema='rep012_live_namespace_output_v1'
+def require(ok,message):
+ if not ok: raise ValueError(message)
+def signature(s):
+ return [getattr(s,k) for k in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')]
 try:
  b=os.lstat(p)
 except FileNotFoundError:
- print('{"status":"missing"}');raise SystemExit(0)
-assert stat.S_ISREG(b.st_mode) and b.st_nlink==1 and 0<=b.st_size<=32768
-print(json.dumps({'status':'ordinary','signature':[getattr(b,k) for k in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')]},sort_keys=True))
+ print(json.dumps({'schema':schema,'status':'missing'},sort_keys=True));raise SystemExit(0)
+require(stat.S_ISREG(b.st_mode) and b.st_nlink==1 and 0<=b.st_size<=32768,'bounded ordinary single-link output')
+fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+try:
+ require(signature(b)==signature(os.fstat(fd)),'stable output open')
+ with os.fdopen(fd,'rb',closefd=False) as stream: body=stream.read(32769)
+ require(signature(b)==signature(os.fstat(fd))==signature(os.lstat(p)) and len(body)==b.st_size,'stable complete output')
+finally: os.close(fd)
+print(json.dumps({'schema':schema,'status':'ordinary','signature':signature(b),
+ 'body_b64':base64.b64encode(body).decode('ascii'),'sha256':hashlib.sha256(body).hexdigest()},sort_keys=True))
 '''
 
 
-def output_metadata(body):
+def namespace_output(body):
+    """Validate one complete trusted-reader frame; never extract archive paths."""
+    need(type(body) is bytes and 0<len(body)<=65536, 'bounded complete output frame')
     row=decode(body)
-    if row=={'status':'missing'}: return row
-    need(set(row)=={'status','signature'} and row['status']=='ordinary'
+    if row=={'schema':'rep012_live_namespace_output_v1','status':'missing'}: return None
+    need(type(row) is dict and set(row)=={'schema','status','signature','body_b64','sha256'}
+         and row['schema']=='rep012_live_namespace_output_v1' and row['status']=='ordinary'
          and type(row['signature']) is list and len(row['signature'])==7
          and all(type(x) is int and x>=0 for x in row['signature']), 'complete exact output metadata')
     s=row['signature']
     need(stat.S_ISREG(s[2]) and s[3]==1 and s[4]<=CAP, 'bounded ordinary single-link output')
-    return row
-
-
-def opaque_tar(body,before,after):
-    need(before==after and before.get('status')=='ordinary', 'stable file across daemon copy')
-    need(type(body) is bytes and 0<len(body)<=65536,'bounded complete uncompressed daemon archive')
-    with tarfile.open(fileobj=io.BytesIO(body),mode='r:') as archive:
-        rows=archive.getmembers()
-        need(len(rows)==1 and rows[0].name=='result.json' and rows[0].isreg()
-             and not rows[0].linkname and rows[0].sparse is None and rows[0].size==before['signature'][4]
-             and rows[0].size<=CAP,'one ordinary bounded output; never extract paths')
-        stream=archive.extractfile(rows[0]); need(stream is not None,'ordinary archive payload')
-        result=stream.read(CAP+1)
-        need(len(result)==rows[0].size,'complete bounded output bytes')
+    need(type(row['body_b64']) is str and len(row['body_b64'])<=43692
+         and type(row['sha256']) is str and re.fullmatch('[a-f0-9]{64}',row['sha256']),
+         'bounded exact payload identity')
+    result=base64.b64decode(row['body_b64'],validate=True)
+    need(len(result)==s[4] and base64.b64encode(result).decode('ascii')==row['body_b64']
+         and hashlib.sha256(result).hexdigest()==row['sha256'], 'complete authenticated output frame')
     return result
 
 
@@ -431,18 +437,15 @@ class Condition:
             need(not self.closed and self.frozen is None and not self.failed,'one active commit')
             need(time.monotonic()<self.tool_end,'commit before shared tool deadline')
             self.inspect()
-            probe=self.execute(['exec','--user','0:0',self.cid,PYTHON,
-                                '-I','-B','-c',OUTPUT_PROBE],timeout=5)
-            need(not probe.stderr,'complete fixed output probe')
-            row=output_metadata(probe.stdout)
-            if row=={'status':'missing'}: result={'status':'missing'}
+            remaining=self.tool_end-time.monotonic()
+            need(remaining>0,'capture within original tool deadline')
+            capture=self.execute(['exec','--user','65534:65534',self.cid,PYTHON,
+                                  '-I','-S','-B','-c',OUTPUT_CAPTURE],timeout=min(5,remaining))
+            need(not capture.stderr,'complete fixed namespace output reader')
+            body=namespace_output(capture.stdout)
+            need(time.monotonic()<self.tool_end,'capture before original tool deadline')
+            if body is None: result={'status':'missing'}
             else:
-                copied=self.execute(['cp',self.cid+':/output/result.json','-'],timeout=5)
-                need(not copied.stderr,'complete daemon output archive')
-                after=self.execute(['exec','--user','0:0',self.cid,PYTHON,
-                                    '-I','-B','-c',OUTPUT_PROBE],timeout=5)
-                need(not after.stderr,'complete post-copy metadata')
-                body=opaque_tar(copied.stdout,row,output_metadata(after.stdout))
                 path=self.folder/'submission.json'; self.pair.budget.write(path,body)
                 result={'status':'captured','path':str(path),**pin(body)}
             self.close()

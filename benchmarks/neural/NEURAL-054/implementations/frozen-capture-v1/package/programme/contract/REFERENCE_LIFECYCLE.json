@@ -1,0 +1,252 @@
+{
+  "schema": "neural054_independent_reference_lifecycle_design_s2",
+  "status": "PROPOSED_SOURCE_CONTRACT_NOT_IMPLEMENTED",
+  "finding_repaired": "N054-F01",
+  "graph_stage": "S08",
+  "scope": {
+    "mandatory_for": [
+      "P/NUM",
+      "P/NUM_REF",
+      "I/NUM",
+      "I/NUM_REF"
+    ],
+    "families": [
+      "R0",
+      "R1",
+      "R2",
+      "R4",
+      "R5"
+    ],
+    "outer_cases": 240,
+    "windows": 5,
+    "arms": 5,
+    "logical_case_artifacts_per_family": 6000,
+    "logical_case_artifacts_total": 30000,
+    "query_rows_per_family": 2224800,
+    "probability_values_per_family": 60069600,
+    "query_rows_all_families": 11124000,
+    "probability_values_all_families": 300348000,
+    "candidate_call_independent": true,
+    "candidate_abstention_independent": true,
+    "D_scope": "D remains a distinct information profile with S18's complete exact-summary-only references; its scores cannot substitute for this full-core bank.",
+    "campaign_reuse": "A single sealed full reference bank may serve multiple selected NUM/NUM_REF/P/I/replicate conditions only when exact source, split, feature/query information policy, fixed reference/config/environment, target-support commitment and output mappings are identical. Each condition binds the complete bank. Otherwise create a separate complete bank. This never licenses candidate output reuse."
+  },
+  "phases": [
+    {
+      "id": "R01",
+      "name": "Admit full independent reference job census",
+      "actor": "trusted_reference_controller",
+      "depends_on": [],
+      "inputs": [
+        "ScientificContract",
+        "FixedReferenceBank",
+        "Outer240Views",
+        "PairedSupportCommitment",
+        "QualifiedEnvironment",
+        "ReferenceResourcePlan"
+      ],
+      "outputs": [
+        "RequiredReferenceJobCensus",
+        "ReferenceInputAdmission",
+        "OriginalReferenceCensusReceipts"
+      ],
+      "requirement": "Enumerate all five families times240 cases times5 windows times5 arms and all expected query IDs before any execution. Required jobs exist regardless of candidate mode, calls, success or abstention. Only training labels are admitted; held target bank remains unavailable."
+    },
+    {
+      "id": "R02",
+      "name": "Execute reference fitting or explicit no-fit preparation",
+      "actor": "trusted_reference_process",
+      "depends_on": [
+        "R01"
+      ],
+      "inputs": [
+        "ReferenceInputAdmission",
+        "PermittedOuterTrainingView",
+        "FixedReferenceSourceConfigEnvironment",
+        "TrainingPhaseLimits"
+      ],
+      "outputs": [
+        "UnsealedReferenceState",
+        "OriginalReferencePreparationReceipts"
+      ],
+      "requirement": "Actually execute R0/R1/R2 fixed training under the unchanged bank/algebra. R4 emits an explicit constant-recipe state with no learned parameters; R5 computes its permitted training-label counts/prior. Record their real preparation rather than claiming artificial model fits. All original completion, outputs, failures and costs observed independently."
+    },
+    {
+      "id": "R03",
+      "name": "Seal independently observed reference state",
+      "actor": "trusted_reference_controller",
+      "depends_on": [
+        "R02"
+      ],
+      "inputs": [
+        "UnsealedReferenceState",
+        "OriginalReferencePreparationReceipts",
+        "ReferenceInputAdmission"
+      ],
+      "outputs": [
+        "ReferenceTrainingSeals",
+        "ReferenceStateRegistry",
+        "OriginalReferenceSealReceipts"
+      ],
+      "requirement": "Bind reference source/config/environment, preparation kind, eligible training membership/features/labels, serialized state and original terminal observations. Seal before query input is admitted. Missing output or completion produces no valid seal."
+    },
+    {
+      "id": "R04",
+      "name": "Admit exact permitted reference queries",
+      "actor": "trusted_query_provider",
+      "depends_on": [
+        "R03"
+      ],
+      "inputs": [
+        "ReferenceTrainingSeals",
+        "Outer240Views",
+        "PairedSupportCommitment",
+        "RequiredReferenceJobCensus"
+      ],
+      "outputs": [
+        "ReferenceQueryInputs",
+        "ReferenceQueryAdmissionReceipts"
+      ],
+      "requirement": "Serve only the same allowed family values and query support as the corresponding candidate arm. No held labels, other-fold information, source IDs, query-dependent fitting or source workspace. R4/R5 legitimately ignore feature values but still bind every served query identity/support."
+    },
+    {
+      "id": "R05",
+      "name": "Execute original trusted reference inference",
+      "actor": "trusted_reference_process",
+      "depends_on": [
+        "R04"
+      ],
+      "inputs": [
+        "ReferenceTrainingSeals",
+        "ReferenceQueryInputs",
+        "FixedReferenceSourceConfigEnvironment",
+        "InferencePhaseLimits"
+      ],
+      "outputs": [
+        "ReferenceQueryProbabilityArtifacts",
+        "OriginalReferenceInferenceReceipts"
+      ],
+      "requirement": "Actually invoke the sealed fixed reference prediction procedure for every admitted original inference job, producing 27 finite independent probabilities for each query. Bind original source/state/query and exact probability bytes; independently observe launch, completion, streams and resources. Neither a training seal nor candidate tool-call receipt is a reference prediction."
+    },
+    {
+      "id": "R06",
+      "name": "Materialize identity-qualified logical reference outputs",
+      "actor": "trusted_reference_controller",
+      "depends_on": [
+        "R05"
+      ],
+      "inputs": [
+        "ReferenceQueryProbabilityArtifacts",
+        "OriginalReferenceInferenceReceipts",
+        "RequiredReferenceJobCensus",
+        "ReferenceQueryAdmissionReceipts"
+      ],
+      "outputs": [
+        "ReferenceLogicalQueryOutputs",
+        "ReferenceReuseMap",
+        "OriginalReferenceMaterializationReceipts"
+      ],
+      "requirement": "Only proved same-input pure-reference outputs may be reused. Emit separately bound logical destinations, including current opaque IDs and class order, from actual original probability bytes. Record source/destination query mapping, exact numeric payload identity and independent allowed-information proof; label/window aliases or candidate calls alone never authorize reuse."
+    },
+    {
+      "id": "R07",
+      "name": "Collect and verify complete independent case artifacts",
+      "actor": "trusted_reference_collector",
+      "depends_on": [
+        "R06"
+      ],
+      "inputs": [
+        "ReferenceLogicalQueryOutputs",
+        "ReferenceReuseMap",
+        "RequiredReferenceJobCensus",
+        "OriginalReferencePreparationReceipts",
+        "OriginalReferenceInferenceReceipts",
+        "OriginalReferenceMaterializationReceipts"
+      ],
+      "outputs": [
+        "CompleteReferenceCaseArtifacts",
+        "ReferenceCaseCompletenessReceipts",
+        "OriginalReferenceCollectionReceipts"
+      ],
+      "requirement": "Every one of30,000 family/case/window/arm artifacts has all expected opaque query IDs exactly once and exactly27 bounded probabilities per row. Bind source/config/environment/training seal/query/probability/receipt identities. Reject missing, extra, malformed or receiptless outputs; no withheld reference family, abstention or chosen support subset."
+    },
+    {
+      "id": "R08",
+      "name": "Seal full independent reference bank and original resource closure",
+      "actor": "trusted_reference_controller",
+      "depends_on": [
+        "R07"
+      ],
+      "inputs": [
+        "CompleteReferenceCaseArtifacts",
+        "ReferenceCaseCompletenessReceipts",
+        "OriginalReferenceCensusReceipts",
+        "OriginalReferencePreparationReceipts",
+        "OriginalReferenceSealReceipts",
+        "ReferenceQueryAdmissionReceipts",
+        "OriginalReferenceInferenceReceipts",
+        "OriginalReferenceMaterializationReceipts",
+        "OriginalReferenceCollectionReceipts",
+        "ReferenceResourcePlan",
+        "ComparatorCompetenceEvidence"
+      ],
+      "outputs": [
+        "CompleteIndependentReferenceBank",
+        "ReferenceBankCompletenessReceipt",
+        "ReferenceExecutionReceiptSet",
+        "ReferenceResourceLedger",
+        "ComparatorCompetence",
+        "ReferenceToolAccessRegistry",
+        "OriginalReferenceBankSealReceipt"
+      ],
+      "requirement": "Freeze all actual output bytes and original preparation/inference/materialization/collection observations. Supply the complete bank to S14/A07 and every original resource/failure record to S19; never supply training seals in place of predictions. Expose only a separately access-controlled NUM_REF tool handle, not the bank directory. The external observer records this final bank-seal process completion and exact output identities; the bank cannot certify its own original completion."
+    }
+  ],
+  "receipt_binding_fields": [
+    "task/source/release/feature-generation/split/label-order/profile/campaign identity",
+    "reference family and exact source/entrypoint/config/environment",
+    "preparation kind and eligible training membership/input digests",
+    "reference state and immutable training-seal identity",
+    "query support/arm/window/schema and exact permitted input descriptors",
+    "actual probability payload and current opaque output IDs",
+    "original producer launch/executable/argv/cwd/source/inputs/outputs",
+    "original terminal status/stdout/stderr and completion observation",
+    "CPU/wall/peak memory/IO/storage/model/tool counts and all partial failures",
+    "reuse original producer/output identities and every separately bound destination",
+    "collector complete-membership decision and whole-bank closure"
+  ],
+  "reuse": {
+    "R0_R1_R2": "Existing exact VISUAL-window reuse:5,040 distinct feature/training views per family, while all6,000 logical case artifacts remain. Ordinary different held sessions cannot share training because the inherited split excludes that session ordinal from all other participants.",
+    "R4": "One immutable constant recipe state can serve all views; this is no-fit preparation. Every served query still receives actual observed probability bytes and a distinct bound logical output/case membership. Constant values do not replace inference/collection receipts.",
+    "R5": "Training-label count state is shared across25 arm/window views of each same outer membership because these views have exactly the same permitted training labels. This gives240 distinct count states, subject to authenticated membership/label-order identity. It does not permit reuse across different outer memberships.",
+    "output_policy": "Reuse is allowed only where permitted query families, model inputs actually used, output order/mapping and pure-reference policy establish identical numeric predictions. VISUAL may require different opaque query IDs across views, so retain a private exact mapping and materialize each destination envelope. No candidate receives the private map.",
+    "cost_policy": "Charge original computation once and every actual admission/materialization/collection/storage cost. Report both logical obligations and unique original jobs. Cross-condition reuse has shared-preparation cost plus per-condition access/serving/collection cost; no double-counted claimed work or omitted actual costs."
+  },
+  "candidate_tool_policy": {
+    "NUM": "Independent bank is mandatory and evaluator-private. Candidate has no reference-tool access. Its zero reference calls cannot waive R01\u2013R08.",
+    "NUM_REF": "Candidate may call an admitted read-only reference handle only after the candidate training seal and grant for that one query. Service returns the exact already-produced sealed reference output for the permitted arm/query/family and separately logs the original serving call/cost. No bank listing, other-query output or held label is exposed.",
+    "training_probe": "If the predeclared tool catalog allows training-row probes, accept only its admitted training inputs and record their independent original execution/cost. Training probes never read the evaluator query bank, satisfy required held-query jobs or replace R01\u2013R08.",
+    "candidate_none_or_abstain": "The full reference census remains required. If execution stops early, preserve missing/cancelled jobs and actual costs as incomplete; do not claim a complete bank. With a full bank but an abstaining candidate, candidate primary remains null and no target access is authorized for that unscorable comparison."
+  },
+  "handoffs": {
+    "S14_A07": [
+      "CompleteIndependentReferenceBank",
+      "ReferenceBankCompletenessReceipt",
+      "CompleteReferenceCaseArtifacts"
+    ],
+    "S19": [
+      "ReferenceExecutionReceiptSet",
+      "ReferenceResourceLedger",
+      "ReferenceReuseMap",
+      "OriginalReferenceBankSealReceipt"
+    ],
+    "S15_A08": "Consumes actual fixedR1 nuisance/joint probabilities and all mandatory diagnostic/reference probabilities from the S14-closed bank against exactly the same protected targets/support; training or competence metadata never stand in for values.",
+    "S12_A05": "Optional NUM_REF serving uses ReferenceToolAccessRegistry; it cannot create, excuse, replace or establish completeness of the independent bank."
+  },
+  "status_rules": {
+    "missing_reference_or_receipt": "INCOMPLETE_NO_TARGET_ACCESS, even if candidate supplied all required predictions and made zero reference calls.",
+    "candidate_abstention_with_complete_reference": "CLOSED_UNSCORABLE_NO_TARGET_ACCESS; primary null, full missingness/disposition/cost retained.",
+    "complete_valid_candidate_and_reference": "Eligible for S19 resource closure and S14/A07 campaign seal, then protected S15/A08 target access only after every other mandatory gate.",
+    "no_observed_execution": "Design status only. No states, queries, probabilities, processes or costs in this contract are claimed to exist."
+  }
+}
