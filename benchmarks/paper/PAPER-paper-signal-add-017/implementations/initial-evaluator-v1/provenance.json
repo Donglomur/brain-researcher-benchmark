@@ -1,0 +1,130 @@
+{
+  "task_id": "PAPER-paper-signal-add-017",
+  "canonical_contract": {
+    "path": "benchmarks/paper/PAPER-paper-signal-add-017/task.json",
+    "sha256": "63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce",
+    "bytes": 14860
+  },
+  "sources": [
+    {
+      "kind": "official_code",
+      "url": "https://github.com/bfinl/Finger-BCI-Decoding/blob/c3a51c374d85f7b01e33ec4e998cf007d7da7763/Functions.py",
+      "revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+      "path_in_source": "Functions.py",
+      "bytes": 10131,
+      "sha256": "53dbd4f587673b562d3558fbf5f85307e0e78ed45a64a298c10d24ad8149a223"
+    },
+    {
+      "kind": "official_code",
+      "url": "https://github.com/bfinl/Finger-BCI-Decoding/blob/c3a51c374d85f7b01e33ec4e998cf007d7da7763/main_model_training.py",
+      "revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+      "path_in_source": "main_model_training.py",
+      "bytes": 2154,
+      "sha256": "351d9cd3ce9da34076c010f1c55adf8fceeb32cc78d7de00b60e9f8188ac64dc"
+    },
+    {
+      "kind": "official_code",
+      "url": "https://github.com/bfinl/Finger-BCI-Decoding/blob/c3a51c374d85f7b01e33ec4e998cf007d7da7763/EEGModels_tf.py",
+      "revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+      "path_in_source": "EEGModels_tf.py",
+      "bytes": 18033,
+      "sha256": "604c7399a2a0e6c90cd8b4cbbc0f78550a3fb5c64b23f311d9c7db44dac94b02"
+    },
+    {
+      "kind": "official_code",
+      "url": "https://github.com/bfinl/Finger-BCI-Decoding/blob/c3a51c374d85f7b01e33ec4e998cf007d7da7763/README.md",
+      "revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+      "path_in_source": "README.md",
+      "bytes": 1152,
+      "sha256": "3e3c90c30cf4a71455278cc6bb4da19a010a1a496ba6b38e8e6a1097e69d02c7"
+    },
+    {
+      "kind": "official_code",
+      "url": "https://github.com/bfinl/Finger-BCI-Decoding/blob/c3a51c374d85f7b01e33ec4e998cf007d7da7763/LICENSE",
+      "revision": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+      "path_in_source": "LICENSE",
+      "bytes": 1068,
+      "sha256": "67ea1caf4bdf3f60a678a0ed0afc4da520bbfc40ee214e6e0f5a84d7e2738ac8"
+    },
+    {
+      "kind": "primary_paper",
+      "url": "https://www.nature.com/articles/s41467-025-61064-x",
+      "bytes": 642246,
+      "sha256": "d515db75b178dc6fd9cc7cc5250eb72e6f2266016f5c749270e91069ddd30a2a"
+    },
+    {
+      "kind": "small_public_metadata",
+      "url": "https://api.figshare.com/v2/articles/29104040",
+      "observed_version": 2,
+      "bytes": 11851,
+      "sha256": "169f8d4bf2b4d6cd615d906585173b848819bf10c834b0251adb20508655d6b5"
+    },
+    {
+      "kind": "data_README",
+      "url": "https://ndownloader.figshare.com/files/55026296",
+      "bytes": 10319,
+      "sha256": "298f12bd7b22b77019b651778796cc2d22e66cd8a409bd75b3c4f77b733d4039"
+    }
+  ],
+  "independent_recovery": "Functions.py SHA256 identical via GitHub blob embeddedData and revision-qualified CDN source bytes",
+  "source_semantics": [
+    {
+      "requirement": "raw schema",
+      "evidence": "Figshare README DATA DESCRIPTION and Functions.py load_and_filter_data",
+      "meaning": "eeg.data128channels\u00d7time, fsample1024Hz, time/channel metadata; Target and TrialEnd events use1-based sample indices; online prediction/prob_* fields are outputs and forbidden as candidate features."
+    },
+    {
+      "requirement": "trial extraction",
+      "evidence": "Functions.py load_and_filter_data",
+      "meaning": "Target.sample-1:TrialEnd.sample-1, halfopen; no postcue crop; cap5s thenNaN pad; CAR across channels; selected classes1/4 for binary and1/2/4 for ternary; source relabels to1/2 or1/2/3."
+    },
+    {
+      "requirement": "window preprocessing",
+      "evidence": "Functions.py train_models/segment_data; main_model_training.py params",
+      "meaning": "Trial-level randomized80/20training/validation split before windows;1s1024sample windows step128 raw samples; reject windows containingNaN; resample each window to100; pad100zeros each end; causal scipy.signal.lfilter fourth-order Butterworth4\u201340Hz at100Hz; crop padding; per-channel within-window zscore."
+    },
+    {
+      "requirement": "chronology and calibration",
+      "evidence": "Functions.py generate_paths; Methods online tasks",
+      "meaning": "Orig source uses offline and all prior online session folders; Finetune current session Base folder only. Binary uses both2class and3classBase folders then removes original index class; ternary uses3classBase only. Methods:8ternaryBase,8binaryBase,8ternaryFine,8binaryFine runs,10trials/class/run. Generic first8same-day sentence is imprecise relative binary source16Base runs."
+    },
+    {
+      "requirement": "recorded metrics",
+      "evidence": "Paper Methods online decoding/offline decoding/statistical analysis",
+      "meaning": "Per-trial hard majority of segment classifier argmax outputs; accuracy plus per-class precision/recall; offline replay model comparisons on same heldout fine-tuned recorded runs. Balanced accuracy and participant paired bootstrap are defensible prospective benchmark metrics, not exact source figure estimands."
+    },
+    {
+      "requirement": "study population",
+      "evidence": "Paper Methods Subjects; Figshare README participation details",
+      "meaning": "49recruited,10withdrew,18excluded below70%in either offlineME/MI,21retained BCI responders with prior limb-level experience; all21have offline+first2online sessions eachME/MI;16have3additionalMI and smoothing phases. Archive metadata cannot confirm allrun/trial payload identities."
+    },
+    {
+      "requirement": "known missing events",
+      "evidence": "Figshare README missing data",
+      "meaning": "S07/OnlineImagery_Sess05_3class_Base lacks eventinformation; explicit exclusion/unusable status before scoring, not blanketS07 exclusion."
+    },
+    {
+      "requirement": "rights",
+      "evidence": "Figshare license metadata; repositoryLICENSE; EEGModels_tf.py header",
+      "meaning": "DataCCBY-NC4.0, top-level codeMIT; ARL EEGModels header retains portionsCC0andApache2.0. Do not flatten licenses or infer non-exposure."
+    }
+  ],
+  "prospective_semantics": [
+    "spectral four-band centroid reference and calibration-augmented retraining",
+    "optional equal first-N run subset budget",
+    "fixed smallest declared class tie rule",
+    "equal-participant aggregation and paired participant percentile bootstrap",
+    "mean-window-probability Brier score",
+    "cyclic within-run trial alignment perturbation"
+  ],
+  "rights": {
+    "data": "CC BY-NC 4.0",
+    "official_repository": "MIT",
+    "EEGModels_tf_component": "ARL CC0 and Apache-2.0 notices retained in original source",
+    "vendored_upstream_code": false
+  },
+  "qualification": "unknown",
+  "source_payloads_read": 0,
+  "native_scientific_runs": 0,
+  "source_transports": "Primary publisher and Figshare metadata; GitHub blob embeddedData and commit-qualified CDN for code after raw TLS/API rate-limit failures"
+}
