@@ -245,6 +245,7 @@ def export_pair(prepared_root, author_source, paper, output, *,
     task = {
         "schema": "smc_participant_task_v1", "task_id": "PAPER-SMC-RNN-2024",
         "objective": "Improve the matching original Table 2 SMC-RNN co-bps result on the complete MC_Maze 20-ms test panel; report every companion metric.",
+        "source_configuration": "Table 2 anchors refer to the selected 36-dimensional, 512-unit arms identified in protocol.json. Generic author training defaults differ from those configurations. Candidate algorithms need not copy the author architecture.",
         "metrics": protocol_data["metrics"], "allowed_observations": {
             "train": "All original training spikes and behavior, including forward bins.",
             "validation": "Original validation held-in inputs and separately labeled validation targets; permitted for selection.",
