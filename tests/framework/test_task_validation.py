@@ -323,6 +323,37 @@ class ValidatorTest(unittest.TestCase):
         path.write_bytes(b"new numerical archive")
         self.assert_issue("stale_evidence")
 
+    def test_nested_authoring_runtime_source_invalidates_evidence(self):
+        # These files are included by the fixture's COPY . /tests/ and
+        # COPY data /data directives. Their directory name is not an exclusion.
+        for relative in ("tests/authoring/scorer.py", "environment/data/authoring/config.json"):
+            with self.subTest(relative=relative):
+                self.write(relative, "{\"threshold\": 0.5}\n")
+                self.record("oracle")
+                self.record("nop")
+                before = self.audit()
+                self.assertEqual(before["runtime_evidence_status"], "consistent")
+                self.write(relative, "{\"threshold\": 0.9}\n")
+                after = self.audit()
+                self.assertNotEqual(before["task_fingerprint"], after["task_fingerprint"])
+                self.assertFalse(after["static_pass"])
+                self.assertEqual(after["runtime_evidence_status"], "invalid")
+                self.assertIn("stale_evidence", [issue["code"] for issue in after["issues"]])
+                self.assertFalse(after["accepted"])
+
+    def test_top_level_authoring_evidence_does_not_change_source_fingerprint(self):
+        self.evidence = self.task / "authoring"
+        self.save_sidecars()
+        before = self.audit()["task_fingerprint"]
+        self.record("oracle")
+        self.record("nop")
+        self.json_write("notes/review.json", {"fixture": "new assessor note"})
+        after = self.audit()
+        self.assertEqual(before, after["task_fingerprint"])
+        self.assertTrue(after["static_pass"], after)
+        self.assertEqual(after["runtime_evidence_status"], "consistent")
+        self.assertFalse(after["accepted"])
+
     def test_native_checksum_disagreement_is_not_same_task(self):
         self.record("oracle")
         self.record("nop", lambda r: r.update(task_checksum="b" * 64))

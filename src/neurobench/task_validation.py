@@ -467,7 +467,12 @@ class Audit:
         entries = []
         for file in sorted(self.task.rglob("*")):
             rel = file.relative_to(self.task)
-            if any(p in {"authoring", ".git", "__pycache__", ".pytest_cache"} for p in rel.parts):
+            # Only the task's top-level authoring directory is the conventional
+            # evidence store. A nested directory with that name can contain
+            # source copied into either runtime (for example tests/authoring).
+            if rel.parts[0] == "authoring" or any(
+                p in {".git", "__pycache__", ".pytest_cache"} for p in rel.parts
+            ):
                 continue
             if file.is_symlink():
                 self.issue("task_symlink", f"Task source symlink is not fingerprinted: {rel}")
