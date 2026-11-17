@@ -1,0 +1,55 @@
+{
+  "schema": "structured-original-row-score-provenance/v1",
+  "task_id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+  "current_contracts": [
+    {
+      "path": "../../task.json",
+      "sha256": "863ac92b681738ffae5c2e6a51ad83018e758ab76c37b58211a8627826027310"
+    },
+    {
+      "path": "../../improvement.v1.json",
+      "sha256": "898efb98e81c560b2cbfdf167a930520826c8297cdb8ce3b8eb799e5672befcf"
+    }
+  ],
+  "source_commit": "8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8",
+  "source_files": [
+    {
+      "role": "native producer",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/time_decoding_ephys.py",
+      "bytes": 5692,
+      "sha256": "54b2530012aa298ea53689dc598eb1d466b376e478225c3e853561fdd47203d6",
+      "locators": ["main Y construction", "test_model np.array_split", "train_slice source-context predictions"]
+    },
+    {
+      "role": "native consumer",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/test_ephys_decode.py",
+      "bytes": 14197,
+      "sha256": "ee745ab9653559c677d1236c99816cd50824c7cbda93bde22c3f8df5426a2489",
+      "locators": ["main shaping_paths and sl_shaping_paths", "predictions * 0.5 and calc_error", "mean_mse/error_list/x reduction"]
+    },
+    {
+      "role": "paper complete PMC BioC cached text",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633125/",
+      "doi": "10.1038/s41593-026-02409-7",
+      "bytes": 153082,
+      "sha256": "3d603f3bb4f50960471fe8585fd559675bfc1b0d1f0e78b929931c79a7dd60d1",
+      "locators": ["passage 52: RNN time decoding", "passage 70: ephys preprocessing", "passage 192: Figure 6 caption"]
+    }
+  ],
+  "source_acquisition": "pre-existing pinned local caches; bytes authenticated and relevant contents inspected",
+  "source_download_bytes": 0,
+  "source_code_vendored": false,
+  "native_inputs_read": false,
+  "native_preparation_or_model_execution": false,
+  "historical_private_targets_accessed": false,
+  "semantic_mapping": {
+    "validate_index": "Exact thirteen Figure 6f sessions; native Y.index rows; first-occurrence trial order; ten np.array_split-sized folds; no outer held-mouse split.",
+    "circular_error": "Integer classes 0..39 at 0.5 seconds; minimum squared distance on the 20-second cycle.",
+    "score": "Every source row contributes equally within session/test context/source decoder; 117 error cells preserved; all decoder excluded from primary cells.",
+    "session_summaries": "Equal mean over three diagonal or six off-diagonal context-pair cells; signed and absolute biological gaps retained only as diagnostics.",
+    "compare": "Same frozen feature/index universe; full paired original-cell deltas; no scalar win or inferential claim.",
+    "native_exports": "Field-preserving conversion of already prepared native index and predictions; no authenticity or numerical parity established."
+  },
+  "qualification": "source-grounded original-row scoring component; complete authentic preparation and scientific evaluation unresolved",
+  "canonical_updates": "None. Existing task, improvement contract and historical implementation preserved. Central integration may register this additive component after independent review."
+}
