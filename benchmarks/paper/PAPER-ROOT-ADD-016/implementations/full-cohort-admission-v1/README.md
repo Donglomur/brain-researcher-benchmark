@@ -6,7 +6,7 @@ recomputes complete saved-draw summaries in the existing cardiac summary format.
 It supplies source for reference review. It does not fit a model, accept a private
 reference, launch a candidate or qualify scientific execution.
 
-The [original task](../../task.json), [six-model endpoint](../six-model-summary/TASK.md),
+The [original task](../../historical/task.pre-improvement.v1.json), [six-model endpoint](../six-model-summary/TASK.md),
 [model contract](../matched-artifacts/MODEL_CONTRACT.json) and
 [summary convention](../matched-artifacts/MATH_SPEC.md) remain unchanged. All 655
 people are exposed development reconstruction inputs. There is no participant

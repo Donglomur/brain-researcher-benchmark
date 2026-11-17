@@ -5,10 +5,10 @@ This package implements the full official CSI1 inventory audit, a label-blind st
 Python 3.10+ standard library is sufficient. Run from this directory:
 
 ```sh
-python3 evaluator.py inventory ../../task.json
+python3 evaluator.py inventory ../../historical/task.pre-improvement.v1.json
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
-python3 evaluator.py audit-identities ../../task.json identities.json
-python3 evaluator.py prepare ../../task.json identities.json trusted-records.json operator-output --shuffle-seed frozen-seed --id-salt at-least-16-secret-characters
+python3 evaluator.py audit-identities ../../historical/task.pre-improvement.v1.json identities.json
+python3 evaluator.py prepare ../../historical/task.pre-improvement.v1.json identities.json trusted-records.json operator-output --shuffle-seed frozen-seed --id-salt at-least-16-secret-characters
 python3 evaluator.py score operator-output/protected.json runs.json vocabulary.json
 ```
 
