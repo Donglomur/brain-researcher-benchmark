@@ -21,6 +21,7 @@ python3 -I -S -B scripts/neurobench.py status
 python3 -I -S -B scripts/neurobench.py show NEURAL-077
 python3 -I -S -B scripts/neurobench.py implementations NEURAL-077
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
+python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py operator routes
 ```
@@ -38,10 +39,11 @@ own two exposed development people. `operator routes` verifies the delivered sou
 it does not inspect local data or execute a grader. Follow the guide for the exact
 external inputs, fresh output directories and native dependencies.
 
-[Native operator controls](docs/status/operator-controls-20261116.json) exercised
-both complete development panels, including incomplete-submission rejection and
-target-pin failure. These are software checks using fixed outputs, with no new
-solver attempt or model call.
+[Native operator controls](docs/status/operator-controls-20261116.json) and the
+[fresh-checkout repair checks](docs/status/operator-controls-rename-20261116.json)
+record 16 controls across both complete development panels, including
+incomplete-submission rejection and target-pin failure. These are software checks
+using fixed outputs, with no new solver attempt or model call.
 
 The [implementation guide](docs/usage/implementations.md) connects other task
 definitions to their available preparation and grading routes.
@@ -58,6 +60,16 @@ neural pilot uses exposed development people and prepared feature inputs. Separa
 [waveform preparation](benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json)
 and [viewer rendering](benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json)
 reports establish authentic-input software behavior; they contain no model evaluation.
+The [restricted viewer transport](benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/README.md)
+also collected all 400 scripted responses without scoring. Its local boundary
+checks do not establish model/provider delivery or neural interpretation.
+
+All 118 neural definitions now bind a current `understanding.v1.json` and preserve
+their exact predecessor. `neural-contract` exposes the target, observation limits,
+controls and separate access modes. The [neural catalog](benchmarks/catalog/neural.md)
+reports 13 delivered named scopes, 94 partial deliveries, seven designs and four
+target mismatches. These counts describe source coverage; the revision confers no
+scientific qualification.
 
 Every current paper definition binds a source-grounded
 [improvement contract](docs/science/paper-improvement/README.md). The
@@ -65,6 +77,9 @@ Every current paper definition binds a source-grounded
 comparisons, ineligible papers and improvement-ready tasks. The current contracts
 establish no empirical paper improvement. A changed split, easier subset or different
 metric is an extension; current SOTA requires its own verified comparison.
+Concrete [paper-preparation routes](docs/usage/implementations.md#prepare-original-paper-endpoints)
+now cover the complete REVE PhysioNet input panel and DeepCaImX manual ROI panel.
+Author-model equivalence and paper improvement remain unresolved.
 
 ## Find source and understand the counts
 

@@ -15,6 +15,7 @@ relationships; it is not a claim that every registered source package is ready t
 ```sh
 python3 -I -S -B scripts/neurobench.py show NEURAL-077
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
+python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
 ```
@@ -78,6 +79,8 @@ recipe defines the baseline comparison.
 
 For neural tasks, select the specific direct-observation, typed-viewer,
 tool-assisted or frozen-programme condition named by the current definition.
+`neural-contract TASK_ID` reads its pinned `understanding.v1.json`, including the
+target, permitted observations, controls, source delivery and missing requirements.
 Prepared feature inputs, raw waveforms and rendered images expose different
 information. A prediction-programme result cannot be reported as direct or viewer
 interpretation. The [NEURAL-007 and NEURAL-077 pilot](../science/difficulty-pilot-20261117.md)
@@ -85,6 +88,46 @@ contains programme attempts on exposed development people; the separate NEURAL-0
 [waveform](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json)
 and [viewer](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json)
 reports describe software controls without model evaluation.
+
+The [restricted viewer transport](../../benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/README.md)
+connects the typed viewer to a fresh local participant process for each query.
+Its authentic 400-query scripted collection is complete and unscored; 15 boundary
+checks exercise local denials and response handling. No model was called, and a
+remote provider's image delivery, capacity and context isolation remain unqualified.
+The guide separates zero-shot and four-demonstration conditions and preserves
+failed sessions; neither condition includes evaluator feedback.
+
+## Prepare original paper endpoints
+
+These additive routes implement concrete source preparation and scoring steps.
+Their software and data evidence is separate from a reproduced author model or a
+candidate improvement. Reserve the required acquisition, disk and native resources
+before running them; data, targets, checkpoints and outputs stay outside public Git.
+
+| Task and route | Executable source and observed coverage | Remaining comparison requirements |
+| --- | --- | --- |
+| [REVE / PAPER-paper-method-003](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md) | `panel.py acquire`, `inspect`, `prepare`, `predict` and `score`; all 654 official EDFs for 109 participants prepared into 9,837 epochs, preserving the 1–70 / 71–89 / 90–109 train/validation/test split | Released-code and paper filtering recipes disagree; the exact downstream classifier checkpoint, historical run aggregation and author-model performance remain unresolved. No model inference ran. |
+| [DeepCaImX / PAPER-paper-method-013](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_PANEL.md) | `source_panel.py convert-rois` and `score-segmentation`; all ten original manual ROI files authenticated and converted, preserving 1,563 masks and spatial coordinates | Exact movie crop/frame mapping, paper-equivalent full checkpoint and native assembly are unresolved. Ten videos correspond to eight donors. No movie-to-mask inference ran; segmentation arithmetic alone leaves trace/runtime obligations open. |
+
+The REVE guide gives the acquisition, complete-panel preparation, frozen prediction
+interface and evaluator commands. Its predictor receives signal shards and channel
+names without targets, but Python adapters are trusted operator code: untrusted
+candidate execution requires a separate isolated input view. A pretrained encoder
+cannot substitute for the missing downstream classifier head. Keep final targets
+out of preprocessing, checkpoint and hyperparameter selection.
+
+The [DeepCaImX recovery report](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_RECOVERY.md)
+also provides checkpoint inspection and bounded source-range inspection. These
+inspectors identify released artifacts and physical storage; they cannot establish
+the missing movie-to-reference transformation. The scorer retains strict IoU > 0.5,
+ten-video macro F1 and unresolved matching/SD conventions explicitly. Public upstream
+annotations and targets remain historically exposed even when local evaluator
+files are separated.
+
+Candidates may change architecture, inference or optimization within the task's
+permitted observations, evaluation and budget. The source-author recipe and
+checkpoint requirements above concern author-baseline qualification; they do not
+require candidates to copy the author method.
 
 ## Portable programme sources
 

@@ -12,6 +12,7 @@ From the repository root:
 python3 -I -S -B scripts/neurobench.py status
 python3 -I -S -B scripts/neurobench.py evidence
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
+python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py implementations NEURAL-007
 python3 -I -S -B scripts/neurobench.py operator routes
 ```
@@ -37,7 +38,8 @@ evidence.
 | [Difficulty pilot](../science/difficulty-pilot-20261117.md) | Eight scored attempts on four task IDs: four historical paper-calibration attempts and four neural prediction-programme attempts | Outcomes for the exact reported development endpoints and conditions, with baseline comparisons; no whole-task qualification or paper improvement |
 | [NEURAL-077 waveform preparation](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json) | All 400 query waveforms and four demonstrations compared with pinned raw samples | Authentic-input materialization; no model execution or scoring |
 | [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |
-| [Native EEG/sleep operator controls](operator-controls-20261116.json) | Eight fixed-output controls covering the complete 400-trial EEG and 5,450-epoch sleep development panels | Input preparation, validation, grading, incomplete-submission rejection and target-pin failure; no new solver attempts, model calls or fits |
+| [NEURAL-077 restricted viewer transport](../../benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EVIDENCE.json) | All 400 authentic queries delivered to fresh scripted clients, complete unscored response collection and 15 authentic boundary checks | Local image/action transport and collection behavior; no model/provider delivery qualification or neural interpretation result |
+| [Native EEG/sleep operator controls](operator-controls-20261116.json) and [fresh-checkout repair validation](operator-controls-rename-20261116.json) | 16 fixed-output controls across two reports, covering the complete 400-trial EEG and 5,450-epoch sleep development panels | Input preparation, validation, grading, incomplete-submission rejection and target-pin failure, including the repaired public entry point; no new solver attempts, model calls or fits |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
 These reports overlap. Together they reference **five distinct registered task
@@ -50,9 +52,15 @@ measure unseen-population generalization or direct reading of neural signals.
 The native controls retained failures as well as accepted fixed-output scores.
 Incomplete submissions were refused before private-stage dispatch, with zero
 target-loader attempts; deliberately wrong target bytes failed the existing pin
-check. Cleanup verified that all 12 owned containers were absent. These controls
+check. Across both reports, cleanup verified that all 24 owned containers were absent. These controls
 establish the reported software behavior at the captured source and environment,
 not the quality or provenance of an independently authored candidate.
+
+Current source routes for the retained historical profiles are the
+[Purkinje task](../../benchmarks/paper/PAPER-FIND-REP-013/README.md),
+[across-day velocity task](../../benchmarks/neural/NEURAL-023/README.md) and
+[TMS task](../../benchmarks/paper/PAPER-paper-signal-add-021/README.md).
+The historical report itself keeps its original source namespace.
 
 The reports and their original limits remain available even when a task definition
 or runtime changes. Source hashes identify the published report being read; they
@@ -77,11 +85,37 @@ The [improvement guide](../science/paper-improvement/README.md) describes the
 comparison rule; the [next-build shortlist](../science/paper-improvement/next-builds.md)
 identifies original endpoints and remaining native-baseline work.
 
-For neural tasks, direct observation, typed-viewer interpretation, tool-assisted
-investigation and frozen prediction programmes are distinct conditions. Available
-programme source cannot supply missing observation access, a working viewer or
-competent interpretation controls. Each task's current definition and assigned
-implementation scope identify which condition the source actually supports.
+All **118 neural definitions** now bind versioned understanding contracts while
+preserving their exact historical definitions. The current
+[neural catalog](../../benchmarks/catalog/neural.md) records **13 delivered named
+scopes, 94 partial deliveries, seven designs and four target mismatches**. These
+are source-scope dispositions, with no scientific qualification conferred by the
+revision. `neural-contract TASK_ID` gives the target, observation limits, evaluation,
+controls and missing requirements.
+
+Direct observation, typed-viewer interpretation, tool-assisted investigation and
+frozen prediction programmes are distinct conditions. Available programme source
+cannot supply missing observation access, a working viewer or competent
+interpretation controls. Each contract identifies the condition its source
+actually supports.
+
+## Original paper preparation
+
+The [REVE PhysioNet route](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md)
+authenticated all 654 original EDFs across 109 participants and prepared 9,837
+epochs under the pinned released-code preprocessing profile. Complete-test-event
+constant-output scorer controls passed; no model inference ran. The released
+preprocessing differs from the paper's filtering description, and the original
+downstream classifier checkpoint and run-aggregation identity remain unresolved.
+
+The [DeepCaImX source-panel route](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_RECOVERY.md)
+authenticated and converted all ten original manual ROI files: 1,563 ROIs across
+ten videos from eight donors. Full-panel arithmetic controls exercised segmentation
+scoring. Movie-to-mask inference has not run: exact crop/frame mapping,
+paper-equivalent checkpoint identity and native assembly remain unresolved. The
+[implementation guide](../usage/implementations.md#prepare-original-paper-endpoints)
+links both executable preparation paths and their required boundaries. Neither
+preparation result establishes source-paper reproduction or improvement.
 
 ## Inventory and execution
 
