@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-FIND-032",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "This Matters Arising reanalysis asks whether apparent prestimulus tone decoding is explained by sequence statistics and biased classifier confusions. The result is a scientific null interpretation, not an ordered prediction benchmark. Higher decoding, larger Bayes evidence for the null, or a smaller p-value cannot by itself surpass the same finding; replacing it with a tone-classification leaderboard would change the registered endpoint.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source contains an ordered four-tone MEG decoding task in Methods Pipeline 1, Figure 1c replication and Supplementary Figure 1, so source-native rebinding is possible. Exact published accuracy matrices, full participant/fold identities and publication-to-code parity remain unrecovered. The descriptive null conclusion remains calibration: stronger null evidence or larger prestimulus accuracy cannot by itself establish neural pre-activation or a method improvement.",
   "source_paper": {
     "title": "No evidence of neural feature-specific pre-activation during the prediction of an upcoming stimulus",
     "url": "https://www.nature.com/articles/s41467-026-73568-1"
@@ -13,8 +13,8 @@
       "id": "find-paper",
       "kind": "paper",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13212915/",
-      "locator": "Figure 1; Discussion; Methods: data, replication, empirical null and theoretical null pipelines",
-      "supports": "Reanalysis target, reused MEG representation and sequence-dependent null rationale."
+      "locator": "Methods: Data analysis and Pipeline 1; Figure 1c replication and Supplementary Figure 1; Pipelines 2-3 and Discussion",
+      "supports": "Original participant-specific four-tone LDA decoding, percent-correct time-generalization task, original entropy conditions/folds and retained empirical/theoretical controls; scientific null inference is distinct from ordered decoder accuracy."
     },
     {
       "id": "find-readme",
@@ -55,7 +55,7 @@
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Test whether prestimulus feature-specific decoding exceeds empirical reordered-sequence and confusion-matrix theoretical nulls; sounds and omissions remain distinct.",
+      "description": "Classify the four actually presented tones from individual-participant MEG at the original train/test time samples: train on random sequences and test all four entropy conditions under source Pipeline 1. Preserve the full temporal-generalization accuracy panel and sound/omission analyses separately; inferential pre-activation claims are distinct from decoder-performance gains.",
       "evidence_ids": [
         "find-paper"
       ]
@@ -86,7 +86,7 @@
     },
     "inputs": {
       "status": "verified",
-      "description": "MEG sensor data, sound/omission event identities and four entropy conditions, with segment reordering and transition/confusion matrices defining the controls.",
+      "description": "Original participant MEG sensor samples at each source time point, with known sound labels and entropy/block identities used to construct original train/test support. Test labels, transition probabilities and confusion matrices may construct the retained source controls but cannot become extra features for the neural decoder.",
       "evidence_ids": [
         "find-paper",
         "find-decoding"
@@ -109,8 +109,8 @@
       ]
     },
     "aggregation": {
-      "status": "verified",
-      "description": "Author code averages fold accuracy within participants; R consumes participant matrices for group means, correlations and cluster/Bayesian inference. Time cells are not independent subjects.",
+      "status": "unresolved",
+      "description": "Author code averages folds within participants and R consumes participant time-generalization matrices. Exact published accuracy arrays, participant/time/entropy reductions and a complete-panel improvement decision remain unrecovered. Do not collapse to a favorable time cell, select only one entropy or treat time cells as independent subjects.",
       "evidence_ids": [
         "find-decoding",
         "find-statistics"
@@ -118,49 +118,50 @@
     }
   },
   "comparison": {
-    "primary_metric": "No ordered same-task improvement endpoint established",
-    "direction": "unresolved",
+    "primary_metric": "Original Pipeline 1 percentage of correctly decoded tones across the full source participant/time/entropy panel",
+    "direction": "higher",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "No ordered numerical baseline represents the paper's negative scientific conclusion. Its accuracy, null contrasts and Bayes/cluster evidence cannot be reduced to a reward for a preferred conclusion.",
+      "description": "Original source decoder performance is shown in Figure 1c replication and Supplementary Figure 1, but exact numeric accuracy matrices and their complete source aggregation have not been recovered. The nominal25% chance level, null contrasts and Bayes evidence are not the author decoder baseline.",
       "evidence_ids": [
         "find-paper",
         "find-statistics"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "A reconstructed descriptive result is a calibration reference, not an improvement comparator.",
+      "description": "Pinned reproduce_and_reorder_sound.py identifies the LDA route, but original participant/fold support and stratified-paper versus KFold-source differences prevent claiming historical parity. No authentic matched author decoder rerun is established.",
       "evidence_ids": [
-        "find-paper",
-        "find-statistics"
+        "find-decoding",
+        "find-readme"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "No scientifically justified scalar improvement direction exists for this registered finding; a larger effect or smaller p-value is not automatically better.",
+      "rationale": "Justify a useful accuracy gain after recovering the complete published decoder panel and baseline variability; do not optimize entropy-confounded prestimulus cells or use a smaller null-test p-value as the effect.",
       "evidence_ids": [
-        "find-paper",
-        "find-statistics"
+        "find-paper"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No improvement hypothesis is admitted. Preserve the source inferential analysis for reproduction.",
-      "independent_unit": "Participant for paired group inference; trial order and shared samples remain dependent.",
-      "rationale": "Valid uncertainty does not turn confirmation of a descriptive or null claim into an ordered performance contest.",
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level candidate-minus-author inference with original trial-order, repeated folds and temporal/entropy dependence preserved; specify multiplicity and a full-panel decision before evaluation.",
+      "independent_unit": "Participant; repeated trials, folds, entropy conditions and temporal cells are dependent observations.",
+      "rationale": "The original group inference establishes controls for interpreting temporal decoding, not an automatic superiority criterion. Source null controls remain mandatory for any anticipatory neural-information interpretation.",
       "evidence_ids": [
         "find-paper",
         "find-statistics"
       ]
     },
     "paper_win_requires": [
-      "No same-task improvement win is admitted for confirming or strengthening this negative finding.",
-      "Retain the original empirical/theoretical controls; higher tone accuracy alone does not demonstrate anticipatory neural information.",
-      "A new classifier benchmark or corrected time/split/null protocol must be separately labelled as an extension with its own objective; numerical parity remains calibration."
+      "Recover exact original Pipeline1 published decoder accuracy matrices, full participant/trial/fold support, source timing and all four entropy conditions, including the original sound/omission distinctions.",
+      "Reproduce the publication-aligned participant-specific LDA baseline and resolve stratified-fold, filtering and time-window discrepancies before candidate comparison.",
+      "Freeze candidate, original inputs and preprocessing, meaningful effect, full-panel aggregation/multiplicity, participant-level uncertainty and matched budgets before final evaluation.",
+      "Surpass the source decoder on identical original support under that declared rule. New splits, easier input conditions, a favorable time/entropy subset or a corrected_methods_v1 profile are extensions, not historical same-task victories.",
+      "Retain empirical reordered-sequence and theoretical confusion/transition controls. Higher prestimulus accuracy alone does not establish anticipatory neural information, and stronger evidence for the paper's null conclusion is not decoder improvement."
     ],
     "current_sota": {
       "status": "not_claimed",
@@ -169,22 +170,22 @@
     }
   },
   "episode": {
-    "improvement_loop": "Inactive: Original null-claim reconstruction is retained; no justified scalar improvement objective is available for the same scientific task.",
-    "candidate_freeze": "No candidate improvement episode is admitted. Preserve frozen historical reconstruction outputs separately.",
-    "final_evaluation": "Do not award surpass-source-paper success for this disposition. A separately approved replacement must supply its own original task and source baseline.",
+    "improvement_loop": "Blocked pending original decoder source recovery. Then iterate using declared source training/development feedback only; preserve participant-specific random-sequence training and original entropy generalization, with all attempts logged.",
+    "candidate_freeze": "Freeze classifier, preprocessing, original participant/trial/fold manifests, temporal/entropy score panel, complete decision rule and budgets before original test evaluation.",
+    "final_evaluation": "Compare candidate with authenticated original LDA on the complete source Pipeline1 support and accuracy panel; report uncertainty and preserve the source empirical/theoretical controls. Descriptive null inference remains a separate scientific interpretation.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Historical reference agreement remains calibration only. Authored extensions and local analytical baselines cannot substitute for the source-paper result."
+    "baseline_policy": "Published decoder accuracy, an authenticated author rerun, and local corrected-method profiles remain distinct. Reconstruction of the null finding is calibration; nominal chance and authored analytical controls cannot substitute for the source decoder."
   },
   "blocking_issues": [
-    "Original scientific endpoint lacks a defensible direction in which a method can surpass the finding.",
-    "Paper versus pinned code differ in cross-validation wording and time-window implementation; a corrected profile cannot silently stand in for the paper.",
-    "Publication-vintage complete participant/file join remains unqualified.",
-    "A replacement must identify a source-reported ordered prediction task; stronger null evidence or sensitivity alone is not one."
+    "Exact original decoder accuracy matrices and full-panel numerical aggregation are unrecovered.",
+    "Publication versus pinned code differ in cross-validation, filtering and temporal support; original execution parity must be recovered rather than silently corrected.",
+    "Complete participant/file/trial joins and original fold assignments remain unauthenticated.",
+    "Meaningful accuracy effect, participant-aware uncertainty, full-panel multiplicity, concrete access/resources and a working same-task evaluator are unspecified."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Retain full temporal-generalization matrices, empirical/theoretical nulls, group inference and historical/source reconciliation. corrected_methods_v1 and sensitivity/power studies remain methodological extensions, never paper-win substitutions."
+    "notes": "Retain full temporal-generalization matrices, empirical/theoretical nulls, group inference and historical source reconciliation as calibration. The current contract may bind only the original ordered Pipeline1 decoder; corrected_methods_v1, new splits and sensitivity/power studies remain extensions, and null-claim agreement is not a victory."
   }
 }
