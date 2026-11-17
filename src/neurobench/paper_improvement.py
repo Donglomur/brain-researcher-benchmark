@@ -409,7 +409,7 @@ def contract_validate(document, task_id=None):
         reproduced = comparison["reproduced_author_baseline"]
         if policy["author_baseline"]["route"] == "reproduced_author" and (reproduced["status"] != "verified" or reproduced["value"] is None):
             errors.append("$.comparison.reproduced_author_baseline: reproduced_author route requires a numeric verified baseline")
-        if reproduced["value"] is not None and published["value"] is not None and abs(_difference(reproduced["value"], published["value"])) > Decimal(str(policy["author_baseline"]["tolerance"])):
+        if reproduced["value"] is not None and published["value"] is not None and _difference(reproduced["value"], published["value"]).copy_abs() > Decimal(str(policy["author_baseline"]["tolerance"])):
             errors.append("$.comparison.reproduced_author_baseline: exceeds predeclared reproduction tolerance from published result")
     return errors
 
@@ -533,10 +533,10 @@ def compare(contract, result):
         errors.append("measurement.published_value differs from verified source-paper baseline")
     reproduced = result["reproduced_author_baseline"]["value"]
     tolerance = policy["author_baseline"]["tolerance"]
-    if abs(_difference(reproduced, published)) > Decimal(str(tolerance)):
+    if _difference(reproduced, published).copy_abs() > Decimal(str(tolerance)):
         errors.append("reproduced author baseline is outside declared tolerance from published score")
     pinned_reproduction = comparison["reproduced_author_baseline"]["value"]
-    if pinned_reproduction is not None and abs(_difference(reproduced, pinned_reproduction)) > Decimal(str(tolerance)):
+    if pinned_reproduction is not None and _difference(reproduced, pinned_reproduction).copy_abs() > Decimal(str(tolerance)):
         errors.append("reproduced author baseline differs from frozen reproduced baseline beyond tolerance")
     sign = 1 if comparison["direction"] == "higher" else -1
     effect = _difference(measurement["candidate_value"], published)
