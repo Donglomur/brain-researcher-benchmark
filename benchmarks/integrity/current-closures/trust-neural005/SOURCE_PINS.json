@@ -1,0 +1,82 @@
+{
+  "schema": "neural005_namespace_source_repair_v1",
+  "benchmark_id": "NEURAL-005",
+  "package": "benchmarks/neural/NEURAL-005/implementations/registered-runtime",
+  "predecessors": [
+    {
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/manifest.json",
+      "bytes": 6621,
+      "sha256": "6021e99bb2b4dee2b832470a9d5ffed04ea15a25463ddf8419a96396b8cdfcb9"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/execution_pins.json",
+      "bytes": 1051,
+      "sha256": "16c5511346672d52356a1e5fa51df428340839058460e306fcb5a997955e9ad3"
+    }
+  ],
+  "members": {
+    "execution_pins.json": {
+      "bytes": 1051,
+      "sha256": "16c5511346672d52356a1e5fa51df428340839058460e306fcb5a997955e9ad3"
+    },
+    "grader.py": {
+      "bytes": 5401,
+      "sha256": "3d599283e1708d67aea006453543b75ba98caaa00468df3bae1cb00f0cd881d6"
+    },
+    "instruction.md": {
+      "bytes": 2809,
+      "sha256": "a7f601e85f3a72356f6c192f8b8df96d89db2ec223d911a070fdc7d5dee9dae6"
+    },
+    "manifest.json": {
+      "bytes": 6621,
+      "sha256": "6021e99bb2b4dee2b832470a9d5ffed04ea15a25463ddf8419a96396b8cdfcb9"
+    },
+    "operator_assets.json": {
+      "bytes": 1062,
+      "sha256": "e43e569385929686ef81957428a5fcb673b299c87b9ec8ef3de1406121b05e64"
+    },
+    "probability_metrics.py": {
+      "bytes": 2292,
+      "sha256": "6d073425605cc876f1220a60f24fc6ab60b910736b33d40f09c69e7ac9f570bc"
+    },
+    "public/cases.json": {
+      "bytes": 56301,
+      "sha256": "c52d582938ad60b3edbedb6312a9e0296be9036608b98a4a868683e42521799f"
+    },
+    "score.py": {
+      "bytes": 17634,
+      "sha256": "8caa28faa4be7d9b817c7fa7dc4521ea41885e406029d2597f25c718340b7295"
+    }
+  },
+  "changed_members": [
+    "score.py"
+  ],
+  "test": {
+    "path": "tests/benchmarks/test_neural005_namespaces.py",
+    "bytes": 9619,
+    "sha256": "dd7b790551720c0c2fbf186aeb42b1d39f35b34d10cba8190e587eba0a899516"
+  },
+  "scope": "Source-only namespace validation repair. Creation requests private IPC; inspection requires Docker default isolated PID mode and explicit private IPC before start. Other identity, mount, resource and pre-start checks remain unchanged.",
+  "namespace_contract": {
+    "PidMode": "",
+    "IpcMode": "private",
+    "creation_addition": [
+      "--ipc",
+      "private"
+    ]
+  },
+  "primary_documentation": [
+    "https://docs.docker.com/reference/cli/docker/container/run/#pid-settings---pid",
+    "https://docs.docker.com/reference/cli/docker/container/run/#ipc-settings---ipc"
+  ],
+  "historical_execution_bindings_rewritten": false,
+  "runtime_rebinding": false,
+  "scientific_qualification": false,
+  "native_execution_verified": false,
+  "remaining_limits": [
+    "Historical manifest and execution_pins retain original paths, code identity and qualification evidence; this descriptor does not select or authorize a new runtime.",
+    "The retained adapter still needs separately reviewed source/path rebinding, its immutable Docker image, protected references and operator assets.",
+    "Generated inspect and mocked control-flow checks do not establish live Docker isolation, scientific result validity or readiness."
+  ],
+  "new_benchmark_ids": 0
+}
