@@ -216,6 +216,38 @@ class UnderstandingBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "differs from its bound contract"):
             engine.load_neural_understanding(self.root, self.task_id)
 
+    def test_dosei_native_successor_preserves_historical_projection(self):
+        home = ROOT / "benchmarks/neural/clinical-dosei-responsiveness"
+        original_body = (home / engine.HISTORY).read_bytes()
+        original = json.loads(original_body)
+        saved = copy.deepcopy(original)
+        prior = home / "docs/understanding-pre-source-condition-v2"
+        prior_contract_body = (prior / engine.CONTRACT).read_bytes()
+        old_projection = engine._current(original, json.loads(prior_contract_body),
+            engine._binding(prior_contract_body, original_body), "clinical-dosei-responsiveness")
+        self.assertEqual(engine._bytes(old_projection), (prior / "task.json").read_bytes())
+        contract_body = (home / engine.CONTRACT).read_bytes()
+        current_contract = json.loads(contract_body)
+        projected = engine._current(original, current_contract,
+            engine._binding(contract_body, original_body), "clinical-dosei-responsiveness")
+        for value in (projected["participant_inputs"], projected["complete_scope"]["input"],
+                      projected["complete_scope"]["complete_compact_representation"],
+                      projected["machine_output"]["coverage"],
+                      projected["resources_and_remaining_gates"]["planning"]):
+            self.assertNotIn("7,500 values", value)
+            self.assertNotIn("7,328", value)
+            self.assertNotIn("1,129", value)
+        self.assertIn("relative native timestamps", projected["participant_inputs"])
+        self.assertIn("not scoring denominators", projected["machine_output"]["coverage"])
+        self.assertEqual(projected["provenance"], original["provenance"])
+        self.assertEqual(projected["admission"], old_projection["admission"])
+        self.assertEqual(original, saved)
+        # The exact condition evidence must not alter another task's inherited fields.
+        other_contract = copy.deepcopy(current_contract)
+        other_contract["task_id"] = "NEURAL-UNRELATED"
+        unrelated = engine._current(original, other_contract, {}, "NEURAL-UNRELATED")
+        self.assertEqual(unrelated["participant_inputs"], original["participant_inputs"])
+
     def test_current_admission_cannot_be_promoted(self):
         self.apply()
         path = self.root / self.home / "task.json"

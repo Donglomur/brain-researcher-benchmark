@@ -1,0 +1,63 @@
+{
+  "schema": "dosei_source_condition_amendment_v1",
+  "task_id": "clinical-dosei-responsiveness",
+  "condition_id": "native_marker_relative_30s_v1",
+  "scientific_design_adoption": "root_adopted_2026-11-17",
+  "registry_binding": "pending_integrator_review",
+  "adoption_evidence": {
+    "root_decision_document": "ROOT_SOURCE_CONDITION_ADOPTION.md",
+    "root_decision_sha256": "c6d98fad6860bbc692eb18f02e7b4d7b00435c1bb9d253ac72eefe4ae4c79edc",
+    "independent_recommendations_sha256": "79e5bcac54e3729f6ff99da8fb11f37715643e936fcf385105d80984531ed912"
+  },
+  "label_target_unchanged": {
+    "ordered_released_categories": [1, 2, 3, 4, 5],
+    "semantics": "recorded bedside MOAAS responsiveness; source-reported original 0/1 merged to1 and5/6 merged to5",
+    "missing_and_ambiguous": "retain source assessment slot with null category; no recoding or imputation",
+    "SOC": "separate event count, never additional ordinal targets"
+  },
+  "observation_estimand": "retrospective_marker_associated_responsiveness",
+  "interval": "[original_marker_ms - 30000, original_marker_ms)",
+  "representation": {
+    "table_step_ms": 4,
+    "table_rows_per_complete_window": 7500,
+    "channels": ["Intellivue/EEG_1", "Intellivue/EEG_2"],
+    "units": "microvolt",
+    "preserve": ["exact relative native timestamps", "all observed channel values", "source blanks as null", "per-channel observation masks"],
+    "forbid": ["every-other-row phase assumption", "interpolation", "resampling", "dense2x3750 enforcement", "zero fill", "300 sentinel as signal", "inferred clinical onset"]
+  },
+  "interpretation": {
+    "pre_challenge_prediction_verified": false,
+    "challenge_or_response_activity_may_be_present": true,
+    "not_established": ["consciousness", "treatment choice", "clinical causal effect", "clinical diagnosis"]
+  },
+  "matched_access_conditions": {
+    "direct_observation": "same complete projection; no execution; capacity and serialization transport remain unqualified",
+    "typed_viewer": "same complete projection; calibrated time/voltage scale; navigation must preserve access to all rows and source missingness",
+    "tool_assisted": "same complete projection; declared tools may use these data and authorized training evidence only",
+    "frozen_program": "same complete projection; precommitted fitting with verified biological-person groups, not inferred study-ID uniqueness"
+  },
+  "forbidden_participant_fields": ["source recording and biological person identifiers", "absolute clinical timestamps", "EVENT", "MOAAS", "SOC", "dose", "procedure progress", "released offline artifact masks"],
+  "population": {
+    "release": "https://zenodo.org/records/22145442",
+    "recording_IDs": 171,
+    "metadata_aggregate_assessments": 7345,
+    "metadata_aggregate_SOC_transitions": 1132,
+    "actual_original_EVENT_census_verified": false,
+    "successor_scorer_denominator": null,
+    "biological_person_crosswalk_verified": false,
+    "policy": "retain all actual events and source-version/exclusion provenance; never truncate to inherited7328/1129"
+  },
+  "legacy_condition": {
+    "description": "pre-assessment-onset 30-second dense two-channel125Hz observation",
+    "status": "historical_unavailable",
+    "preserve_registered_definition_and_source_bytes": true,
+    "equivalent_to_current_condition": false
+  },
+  "implementation_scope": {
+    "generic_grid_window": "marker_window; caller-supplied grid cutoff, source marker identity not verified",
+    "source_bound_candidate_window": "candidate_window; original EVENT and nonempty MOAAS cells at exact source row; full EVENT grammar/unique assessment identity still unverified",
+    "authentic_signal_execution": false,
+    "canonical_scorer_projection": "refused_pending_complete_reviewed_source_population",
+    "readiness_promotion": false
+  }
+}

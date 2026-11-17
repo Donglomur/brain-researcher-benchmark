@@ -90,7 +90,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 2 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 10 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 11 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 4 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
@@ -122,9 +122,9 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-DISC-20261114-VESTIBULAR-VO](NEURAL-DISC-20261114-VESTIBULAR-VO/README.md) | Continuous self-motion reconstruction from simultaneous vestibular spike trains | 2 | not linked |
 | [NEURAL-DISC-20261114-VOLTRON-SPIKES](NEURAL-DISC-20261114-VOLTRON-SPIKES/README.md) | Optical voltage trace to independently recorded spike timing across complete cell recordings | 3 | not linked |
 | [NEURAL-DISC-20261114-WORM-PROPAGATION](NEURAL-DISC-20261114-WORM-PROPAGATION/README.md) | Conditional downstream calcium-response reconstruction after identified-neuron perturbation | 2 | not linked |
-| [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Neonatal seizure-report probability from complete causal EEG windows | 1 | not linked |
+| [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Neonatal seizure-report probability from complete causal EEG windows | 2 | not linked |
 | [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Offline reported-attention direction inference with motor and mixture controls | 2 | not linked |
-| [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 2 | not linked |
+| [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 3 | not linked |
 | [NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY](NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/README.md) | Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics | 3 | not linked |
 | [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 5 | not linked |
 | [NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT](NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/README.md) | Predicting longitudinal state-selective calcium activity across identified neurons | 2 | not linked |
@@ -133,7 +133,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-SCOPE-20261114-STROOP](NEURAL-SCOPE-20261114-STROOP/README.md) | Cross-person, unseen-session Stroop condition inference from frontal fNIRS | 3 | not linked |
 | [apcx-odor-pulse-evidence](apcx-odor-pulse-evidence/README.md) | Recover odor-pulse quantity and temporal sensory evidence from anterior piriform spike trains | 2 | not linked |
 | [clinical-ccep-stimulation-attribution](clinical-ccep-stimulation-attribution/README.md) | Anatomical stimulation-site attribution from complete VTC evoked responses | 4 | not linked |
-| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Observed bedside responsiveness from causal pre-assessment EEG | 3 | not linked |
+| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Recorded bedside responsiveness from native marker-relative EEG | 4 | not linked |
 | [clinical-sensefog-stn-state](clinical-sensefog-stn-state/README.md) | Participant-held gait-state inference from bilateral STN LFP | 2 | not linked |
 | [marmoset-retinal-contrast-generalization](marmoset-retinal-contrast-generalization/README.md) | Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization | 2 | not linked |
 

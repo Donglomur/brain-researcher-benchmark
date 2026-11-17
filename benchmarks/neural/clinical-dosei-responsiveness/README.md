@@ -1,4 +1,4 @@
-# Observed bedside responsiveness from causal pre-assessment EEG
+# Recorded bedside responsiveness from native marker-relative EEG
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -14,24 +14,24 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Released ordered MOAAS categories 1,2,3,4,5, with source-reported merging of original 0/1 and 5/6; missing/ambiguous ratings stay null.
 
-**Source delivery:** partial\_delivery. Exact ordinal primary/paired artifact scoring and secondary ordinal metrics exist. Source person/assessment joins, causal EEG packets, trained physiological comparators and participant execution remain unqualified.
+**Source delivery:** partial\_delivery. Scoped ordinal artifact evaluators and source-native intake code exist. The adopted native\_marker\_relative\_30s\_v1 observation is retrospective; complete original-EVENT identities, biological-person joins, native release authentication, successor scorer population and participant delivery remain unqualified.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
 
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
-| Direct observation | not\_delivered | Complete 7,500 value causal two-channel EEG or an explicitly matched waveform rendering. No execution; exact full observation and mask/capacity policy required. | Complete authentic packet and no-tools transport. |
-| Typed viewer | not\_delivered | Potential calibrated two-channel 30 second waveform display with typed time/scale actions. No clinical timestamps/labels or dose overlays; cannot silently crop to salient segments. | Restricted viewer and response-capture implementation. |
-| Tool assisted | not\_delivered | Same pre-assessment waveform plus causal spectral/entropy tools. No centered/future-aware features; train-only fitted tools and fixed case budget. | Audited physiological tools and protected input path. |
-| Frozen program | not\_delivered | Precommitted ordinal predictor with fixed train-only fitting recipe. Group all recordings per person; scorer schema does not enforce fit custody. | Frozen execution lifecycle and authentic baseline. |
+| Direct observation | not\_delivered | The same complete native marker-relative timestamps, two-channel sparse observations and masks, without analysis execution; an exactly matched rendering must preserve every row. No execution. Measure context capacity on exact serialized native timestamps, sparse channel values and observation masks, never an assumed dense-value count. Complete native preparation, storage, peak memory and full-campaign cost remain unqualified. | Authenticated complete native packet, measured capacity and no-tools serialization transport. |
+| Typed viewer | not\_delivered | The same complete native marker-relative projection through calibrated time/voltage navigation, preserving access to every row and all missingness. No clinical identifiers, absolute timestamps, labels, dose or offline artifact overlays; navigation cannot hide rows or select salient segments. Transport remains unavailable. | Restricted viewer and response-capture implementation. |
+| Tool assisted | not\_delivered | The same complete native marker-relative projection plus separately declared tools restricted to that observation and authorized training evidence. No information outside the declared marker-relative window or silent future-aware artifact/processed features; fitted tools use authorized training evidence and fixed case budgets. | Audited native-window tools with explicit preprocessing exposure and protected input path. |
+| Frozen program | not\_delivered | The same complete native marker-relative projection with precommitted fitting using verified biological-person groups and authorized training evidence. Group all recordings for each verified biological person. No inferred study-ID uniqueness, future-aware preprocessing or claim that scorer schema enforces fitting custody. | Frozen execution lifecycle and authentic baseline. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 27617 bytes; SHA-256 `a3a94564277fda5dff8a8951cfb97bbb83b11b4f05f54ff3d08e5c6cf6737502`.
+- Specification identity: 33790 bytes; SHA-256 `e5de0de71ae61940a8e31f5511ff0bd3d2470085d27bb17f0ff5842149c59fbb`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Secondary ordinal metrics and paired participant uncertainty](docs/ordinal-metrics-v2.md)
+- [Before retrospective source-condition adoption: task.json](docs/understanding-pre-source-condition-v2/task.json)
+- [Before retrospective source-condition adoption: understanding.v1.json](docs/understanding-pre-source-condition-v2/understanding.v1.json)
 
 ## Implementation artifacts
 
@@ -46,6 +48,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Ordinal metrics v2](implementations/ordinal-metrics-v2) — Task implementation.
   Scope: Conditional secondary ordinal reports and original-arm paired participant intervals under explicit prospective policy. Exact unchanged primary dependency; no authentic inputs, competent reference, protected execution, clinical validity or scientific qualification.
+- [Source native intake v1](implementations/source-native-intake-v1) — Reviewed source component.
+  Scope: Complete 171-ID source metadata reconciliation and sparse native-marker-relative 30-second intake interface. The retrospective condition preserves the released five-category target and sparse rows; metadata summaries are not scoring denominators. Authentic native packets, original EVENT census, biological-person authority, final scorer adapter, competent reference and protected participant transport remain open.
 - [Participant prior v1](implementations/participant-prior-v1) — Reviewed source component.
   Scope: Participant-weighted ordinal training prior. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

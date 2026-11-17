@@ -42,6 +42,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Native inputs v1](implementations/native-inputs-v1) — Reviewed source component.
+  Scope: Complete original three-archive native source producer with authenticated successful preparation and independent output audit: 104 animals, 936 target cases and all support traces retained. The three above-range target annotations, physical/acoustic binding, biological support mapping and competent comparison remain unresolved; candidate conditions and primary scoring are not admitted by source preparation.
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prepared-threshold engineering evaluator with a complete prediction/failure ledger, equal-animal metrics, paired bootstrap and separate historical/paper threshold-rule diagnostics. Authentic aggregate scoring is unavailable: the native target/support census, annotations and censoring, physical units, waveform adapters, rights, source-only baselines and protected qualification remain held. The existing components-abr-protected-fold-runner relationship is retained as related source only; its runner capabilities are not inherited by this owned evaluator.
 - [Series evaluator v2](implementations/series-evaluator-v2) — Reviewed source component.

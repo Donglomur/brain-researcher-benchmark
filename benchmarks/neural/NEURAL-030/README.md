@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 26529 bytes; SHA-256 `6fc193026f18f4d2819dbb646aa5f5dd1c8be9fa68a826566fcd0d1dc634bca9`.
+- Specification identity: 26529 bytes; SHA-256 `fe167026eebc6ad8723682ee4a4d7527d8cc8591a5fad6eba780b54e5b22c52c`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -40,6 +40,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 ## Task documentation
 
 - [Executor role separation and current source](docs/executor-role-separation.md)
+- [Before current source-evidence refresh: task.json](docs/understanding-pre-evidence-refresh-v2/task.json)
+- [Before current source-evidence refresh: understanding.v1.json](docs/understanding-pre-evidence-refresh-v2/understanding.v1.json)
 
 ## Implementation artifacts
 
