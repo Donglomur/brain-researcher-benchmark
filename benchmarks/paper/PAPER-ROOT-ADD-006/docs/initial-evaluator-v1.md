@@ -32,11 +32,11 @@ Published behavioral parameters were estimated with hierarchical EM. Simply hold
 
 ## Input boundary and operation
 
-Use an existing Python environment with NumPy and SciPy. Verified here with `/opt/homebrew/opt/python@3.11/bin/python3.11` (Python 3.11.6), NumPy 2.4.6 and SciPy 1.17.1. Other `python3` aliases on the construction host lack SciPy; select the environment explicitly. No installation is performed. From the package directory:
+Use an existing Python 3.11 environment with NumPy and SciPy. Validation used Python 3.11.6, NumPy 2.4.6 and SciPy 1.17.1; the exact validation interpreter is recorded in external construction evidence. Select an existing environment that provides these dependencies before running the commands below. No installation is performed. From the package directory:
 
 ```sh
-python evaluator.py /absolute/path/manifest.json /absolute/path/result.json
-python -m unittest discover -s tests -v
+python3.11 evaluator.py /absolute/path/manifest.json /absolute/path/result.json
+python3.11 -m unittest discover -s tests -v
 ```
 
 `manifest.json` is JSON with `schema_version:1`, `task_id`, exact `contract_sha256` and `source_revision`, `input_kind` either `generated_engineering_control` or `unqualified_primitive_export`, `event_table_conversion_status:"unqualified"`, predeclared `train_ms`, `test_ms`, positive `ridge_alphas`, and `participants` in complete source order. These frozen settings and their SHA256 are included in results; an external protected operator must govern when the manifest is frozen.
