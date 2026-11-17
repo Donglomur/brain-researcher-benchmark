@@ -1,0 +1,2827 @@
+# Bounded generated engineering controls; no scientific qualification is established.
+name: Construction expansion A
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: construction-expansion-a-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+
+jobs:
+  construction-a-neural-011:
+    name: construction-a-neural-011
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-011/docs/initial-evaluator-v1.md",
+                  "bytes": 12051,
+                  "sha256": "d060e5745de096105161bf225df0d2cf12aeddb318480685ee1782da9cc10590"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1902,
+                  "sha256": "ceb6c19498583a357dc40ee7ef922dce162080bd2df199b8c28d08198b77b60e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4245,
+                  "sha256": "1a76340f9115fad6fd41aa4d3008ec0ece25eb34a014f6c54fb120c983445eaf"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/reference.py",
+                  "bytes": 9291,
+                  "sha256": "15549e34fb72d1ee4976060730af3cfeeb2be6285acc72a4e661c375e3ae1340"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/siena_evaluator.py",
+                  "bytes": 21119,
+                  "sha256": "de9f34b9d9399ae34210e55d39047c6ab1f4371d345c68ba15846c839d05aa16"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/source_inventory.json",
+                  "bytes": 7820,
+                  "sha256": "4d4ae5ae132d851bea2a2388965dbc0b528e533b4f9cbea97e5822ab660203ea"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/tests/independent_controls.json",
+                  "bytes": 5540,
+                  "sha256": "48ca2f572f386d129dd676f37a4819120008cd649277b11409ab5d20416f2f88"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11634,
+                  "sha256": "89bce9f6189214e2c2011699271aabca8fdf4dc2985b7944b16f8be6fe03103a"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-011/task.json",
+                  "bytes": 13904,
+                  "sha256": "044340155db14895d22a711e2a892261d0377603714125502e911dd7181fd0ea"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 9 > 0
+          assert sum(row['bytes'] for row in rows) == 87506 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 87506,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-neural-011-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-neural-011-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.AnnotationTests.test_ambiguous_clocks_follow_pinned_final_clock', 'test_evaluator.AnnotationTests.test_midnight_pn01_alias_and_two_events', 'test_evaluator.AnnotationTests.test_missing_does_not_mean_background', 'test_evaluator.AnnotationTests.test_pn12_repeated_registration', 'test_evaluator.AnnotationTests.test_source_correction', 'test_evaluator.ManifestTests.test_complete_scores_and_nonfinite', 'test_evaluator.ManifestTests.test_constant_scores_retained_as_controls', 'test_evaluator.ManifestTests.test_full_patient_inventory', 'test_evaluator.ManifestTests.test_identity_and_leakage', 'test_evaluator.MetricsTests.test_boundary_events', 'test_evaluator.MetricsTests.test_independently_derived_controls', 'test_evaluator.MetricsTests.test_invalid_events_and_vectors', 'test_evaluator.MetricsTests.test_paired_patient_uncertainty', 'test_evaluator.MetricsTests.test_patient_macro_not_recording_or_event_pool', 'test_evaluator.MetricsTests.test_subtick_alarm_is_false_alarm_as_native', 'test_evaluator.ReferenceTests.test_causal_signal_transform', 'test_evaluator.ReferenceTests.test_cli_roundtrip', 'test_evaluator.ReferenceTests.test_complete_train_predict_score', 'test_evaluator.ReferenceTests.test_timing_only_and_paired_comparison', 'test_evaluator.ReferenceTests.test_training_patient_labels_channels_and_frozen_tamper']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 20 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 20, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-neural-027:
+    name: construction-a-neural-027
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-027/docs/initial-evaluator-v1.md",
+                  "bytes": 10982,
+                  "sha256": "9296c91466fb4107fcd1549c859d924e0309c52d184e318a5adb703df2cd8483"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1307,
+                  "sha256": "26430cb514ee80ca2c5362da0d28a03ad9f10ab19a5f90b0793fdd15552ba529"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 23792,
+                  "sha256": "77b4d047e176e52e2212ad5eb8dc814683226f83a25ac53e70c0f17a0f929b21"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 11216,
+                  "sha256": "9438ed345cf071e2595ca6dd4bae1fddd4aa308115e985163e70bdc82e7a8189"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 13943,
+                  "sha256": "f1696df127a6a5acc308d3cb134be7202bb1e111583bea2ab8b6cf2fb862b94e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-027/task.json",
+                  "bytes": 15976,
+                  "sha256": "9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 77216 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 77216,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-neural-027-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-neural-027-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.PacketTests.test_bad_neural_source_area_and_stimuli', 'test_evaluator.PacketTests.test_behavior_tail_audited_and_short_vector_rejected', 'test_evaluator.PacketTests.test_cli_safe_numeric_npz', 'test_evaluator.PacketTests.test_complete_frame_to_endpoint_path', 'test_evaluator.PacketTests.test_equal_class_availability_required', 'test_evaluator.PacketTests.test_exact_last_edge_and_internal_edge', 'test_evaluator.PacketTests.test_infinite_unselected_trial_rejected_but_nan_audited', 'test_evaluator.PacketTests.test_no_cross_trial_interpolation', 'test_evaluator.PacketTests.test_population_phase_and_mouse_leakage', 'test_evaluator.PacketTests.test_position_units_outside_domain_rejected', 'test_evaluator.PacketTests.test_source_wall_mapping_and_trial_bins', 'test_evaluator.PacketTests.test_string_source_wall_identity_mapping', 'test_evaluator.PacketTests.test_target_and_query_values_do_not_fit_reference', 'test_evaluator.PacketTests.test_train_class_and_mouse_weighting', 'test_evaluator.ScoringTests.test_cluster_uncertainty_and_single_mouse', 'test_evaluator.ScoringTests.test_independent_mouse_macro_oracle', 'test_evaluator.ScoringTests.test_malformed_missing_duplicate_unknown_probabilities', 'test_evaluator.ScoringTests.test_null_zero_and_tie_policy', 'test_evaluator.ScoringTests.test_pairing_rejects_different_items_and_label_bindings', 'test_evaluator.ScoringTests.test_public_scorer_and_reference_reject_invalid_class_sets']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 20 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 20, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-neural-050:
+    name: construction-a-neural-050
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-050/docs/initial-evaluator-v1.md",
+                  "bytes": 13074,
+                  "sha256": "133c144d15eb3863b35b47496cbda0d62961a3c7d0d536843344be1b5d496b76"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 671,
+                  "sha256": "b737aa397306f542cca76ac07194a1ea85cd87eeabfb7633c985af1aa64e52f6"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 25577,
+                  "sha256": "736bf6c0b9573dba13985e88564ad18175746041118b9590d34fb12a9f0052a6"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 2268,
+                  "sha256": "a440dceb61086f8f5efada614c992d561eea6bd898fc41c1b34f43a617bb6973"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11411,
+                  "sha256": "520938a2db9096da1b951ead25fb4647ca648233af3b8779a27bcead3873172a"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-050/task.json",
+                  "bytes": 10994,
+                  "sha256": "a313ed58e5be0dc8a647a5ee34d053adb5f5edcaacf4a5650b994837cc9457bb"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 63995 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 63995,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-neural-050-requirements.txt" <<'REQUIREMENTS'
+          iniconfig==2.3.0 --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          pluggy==1.6.0 --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+          pygments==2.20.0 --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+          pytest==9.1.1 --hash=sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-neural-050-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'iniconfig': '2.3.0', 'numpy': '2.4.6', 'packaging': '26.3', 'pluggy': '1.6.0', 'pygments': '2.20.0', 'pytest': '9.1.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          assert os.environ.get('PYTEST_DISABLE_PLUGIN_AUTOLOAD') == '1'
+          import pytest
+          expected_ids = ['test_evaluator.py::test_bad_inputs_rejected[duplicate]', 'test_evaluator.py::test_bad_inputs_rejected[missing]', 'test_evaluator.py::test_bad_inputs_rejected[nan]', 'test_evaluator.py::test_bad_inputs_rejected[overlap]', 'test_evaluator.py::test_bad_inputs_rejected[pin]', 'test_evaluator.py::test_binary_clock_selection_equals_independent_full_mask', 'test_evaluator.py::test_cli_and_json_duplicate_keys', 'test_evaluator.py::test_constant_target_is_undefined_not_infinity', 'test_evaluator.py::test_day_shift_preserves_each_day_values', 'test_evaluator.py::test_exact_independent_prediction_arithmetic', 'test_evaluator.py::test_guard_rejects_day_labels_that_hide_adjacent_windows', 'test_evaluator.py::test_macro_unit_is_patient_not_window', 'test_evaluator.py::test_matched_pairs_exact_state_time_and_no_reuse', 'test_evaluator.py::test_midnight_half_open_window_is_accepted', 'test_evaluator.py::test_no_match_coverage_is_explicit', 'test_evaluator.py::test_overlap_behaviors_match_exact_label_sets', 'test_evaluator.py::test_prediction_ids_and_nonfinite_rejected', 'test_evaluator.py::test_provenance_and_clock_fail_closed', 'test_evaluator.py::test_provenance_binds_clock_and_state_metadata', 'test_evaluator.py::test_qc_rejects_zero_filled_or_masked_support', 'test_evaluator.py::test_real_fitting_improves_generated_relation_and_freezes_units', 'test_evaluator.py::test_signal_features_have_analytic_scale', 'test_evaluator.py::test_train_only_scaling_and_predictions_ignore_test_targets', 'test_evaluator.py::test_zero_gamma_matches_baseline']
+          def normalize(nodeid):
+              first, *rest = nodeid.split('::')
+              return '::'.join([Path(first).name, *rest])
+          class ExactControls:
+              def __init__(self):
+                  self.collected = []
+                  self.phases = {}
+                  self.forbidden = []
+              def pytest_collection_finish(self, session):
+                  self.collected = sorted(normalize(item.nodeid) for item in session.items)
+                  if self.collected != expected_ids:
+                      raise pytest.UsageError('Collected controls differ from reviewed exact case roster')
+              def pytest_runtest_logreport(self, report):
+                  key = (normalize(report.nodeid), report.when)
+                  if key in self.phases:
+                      self.forbidden.append('duplicate phase ' + repr(key))
+                  self.phases[key] = report.outcome
+                  if report.outcome != 'passed' or hasattr(report, 'wasxfail'):
+                      self.forbidden.append((report.nodeid, report.when, report.outcome))
+          gate = ExactControls()
+          status = pytest.main(['benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/tests/test_evaluator.py', '-q', '-p', 'no:cacheprovider', '-c', '/dev/null',
+                                '--confcutdir', 'benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/tests', '--rootdir', 'benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1'], plugins=[gate])
+          assert status == 0, f'pytest exited {status}'
+          assert gate.collected == expected_ids and len(gate.collected) == 24 > 0
+          expected_phases = {(case, phase) for case in expected_ids for phase in ('setup', 'call', 'teardown')}
+          assert set(gate.phases) == expected_phases, 'Incomplete or duplicate executed case phases'
+          assert not gate.forbidden, f'Skips, failures, xfail and xpass are forbidden: {gate.forbidden}'
+          print(json.dumps({'test_file': 'benchmarks/neural/NEURAL-050/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'collected': len(gate.collected),
+                            'tests_run': sum(phase == 'call' for _, phase in gate.phases),
+                            'passed': sum(phase == 'call' and outcome == 'passed' for (_, phase), outcome in gate.phases.items()),
+                            'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+  construction-a-neural-disc-20261114-worm-propagation:
+    name: construction-a-neural-disc-20261114-worm-propagation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/docs/initial-evaluator-v1.md",
+                  "bytes": 13202,
+                  "sha256": "383cd1254e35eb8720d9295404e7e35d87f0f74f6fa25f2b3e3b2380622065b4"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1670,
+                  "sha256": "6dc24cc27e3b67041ab501419f2ef6b3e5091e2624609f7269db850c6c5e0fb0"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 12443,
+                  "sha256": "53e72f3638c1cd7568d7a49a3eda43365caa303fcd165901c092aceaf6d4c8e1"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/release_inventory.json",
+                  "bytes": 78625,
+                  "sha256": "1e3891b9a3670ae021e9e8ddb46e2b630d57d436fd135b3a58df4e1761085d85"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/tests/test_worm_evaluator.py",
+                  "bytes": 12886,
+                  "sha256": "8f9eb981f850593c8518bf8f9e85926e1c85494017636e6776de440027b66709"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/worm_evaluator.py",
+                  "bytes": 25737,
+                  "sha256": "01bf6d01c9bd6a36fda0e39b990e3c82a472246c57b6e603f5cbc923fb9a7cfb"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/task.json",
+                  "bytes": 10863,
+                  "sha256": "cdb143e840819271f52a1ab97f78ca1a04a522576518a6ada60e97bb4e47a8dc"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 155426 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 155426,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-neural-disc-20261114-worm-propagation-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-neural-disc-20261114-worm-propagation-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_worm_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/tests', pattern='test_worm_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_worm_evaluator.EvaluatorTests.test_convolution_numeric_ridge_solution', 'test_worm_evaluator.EvaluatorTests.test_independent_hierarchical_weighting', 'test_worm_evaluator.EvaluatorTests.test_independent_mse_area_and_variance', 'test_worm_evaluator.EvaluatorTests.test_missingness_no_interpolation_or_area_bridge', 'test_worm_evaluator.EvaluatorTests.test_nested_stimulus_target_leakage_rejected', 'test_worm_evaluator.EvaluatorTests.test_no_large_gap_bridge', 'test_worm_evaluator.EvaluatorTests.test_original_irregular_time_area', 'test_worm_evaluator.EvaluatorTests.test_paired_worm_bootstrap', 'test_worm_evaluator.EvaluatorTests.test_physical_export_and_score_cli', 'test_worm_evaluator.EvaluatorTests.test_prediction_validation_even_when_target_missing', 'test_worm_evaluator.EvaluatorTests.test_public_packets_hide_all_response_and_arbitrary_evaluator_fields', 'test_worm_evaluator.EvaluatorTests.test_roster_cannot_drop_failure_case', 'test_worm_evaluator.EvaluatorTests.test_target_zero_not_receiver_prehistory', 'test_worm_evaluator.EvaluatorTests.test_training_reference_and_kernel_never_read_held_targets', 'test_worm_evaluator.EvaluatorTests.test_unsupported_pair_not_silently_dropped_or_filled', 'test_worm_evaluator.EvaluatorTests.test_whole_trace_reassignment_preserves_nulls_and_shared_stimulation', 'test_worm_evaluator.EvaluatorTests.test_worm_split_and_acquisition_alias_rejected', 'test_worm_evaluator.EvaluatorTests.test_zero_training_variance_and_all_missing_targets_retained']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 18 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 18, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/tests/test_worm_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-candidate-20261114-dpad:
+    name: construction-a-paper-candidate-20261114-dpad
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/docs/initial-evaluator-v1.md",
+                  "bytes": 11721,
+                  "sha256": "4f6935245011439d141c4744136c3a983c639ad998ecd08aef6be2199223a296"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1861,
+                  "sha256": "c7674117deef92988011630ab1726b243b76f6ad55270f5a764dc4b370cd9225"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 23034,
+                  "sha256": "719931616b93504815b0becc0135278d4e55d41ce689b681f241bf79d7a6d3f3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/generated_control.py",
+                  "bytes": 3465,
+                  "sha256": "5810f8b503eec9952f83dbd4b2e9ddba8d245d2567b1363d2a9973dc71568320"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4873,
+                  "sha256": "9c8ffe40ca3e1fb3705f46fa4027b724c4ee1c6fbb05b6739c6dcc9d7e15fa13"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/test_evaluator.py",
+                  "bytes": 8460,
+                  "sha256": "59169105c17ca4bdedb92d668e3b23571cb2146c0889ab474cc7af804fd6cd79"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/task.json",
+                  "bytes": 8131,
+                  "sha256": "2ffb768bc07b34e4228fbd545c7c426348c582f038e7f4a19bdebc12b76c1c1e"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 61545 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 61545,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.FullGrid.test_bound_plan_cannot_change_fixed_architecture_or_n1', 'test_evaluator.FullGrid.test_complete_scoring_and_source_selected_profiles', 'test_evaluator.FullGrid.test_filter_future_and_support_leakage', 'test_evaluator.FullGrid.test_held_truth_has_no_dimension_selection_input', 'test_evaluator.FullGrid.test_missing_duplicate_shuffled_or_nonfinite_prediction_rejected', 'test_evaluator.FullGrid.test_plan_binding', 'test_evaluator.FullGrid.test_selection_rejects_held_provenance_and_incomplete_search', 'test_evaluator.ScientificDefinitions.test_architecture_uses_maximum_lower_sem_bound', 'test_evaluator.ScientificDefinitions.test_cc_flat_and_nonfinite_never_silently_drop', 'test_evaluator.ScientificDefinitions.test_cc_large_finite_values', 'test_evaluator.ScientificDefinitions.test_channel_cc_independent_orthogonal_construction', 'test_evaluator.ScientificDefinitions.test_dimension_is_larger_smallest_peak', 'test_evaluator.ScientificDefinitions.test_frontier_requires_effect_and_significance', 'test_evaluator.ScientificDefinitions.test_frontier_signed_rank_direction_not_mean_direction', 'test_evaluator.ScientificDefinitions.test_grid_cardinality_and_fixed_loci', 'test_evaluator.ScientificDefinitions.test_parser_rejects_duplicate_keys_and_json_nan', 'test_evaluator.ScientificDefinitions.test_signed_rank_independent_exhaustive_sign_oracle']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 17 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 17, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-find-005:
+    name: construction-a-paper-find-005
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/docs/initial-evaluator-v1.md",
+                  "bytes": 10126,
+                  "sha256": "f18478d57e16b928530a9a490706098892aaa639a320b279d578173a1e940a2b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/.gitignore",
+                  "bytes": 19,
+                  "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1789,
+                  "sha256": "fbdf0039e7e8db4b6fb9e8f4ced797fff72e044e53b32e56668d076d606a732e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/THIRD_PARTY_LICENSE.txt",
+                  "bytes": 1263,
+                  "sha256": "26ccf75c5b2518a15951b8d8d226b29bce63431b0f700d8ef092deabcf406bf5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20656,
+                  "sha256": "b7cceb52de982152c076909afa7c59987899066e422e8e61b3455635edd6be2d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 844,
+                  "sha256": "10734cfcae347a892e682998f5e3e3ee0b786490b01e0c632d3f0196a911811c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 4388,
+                  "sha256": "fb2c554211adb8316f0335ad6ad36c935f1cc6c8e249e35e98d27317d437c759"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10323,
+                  "sha256": "7c0acc8a700e1c20daccee6da6dfae887a8f8432abadfda5d4f532afbf4adf66"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-005/task.json",
+                  "bytes": 15756,
+                  "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 9 > 0
+          assert sum(row['bytes'] for row in rows) == 65164 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 65164,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-find-005-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-find-005-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.PipelineControls.test_cli_generated_control', 'test_evaluator.PipelineControls.test_complete_pipeline_and_order_invariance', 'test_evaluator.PipelineControls.test_incomplete_region_family_withholds_bh', 'test_evaluator.PipelineControls.test_mask_and_profiles', 'test_evaluator.PipelineControls.test_minimum_three_error_trials_after_common_mask', 'test_evaluator.PipelineControls.test_missing_population_and_wrong_pins_rejected', 'test_evaluator.PipelineControls.test_probes_grouped_by_session_and_mouse_weighted', 'test_evaluator.PipelineControls.test_source_export_cannot_lower_shuffle_budget', 'test_evaluator.StatisticalControls.test_bh_known_family', 'test_evaluator.StatisticalControls.test_block_isolation_prevents_exchange', 'test_evaluator.StatisticalControls.test_constant_ties_retain_source_average_rank', 'test_evaluator.StatisticalControls.test_no_comparable_strata_is_explicit', 'test_evaluator.StatisticalControls.test_simpson_confound_removed', 'test_evaluator.StatisticalControls.test_source_independent_directional_null_distribution', 'test_evaluator.StatisticalControls.test_window_boundaries_and_zero_spikes']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 15 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-FIND-005/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-find-add-005:
+    name: construction-a-paper-find-add-005
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/docs/initial-evaluator-v1.md",
+                  "bytes": 2247,
+                  "sha256": "b13a04503b19ed6b42fcbc3bf08c7626af1df96c35bb5e729fd4617e2e8a428b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 10932,
+                  "sha256": "372b51939729712a62f520e915c981b6bbeb4c349bf107d5c4c885c713addcd9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 27351,
+                  "sha256": "24ed6dad45d4337c37b722d22e7de43a710613f382d39cb34d0db709cc71de75"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 10582,
+                  "sha256": "5dbaab5c3f5ea71bad17873deec2f16d2a0c0f08f64ce4fc808dafaffb522038"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12144,
+                  "sha256": "792d395c4d70022cdf39e0904d3950ecbaeb46dfdef0344abad12bbfc1e7e093"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-ADD-005/task.json",
+                  "bytes": 14145,
+                  "sha256": "2c5c8595ac6e80527bbab09f8780b38923c008bfc45c738fe034dd3b80daa841"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 77401 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 77401,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-find-add-005-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-find-add-005-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.DesignAndFitTests.test_event_boundary_and_trial_reset', 'test_evaluator.DesignAndFitTests.test_independent_likelihood_deviance_oracle', 'test_evaluator.DesignAndFitTests.test_intercept_fit_and_exposure_are_not_mean_counts', 'test_evaluator.DesignAndFitTests.test_invalid_score_arrays_fail_closed', 'test_evaluator.DesignAndFitTests.test_nonconvergence_is_not_scored', 'test_evaluator.DesignAndFitTests.test_source_progressive_basis_has_normalized_columns', 'test_evaluator.DesignAndFitTests.test_train_only_scaling_and_all_zero_failure', 'test_evaluator.DesignAndFitTests.test_whole_trial_purge_and_insufficient_data', 'test_evaluator.EndToEndTests.test_cli_and_identity_rejection', 'test_evaluator.EndToEndTests.test_complete_nested_pipeline_coverage_and_unknown_qualification', 'test_evaluator.EndToEndTests.test_default_configuration_runs_all_source_bases_and_nested_folds', 'test_evaluator.EndToEndTests.test_outer_labels_do_not_change_fold_training_or_penalty', 'test_evaluator.SourceMappingTests.test_derived_saccade_directions_and_reward_absence', 'test_evaluator.SourceMappingTests.test_duplicate_trial_and_nonfinite_spike_rejected', 'test_evaluator.SourceMappingTests.test_full_converter_units_clipping_partial_bin_and_eye_origin', 'test_evaluator.SourceMappingTests.test_independent_spike_boundary_oracle', 'test_evaluator.SourceMappingTests.test_missing_eye_in_trial_is_explicit_exclusion_not_imputation', 'test_evaluator.SourceMappingTests.test_missing_history_omits_whole_cell', 'test_evaluator.SourceMappingTests.test_source_exclusions_are_accounted']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 19 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 19, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-find-rep-007:
+    name: construction-a-paper-find-rep-007
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/docs/initial-evaluator-v1.md",
+                  "bytes": 10932,
+                  "sha256": "0bfca5c5ea70cc0ce32fd6fcc47163567572763477300854302d5136754b74de"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1530,
+                  "sha256": "2e2c9ab8e19d1ac61a91cfd86a3f77d72ffff61b6ab2657c0107e306892ad70f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 27684,
+                  "sha256": "89a506fa5d9ad64644141e1da302810dcd7a7c3d94d365b5f4c35d40ecd0d331"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 6505,
+                  "sha256": "4dd01b9804086fb1e059207c9e6cca0d7771c53eba36b2fe1798915a9101f25c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/sequence.py",
+                  "bytes": 4952,
+                  "sha256": "1a628abf7e2c5920257e88238583e1adbb5d14df5418bff16aa596945ce4c510"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 13101,
+                  "sha256": "169f8f2271c432c499a897e96f2964e988010447f55fc3cf187fcd850b0a6a82"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-REP-007/task.json",
+                  "bytes": 30615,
+                  "sha256": "cc67ccdf999414a2835b96969fbed9e058705497546f6466e633c6adc4c0bdf9"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 95319 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 95319,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-find-rep-007-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-find-rep-007-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.NumericControls.test_all_trial_reward_cue_split_and_positive_stimulus_gate', 'test_evaluator.NumericControls.test_arithmetic_standard_deviation_source_formula', 'test_evaluator.NumericControls.test_bundle_rejects_empty_trials_and_unknown_valid_frame_labels', 'test_evaluator.NumericControls.test_frame_masks_and_all_area_denominators', 'test_evaluator.NumericControls.test_lick_inclusive_boundaries_global_cutoff_no_event_double_count', 'test_evaluator.NumericControls.test_native_behavior_never_relabels_source_sibling_categories', 'test_evaluator.NumericControls.test_native_behavior_reward_categories_and_ambiguity', 'test_evaluator.NumericControls.test_native_bridge_all_planes_linear_interpolation', 'test_evaluator.NumericControls.test_sequence_peaks_reference_repeat_and_reversal', 'test_evaluator.NumericControls.test_sequence_selection_isolated_from_odd_raw_frame_activity', 'test_evaluator.NumericControls.test_zero_variance_preserves_source_comparisons', 'test_evaluator.PanelControls.test_all_five_learning_stages_preserved', 'test_evaluator.PanelControls.test_cli_complete_declared_panel_equal_animal_changes', 'test_evaluator.PanelControls.test_cross_condition_animal_and_omitted_inventory_rejected', 'test_evaluator.PanelControls.test_missing_longitudinal_stage_and_input_tampering_rejected']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 15 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-FIND-REP-007/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-root-add-006:
+    name: construction-a-paper-root-add-006
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/docs/initial-evaluator-v1.md",
+                  "bytes": 11094,
+                  "sha256": "12279dab0f03cf5d14ea85b318f7317527241440b2960c21377561f3208a9f6a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1662,
+                  "sha256": "8fa7c3c1cf11b5e57d76168ce5d0704a8e3bad2cf41ee6055483c43562d3db68"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20861,
+                  "sha256": "78ba5358176923463c5be5cdf48fee0828fd0bc1ccdd74091b4df4ce8812cb7c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 705,
+                  "sha256": "d5842bacbc6a688138a9b000283654d1b74f932e5944ab8c4f7cf1b1c8651f7d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 11379,
+                  "sha256": "4b8c2476bbcc128e455e0c4921f481d71ca1763aa6bc979eaad87ee9a5734e51"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 8522,
+                  "sha256": "7ff45c2f6f3791cbecdc00b8454b37441a61a08beff0dc4d9ba0f68760cadb4a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-006/task.json",
+                  "bytes": 31999,
+                  "sha256": "c4d1438fbdf13e3ecb5d5ce8ead240d10f0115b046bb63edc7c1144d96f9daf4"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 86222 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 86222,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-root-add-006-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-root-add-006-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.DecoderControls.test_intercept_only_closed_form', 'test_evaluator.DecoderControls.test_missing_class_or_exact_time_rejected', 'test_evaluator.DecoderControls.test_prediction_is_independent_of_other_task_rows', 'test_evaluator.NestedControls.test_heldout_label_cannot_change_own_prediction_or_selection', 'test_evaluator.NestedControls.test_ridge_manual_one_feature_reference', 'test_evaluator.PacketControls.test_full_generated_path_and_preserved_holds', 'test_evaluator.PacketControls.test_joint_population_behavior_fits_rejected', 'test_evaluator.PacketControls.test_missing_participant_hash_and_path_rejected', 'test_evaluator.PacketControls.test_object_npz_and_false_qualification_rejected', 'test_evaluator.SourceEquations.test_first_level_known_joint_coefficients', 'test_evaluator.SourceEquations.test_probability_orientation', 'test_evaluator.SourceEquations.test_rt_censor_inclusive_and_rank_failure']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 12 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 12, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-ROOT-ADD-006/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-root-add-025:
+    name: construction-a-paper-root-add-025
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/docs/initial-evaluator-v1.md",
+                  "bytes": 11061,
+                  "sha256": "f48348b36368d92cdec419a429b987454a2c0176aff45673dd25a1f5c290dbba"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1372,
+                  "sha256": "eb60f12d70655b8a01f8105a135c545006919cd541ef96f35c22cda38c4d7ca3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 23512,
+                  "sha256": "ee1cc70795a7250b14b9fadab642f7647f62ba6ff1e2f9f0703ecde35455fa07"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 681,
+                  "sha256": "837179066579753445d639f216184bae61ac3844409b456c51d761ce26ac425c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 6533,
+                  "sha256": "0df7f29f51e3d95c2b01cd48eb8f332b9cf8073f856215acd57bb44d582e39b8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 11944,
+                  "sha256": "14d389e3ad0ffa9cd718f5f41874cf52b509e6e4256291fa2be205385be9411b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-025/task.json",
+                  "bytes": 96433,
+                  "sha256": "0e4a5b37da28a0d6936d45af4ff352a5cc64529358f9fae7c09059057b322f2a"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 151536 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 151536,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-root-add-025-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-root-add-025-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.NumericalControls.test_abs_after_signed_time_and_component_averaging', 'test_evaluator.NumericalControls.test_behavioral_slope_constant_roundoff', 'test_evaluator.NumericalControls.test_complete_packet_controls_and_determinism', 'test_evaluator.NumericalControls.test_constant_component_undefined_not_zero', 'test_evaluator.NumericalControls.test_constant_prediction_roundoff_cannot_fabricate_correlation', 'test_evaluator.NumericalControls.test_constant_training_features_ignore_centering_residue', 'test_evaluator.NumericalControls.test_constant_training_targets_cannot_create_roundoff_slope', 'test_evaluator.NumericalControls.test_duplicate_or_misaligned_identity_rejected', 'test_evaluator.NumericalControls.test_encoding_and_readout_are_distinct', 'test_evaluator.NumericalControls.test_epoch_indices_and_actual_source_baseline', 'test_evaluator.NumericalControls.test_fit_ignores_heldout_targets', 'test_evaluator.NumericalControls.test_grouped_trial_folds_keep_all_samples_together', 'test_evaluator.NumericalControls.test_invalid_source_mask_and_nonfinite_neural_rejected', 'test_evaluator.NumericalControls.test_json_undefined_is_null_and_invalid_seed', 'test_evaluator.NumericalControls.test_mean_fold_correlation_is_not_pooled_correlation', 'test_evaluator.NumericalControls.test_perfect_independent_linear_reference_and_units', 'test_evaluator.NumericalControls.test_regional_abs_follows_signed_parcel_mean', 'test_evaluator.NumericalControls.test_roster_and_hash_fail_closed', 'test_evaluator.NumericalControls.test_source_eligibility_and_integer_mean_selection', 'test_evaluator.NumericalControls.test_underpowered_pairs_retained', 'test_evaluator.NumericalControls.test_zero_evidence_neither_consistency_class']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 21 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 21, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-ROOT-ADD-025/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-method-012:
+    name: construction-a-paper-method-012
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/docs/initial-evaluator-v1.md",
+                  "bytes": 9884,
+                  "sha256": "abdf1056d0651733c5fdc674248bdcd0f9eb80670c366f205d4967caf1642ff8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1727,
+                  "sha256": "be790e1f3ce1c671974126994fec8a3ef206c9e14d0a80aa10af3ebbd8c168dc"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 892,
+                  "sha256": "5ba0dc839d60476017e366b1e9be400d7b5d1aff7b5e73fef464f63c85011cff"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/mint_reference.py",
+                  "bytes": 15214,
+                  "sha256": "daac7d467f6fee335fdc590d371c3272e6109ce74d49d9d73b2384ed5747f272"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/prepare_mat.py",
+                  "bytes": 4163,
+                  "sha256": "37c794374481901cde582ac57f2c2b69ac7cf8d3f4b9ad2d135efec14c131246"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 7056,
+                  "sha256": "47848675be12b385dacc1ab0017911bf8b9df7d17c4f76c8d320d3b4aece7e9b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_prepare_mat.py",
+                  "bytes": 1942,
+                  "sha256": "242e18e17ce78bdfc46b7b6ab37daa2af843a7aae8e1a5025476b56e7232c855"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_reference.py",
+                  "bytes": 7243,
+                  "sha256": "db63369c320bcbc015bc40946b685b23be9f188eb78466abcf0d01ba89586065"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-012/task.json",
+                  "bytes": 36313,
+                  "sha256": "549d5de7931e1cd6fc3b651b3084052e566dc054cf38662bc7d8995a70358ca2"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 9 > 0
+          assert sum(row['bytes'] for row in rows) == 84434 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 84434,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-method-012-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-method-012-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_prepare_mat.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests', pattern='test_prepare_mat.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_prepare_mat.PrepareTests.test_generated_mat_readthrough', 'test_prepare_mat.PrepareTests.test_noninteger_raw_traces_are_rejected']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 2 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 2, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_prepare_mat.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+      - name: Exact generated controls test_reference.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests', pattern='test_reference.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_reference.ReferenceTests.test_all_pairs_full_count_negative_and_group_means', 'test_reference.ReferenceTests.test_cli_runs_real_entrypoint', 'test_reference.ReferenceTests.test_direct_mi_api_rejects_noninteger_states', 'test_reference.ReferenceTests.test_exact_mi_oracles', 'test_reference.ReferenceTests.test_full_recording_remainder_is_not_dropped', 'test_reference.ReferenceTests.test_iid_selected_label_histogram_preserved', 'test_reference.ReferenceTests.test_negative_shuffle_subtraction_exact_enumeration', 'test_reference.ReferenceTests.test_neuron_cap_is_explicit_source_semantics', 'test_reference.ReferenceTests.test_qe_polynomial_identity_and_balanced_partitions', 'test_reference.ReferenceTests.test_roster_shape_nonfinite_and_empty_rejected', 'test_reference.ReferenceTests.test_schedules_are_common_joint_and_deterministic', 'test_reference.ReferenceTests.test_xor_and_redundancy']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 12 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 12, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_reference.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-method-029:
+    name: construction-a-paper-method-029
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/docs/initial-evaluator-v1.md",
+                  "bytes": 9756,
+                  "sha256": "b6e9f057cb6ac4a920bed8888c35d143c95c09b20f9477c752fbc57b394e2515"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 816,
+                  "sha256": "cdbaf0517383fba7ff2c8c952f611922ea7c2fa1b4f296aa6e72d83f62ad14b8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/SOURCE_LICENSE.txt",
+                  "bytes": 1069,
+                  "sha256": "aaea9cf3878a6a3e59969b7c7c7b3231b145d2316c0febf02af1ed36ae88b5c6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/SOURCE_PROVENANCE.json",
+                  "bytes": 9970,
+                  "sha256": "81004eebfd4b791ef042901c201710bb8bf59668e3113bb05b6aa53583fdb50e"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/ncc_evaluator.py",
+                  "bytes": 21817,
+                  "sha256": "cbd0755ced8f46832c2cfbc035fa73d3a145590b68a4e332f2b0c30d44f65fb6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12343,
+                  "sha256": "121751207095f09d12cd32c637eeb22bc2aa3fcafcc7352a1afb9713dac281eb"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-029/task.json",
+                  "bytes": 27206,
+                  "sha256": "8dd236212e98ac90d995fe5d524c16a7240f551d0c3f0104f3b9a50d30bece91"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 82977 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 82977,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-method-029-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-method-029-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.EndToEnd.test_artifact_tampering_rejected', 'test_evaluator.EndToEnd.test_complete_pair_inference_and_cli', 'test_evaluator.EndToEnd.test_duplicate_trial_id_and_missing_repeat_rejected', 'test_evaluator.EndToEnd.test_generated_shape_cannot_claim_public_population', 'test_evaluator.EndToEnd.test_missing_pair_rejected', 'test_evaluator.EndToEnd.test_model_voxel_reorder_rejected', 'test_evaluator.EndToEnd.test_numpy_brain_affine_oracle', 'test_evaluator.EndToEnd.test_numpy_content_scalar_topology_oracle', 'test_evaluator.EndToEnd.test_pinned_ceiling_csv_end_to_end', 'test_evaluator.EndToEnd.test_shared_training_cannot_be_nonshared', 'test_evaluator.EndToEnd.test_training_test_leak_rejected', 'test_evaluator.MetricControls.test_ceiling_threshold_clipping_and_missing', 'test_evaluator.MetricControls.test_cross_repeat_is_not_repeat_mean', 'test_evaluator.MetricControls.test_pattern_profile_axes_and_order', 'test_evaluator.MetricControls.test_scalar_pearson_oracle', 'test_evaluator.MetricControls.test_source_bootstrap_deterministic_and_not_subject_claim', 'test_evaluator.MetricControls.test_undefined_is_not_zero']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 17 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 17, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-method-033:
+    name: construction-a-paper-method-033
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/docs/initial-evaluator-v1.md",
+                  "bytes": 10605,
+                  "sha256": "5986528377f2458d1a67fc3d1c52dcabf628a3e338fc2cd85f3813dfb5b34f23"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 731,
+                  "sha256": "9d866699f729130e94d001c1cc6ad17d12ea4708af0b02966f894df3eea5befd"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 17195,
+                  "sha256": "ef22f212d9b8ef9424102f44c90ce8003a0b7f2ba6bcf7d1eb2ddf6a6cd01f6c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/implementation.json",
+                  "bytes": 665,
+                  "sha256": "8af5d296e855abe32ea23a3863a7f3885731f5a6cc9e70d4790b2c202223d89b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 2439,
+                  "sha256": "3dcb56437aa21b0807eac85d7e71ed5b9ba45a6fdf74e836225a37701a12e688"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9468,
+                  "sha256": "fbe2258aa676e49126b0e25d73d489c497e5a7e1b14e535dd8cd78bed2268d81"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-033/task.json",
+                  "bytes": 128582,
+                  "sha256": "837cade4f9794be5e10e129d9c8244135f0841a25b3f42661728d04ee31722c6"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 169685 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 169685,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-method-033-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-method-033-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.NumericalTests.test_affine_and_distance', 'test_evaluator.NumericalTests.test_affine_strict_ties_match_source', 'test_evaluator.NumericalTests.test_independent_asymmetric_oracle', 'test_evaluator.NumericalTests.test_source_np_corrcoef_reference', 'test_evaluator.NumericalTests.test_strict_ties_not_half_credit', 'test_evaluator.NumericalTests.test_undefined_rejected', 'test_evaluator.PipelineTests.test_budgets_not_repeat_counts', 'test_evaluator.PipelineTests.test_cli', 'test_evaluator.PipelineTests.test_comparability_and_selection_reject', 'test_evaluator.PipelineTests.test_complete_curve_and_repeat_count', 'test_evaluator.PipelineTests.test_global_image_leakage', 'test_evaluator.PipelineTests.test_missing_duplicate_and_unmatched_rows', 'test_evaluator.PipelineTests.test_nested_and_measurement_identity', 'test_evaluator.PipelineTests.test_neural_shuffle_not_prediction_shuffle_attestation', 'test_evaluator.PipelineTests.test_protocol_binding', 'test_evaluator.PipelineTests.test_row_order_is_identity_aligned', 'test_evaluator.PipelineTests.test_unused_candidate_still_validated']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 17 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 17, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-033/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-method-add-003:
+    name: construction-a-paper-method-add-003
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/docs/initial-evaluator-v1.md",
+                  "bytes": 9465,
+                  "sha256": "7f2d521a921d7fe8481d5a133e01853cba5961a9c924658f68708f6e54e8db81"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1651,
+                  "sha256": "6701b0ca1fd1bb7543cf101a33fc154c09891e30de7bd8eb50a15ae5ecc7cced"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/UPSTREAM-LICENSE.txt",
+                  "bytes": 1085,
+                  "sha256": "61b2b2d23c9cf4d14a8c9076ee30c6d4bbb74b5560c9923376b42222703b1fda"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 20860,
+                  "sha256": "a5a9f9168e1dc057204737cab9d9d7ec46dd72a7fb4ee940b8834cfec277ae09"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/source-provenance.json",
+                  "bytes": 8704,
+                  "sha256": "de3ed01ffe1db89ca324b96453cb2599e87d4bba83bab9ccf9de2a2c3c597342"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 9738,
+                  "sha256": "3a4f3e8ef17c63a8b356932cfcbf70dc9fee869299bbeb0650c6942044955eb6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/task.json",
+                  "bytes": 30135,
+                  "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 81638 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 81638,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-method-add-003-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-method-add-003-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.RawAndCliTests.test_cli_generated_full_cohort', 'test_evaluator.RawAndCliTests.test_protocol_overlap_rejected_before_data', 'test_evaluator.RawAndCliTests.test_raw_loader_hash_and_aligned_role', 'test_evaluator.RegistrationTests.test_constant_profiles_do_not_report_motion', 'test_evaluator.RegistrationTests.test_full_cohort_required_and_patient_macro', 'test_evaluator.RegistrationTests.test_holdout_and_support_fail_closed', 'test_evaluator.RegistrationTests.test_inverse_sampling_relation', 'test_evaluator.RegistrationTests.test_nonrigid_fold_rejected', 'test_evaluator.RegistrationTests.test_nonrigid_inverse_affine_coordinate_map', 'test_evaluator.RegistrationTests.test_physical_translation_sign_and_gauge', 'test_evaluator.RegistrationTests.test_shared_support_and_true_shift_alignment', 'test_evaluator.RegistrationTests.test_smoothing_adversary_visible', 'test_evaluator.RegistrationTests.test_undefined_pairs_cannot_support_paired_gain', 'test_evaluator.RegistrationTests.test_zero_displacement_identity', 'test_evaluator.RegistrationTests.test_zero_weight_graph_not_identifiable']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 15 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 15, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-method-replacement-005:
+    name: construction-a-paper-method-replacement-005
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/docs/initial-evaluator-v1.md",
+                  "bytes": 2334,
+                  "sha256": "4530bb91921ffb3cb838a9c6aca49785cc649071ad3bd6367d40b24fa465164b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/.gitignore",
+                  "bytes": 19,
+                  "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 9548,
+                  "sha256": "9b8efc6b491e4330ff87c86246ed299221e7015d3f7024afa1bb94b4437b06df"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/cohort.json",
+                  "bytes": 4098,
+                  "sha256": "2f68e7934f7b7c5071c8e8e4763a0f3503669fe0671fd7a0ad3349fe8e0ecda5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/neds_evaluator.py",
+                  "bytes": 23099,
+                  "sha256": "6bd0b39102e8ea5afd6c5dad4e09830e0c13b3d29070d6e92f46892ad16f05d2"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 13369,
+                  "sha256": "995b819043680def7bde397145392081475b3a03bb0b4ddbb857e6186da5a3b3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 10909,
+                  "sha256": "9ef5daf63e1eb54ca2b191c23e9f7585391b573317ea535682d85403afcaee69"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/task.json",
+                  "bytes": 26106,
+                  "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 89482 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 89482,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-method-replacement-005-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-method-replacement-005-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_evaluator.Contracts.test_animal_macro_is_not_session_macro', 'test_evaluator.Contracts.test_full_panel_and_cli', 'test_evaluator.Contracts.test_full_roster_required_and_source_pins', 'test_evaluator.Contracts.test_overlap_alias_nonfinite_and_unit_tampering', 'test_evaluator.Contracts.test_pair_completeness_packet_and_exposure', 'test_evaluator.Contracts.test_reference_test_targets_cannot_fit_or_select', 'test_evaluator.Contracts.test_target_mutations_do_not_enter_packets', 'test_evaluator.Contracts.test_zero_spike_session_not_dropped', 'test_evaluator.Metrics.test_degeneracy_and_unclipped_r2', 'test_evaluator.Metrics.test_finite_input_numeric_overflow_rejected', 'test_evaluator.Metrics.test_independent_neuron_macro_not_spike_weighted', 'test_evaluator.Metrics.test_pinned_source_ast_reference', 'test_evaluator.Metrics.test_train_null_is_separate', 'test_evaluator.Metrics.test_zero_floor_only_and_no_mutation']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 14 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+  construction-a-paper-signal-add-001:
+    name: construction-a-paper-signal-add-001
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/docs/initial-evaluator-v1.md",
+                  "bytes": 11669,
+                  "sha256": "d16a3477239e9e730097f8ae95f95052ff2de8c2e77da6e7e97d374111766ef3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1453,
+                  "sha256": "73408acf4d67c57b3e2acbc78ce85b3954e05f58e6301988299bf72e348b789a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/evaluator.py",
+                  "bytes": 28690,
+                  "sha256": "3d70e63ef6ff4a1624c93167b56cc8456411651941c58fda2cba555450e6243b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/source_contract.json",
+                  "bytes": 16120,
+                  "sha256": "3461d8f42074b9e1d44a1043bc1a4be83a74573e3ae61dac1017fb9bc66c2476"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+                  "bytes": 12722,
+                  "sha256": "c59a5a971cda2f8c50f4cc7de686ab8875e30609d65561351549222604047460"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/task.json",
+                  "bytes": 21335,
+                  "sha256": "af6f2bf29ed18bc720632f05388a77aab696879bcf83c01ef20872a1e5022aca"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 91989 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 91989,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-signal-add-001-requirements.txt" <<'REQUIREMENTS'
+          h5py==3.16.0 --hash=sha256:fb1720028d99040792bb2fb31facb8da44a6f29df7697e0b84f0d79aff2e9bd3
+          iniconfig==2.3.0 --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          pluggy==1.6.0 --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+          pygments==2.20.0 --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+          pytest==9.1.1 --hash=sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-signal-add-001-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'h5py': '3.16.0', 'iniconfig': '2.3.0', 'numpy': '2.4.6', 'packaging': '26.3', 'pluggy': '1.6.0', 'pygments': '2.20.0', 'pytest': '9.1.1', 'scipy': '1.17.1'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_evaluator.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          assert os.environ.get('PYTEST_DISABLE_PLUGIN_AUTOLOAD') == '1'
+          import pytest
+          expected_ids = ['test_evaluator.py::test_cli_patient_report_is_strict_json_and_preserves_holds', 'test_evaluator.py::test_epoch_clock_inclusive_and_prospective_right_edges', 'test_evaluator.py::test_generated_comodulogram_computes_raw_lfp_and_full_grid', 'test_evaluator.py::test_generated_complete_su_example_path', 'test_evaluator.py::test_generated_nwb_bridge_ragged_indices_and_exact_pin_validation', 'test_evaluator.py::test_morlet_fft_matches_direct_complex_convolution', 'test_evaluator.py::test_patient_hierarchy_complete_roster_and_deterministic_bootstrap', 'test_evaluator.py::test_source_filter_independent_sinc_oracle_and_trial_isolation', 'test_evaluator.py::test_source_trial_masks_validate_original_metadata', 'test_evaluator.py::test_spike_binary_bins_endpoint_collision_and_source_lengths', 'test_evaluator.py::test_su_nested_poisson_independent_analytic_oracle', 'test_evaluator.py::test_su_requires_explicit_correction_before_any_execution', 'test_evaluator.py::test_su_table_source_zscore_median_left_edges_and_no_offset', 'test_evaluator.py::test_surrogates_preserve_trial_structure_and_explicit_sample_sd', 'test_evaluator.py::test_tort_independent_high_precision_entropy', 'test_evaluator.py::test_uniform_and_undefined_tort']
+          def normalize(nodeid):
+              first, *rest = nodeid.split('::')
+              return '::'.join([Path(first).name, *rest])
+          class ExactControls:
+              def __init__(self):
+                  self.collected = []
+                  self.phases = {}
+                  self.forbidden = []
+              def pytest_collection_finish(self, session):
+                  self.collected = sorted(normalize(item.nodeid) for item in session.items)
+                  if self.collected != expected_ids:
+                      raise pytest.UsageError('Collected controls differ from reviewed exact case roster')
+              def pytest_runtest_logreport(self, report):
+                  key = (normalize(report.nodeid), report.when)
+                  if key in self.phases:
+                      self.forbidden.append('duplicate phase ' + repr(key))
+                  self.phases[key] = report.outcome
+                  if report.outcome != 'passed' or hasattr(report, 'wasxfail'):
+                      self.forbidden.append((report.nodeid, report.when, report.outcome))
+          gate = ExactControls()
+          status = pytest.main(['benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/tests/test_evaluator.py', '-q', '-p', 'no:cacheprovider', '-c', '/dev/null',
+                                '--confcutdir', 'benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/tests', '--rootdir', 'benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1'], plugins=[gate])
+          assert status == 0, f'pytest exited {status}'
+          assert gate.collected == expected_ids and len(gate.collected) == 16 > 0
+          expected_phases = {(case, phase) for case in expected_ids for phase in ('setup', 'call', 'teardown')}
+          assert set(gate.phases) == expected_phases, 'Incomplete or duplicate executed case phases'
+          assert not gate.forbidden, f'Skips, failures, xfail and xpass are forbidden: {gate.forbidden}'
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/tests/test_evaluator.py', 'collected': len(gate.collected),
+                            'tests_run': sum(phase == 'call' for _, phase in gate.phases),
+                            'passed': sum(phase == 'call' and outcome == 'passed' for (_, phase), outcome in gate.phases.items()),
+                            'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
+          PY
+  construction-a-paper-signal-add-017:
+    name: construction-a-paper-signal-add-017
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify reviewed source identities and complete package closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/docs/initial-evaluator-v1.md",
+                  "bytes": 11285,
+                  "sha256": "9c4fcad56d89a011249ac08f5141c9939c326ee6c7706626f33205a986c8445f"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/README.md",
+                  "bytes": 1519,
+                  "sha256": "40713dbc1d93659f42e51b4b5b4924a7579058dbaf9726877a4581df65786f7d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/finger017.py",
+                  "bytes": 25657,
+                  "sha256": "a933cbadfe31bcbc281aab91e6dc097eae8a236aa86ae468cadb395814843936"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/provenance.json",
+                  "bytes": 6963,
+                  "sha256": "acfce83ec52e0f3d69f1a8cb32dcfcadd45a603b85fc8efc6c1d9450bfc6f3a3"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/tests/test_finger017.py",
+                  "bytes": 16129,
+                  "sha256": "cdccefbd6f970a49e49d44bbee95d6cae9dd3dbac1135b5cb2b0998814942314"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-017/task.json",
+                  "bytes": 14860,
+                  "sha256": "63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce"
+              }
+          ]
+          packages = [
+              "benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1"
+          ]
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 76413 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 76413,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Install reviewed exact binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-a-paper-signal-add-017-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --no-cache-dir --force-reinstall -r "${RUNNER_TEMP}/construction-a-paper-signal-add-017-requirements.txt"
+      - name: Verify installed dependency versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          import sys
+          assert sys.version_info[:2] == (3, 11)
+          expected = {'numpy': '2.4.6'}
+          observed = {name: importlib.metadata.version(name) for name in expected}
+          assert observed == expected, (observed, expected)
+          print(json.dumps({'verified_dependency_versions': observed}))
+          PY
+      - name: Exact generated controls test_finger017.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 11)
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/tests', pattern='test_finger017.py')
+          def case_ids(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [value for child in item for value in case_ids(child)]
+              return [item.id()]
+          expected_ids = ['test_finger017.MetricTests.test_independent_confusion_and_fixed_classes', 'test_finger017.MetricTests.test_paper_majority_differs_from_mean_probability', 'test_finger017.MetricTests.test_participant_weight_and_paired_cluster_bootstrap', 'test_finger017.MetricTests.test_vote_ties_roster_simplex_and_nan', 'test_finger017.ReferenceTests.test_complete_reference_and_controls', 'test_finger017.ReferenceTests.test_complete_ternary_reference_and_source_route', 'test_finger017.ReferenceTests.test_equal_trial_weight_and_no_test_scaling', 'test_finger017.ReferenceTests.test_heldout_target_mutation_does_not_change_predictions', 'test_finger017.ReferenceTests.test_safe_export_cli_reference_score_packets_and_hash', 'test_finger017.SourceBridgeTests.test_exact_source_calibration_routes_and_grouping', 'test_finger017.SourceBridgeTests.test_malformed_events_and_raw_admission', 'test_finger017.SourceBridgeTests.test_missing_event_family_is_rejected_before_recording_load', 'test_finger017.SourceBridgeTests.test_numeric_run_alias_rejected_despite_new_metadata', 'test_finger017.SourceBridgeTests.test_public_packet_excludes_targets_events_online_outputs', 'test_finger017.SourceBridgeTests.test_raw_boundary_car_and_independent_window_counts', 'test_finger017.SourceBridgeTests.test_temporal_role_and_identity_adversaries']
+          assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
+          assert suite.countTestCases() == 16 > 0
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 16, "Executed case count differs from reviewed roster"
+          assert not result.skipped, "Skipped controls are forbidden"
+          assert not result.expectedFailures, "Expected failures are forbidden"
+          assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-signal-add-017/implementations/initial-evaluator-v1/tests/test_finger017.py', 'tests_run': result.testsRun,
+                            'skipped': len(result.skipped), 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
