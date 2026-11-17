@@ -1,0 +1,210 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-019",
+  "title": "Movement information in neural latent representations",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Current source grades complete held-maze velocity predictions against four fixed readouts. This is a retrospective movement-decoding assay; the artifact scorer cannot establish a submitted latent representation or matched readout provenance.",
+  "scientific_target": {
+    "question": "How well does a representation fitted without assessment velocity preserve movement information on eight held-out maze groups under a matched ten-dimensional readout comparison?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Measured, filtered two-axis hand velocity in physical m/s for 126 assessment trials×140 bins.",
+    "answer_origin": "Timestamped MC_Maze hand-velocity measurements converted using source physical units; target clock is 100 mslater than the neural clock.",
+    "case_unit": "A complete reach trajectory, nested within maze group and single recording session.",
+    "independent_unit": "One Jenkins macaque/session; eight maze groups assess condition transfer, not animal replication.",
+    "inference_scope": "Retrospective transfer to held maze groups; PCA10 versus random 10 is the matched representation comparison. Arbitrary candidate velocity accuracy alone measures prediction, not biological latent validity.",
+    "exclusions": [
+      "Causal/online decoding from symmetrically filtered signals.",
+      "Raw 137 versus PCA10 as a capacity-matched latent comparison.",
+      "Recovery of true latent states, circuit mechanism or native LLM understanding."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "1340 official-training trials from 28 maze groups: uint16[1340,140,137]counts per 5 ms and training float64 velocity[m/s].",
+      "126 official-validation assessment trials from 8 disjoint maze groups with 137 observed-unit counts.",
+      "Anonymous training group/fourfold IDs; neural clock[-250,450)ms and velocity clock[-150,550)ms; axesx,y."
+    ],
+    "forbidden_inputs": [
+      "Assessment velocity, held maze labels/source-trial identity, raw NWB or prior 017/018 packets.",
+      "Assessment labels in PCA, scaling, ridge tuning or phase-template fitting."
+    ],
+    "case_identity": "All 126 anonymous assessment_trial_ids, exact x/y order,140 velocity edges and panel_fingerprint. Identity-preserving reordering is accepted; literal source IDs are not distributed.",
+    "split": "1340 training trials/28 maze groups versus 126 assessment trials/8 different maze groups; all maze versions stay together. Four whole-maze training folds fit preprocessing and tune the readout without assessment targets.",
+    "coverage": "Full 126×140×2 velocity trajectory; all 8 maze groups included equally. This is a declared subset of the 2295 trial source with different role eligibility, not the full 017/018 panel or another cohort."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_maze_group_macro_uniform_axis_R2",
+      "direction": "higher",
+      "aggregation": "Within each held maze group pool trial/time samples, compute x/y R2 against group-specific means, average the axes equally, then average all 8 groups equally.",
+      "rationale": "Prevents trial-rich maze groups or high-variance axes from defining the entire transfer result; negative R2 remains meaningful."
+    },
+    "secondary": [
+      "Pooled uniform-axis R2; per-group/per-axis SSE,SST,MAE,MSE.",
+      "Candidate-minus-phase_only/raw 137/pca 10/random 10 signed differences.",
+      "Matched PCA10-minus-random 10 contrast requires verified identical fitting and readout access."
+    ],
+    "comparators": [
+      {
+        "name": "pca10_vs_random10",
+        "inputs": "Identical 137 unit training counts and training velocity;10-dimensional representation each.",
+        "procedure": "Implemented symmetric 50 ms Gaussian smoothing, training-fold scaling, PCA or fixed seeded QRrandom projection, identical ridge grid[0.01,0.1,1,10] and four whole-group folds."
+      },
+      {
+        "name": "phase_only_and_raw137",
+        "inputs": "Training movement phase alone or full 137 unit count representation.",
+        "procedure": "Fixed training-only phase template and 137 dimensional residual ridge are controls; raw 137 has greater feature capacity and is not the matched latent contrast."
+      }
+    ],
+    "nuisance_controls": [
+      "Recompute every fitted transform inside training folds; no velocity in unsupervised representation fitting.",
+      "Keep all variants of each maze in one role/fold.",
+      "Report movement-phase-only performance and disclose symmetric neural/target filtering."
+    ],
+    "uncertainty": "Paired maze/trial-block uncertainty is descriptive within one animal; keep maze dependence and no bin/neuron pseudoreplication.",
+    "failure_policy": "Require all 126×140×2 finite signed predictions in m/s and exact identities/clock. No clipping/fill. Any constant target axis in a held group makes the primary undefined with that group retained."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-019/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-019/implementations/registered-runtime/README.md",
+      "benchmarks/neural/NEURAL-019/implementations/registered-runtime/reference_core.py",
+      "benchmarks/neural/NEURAL-019/implementations/registered-runtime/io_contract.py",
+      "benchmarks/neural/NEURAL-019/implementations/registered-runtime/worker.py"
+    ],
+    "scorer_target": "Measured held-maze hand-velocity trajectories with fixed reference comparisons; no equality to reference prediction required.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Artifact scorer, exact public validator and complete reference numerical routines; candidate-programme and matched latent-provenance enforcement are not delivered here.",
+    "missing": [
+      "Authenticate/recover external packet and frozen four-reference artifacts under current portable paths.",
+      "Deliver a candidate producer that records representation fitting and matched readout to test the stronger latent-representation question.",
+      "Keep existing exposed assessment/reference chronology; acquire separately justified evaluation for novel generalization claims."
+    ],
+    "execution_evidence": "README preserves historical reference scoring/arithmetic checks and states that the scalar audit was authored by the same AI author, not independent human validation. This source review runs no references or candidate."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all 140×2 signed velocity values; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-019/historical/task.pre-understanding.v1.json",
+      "sha256": "b869a5ee66421b1a7f3e8f613564994fe6e29f1e341a48ce8b0123f3f8b05031",
+      "supports": "Original source definition, verified source header identities and acquisition-versus-organizer distinction."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-019/implementations/registered-runtime/README.md",
+      "sha256": "2cac00fed6a68e99dec5f89c5fb14cd87a7615a6dff10f6c41d354c5c2f4defe",
+      "supports": "1340 training/126 assessment cases,8 held maze groups,100 mslag and retrospective filters."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-019/implementations/registered-runtime/reference_core.py",
+      "sha256": "68593eb7b48498e74763e150ef84c07a1cbfea573016cd49add682a5e28cc647",
+      "supports": "Training-fold PCA10/random 10/raw 137 readouts and equal-group uniform-axis R2."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-019/implementations/registered-runtime/io_contract.py",
+      "sha256": "6498192c2621cb6bb904e11d1c8b17addf172a1c89021adbb0245f4ab89ee849",
+      "supports": "Exact 126×140×2 finite signed m/s output with identity/clock validation."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-019/implementations/registered-runtime/worker.py",
+      "sha256": "fc6cf7f949ab7d11fdc524b220c128720e95cb1ba9e2bdfd7e441739bfc6dbbe",
+      "supports": "Arbitrary prediction scoring and fixed four-reference comparison; no candidate latent fitting validation."
+    },
+    {
+      "id": "acquisition-paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/nature11129",
+      "locator": "Original source paper identified by verified task source audit",
+      "supports": "Primary acquisition study; source of measured neural and behavioral variables, not a native-understanding benchmark."
+    },
+    {
+      "id": "source-data",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/000128/0.220113.0400",
+      "locator": "Versioned DANDI acquisition record",
+      "supports": "Versioned dataset and biological-session identity."
+    },
+    {
+      "id": "organizer-metric",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike and velocity_decoding; source pinned at 42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "supports": "Organizer code defines co-smoothing, forward-rate likelihood and train/readout velocity scoring."
+    },
+    {
+      "id": "public-exposure",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/main/README.md",
+      "locator": "README overview and other resources; checked 2026-11-16",
+      "supports": "Organizer README states former test ground truth was made public in January 2026."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source declarations and software/reference controls retain their original scope; this revision inspects source and conducts no model or human trial.",
+    "excluded_claims": [
+      "No direct-observation or viewer model performance is established.",
+      "Public source labels and earlier exposed development scores do not constitute an untouched final test."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separate behavioral prediction from the stronger latent-preservation claim requiring matched readout provenance.",
+      "Freeze full 126 case/8 maze group and 100 mslag scope and retain symmetric-filter retrospective limitation.",
+      "Specify equal-group uniform-axis R2 and the capacity-matched PCA10/random 10 comparison."
+    ],
+    "source_review": "Original contract, named current implementation source, source-specific local documentation, and pinned organizer evaluation inspected. Official README checked 2026-11-16 for public target exposure."
+  }
+}

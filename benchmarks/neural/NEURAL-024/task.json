@@ -16,11 +16,11 @@
     ],
     "task_family": "population_dynamics"
   },
-  "scientific_question": "Do neural-history models retain predictive gain under day-to-day drift without movement labels?",
+  "scientific_question": "On the fixed Indy 2016-10-05 to 2016-10-06 development transfer, does a precommitted neural-history procedure predict next-bin electrode counts beyond source/calibration rate controls, and what is the descriptive gain from a declared lawful-history adaptation policy?",
   "task_type": "investigation",
   "neural_role": "both",
   "primary_outputs": [
-    "Future-spike likelihood contrasts for frozen versus adapted neural-history models."
+    "Observed integer extracellular counts in the next 20 ms bin for all 96 M1 electrode channels; candidate outputs are strictly positive expected counts per bin. Evidence for adaptation is a held-out likelihood contrast, not agreement with a claim that dynamics are stable."
   ],
   "input_assets": {
     "routes": [
@@ -355,19 +355,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Original MAT7.3 source stores chan_names and spikes as channel-by-unit cells, including an unsorted/hash unit; wf contains waveform snippets. Actual sampled header confirms chan_names[1,96], spikes[5,96],wf[5,96] reference arrays. Sorted units are not claimed longitudinally matched.",
-    "allowed_context": "cursor_pos and target_pos in millimeters; finger_pos in centimeters with coordinate order(z,-x,-y), optionally orientation; author metadata provides these units. Actual sampled file has cursor_pos[2,93501],finger_pos[3,93501],target_pos[2,93501].",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Actual t[1,93501]header; author documents250Hz kinematic samples and spikes timestamped in seconds. NDT3 loader resamples finger position, derives velocity in m/s, bins spikes and handles sorted/hash unit aggregation; its configuration must be fixed before comparison.",
-    "source_contract_evidence": "Original data-description schema and47-file manifest read; one83.96MB MAT file inspected through14,008bytes of HDF5 metadata, no numerical array values."
+    "inputs": [
+      "Count-only source training: 18,700 by 96 counts and 18,701 clock edges, preceding target day.",
+      "Count-only target-day first 60 s calibration: 3,000 by 96 counts and 3,001 clock edges; counts use uint32 and clock edges float64 in the documented export.",
+      "Sequential protocol request contains only previously committed/revealed count history; sequence 0 has no previous observation. Lawful-prefix online learning is allowed under the frozen procedure."
+    ],
+    "forbidden_inputs": [
+      "Current or future target-bin counts before commitment; the NEURAL-023 public assessment packet or a union of task public directories.",
+      "Velocity, hand position, target position, evaluation labels/reference outputs or behavioral summaries.",
+      "Unrecorded prior exposure to the same source observations; later runtime isolation cannot erase earlier access."
+    ],
+    "case_identity": "Documented sequence IDs 0 through 22099 are mandatory; 0 through 9 are warm-up, 10 through 22099 map to target bins 3010 through 25099 and are scored. Each reply has all 96 strictly positive finite means. Protocol implementation is absent in this checkout, so IDs are specification facts rather than newly executed validation.",
+    "split": "Historical first-day source counts, first 60 s of next-day calibration and subsequent sequential assessment, with the first 10 forecast rounds warm-up. A broader across-day test needs frozen chronological session pairs and session-specific readouts/electrode identities; no unit matching or movement-label adaptation may be assumed.",
+    "coverage": "Historical finite scope covers every 22,090 scored bin and all 96 channels, with warm-up retained in protocol but excluded from all scores. This publication contains declarations for that scope; data/scorer/controller files named by delivery manifest are absent. Other sessions and Loco are not covered."
   },
-  "biological_unit": "Two named macaques Indy and Loco,37and10sessions respectively, identifiable from filenames. There are continuous self-paced reaches without experimenter-imposed trial gaps.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One monkey and one day pair; 2,120,640 scored channel-bin cells are dependent measurement outcomes, not biological replicates.",
+  "case_definition": "One complete source-to-target day transfer episode: 22,100 required predict/reveal rounds, 10 warm-up rounds and 22,090 scored rounds with 96 outputs each.",
   "split": {
-    "policy": "Chronological whole sessions within Indy/Loco; temporal guard bands for continuous segments; report both animals separately and never assume neuron identity across days.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Historical first-day source counts, first 60 s of next-day calibration and subsequent sequential assessment, with the first 10 forecast rounds warm-up. A broader across-day test needs frozen chronological session pairs and session-specific readouts/electrode identities; no unit matching or movement-label adaptation may be assumed.",
+    "coverage": "Historical finite scope covers every 22,090 scored bin and all 96 channels, with warm-up retained in protocol but excluded from all scores. This publication contains declarations for that scope; data/scorer/controller files named by delivery manifest are absent. Other sessions and Loco are not covered."
   },
   "reference": {
     "source_code_url": "https://github.com/joel99/ndt3",
@@ -385,50 +391,106 @@
     "data_url": "https://doi.org/10.5281/zenodo.3854034"
   },
   "controls": [
-    "Same neuron visibility",
-    "history GLM and rate baselines",
-    "chronological blocks",
-    "no cross-day cell identity assumption."
+    "Enforce complete-vector durable commit before current-count reveal; an offline journal or candidate-authored attestation cannot prove causality.",
+    "Do not give NEURAL-023 packet access, repository-wide source observations or behavioral covariates to the candidate; disclose historical exposure in all results.",
+    "Use electrode-level aggregation consistently; sorted unit slots do not demonstrate cross-day identity.",
+    "Keep warm-up and all quiet/active bins fixed; no favorable-prefix selection, denominator changes or dropping low-rate channels.",
+    "Separate rate nonstationarity, self-history and cross-channel-history gains before interpreting population dynamics."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools bounded count-history view could test next-bin expectation judgments if complete episode support and output dimensionality were preserved.",
+      "boundary": "Only lawful preceding observations; exact expected-count response and feedback policy must be fixed before any trial.",
+      "evidence_ids": [
+        "delivery_task"
+      ],
+      "missing": [
+        "No direct observation transport or complete-response collection; current 22,100-round quantitative task is not a validated visual interpretation task."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed raster/history visualization without raw-array or future-count access.",
+      "boundary": "A viewer cannot reveal current target counts before a 96-value prediction is committed; any reduced-channel/window endpoint is an explicit scope revision.",
+      "evidence_ids": [
+        "delivery_task"
+      ],
+      "missing": [
+        "No viewer renderer, typed actions or causal answer/observation binding."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case neural-history investigation with numerical tools and fixed decoder models under the same lawful-prefix protocol.",
+      "boundary": "Freeze tool/checkpoint access and adaptation/compute; verify numeric contrasts independently without privileged future data.",
+      "evidence_ids": [
+        "runtime_manifest",
+        "delivery_task"
+      ],
+      "missing": [
+        "No present tool-using actor controller or investigation evidence scorer; historical references are not matched agent/tool trials."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical precommitted programme procedure with lawful-prefix updates and complete next-bin outputs.",
+      "boundary": "Freeze executable and update policy before target stream; fixed programme does not mean fixed weights, and actual current/future counts must remain outside candidate mounts.",
+      "evidence_ids": [
+        "runtime_manifest",
+        "delivery_manifest"
+      ],
+      "missing": [
+        "Historical registered runtime/protocol/scorer source and asset bodies are absent from current publication; recover and verify them before exposing this mode."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed per-session bits-per-spike improvement and calibration cost.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "bits_per_spike_vs_calibration_rate",
+      "direction": "higher",
+      "aggregation": "Documented full Poisson log-likelihood difference between candidate and immutable calibration-rate reference, summed over all 2,120,640 scored channel-bin cells and divided by total observed spikes and ln(2). Exclude all 10 warm-up rounds; a zero spike denominator is undefined.",
+      "rationale": "Directly scores prediction of measured neural events beyond a stationary target-day rate; it does not score source-table reproduction or reward a preferred stability narrative."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Full Poisson log-likelihood including log-factorials and mean negative log-likelihood.",
+      "Per-channel descriptive results and all six signed immutable reference contrasts on identical support.",
+      "Calibration duration, allowed-history adaptation and preparation/inference cost; frozen-versus-adapted effects are descriptive until policy and compute are matched."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "source_rate and calibration_rate",
+        "inputs": "Source count history only or first 60 s target-day calibration counts.",
+        "procedure": "Historical fixed stationary references declared in manifest; calibration_rate is the primary denominator/comparison. Recover exact source and numerical artifacts before execution."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "self_history_frozen and self_history_adapted",
+        "inputs": "Same channel preceding counts, with source/calibration fitting and only legally revealed target prefix for declared adaptation.",
+        "procedure": "Historical reference names; matched data/policy/compute comparison must be specified prospectively before causal attribution of adaptation benefit."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "self_population_history_frozen and self_population_history_adapted",
+        "inputs": "Same allowed neural history including population channels; no behavior.",
+        "procedure": "Historical reference family isolates added population-history information. Keep channels, support and update exposures identical; exact scorer/reference implementations are missing from this source release."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Enforce complete-vector durable commit before current-count reveal; an offline journal or candidate-authored attestation cannot prove causality.",
+      "Do not give NEURAL-023 packet access, repository-wide source observations or behavioral covariates to the candidate; disclose historical exposure in all results.",
+      "Use electrode-level aggregation consistently; sorted unit slots do not demonstrate cross-day identity.",
+      "Keep warm-up and all quiet/active bins fixed; no favorable-prefix selection, denominator changes or dropping low-rate channels.",
+      "Separate rate nonstationarity, self-history and cross-channel-history gains before interpreting population dynamics."
+    ],
+    "uncertainty": "The delivered single pair supports a descriptive score and declared temporal-block sensitivity, not population inference. Resampling must preserve serial dependence and pair all methods on identical bins; bins/channels cannot be treated as independent monkeys. Additional chronological pairs should be summarized separately for Indy and Loco.",
+    "failure_policy": "Documented protocol requires complete ordered handshake, all 22,100 nonce-bound replies, all 96 positive finite means and stop acknowledgment. Missing/duplicate/out-of-order replies, partial prefixes and invalid numbers receive no scientific score. Zero denominator stays undefined and finite arithmetic failure is reported, not clipped. Current publication lacks the parser/grader required to enforce this policy.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "800191c45e71617123bcd389afb5289d13c193398582e783461a283446bcdfc0",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "fc9719cf8b05eb42895ba8aa898b1ad27eebb5248053f916169227fe1d0c4a68"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -518,6 +580,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

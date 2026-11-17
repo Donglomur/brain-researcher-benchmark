@@ -16,11 +16,11 @@
     ],
     "task_family": "learning_plasticity"
   },
-  "scientific_question": "Does a calcium representation trained before reward learning identify stimuli after reward-free or rewarded exposure?",
+  "scientific_question": "Can a decoder trained only on prereward animals and phases identify the predeclared visual stimulus classes from calcium-derived regional activity in held-out animals after reward-free or rewarded exposure, beyond movement and position?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Stimulus identity probabilities per fixed position/trial packet."
+    "Canonical visual stimulus category0–6 mapped explicitly from source UniqWalls/stim_id and held privately for each complete trial/position packet; the plan freezes a subset before outcomes."
   ],
   "input_assets": {
     "routes": [
@@ -142,19 +142,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "utils.load_spk opens {mname}_{datexp}_{blk}_neural_data.npy, concatenating the spks arrays into neurons × frames; these are calcium-derived activity estimates, not electrode spikes. Transform files map neurons into cortical areas.",
-    "allowed_context": "Beh_{experiment}.npy provides ft_WallID (stimulus), ft_trInd (trial), ft_move, ft_PosCum, ft_CorrSpc and ft_GraySpc, plus licking/reward fields. Imaging_Exp_info.npy identifies supervised/unsupervised/naive and before/after/test experiments.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Neural/behavior correspondence is explicitly frame-indexed: code truncates behavior vectors to nfr and optionally interpolates moving trials into 60 position bins over the corridor. Absolute sampling-time fields were not established; initial tasks use trial/frame/position coordinates, not exact millisecond latencies.",
-    "source_contract_evidence": "297-file Figshare v2 manifest and pinned data_process_script.ipynb/utils.py directly establish neural/behavior filenames and keys. No NPY objects were loaded."
+    "inputs": [
+      "Public item_id plus four calcium regional means (V1 area8; mHV0/1/2/9; lHV5/6; aHV3/4), and matched mean movement/normalized position context.",
+      "Source decoded spks and behavior are prepared operator-side; trial-local moving-corridor frames are averaged into every frozen normalized-position bin without extrapolation or neighboring-trial borrowing.",
+      "Labels from training animals/phases only; training mouse/class weights equalized."
+    ],
+    "forbidden_inputs": [
+      "Query WallID, stim_id, phase, animal/date/block, reward/licking, target labels or target-bearing source filenames.",
+      "Query-fitted normalization, feature selection or interpolation across trial boundaries."
+    ],
+    "case_identity": "Implemented opaque item_id is SHA256 of session_id, original trial_id and bin index; complete plan enumerates session/mname/datexp/blk. No authentic selected cohort or final ID roster has been prepared.",
+    "split": "Plan requires train/evaluation animals and phase labels disjoint, with operator-verified prereward training semantics. Whole trials must cover every position bin and every retained mouse/phase must support every frozen class.",
+    "coverage": "Completeness is relative to supplied frozen manifest; exact native animal/session inventory and safe-export equality remain unverified. Class/position subsets are declared construction choices, not extra benchmarks."
   },
-  "biological_unit": "Imaging_Exp_info records mname,datexp,blk; identical IDs occur in neural filenames and behavior keys. Preserve every date/block of one mname. Exact animal counts and cross-session cell correspondences are not independently loaded.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Source mname mouse identity; every datexp/blk remains grouped and repeated phases are dependent.",
+  "case_definition": "One fixed-position bin inside a complete eligible moving-corridor trial; trial bins and sessions are nested within animal and phase.",
   "split": {
-    "policy": "Group every date/block by mname; hold out animals and exposure phases according to the question; explicit cell-registration or calibration contract.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Plan requires train/evaluation animals and phase labels disjoint, with operator-verified prereward training semantics. Whole trials must cover every position bin and every retained mouse/phase must support every frozen class.",
+    "coverage": "Completeness is relative to supplied frozen manifest; exact native animal/session inventory and safe-export equality remain unverified. Class/position subsets are declared construction choices, not extra benchmarks."
   },
   "reference": {
     "source_code_url": "https://github.com/MouseLand/zhong-et-al-2025",
@@ -169,50 +174,93 @@
     "data_url": "https://janelia.figshare.com/articles/dataset/Unsupervised_pretraining_in_biological_neural_network/28811129"
   },
   "controls": [
-    "Group animal/date/block",
-    "equal stimulus availability",
-    "movement/position-only baseline",
-    "no WallID in query."
+    "Never equate raw WallID values with canonical category numbers; preserve string/integer wall identity mapping.",
+    "Require within-trial ft_Pos/Corridor_Length units and four-region anatomical support; regional pooling is a declared cross-animal calibration, not cell registration.",
+    "Record every trial exclusion and behavior-tail truncation; freeze eligibility and class support before outcomes."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Compact four-value neural plus two-value context records are suitable for a prospective no-tools probability condition; no fixed contexts/demos/collector exist.",
+      "boundary": "Only allowlisted numeric query and declared training demonstrations, no source labels/identities.",
+      "evidence_ids": [],
+      "missing": [
+        "Frozen direct prompts, demonstrations and full response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A rendering of the same regional values could support visual interpretation, but no typed viewer exists.",
+      "boundary": "Render only permitted regional/context observations; do not imply raw-cell spatial or temporal structure absent from packet.",
+      "evidence_ids": [],
+      "missing": [
+        "Renderer and a defensible matched-observation visual condition."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical construction/reference APIs exist, but no bounded per-case investigator transport is supplied.",
+      "boundary": "Same training/query observations and model-tool exposure as comparator; no report/label access.",
+      "evidence_ids": [],
+      "missing": [
+        "Tool transport, per-case reset and matched budget enforcement."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Operator-only numerical source is present: Frozen train-only numerical classifier and complete probability scorer on normalized source arrays. This does not deliver a participant-facing frozen program mode.",
+      "boundary": "Training only before reward/evaluation access; no query fitted normalization or label feedback.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Authentic full inputs, participant programme runner and protected execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro log loss and balanced accuracy by exposure phase.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Mouse-macro stimulus log loss by exposure phase",
+      "direction": "lower",
+      "aggregation": "Packet log loss averaged within mouse/phase then equal mice; no scalar averaging across unlike phases. Equal bins per complete trial retain equal trial weight.",
+      "rationale": "Proper probability scoring against recorded stimulus identity captures calibrated decoding; source figure reproduction is irrelevant to correctness."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Mouse-macro class-balanced accuracy by phase; class-support counts and constant/zero-probability diagnostics.",
+      "Paired neural-minus-movement/position log loss and accuracy, with same expected IDs/labels/class ordering."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Frozen diagonal-Gaussian neural classifier",
+        "inputs": "Four regional means and training targets only.",
+        "procedure": "Implemented train-only scaling, uniform class priors, mouse/class-balanced centroids and within-class diagonal variance floor0.1."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Matched movement-position classifier",
+        "inputs": "Only mean framewise movement and mean normalized position.",
+        "procedure": "Identical diagonal-Gaussian fitting and probability output; isolates observed behavioral-context shortcuts."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Uniform probabilities",
+        "inputs": "Frozen class set only.",
+        "procedure": "Prospective explicit chance/calibration reference; constant output remains valid and is flagged."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Never equate raw WallID values with canonical category numbers; preserve string/integer wall identity mapping.",
+      "Require within-trial ft_Pos/Corridor_Length units and four-region anatomical support; regional pooling is a declared cross-animal calibration, not cell registration.",
+      "Record every trial exclusion and behavior-tail truncation; freeze eligibility and class support before outcomes."
+    ],
+    "uncertainty": "Paired2000 seeded mouse-cluster bootstrap within phase; apply identical resamples to both arms. One mouse is descriptive without population interval. Sessions/bins are not independent animals.",
+    "failure_policy": "Reject missing/duplicate/extra IDs, class-shape mismatch, nonfinite or invalid simplex outputs; true-class log probabilities clip at1e-15 with zero counts reported. Reject incomplete class support and malformed alignment rather than shrinking class set.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "ec9eeb1617e2bd62a25b5d2b0659015532fb1fec5f16b3e24a686b735b6d1945",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -300,6 +348,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

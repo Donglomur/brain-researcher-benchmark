@@ -16,11 +16,11 @@
     ],
     "task_family": "sensorimotor_readout"
   },
-  "scientific_question": "Do M1 and S1 encode joint configuration beyond target, movement phase and coarse limb displacement?",
+  "scientific_question": "How accurately can predictions using permitted M1/S1 calcium and context improve held-out joint angles over an independently fixed target/phase/coarse-motion model, and how does prediction gain vary between areas within the same five mice?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Within-mouse area contrast in incremental kinematic prediction."
+    "Actual held-out 24-joint trajectories establish prediction losses; the signed incremental EV and paired S1-minus-M1 contrasts are recomputed from those measurements and submitted predictions, never supplied by a favored paper conclusion."
   ],
   "input_assets": {
     "routes": [
@@ -380,19 +380,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Trial R structs contain events and hasNeuralData; eventLockData returns time × ROI data. Raw/denoised calcium and RADICaL-derived variants are distinct allowed-input choices, not interchangeable raw spikes.",
-    "allowed_context": "R/M sources yield 3D marker positions and 24 joint angles/velocities, LR reach target and event intervals. Optogenetic trial labels are available for a separate behavioral intervention task.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Pinned eventLockData subtracts syncTime from event timestamps, aligns frameTimes using cycleDurMs and corrects ROILags. tPts and cycleDurMs use milliseconds; resampling to 10 ms does not create 100 Hz independent observations.",
-    "source_contract_evidence": "Published 13-file inventory; pinned loadData, eventLockData, loadLock4Decode, decode and SUMMARY inspected. Data schema comes from author source, not loaded MAT structures."
+    "inputs": [
+      "Per-fold x: trial×51×128 ROI calcium features; z: trial×51×141 fixed nuisance features; training y: trial×51×24 original angles.",
+      "Nuisance basis has target×time indicators, target-interacted phase/duration terms, centroid position/velocity and quadratic terms; target, lift/grab timing and coarse motion are explicitly retrospective inputs."
+    ],
+    "forbidden_inputs": [
+      "Query joint angles, individual target-marker coordinates, query target-validity masks and target-derived extra features.",
+      "Other folds or aligned full-session arrays during a case: each fold training set contains labels for another fold query set.",
+      "Candidate-controlled nuisance predictions as the primary gain anchor; revised scoring fixes these in the operator."
+    ],
+    "case_identity": "Current design enumerates all 50 mouse/area/fold cases and whole original trial IDs. Matching uses first chronological min(N_M1,N_S1) trials per reach target, requiring at least ten per target/area and 128 eligible ROIs; authentic counts are not yet prepared.",
+    "split": "Current source uses target-stratified trial ordinal modulo five and complete training complements; each original session trial is query exactly once. Freeze the native source predicate and alignment before outcome access.",
+    "coverage": "Complete five-mouse/ten-session/50-fold domain and all 240 mouse-area-joint effects required; the current source estimates do not establish real packet coverage or authentic ten-recording preparation."
   },
-  "biological_unit": "Imaging mice cfa17,cfa19,cfa20,cfa22,cfa24; two dated sessions per mouse, M1 and S1 per docs. R(1).animalID and timestamped filenames provide grouping. Separate optogenetic files cfaVG1/cfaVG4.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Five paired mice; session days differ between M1 and S1, so matched counts do not create paired individual reaches.",
+  "case_definition": "Complete session fold: 5 mice × 2 areas × 5 whole-trial folds = 50 computational cases, with all 51 time points and 24 angles.",
   "split": {
-    "policy": "Group both M1/S1 sessions by mouse; whole reach trials; separate within-mouse and calibrated new-mouse conditions; PCA/neuron selection training only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Current source uses target-stratified trial ordinal modulo five and complete training complements; each original session trial is query exactly once. Freeze the native source predicate and alignment before outcome access.",
+    "coverage": "Complete five-mouse/ten-session/50-fold domain and all 240 mouse-area-joint effects required; the current source estimates do not establish real packet coverage or authentic ten-recording preparation."
   },
   "reference": {
     "source_code_url": "https://github.com/kaufmanlab/GSK26-public",
@@ -411,49 +416,100 @@
     "data_url": "https://figshare.com/articles/dataset/Data_from_Mouse_sensorimotor_cortex_reflects_complex_kinematic_details_during_reaching_and_grasping_eLife_2025/28326998"
   },
   "controls": [
-    "Matched cell/trial budgets",
-    "target/time/coarse-kinematic baseline",
-    "multiplicity control across joints."
+    "Equal target/trial/cell budgets across M1/S1; all model transforms fit inside training folds.",
+    "Retrospective phase uses grab/lift timing and coarse centroid motion; disclose remaining joint, arousal and temporal confounds.",
+    "Independently commit the trusted nuisance reference and complete design before candidate outcomes; all50 candidate files validate before any protected target/reference callback. No cross-fold label sharing."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No direct numeric/visual case-answer condition exists for the revised fine-joint interpretation endpoint.",
+      "boundary": "Any future complete case must expose identical permitted inputs and withhold other folds.",
+      "evidence_ids": [],
+      "missing": [
+        "Direct-context protocol and complete response capture."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed calcium/kinematics-context viewer exists.",
+      "boundary": "A viewer must not reveal query angle traces or access complementary-fold training labels.",
+      "evidence_ids": [],
+      "missing": [
+        "Source-faithful restricted rendering and complete cohort collector."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Existing tools are frozen reconstruction procedures; no independent per-case investigative mode for revised measured-target comparisons.",
+      "boundary": "Numerical/model tools and resources must be matched, with fixed nuisance outputs inaccessible until closure.",
+      "evidence_ids": [],
+      "missing": [
+        "Case-adaptive scientific endpoint and transport."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical frozen programme source implements reconstruction conditions. The revised arbitrary-method measured-target artifact scorer is not yet bound to a participant execution route; historical programme availability is not current-mode delivery.",
+      "boundary": "A future arbitrary-method programme must commit source and fitting/selection recipe before query access, expose only active-fold observations, and close all50 predictions before protected scoring. Historical reconstruction access controls remain scoped to that prior endpoint.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-3",
+        "implementation-4",
+        "programme-lifecycle",
+        "programme-worker"
+      ],
+      "missing": [
+        "Bind current arbitrary-method execution to revised artifact metric; existing participant route remains historical reconstruction scope.",
+        "Authentic inputs/native runtime and independent fold-custody qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed mouse-macro incremental explained variance with paired intervals.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "equal_mouse_area_joint_fixed_nuisance_incremental_EV",
+      "direction": "higher",
+      "aggregation": "Implemented additive scorer pools each session joint query SSE/SST across all five folds once; ΔEV=(SSE_operator_fixed_nuisance−SSE_candidate_prediction)/SST, equal24 joints, two areas per mouse and five mice, retaining all signed values.",
+      "rationale": "Recorded angles are the target and independently frozen nuisance predictions are the comparison anchor. Candidate nuisance degradation cannot raise the primary. Arbitrary permitted methods are allowed; closeness to the fixed analysis is only a separate legacy calibration endpoint."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "All240 per-joint gains, candidate and fixed nuisance/neural/shifted MSEs, candidate/nuisance R² and signed fixed-reference comparisons.",
+      "Five mouse-level gains and descriptive S1−M1 differences; the new scorer supplies no inferential interval or p-value.",
+      "Matched candidate context-only and neural-disruption ablations under equal fitting/selection budgets are required separately before attributing gain to neural observations. The fixed shifted reference is not a matched arbitrary-candidate ablation.",
+      "Unchanged legacy reconstruction MAE and historical sign-flip/t95/Holm diagnostics remain calibration-only outputs, never silently combined with the new primary."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Fixed nuisance ridge",
+        "inputs": "Identical public z, training angles and no calcium.",
+        "procedure": "Existing mean-loss ridge alpha1 with training standardization/intercept becomes a separately frozen operator comparator; candidate may not redefine it."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Fixed residualized calcium reference",
+        "inputs": "Same x/z/training angles and fixed128-ROI budget.",
+        "procedure": "Current reference residualizes neural activity and angles against z, fits training PCA explaining90% residual variance and ridge; use as a fixed declared reference whose empirical competence remains unqualified, not a mandatory candidate algorithm."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Whole-training-trial shifted neural reference",
+        "inputs": "Same complete inputs with neural training trials rotated within reach-target strata.",
+        "procedure": "Current floor(n/2) cyclic rotation and refit preserve phase/target composition; diagnostic rather than a unique causal test."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Equal target/trial/cell budgets across M1/S1; all model transforms fit inside training folds.",
+      "Retrospective phase uses grab/lift timing and coarse centroid motion; disclose remaining joint, arousal and temporal confounds.",
+      "Independently commit the trusted nuisance reference and complete design before candidate outcomes; all50 candidate files validate before any protected target/reference callback. No cross-fold label sharing."
+    ],
+    "uncertainty": "Five mice, not50 folds or240 joint effects, are biological units. New measured-target scorer reports complete descriptive mouse/area values without intervals or significance. Legacy32 sign-flip/t95/Holm outputs retain their own historical assumptions and are not new-score inference.",
+    "failure_policy": "Require exact50-case identity, complete ordered query trials and every51×24 trajectory. New candidate schema needs trial_id and neural predictions only; legacy3-arm artifacts are compatible, but their nuisance/shifted values cannot affect the primary. Undefined joint variance or arithmetic overflow/underflow refuses the complete score. CLI requires independently supplied operator design/binding hashes and pinned target/reference arrays.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "47d600313fbaeec5d3d83f39d6caca42f4532c4be279a81077e6b0485157c89d",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "886780e6deeec71bbafa12e6275d194f8f10498f5a1893401361b4133810a1db"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -537,6 +593,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

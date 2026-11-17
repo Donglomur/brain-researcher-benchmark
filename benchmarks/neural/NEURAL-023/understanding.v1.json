@@ -1,0 +1,255 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-023",
+  "title": "Continuous reaching across recording days",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A complete numerical artifact scorer is present for one exposed Indy day pair and 22,091 trailing-velocity endpoints. Exact prepared arrays remain operator-provisioned; the registered historical program runner and legacy scorer dependency are absent from the published source. The source-wide later-session/second-animal claim and matched investigation modes remain unfinished.",
+  "scientific_target": {
+    "question": "For the fixed Indy 2016-10-05 to 2016-10-06 development transfer, how accurately do allowed 20 ms electrode counts plus 60 seconds of labeled target-day calibration predict all later trailing-bin x/y finger velocities; and how does performance compare with fixed source-only, calibration-only and pooled decoders?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Measured trailing 20 ms finger velocity in m/s, x then y, at each assessment endpoint. This is continuous movement reconstruction from neural observations, not reproduction of a published score table.",
+    "answer_origin": "Frozen conversion of independently recorded hand-tracker positions from the original RTT sessions; private target identity is fixed by the external-artifact scorer. Raw finger_pos uses cm and (z,-x,-y); the prepared packet coordinate convention, not an assumed raw-axis mapping, governs output.",
+    "case_unit": "One complete target-day assessment segment with 22,091 nested endpoint rows; a row is not an independent animal or recording session.",
+    "independent_unit": "One monkey, Indy, and one source-to-target day pair in the delivered scope. The archive has two animals, but Loco and other day pairs are not covered by this scorer.",
+    "inference_scope": "Retrospective batch neural-to-kinematic prediction under fixed labeled calibration. Later assessment neural counts may be inspected; online forecasting and causal neural mechanisms cannot be inferred from this score.",
+    "exclusions": [
+      "Future-velocity prediction",
+      "Unseen-subject or macaque-population generalization",
+      "Longitudinal tracking of sorted individual neurons",
+      "Direct or viewer-mediated understanding inferred from programme/file scores"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Source-day counts: 18,700 by 96 electrode channels, with 18,691 labeled velocity endpoints.",
+      "Target-day first 60 s calibration: 3,000 by 96 counts with 2,991 labeled velocity endpoints.",
+      "Target-free full-batch assessment: 22,100 by 96 counts, native clock edges and 22,091 public endpoint IDs. Counts aggregate all released sort slots, including residual unsorted events, in 20 ms bins.",
+      "Exact candidate-public source/calibration/assessment/manifest asset identities in external-artifact-v1/ASSETS.json; data bodies are not included in the source release."
+    ],
+    "forbidden_inputs": [
+      "Assessment movement targets, saved reference predictions/metrics and outcome-dependent selection feedback.",
+      "Answer-bearing external source lookup or prior target access; public source availability must be recorded as exposure."
+    ],
+    "case_identity": "Every integer case_id 3010 through 25100 exactly once; candidate_io.py sorts and joins IDs. velocity_m_s has exact shape [22091,2].",
+    "split": "Delivered chronological Indy 2016-10-05 source segment, first 60 s of 2016-10-06 calibration and guarded later assessment. A source-wide evaluation must freeze additional whole later sessions within each animal before fitting, retain temporal guards covering preprocessing/history, and report Indy and Loco separately.",
+    "coverage": "All 22,091 endpoints are required in this finite exposed development pair. The 47-session original archive and 2-animal question are not delivered; programme/direct/viewer conditions do not add tasks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "mean_axis_r2",
+      "direction": "higher",
+      "aggregation": "Compute R-squared independently on all 22,091 x values and all 22,091 y values, then take their unweighted mean. A constant target axis leaves the primary undefined. Future multi-session extensions must macro-average complete session results within each animal.",
+      "rationale": "Preserves the actual implemented fixed-axis movement target and avoids silently replacing it with variance-weighted R-squared or source-result agreement."
+    },
+    "secondary": [
+      "Per-axis R-squared, MSE and MAE; negative R-squared is valid.",
+      "Eight descriptive consecutive 3,000-row clock blocks including the remainder; these do not create biological replicates.",
+      "Signed comparisons with all seven immutable reference methods on identical endpoints; no binary scientific-success threshold.",
+      "Proposed neural-dependence extension: preregister a source/calibration-fitted clock/target-history comparator and neural-shuffle control; not implemented by the seven current references."
+    ],
+    "comparators": [
+      {
+        "name": "zero_velocity, source_mean_velocity, calibration_mean_velocity",
+        "inputs": "No assessment neural features; source or permitted calibration labels for corresponding means.",
+        "procedure": "Three existing immutable non-neural prediction references; compare signed R-squared, MSE and MAE differences on all rows."
+      },
+      {
+        "name": "source_only_ridge and source_only_ridge_plus_calibration_mean_residual",
+        "inputs": "Source labeled 10-bin count histories; latter additionally uses permitted calibration residual mean.",
+        "procedure": "Existing fixed source-trained reference family; preserve source support and all stored comparisons without selecting a favorable reference after assessment."
+      },
+      {
+        "name": "calibration_only_ridge and balanced_pooled_ridge",
+        "inputs": "Permitted labeled calibration only, or balanced source plus calibration count histories.",
+        "procedure": "Existing immutable references; any adaptive-versus-frozen claim requires matched preparation, labels and compute beyond these file-score comparisons."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep electrode ordering and packet x/y convention fixed; do not substitute per-day sorted-neuron identities.",
+      "Fit scaling, hyperparameters and calibration policies using only source/calibration data; record target-day calibration duration and prior checkpoint exposure.",
+      "Separate trailing-bin batch reconstruction from causal prediction: full assessment access is allowed here and cannot attest past-only processing.",
+      "NEURAL-023 public assessment counts are NEURAL-024 private future targets; forbid combined mounts when evaluating 024 and retain prior-exposure disclosure."
+    ],
+    "uncertainty": "Report the complete single-pair estimate and descriptive clock-block variability. Time points and 96 electrodes are correlated nested observations, not replicates; do not use them for macaque-population confidence. A broader predeclared study should report each animal and paired session effects with temporal block resampling within session.",
+    "failure_policy": "Require all IDs once, exact array schema and finite velocities before target access. Missing/duplicate/nonfinite/malformed submissions receive explicit invalid status and null score; unsupported finite arithmetic receives null primary score, never clipped improvement or favorable-prefix scoring. Independent arithmetic disagreement is an operator error."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-023/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/score.py",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/public_contract.md",
+      "benchmarks/neural/NEURAL-023/contracts/delivery/public/TASK.md",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/README.md",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/ASSETS.json",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/external_score.py",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/dependencies/candidate_io.py",
+      "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/dependencies/score_core.py"
+    ],
+    "scorer_target": "external_score.py loads exact operator-provided assessment targets and seven saved reference metrics after complete public submission validation; score_core.py measures genuine measured velocity predictions with ID-aligned mean-axis R-squared. It neither runs candidate code nor verifies how predictions were produced.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Published executable external-artifact grading source plus four pinned numerical helpers; complete 22,091-row public schema and fixed asset hashes. Historical manifest records file/program software qualification for this one exposed pair, but its original authoring paths are absent and are not the portable companion entrypoint.",
+    "missing": [
+      "Exact prepared public input and operator target/reference assets must be provisioned externally; no automatic acquisition.",
+      "Legacy score.py points to absent authoring/rtt-transfer-v1/scoring-adapter-v2/score.py; historical submitted-program runner source is not present.",
+      "No delivered direct observation transport, typed viewer, or per-case tool-assistance controller.",
+      "Additional chronological session pairs, Loco scope and matched neural-dependence comparators are not evaluated."
+    ],
+    "execution_evidence": "Historical registered manifest reports six file controls and four program controls on the fixed pair, with no frontier-agent attempt. External-artifact README reports eight generated relocation controls, not fresh authentic-data runs. This revision inspected source and public metadata only, executed no scorer/model and does not renew runtime qualification."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed numeric spike-raster/count view plus fixed labeled calibration, with a complete structured velocity response.",
+      "boundary": "No numerical/model tools or evaluator feedback; a reduced visual case would be a separately declared endpoint, not a score on the full current batch.",
+      "evidence_ids": [
+        "delivery_task"
+      ],
+      "missing": [
+        "No no-tools observation/answer transport or tested model trial."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed raster/count-history visualization for the same designated observations; dense 22,091-by-96 full support must not silently become a hand-picked example set.",
+      "boundary": "Typed bounded rendering only, with no raw-array/target return and fixed response coverage.",
+      "evidence_ids": [
+        "delivery_task"
+      ],
+      "missing": [
+        "No typed viewer, rendering/answer binding or complete-support viewer protocol."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-session numerical/model-assisted investigation of transfer, calibration and neural dependence; external artifact scorer can grade resulting full-support predictions.",
+      "boundary": "Same data, calibration labels, checkpoint access and accounted compute as comparison; numerical claims must be recomputed without evaluator feedback.",
+      "evidence_ids": [
+        "external_scorer",
+        "score_math"
+      ],
+      "missing": [
+        "No current actor/tool controller or matched investigation outcome grader; artifact scoring alone supplies neither."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical one-file frozen-program route receives source, calibration and full target-free assessment batch.",
+      "boundary": "Commit program and fitting recipe before assessment; full-batch assessment counts are permitted; scoring must follow producer shutdown with private assets excluded.",
+      "evidence_ids": [
+        "runtime_manifest",
+        "external_scorer"
+      ],
+      "missing": [
+        "Historical runner source and required local execution dependencies absent from current publication; only the prediction artifact scorer is delivered."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original_definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/historical/task.pre-understanding.v1.json",
+      "sha256": "8c2e1e2ecc846e4a046de8fc87a59623c905d3f6e7d5e7d9a5af8ac579963c4b",
+      "supports": "Preserved source-wide objective, source recording contract and original proposed two-animal chronological-session evaluation."
+    },
+    {
+      "id": "runtime_manifest",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/manifest.json",
+      "sha256": "8fc39b5fde70f49b64e25a8777a6ffba8daa38520e90edd4f30a1997ff0f97b9",
+      "supports": "Historical finite-pair programme/file qualification declarations, exact calibration/support and explicit absence of scientific qualification."
+    },
+    {
+      "id": "delivery_task",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/contracts/delivery/public/TASK.md",
+      "sha256": "87dbea378b22663e0296fbf35ea665faebab74470fe90d021e74eac349cb4352",
+      "supports": "20 ms trailing target, coordinate and sort-slot policy, full support and cross-task exposure."
+    },
+    {
+      "id": "external_scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/external_score.py",
+      "sha256": "8e3ed5c991397b3409f76f3e6fcb5e0b1cfa59c2885c422677194e62c34be5a9",
+      "supports": "Actual trusted-host source hashes, public-first validation, fixed target/reference loading and no candidate execution."
+    },
+    {
+      "id": "score_math",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/dependencies/score_core.py",
+      "sha256": "8cef8d269540d99b39ddf662542fff0c23aac41a1bf54dd2506d3f2f1a6319ca",
+      "supports": "Unweighted axis R-squared, null constant-axis primary, descriptive clock blocks and signed comparisons."
+    },
+    {
+      "id": "response_parser",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/dependencies/candidate_io.py",
+      "sha256": "76ae6019ab40f08fbc98b0e2f52e64201884ef1111bb0d7a1e1553d054a2fdf4",
+      "supports": "Exact complete endpoint identity and all seven reference names."
+    },
+    {
+      "id": "assets",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/ASSETS.json",
+      "sha256": "bfe49d0fefbe9f81502a9acd6ce8bb63baf8c6af5a635c65649b78a62267de15",
+      "supports": "Asset bodies absent; exact operator/candidate asset identities and exposure boundary."
+    },
+    {
+      "id": "rtt_archive",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/3854034",
+      "locator": "Version 2 description, variable names, decoder results and recording-session inventory; rechecked 2026-11-16",
+      "supports": "Original continuous-reaching archive supplies independent measured fingertip positions and extracellular spike times; 37 Indy and 10 Loco sessions are two animals. Historical decoder CSV is a result summary, not an executable comparator."
+    },
+    {
+      "id": "ndt3_loader",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/joel99/ndt3/877f9f5edbcd47f20af6e6c0ba11926da7a22354/context_general_bci/tasks/rtt.py",
+      "locator": "ODohertyRTTLoader.load_raw and load; pinned revision inspected 2026-11-16",
+      "supports": "Later NDT3 loader applies polyphase resampling and a numerical gradient to finger position and can aggregate released sort slots. It is a later method implementation, not acquisition-author source or a verified causal-preprocessing recipe."
+    },
+    {
+      "id": "additional-source-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/score.py",
+      "sha256": "775d3499b4157cc1f5048087636702e2b22c24cc43cec6f9e9fa7efa0714af9f",
+      "supports": "Inspected implementation documentation or entrypoint supports the actual delivered scope and named operator dependencies."
+    },
+    {
+      "id": "additional-source-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/public_contract.md",
+      "sha256": "c71187ade3479cff5f902acba09c2a6af95b3f9a6ffa8b3c91f79dcad635d1f5",
+      "supports": "Inspected implementation documentation or entrypoint supports the actual delivered scope and named operator dependencies."
+    },
+    {
+      "id": "additional-source-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/README.md",
+      "sha256": "d80c6a403427202907e739dfa68393ae9a2116df11f8a8eef5f2709a84497183",
+      "supports": "Inspected implementation documentation or entrypoint supports the actual delivered scope and named operator dependencies."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Retain historical fixed software/reference controls on one exposed pair. They are not one of the four prior neural solver programme attempts on NEURAL-007/077, and no solver or human performance is added here.",
+    "excluded_claims": [
+      "Published source implies an executable historical runner",
+      "22,091 endpoints imply independent biological replication",
+      "Velocity reconstruction demonstrates causal or native neural understanding"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replaces the source-wide ambiguous prediction claim with an explicit delivered retrospective velocity endpoint while retaining the broader two-animal investigation as unfulfilled scope.",
+      "Distinguishes the actual portable file scorer from absent historical execution routes and exposes exact calibration/support/coordinate rules.",
+      "Makes cross-task target exposure, complete-case failures and matched neural-dependence controls explicit."
+    ],
+    "source_review": "Read original task and current runtime/delivery/source files; checked original Zenodo v2 metadata and pinned later NDT3 loader; no signal or target values read."
+  }
+}

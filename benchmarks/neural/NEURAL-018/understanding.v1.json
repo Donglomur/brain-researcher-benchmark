@@ -1,0 +1,208 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-018",
+  "title": "Causal motor-population forecasting",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The current scorer supports genuine future-count predictions on a complete 574-trial panel; legacy programme qualification is recorded but its runner is not delivered in this task folder. Known condition labels and retrospective movement alignment limit a causal-neural interpretation.",
+  "scientific_target": {
+    "question": "From 137 observed units before+450 ms and permitted trial-condition context, how accurately can a fixed method predict all 182 units over the following 200 ms?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Observed integer spike counts for all 182 units in 40 future 5 ms bins, relative edges 450…645 ms.",
+    "answer_origin": "MC_Maze Jenkins 2009-09-25 NWB future spikes, with evaluation future targets separately held by the operator.",
+    "case_unit": "One reach trial containing a complete past window and future prediction horizon.",
+    "independent_unit": "One macaque/session;574 trials are nested observations.",
+    "inference_scope": "Past-only prediction within the supplied preprocessed, movement-aligned observation clock; this tests temporal forecast dependence, not a perturbation or an online onset detector.",
+    "exclusions": [
+      "Interventional causality or causal biological mechanism.",
+      "Pure neural-only inference when condition IDs are supplied.",
+      "Unseen animal or untouched target evaluation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "1721 training trials with observed and withheld past counts and their future counts.",
+      "574 query trials with 137 held-in units over[-250,+450)ms; trial_type/trial_version condition context explicitly permitted."
+    ],
+    "forbidden_inputs": [
+      "All query bins at/after+450 ms, query withheld-unit past counts, raw NWB and private future targets.",
+      "Stored reference predictions, prior private grades and outcome-adaptive selection."
+    ],
+    "case_identity": "All 574 public eval_trial_ids and 182 forecast_unit_ids, panel_fingerprint and exact 450,455,…645 ms grid; scorer permits ID-aligned reordering. Source checkout does not supply actual packet identities.",
+    "split": "1721 whole training trials to 574 exposed development trials; supervised tuning only within whole training trials. Any unsupervised query adaptation must be declared. Source condition support is not a held-condition generalization test.",
+    "coverage": "Complete 574×40×182 future values; no held-in-only or favorable-trial score. One shared Jenkins source with 017/019; former official test targets are also now public."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "joint_forward_bits_per_spike",
+      "direction": "higher",
+      "aggregation": "Pooled likelihood improvement across all 182 forecast units,574 trials and 40 bins, normalized by observed total spikes.",
+      "rationale": "The forecast target is future measured spikes across both held-in and held-out populations; evaluation mean is only the null normalization."
+    },
+    "secondary": [
+      "Signed score differences for every frozen reference, retaining original negative and outcome-informed follow-up controls.",
+      "Forecast-horizon and unit-group diagnostics; matched within-condition neural shuffle needed for incremental neural information."
+    ],
+    "comparators": [
+      {
+        "name": "global_rate_and_condition_time",
+        "inputs": "Training counts and allowed condition/time context.",
+        "procedure": "Original fixed global-rate and condition/time comparators; keep continuous signed comparisons."
+      },
+      {
+        "name": "pooled_condition_and_selected_ridge",
+        "inputs": "Training-only labels; pooled condition context or past activity plus condition.",
+        "procedure": "Historical version 2 training-only fivefold follow-up is outcome-informed and exposed. Retain both; pooled-condition is stronger in the recorded local development comparison, not a new protected baseline."
+      }
+    ],
+    "nuisance_controls": [
+      "Prohibit future bins and noncausal filtering across the+450 ms cutoff.",
+      "Match condition labels across all methods; compare intact past activity to within-condition shuffled history.",
+      "Keep all reference outcomes and exposure chronology; do not select only the weakest comparator."
+    ],
+    "uncertainty": "Paired complete-trial/block summaries within one session; do not use neurons/bins as independent animals.",
+    "failure_policy": "Validate complete 574×40×182 float32/64 rates, exact future clock, units and IDs before targets. Rates must be finite and strictly positive; all-zero target totals remain undefined. Negative gains are valid, not rejected."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-018/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-018/implementations/registered-runtime/INSTRUCTIONS.md",
+      "benchmarks/neural/NEURAL-018/implementations/registered-runtime/scoring-v2/scoring_core.py",
+      "benchmarks/neural/NEURAL-018/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-018/implementations/registered-runtime/scoring-v2/README.md"
+    ],
+    "scorer_target": "Joint future measured spike counts; not author-table reconstruction. Current scorer accepts arbitrary prediction arrays and separately evaluates fixed references.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Portable numerical source and legacy isolated artifact-scoring wrapper are present; original manifest refers to an external programme runner and operator assets absent here.",
+    "missing": [
+      "Recover the exact runner and qualified source closure if a frozen-programme arm is to be delivered.",
+      "Authenticate all past/future packets and temporal preprocessing boundary.",
+      "Run matched neural-dependence controls on a new declared evaluation before incremental-information claims."
+    ],
+    "execution_evidence": "Legacy manifest records local scorer/programme software qualification and zero LLM attempts for that qualification; prior reference outcomes are exposed development results, not new trials or present deployment proof."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all 40×182 positive future expected counts; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-018/historical/task.pre-understanding.v1.json",
+      "sha256": "fa8ed13c6beb9fdf125c164c3ec15a1f62d727791d9b209dee54e985018e37b9",
+      "supports": "Original source definition, verified source header identities and acquisition-versus-organizer distinction."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-018/implementations/registered-runtime/INSTRUCTIONS.md",
+      "sha256": "698908c54a279a88250b7241dec453b68ed21552f788d9cafbdb8edaf5adeb99",
+      "supports": "Exact past/future boundary and condition-assisted forecast inputs."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-018/implementations/registered-runtime/scoring-v2/scoring_core.py",
+      "sha256": "928ec0f36461aa9ec3613c5591456bf9978425e98b1e8edcae09a1013d93c62a",
+      "supports": "Full 574×40×182 joint future score, identity checks and arbitrary finite positive predictions."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-018/implementations/registered-runtime/manifest.json",
+      "sha256": "6edc3dc9ca2304df717d3449c6158a4fbf0f5c86be933348eeaf023da04b2515",
+      "supports": "Historical source qualification and five frozen comparator lineage; runner location is a legacy external path."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-018/implementations/registered-runtime/scoring-v2/README.md",
+      "sha256": "35b6e8b53a301b64bbe380d40833c9671f3926a4dbabd3b1c4fd6f016cafd3e8",
+      "supports": "Reference-panel version 2 retains stronger pooled-condition and selected-ridge follow-up alongside original negative controls."
+    },
+    {
+      "id": "acquisition-paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/nature11129",
+      "locator": "Original source paper identified by verified task source audit",
+      "supports": "Primary acquisition study; source of measured neural and behavioral variables, not a native-understanding benchmark."
+    },
+    {
+      "id": "source-data",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/000128/0.220113.0400",
+      "locator": "Versioned DANDI acquisition record",
+      "supports": "Versioned dataset and biological-session identity."
+    },
+    {
+      "id": "organizer-metric",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike and velocity_decoding; source pinned at 42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "supports": "Organizer code defines co-smoothing, forward-rate likelihood and train/readout velocity scoring."
+    },
+    {
+      "id": "public-exposure",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/main/README.md",
+      "locator": "README overview and other resources; checked 2026-11-16",
+      "supports": "Organizer README states former test ground truth was made public in January 2026."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source declarations and software/reference controls retain their original scope; this revision inspects source and conducts no model or human trial.",
+    "excluded_claims": [
+      "No direct-observation or viewer model performance is established.",
+      "Public source labels and earlier exposed development scores do not constitute an untouched final test."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Freeze the 450 msobservation cutoff and all 182 unit joint forecast endpoint.",
+      "State condition assistance and retrospective alignment explicitly; temporal prediction is not interventional causality.",
+      "Retain stronger exposed follow-up comparators and distinguish manifest programme history from current scorer-only delivery."
+    ],
+    "source_review": "Original contract, named current implementation source, source-specific local documentation, and pinned organizer evaluation inspected. Official README checked 2026-11-16 for public target exposure."
+  }
+}
