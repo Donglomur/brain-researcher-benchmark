@@ -22,6 +22,8 @@ OBJECTIVE = "recreate_and_surpass_source_paper_same_task"
 HISTORY = "historical/task.pre-outcomes.v1.json"
 SNAPSHOT = "docs/provenance/registrations/paper-pre-outcomes-v1.json"
 REPRODUCTION = "reproduction.v1.json"
+REPRODUCTION_FILES = {"paper-reproduction/v1": REPRODUCTION,
+                      "paper-reproduction/v2": "reproduction.v2.json"}
 OUTCOMES = "outcomes.v1.json"
 REGISTRY = "benchmarks/registry.json"
 CONDITIONS = ("paper_data", "paper_data_author_code")
@@ -102,7 +104,7 @@ def engine(reproduction=None):
     return sys.modules[result_name]
 
 
-def project_task(previous, row, improvement, scope_entry=None):
+def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1"):
     """Return the reviewed dual-outcome wording, preserving scientific inputs.
 
     This projection intentionally does not depend on the reproduction contract or
@@ -114,6 +116,8 @@ def project_task(previous, row, improvement, scope_entry=None):
     need(type(previous) is dict and type(row) is dict and type(improvement) is dict,
          "Paper projection requires metadata objects")
     identifier = row["id"]
+    need(reproduction_version in REPRODUCTION_FILES, "Unsupported reproduction projection version")
+    reproduction_file = REPRODUCTION_FILES[reproduction_version]
     need(row.get("track") == "paper" and improvement.get("task_id") == identifier,
          "Paper projection task identity mismatch")
     need(previous.get("objective") == "surpass_source_paper_same_task",
@@ -129,7 +133,7 @@ def project_task(previous, row, improvement, scope_entry=None):
         "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions.",
     ]
     result["success_criteria"] = [
-        "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+        "Assess reproduction and improvement independently under " + reproduction_file + " and improvement.v1.json; do not combine their scores.",
         "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
         "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
         "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
@@ -138,7 +142,7 @@ def project_task(previous, row, improvement, scope_entry=None):
     ]
     result["evaluation"] = {
         "objective": OBJECTIVE,
-        "contracts": {"reproduction": REPRODUCTION, "improvement": "improvement.v1.json"},
+        "contracts": {"reproduction": reproduction_file, "improvement": "improvement.v1.json"},
         "paired_protocol": OUTCOMES,
         "information_conditions": list(CONDITIONS),
         "outcome_roles": {"reproduction": "first_class_outcome", "improvement": "first_class_outcome"},
@@ -151,19 +155,19 @@ def project_task(previous, row, improvement, scope_entry=None):
     for field in ("episode", "blocking_issues"):
         if field in previous:
             result[field] = {"improvement": copy.deepcopy(previous[field]),
-                             "reproduction_contract": REPRODUCTION,
+                             "reproduction_contract": reproduction_file,
                              "paired_protocol": OUTCOMES}
     if "next_implementation_action" in previous:
         result["next_implementation_action"] = {
             "improvement": copy.deepcopy(previous["next_implementation_action"]),
-            "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+            "reproduction": "Resolve the task-specific source and execution gaps declared in " + reproduction_file + ".",
             "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json.",
         }
     if "holds" in previous:
         result["holds"] = {
             "preserved_limits": copy.deepcopy(previous["holds"]),
-            "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
-            "reproduction_contract": REPRODUCTION,
+            "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in " + reproduction_file + ".",
+            "reproduction_contract": reproduction_file,
         }
     if type(result.get("admission")) is dict:
         result["admission"]["delivery_unit"] = "one_registered_paper_task_two_independent_outcomes"
@@ -213,6 +217,20 @@ class PreviousRows(dict):
     """An authenticated prior roster with separately pinned scope decisions."""
     scope_decisions = None
     scope_pin = None
+
+
+def read_reproduction(member_pin, home, read_pin):
+    """Admit only a fixed filename whose declared schema version agrees."""
+    need(type(member_pin) is dict and member_pin.get("path") in
+         {home + "/" + filename for filename in REPRODUCTION_FILES.values()},
+         "Expected an explicit versioned reproduction filename")
+    require_pin(member_pin, member_pin["path"], "reproduction contract")
+    document = read_pin(member_pin, "Reproduction contract")
+    need(type(document) is dict and document.get("schema_version") in REPRODUCTION_FILES,
+         "Unsupported reproduction contract version")
+    need(member_pin["path"] == home + "/" + REPRODUCTION_FILES[document["schema_version"]],
+         "Reproduction filename must match its declared schema version")
+    return document
 
 
 def scope_decisions(value):
@@ -330,7 +348,7 @@ def validate_unavailable(outcomes, reproduction, improvement, row, previous_rows
              "Reproduction proposal target must match the corrected primary scope")
         need(reproduction["source_paper"]["url"] == improvement["source_paper"]["url"],
              "Primary reproduction proposal must retain its source paper identity")
-        need(outcomes["reproduction_proposal"] == {"path": REPRODUCTION, "raw_sha256": reproduction_pin["sha256"],
+        need(outcomes["reproduction_proposal"] == {"path": REPRODUCTION_FILES[reproduction["schema_version"]], "raw_sha256": reproduction_pin["sha256"],
                                                    "contract_digest": module.contract_digest(reproduction)},
              "Unavailable reproduction proposal identity mismatch")
     return unavailable_summary(identifier)
@@ -367,18 +385,17 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     improvement = improvement_contract if improvement_contract is not None else read_pin(improvement_pin, "Improvement contract")
     scope = getattr(previous_rows, "scope_decisions", None)
     scope_entry = scope["entries"].get(identifier) if scope else None
-    projected = project_task(previous_document, prior, improvement, scope_entry)
+    reproduction = read_reproduction(binding["reproduction_contract"], home, read_pin) if "reproduction_contract" in binding else None
+    projected = project_task(previous_document, prior, improvement, scope_entry,
+                             reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1")
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
     require_pin(binding["outcomes"], home + "/" + OUTCOMES, "paper outcomes")
     outcomes = read_pin(binding["outcomes"], "Paper outcomes")
     need(type(outcomes) is dict, "Paper outcomes must be an object")
-    reproduction = None
     members = {previous_pin["path"], binding["outcomes"]["path"]}
     if "reproduction_contract" in binding:
-        require_pin(binding["reproduction_contract"], home + "/" + REPRODUCTION, "reproduction contract")
-        reproduction = read_pin(binding["reproduction_contract"], "Reproduction contract")
         members.add(binding["reproduction_contract"]["path"])
     unavailable = outcomes.get("schema_version") == UNAVAILABLE
     need(unavailable == (scope_entry is not None), "Corrected primary scopes cannot use a mixed-scope normal outcome bundle")

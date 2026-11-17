@@ -172,20 +172,29 @@ def build_outputs(root=ROOT):
                 existing_archive, _ = raw(reader, archive_pin["path"])
                 binding.need(existing_archive == archived_raw, "Refusing to replace a pre-outcomes task archive")
         scopes = previous.scope_decisions
-        projected = binding.project_task(previous_document, prior, improvement,
-                                         scopes["entries"].get(identifier) if scopes else None)
-        current_body = binding.encode(projected)
-        current_pin = binding.pin(home + "/task.json", current_body)
         outcomes_raw, outcomes_pin = raw(reader, home + "/" + binding.OUTCOMES)
         outcomes = binding.engine().loads_contract(outcomes_raw.decode("utf-8"))
         binding.need(type(outcomes) is dict, "Supplied paper outcomes must be an object")
         reproduction_pin = None
-        reproduction_path = home + "/" + binding.REPRODUCTION
-        if outcomes.get("schema_version") != binding.UNAVAILABLE or "reproduction_proposal" in outcomes:
-            _, reproduction_pin = raw(reader, reproduction_path)
+        reproduction = None
+        if already_bound:
+            selected = row["paper_outcomes"].get("reproduction_contract")
+            reproduction_paths = [selected["path"]] if selected is not None else []
         else:
-            binding.need(not checker.checked_path(root, reproduction_path, missing=True).exists(),
+            reproduction_paths = [home + "/" + filename for filename in binding.REPRODUCTION_FILES.values()
+                                  if checker.checked_path(root, home + "/" + filename, missing=True).exists()]
+        if outcomes.get("schema_version") != binding.UNAVAILABLE or "reproduction_proposal" in outcomes:
+            binding.need(len(reproduction_paths) == 1, "Exactly one explicit versioned reproduction contract is required")
+            _, reproduction_pin = raw(reader, reproduction_paths[0])
+            reproduction = binding.read_reproduction(reproduction_pin, home, read_pin)
+        else:
+            binding.need(not reproduction_paths,
                          "An existing reproduction proposal must be explicitly bound")
+        projected = binding.project_task(previous_document, prior, improvement,
+                                         scopes["entries"].get(identifier) if scopes else None,
+                                         reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1")
+        current_body = binding.encode(projected)
+        current_pin = binding.pin(home + "/task.json", current_body)
         updated_rows[identifier]["specification"] = current_pin
         updated_rows[identifier]["paper_outcomes"] = {
             "schema_version": binding.VERSION, "previous_specification": archive_pin,

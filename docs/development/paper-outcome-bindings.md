@@ -6,12 +6,19 @@ task. Each outcome has separate paper+data and paper+data+author-code conditions
 Contract eligibility, a consistent metadata receipt and a scientific result are
 different claims. The catalog reports scientific results as unknown.
 
-`reproduction.v1.json` contains the source-grounded reproduction contract. Its
-`schema_version` selects the reviewed reproduction validator; the filename does
-not select a schema. `improvement.v1.json` keeps its existing criteria unchanged.
+`reproduction.v1.json` contains a v1 source-grounded reproduction contract;
+`reproduction.v2.json` contains an explicitly selected structured v2 contract.
+The filename and declared `schema_version` must agree. The registry pins exactly
+one current reproduction contract, and its version selects the reviewed validator.
+`improvement.v1.json` keeps its existing criteria unchanged.
 `outcomes.v1.json` binds both contract digests and the raw current `task.json`
 digest. The current task refers to filenames, so the bindings have no digest
-cycle. Neither an author baseline nor a historical reconstruction is promoted to
+cycle. A change to the selected reproduction version requires a separately
+reviewed task projection and descriptor binding. Initial adoption refuses two
+unbound v1/v2 variants; after adoption the exact registry pin selects the current
+contract. The full repository ownership gate rejects unowned alternate metadata,
+which never selects a validator or changes an inspected contract. Neither an
+author baseline nor a historical reconstruction is promoted to
 a newly qualified AI reproduction.
 
 The registry separately pins the current definition, the two contracts and the
