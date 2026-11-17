@@ -32,15 +32,17 @@ Source availability does not establish a qualified runtime. A programme score ca
 
 - [Authoritative task specification](task.json)
 - Specification identity: 15149 bytes; SHA-256 `b1bd4ce53179f2ac2f9c7f7007ccf4b60487233596424be055291111375589fa`.
-- [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
-- [Legacy declaration package](implementations/registered-runtime)
+- [Preserved legacy runtime declaration](implementations/frozen-capture-v1/manifest.json)
+- [Legacy declaration package](implementations/frozen-capture-v1)
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
 ## Implementation artifacts
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+  Scope: Historical source package previously selected by the published catalog; the active source package is frozen-capture-v1. Its original source, provenance and qualification limits are retained; selection does not assert executable or scientific qualification.
+- [Frozen capture v1](implementations/frozen-capture-v1) — Reviewed source component.
+  Scope: Reviewed same-host frozen-capture source successor selected as the active package, retaining the original registered-runtime source and all scientific/readiness limits. PID/start/cgroup-bound capture is not Docker Desktop or general runtime qualification; no authentic native execution is asserted.
 - [Source identity v2](implementations/source-identity-v2) — Reviewed source component.
   Scope: Shared image identity repair. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

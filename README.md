@@ -102,6 +102,15 @@ It preserves the six-person training and two-person development endpoint; six
 historical metadata bodies and all scientific operands remain external. Current
 runtime selection and qualification are unchanged.
 
+A separate [Sleep construction receipt](benchmarks/neural/NEURAL-007/implementations/finite-workflow-v1/CONSTRUCTION_RECEIPT.json)
+records the accepted fixed-uniform programme check across all 5,450 epochs of
+the two exposed development people, paired with the historical scripted viewer.
+
+The [spine structural-change fixed-control receipt (NEURAL-031)](benchmarks/neural/NEURAL-031/implementations/runtime-qualification-v1/RUNTIME_VALIDATION.json)
+records the local 40-context, 1,548-prediction ratio-1 construction check.
+AI understanding, scientific performance and general runtime qualification remain
+unestablished; registered attempt counts are unchanged.
+
 For paper tasks, `paper-contract --outcome reproduction` and `paper-outcomes`
 inspect adopted reproduction definitions and their separate improvement and access
 conditions. `paper-contract` defaults to the current improvement contract.

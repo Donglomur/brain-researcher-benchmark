@@ -45,6 +45,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Paired executor v1](implementations/paired-executor-v1) — Reviewed source component.
   Scope: Paired executor and exact target/input bridge source retain the original task endpoints and paired execution boundaries. Accepted authentic bridge preparation is distinct from protected Docker candidate execution, model interpretation, full reference reproduction and scientific qualification; generated control evidence does not activate a runtime selector.
+- [Runtime qualification v1](implementations/runtime-qualification-v1) — Reviewed source component.
+  Scope: Reviewed corrected source and generated controls plus the accepted local40-context/1548-prediction ratio-1 construction receipt; first native failure and all costs remain preserved. Canonical runtime selection, submission readiness and scientific qualification are unchanged.
 - [Ratio scoring v1](implementations/ratio-scoring-v1) — Reviewed source component.
   Scope: Recovered ratio endpoint and paired scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

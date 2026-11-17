@@ -5288,8 +5288,9 @@ jobs:
           bootstrap = types.ModuleType('rep012_authenticated_bootstrap')
           bootstrap.__file__ = str(path)
           exec(compile(body, str(path), 'exec'), bootstrap.__dict__)
-          root, manifest, bodies = bootstrap.verify('e6f7d5e355abedad833bd7d9c63f78c47258c99cb723d19422cab196e6e119a0')
-          assert len(bodies) == 13
+          manifest_pin = {'path': 'benchmarks/paper/PAPER-FIND-REP-012/implementations/rep012-portable/SOURCE_MANIFEST.json', 'bytes': 2410, 'sha256': 'b7836e4300e7d2090dcba30d4611a80347acdec8a60e6918d6906a5a4e92a339'}
+          root, manifest, bodies = bootstrap.verify(manifest_pin['sha256'])
+          assert len(bodies) == 15
           path = root / 'tests/test_relocation.py'
           tests = types.ModuleType('rep012_generated_relocation_tests')
           tests.__file__ = str(path)
