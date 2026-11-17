@@ -1,5 +1,7 @@
 """Protected-scoring mathematical primitives; no authentic scorer is qualified."""
+from fractions import Fraction
 import math
+import sys
 from retina_contract import Refusal, require
 
 
@@ -15,26 +17,82 @@ def finite_number(value):
 def vector(values, label):
     require(type(values) is list and bool(values), label + ":nonempty_vector")
     require(all(finite_number(x) for x in values), label + ":finite")
-    return [float(x) for x in values]
+    converted = [float(x) for x in values]
+    # Integers are admitted by representability, not an arbitrary magnitude cap.
+    # In particular, adjacent large integers must not collapse to the same frame.
+    require(all(type(x) is not int or int(y) == x for x, y in zip(values, converted)),
+            label + ":integer_precision")
+    return converted
+
+
+def _scaled_squares(values):
+    """Represent a sum of squares as scale**2 * total without squaring scale."""
+    require(all(math.isfinite(x) for x in values), "metric:overflow")
+    scale = max(abs(x) for x in values)
+    return (scale, math.fsum((x / scale) ** 2 for x in values)) if scale else (0., 0.)
+
+
+def _public_loss(scale, total, target, prediction, divisor=1):
+    """Materialize an output loss, refusing a positive value rounded to zero."""
+    if scale == 0:
+        return 0.
+    mantissa, exponent = math.frexp(scale)
+    try:
+        loss = math.ldexp(mantissa * mantissa * (total / divisor), 2 * exponent)
+    except OverflowError:
+        loss = math.inf
+    if not math.isfinite(loss) or loss < sys.float_info.min:
+        # Near the binary64 range boundaries, rounding the normalized product
+        # before ldexp can turn a representable positive result into zero (or
+        # overflow). Round the exact input loss once before deciding to refuse.
+        exact = sum((Fraction(a) - Fraction(b)) ** 2 for a, b in zip(target, prediction))
+        try:
+            loss = float(exact / divisor)
+        except OverflowError as exc:
+            raise Refusal("metric:overflow") from exc
+    require(math.isfinite(loss), "metric:overflow")
+    require(loss > 0, "metric:underflow")
+    return loss
 
 
 def score_response(target, prediction):
-    """Every declared frame is required; missing/NaN predictions never disappear."""
+    """Score complete frames; positive unrepresentable SSE/MSE explicitly refuse.
+
+    Integer inputs must convert to binary64 exactly. Center the targets before
+    scaling, so a large shared offset cannot round away their mean deviation.
+    Keep SST scaled internally: an unrepresentable SST alone is not constancy.
+    """
     y, p = vector(target, "target"), vector(prediction, "prediction")
     require(len(y) == len(p), "prediction:complete_frames")
     require(all(x >= 0 for x in y), "target:negative_firing_rate")
-    try:
-        mean = math.fsum(y) / len(y)
-        sse = math.fsum((a - b) ** 2 for a, b in zip(y, p))
-        sst = math.fsum((a - mean) ** 2 for a in y)
-    except OverflowError as exc:
-        raise Refusal("metric:overflow") from exc
-    require(math.isfinite(sse) and math.isfinite(sst), "metric:overflow")
-    r2 = None if sst == 0 else 1 - sse / sst
+    residual_scale, residual_total = _scaled_squares([a - b for a, b in zip(y, p)])
+    sse = _public_loss(residual_scale, residual_total, y, p)
+    mse = _public_loss(residual_scale, residual_total, y, p, len(y))
+    origin = min(y)
+    offsets = [a - origin for a in y]
+    target_scale = max(offsets)
+    constant = target_scale == 0
+    if constant:
+        r2 = None
+    elif residual_scale == 0:
+        r2 = 1.
+    else:
+        normalized = [a / target_scale for a in offsets]
+        mean = math.fsum(normalized) / len(y)
+        target_total = math.fsum((a - mean) ** 2 for a in normalized)
+        residual_mantissa, residual_exponent = math.frexp(residual_scale)
+        target_mantissa, target_exponent = math.frexp(target_scale)
+        ratio_mantissa = ((residual_total / target_total)
+                          * (residual_mantissa / target_mantissa) ** 2)
+        try:
+            ratio = math.ldexp(ratio_mantissa, 2 * (residual_exponent - target_exponent))
+        except OverflowError as exc:
+            raise Refusal("metric:nonfinite_ratio") from exc
+        r2 = 1 - ratio
     require(r2 is None or math.isfinite(r2), "metric:nonfinite_ratio")
-    return {"frames": len(y), "sse": sse, "mse": sse / len(y),
+    return {"frames": len(y), "sse": sse, "mse": mse,
             "r2_unclipped": r2, "r2_historical_clipped": None if r2 is None else max(0., r2),
-            "constant_target_hold": sst == 0,
+            "constant_target_hold": constant,
             "historical_nan_dropping_used": False,
             "negative_prediction_frames": sum(x < 0 for x in p)}
 
