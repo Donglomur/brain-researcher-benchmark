@@ -4,6 +4,8 @@ This component connects the original 44 spinal MAT files to the existing five-me
 
 The previous `prospective_native_400ms` packet remains a different condition. No prepared targets or predictions from that packet enter this producer. The native MAT field extraction and authenticated source inventory are reused.
 
+One admitted [authentic preparation](AUTHENTIC_PREPARATION.json) has authenticated all 44 neurons and 132 recordings. It produced 116 recording arrays across all 44 neurons; 16 original recordings remain explicitly unavailable because their native noise exceeds the requested level 7. The complete-recording metric bridge consequently remains fail-closed. This was input preparation, with no model execution or scientific prediction score.
+
 ## Source and condition
 
 The paper is *Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data*, [DOI 10.1523/JNEUROSCI.1187-24.2025](https://doi.org/10.1523/JNEUROSCI.1187-24.2025), [PMC12044035](https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/). The numerical reference is [Cascade](https://github.com/HelmchenLabSoftware/Cascade) revision `1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f`, function `calibrated_ground_truth_artificial_noise` in `cascade2p/utils.py`. Exact source bytes are retained in `upstream/utils.py`; controls extract that single function without importing its unrelated model dependencies. The producer's source-derived numerical component and retained upstream file are distributed under GPLv3; see `LICENSE`.
