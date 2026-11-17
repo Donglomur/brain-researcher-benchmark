@@ -968,6 +968,24 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
 
+      - name: Generated NEURAL099 source anatomy and clock controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 60s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1', pattern='test_inspect_metadata.py')
+          assert suite.countTestCases() == 14, 'All 14 NEURAL099 controls must load'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, 'All 14 NEURAL099 controls must execute'
+          assert not result.skipped and not result.expectedFailures, 'Complete unskipped controls required'
+          print(json.dumps({'tests_run': result.testsRun, 'skipped': len(result.skipped),
+                            'generated_metadata_only': True, 'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
   construction-calcium-controls:
     needs: construction-source-identities
     runs-on: ubuntu-24.04
