@@ -44,11 +44,11 @@ This component does not build source rate maps, reproduce outward-run burst/neig
 
 ## Run and verify
 
-Use an existing Python 3 environment with NumPy and SciPy; no dependencies were installed. In the construction environment, `/opt/homebrew/bin/python3` has these dependencies while another PATH-selected Python lacks SciPy.
+Select an existing Python 3 environment with NumPy and SciPy so its interpreter is available as `python3`. No dependencies were installed during construction; the exact validation runtime is retained in the external evidence.
 
 ```sh
-/opt/homebrew/bin/python3 benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/pfc_evaluator.py packet.json --output result.json --seed 0
-PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/bin/python3 -m unittest discover -s benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/tests -v
+python3 benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/pfc_evaluator.py packet.json --output result.json --seed 0
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/tests -v
 ```
 
 Tests use generated controls only: analytic rank nulls, four-mouse admission, recomputed cluster partitions, held/undefined cases, count matching, input order invariance, group-shared nulls, direct Poisson odds and CLI failures. Costs/commands and independent review are retained in the external task handoff. CLI resources are engineering input bytes, SHA256 and elapsed time; scientific runs remain zero. Runtime on native input is unmeasured; pairwise clustering is quadratic in event count and must not be mistaken for a measured full-data execution guarantee.
