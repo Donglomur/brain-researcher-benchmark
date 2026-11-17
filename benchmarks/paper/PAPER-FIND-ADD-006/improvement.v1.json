@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-ADD-006",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention, original resampling and speed-equalized input route are unrecovered; the existing implementation only reconstructs descriptive Ward-tree curves.",
+  "source_paper": {
+    "title": "Learning reshapes the hippocampal representation hierarchy",
+    "url": "https://doi.org/10.1073/pnas.2417025122"
+  },
+  "evidence": [
+    {
+      "id": "hierarchy-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11929462/",
+      "locator": "Figure 4B,D; Methods: Global and Conditional Decoding; Results: Hierarchical Representation Facilitates Readout",
+      "supports": "An ordered conditional context-decoding endpoint exists, using speed-equalized CA1 population vectors, repeated source train/test splits and comparison with global/shuffled decoding. Hierarchy curves themselves are descriptive."
+    },
+    {
+      "id": "hierarchy-data",
+      "kind": "author_data",
+      "url": "https://research-explorer.ista.ac.at/download/18991/18993/readme.txt",
+      "locator": "Data organization; file extensions and sampling rates; missing data note",
+      "supports": "Five rats across five days; .res uses 20 kHz, positions 50 Hz and session shifts 24 kHz; first sleep for jc250/050221 is missing."
+    },
+    {
+      "id": "hierarchy-example",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/hchiossi/hpc-hierarchy/95b94942608b2f3e3f7389aeed724459ab3e679e/SVM_decoder_example.py",
+      "locator": "data_source configuration, global/conditional/sequential routes and prediction CSV export",
+      "supports": "Default original population vectors differ from the speed-equalized Figure 4 input. Prediction exports carry bootstrap identities and must be scored under a reconciled original endpoint."
+    },
+    {
+      "id": "hierarchy-decoder",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/hchiossi/hpc-hierarchy/95b94942608b2f3e3f7389aeed724459ab3e679e/func_decoder.py",
+      "locator": "SVM_global and SVM_conditional, approximately lines 45-192",
+      "supports": "Code uses accuracy_score for global decoding; conditional routine initializes a zero accuracy array without filling it before return. Repeated stratified train/test draws have no fixed random_state."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure 4D binary context decoding conditional on actual position from speed-equalized CA1 population vectors, preserving the source learning-session support and comparison to its conditional decoder. It is an original paper endpoint; changes in hierarchy depth or curve fidelity are not decoding improvement.",
+      "evidence_ids": [
+        "hierarchy-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author ISTA record 18991, Chiossi_etal_2025_PNAS_data.zip, with sorted spikes, unit descriptions, linearized positions, trial CSVs and session shifts; no raw-voltage endpoint is implied.",
+      "evidence_ids": [
+        "hierarchy-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Five rats recorded over five days, 25 recording sessions. The missing first sleep recording is disclosed and does not justify narrowing the awake conditional-decoding cohort. Repeated session columns must not be treated as unique independent neurons across days.",
+      "evidence_ids": [
+        "hierarchy-data",
+        "hierarchy-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Methods specify 100 stratified 70/30 population-vector splits, followed by stratified bootstrap resampling within partitions, with matched draws across comparison methods. Original draw identities/seeds are not recovered; arbitrary new animal/day/trial holdouts would change the task.",
+      "evidence_ids": [
+        "hierarchy-paper",
+        "hierarchy-decoder"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original Figure 4 speed-equalized population vectors with actual position as the conditioning variable and context as the prediction label. Do not replace actual position with an easier or different condition, or silently use example-default raw vectors.",
+      "evidence_ids": [
+        "hierarchy-paper",
+        "hierarchy-example"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover the complete source speed-equalization/GLM-to-PV and decoder settings for Figure 4. Clock conversions must retain 20 kHz spikes, 24 kHz session boundaries and 50 Hz positions. The existing raw-PV Ward-tree pipeline is not this input route.",
+      "evidence_ids": [
+        "hierarchy-data",
+        "hierarchy-example",
+        "hierarchy-paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper Figure 4/Methods describe a normalized absolute label difference while calling it accuracy; code uses exact-match accuracy_score in the global route. For binary context, accuracy and one-minus-normalized-error can coincide, but the source scoring transformation must be explicitly reconciled and the conditional zero-return array cannot be used as a score.",
+      "evidence_ids": [
+        "hierarchy-paper",
+        "hierarchy-decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Methods average conditional decoding over conditioning groups; exact Figure 4D aggregation over repeats, sessions and rats plus its numeric baseline have not been recovered. Preserve the original 25-session endpoint rather than select a favorable session or bootstrap.",
+      "evidence_ids": [
+        "hierarchy-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 4D conditional context-decoding performance, pending source accuracy/error reconciliation",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The inspected Figure 4 text establishes comparisons/significance but no exact numeric aggregate conditional-context score. No figure digitization or invented scalar baseline is used.",
+      "evidence_ids": [
+        "hierarchy-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author rerun exists here. A verified route must use correct speed-equalized inputs and recompute the reconciled metric from exported predictions; SVM_conditional's unassigned zero accuracy array is not an author performance baseline.",
+      "evidence_ids": [
+        "hierarchy-example",
+        "hierarchy-decoder"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Recover metric units, original per-session results and source variability before justifying a meaningful decoding gain. A more separated hierarchy or smaller curve error supplies no such margin.",
+      "evidence_ids": [
+        "hierarchy-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Preserve paired source resampling for the corpus metric, then predeclare an uncertainty rule respecting five independent rats and repeated sessions.",
+      "independent_unit": "Rat; sessions and repeated PV/bootstrap draws are nested.",
+      "rationale": "One hundred repeated draws do not create one hundred independent biological replicates. No confidence level or margin is invented before source reconstruction.",
+      "evidence_ids": [
+        "hierarchy-paper",
+        "hierarchy-data"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact Figure 4D numeric score, metric transformation and original aggregation.",
+      "Bind the source speed-equalized inputs, all 25 sessions, decoder configuration and original draw schedule or a fully documented author-rerun protocol; do not silently compare a new split to the published figure.",
+      "Resolve the author conditional-score output defect by independently verifying prediction-derived scoring, without treating zeros as the baseline to beat.",
+      "Freeze candidate and comparison rules before final evaluation; show meaningful performance gain under valid uncertainty on the identical original endpoint.",
+      "Keep hierarchy-curve reconstruction, alternate clustering, larger context separation and new held-animal/day/trial decoding as calibration or extensions, not paper wins."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was verified; source-paper results and any future author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Not admitted pending baseline and metric recovery. Once recovered, use training-only internal validation within the source partitions for iterative model/decoder choices.",
+    "candidate_freeze": "Freeze the candidate, speed-equalization route, source-compatible resampling protocol, metric direction, aggregate and budget before protected final predictions.",
+    "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on the original support and protocol; all other variants receive separate extension labels.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Numeric paper baseline and independently scored author rerun must remain distinct; matching the local Ward curves or beating an unassigned zero return is not improvement."
+  },
+  "blocking_issues": [
+    "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
+    "Paper accuracy/error wording and author score implementation require reconciliation.",
+    "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
+    "Exact speed-equalization configuration, original resampling identities and source-authorized rerun comparison remain unresolved.",
+    "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve hierarchy-programme and original-hierarchy unchanged. Their complete-25-session normalized-curve error and cophenetic discrepancy assess reconstruction under explicit local source conventions, including nonroot normalization; they do not score Figure 4 decoding or stronger-than-paper performance."
+  }
+}

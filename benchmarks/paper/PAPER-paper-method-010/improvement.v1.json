@@ -1,0 +1,186 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-010",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered mouse sensorimotor and rat CA1 scope is an empirical visualization/reconstruction task. The source paper benchmarks ordered performance on simulations with known ground truth, not on this combined empirical scope. Its empirical displays do not define a paper score to surpass. The local held-out neighborhood, linear behavior-prediction and perturbation-stability endpoints change the scientific task; beating them cannot establish a source-paper win.",
+  "source_paper": {
+    "title": "Rastermap: a discovery method for neural population recordings",
+    "url": "https://www.nature.com/articles/s41593-024-01783-4"
+  },
+  "evidence": [
+    {
+      "id": "r-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-024-01783-4",
+      "locator": "Results: Benchmarking with known ground truth; Figures 1h-j, 3 and 4a; Methods: Spontaneous activity in sensorimotor areas; Rat hippocampus data",
+      "supports": "Separates simulated ordering benchmarks from empirical illustrations and describes the original empirical preprocessing."
+    },
+    {
+      "id": "r-mouse",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/notebooks/rastermap_largescale.ipynb",
+      "locator": "Introduction; Load data; Run Rastermap; Neural activity prediction from behavior",
+      "supports": "The demonstration uses a half-recording, 200-neuron bins and a nonlinear PC predictor; these are not automatically the paper figure protocol."
+    },
+    {
+      "id": "r-rat",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/notebooks/rastermap_singleneurons.ipynb",
+      "locator": "Introduction; Run Rastermap; compute tuning curves; Visualization",
+      "supports": "137-neuron processed CA1 demonstration with 200 ms bins, full-matrix z-scoring and time_lag_window=15."
+    },
+    {
+      "id": "r-loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/loaders.py",
+      "locator": "load_hippocampus_data, lines 89-156; tuning-curve helper preceding it",
+      "supports": "Maze-epoch spike binning and direction-aware track-position construction."
+    },
+    {
+      "id": "r-metrics",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/rastermap/b37644ea52c4cd81f143a9c2cec90286ffd61c49/paper/metrics.py",
+      "locator": "triplet_order; embedding_contamination; embedding_quality, lines 21-138",
+      "supports": "Ground-truth order metrics and the native maximum-2000-point neighborhood calculation."
+    },
+    {
+      "id": "r-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-010/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "temporal_split; knn_indices; behavior_prediction; HOLDS",
+      "supports": "Historical implementation explicitly labels its 60/20/20 split and linear behavior prediction prospective, and disclaims paper qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Visualize neural population ordering and its behavioral/position relationships in the registered empirical scope; no source-defined ordered scalar evaluates the combined displays.",
+      "evidence_ids": [
+        "r-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Mouse spontaneous-activity and rat CA1 processed archives are identified, but the mouse notebook explicitly truncates to half the recording. Its data and settings cannot be assumed identical to Figure 3. Exact paper-figure assets remain unbound.",
+      "evidence_ids": [
+        "r-mouse",
+        "r-rat"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The demonstrated populations are 34,086 mouse sensorimotor neurons and all 137 rat CA1 neurons during linear-track traversal. These are recordings, not thousands of independent biological replicates.",
+      "evidence_ids": [
+        "r-mouse",
+        "r-rat"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The CA1 demonstration fits all timepoints. The mouse notebook obtains itest from PredictionNetwork.train_model; the registered 60/20/20 chronological split is a new extension and is not a recovered paper split.",
+      "evidence_ids": [
+        "r-rat",
+        "r-mouse",
+        "r-local"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Neurons-by-time spks; mouse aligned camera/neural clocks, behavioral keypoints and running; rat loc_signed and cell-type flags for interpretation.",
+      "evidence_ids": [
+        "r-mouse",
+        "r-rat"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Rat source loader bins at 0.2 s and retains the maze epoch. The paper specifies rat time_lag_window=0 while the reviewed notebook uses 15; paper mouse bins contain 50 neurons while the notebook uses 200. Exact figure processing must be reconciled for calibration.",
+      "evidence_ids": [
+        "r-loader",
+        "r-paper",
+        "r-rat",
+        "r-mouse"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "No ordered paper performance metric exists for this registered combined empirical visualization. Triplet accuracy and module contamination require simulated ground-truth modules; transferring them or inventing a downstream score changes the task.",
+      "evidence_ids": [
+        "r-paper",
+        "r-metrics"
+      ]
+    },
+    "aggregation": {
+      "status": "not_applicable",
+      "description": "There is no source-defined combined mouse/rat scalar or cross-recording performance aggregation for these empirical figures.",
+      "evidence_ids": [
+        "r-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No admissible ordered metric for the registered empirical visualization scope",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "The paper does not give a benchmark score for this combined empirical scope; simulation scores do not transfer to these recordings.",
+      "evidence_ids": [
+        "r-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Native figure reconstruction would calibrate the historical task, not create a missing published improvement endpoint.",
+      "evidence_ids": [
+        "r-local"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "A meaningful performance margin cannot be assigned to a descriptive raster or a newly invented task.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No superiority test is admitted for this ineligible scope.",
+      "independent_unit": "Recording/animal for biological inference; neuron perturbations are not independent animals.",
+      "rationale": "Uncertainty around an extension metric cannot supply an absent source-paper success endpoint.",
+      "evidence_ids": [
+        "r-local"
+      ]
+    },
+    "paper_win_requires": [
+      "This registration cannot award a same-task paper win while retaining only its empirical visualization endpoint.",
+      "Any replacement based on the original simulation protocol requires separate reviewed registration with its complete source generator, metrics and baseline; it must not silently replace the empirical task.",
+      "New temporal splits, behavior regressors, neuron subsamples or stability scores remain explicitly labeled extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for this ineligible empirical scope; historical author reconstruction may still be used for calibration.",
+    "candidate_freeze": "No active improvement candidate is admissible until a separately reviewed compatible task is registered.",
+    "final_evaluation": "The legacy evaluator may report prospective extension measurements, but cannot return source-paper victory.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep the original figures, author code and historical implementation intact. Do not promote the local linear-regression or neighborhood baseline to the paper baseline."
+  },
+  "blocking_issues": [
+    "Registered empirical figures lack a source-defined ordered success endpoint.",
+    "Mouse half-recording demo and paper-figure input identity are not reconciled.",
+    "Paper/notebook rat lag and mouse superneuron-bin settings disagree.",
+    "A simulation-based replacement is a different registered task and requires separate review."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the existing Rastermap evaluator and all controls. Its prospective split, full-population KNN and linear behavior model can support engineering checks or separately named extensions only."
+  }
+}

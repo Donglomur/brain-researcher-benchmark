@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-002",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original V1 sentence-decoding task is ordered, but the registered neural-only export has no recovered matching published numeric baseline. The headline MEG CER of 29% includes the language model. Current source defaults also differ from the paper training recipe and split description; a successful local transcript score cannot establish a same-task win.",
+  "source_paper": {
+    "title": "Non-invasive decoding of typed sentences from human brain activity",
+    "url": "https://www.nature.com/articles/s41593-026-02303-2"
+  },
+  "evidence": [
+    {
+      "id": "typing-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02303-2",
+      "locator": "Fig. 2e–h; Brain2Qwerty ablations; Methods: preprocessing, train/validation/test splits, Evaluation/CER",
+      "supports": "Original V1 modalities, ablated neural-only versus language-assisted systems, and sentence-level CER target."
+    },
+    {
+      "id": "typing-export",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/scripts/extract_predictions.py",
+      "locator": "compute_cer, process_json, SUBJECT_MERGES, print_summary (lines 20–87)",
+      "supports": "Scores the presented true sentence, merges duplicate MEG recording IDs, and averages sentence CER within subject then across subjects."
+    },
+    {
+      "id": "typing-config",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/config/xp_config.py",
+      "locator": "experiment_config (lines 17–77)",
+      "supports": "Pinned current source uses 300 epochs, batch64, learning rate5e-5, split seed1; comment explicitly identifies a changed learning rate."
+    },
+    {
+      "id": "typing-split",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/brain2qwerty_v1/transforms.py",
+      "locator": "SpanishBCBLPreprocessing; Brain2QwertyV1Splitter (lines 17–190)",
+      "supports": "Participant/event cleaning and connected-component TF-IDF similarity clustering with keystroke-weighted greedy split allocation."
+    },
+    {
+      "id": "typing-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/facebookresearch/brain2qwerty/5f9889621d0df391c5aab37c996683d308e6e926/README.md",
+      "locator": "Publications, Code, Data",
+      "supports": "V1 links the source paper and SpanishBCBL; V2 data are separately embargoed."
+    },
+    {
+      "id": "typing-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/evaluator.py",
+      "locator": "module docstring; sentence_metrics; summarize; evaluate_validated",
+      "supports": "Historical scorer is a presented-sentence export implementation; it explicitly disclaims original reference competence and scientific qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict V1 sentence characters from keystroke-aligned EEG or MEG. Match the paper Conv+Trans ablation for the registered neural-only condition; full Brain2Qwerty with N-gram correction is a separate source condition.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "SpanishBCBL V1 is identified by the author release. The registration pins revision88f9096c6ce3a3fb17cc7b8e3131ff7f96da5684, but exact paper-era recording/event payload equivalence has not been established.",
+      "evidence_ids": [
+        "typing-release",
+        "typing-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Fig.2 reports20 EEG and19 MEG participants. Author export merges S18→S1, S14→S4, S10/S21→S5. The complete original modality-specific recording/session and sentence roster remains unbound.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export",
+        "typing-split"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Recover the exact original fixed-seed sentence-cluster train/validation/test membership. Paper describes80/10/10 agglomerative TF-IDF clustering; pinned code builds similarity-connected components and greedily targets keystroke counts. Equal ratios alone do not prove identical heldout sentences.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-split",
+        "typing-config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "V1 neural-only condition supplies0.5-second EEG/MEG windows around known keystroke timing and approved participant/sensor metadata. No reference sentence, typed character, language-model rescoring, V2 recordings or added calibration labels may enter inference.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-config"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper specifies0.1–20Hz filtering,50Hz resampling,−0.2 to+0.3s windows, baseline correction and robust scaling. Resolve current extractor baseline conventions, typed versus intended targets, cleaning and training-default changes against the paper recipe before admission.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-config",
+        "typing-split"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "CER is character Levenshtein edits divided by reference sentence length. The pinned export compares predictions with true/presented sentences; WER is secondary and cannot replace the source CER.",
+      "evidence_ids": [
+        "typing-export"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average sentence CER within each source participant, then equally across participants, separately for EEG and MEG; source export reports subject-level SEM. Do not pool characters or merge modalities into an easier score.",
+      "evidence_ids": [
+        "typing-export"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "V1 neural-only Conv+Trans CER, by modality",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Matching Fig.2 Conv+Trans aggregate CER not recovered. Published full-system MEG29% and EEG65% are contextual results, not neural-only baselines.",
+      "evidence_ids": [
+        "typing-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author-model rerun or original-split agreement. Use the original V1 Conv+Trans recipe after resolving source-default differences; do not substitute a locally authored decoder.",
+      "evidence_ids": [
+        "typing-config",
+        "typing-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Determine a CER reduction that changes sentence recovery meaningfully, using source participant variation and full sentence errors; no numerical margin is supported yet.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level uncertainty for candidate-minus-author CER after fixing each modality and the original test sentences; account for shared sentences and model-seed variation.",
+      "independent_unit": "Biological participant; repeated sessions and sentence repeats remain nested.",
+      "rationale": "Fig.2 identifies participants as biological replicates. The final interval/decision rule and replication count are not fixed.",
+      "evidence_ids": [
+        "typing-paper",
+        "typing-export"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original Conv+Trans paper score and validate the exact modality-specific person/session/sentence roster and split.",
+      "Demonstrate improved original CER versus both the published same-condition score and a competent author rerun under matched declared access/resources.",
+      "Do not compare neural-only outputs to the language-assisted29% headline, count alias recordings as independent people, or claim a paper win on a new sentence split.",
+      "Freeze the decoder, preprocessing, thresholds and all selection decisions before one protected final evaluation."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately source-verified current-SOTA comparison has been established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate V1 neural decoder changes using original training and validation sentences only; report validation CER by modality and record all attempts.",
+    "candidate_freeze": "Seal code, model, preprocessing, modality, source roster, split, access/resource budgets and selection rule before final scoring.",
+    "final_evaluation": "Use the identical original test sentence/person panel and export CER route with protected references; a newly created split is an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published Conv+Trans score, independently rerun author Conv+Trans score and full-system language-model score separate. Current source defaults require reconciliation."
+  },
+  "blocking_issues": [
+    "Numeric original neural-only baseline missing.",
+    "Paper-era split membership and complete modality-specific empirical roster not authenticated.",
+    "Current300-epoch/batch64/lr5e-5 defaults differ from paper100-epoch/batch128/lr1e-4 recipe; intended versus typed target conventions need reconciliation.",
+    "No matched author rerun, protected model execution, justified effect, final uncertainty rule, or fixed episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain transcript evaluator as calibration only. It validates complete supplied panel coverage but explicitly does not establish authentic population, original decoder competence, or paper reproduction."
+  }
+}

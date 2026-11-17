@@ -1,0 +1,175 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-047",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Spike inference has ordered ground-truth metrics, but the original Figure1 cohort/score and excluded-neuron author models are not recovered for the registered117-file panel. Smoothing/timing and paper-era versus corrected software differ. No numeric paper baseline or same-task win can be inferred from the released-panel controller or a generic pretrained CASCADE checkpoint.",
+  "source_paper": {
+    "title": "Spike inference from calcium imaging data acquired with GCaMP8 indicators",
+    "url": "https://www.nature.com/articles/s41592-026-03183-x"
+  },
+  "evidence": [
+    {
+      "id": "gcamp-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-026-03183-x",
+      "locator": "Fig.1; Methods: Spike inference with CASCADE; MLSpike for spike inference; Fig.6",
+      "supports": "The paper retrains GC8-pooled and variant-specific models with leave-one-neuron-out evaluation; interneuron and online conditions are distinct."
+    },
+    {
+      "id": "gcamp-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/README.md",
+      "locator": "Updates2026-10-27; Typical work flow; Quantify expected performance",
+      "supports": "Author reports a one-frame timing error affecting some models, distinguishes training configuration and out-of-dataset benchmarking, and links the GCaMP8 paper."
+    },
+    {
+      "id": "gcamp-loo",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+      "locator": "lines16–64 and70–91",
+      "supports": "Demonstrates excluding each test neuron from training; config-derived smoothing, correlations/errors/bias and multiple noise levels. It is a current demo, not proof of historical Figure1 equivalence."
+    },
+    {
+      "id": "gcamp-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-047/implementations/registered-runtime/manifest.json",
+      "locator": "scope; scientific_limits; admission",
+      "supports": "Registered released117 pair explicitly states unresolved historical105 Figure1 mapping and no scientific execution/qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
+      "evidence_ids": [
+        "gcamp-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author CASCADE Ground_truth GCaMP8 variants underlie the task; the existing DS30/31/32 released117-file panel is not yet mapped to the historical Figure1 input version. Current database files alone do not establish original data identity.",
+      "evidence_ids": [
+        "gcamp-readme",
+        "gcamp-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Recover the exact historical Figure1 neuron inclusion and biological animal identities. The registration explicitly distinguishes117 released neuron files from unresolved historical105 mapping; pooling interneurons with excitatory neurons would change the task.",
+      "evidence_ids": [
+        "gcamp-registration",
+        "gcamp-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "For paper GC8-trained CASCADE, leave the test neuron out of training and retrain each model; pooled-GC8 and variant-specific training pools differ. A new leave-animal-out split can be reported only as an extension.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calcium ΔF/F traces at the declared frame rate and noise condition; paired electrophysiological spikes supervise permitted training neurons and remain evaluator-only for each heldout neuron. No all-neuron checkpoint may be assumed heldout.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Pin resampling, standardized noise generation, temporal window alignment, Gaussian target smoothing and boundary masking to the historical figure. Current configuration-driven demo and2026-10-27 one-frame fix require explicit paper-era/corrected separation.",
+      "evidence_ids": [
+        "gcamp-readme",
+        "gcamp-loo"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Pearson correlation between inferred and ground-truth spike-rate vectors is the ordered candidate primary endpoint; error and bias remain secondary. Demo uses corrcoef on prepared rates and smoothed normalized absolute error/bias. Historical smoothing/timing and exact figure condition must be recovered before adopting its values.",
+      "evidence_ids": [
+        "gcamp-loo",
+        "gcamp-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover the original figure’s neuron/noise/variant aggregation and reported numbers. Demo exports means, medians and quantiles by noise level; this does not identify which summary is the original paper endpoint. Do not pool time bins or noise replicas as independent cells.",
+      "evidence_ids": [
+        "gcamp-loo",
+        "gcamp-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original-condition per-neuron spike-rate Pearson correlation, with source figure aggregation",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated numeric original Figure1 aggregate for the exact registered source condition has been recovered. Published boxplots or p-values are not substituted with guessed scores.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-registration"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No excluded-neuron author-model rerun. The author LOO procedure supplies a route once original cohort/configurations are recovered; general-release all-neuron weights are not an admissible test baseline.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a correlation gain with unchanged temporal precision, rate-error safeguards and biological variability; positive affine rate calibration cannot itself improve Pearson correlation.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired differences over original test neurons with animal/session clustering where applicable and account for model-training and synthetic-noise repetition; no interval rule can be finalized without group identities.",
+      "independent_unit": "Biological animal where neurons share animals; source test neurons are nested units, not independent time bins or noise replicas.",
+      "rationale": "The original test exclusion is neuron-level, while biological dependence and historical grouping remain unresolved.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original Figure1 identities, score, smoothing, sampling/noise conditions and aggregation before comparing methods.",
+      "Use competent pooled and variant-specific author retraining that excludes every test neuron; prove checkpoint membership.",
+      "Surpass the published matching result and author rerun with justified effect/uncertainty while preserving full original cohort and declared access/resources.",
+      "Report timing-bug corrections separately; no win from changing kernels, adding easier cells, selecting noise levels, using a new split or comparing against pre-GCaMP8 defaults alone."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately source-verified current-SOTA comparison has been established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After original-task recovery, iterate inference models on permitted training-neuron data and a declared development route; record all fits and avoid direct final-neuron spike-label feedback.",
+    "candidate_freeze": "Freeze training and model membership, source cohort, variants, noise seeds, smoothing/alignment, aggregation, checkpoint/source hashes and resource/access budgets before final scoring.",
+    "final_evaluation": "Generate paired predictions on the unchanged original LOO tests under protected labels, keeping pooled and variant-specific results separate and preserving all original conditions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep rounded/source reported scores, exact author rerun scores, generic pretrained models and corrected-code variants distinct. Local released117 evidence alone is calibration/extension evidence."
+  },
+  "blocking_issues": [
+    "Historical105-to-released117 cell identity/inclusion mapping missing.",
+    "Exact published baseline numbers and original aggregate not recovered.",
+    "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
+    "Animal/session dependence and valid final uncertainty rule missing.",
+    "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Keep the released117 paired controller and transitive runtime recovery materials as calibration infrastructure. The registration already disclaims historical Figure1 equivalence and scientific qualification; no new model/data execution occurs in this overhaul."
+  }
+}

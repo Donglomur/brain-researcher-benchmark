@@ -1,0 +1,169 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-NPVC",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source has a genuine FDE prediction endpoint, but the published numeric baseline, exact fold/cohort mapping and scalar comparison are unrecovered. The existing signed-motif implementation cannot establish stronger-than-paper neural prediction.",
+  "source_paper": {
+    "title": "Specialized structure of neural population codes in parietal cortex outputs",
+    "url": "https://www.nature.com/articles/s41593-025-02095-x"
+  },
+  "evidence": [
+    {
+      "id": "npvc-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Results: Vine copula models to analyze encoding in multivariate neural and behavioral data; Fig. 2b,c; Extended Data Fig. 1g",
+      "supports": "Frame-by-frame neural response prediction is an ordered endpoint; FDE is displayed as a distribution. The paper reports ten mice and 59 sessions."
+    },
+    {
+      "id": "npvc-methods",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Methods: NPvC models of single-neuron activity, Eq. 6 and following two paragraphs; calcium-imaging preprocessing",
+      "supports": "Defines conditional inputs, OASIS deconvolution, fivefold fitting, five task epochs, eight trial types, minimum trial support and model-specific deviance normalization."
+    },
+    {
+      "id": "npvc-code",
+      "kind": "author_code",
+      "url": "https://github.com/houman1359/Triplets/tree/68d9f18993f7a33c5c1df21b5fe392f857aed4fa",
+      "locator": "README.md; NPvC/ and SIMULATIONS/ directories",
+      "supports": "Author repository supplies NPvC, glmnet and simulation comparisons. Its README does not establish a complete real-data Figure 2 evaluation or historical fold ledger."
+    },
+    {
+      "id": "npvc-data",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Data availability",
+      "supports": "Names Harvard Dataverse DOI 10.7910/DVN/NL1CAQ as the original data source; this does not authenticate the release-to-session mapping."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict held-out single-neuron deconvolved PPC activity conditional on the original task and movement variables, preserving Figure 2b,c. Larger motif enrichment or interaction information is not itself better predictive performance.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original source deposit is doi:10.7910/DVN/NL1CAQ. The registration records release 1.0 and 70 files, but the bounded primary metadata request was denied; no authenticated file-to-Figure-2 mapping was recovered.",
+      "evidence_ids": [
+        "npvc-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper reports ten mice and 59 sessions, with ACC-, RSC-, contralateral-PPC-projecting and unlabeled neurons. FDE uses sessions with at least five trials in every one of eight trial types. Exact eligible neurons/sessions and their animal joins remain unrecovered.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source uses fivefold cross-validation for fit evaluation and bandwidth fitting. Original fold assignments and the precise time-point versus whole-trial assignment implementation have not been recovered; a whole-mouse holdout changes the task.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Time; virtual heading; lateral/forward running velocities and accelerations; trial type defined by sample cue, test cue and correct/incorrect outcome. Preserve all five original event epochs and the original conditional information boundary.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper describes OASIS AR1 deconvolution with cell-specific decay and epochs from -0.5 to +2 seconds around sample, delay, test, turn and reward. Exact release fields, trial alignment, and real-data fit construction are not yet bound to an executable baseline.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Eq. 6 FDE=(L_model-L_null)/(L_sat-L_null), using held-out log-likelihoods. NPvC null uses the marginal activity density and its saturated term uses the peak over the source 200-point activity grid. GLM and NPvC have distinct source normalizers; preserve and audit those conventions rather than silently sharing a denominator.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 2c reports neuronwise FDE cumulative distributions; no exact numeric aggregate or complete per-neuron panel was recovered. A newly selected average, favorable projection subgroup or neuron count cannot substitute for the published comparison.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 2 held-out fraction of deviance explained, with original per-neuron support and source normalization",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Published Figure 2c is an FDE distribution; an exact numeric source baseline and aggregate comparison rule have not been recovered. No value was digitized or invented.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No real-data author rerun was executed or established. The simulation README and deterministic signed-graph component are not a reproduced Figure 2 baseline.",
+      "evidence_ids": [
+        "npvc-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful FDE gain must be justified after recovering the original per-neuron distribution and baseline variability; no universal margin is supplied.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the original model-comparison and resampling design, then predeclare a paired analysis respecting neurons nested within sessions and mice.",
+      "independent_unit": "Mouse for biological replication; original neuronwise corpus metric retained separately.",
+      "rationale": "Triplets, cells, folds and time points cannot become independent mice. Exact animal/session mapping is needed before selecting an uncertainty rule.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact Figure 2 support, folds, fitted source preprocessing, likelihood normalizers and numeric NPvC baseline.",
+      "Compare candidate and author NPvC on the same original held-out observations and declared primary aggregation, with a justified effect and uncertainty rule frozen before final evaluation.",
+      "Retain GLM and original NPvC as separate baselines; beating GLM alone does not surpass the paper's NPvC result.",
+      "Do not reward higher motif enrichment, stronger p-values, graph-calculation fidelity, changed epochs or a held-animal extension as the same-task paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was verified; source-paper results and any future author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Not admitted until original FDE evaluation is recovered. Then expose only the source-compatible training and internal validation information for iterative candidate development.",
+    "candidate_freeze": "Freeze code, hyperparameters, transforms, permitted inputs, fold ledger, metric and aggregation before the untouched original final predictions are scored.",
+    "final_evaluation": "One complete original-support Figure 2 comparison to the verified author baseline; any new split is reported only as an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published FDE distribution, reproduced NPvC and GLM, and any future current-SOTA claim are distinct. Historical motif reconstruction is calibration only."
+  },
+  "blocking_issues": [
+    "Exact Figure 2 per-neuron numeric baseline and original aggregation are missing.",
+    "The 70-file registration inventory is not an authenticated 59-session/ten-mouse eligible-cohort ledger.",
+    "Original folds and real-data source execution route are unresolved.",
+    "Meaningful effect, uncertainty, fixed access/compute budgets and full evaluator admission are incomplete."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve implementations/signed-motifs unchanged. It computes exact supplied-graph triplet statistics and finite two-pool probabilities, supplies no authentic graph cohort or fitted NPvC, and is calibration only; it is not a Figures 2-6 improvement evaluator."
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The current original findings estimate ripple-rate learning effects and ripple/grid/behavior associations. Their coefficients and p-values are not performance measures that can be improved by exceeding the reported value. Turning these into a new decoder or detector would change the task.",
+  "source_paper": {
+    "title": "Human hippocampal ripples align new experiences with a grid-like schema",
+    "url": "https://doi.org/10.1016/j.neuron.2025.07.028"
+  },
+  "evidence": [
+    {
+      "id": "ripple-paper",
+      "kind": "paper",
+      "url": "https://doi.org/10.1016/j.neuron.2025.07.028",
+      "locator": "Summary; Results: Task and intracranial recordings, Hippocampal ripple activity increases as learning progresses; Fig. 4G,H",
+      "supports": "The study reports learning-related ripple effects and associations between rest ripples, grid modulation and inference; these are scientific estimands, not a benchmarked prediction algorithm."
+    },
+    {
+      "id": "ripple-learning",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/liulab-repository/ripple-representation-learning/f143b0b7dca77bf9b09d5c7f39352fc5332c83c0/ripple/Ripple_offline_learning.m",
+      "locator": "Lines 4-39, 63-99 and 110-178",
+      "supports": "Loads processed learning rates, excludes phase-specific upper 1% of positive ripple values, fits phase/accuracy/trial mixed models, and relates subject-level Learn-R to behavior."
+    },
+    {
+      "id": "ripple-grid",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/liulab-repository/ripple-representation-learning/f143b0b7dca77bf9b09d5c7f39352fc5332c83c0/ripple/Ripple_predict_grid_code.m",
+      "locator": "Grid coefficient summaries and partial-correlation analysis; Fig. 4 plotting blocks",
+      "supports": "The script uses already estimated grid coefficients and reports association/correlation results. The filename does not establish out-of-sample predictive accuracy."
+    },
+    {
+      "id": "ripple-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/16950716",
+      "locator": "Version v2, published August 27 2025; description and file inventory",
+      "supports": "Released processed neural/behavioral data; large HFB and contact files are on Zenodo and smaller complementary files are in the author repository."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate learning-phase and accuracy effects on hippocampal ripple rates and their association with inference, HFB and estimated grid modulation. These observational effects have no source-defined direction that an alternative algorithm should maximize.",
+      "evidence_ids": [
+        "ripple-paper",
+        "ripple-learning",
+        "ripple-grid"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Processed author data in Zenodo v2 record 16950716 plus the pinned repository tables; no raw-sEEG detector benchmark is supplied by this release.",
+      "evidence_ids": [
+        "ripple-data",
+        "ripple-learning"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The source recruited 42 epilepsy patients, retained 38 for analysis, and reports 181 hippocampal contacts in 34 subjects. Analysis-specific contact availability must remain explicit rather than treating every contact as an independent patient.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The registered rate/behavior association endpoint is inferential, without a held-out predictive-performance target. The paper's grid-orientation cross-validation supports estimating grid modulation, not optimizing the learning-rate association or scoring the supplied coefficient table as a decoder.",
+      "evidence_ids": [
+        "ripple-paper",
+        "ripple-grid"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial/phase ripple rates, subject/channel identifiers, trial accuracy and behavior summaries; additional HFB and estimated grid coefficients support the corresponding association analyses.",
+      "evidence_ids": [
+        "ripple-learning",
+        "ripple-grid",
+        "ripple-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Author learning script removes values above each phase's 99th percentile of positive ripple rates, reshapes phase rates and selects correct trials for Learn-R, with explicit outlier removal and channel-to-subject averaging.",
+      "evidence_ids": [
+        "ripple-learning"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Mixed-model coefficients, covariance, Learn-R, partial correlations and their uncertainty are estimates to reproduce or challenge. A larger positive slope, correlation or smaller p-value is not a scientifically ordered performance improvement.",
+      "evidence_ids": [
+        "ripple-learning",
+        "ripple-grid"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "The Learn-R route computes channel/phase estimates then averages to subject level before behavior association. Preserve source model grouping and per-analysis support; do not aggregate contacts as independent subjects.",
+      "evidence_ids": [
+        "ripple-learning"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No eligible ordered performance metric for the registered ripple-rate and grid-association findings",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Reported effects and correlations are not algorithm-performance baselines to exceed.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "A faithful mixed-model or coefficient-table reconstruction is calibration, not a baseline whose scientific value increases when exceeded.",
+      "evidence_ids": [
+        "ripple-learning",
+        "ripple-grid"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "There is no meaningful positive performance margin for increasing a biological association estimate.",
+      "evidence_ids": [
+        "ripple-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "Source association uncertainty may be reproduced, but no performance-difference test is defined.",
+      "independent_unit": "Patient, with contacts nested within patient.",
+      "rationale": "Stronger statistical significance would not improve the source finding; changing the estimand would require a separately registered scientific task.",
+      "evidence_ids": [
+        "ripple-paper",
+        "ripple-learning"
+      ]
+    },
+    "paper_win_requires": [
+      "No active same-task paper win is admitted for these descriptive endpoints.",
+      "Retain source effects, nulls and uncertainty without rewarding their magnitude or significance.",
+      "Any proposed held-patient behavior decoder, raw ripple detector or re-estimated grid-orientation benchmark needs its own source-backed original task and baseline; it cannot retroactively replace this task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was verified; source-paper results and any future author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for this ineligible descriptive task. Existing fitting/reconstruction can assess computational calibration only.",
+    "candidate_freeze": "For any retained calibration run, freeze the source estimand, inclusion and fitting choices before comparing reference estimates; this does not create a performance episode.",
+    "final_evaluation": "Report reconstruction fidelity and scientific sensitivity separately, with no stronger-than-paper reward.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Neither reference coefficient agreement nor a larger effect/smaller p-value is source-paper improvement. No author predictive-performance baseline was identified."
+  },
+  "blocking_issues": [
+    "The registered scientific target is a descriptive association with no defensible ordered performance endpoint.",
+    "Raw-sEEG ripple detection and fresh grid estimation are outside the demonstrated processed inputs.",
+    "A different supervised decoder would require a distinct source-grounded task; it is not a repair by changing this task's success metric."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve registered-runtime/program-v1/portable/task and score.py. Their reconstruction of three learning-phase mixed models, preprocessing support and covariance is calibration only; the task itself states there is no reward for a positive slope or small p-value."
+  }
+}

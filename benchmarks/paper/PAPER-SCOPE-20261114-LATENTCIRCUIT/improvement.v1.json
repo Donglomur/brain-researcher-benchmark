@@ -1,0 +1,185 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-SCOPE-20261114-LATENTCIRCUIT",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Published monkey-specific projected-fit anchors exist, but the exact empirical population, projection/error normalization, trial membership and model-to-neural adapter are not recoverable as one verified comparison. The current fixed-original-neuron scorer uses a new metric and nested split; its improvement is an extension and cannot surpass the paper's projected R-squared.",
+  "source_paper": {
+    "title": "Latent circuit inference from heterogeneous neural responses during cognitive tasks",
+    "url": "https://doi.org/10.1038/s41593-025-01869-7"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01869-7",
+      "locator": "Results: Representations of irrelevant stimuli in the PFC; Figure 6 and Extended Data Figures 7-9",
+      "supports": "Original two-monkey empirical task reports projected test R-squared 0.88/0.76 and captured total variance 11%/7%; fit-quality and connectivity summaries use different fit aggregations."
+    },
+    {
+      "id": "methods",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01869-7",
+      "locator": "Methods: Analysis of PFC data, equations 28-32; Statistics and reproducibility",
+      "supports": "Original half-trial design, preprocessing, eligibility, three-term empirical objective and 200 initializations per monkey. Methods and Results report different unit counts; printed loss does not by itself resolve reported R-squared implementation."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/engellab/latentcircuit/blob/3e151da42379a0e659f3fefcdc858a66eba1eaac/latent_net.py",
+      "locator": "latent_net.py lines 79-104, loss and normalized-error helpers",
+      "supports": "Released class uses mse_z + l_y*nmse_y; projected diagnostic normalization uses centered full-dimensional data variance. It does not establish the paper's empirical fitted-intercept/three-term objective or sampling adapter."
+    },
+    {
+      "id": "code_scope",
+      "kind": "author_code",
+      "url": "https://github.com/engellab/latentcircuit/tree/3e151da42379a0e659f3fefcdc858a66eba1eaac",
+      "locator": "README and released tutorial scope",
+      "supports": "Inspected release demonstrates a trained-RNN tutorial; a complete original empirical-PFC entry point was not established."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://www.ini.uzh.ch/en/research/groups/mante/data.html",
+      "locator": "Mante et al. 2013 data page: PFC data.zip and tdr.zip",
+      "supports": "Original neural-data and targeted-dimensionality-reduction archive routes exist. Archive payload, trial membership and eligibility were not read or authenticated in this audit."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer a compact recurrent circuit accounting for the original two-monkey PFC condition-averaged responses and native context-dependent task output, retaining all 72 stimulus/context conditions.",
+      "evidence_ids": [
+        "paper",
+        "methods"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Original Mante et al. 2013 PFC dataset used by the paper, with public PFC data.zip and tdr.zip routes; exact archive identity and empirical adapter remain admission blockers.",
+      "evidence_ids": [
+        "methods",
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Both monkeys A and F are required. Results lists 727/574 PFC units; Methods lists 762/640 available and 483/323 meeting at least four correct trials in every condition. These denominators require source/data reconciliation; none may be chosen for convenience.",
+      "evidence_ids": [
+        "paper",
+        "methods"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original condition-wise disjoint equal half-trial train/validation averages must be recovered with their trial membership. The local train/validation/assessment partition is a different experiment, not the paper's original split.",
+      "evidence_ids": [
+        "methods"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original unit-level correct-trial neural responses, 2 x 6 x 6 context/motion/color condition identities, and native continuous task-output targets. Non-simultaneous units cannot be treated as synchronized population trials.",
+      "evidence_ids": [
+        "methods"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Published processing includes 50-ms bins, 40-ms Gaussian smoothing, split-specific z-scoring, condition-independent mean subtraction and PCA retaining 50% variance. The 15 neural samples versus 150 model steps of 10 ms and empirical intercept/loss adapter are unbound.",
+      "evidence_ids": [
+        "methods",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper reports projected test R-squared, but equations 31-32 print normalized norm-based error terms and the released diagnostic helper uses a different variance normalization. Recover exact centering, squaring and conversion to reported R-squared; a standard formula cannot be assumed.",
+      "evidence_ids": [
+        "paper",
+        "methods",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Keep A and F separate. Extended Data 7a/8a describes means over 200 fits with bootstrap intervals; top-ten fits in Figure 6b/Extended Data 9b summarize connectivity weights. The exact relationship of rounded 0.88/0.76 to score-producing fit aggregates remains unbound.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original monkey-specific projected test R-squared with total-variance capture and native task-output fit retained",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.88,
+      "description": "0.88 is the reported monkey-A anchor only; monkey F is 0.76. The paper also reports captured total PFC variance of 11% and 7%, respectively. No pooled scalar baseline is asserted; original score normalization and full fit distribution must be recovered.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No native complete two-monkey empirical replay is established. The trained-RNN tutorial and new fixed-neuron scorer are neither the source empirical reference nor equivalent numerical baselines.",
+      "evidence_ids": [
+        "code",
+        "code_scope"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful projected-fit improvement cannot be declared until the original denominator, projection constraints and captured-variance/continuous-behavior safeguards are fixed. A universal R-squared margin would be unsupported.",
+      "evidence_ids": [
+        "paper",
+        "methods"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover original 200-fit distributions, then predeclare paired comparison and stochastic-selection accounting. Report each monkey separately and distinguish conditional trial/session uncertainty from optimization variability.",
+      "independent_unit": "Two biological monkeys; trial/session units require verified recording hierarchy; optimizer starts are not animals",
+      "rationale": "The paper's bootstrap across fitted models describes fit variation, not 200 biological replications. New inferential thresholds and aggregation cannot be inferred from that interval.",
+      "evidence_ids": [
+        "paper",
+        "methods"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact empirical census, half-trial membership, timing adapter, objective, projection and reported-score formula before comparing methods.",
+      "Retain both monkeys and every original eligible unit/condition; compare monkey A with its 0.88 anchor and monkey F with its 0.76 anchor at original source precision under the same protocol.",
+      "Predeclare meaningful improvement and uncertainty while retaining captured-variance and native continuous task-output safeguards; increasing fit in an easier learned projection alone is insufficient.",
+      "Preserve the complete 200-initialization-per-monkey reference and declared selection policy, including failed starts; do not confuse all-fit score aggregation with top-ten connectivity summaries.",
+      "Treat fixed-original-neuron loss, new nested or condition-blocked splits and binary choice accuracy as separately labelled extensions; none is interchangeable with published projected R-squared.",
+      "Larger inferred suppression or smaller Mann-Whitney p-values cannot constitute method-performance improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is established for the original empirical task.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. A future same-task episode must expose only source-compatible training/development feedback while preserving original comparison identities and preventing transfer of owner reference targets.",
+    "candidate_freeze": "Freeze circuit family, projection constraints, loss, optimizer, complete seed/start policy and preprocessing before assessment; exact original selection boundaries must be recovered first.",
+    "final_evaluation": "Use the recovered native two-monkey evaluator and original trial partition, report original fit distributions and monkey-specific neural/task outcomes. The current fixed-neuron assessment produces extension results only.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The published 0.88/0.76 anchors are distinct from a future author-method rerun and any current SOTA. A local reconstructed reference is not author-equivalent until empirical objective/timing and source-score parity are verified."
+  },
+  "blocking_issues": [
+    "Reconcile Results and Methods unit denominators using the complete original archive census without narrowing either monkey.",
+    "Recover original exact half-trial assignments and the native 150-step model to 15-sample neural clock/intercept/three-term loss adapter.",
+    "Resolve reported projected R-squared formula and normalization versus equations 31-32 and released helper code.",
+    "Bind original 200-fit distributions and score aggregation; the current top-ten connectivity summary cannot stand in for fit-quality aggregation.",
+    "Qualify source-compatible projection safeguards, meaningful effect, independent-unit uncertainty, candidate access and concrete cumulative resource/search budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 and its engineering controls. Its fixed-neuron normalized squared error and nested outer-trial split are a prospective scientific extension, not the source-paper success condition or an author-baseline replay."
+  }
+}

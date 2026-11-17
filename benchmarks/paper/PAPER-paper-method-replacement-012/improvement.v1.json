@@ -1,0 +1,204 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-012",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original conference paper supplies ordered macro-F1 targets for the full nine-panel Bugeon scope, and pinned author code defines the readout and split regimes. Exact paper-era artifact equivalence, native reference execution, meaningful-effect/uncertainty policy and concrete budgets remain unresolved, so this is a source-grounded design rather than an admitted task.",
+  "source_paper": {
+    "title": "Know Thyself by Knowing Others: Learning Neuron Identity from Population Context",
+    "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "conference_scores",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf",
+      "locator": "Table 1, page 7; Appendix A.8/Table 8, pages 18-19",
+      "supports": "Nine Bugeon macro-F1 panel results, reported as five-training-seed means and standard deviations; EI inductive LOLCAT exceeds NuCLR."
+    },
+    {
+      "id": "conference_protocol",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf",
+      "locator": "Appendix B.3 and D.4, pages 19 and 22",
+      "supports": "Calcium population input and the three Bugeon exposure/split regimes; four development sessions excluded from final test."
+    },
+    {
+      "id": "split_routes",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/README.md",
+      "locator": "Data Splits and Bugeon sections",
+      "supports": "Nine named split files and resampling readout route; downloadable split bytes are not immutable or verified here."
+    },
+    {
+      "id": "readout",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/multi_split_eval.py",
+      "locator": "balanced_resampling; logreg_scores; checkpoint selection and final prediction concatenation",
+      "supports": "Train-only standardization, logistic regression, CV macro-F1 selection and pooled final macro-F1 aggregation."
+    },
+    {
+      "id": "inductive_sessions",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_inductive.yaml",
+      "locator": "train_dataset.exclude_sessions and val_dataset.sessions",
+      "supports": "Five SB028 sessions excluded from representation training; one is development-only."
+    },
+    {
+      "id": "preparation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py",
+      "locator": "extract_neural_activity; extract_neurons; main calcium concatenation",
+      "supports": "Session-local neuron IDs, transcriptomic label derivation, fluorescence normalization, and omitted UniqueID ingestion."
+    },
+    {
+      "id": "embedding_loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/utils.py",
+      "locator": "load_emb and load_embs",
+      "supports": "Embedding float32 conversion, increasing-epoch ordering and matching neuron IDs across checkpoints."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict Bugeon neuron E/I, five-subclass and eleven-class identity from population-context representations, retaining transductive, transductive-zero-shot and inductive-zero-shot panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "split_routes"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Bugeon transcriptomic calcium data, represented as bugeon_transcriptomic_2022 in the pinned preparation code; exact source archive, metadata and paper-era split byte identities still require acquisition validation.",
+      "evidence_ids": [
+        "preparation",
+        "split_routes"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Seventeen sessions across four mice; preserve all source-eligible neurons and stimulus-specific subrecordings. Repeated-cell linkage and label-map joins remain execution holds.",
+      "evidence_ids": [
+        "conference_protocol",
+        "preparation"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source protocol: neuron-wise transductive split; four-subject leave-one-out transductive zero-shot; SB028 held out for inductive zero-shot, with three-subject CV. Four development sessions never enter final tests. Exact distributed split equivalence to conference results is not verified.",
+      "evidence_ids": [
+        "conference_protocol",
+        "inductive_sessions",
+        "split_routes"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calcium population activity supplies representations; transcriptomic labels train the downstream readout only within source folds. Transductive representation training sees test-population activity; inductive representation training excludes all SB028 sessions.",
+      "evidence_ids": [
+        "conference_protocol",
+        "inductive_sessions",
+        "readout"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Pinned preparation concatenates stimulus experiments with one-hour offsets, retains session-local neuron indices and forms fluorescence normalized by its flattened 99th percentile. Readout casts/standardizes embeddings using training data and uses author class resampling, without substituting class weighting.",
+      "evidence_ids": [
+        "preparation",
+        "readout",
+        "split_routes",
+        "embedding_loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Macro F1: average of per-class 2TP/(2TP+FP+FN) for the author evaluator label set; source sklearn macro-F1 behavior must be retained. Accuracy and balanced accuracy are diagnostics, not interchangeable victory metrics.",
+      "evidence_ids": [
+        "readout",
+        "conference_scores"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Within each panel, concatenate selected outer-test predictions before macro-F1; choose each checkpoint by pooled CV macro-F1. Conference scores then average five training seeds. Do not average subjects or all nine panels into an invented source score.",
+      "evidence_ids": [
+        "readout",
+        "conference_scores"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Panel-specific macro-F1 across all nine registered Bugeon tasks; five-subclass inductive-zero-shot value is the scalar provenance anchor, not a suite aggregate",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Anchor: NuCLR five-subclass inductive 0.3938 \u00b1 0.0556. Remaining NuCLR means (transductive/transductive-zero-shot/inductive): EI 0.8110/0.6826/0.6738; five-subclass 0.6101/0.4014/0.3938; eleven-class 0.4056/0.2333/0.1990. For EI inductive, the paper also reports stronger LOLCAT 0.7463 \u00b1 0.0095; beating 0.6738 alone does not surpass that source-paper result.",
+      "evidence_ids": [
+        "conference_scores"
+      ],
+      "value": 0.3938
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Pinned author preprocessing, training and readout provide a recovery route, but no authentic reference run on verified conference-equivalent splits has been established.",
+      "evidence_ids": [
+        "preparation",
+        "readout",
+        "split_routes"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Predeclare panel-specific practically meaningful macro-F1 gains after validating source label prevalence and reference repeatability. Published seed standard deviations are not effect thresholds; no common made-up delta is admitted.",
+      "evidence_ids": [
+        "conference_scores"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired method comparisons across training seeds and the original subject structure, with multiplicity across the nine panels; quantify conditional-on-cohort and population-generalization uncertainty separately.",
+      "independent_unit": "Mouse for biological generalization; independently trained seed for optimization variability. Repeated neuron observations and CV folds are not independent mice.",
+      "rationale": "The inductive panel has one test mouse (SB028), so a mouse-population confidence claim cannot be created by treating its neurons or seeds as independent animals. Repeated-cell identities require reconciliation.",
+      "evidence_ids": [
+        "conference_protocol",
+        "preparation"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact conference-equivalent data, eligible neurons, split files, source readout and all nine panel conditions; any changed split is a separately labeled extension.",
+      "Compare each retained panel to its matching published source result and independently rerun author method; preserve stronger source comparators, including EI inductive LOLCAT 0.7463.",
+      "Freeze the primary panel decision, protected remaining panels, meaningful effects and joint uncertainty rule before candidate selection; no selecting a favorable label level or exposure regime after results.",
+      "Report the complete nine-panel result vector. The scalar baseline field cannot authorize a narrowed one-panel or smaller-cohort paper win.",
+      "Complete native reference qualification, final-evaluation protection and concrete common access/compute budgets before admitting an improvement episode."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper tables establish source-era comparators only. No present-day SOTA survey or claim was performed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on representations using only the exact source training/development information and author CV feedback, preserving all nine exposure/label panels. Hold source test labels owner-side.",
+    "candidate_freeze": "Freeze method/code, inputs, context policy, hyperparameters, allowed checkpoint-selection rule, seeds, split/label digests and panel-wise success rule before final test scoring.",
+    "final_evaluation": "Run the frozen candidate and qualified source methods on the unchanged paper tests; publish complete panel results and predeclared uncertainty. A new subject split can be an extension but never substitutes for the source task.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published table values, authentic rerun values and current SOTA remain separate. A supplied-embedding local readout or context-ablation improvement alone cannot be a paper win."
+  },
+  "blocking_issues": [
+    "Paper-era split bytes and exact source archive/metadata identity are not validated; the current split download cannot silently substitute for them.",
+    "Session-local neuron IDs do not establish repeated-cell linkage; label-map and fluorescence-column joins require audit.",
+    "No authentic NuCLR or stronger EI-inductive source-comparator rerun is established.",
+    "The one-mouse inductive test cannot support a general population uncertainty claim by neuron-level resampling.",
+    "Primary-versus-protected panel decision, meaningful effects, multiple-panel inference, protected scorer and concrete episode budgets are not fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The existing supplied-embedding evaluator checks identities, readout behavior and context-ablation diagnostics. Its generated controls and reproduction outputs are calibration only; original graders and historical task materials remain preserved."
+  }
+}
