@@ -1,0 +1,41 @@
+{
+  "schema": "population_geometry_rng_policy_v1",
+  "primary_route": "current_serial_seeded_v1",
+  "literal_source_route": "source_random_state_none",
+  "historical_realization_authenticated": false,
+  "main_rng": "numpy.random.RandomState MT19937",
+  "region_seeds": {"CA1": 213423, "PFC": 45342},
+  "traversal": "region CA1 then PFC; repetition0..499; declared animal order KL8,ER1,JS34,JS14,JS17,JS21,JS15,ZT2; session1..8",
+  "main_draw_order": [
+    "choice(all eligible geometry rows,500,replace=False)",
+    "choice(all eligible geometry neurons,19,replace=False)",
+    "randn(4,500) original Gaussian teachers",
+    "choice(500,300,replace=False) training positions; sorted complement is test"
+  ],
+  "state_capture": "Snapshot the MT19937 state immediately before randn(4,500), before any readout fit. The same frozen state and teacher/training manifest must be used for reference and candidate; no candidate-dependent redraw.",
+  "state_object": {
+    "algorithm": "literal MT19937 string",
+    "keys": "624 unsigned32-bit integers in get_state order, serialized as ordinary JSON integer array",
+    "position": "get_state position as JSON integer",
+    "has_gauss": "get_state cached-Gaussian flag as JSON integer0or1",
+    "cached_gaussian": "get_state cached Gaussian as finite JSON float; signed zero is preserved by json.dumps"
+  },
+  "state_serialization": "Python json.dumps(state,sort_keys=True,separators=(',',':'),allow_nan=False).encode('utf-8'); no newline",
+  "state_sha256": "lowercase64-character hexadecimal SHA256 of exact state serialization",
+  "teacher_index": "zero-based original column index0..499, before balance filtering; encoded as ordinary base10 integer without leading zeros",
+  "per_teacher_seed_bytes": "UTF8(state_sha256 + ':' + str(original_teacher_index)); no newline",
+  "per_teacher_seed": "int(SHA256(per_teacher_seed_bytes).hexdigest()[:8],16), integer0..4294967295",
+  "primary_svc": "Serial sklearn.svm.LinearSVC(dual='auto',max_iter=10000,random_state=per_teacher_seed); all remaining constructor defaults recorded by runtime version",
+  "literal_source_svc": "Serial callable sklearn.svm.LinearSVC(dual='auto',max_iter=10000,random_state=None); global runtime RNG is unbound. This preserves the literal None option but does not reconstruct source n_jobs=-1 worker RNG or historical scheduling.",
+  "main_rng_isolation": "Primary SVC seed derivation never calls choice,randint,randn or another RNG draw; per-task estimators receive their own integer seeds and must not consume the main region stream.",
+  "balance_rule": "Keep original teacher columns with abs(mean(sign(z @ teachers),axis=0))<0.25 over all500 source observations; require strictly more than100 columns. Full-row task filtering sees eventual test rows and remains source exposure.",
+  "paired_comparison": "Freeze row IDs, unit IDs, latent/teacher identities, retained original teacher indices, train/test IDs, stateSHA and per-teacher seeds before any candidate-dependent operation. Reuse this exact manifest across reference and candidate; a method may not request fresh draws after viewing outcomes.",
+  "recording": "Record full pre/post RNG state, pre-teacher stateSHA, teacher-array dtype/shape/hash, retained teacher indices, native row/unit IDs, training/test IDs, every per-teacher seed, warnings and NumPy/SciPy/scikit-learn versions.",
+  "glm_pr_rng": "Caller supplies an explicit independently recorded RandomState. For each of500 repetitions draw19 raw units then independently draw19 fitted units; do not silently couple those subsets.",
+  "source_discrepancies": [
+    "Declared animal order is current; source geometry used unsorted glob order.",
+    "Source figure PR RNG is unseeded; caller-frozen PR stream is a current realization.",
+    "Active geometry and GLM figure code use19 CA1 units; paper describes24.",
+    "Source parallel LinearSVC random_state=None worker state is not recovered."
+  ]
+}

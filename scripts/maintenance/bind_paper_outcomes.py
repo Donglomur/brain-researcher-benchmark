@@ -256,7 +256,8 @@ def build_outputs(root=ROOT):
             new_binding["reproduction_contract"] = reproduction_pin
         selected_improvement = improvement
         successor = None
-        if identifier == binding.PRIMARY_SUCCESSOR_TASK or identifier in binding.SCOPE_POLICY_SUCCESSOR_TASKS:
+        if (identifier == binding.PRIMARY_SUCCESSOR_TASK
+                or identifier in binding.SCOPE_POLICY_SUCCESSOR_TASKS | binding.REFERENCE_SUCCESSOR_TASKS):
             # These fixed tasks require their reviewed current policies. Missing
             # descriptors or policies fail; retained policy is never a fallback.
             module = binding.primary_successor_module(identifier)

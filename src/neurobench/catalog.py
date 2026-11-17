@@ -798,7 +798,8 @@ def validate(catalog, root=ROOT, *, _reader=None):
                    and identifier in source_by_id
                    and type(source_by_id[identifier].get('paper_outcomes')) is dict}
     need(neutral_ids <= {row['id'] for row in tasks}, 'Neutral unavailable source tasks cannot be omitted')
-    fixed_successors = {module.PRIMARY_SUCCESSOR_TASK} | module.SCOPE_POLICY_SUCCESSOR_TASKS
+    fixed_successors = ({module.PRIMARY_SUCCESSOR_TASK} | module.SCOPE_POLICY_SUCCESSOR_TASKS
+                        | module.REFERENCE_SUCCESSOR_TASKS)
     successor_ids = ({identifier for identifier, original in authenticated_previous_rows.items()
                       if original.get('track') == 'paper' and identifier in fixed_successors}
                      if authenticated_previous_rows is not None else set())
@@ -995,11 +996,15 @@ def paper_count_text(catalog):
     neutral_count = sum(neutral_unavailable_reason(row.get('paper_outcomes', {})) for row in catalog['tasks'])
     successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
     scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
-                                and row['paper_outcomes']['candidate_interface'] is None for row in catalog['tasks'])
+                                and row['paper_outcomes']['candidate_interface'] is None
+                                and row['id'] != 'PAPER-ROOT-ADD-001' for row in catalog['tasks'])
+    reference_successor_count = sum(row['id'] == 'PAPER-ROOT-ADD-001'
+                                    and row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
+                                    for row in catalog['tasks'])
     continuous_count = sum(continuous_paper_selection(row.get('paper_outcomes', {})) is not None
                            for row in catalog['tasks'])
     official_assets_count = sum('continuous_outcomes_v2' in row.get('paper_outcomes', {}) for row in catalog['tasks'])
-    temporal_successor_count = successor_count - scope_successor_count - continuous_count
+    temporal_successor_count = successor_count - scope_successor_count - reference_successor_count - continuous_count
     dual_text = ''
     if outcomes['covered']:
         eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
@@ -1038,6 +1043,9 @@ def paper_count_text(catalog):
             if temporal_successor_count:
                 dual_text += ('For the revised SMC task, the old contract remains an author-source policy; '
                               'the selected contract defines the candidate interface.')
+            if reference_successor_count:
+                dual_text += ('The LANGUAGE reference successor records author-provided-array/current-runtime reference recovery; '
+                              'its current improvement policy and remaining source limits are explicit, with no AI outcome or qualification. ')
             if scope_successor_count:
                 dual_text += (' ' if temporal_successor_count else '')
                 dual_text += ('For the reviewed scope-policy selections, the current primary policy governs improvement; '
@@ -1369,7 +1377,9 @@ def render_tracks(catalog):
                              '**Primary goal:** ' + markdown_text(correction['primary_goal']) + '\n\n'
                              '**Primary scientific scope:** ' + markdown_text(correction['primary_scope']) + '\n\n')
                     if correction['remaining_source_limits']:
-                        text += ('**Remaining source limits:**\n\n'
+                        text += (('**Retained scope-adjudication limits (see current reference successor below):**\n\n'
+                                  if row['id'] == 'PAPER-ROOT-ADD-001' and outcomes.get('primary_policy_revision') is not None
+                                  else '**Remaining source limits:**\n\n')
                                  + ''.join('- ' + markdown_text(limit) + '\n' for limit in correction['remaining_source_limits'])
                                  + '\n')
                     if correction.get('retained_scope_notes'):
@@ -1417,6 +1427,18 @@ def render_tracks(catalog):
                         for field in ('delivery', 'scorer', 'protocol'):
                             text += '| ' + readable_label(field) + ' | ' + markdown_link(author[field]['path'].split('/')[-1], author[field]['path'], task) + ' |\n'
                         text += '\n'
+                    elif row['id'] == 'PAPER-ROOT-ADD-001':
+                        provenance = outcomes['primary_policy_provenance']
+                        text += ('The reference successor records author-provided-array/current-runtime measurements. '
+                                 'It does not establish AI reproduction, fresh author training, paired improvement or scientific qualification. '
+                                 'The retained scope decision above keeps its historical limits; the selected current contracts record reference recovery and remaining obligations.\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated reference successor', outcomes['primary_policy_revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Provided-author reference report', provenance['provided_reference']['path'], task) + '\n'
+                                 '- ' + markdown_link('Reference recovery receipt', provenance['reference_receipt']['path'], task) + '\n\n')
+                        text += ('**Current reproduction/source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
+                                 + '\n')
                     elif candidate is None:
                         text += ('The reviewed current policy selects the primary scientific scope. '
                                  'Runtime routes are not declared by this policy metadata.\n\n'

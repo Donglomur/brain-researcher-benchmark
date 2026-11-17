@@ -9,7 +9,7 @@ scientific qualification.
 python3 -I -S -B scripts/check_repository.py
 ```
 
-This checker validates the declared ownership and current layout of all 651
+This checker validates the declared ownership and current layout of all 655
 implementation artifact records against
 [benchmarks/integrity/source-ownership.json](../../benchmarks/integrity/source-ownership.json)
 and the task registry. It checks the published source organization; it does not

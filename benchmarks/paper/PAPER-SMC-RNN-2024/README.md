@@ -105,6 +105,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Original two-arm scientific comparison and scope](docs/scientific-contract.json)
 - [Source preparation and paired-export engineering evidence](docs/source-preparation-evidence.json)
 - [Partial native execution and full-run cost estimates](docs/native-cost-characterization.json)
+- [Official-assets v2 material preparation and inspection receipt](docs/official-assets-materials-v2-20261117.json)
 
 ## Implementation artifacts
 

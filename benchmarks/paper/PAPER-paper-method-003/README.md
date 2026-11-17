@@ -53,6 +53,10 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Authentic participant-material export receipt](docs/authentic-material-export-20261117.json)
+
 ## Implementation artifacts
 
 - [Paper paper method 003](implementations/paper-paper-method-003) — Calibration only.

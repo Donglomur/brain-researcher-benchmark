@@ -3,8 +3,8 @@
   "kind": "public_neuroscience_source_catalog",
   "registry": {
     "path": "benchmarks/registry.json",
-    "bytes": 2456189,
-    "sha256": "7a0aac75f91119c08de17a89fc71ba53e970ba950038e9671e45f4766600688c"
+    "bytes": 2467280,
+    "sha256": "54982914c309c0c9e2eb5e86de009c5fdd39f31c995b1ad5789775307e65c870"
   },
   "source_commit": "8a07b93da68e8b9cf193cdba7d09faa17bf56a43",
   "source_counts": {
@@ -26,7 +26,7 @@
     "runtime_manifests": 95,
     "linked_runtime_manifests": 95,
     "source_components": 73,
-    "implementation_artifacts": 651,
+    "implementation_artifacts": 655,
     "tasks_with_implementation_artifacts": 235,
     "tasks_with_related_scientific_sources": 1,
     "unresolved_implementation_artifacts": 5
@@ -28442,8 +28442,8 @@
       "registration_stage": "canonical_source_specification",
       "specification": {
         "path": "benchmarks/paper/PAPER-ROOT-ADD-001/task.json",
-        "bytes": 27626,
-        "sha256": "2213beed3a83ad5d49a54844db0d024741b61d3a7b53f0b2be08b8739d50616f"
+        "bytes": 31718,
+        "sha256": "5c4e1af6794f068015c5750e2d99e1560b35f04cb472c56446f01c884a237029"
       },
       "registry": null,
       "runtime_manifest": null,
@@ -28473,12 +28473,13 @@
         "sha256": "e0603a695d896be326045d6c734ce21cd185b6c408bd5bc06846ff3afd6ff254"
       },
       "registration_class": "canonical",
-      "runtime_lineage_note": "Historical paper implementations are calibration components; they cannot establish same-task paper improvement.",
+      "runtime_lineage_note": "The selected primary policy and retained predecessor policy are separate metadata records; neither establishes execution or scientific qualification.",
       "implementation_ids": [
         "authoring-delivery-20261105-common-remaining-builds-wave19-paper-program-b",
         "authoring-delivery-20261105-language-building-blocks",
         "language-original-inference-reference-v1",
         "language-original-inputs-predictions-v1",
+        "language-original-raw-prediction-submission-v1",
         "parallel-paper-root-add-001-original-figure3-v1"
       ],
       "related_implementation_ids": [],
@@ -28506,6 +28507,22 @@
         {
           "label": "Original provided-author reference verification: REVIEW.json",
           "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/original-reference-20261117/REVIEW.json"
+        },
+        {
+          "label": "Before current author-reference adoption: task.json",
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/task.json"
+        },
+        {
+          "label": "Before current author-reference adoption: reproduction.v2.json",
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/reproduction.v2.json"
+        },
+        {
+          "label": "Before current author-reference adoption: improvement.v1.json",
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/improvement.v1.json"
+        },
+        {
+          "label": "Before current author-reference adoption: outcomes.v1.json",
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/outcomes.v1.json"
         }
       ],
       "paper_improvement": {
@@ -28538,7 +28555,8 @@
           "path": "benchmarks/paper/PAPER-ROOT-ADD-001/historical/task.pre-improvement.v1.json",
           "bytes": 21555,
           "sha256": "e0603a695d896be326045d6c734ce21cd185b6c408bd5bc06846ff3afd6ff254"
-        }
+        },
+        "role": "retained_pre_outcomes_policy"
       },
       "specification_revision": {
         "version": "paper-improvement/v1",
@@ -28564,31 +28582,29 @@
         },
         "reproduction_contract": {
           "path": "benchmarks/paper/PAPER-ROOT-ADD-001/reproduction.v2.json",
-          "bytes": 400592,
-          "sha256": "1709e85de608f3eddf597fc4bf371780c32a3779bcefcf7ced9aa43a2dd31c75"
+          "bytes": 484183,
+          "sha256": "a54119dd20b84008064ea4f16956b61c2ecbc1926f48987f23f2fe24690406d1"
         },
         "improvement_contract": {
-          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/improvement.v1.json",
-          "bytes": 11903,
-          "sha256": "58a45ef025115d17e07bf7c0600ccfac2c3948463af3f083009ff9a15ac13b9b"
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/improvement.reference.v1.json",
+          "bytes": 16054,
+          "sha256": "c9b3201bafdad76018a1553c822c686c0c06035db9e91ec82d799d20ffd97fa7"
         },
         "outcomes": {
           "path": "benchmarks/paper/PAPER-ROOT-ADD-001/outcomes.v1.json",
-          "bytes": 2160,
-          "sha256": "edebf4e17f8d7d1aeb91c0802834eff81e546902070f5a7d132ab1acb31e7f83"
+          "bytes": 2579,
+          "sha256": "b357dfcf0f0bf086cfa06e4f2373d5e0748981b20f71af7fe615b5d3d79ebb00"
         },
         "reproduction_eligibility": "source_unresolved",
         "reproduction_blocking_issues": [
-          "V2 now declares the actual native prediction/control array families and the three required Figure3e maps with source axes rather than substituting scalar summaries. Representation remains unresolved: authentic semantic identity, source unit correspondence, support/domain/derivation manifests, actual dtype policies and publication-equivalent numerical references are absent. Numerical-reference equivalence is schema-supported, but its justified criterion/program/uncertainty bindings are not supplied; no successful comparison is implied.",
-          "The exact3b layer/time/equal-session reduction is recovered, but unrounded original correlations, complete numeric companion targets and the reported3b SEM calculation remain unverified; only the printed0.05 mean and0.01 SEM are source targets, not computed evidence.",
-          "All224 released source-format results and567x40x33 unit values are required. Actual source/result arrays and exact qid/support identities are not authenticated by source filenames, header census or generated tests.",
-          "The original 579-neuron versus 567 released unit-row identity and inclusion discrepancy remains unresolved; removing automatic Figure 3f admission does not establish prediction-cohort equivalence. Weighted Figure 3e also requires authentic original self_FR_aligned2word neuron counts and their session joins; released fr_matrix counts must not substitute. The current reducer does not compute weighted Figure 3e. Figure 3f A1/trans_ind/selectivity joins remain separately unresolved associated evidence, not an automatic gate for the retained primary.",
-          "The original fixed Figure 3b reducer exposes descriptive statistics, Figure 3c/3d summaries and unweighted dynamics, but does not rerun source permutation tests, fit the Figure 3c exponential or perform the weighted Figure 3e join. Missing required numerical prediction/control/dynamics outputs cannot be replaced by scalar Figure 3b agreement. Its explicit uncomputed Figure 3f status remains preserved source evidence for the separately scoped associated mapping result.",
-          "No source-justified reproduction tolerance, deterministic numerical-equivalence rule or participant-aware inferential criterion is frozen. Neither sourceSEM nor source significance nor native artifactMAE is a default equivalence threshold.",
-          "The native program interface emits aggregate correlation/mask arrays; the operator still needs independent verification from authentic row/qid masks, held-sentence predictions and fit/feature provenance through every full array and finding. The accepted source-output reducer does not establish that a submitted analysis used data.",
-          "No immutable authentic-data, ordered cohort/split/panel/observations/metric/aggregation manifests or independent computation-verification program are qualified for these outcomes. Known source-code hashes cannot substitute for those absent execution identities; admission_policy is therefore omitted.",
-          "Paired paper+data and paper+data+author-code common-input/exposure/code manifests, cumulative budgets and independently verified newAI execution receipts are unbound. Existing native/prospective layouts and source controls are not completed paired reproduction or improvement runs.",
-          "The source Figure3c 100-point fit curve is explicitly declared, but original curve-fit execution, source version/parity, authentic fit inputs/outputs and agreement policies are unqualified. This is a declaration of a source-consumed output, not execution of SciPy or native analysis."
+          "Complete original inputs and provided-author result arrays/reference reductions are authenticated, but independent candidate prediction execution on each original field/layer/lag/qid support is not. Freeze and verify the exact per-job source row/fold identities and retained prediction products across all58926jobs/224output arrays; no subset or scalar-only artifact may substitute.",
+          "Original579weight/selectivity-to567continuous-unit inclusion and biological correspondence remain unresolved. Authentic native579-count Figure3e weights and session joins are recovered and must be preserved; they do not resolve the separate Figure3f/trans_ind identity crosswalk.",
+          "Current provided-array reduction uses NumPy2.4.6/SciPy1.17.1; historical source stack parity and fresh original C1–D1 model fitting have not been authenticated. The source fitted context curve and all9source contrasts are computed once, not missing, but their source procedure does not qualify independent biological inference.",
+          "The published0.05mean/0.01SEM remain distinct from the measured provided-array mean0.04512071156679768/descriptive ddof0 SEM0.0139383764611419. The notebook does not establish the reported3b SEM calculation. Neither printed rounding nor source significance supplies an automatic binary equivalence threshold.",
+          "Continuous scalar/array discrepancies and complete defined-support diagnostics require no binary pass threshold. A binary reproduced/equivalent decision would separately require a justified frozen agreement rule; no such criterion, successful comparison or scientific qualification is asserted.",
+          "Indexed reference values and source member identities are recovered, while future candidate semantic/support/domain/derivation manifests and an independent raw-prediction-to-full-panel verification program remain unbound. The schema comparison policy is left unresolved and admission_policy remains omitted.",
+          "The existing native program interface emits aggregate correlation/mask arrays and the70episode prediction runner uses a different purged split. They do not establish protected original-qid heldout prediction execution; digest-only traces do not replace independently rescorable prediction products.",
+          "Matched paper+data and paper+data+author-code delivery/exposure manifests, candidate freezes, cumulative budgets, protected target custody and independently verified AI execution remain unqualified. No provided author result or calibration run is a newAI reproduction or improvement."
         ],
         "cells": [
           {
@@ -28637,6 +28653,57 @@
           "improvement": "unknown"
         },
         "assurance": "Declared evidence consistency only; artifacts and scientific validity are not independently authenticated.",
+        "improvement_disposition": "design_ready",
+        "retained_improvement_contract": {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/improvement.v1.json",
+          "bytes": 11903,
+          "sha256": "58a45ef025115d17e07bf7c0600ccfac2c3948463af3f083009ff9a15ac13b9b"
+        },
+        "retained_improvement_role": "retained_pre_outcomes_policy",
+        "primary_policy_revision": {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/reference-successor.v1.json",
+          "bytes": 24103,
+          "sha256": "ab4ec7d457e190b466e1fc9117a0a5e95ac02e823dbafb5811a863219f2b7326"
+        },
+        "primary_policy_provenance": {
+          "scope_decision": {
+            "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+            "bytes": 523120,
+            "sha256": "ba085cfa4294baf51629867997da0c356d21466773884d0412654f2bc75924e2"
+          },
+          "provided_reference": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/original-reference-20261117/REFERENCE.json",
+            "bytes": 485111,
+            "sha256": "d822f284c2d781f920841705a63fec38d3267ee5c62e5dd5635272cf087e49c9"
+          },
+          "reference_receipt": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/original-reference-20261117/RECEIPT.json",
+            "bytes": 16051,
+            "sha256": "2d8a98f82cf860c74877bfa870f918eb9cac88352b6a23e8015c56d46c5c5273"
+          },
+          "previous_task": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/task.json",
+            "bytes": 27626,
+            "sha256": "2213beed3a83ad5d49a54844db0d024741b61d3a7b53f0b2be08b8739d50616f"
+          },
+          "previous_reproduction": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/reproduction.v2.json",
+            "bytes": 400592,
+            "sha256": "1709e85de608f3eddf597fc4bf371780c32a3779bcefcf7ced9aa43a2dd31c75"
+          },
+          "previous_improvement": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/improvement.v1.json",
+            "bytes": 11903,
+            "sha256": "58a45ef025115d17e07bf7c0600ccfac2c3948463af3f083009ff9a15ac13b9b"
+          },
+          "previous_outcomes": {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-reference-20261117/outcomes.v1.json",
+            "bytes": 2160,
+            "sha256": "edebf4e17f8d7d1aeb91c0802834eff81e546902070f5a7d132ab1acb31e7f83"
+          }
+        },
+        "candidate_interface": null,
+        "author_reproduction_routes": null,
         "primary_scope_correction": {
           "disposition": "same_primary_unqualified",
           "primary_goal": "Reproduce the original sentence-held-out supplied-embedding-to-neuron predictivity result across the registered sessions, units, temporal lags and layers, preserving original population and individual-unit outputs and lexical, shuffle and context controls. Evaluate improvement on the same prediction support and source-defined reduction after its complete comparison is qualified. Figure 3b is a numerical anchor, not a substitute for the complete intended outputs.",
@@ -31701,7 +31768,8 @@
       "runtime_lineage_note": "Historical paper implementations are calibration components; they cannot establish same-task paper improvement.",
       "implementation_ids": [
         "benchmarks-neuroscience-paper-root-add-026",
-        "parallel-paper-root-add-026-source-cv-replay-v1"
+        "parallel-paper-root-add-026-source-cv-replay-v1",
+        "temporal026-source-model-producer-v1"
       ],
       "related_implementation_ids": [],
       "documentation": [
@@ -32306,6 +32374,10 @@
         {
           "label": "Partial native execution and full-run cost estimates",
           "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/native-cost-characterization.json"
+        },
+        {
+          "label": "Official-assets v2 material preparation and inspection receipt",
+          "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json"
         }
       ],
       "paper_improvement": {
@@ -33642,7 +33714,12 @@
         "reve-candidate-materials-v1"
       ],
       "related_implementation_ids": [],
-      "documentation": [],
+      "documentation": [
+        {
+          "label": "Authentic participant-material export receipt",
+          "path": "benchmarks/paper/PAPER-paper-method-003/docs/authentic-material-export-20261117.json"
+        }
+      ],
       "paper_improvement": {
         "task_id": "PAPER-paper-method-003",
         "objective": "surpass_source_paper_same_task",
@@ -39029,6 +39106,7 @@
       "implementation_ids": [
         "benchmarks-neuroscience-slicetca",
         "parallel-paper-paper-method-add-002-source-endpoints-v1",
+        "slicetca-native-submission-bridge-v1",
         "slicetca-source-producer-v1"
       ],
       "related_implementation_ids": [],
@@ -40008,7 +40086,8 @@
       "runtime_lineage_note": "Historical paper implementations are calibration components; they cannot establish same-task paper improvement.",
       "implementation_ids": [
         "construction-paper-paper-method-add-006-initial-evaluator-v1",
-        "parallel-paper-paper-method-add-006-oof-prediction-replay-v2"
+        "parallel-paper-paper-method-add-006-oof-prediction-replay-v2",
+        "population-geometry-original-grid-producer-v1"
       ],
       "related_implementation_ids": [],
       "documentation": [
@@ -59289,6 +59368,38 @@
       ]
     },
     {
+      "id": "language-original-raw-prediction-submission-v1",
+      "owner_ids": [
+        "PAPER-ROOT-ADD-001"
+      ],
+      "related_task_ids": [],
+      "scope": "task",
+      "role": "reviewed_source_component",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-prediction-submission-v1",
+      "original_path": "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-prediction-submission-v1",
+      "source_commit": "90897009b39d4ba6809fd79faea01f335c29c678",
+      "status": "constructed_source",
+      "scientific_readiness": "unknown",
+      "owner_relationships_complete": true,
+      "scope_notes": "Frozen raw-prediction submission transport covers the original 14-session, eight-person, 58,926-job source panel, private operator-held target recomputation and all 224 result files. Generated controls do not establish protected per-fold execution, historical preprocessing parity, independent-person uncertainty, candidate authorship or authentic candidate scoring. Continuous reference differences remain separate from binary success or superiority.",
+      "evidence": [
+        {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-prediction-submission-v1/README.md",
+          "bytes": 6885,
+          "sha256": "e511f59a672b90796194e9525f3863a6a7497cc89e15b24fb92fd2985109bcc7",
+          "commit": "90897009b39d4ba6809fd79faea01f335c29c678",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        },
+        {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-prediction-submission-v1/SOURCE.json",
+          "bytes": 3996,
+          "sha256": "d17cad3db4bec79b5494996bec9877e0c3e4582714e30ad28e7edcceb118eceb",
+          "commit": "90897009b39d4ba6809fd79faea01f335c29c678",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        }
+      ]
+    },
+    {
       "id": "laser-eeg-condition-packets",
       "owner_ids": [
         "NEURAL-SCOPE-20261114-LASER-EEG-REPORT"
@@ -65652,6 +65763,38 @@
       ]
     },
     {
+      "id": "population-geometry-original-grid-producer-v1",
+      "owner_ids": [
+        "PAPER-paper-method-add-006"
+      ],
+      "related_task_ids": [],
+      "scope": "task",
+      "role": "reviewed_source_component",
+      "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/original-grid-producer-v1",
+      "original_path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/original-grid-producer-v1",
+      "source_commit": "44ef8f7d1d418e710b4d17cd034fa091fc6f2062",
+      "status": "constructed_source",
+      "scientific_readiness": "unknown",
+      "owner_relationships_complete": true,
+      "scope_notes": "Complete source grid and result producer retain 13824 GLM jobs, 64000 geometry jobs, all 216 configuration scores, 64-session reductions, 14 MixedLM trends and the original joint 24-test correction. The current serial seeded policy is distinguished from the callable source random-state-none route. Generated Poisson/SVC controls and required hosted MixedLM validation do not establish authentic full-grid execution, historical runtime/RNG parity, anatomical mapping, unresolved source aggregation or scientific qualification.",
+      "evidence": [
+        {
+          "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/original-grid-producer-v1/README.md",
+          "bytes": 11266,
+          "sha256": "4e9ad305a1d85ae272182d4e3371b243ed477d801a425fa522099f664c223080",
+          "commit": "44ef8f7d1d418e710b4d17cd034fa091fc6f2062",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        },
+        {
+          "path": "benchmarks/paper/PAPER-paper-method-add-006/implementations/original-grid-producer-v1/RNG_POLICY.json",
+          "bytes": 3940,
+          "sha256": "a1ddc9f0e85b4818bad0ae8a399497fb6058c37ba9e3253ad13b55a347784eca",
+          "commit": "87722eeae80a3da02852f22597331beaa0c27b53",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        }
+      ]
+    },
+    {
       "id": "reve-candidate-materials-v1",
       "owner_ids": [
         "PAPER-paper-method-003"
@@ -65725,13 +65868,13 @@
       "status": "constructed_source",
       "scientific_readiness": "unknown",
       "owner_relationships_complete": true,
-      "scope_notes": "Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. Generated controls only; authentic full-panel throughput, sandbox/provider delivery, model interpretation and scientific qualification remain unestablished.",
+      "scope_notes": "Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. The accepted f1-source scripted software control completed all 5450 epochs; its earlier failed attempt and declared versus observed resources are retained. This is not model interpretation or provider-delivery qualification, and scientific qualification remains unestablished.",
       "evidence": [
         {
           "path": "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/README.md",
-          "bytes": 9332,
-          "sha256": "8e5b09416a99e769a5ff9a6b59c0d40a3b25f0c4845852ea627a0a1489861146",
-          "commit": "f1dea1ee4fa779ea3ee56bc6b5a906186488506b",
+          "bytes": 10291,
+          "sha256": "fd076586298f15d29b0dcff551dda662f8adeb189f7827abcc9cb2b951a6cfc5",
+          "commit": "12088c92b00cedc464a4c15316519743d51c2478",
           "claim": "Accepted source scope, exact dependencies and remaining scientific limits"
         },
         {
@@ -65740,6 +65883,52 @@
           "sha256": "4adf6a1dc4075646d40f15e838534327e44adc7d15b13dd5a4290b945e948da4",
           "commit": "f1dea1ee4fa779ea3ee56bc6b5a906186488506b",
           "claim": "Accepted source scope, exact dependencies and remaining scientific limits"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/SCRIPTED_CONTROL.json",
+          "bytes": 6061,
+          "sha256": "0bdf359593ca002a09e5d59b7f34ef689a3b5608f6c7e590f8dac8325f4be8fd",
+          "commit": "12088c92b00cedc464a4c15316519743d51c2478",
+          "claim": "Accepted complete 5450-epoch scripted software control with preserved prior failure and declared/observed resource limits; no provider/model/scientific qualification"
+        }
+      ]
+    },
+    {
+      "id": "slicetca-native-submission-bridge-v1",
+      "owner_ids": [
+        "PAPER-paper-method-add-002"
+      ],
+      "related_task_ids": [],
+      "scope": "task",
+      "role": "reviewed_source_component",
+      "path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1",
+      "original_path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1",
+      "source_commit": "8afbdcf514b48e8fec95ebb0935b6fa12da5bfa2",
+      "status": "constructed_source",
+      "scientific_readiness": "unknown",
+      "owner_relationships_complete": true,
+      "scope_notes": "Source-native submission and comparison bridge checks complete packet identity, split membership, operator-target recomputation, 14 decoding summaries, four mixed companions and reconstruction cells. Raw and condition-average deltas are fixed-control diagnostics. Generated API controls do not authenticate submitted factors, historical masks or references, per-fold fitting provenance, protected paired execution or scientific reproduction/improvement.",
+      "evidence": [
+        {
+          "path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1/README.md",
+          "bytes": 8634,
+          "sha256": "76c72972f37384f0c81963e82728e9ab8eb398de2901499453c2b3c36a4e9377",
+          "commit": "8afbdcf514b48e8fec95ebb0935b6fa12da5bfa2",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        },
+        {
+          "path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1/SOURCE_MAP.json",
+          "bytes": 1287,
+          "sha256": "e25191a4b2b0510a376fa3ac46070b93d88b8436bf6c84b724fb12de8604d63e",
+          "commit": "8afbdcf514b48e8fec95ebb0935b6fa12da5bfa2",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        },
+        {
+          "path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1/VALIDATION.json",
+          "bytes": 4288,
+          "sha256": "fba3cc7462f5b4c6f8731572be455959e74e6374ce7bd862f3582e96d4bce49d",
+          "commit": "8afbdcf514b48e8fec95ebb0935b6fa12da5bfa2",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
         }
       ]
     },
@@ -65964,6 +66153,38 @@
           "sha256": "03fe407a36c145281d177a16f2de411026d0cab6faa68f1203bc425f1829fdd7",
           "commit": "f55fc2bc158f77417722a0eda8f5b6a74ec98c6f",
           "claim": "Accepted current source scope and recorded preparation limitations; no scientific qualification inferred"
+        }
+      ]
+    },
+    {
+      "id": "temporal026-source-model-producer-v1",
+      "owner_ids": [
+        "PAPER-ROOT-ADD-026"
+      ],
+      "related_task_ids": [],
+      "scope": "task",
+      "role": "reviewed_source_component",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1",
+      "original_path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1",
+      "source_commit": "72b6afa8bccee4861cc995f280695f17c64a9837",
+      "status": "constructed_source",
+      "scientific_readiness": "unknown",
+      "owner_relationships_complete": true,
+      "scope_notes": "Exact source numerical core and a complete 2054-coordinate dispatcher retain all fit observations, predictions, internal components and failures. Regional biological summaries and the separate 26-electrode preferred/nonpreferred pool are prospective reconstructions with explicit recipes. Original Figure 4-9 caller policies, selected identities, historical runtime/RNG, authentic fitting and scientific figure comparison remain unresolved; no selector or policy activation is inferred.",
+      "evidence": [
+        {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1/README.md",
+          "bytes": 13033,
+          "sha256": "81997875d9c07bfada6235658c5cd380f2177f21f7f06590fcb86730fa9f9801",
+          "commit": "72b6afa8bccee4861cc995f280695f17c64a9837",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
+        },
+        {
+          "path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1/SOURCE.json",
+          "bytes": 5772,
+          "sha256": "80def205ea3bff2d9a4a2fda522c56d3a8705b7c38ad1fc1a9e8ff06881139dd",
+          "commit": "72b6afa8bccee4861cc995f280695f17c64a9837",
+          "claim": "Reviewed source scope and remaining execution/scientific limits; no qualification inferred from enrollment"
         }
       ]
     },
