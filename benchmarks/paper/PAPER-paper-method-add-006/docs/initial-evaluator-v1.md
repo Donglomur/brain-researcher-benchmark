@@ -172,7 +172,7 @@ optimal biological code. All CLI outputs retain `research_qualified=false` and
 Run from the repository root:
 
 ```text
-PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests -v
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/tests -v
 ```
 
 Ten controls were independently derived from closed-form covariance identities
