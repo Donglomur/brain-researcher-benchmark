@@ -42,7 +42,7 @@ class EvidenceTests(unittest.TestCase):
 
     def test_current_public_evidence_is_scoped_and_overlapping(self):
         result = evidence.load(ROOT)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['paper_calibration_attempts'], 4)
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
@@ -302,8 +302,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['native_operator_control_reports'], 2)
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
-        self.assertEqual(result['counts']['public_reports'], 9)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
+        self.assertEqual(result['counts']['public_reports'], 12)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -364,10 +364,10 @@ class EvidenceTests(unittest.TestCase):
         for name in evidence.PUBLIC_REPORTS:
             self.install(name)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 9)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
-        self.assertEqual(result['counts']['paper_source_preparation_reports'], 2)
-        self.assertEqual(result['counts']['paper_source_preparation_tasks'], 2)
+        self.assertEqual(result['counts']['public_reports'], 12)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
+        self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)
         self.assertEqual(result['counts']['authentic_engineering_reports'], 3)
         self.assertEqual(result['counts']['native_operator_controls'], 16)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
@@ -454,6 +454,148 @@ class EvidenceTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         evidence.load(self.root)
                     (self.root / name).unlink()
+
+    def test_smc_real_author_probes_are_separate_from_preparation_and_solver_attempts(self):
+        self.install(evidence.SMC_PREPARATION)
+        self.install(evidence.SMC_PROBES)
+        result = evidence.load(self.root, {'PAPER-SMC-RNN-2024'})
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 1)
+        self.assertEqual(result['counts']['author_model_inference_probes'], 2)
+        self.assertEqual(result['counts']['author_model_inference_probe_reports'], 1)
+        self.assertEqual(result['counts']['pilot_attempts'], 0)
+        rows = result['records']['PAPER-SMC-RNN-2024']
+        prepared = next(row for row in rows if row['category'] == 'paper_source_preparation')
+        self.assertEqual(prepared['model_attempts_recorded'], 0)
+        self.assertIsNone(prepared['source_execution']['commit'])
+        self.assertEqual(prepared['coverage']['source_trials'], 2869)
+        self.assertEqual(prepared['coverage']['validation'], {'train': 1721, 'eval': 574})
+        self.assertEqual(prepared['paired_delivery']['total_files'], 56)
+        self.assertEqual(prepared['paired_delivery']['total_payload_bytes'], 27828070)
+        self.assertFalse(prepared['paired_delivery']['temporal_access_enforced'])
+        probes = [row for row in rows if row['category'] == 'author_model_inference_probe']
+        self.assertEqual(len(probes), 2)
+        for row in probes:
+            self.assertTrue(row['model_executed'])
+            self.assertEqual(row['native_inference_calls'], 2)
+            self.assertEqual(row['particles'], 192)
+            self.assertEqual([chunk['observed_chunk_trials'] for chunk in row['observed_chunks']], [33, 34])
+            self.assertEqual(row['panel_identity_roles']['actual_prepared_panel_sha256'], evidence.SMC_ACTUAL_PANEL)
+            self.assertEqual(row['panel_identity_roles']['public_reference_projection_sha256'], evidence.SMC_PUBLIC_PANEL)
+            self.assertNotEqual(evidence.SMC_ACTUAL_PANEL, evidence.SMC_PUBLIC_PANEL)
+            self.assertEqual(row['preparation_environment']['pandas'], '1.3.4')
+            self.assertEqual(row['inference_environment']['versions']['pandas'], '1.5.3')
+            self.assertIn('frozen prepared H5', row['inference_environment']['role'])
+            self.assertFalse(row['generated_allocation_control']['model_executed'])
+            self.assertFalse(row['complete_predictions'])
+            self.assertFalse(row['author_baseline_calibration_complete'])
+            self.assertFalse(row['scoring_performed'])
+            self.assertEqual(row['solver_attempts_recorded'], 0)
+            self.assertEqual(row['candidate_attempts_recorded'], 0)
+
+    def test_smc_probes_require_preparation_and_reject_scope_or_identity_drift(self):
+        self.install(evidence.SMC_PROBES)
+        with self.assertRaisesRegex(ValueError, 'preparation report'):
+            evidence.load(self.root)
+        mutations = {
+            'full-panel-result': lambda d: d.update(complete_predictions=True),
+            'model-qualification': lambda d: d.update(author_baseline_qualified=True),
+            'target-access': lambda d: d.update(test_targets_accessed=True),
+            'public-hash-as-actual': lambda d: d.update(panel_sha256=evidence.SMC_PUBLIC_PANEL),
+            'wrong-source': lambda d: d.update(source_commit='a' * 40),
+            'only-one-arm': lambda d: d['arms'].pop('noncausal'),
+            'wrong-particles': lambda d: d['arms']['causal'].update(particles=1),
+            'boolean-seed': lambda d: d['arms']['causal'].update(seed=True),
+            'oversized-seed': lambda d: d['arms']['causal'].update(seed=2 ** 32),
+            'duplicate-split': lambda d: d['arms']['causal']['timings'][1].update(split='train'),
+            'partial-chunk': lambda d: d['arms']['causal']['timings'][0].update(chunk_trials=1),
+            'wrong-inference-environment': lambda d: d['arms']['causal']['versions'].update(pandas='1.3.4'),
+            'allocation-as-model': lambda d: d['full_repeat_memory_control'].update(model_executed=True),
+        }
+        self.install(evidence.SMC_PREPARATION)
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                document = self.document(evidence.SMC_PROBES)
+                mutate(document)
+                self.install(evidence.SMC_PROBES, document)
+                with self.assertRaises(ValueError):
+                    evidence.load(self.root)
+
+    def test_smc_preparation_identity_population_and_access_contradictions_refuse(self):
+        mutations = {
+            'missing-trial': lambda d: d['coverage'].update(source_trials=2868),
+            'truncated-validation': lambda d: d['coverage']['validation'].update(eval=573),
+            'wrong-preparation-environment': lambda d: d['preparation']['versions'].update(pandas='1.5.3'),
+            'temporal-enforcement': lambda d: d['paired_delivery'].update(temporal_access_enforced=True),
+            'test-targets-delivered': lambda d: d['paired_delivery'].update(test_target_payloads_included=True),
+            'participant-executed': lambda d: d.update(participant_episode_executed=True),
+            'model-in-preparation': lambda d: d.update(model_trials=1),
+            'fabricated-execution-commit': lambda d: d['source_execution'].update(commit=d['source_execution']['publication_commit']),
+            'test-reference-misjoin': lambda d: next(pin for pin in d['current_source']['files'] if pin['path'].endswith('/reference_panel.json')).update(sha256='a' * 64),
+            'validation-reference-misjoin': lambda d: next(pin for pin in d['current_source']['files'] if pin['path'].endswith('/reference_validation_panel.json')).update(sha256='a' * 64),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                document = self.document(evidence.SMC_PREPARATION)
+                mutate(document)
+                self.install(evidence.SMC_PREPARATION, document)
+                with self.assertRaises(ValueError):
+                    evidence.load(self.root)
+
+    def test_neural096_saved_packet_audit_does_not_become_independent_source_validation(self):
+        self.install(evidence.NEURAL096_PREPARATION)
+        result = evidence.load(self.root, {'NEURAL-096'})
+        self.assertEqual(result['counts']['neural_source_preparation_reports'], 1)
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 0)
+        self.assertEqual(result['counts']['author_model_inference_probes'], 0)
+        self.assertEqual(result['counts']['pilot_attempts'], 0)
+        row = result['records']['NEURAL-096'][0]
+        self.assertEqual(row['coverage']['trials'], 204)
+        self.assertEqual(row['coverage']['units'], 54)
+        self.assertEqual(row['coverage']['retained_spikes'], 81311)
+        self.assertIsNone(row['execution_commit'])
+        self.assertFalse(row['verification']['independent_source_spike_reread'])
+        self.assertFalse(row['verification']['additional_14_unit_ids_independently_recovered'])
+        self.assertEqual(row['verification']['generated_platform_skipped'], 1)
+        self.assertEqual(row['reference_contrasts'], 0)
+        self.assertFalse(row['full_task_completed'])
+
+    def test_neural096_claim_promotion_and_population_corruption_refuse(self):
+        mutations = {
+            'population': lambda d: d['observations'].update(trials=203),
+            'units': lambda d: d['observations'].update(units=40),
+            'spikes': lambda d: d['observations'].update(retained_spikes=81310),
+            'omit-empty-cells': lambda d: d['observations'].update(empty_support_cells_preserved=0),
+            'source-reread': lambda d: d['verification'].update(independent_source_spike_reread=True),
+            'unit-identities': lambda d: d['verification'].update(additional_14_unit_ids_independently_recovered=True),
+            'invented-execution-commit': lambda d: d.update(execution_commit='a' * 40),
+            'scientific-contrast': lambda d: d.update(reference_contrasts=1),
+            'model-trial': lambda d: d.update(new_model_trials=1),
+            'full-task': lambda d: d.update(full_task_completed=True),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                document = self.document(evidence.NEURAL096_PREPARATION)
+                mutate(document)
+                self.install(evidence.NEURAL096_PREPARATION, document)
+                with self.assertRaises(ValueError):
+                    evidence.load(self.root)
+
+    def test_new_source_and_probe_records_do_not_open_embedded_dependencies(self):
+        selected = (evidence.SMC_PREPARATION, evidence.SMC_PROBES, evidence.NEURAL096_PREPARATION)
+        for name in selected:
+            self.install(name)
+        original = Path.open
+        observed = []
+        def guarded(path, *args, **kwargs):
+            relative = path.relative_to(self.root).as_posix()
+            self.assertIn(relative, selected)
+            observed.append(relative)
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'open', guarded):
+            result = evidence.load(self.root, {'PAPER-SMC-RNN-2024', 'NEURAL-096'})
+        self.assertEqual(observed, list(selected))
+        self.assertEqual(result['counts']['public_reports'], 3)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 2)
 
     def test_malformed_duplicate_and_nonfinite_json_refuse(self):
         path = self.install(evidence.PILOT)

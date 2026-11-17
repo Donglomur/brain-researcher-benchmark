@@ -36,14 +36,26 @@ class EvidenceCommandTests(unittest.TestCase):
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
         self.assertEqual(result['counts']['direct_interpretation_attempts'], 0)
         self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
-        self.assertEqual(result['counts']['paper_source_preparation_reports'], 2)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
+        self.assertEqual(result['counts']['public_reports'], 12)
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
+        self.assertEqual(result['counts']['neural_source_preparation_reports'], 1)
+        self.assertEqual(result['counts']['author_model_inference_probes'], 2)
         for task in ('PAPER-paper-method-003', 'PAPER-paper-method-013'):
             preparation = [record for record in result['records'][task]
                            if record['category'] == 'paper_source_preparation']
             self.assertEqual(len(preparation), 1)
             self.assertEqual(preparation[0]['model_attempts_recorded'], 0)
             self.assertFalse(preparation[0]['author_baseline_qualified'])
+        smc = result['records']['PAPER-SMC-RNN-2024']
+        probes = [record for record in smc if record['category'] == 'author_model_inference_probe']
+        self.assertEqual(len(probes), 2)
+        self.assertTrue(all(record['model_executed'] for record in probes))
+        self.assertTrue(all(record['solver_attempts_recorded'] == 0 for record in probes))
+        self.assertTrue(all(not record['author_baseline_calibration_complete'] for record in probes))
+        neural = result['records']['NEURAL-096'][0]
+        self.assertEqual(neural['category'], 'neural_source_preparation')
+        self.assertFalse(neural['verification']['independent_source_spike_reread'])
         self.assertIn('selected public reports only', result['scope'])
         self.assertIn('not current runtime verification', result['scope'])
         for task_records in result['records'].values():

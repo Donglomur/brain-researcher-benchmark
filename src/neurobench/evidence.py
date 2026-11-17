@@ -24,7 +24,15 @@ TRANSPORT = 'benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EV
 NATIVE_REPAIR = 'docs/status/operator-controls-rename-20261116.json'
 REVE_PREPARATION = 'docs/status/reve-source-preparation-20261116.json'
 DEEP_PREPARATION = 'docs/status/deepcaimx-source-preparation-20261116.json'
-PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION)
+SMC_HOME = 'benchmarks/paper/PAPER-SMC-RNN-2024/'
+SMC_PREPARATION = SMC_HOME + 'docs/source-preparation-evidence.json'
+SMC_PROBES = SMC_HOME + 'docs/native-cost-characterization.json'
+NEURAL096_HOME = 'benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/'
+NEURAL096_PREPARATION = NEURAL096_HOME + 'AUTHENTIC_PREPARATION.json'
+SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf95be5'
+SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
+PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
+                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -665,6 +673,227 @@ def paper_preparation_records(doc, source):
     return [row]
 
 
+def exact_counts(value, expected, label):
+    value = obj(value)
+    require(all(integer(value[key]) == count for key, count in expected.items()), label + ' counts differ')
+    return {key: value[key] for key in expected}
+
+
+def extent(value):
+    require(type(value) is int and 0 < value <= 1024 ** 4, 'invalid published byte extent')
+    return value
+
+
+def pin_map(value, expected_names):
+    value = obj(value)
+    require(set(value) == set(expected_names), 'published pin inventory differs')
+    result = {}
+    for name, pin in value.items():
+        obj(pin)
+        require(set(pin) == {'bytes', 'sha256'}, 'published pin must not carry an extra locator')
+        result[name] = {'bytes': extent(pin['bytes']), 'sha256': digest(pin['sha256'])}
+    return result
+
+
+def smc_preparation_records(doc, source):
+    require(type(doc.get('schema_version')) is int and doc['schema_version'] == 1
+            and doc.get('schema') == 'smc_source_preparation_evidence_v1'
+            and doc.get('kind') == 'paper_source_preparation' and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
+            and all(doc[key] is False for key in ('author_baseline_calibration_complete', 'author_baseline_qualified',
+                'candidate_improvement_evaluated', 'participant_episode_executed', 'scientific_qualification', 'scientific_result'))
+            and integer(doc['model_trials']) == 0 and integer(doc['solver_attempts']) == 0,
+            'SMC preparation cannot inherit model execution or qualification')
+    coverage = exact_counts(doc['coverage'], {'bin_ms': 20, 'forward_bins': 10, 'heldin_neurons': 137,
+        'heldout_neurons': 45, 'observation_bins': 35, 'source_conditions': 108, 'source_excluded_rows': 0,
+        'source_neurons': 182, 'source_trials': 2869}, 'SMC source population')
+    coverage['test'] = exact_counts(doc['coverage']['test'], {'train': 2295, 'eval': 574}, 'SMC test')
+    coverage['validation'] = exact_counts(doc['coverage']['validation'], {'train': 1721, 'eval': 574}, 'SMC validation')
+    coverage['condition_scope'] = text(doc['coverage']['condition_scope'])
+    references = obj(doc['coverage']['reference_manifests'])
+    require(set(references) == {'reference_panel.json', 'reference_validation_panel.json'}, 'SMC reference set differs')
+    for name, expected_hash in (('reference_panel.json', SMC_PUBLIC_PANEL),
+                               ('reference_validation_panel.json', '772123900caed9a8fdfc7799cb5496e70ff89620cbb01d271afb960ef86ed54a')):
+        require(obj(references[name]) == {'path': 'implementations/source-matched-nlb-v1/' + name, 'sha256': expected_hash},
+                'SMC public reference projection identity differs')
+    prefix = 'implementations/source-matched-nlb-v1/'
+    executed_names = {prefix + name for name in ('prepare.py', 'memory_prepare.py', 'preparation_memory.patch', 'control_memory_preparation.py')}
+    current_names = executed_names | {prefix + name for name in ('delivery.py', 'scorer.py', 'reference_panel.json',
+                                                                 'reference_validation_panel.json', 'control_temporal_access.py')}
+    def normalized(snapshot, names, execution=False):
+        snapshot = obj(snapshot)
+        require(type(snapshot['files']) is list and {obj(pin)['path'] for pin in snapshot['files']} == names,
+                'SMC task-relative source inventory differs')
+        expanded = {**snapshot, 'files': [{**pin, 'path': SMC_HOME + pin['path']} for pin in snapshot['files']]}
+        return source_snapshot(expanded, {SMC_HOME + name for name in names}, execution=execution)
+    executed = normalized(doc['source_execution'], executed_names, True)
+    current = normalized(doc['current_source'], current_names)
+    require(executed['commit'] is None and 'publication_commit' in executed
+            and executed.get('binding_status') == 'reviewed_post_execution_source_identity',
+            'SMC preparation must preserve its uncommitted execution source')
+    current_pins = {pin['path']: pin for pin in current['files']}
+    require(all(current_pins[pin['path']] == pin for pin in executed['files']), 'SMC executed preparation source changed')
+    require(all(current_pins[SMC_HOME + reference['path']]['sha256'] == reference['sha256']
+                for reference in references.values()),
+            'SMC reference snapshot contradicts coverage')
+    delivery = obj(doc['paired_delivery'])
+    delivery_counts = exact_counts(delivery, {'shared_files': 12, 'code_only_source_files': 28,
+        'code_condition_additions': 29, 'total_files': 56}, 'SMC paired material')
+    require(extent(delivery['total_payload_bytes']) == 27828070 and delivery['audit_passed'] is True
+            and delivery['status'] == 'participant_materials_prepared'
+            and all(delivery[key] is False for key in ('checkpoints_included', 'operator_predictions_included',
+                'episode_executed', 'temporal_access_enforced', 'test_target_payloads_included')),
+            'SMC paired material access or execution scope differs')
+    require(obj(delivery['phase_counts']) == {'test': coverage['test'], 'val': coverage['validation']}
+            and obj(delivery['dimensions']) == {'forward_bins': 10, 'heldin': 137, 'heldout': 45, 'observation_bins': 35},
+            'SMC paired material dimensions differ')
+    preparation = obj(doc['preparation'])
+    versions = {text(key): text(value) for key, value in obj(preparation['versions']).items()}
+    require(preparation['python'] == '3.9.6' and versions.get('pandas') == '1.3.4'
+            and preparation['complete_original_fields_preserved'] is True and preparation['test_target_accessed'] is False,
+            'SMC original preparation environment or exposure differs')
+    retained = []
+    seen = set()
+    for pin in doc['retained_evidence']:
+        obj(pin)
+        identifier = text(pin['id'])
+        require(set(pin) == {'id', 'bytes', 'sha256'} and identifier not in seen
+                and all(c.isascii() and (c.isalnum() or c in '._-') for c in identifier), 'SMC retained identity invalid')
+        seen.add(identifier)
+        retained.append({'id': identifier, 'bytes': extent(pin['bytes']), 'sha256': digest(pin['sha256'])})
+    require('smc.preparation_environment-json' in seen and len(retained) == 8, 'SMC retained preparation evidence incomplete')
+    row = record('smc-original-source-preparation', 'PAPER-SMC-RNN-2024', 'paper_source_preparation', source, '',
+                 doc['scope'], 'complete original MC_Maze 20-ms preparation and paired materials', doc['limits'])
+    row.update(coverage=coverage, source_execution=executed, current_source=current, retained_evidence=retained,
+               preparation_controls={key: text(obj(doc['software_controls'])[key]) for key in ('mandatory_scorer', 'preparation_parity', 'temporal_access')},
+               preparation_environment={'python': '3.9.6', 'machine': text(preparation['machine']), 'versions': versions,
+                                       'role': 'Original NWB preparation; pandas 1.5.3 preparation was rejected.'},
+               paired_delivery={**delivery_counts, 'total_payload_bytes': 27828070, 'audit_passed': True,
+                                'participant_episode_executed': False, 'temporal_access_enforced': False,
+                                'test_target_payloads_included': False, 'pair_manifest_sha256': digest(delivery['pair_manifest_sha256'])},
+               input_exposure={key: text(obj(doc['input_exposure'])[key]) for key in ('boundary', 'original_test_targets', 'validation')},
+               model_attempts_recorded=0, solver_attempts_recorded=0, author_baseline_qualified=False,
+               scientific_result=False, original_records_in_publication=False)
+    return [row]
+
+
+def smc_probe_records(doc, source, preparation):
+    require(preparation is not None, 'SMC author probes require their preparation report')
+    prepared, preparation_pin = preparation
+    require(doc.get('schema') == 'smc_native_cost_characterization_v1' and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
+            and all(doc[key] is False for key in ('author_baseline_qualified', 'complete_predictions', 'scientific_result', 'test_targets_accessed')),
+            'SMC partial author probes cannot assert complete calibration or scientific results')
+    require(revision(doc['source_commit']) == obj(prepared['source'])['author_commit']
+            and doc['panel_sha256'] == SMC_ACTUAL_PANEL
+            and prepared['coverage']['reference_manifests']['reference_panel.json']['sha256'] == SMC_PUBLIC_PANEL,
+            'SMC author source or actual/public panel identity differs')
+    arms = obj(doc['arms'])
+    require(set(arms) == {'causal', 'noncausal'}, 'both SMC author inference probes required')
+    allocation = obj(doc['full_repeat_memory_control'])
+    require(all(allocation[key] is True for key in ('generated_only', 'arithmetic_checks_passed'))
+            and allocation['model_executed'] is False and allocation['target_access'] is False
+            and integer(allocation['repeats']) == 32 and allocation['train_shape'] == [2295, 45, 182]
+            and allocation['eval_shape'] == [574, 45, 182], 'generated allocation control must remain separate from model inference')
+    allocation_summary = {'generated_only': True, 'model_executed': False, 'target_access': False, 'repeats': 32,
+                          'control_sha256': digest(allocation['control_sha256']), 'source_sha256': digest(allocation['source_sha256'])}
+    result = []
+    for arm, values in arms.items():
+        values = obj(values)
+        require(integer(values['particles']) == 192 and integer(values['source_requested_repeats']) == 32
+                and values['smooth'] is False, 'SMC author inference recipe differs')
+        require(type(values['seed']) is int and 0 <= values['seed'] < 2 ** 32,
+                'invalid SMC inference seed')
+        versions = {text(key): text(value) for key, value in obj(values['versions']).items()}
+        require(versions.get('pandas') == '1.5.3' and versions.get('torch') == '2.3.1', 'SMC frozen-H5 inference environment differs')
+        timings = values['timings']
+        require(type(timings) is list and len(timings) == 2, 'SMC probe requires one train and one eval chunk')
+        seen, observed = set(), []
+        for timing in timings:
+            timing = obj(timing)
+            split = timing['split']
+            require(split in ('train', 'eval') and split not in seen, 'duplicate or unknown SMC probe split')
+            seen.add(split)
+            trials, chunk, chunks, source_chunks = (2295, 33, 70, 71) if split == 'train' else (574, 34, 17, 17)
+            exact_counts(timing, {'n_trials': trials, 'chunk_trials': chunk, 'actual_chunks': chunks,
+                                 'source_chunks': source_chunks, 'full_repeats': 32}, 'SMC chunk coverage')
+            require(timing['full_array_shape'] == [chunk, 182, 45, 192] and timing['finite_nonnegative'] is True,
+                    'SMC native chunk output shape or finite check differs')
+            observed.append({'split': split, 'observed_chunk_trials': chunk, 'complete_split_trials': trials,
+                             'wall_seconds': number(timing['wall_seconds']), 'cpu_seconds': number(timing['cpu_seconds'])})
+            require(observed[-1]['wall_seconds'] > 0 and observed[-1]['cpu_seconds'] > 0, 'invalid measured native chunk cost')
+        row = record('smc-author-inference-probe:' + arm, 'PAPER-SMC-RNN-2024', 'author_model_inference_probe', source,
+                     '/arms/' + arm, 'Actual selected author-checkpoint inference on the first train and eval chunks only; no complete predictions, scores or 32-repeat baseline.',
+                     arm + ' author model, 192 particles, filtered outputs', [
+                         'Two partial author-model probes are not candidate or solver attempts.',
+                         'Full-panel, all-repeat author calibration and printed-score linkage remain unqualified.',
+                         'Full-run time and memory projections are estimates; generated allocation controls are not model inference.',
+                         'Original test targets were publicly exposed, but were not accessed by these probes.'])
+        row.update(model_executed=True, author_model_probe_count=1, native_inference_calls=2,
+                   observed_chunks=observed, particles=192, source_requested_repeats=32, seed=values['seed'],
+                   author_source_commit=doc['source_commit'], source_snapshot_sha256=digest(doc['source_snapshot_sha256']),
+                   source_postcheck_sha256=digest(doc['source_postcheck_sha256']),
+                   panel_identity_roles={'actual_prepared_panel_sha256': SMC_ACTUAL_PANEL,
+                       'public_reference_projection_sha256': SMC_PUBLIC_PANEL,
+                       'relationship': 'The public reference is an independently reviewed exact metadata subset of the same native panel, preserving H5 file/content, order and count identities; the distinct hashes identify different JSON bodies.',
+                       'relationship_review': {'bytes': 5312, 'sha256': '736add808b2d29fd321cb291069de0a9318e89bcaf0815b28b0e100428b7fe68'}},
+                   preparation_report=preparation_pin,
+                   inference_environment={'python': '3.11', 'machine': 'arm64', 'versions': versions,
+                       'role': 'Reads frozen prepared H5 inputs only; does not perform NWB preparation.',
+                       'identity_basis': 'Separately retained preparation-environment receipt and independent native/public panel relationship review.'},
+                   preparation_environment={'python': prepared['preparation']['python'], 'pandas': prepared['preparation']['versions']['pandas'],
+                                            'role': 'Original NWB preparation, separately executed under Python 3.9 and pandas 1.3.4.'},
+                   generated_allocation_control=allocation_summary, complete_predictions=False, scoring_performed=False,
+                   solver_attempts_recorded=0, candidate_attempts_recorded=0, author_baseline_calibration_complete=False,
+                   author_baseline_qualified=False, scientific_result=False, original_records_in_publication=False)
+        result.append(row)
+    return result
+
+
+def neural096_preparation_records(doc, source):
+    require(doc.get('schema') == 'neural096_authentic_source_preparation_summary_v1' and doc.get('task_id') == 'NEURAL-096'
+            and doc.get('status') == 'complete_declared_source_observations_prepared' and doc.get('execution_commit') is None
+            and all(doc[key] is False for key in ('full_task_completed', 'scientific_qualified'))
+            and all(integer(doc[key]) == 0 for key in ('fits', 'new_model_trials', 'reference_contrasts')),
+            'NEURAL-096 source preparation cannot claim contrasts, models or qualification')
+    coverage = exact_counts(doc['observations'], {'empty_support_cells_preserved': 3, 'excluded_selected_trials': 0,
+        'nlb_heldin_units': 40, 'nlb_heldout_units': 14, 'packet_bytes': 640017, 'phase_bins': 20,
+        'recording_observation_segments': 6, 'retained_spikes': 81311, 'source_train': 150,
+        'source_validation': 54, 'trials': 204, 'units': 54, 'unsupported_selected_trials': 0}, 'NEURAL-096 preparation')
+    require(all(doc['observations'][key] is True for key in ('all_native_timestamps_retained', 'source_sha256_verified')),
+            'NEURAL-096 source timestamp or identity check differs')
+    verification = obj(doc['verification'])
+    require(verification['authentic_preparation_success'] is True and verification['independent_saved_packet_audit'] == 'passed'
+            and verification['prior_cue_metadata_roster_match'] is True
+            and verification['independent_source_spike_reread'] is False
+            and verification['additional_14_unit_ids_independently_recovered'] is False,
+            'NEURAL-096 saved-packet audit cannot become independent NWB or held-out-unit recovery')
+    exact_counts(verification, {'generated_passed': 33, 'generated_platform_skipped': 1,
+                               'independently_recounted_trial_unit_bins': 220320}, 'NEURAL-096 verification')
+    sources = pin_map(doc['executed_source_files'], {'PROTOCOL.json', 'core.py', 'prepare.py'})
+    retained = pin_map(doc['evidence_receipt_pins'], {'SOURCE_FREEZE.json', 'audit-run.json', 'native-run.json',
+        'numerical-review/FINAL_REVIEW.json', 'numerical-review/GENERATED_CONTROLS-02.json', 'numerical-review/REVIEW.json',
+        'numerical-review/SAVED_PACKET_AUDIT-01.json', 'prepared-v1/receipt.json', 'source-review/DOCUMENTATION_REVIEW.json',
+        'source-review/PREPARATION_SCIENCE_REVIEW.json', 'source-review/REVIEW.json'})
+    original = obj(doc['source'])
+    require(integer(original['animal_count']) == 1 and integer(original['session_count']) == 1
+            and original['previously_exposed'] is True, 'NEURAL-096 source population/exposure differs')
+    row = record('neural096-authentic-source-preparation', 'NEURAL-096', 'neural_source_preparation', source, '',
+                 'Complete declared Set–Go source observations prepared; saved-packet recount checks internal consistency, not an independent reread of all NWB spikes or a scientific contrast.',
+                 'one exposed source session; full retained spike timestamps and count packet',
+                 texts(doc['remaining']) + texts(verification['audit_limits']))
+    row.update(coverage=coverage, execution_commit=None, execution_attestation=text(doc['execution_attestation']),
+               executed_source_files=[{'path': NEURAL096_HOME + name, **pin} for name, pin in sorted(sources.items())],
+               retained_evidence=[{'id': name.replace('/', '-'), **pin} for name, pin in sorted(retained.items())],
+               source_identity={'sha256': digest(original['sha256']), 'bytes': extent(original['bytes']),
+                   'dandiset': text(original['dandiset']), 'version': text(original['version']), 'asset_id': text(original['asset_id']),
+                   'animal_count': 1, 'session_count': 1, 'previously_exposed': True},
+               verification={'independent_saved_packet_audit': 'passed', 'independently_recounted_trial_unit_bins': 220320,
+                   'independent_source_spike_reread': False, 'additional_14_unit_ids_independently_recovered': False,
+                   'generated_passed': 33, 'generated_platform_skipped': 1, 'platform_skip': text(verification['platform_skip'])},
+               model_attempts_recorded=0, solver_attempts_recorded=0, reference_contrasts=0,
+               full_task_completed=False, scientific_result=False, original_records_in_publication=False)
+    return [row]
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -683,7 +912,10 @@ def load(root, task_ids=None):
                               (DIRECT, engineering_records), (VIEWER, lambda doc, source: engineering_records(doc, source, True)),
                               (NATIVE, native_operator_records), (TRANSPORT, viewer_transport_records),
                               (NATIVE_REPAIR, native_operator_records),
-                              (REVE_PREPARATION, paper_preparation_records), (DEEP_PREPARATION, paper_preparation_records)):
+                              (REVE_PREPARATION, paper_preparation_records), (DEEP_PREPARATION, paper_preparation_records),
+                              (SMC_PREPARATION, smc_preparation_records),
+                              (SMC_PROBES, lambda doc, source: smc_probe_records(doc, source, captured_reports.get(SMC_PREPARATION))),
+                              (NEURAL096_PREPARATION, neural096_preparation_records)):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -710,6 +942,10 @@ def load(root, task_ids=None):
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
         'paper_source_preparation_reports': categories['paper_source_preparation'],
+        'neural_source_preparation_reports': categories['neural_source_preparation'],
+        'author_model_inference_probes': categories['author_model_inference_probe'],
+        'author_model_inference_probe_reports': len({row['source']['path'] for items in records.values() for row in items
+                                                   if row['category'] == 'author_model_inference_probe'}),
         'paper_source_preparation_tasks': sum(any(row['category'] == 'paper_source_preparation' for row in items)
                                              for items in records.values()),
         'scripted_viewer_sessions': sum(row['coverage']['valid_unscored_sessions'] for items in records.values() for row in items
