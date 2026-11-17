@@ -200,6 +200,85 @@ class ManifestControls(unittest.TestCase):
                     launcher.validate_document(document,'stdlib')
 
 
+class AggregateControls(unittest.TestCase):
+    PASS='import unittest\nclass Checks(unittest.TestCase):\n def test_one(self): self.assertTrue(True)\nif __name__=="__main__": unittest.main()\n'
+    SKIP='import unittest\nclass Checks(unittest.TestCase):\n @unittest.skip("generated skipped control")\n def test_one(self): pass\nif __name__=="__main__": unittest.main()\n'
+
+    def fixture(self,root,programs,counts=None):
+        source,manifest,document=ManifestControls.fixture(self,root)
+        template=document['commands'][0]
+        commands=[];pins=[]
+        for index,program in enumerate(programs):
+            path=source.with_name('control%d.py'%index);path.write_text(program)
+            relative=path.relative_to(root).as_posix();raw=path.read_bytes()
+            pins.append({'path':relative,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+            commands.append({**template,'id':'control%d'%index,'test_paths':[relative],
+                'argv':['${PYTHON}','-I','-S','-B',relative],
+                'expected_tests':counts[index] if counts else 1})
+        document['commands']=commands
+        manifest.write_text(json.dumps(document))
+        inventory=root/'benchmarks/integrity/source-ownership.json'
+        inventory.write_text(json.dumps({'files':pins}))
+        return manifest,document,inventory
+
+    def test_failed_then_passed_then_skipped_are_all_retained(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            manifest,_,_=self.fixture(root,['raise SystemExit(4)\n',self.PASS,self.SKIP])
+            output=base/'results'
+            with self.assertRaisesRegex(ValueError,'2 of 3 authenticated commands failed'):
+                launcher.run(root,manifest,'stdlib',output)
+            result=json.loads((output/'results.json').read_text())
+            self.assertEqual((result['status'],result['attempted']),('failed',3))
+            self.assertEqual([r['id'] for r in result['completed']],['control1'])
+            self.assertEqual([r['id'] for r in result['failed']],['control0','control2'])
+            self.assertIn('process exit 4',result['failed'][0]['error'])
+            self.assertIn('skipped',result['failed'][1]['error'])
+            self.assertEqual(len(list(output.glob('*.log'))),3)
+
+    def test_count_mismatch_is_retained_and_later_control_runs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            manifest,_,_=self.fixture(root,[self.PASS,self.PASS],[2,1])
+            output=base/'results'
+            with self.assertRaisesRegex(ValueError,'1 of 2 authenticated commands failed'):
+                launcher.run(root,manifest,'stdlib',output)
+            result=json.loads((output/'results.json').read_text())
+            self.assertEqual(result['attempted'],2)
+            self.assertIn('test count mismatch',result['failed'][0]['error'])
+            self.assertEqual(result['completed'][0]['id'],'control1')
+
+    def test_later_bad_pin_prevents_every_launch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            manifest,_,inventory=self.fixture(root,[self.PASS,self.PASS])
+            pins=json.loads(inventory.read_text());pins['files'][1]['sha256']='0'*64
+            inventory.write_text(json.dumps(pins));output=base/'results'
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(ValueError,'source pin mismatch'):
+                launcher.run(root,manifest,'stdlib',output)
+            execute.assert_not_called();self.assertFalse(output.exists())
+
+    def test_later_missing_cwd_prevents_every_launch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            manifest,document,_=self.fixture(root,[self.PASS,self.PASS])
+            document['commands'][1]['cwd']='missing';manifest.write_text(json.dumps(document))
+            output=base/'results'
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(ValueError,'missing control path'):
+                launcher.run(root,manifest,'stdlib',output)
+            execute.assert_not_called();self.assertFalse(output.exists())
+
+    def test_unexpected_run_or_cleanup_errors_stay_fatal(self):
+        for error in (OSError('generated infrastructure failure'),ValueError('generated cleanup failure')):
+            with self.subTest(error=type(error).__name__),tempfile.TemporaryDirectory() as tmp:
+                base=Path(tmp);root=base/'repo';root.mkdir()
+                manifest,_,_=self.fixture(root,[self.PASS,self.PASS]);output=base/'results'
+                with patch.object(launcher,'run_command',side_effect=error) as execute,self.assertRaises(type(error)):
+                    launcher.run(root,manifest,'stdlib',output)
+                self.assertEqual(execute.call_count,1)
+                self.assertFalse((output/'results.json').exists())
+
+
 class Response:
     def __init__(self,body=b'code',url='https://raw.githubusercontent.com/a/b/abc/source.py',code=200,headers=None):
         self.stream=io.BytesIO(body)
@@ -225,6 +304,31 @@ class Opener:
 
 
 class FixtureControls(unittest.TestCase):
+    def test_exact_physionet_object_address_only(self):
+        address='https://physionet-open.s3.amazonaws.com/chbmit/1.0.0/RECORDS'
+        self.document['fixtures']['source']['url']=address
+        result,opener,_=self.run_fetch([Response(url=address)])
+        self.assertEqual(result['files'][0]['fetched_url'],address)
+        self.assertEqual(len(opener.requests),1)
+        for refused in (address+'?download=1',address+'#fragment',address+'/',
+                        address.replace('RECORDS','OTHER'),address.replace('/1.0.0/','/1.0.1/'),
+                        address.replace('https://','http://'),
+                        address.replace('https://','https://user:secret@'),
+                        address.replace('.com/','.com:443/'),
+                        address.replace('physionet-open.','another-bucket.')):
+            with self.subTest(url=refused),self.assertRaises(ValueError):
+                launcher._url(refused)
+
+    def test_physionet_cross_host_redirect_still_refused(self):
+        origin='https://physionet.org/files/chbmit/1.0.0/RECORDS'
+        address='https://physionet-open.s3.amazonaws.com/chbmit/1.0.0/RECORDS'
+        self.document['fixtures']['source']['url']=origin
+        response=Response(b'',url=origin,code=302,headers={'Location':address})
+        with self.assertRaisesRegex(ValueError,'cross-host fixture redirect refused'):
+            self.run_fetch([response])
+        self.assertEqual(self.receipt()['response_bytes_read'],0)
+        self.assertFalse((self.dest/'author/source.py').exists())
+
     def setUp(self):
         self.temporary=tempfile.TemporaryDirectory()
         self.base=Path(self.temporary.name).resolve()
