@@ -11,7 +11,7 @@ from unittest import mock
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location('operator_routes', ROOT / 'src/neurobench/operator.py')
+spec = importlib.util.spec_from_file_location('operator_routes', ROOT / 'src/neurobench/operator_routes.py')
 op = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(op)
 

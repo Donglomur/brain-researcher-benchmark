@@ -35,7 +35,7 @@ def improvement_module():
 
 def companion_module(name):
     """Load a fixed framework sibling without importing task implementation code."""
-    need(name in {'neural_understanding', 'evidence', 'operator'}, 'Unknown framework companion')
+    need(name in {'neural_understanding', 'evidence', 'operator_routes'}, 'Unknown framework companion')
     spec = importlib.util.spec_from_file_location('neurobench_' + name,
                                                  Path(__file__).with_name(name + '.py'))
     module = importlib.util.module_from_spec(spec)

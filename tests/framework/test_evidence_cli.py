@@ -119,7 +119,7 @@ class EvidenceCommandTests(unittest.TestCase):
                 patch.object(cli.subprocess, 'run', side_effect=AssertionError('outer CLI executed a process')):
             result = cli.main(arguments, root=directory)
             self.assertEqual(result, 9)
-            companion.assert_called_once_with('operator')
+            companion.assert_called_once_with('operator_routes')
             operator.main.assert_called_once_with(arguments[1:], root=Path(directory))
         self.assertEqual(arguments[0], 'operator')
 

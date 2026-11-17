@@ -581,7 +581,7 @@ def main(argv=None, root=None):
     root = ROOT if root is None else Path(root)
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] == 'operator':
-        return public_catalog_module().companion_module('operator').main(argv[1:], root=root)
+        return public_catalog_module().companion_module('operator_routes').main(argv[1:], root=root)
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest='action', required=True)
     subs.add_parser('status')
