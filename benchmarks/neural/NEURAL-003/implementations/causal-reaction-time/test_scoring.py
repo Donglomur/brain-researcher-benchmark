@@ -25,6 +25,7 @@ def load_scorer(name, filename):
 
 OLD = load_scorer("original_fixture", "fixtures/scoring_before_overflow.py")
 NEW = load_scorer("successor_fixture", "neural003/scoring.py")
+SCHEMA = sys.modules["successor_fixture.prediction_schema"]
 ARMS = ("eeg", "contrast_instruction")
 MAX = sys.float_info.max
 
@@ -143,6 +144,78 @@ class ScoringRegression(unittest.TestCase):
         self.assertTrue(all(row["eeg"] == expected for row in result["per_person"]))
         self.assertEqual(result["paired_gain_seconds"], 0.0)
         self.assert_exact_extreme_means(result)
+
+
+class NumericAdmissionRegression(unittest.TestCase):
+    def fixture(self, prediction, target):
+        outputs, expected, targets = case(lambda p, a, i: prediction)
+        for rows in targets.values():
+            for row in rows:
+                row["rt_seconds"] = target
+        return outputs, expected, targets
+
+    def test_original_rounded_target_repro_is_operator_fault(self):
+        outputs, expected, targets = self.fixture(2**53, 2**53 + 1)
+        calls = []
+        with self.assertRaisesRegex(NEW.InvalidTargetRT, "operator target fault.*exactly representable"):
+            NEW.grade(outputs, expected, lambda: calls.append(True) or targets)
+        self.assertEqual(calls, [True])
+
+    def test_reverse_repro_fails_even_at_last_candidate_row_before_target_access(self):
+        outputs, expected, targets = self.fixture(2**53, 2**53)
+        outputs[(25, "eeg")][-1]["rt_seconds"] = 2**53 + 1
+        # If both sides are faulty, candidate admission must still fail first.
+        targets[0][0]["rt_seconds"] = 2**53 + 1
+        calls = []
+        with self.assertRaisesRegex(SCHEMA.InvalidPredictionRT, "candidate.*exactly representable"):
+            NEW.grade(outputs, expected, lambda: calls.append(True) or targets)
+        self.assertEqual(calls, [])
+
+    def test_representable_boundary_neighbors_preserve_one_second_mae(self):
+        for prediction, target in ((2**53 - 1, float(2**53)),
+                                   (float(2**53), 2**53 - 1)):
+            with self.subTest(prediction=prediction, target=target):
+                outputs, expected, targets = self.fixture(prediction, target)
+                result = NEW.grade(outputs, expected, lambda: targets)
+                self.assertEqual(result["macro_mae_seconds"],
+                                 {arm: 1.0 for arm in ARMS})
+                self.assertTrue(all(row[arm] == 1.0
+                                    for row in result["per_person"] for arm in ARMS))
+                self.assertEqual(result["paired_gain_seconds"], 0.0)
+                self.assertFalse(result["qualification"])
+
+    def test_exact_values_above_2_to_53_have_no_arbitrary_magnitude_cap(self):
+        values = (4, 2**53 + 2, 2**100, 2**1023, int(MAX), MAX,
+                  math.nextafter(0.1, math.inf))
+        for value in values:
+            with self.subTest(value=value):
+                outputs, expected, targets = self.fixture(value, value)
+                calls = []
+                result = NEW.grade(outputs, expected, lambda: calls.append(True) or targets)
+                self.assertEqual(calls, [True])
+                self.assertEqual(result["macro_mae_seconds"],
+                                 {arm: 0.0 for arm in ARMS})
+                self.assertEqual(result["people"], 26)
+                self.assertTrue(result["constant_outputs_valid"])
+                self.assertFalse(result["qualification"])
+
+    def test_invalid_numbers_are_classified_on_the_correct_side_of_target_barrier(self):
+        invalid = (2**53 + 1, int(MAX) + 1, 2**1024, math.inf, math.nan,
+                   0.1, math.nextafter(0.1, 0.0), 0, -1, True, "1")
+        for value in invalid:
+            for side in ("prediction", "target"):
+                with self.subTest(value=value, side=side):
+                    outputs, expected, targets = self.fixture(1, 1)
+                    if side == "prediction":
+                        outputs[(25, "eeg")][-1]["rt_seconds"] = value
+                        error_type = SCHEMA.InvalidPredictionRT
+                    else:
+                        targets[25][-1]["rt_seconds"] = value
+                        error_type = NEW.InvalidTargetRT
+                    calls = []
+                    with self.assertRaises(error_type):
+                        NEW.grade(outputs, expected, lambda: calls.append(True) or targets)
+                    self.assertEqual(calls, [] if side == "prediction" else [True])
 
 
 if __name__ == "__main__":

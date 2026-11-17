@@ -1,0 +1,135 @@
+{
+  "schema": "numeric_neural003_current_bindings_v1",
+  "benchmark_id": "NEURAL-003",
+  "package": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time",
+  "comparison_commit": "68a9ae5c9bd927949fee99b1add5793f7e7d88b0",
+  "finding": "N003-INTEGER-ROUNDING-001",
+  "change": "Require lossless finite binary64 conversion for built-in integer RT inputs on both candidate and operator target sides. Reject 2**53+1 and overflowing integers before arithmetic; preserve all exactly representable finite integers, including above 2**53.",
+  "arithmetic": "Input conversion is lossless for admitted integers. Existing binary64 subtraction, participant-macro MAE, paired-person gains, and overflow-safe mean arithmetic remain unchanged. This does not promise exact-real arithmetic for all magnitudes.",
+  "error_boundary": {
+    "candidate": "InvalidPredictionRT (ValueError subclass) before sealed_targets is called, including faults at the final roster row.",
+    "operator_target": "InvalidTargetRT (ValueError subclass) after one sealed_targets call; no score is emitted for faulty target numerics."
+  },
+  "population": {
+    "people": 26,
+    "arms": [
+      "eeg",
+      "contrast_instruction"
+    ],
+    "required_person_arm_outputs": 52,
+    "weighting": "equal-person participant-macro MAE"
+  },
+  "current_sources": [
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/prediction_schema.py",
+      "bytes": 3195,
+      "sha256": "3cadd8774c3e52e158ab509b5e857c0aee769a59c7c56a9549f3f385670ce6aa"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/scoring.py",
+      "bytes": 3694,
+      "sha256": "0a7ee0de45cc72d377fe84ec41487f2ce9235321cce824ec2ae6a30aad578f37"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/test_scoring.py",
+      "bytes": 10557,
+      "sha256": "81bd14dc7304effd4d8aecb84ffd2333e2f5410104fa6b1e8f6c213fb1df3a0c"
+    },
+    {
+      "path": "tests/benchmarks/test_numeric_neural003.py",
+      "bytes": 1556,
+      "sha256": "4a5236342df4f38827820f7356b8f599dc0198eda86e2edd3ea081a69e980f09"
+    }
+  ],
+  "predecessor_source_identities": [
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/prediction_schema.py",
+      "bytes": 2223,
+      "sha256": "46bce884b194fa3807a2be2a3fc902aa6cb48cf2a1fd4bc0c105584f45f44991"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/scoring.py",
+      "bytes": 3526,
+      "sha256": "827b31632ea0e42f99fb84905428cd9351b8631fa521a2cbe6de50c34242fa90"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/test_scoring.py",
+      "bytes": 6577,
+      "sha256": "9bd02609e7f9a37859bffd0084b29ccded429684e2c65a190474d277e05e368d"
+    }
+  ],
+  "preserved_contracts": [
+    {
+      "path": "benchmarks/neural/NEURAL-003/task.json",
+      "bytes": 11638,
+      "sha256": "49e6a48f5c0f099e4a054fc9882674a745c05b28b0e9c1c69f6c7798f329c05e"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/CONSTRUCTION_DECISION.md",
+      "bytes": 3410,
+      "sha256": "e0b4dd9e7d4cc0e979ba808763ff1f2c12c0c1db2b4f7104cf56d0581c373e8f"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/MISSING_INPUT_CONTRACT.json",
+      "bytes": 3056,
+      "sha256": "6ce34351df7685d36102c5ca263a57e2c684c1a98d29ea7e56f41f2a9ea9778b"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/README.md",
+      "bytes": 4285,
+      "sha256": "3f3543ae31d2ccebb1bb47725aae46fad33dbfd9324e18b72d36f3753d2e1279"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/fixtures/scoring_before_overflow.py",
+      "bytes": 2737,
+      "sha256": "11299c87f9b0a4affa50bdaff57cad8923a2b1599effb90e767f82cad6761d45"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/__init__.py",
+      "bytes": 80,
+      "sha256": "3c5aa9e09f7193bd043b0a78cc35fd13e797c5ccebafdc28e7f4793c43379a96"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/partition.py",
+      "bytes": 2659,
+      "sha256": "aca8a7576c63cd4d4825c15a089cee4f2663aa7475b79a981403f25ef10aae90"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/reference.py",
+      "bytes": 6918,
+      "sha256": "ecb3f5ae31fcbae047e8df9dbc6de496750615a8dc9a0e081874f55ad6c5c5a1"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/window.py",
+      "bytes": 5546,
+      "sha256": "f8dc1d3677803ade4a50893e9e3a1ab882c101e26e8112ca9e60fb8f3de75f62"
+    }
+  ],
+  "historical_readme_note": "The unchanged package README describes the predecessor snapshot. Its five-unchanged-modules statement and seven-test count do not describe this current binding. prediction_schema.py and scoring.py now differ, and the current package has 12 generated tests. The current regression command is recorded below; the old components/neural003-causal-rt path is historical.",
+  "commands": [
+    [
+      "python3",
+      "-I",
+      "-S",
+      "-B",
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/test_scoring.py"
+    ],
+    [
+      "python3",
+      "-I",
+      "-S",
+      "-B",
+      "tests/benchmarks/test_numeric_neural003.py"
+    ]
+  ],
+  "regression_scope": "Invented complete26-person/52-arm controls; no authentic inputs, protected reference reads, model execution, installation, or scientific run.",
+  "remaining_limits": [
+    "Original raw roster, rights, joins, clock calibration, native decoder/channel identity, outcome-independent eligibility and nonresponse policy remain unresolved.",
+    "Protected complete target production and separately enforced fold/arm isolation remain unresolved.",
+    "Resource feasibility, numerical agreement against authentic data, reference competence, and uncertainty qualification remain unresolved.",
+    "Historical task/source records and the predecessor scoring fixture are preserved; this descriptor is the current repair binding."
+  ],
+  "scientific_qualification": false,
+  "execution_authority": false,
+  "new_benchmark_ids": 0
+}

@@ -3,6 +3,31 @@ import math
 
 ARMS = ("eeg", "contrast_instruction")
 
+
+class InvalidPredictionRT(ValueError):
+    """Candidate RT admission failed before any private target access."""
+
+
+def _admit_rt_seconds(value):
+    """Return a finite binary64 RT without silently changing an integer input.
+
+    Representability, rather than an arbitrary magnitude cap, is required:
+    exactly representable integers above 2**53 remain valid. Built-in floats
+    already express binary64 values; arithmetic remains binary64 thereafter.
+    """
+    if type(value) not in (int, float):
+        raise ValueError("RT must be a built-in int or float")
+    try:
+        converted = float(value)
+    except OverflowError:
+        raise ValueError("RT must be representable as finite binary64") from None
+    if not math.isfinite(converted) or converted <= 0.1:
+        raise ValueError("finite total RT above landmark; no arbitrary3s cap")
+    if type(value) is int and converted != value:
+        raise ValueError("integer RT must be exactly representable as binary64")
+    return converted
+
+
 def admit_predictions(outputs, expected):
     """expected maps each (person, arm) to exact opaque IDs for that isolated view.
 
@@ -36,9 +61,9 @@ def admit_predictions(outputs, expected):
                 raise ValueError("exact prediction fields")
             if row["trial_id"] != ident:
                 raise ValueError("prediction identity/order")
-            value = row["rt_seconds"]
-            if type(value) not in (int, float) or not math.isfinite(value) or value <= 0.1:
-                raise ValueError("finite total RT above landmark; no arbitrary3s cap")
-            values.append(float(value))
+            try:
+                values.append(_admit_rt_seconds(row["rt_seconds"]))
+            except ValueError as error:
+                raise InvalidPredictionRT(f"invalid candidate prediction RT: {error}") from error
         clean[key] = tuple(values)
     return clean
