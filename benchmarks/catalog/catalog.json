@@ -1282,6 +1282,409 @@
           "epistemic_limit": "Exact selected metadata values from retained records; original payloads and executed environments were not revalidated. Digests identify records and claimed output chains; independently reproducible public results require further evidence."
         }
       ],
+      "PAPER-paper-method-003": [
+        {
+          "id": "reve-source-preparation-20261116",
+          "task_id": "PAPER-paper-method-003",
+          "category": "paper_source_preparation",
+          "source": {
+            "path": "docs/status/reve-source-preparation-20261116.json",
+            "bytes": 8911,
+            "sha256": "0dbf455f5d08b4300a9053bb78f85ac9c3b95cfcc70a3e684f351d89763809e8"
+          },
+          "source_pointer": "",
+          "scope": "Complete authentic PhysioNet-MI source preparation under the released direct-200-Hz profile and a fixed-output full-test scorer/comparator software control. This is not trained REVE performance, author-baseline qualification, historical paper reproduction or same-task improvement.",
+          "condition": "released-code full-panel preparation and fixed-output full-test scorer control",
+          "limits": [
+            "The original Table 12 trained downstream classifier checkpoint remains unresolved; an encoder-only checkpoint does not replace it.",
+            "Historical 128 Hz intermediate preprocessing versus the released direct 200 Hz recipe remains unresolved despite the complete epoch-count match.",
+            "Historical seed/run identities, repeat count and standard-deviation denominator remain unresolved.",
+            "No trained author model inference or fitting occurred, and no author baseline, paper reproduction, improvement or current SOTA result is qualified.",
+            "A paired candidate comparison, effect/uncertainty rule and protected untrusted-candidate transport remain unqualified.",
+            "The independent observed review checked authenticated acquisition/preparation metadata and did not independently rehash raw EEG arrays or inspect targets.",
+            "Reported file pins identify execution and reviewed current snapshots; this report does not qualify arbitrary later source changes."
+          ],
+          "qualification_effect": "none",
+          "coverage": {
+            "edf_files": 654,
+            "participants": 109,
+            "imagery_runs": [
+              4,
+              6,
+              8,
+              10,
+              12,
+              14
+            ],
+            "epochs": 9837,
+            "split_epochs": {
+              "train": 6300,
+              "validation": 1734,
+              "test": 1803
+            },
+            "split_participants": {
+              "train": 70,
+              "validation": 19,
+              "test": 20
+            },
+            "raw_sampling_hz_file_counts": {
+              "160": 636,
+              "128": 18
+            },
+            "native_boundary_dropped_annotations": 1
+          },
+          "preparation_controls": {
+            "kind": "fixed_output_full_original_test_panel",
+            "test_events": 1803,
+            "test_participants": 20,
+            "targets_used_for_control_selection": false,
+            "trained_model_execution": false,
+            "event_identity_join_exercised": true,
+            "original_metric_path_exercised": true,
+            "paired_comparator_path_exercised": true,
+            "expected_metric_and_paired_difference_checks_passed": true,
+            "scoring_performed": true,
+            "prediction_policy": "Two separately identified identical constant-class outputs, frozen before derived test targets were opened."
+          },
+          "source_execution": {
+            "commit": "32598f9d55afffd1c4d84ebc8f9f5224f1618714",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+                "bytes": 9095,
+                "sha256": "8379b2a5f27420907343ac9c5064531190de7e2ee2001227422aba685bbab729"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+                "bytes": 10900,
+                "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+                "bytes": 13598,
+                "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+                "bytes": 21262,
+                "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+              }
+            ],
+            "binding_status": "recorded_execution_source_revision",
+            "identity_basis": "The full-panel receipt records the public source revision; the scorer control separately pins panel.py. Independent reviews pin panel.py, metrics.py and author_adapter.py. Adapter source was present but no model initialization or inference was executed.",
+            "executed_members": [
+              "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+              "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py"
+            ]
+          },
+          "current_source": {
+            "commit": "e8397886d8c7281335c5a43f4816bc8896a0f439",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+                "bytes": 10747,
+                "sha256": "4e50a6d8d9b41106e09fe15ddcdd0380094a6452bbcfe8fd989e5392856f1a9b"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+                "bytes": 10900,
+                "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+                "bytes": 13598,
+                "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+                "bytes": 21262,
+                "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+              }
+            ],
+            "verified_in_checkout_commit": "c7709275ac5937d064ff58ab14a002d75019eac7",
+            "relationship_to_execution": "panel.py, metrics.py and author_adapter.py retain the execution-source bytes. README.md changed to document the authentic preparation and software control; its changed hash is explicit. No model execution is inherited from the adapter source."
+          },
+          "input_exposure": "Operator-only raw public annotations and derived targets; constant-output control frozen before derived targets opened; no candidate or checkpoint selection. The original public source annotations are exposed; operator custody of derived targets does not make them an untouched evaluation population.",
+          "retained_evidence": [
+            {
+              "id": "evidence_index",
+              "bytes": 1974,
+              "sha256": "a1084a24ff65e5af968c6ff8e37ddc8b02e52ed9a42e9b8fa22edab8dd2ade88"
+            },
+            {
+              "id": "full_original_panel_receipt",
+              "bytes": 3963,
+              "sha256": "1e1a5c4e890542a321c8a7d100b8cea03f051f495c563d5dffbc7ac6a55c7fb2"
+            },
+            {
+              "id": "preparation_protocol",
+              "bytes": 5140,
+              "sha256": "4b2933a4e1f4477e6f02c863edeb74fe989dbf3b36ebece64102791b94d4d68e"
+            },
+            {
+              "id": "scorer_control_protocol",
+              "bytes": 1801,
+              "sha256": "3977293ca813fe17264092ca7e45398dcacbb07b2938e6d114eb1f65fe22c5ad"
+            },
+            {
+              "id": "scorer_control_summary",
+              "bytes": 819,
+              "sha256": "1d94ef18c5da1a762c04d08bc02a5c538d9014a47820e594a0196a0ece34ad77"
+            },
+            {
+              "id": "independent_observed_review",
+              "bytes": 7021,
+              "sha256": "4e02efae2040deaa4f2ef761ade6b67a972018b784098a9d8fc0d1fa268a6fca"
+            },
+            {
+              "id": "independent_panel_review",
+              "bytes": 4652,
+              "sha256": "05810fb449fab5a1875d57a01e13113d42c882febd7218d392699cd3ec4b4812"
+            },
+            {
+              "id": "independent_adapter_review",
+              "bytes": 717,
+              "sha256": "47dc97850ece9f16411be23415380545144ae202e5f5c728f2f7ea6c08440e9f"
+            },
+            {
+              "id": "independent_contract_review",
+              "bytes": 3597,
+              "sha256": "09d23573a4b86fc55163c91aff4f101cd4af44abe334bcb9d88a7812e1928a98"
+            }
+          ],
+          "model_attempts_recorded": 0,
+          "solver_attempts_recorded": 0,
+          "author_baseline_qualified": false,
+          "scientific_result": false,
+          "original_records_in_publication": false,
+          "report_date": "2026-11-16",
+          "execution_utc_date": "2026-11-17"
+        }
+      ],
+      "PAPER-paper-method-013": [
+        {
+          "id": "deepcaimx-source-preparation-20261116",
+          "task_id": "PAPER-paper-method-013",
+          "category": "paper_source_preparation",
+          "source": {
+            "path": "docs/status/deepcaimx-source-preparation-20261116.json",
+            "bytes": 10750,
+            "sha256": "046f5ab41c3eb2d6ff11eb79514bd0fbd0f0c8ba000eb0dcb1f201b9a34aea10"
+          },
+          "source_pointer": "",
+          "scope": "Authenticated conversion of all ten original manual ROI files and complete-panel identity/empty segmentation arithmetic controls, plus bounded movie-header and inert checkpoint configuration inspection. No movie-to-mask model or author baseline was executed.",
+          "condition": "manual ROI conversion and complete-panel identity/empty scorer controls",
+          "limits": [
+            "No original movie-to-mask baseline, paper reproduction or same-task improvement is established.",
+            "Executed commit and executable hashes were not captured in the ROI control receipt; post-execution publication/review identity is a separate claim.",
+            "Movie-header structure and checkpoint bytes do not authenticate original crop, frame mapping or paper architecture.",
+            "All authentic target arrays, generated control masks and raw receipts remain in operator custody; only aggregate scope and immutable receipt identities are published.",
+            "No untouched evaluation, candidate authoring study or new solver/model trial occurred.",
+            "Matching collision semantics, published SD convention and the paper trace/runtime companions remain unresolved."
+          ],
+          "qualification_effect": "none",
+          "coverage": {
+            "manual_roi_files": 10,
+            "recordings": 10,
+            "manual_rois": 1563,
+            "donors": 8,
+            "image_shape": [
+              488,
+              488
+            ],
+            "complete_original_roi_panel": true,
+            "movie_headers_inspected": 10,
+            "source_movie_intervals_acquired": 0,
+            "model_inference_tiles": 0
+          },
+          "preparation_controls": {
+            "authentic_target_controls_passed": 2,
+            "conditions": [
+              "identity_software_control",
+              "empty_software_control"
+            ],
+            "generated_source_controls_passed": 30,
+            "retained_evaluator_controls_passed": 18,
+            "population": "All ten original recording IDs and all 1,563 manually labelled ROIs.",
+            "interpretation": "Identity masks and empty prediction masks exercised the retained segmentation arithmetic; they are not fitted predictions or model accuracy."
+          },
+          "source_execution": {
+            "commit": null,
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/source_panel.py",
+                "bytes": 13040,
+                "sha256": "e1cd3997ed4ceb5cdabb12de81d268ff5f176200471cb42dee157e1e40e3009a"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/roi_sources.json",
+                "bytes": 3255,
+                "sha256": "1be99b9055a9dac1c7be20380aac204fe815e7be796c8cf6569e992f2e93499c"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+                "bytes": 19170,
+                "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/range_source.py",
+                "bytes": 7677,
+                "sha256": "0ba750059519fd33ebc6ca6971844fa7b2beb513e150fb3bb2c749ec58e65a2d"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/checkpoint.py",
+                "bytes": 8962,
+                "sha256": "cb198dcfe0c2f15eecbb9d7682486da380504f4bd5435ca1c26c01f28180a3c8"
+              }
+            ],
+            "publication_commit": "666b6f3eeeed1ddcf47b4fc33c230f3d7823fac8",
+            "binding_status": "reviewed_post_execution_source_identity",
+            "identity_basis": "The control receipt records no contemporaneous source commit or executable digest. Independent post-execution source reviews pin converter, ROI-source, range-inspector and checkpoint-inspector files. The retained scoring dependency is identified by its unchanged publication bytes; these identities are not an execution-environment attestation."
+          },
+          "current_source": {
+            "commit": "c7709275ac5937d064ff58ab14a002d75019eac7",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/source_panel.py",
+                "bytes": 13040,
+                "sha256": "e1cd3997ed4ceb5cdabb12de81d268ff5f176200471cb42dee157e1e40e3009a"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/roi_sources.json",
+                "bytes": 3255,
+                "sha256": "1be99b9055a9dac1c7be20380aac204fe815e7be796c8cf6569e992f2e93499c"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+                "bytes": 19170,
+                "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/range_source.py",
+                "bytes": 7677,
+                "sha256": "0ba750059519fd33ebc6ca6971844fa7b2beb513e150fb3bb2c749ec58e65a2d"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/checkpoint.py",
+                "bytes": 8962,
+                "sha256": "cb198dcfe0c2f15eecbb9d7682486da380504f4bd5435ca1c26c01f28180a3c8"
+              }
+            ],
+            "comparison_to_execution_source": "All five listed current files equal the independently reviewed publication bytes. No new execution is inherited from this equality."
+          },
+          "input_exposure": "Manual ROI targets are publicly released upstream. Operator conversion read them internally and retained all target arrays outside public Git and participant input. Local separation does not make the targets historically unseen.",
+          "retained_evidence": [
+            {
+              "id": "roi-conversion-controls",
+              "bytes": 2086,
+              "sha256": "670f51d2951984e7ba6b749ee327a24e9db94799fa65a73a2f9a1348eb79dc57"
+            },
+            {
+              "id": "operator-protocol",
+              "bytes": 3503,
+              "sha256": "9303859a79257860d81ce2f1b11eb0232c8f685fbc4d647aff8c49f63d50c36d"
+            },
+            {
+              "id": "control-driver-source",
+              "bytes": 2035,
+              "sha256": "4b9f62ad264d69a9ed9246b42c2ebbcc5bb90b323fa464600cf3af2397af54f3"
+            },
+            {
+              "id": "converter-scorer-review",
+              "bytes": 3133,
+              "sha256": "c2bd5905e2d26ab5fbf54cd9727aac922242f6e03e1cc85b7c5c4dc4c5cb2bea"
+            },
+            {
+              "id": "source-component-review",
+              "bytes": 5917,
+              "sha256": "f7634c1e494a632862bb1aeff921bed8ec6c2e1859f45e0d503bc30811570228"
+            },
+            {
+              "id": "checkpoint-documentation-review",
+              "bytes": 2898,
+              "sha256": "b813406044981cbfa44390e9f300a9af501bda9f5f06cc1addc19968c4d78f0e"
+            },
+            {
+              "id": "checkpoint-structural-inspection",
+              "bytes": 2645,
+              "sha256": "6cd308ebb0fd2106ae32bbf44ca28794ad3501b0d17dfc3ce38788b6bf0cbf8f"
+            },
+            {
+              "id": "donor-and-source-review",
+              "bytes": 6900,
+              "sha256": "bf0a65a67919d67a252f1def9ea266b0ea4f2855a474c0627ec5b2ab25c75305"
+            },
+            {
+              "id": "generated-control-summary",
+              "bytes": 255,
+              "sha256": "365b82eab9b6257fedd6ccf78083f339000352103f21e9334ad9428a0c9f8786"
+            },
+            {
+              "id": "movie-header-501271265",
+              "bytes": 2258,
+              "sha256": "5e500595442c529c73f585f3db16717e57c56cfd60be982424457bb4dd77aebc"
+            },
+            {
+              "id": "movie-header-501704220",
+              "bytes": 2258,
+              "sha256": "fbf2239e50341c69b8633dd9d54e9566ef1a3c884ac5734d30bff8b3bed38990"
+            },
+            {
+              "id": "movie-header-524691284",
+              "bytes": 2258,
+              "sha256": "534155b66aafd921a1ec55fc08b32714f7fbad7e63cfb4e3e32271937303df40"
+            },
+            {
+              "id": "movie-header-531006860",
+              "bytes": 2258,
+              "sha256": "2cfe891b1087deba1788c0d260334548eadb472db736b18215e11cca6b827ed6"
+            },
+            {
+              "id": "movie-header-603516552",
+              "bytes": 2258,
+              "sha256": "bee16d4db7ffbcf2f290b2a093802666c77509a02afe949f102c1e1d33e9e315"
+            },
+            {
+              "id": "movie-header-604145810",
+              "bytes": 2258,
+              "sha256": "1d4240455cc771460a380dfbed00426a277180ebd10d14b399cb2ad2443a5d8f"
+            },
+            {
+              "id": "movie-header-607040613",
+              "bytes": 2258,
+              "sha256": "a38091710a0af6dee7de272ab3b233b47fc71febb9b6b9f557c51b13dd8f4d1b"
+            },
+            {
+              "id": "movie-header-669233895",
+              "bytes": 2258,
+              "sha256": "c5102e6aaae1f6c13f9309314714ee8ea5ac31ddd75c83881450494abf210296"
+            },
+            {
+              "id": "movie-header-671162628",
+              "bytes": 2258,
+              "sha256": "6a8f6d13d521cf230894f292fe865d02bf727203e03c05c22a8b268ce3381547"
+            },
+            {
+              "id": "movie-header-679353932",
+              "bytes": 2258,
+              "sha256": "5d2f228cb46f7bd3534dea3524aa5884bc85b703d27023598d3af6b90bac66cc"
+            }
+          ],
+          "model_attempts_recorded": 0,
+          "solver_attempts_recorded": 0,
+          "author_baseline_qualified": false,
+          "scientific_result": false,
+          "original_records_in_publication": false,
+          "source_parity": {
+            "checkpoint_architecture": "Unresolved: released checkpoint configuration has eight neuronal channels and conditional 396-sample temporal output, while the paper describes N=15/P=9; native output shapes were not executed.",
+            "crop_mapping": "Unresolved: official movies are 512 by 512 and manual targets are 488 by 488; the original crop origin is not established.",
+            "frame_mapping": "Unresolved: raw HDF frame-index origin for author filename labels 18501 through 23500 is not established.",
+            "tiling_assembly_trace": "Original complete tiling, assembly, trace-boundary support and paper-equivalent trace preprocessing remain unqualified."
+          },
+          "report_date": "2026-11-16",
+          "execution_utc_date": "2026-11-17"
+        }
+      ],
       "PAPER-paper-signal-add-021": [
         {
           "id": "difficulty-pilot-20261117:tms-A",
@@ -1418,11 +1821,21 @@
         "path": "docs/status/operator-controls-rename-20261116.json",
         "bytes": 12251,
         "sha256": "e10e38e95ef1bc6fc570bc0ad0a49718b17f564abba92380fd896568496b15cc"
+      },
+      {
+        "path": "docs/status/reve-source-preparation-20261116.json",
+        "bytes": 8911,
+        "sha256": "0dbf455f5d08b4300a9053bb78f85ac9c3b95cfcc70a3e684f351d89763809e8"
+      },
+      {
+        "path": "docs/status/deepcaimx-source-preparation-20261116.json",
+        "bytes": 10750,
+        "sha256": "046f5ab41c3eb2d6ff11eb79514bd0fbd0f0c8ba000eb0dcb1f201b9a34aea10"
       }
     ],
     "counts": {
-      "tasks_with_recorded_evidence": 5,
-      "public_reports": 7,
+      "tasks_with_recorded_evidence": 7,
+      "public_reports": 9,
       "pilot_attempts": 8,
       "paper_calibration_attempts": 4,
       "neural_programme_attempts": 4,
@@ -1430,6 +1843,8 @@
       "viewer_interpretation_attempts": 0,
       "authentic_engineering_reports": 3,
       "authentic_viewer_transport_reports": 1,
+      "paper_source_preparation_reports": 2,
+      "paper_source_preparation_tasks": 2,
       "scripted_viewer_sessions": 400,
       "historical_profiles": 3,
       "historical_programme_controls": 4,
@@ -25089,7 +25504,185 @@
           "sha256": "3b7d04a02c39793f20f907dd1b6e64ce090067decd7effb9ceeea8a2fbcb7408"
         }
       },
-      "recorded_evidence": []
+      "recorded_evidence": [
+        {
+          "id": "reve-source-preparation-20261116",
+          "task_id": "PAPER-paper-method-003",
+          "category": "paper_source_preparation",
+          "source": {
+            "path": "docs/status/reve-source-preparation-20261116.json",
+            "bytes": 8911,
+            "sha256": "0dbf455f5d08b4300a9053bb78f85ac9c3b95cfcc70a3e684f351d89763809e8"
+          },
+          "source_pointer": "",
+          "scope": "Complete authentic PhysioNet-MI source preparation under the released direct-200-Hz profile and a fixed-output full-test scorer/comparator software control. This is not trained REVE performance, author-baseline qualification, historical paper reproduction or same-task improvement.",
+          "condition": "released-code full-panel preparation and fixed-output full-test scorer control",
+          "limits": [
+            "The original Table 12 trained downstream classifier checkpoint remains unresolved; an encoder-only checkpoint does not replace it.",
+            "Historical 128 Hz intermediate preprocessing versus the released direct 200 Hz recipe remains unresolved despite the complete epoch-count match.",
+            "Historical seed/run identities, repeat count and standard-deviation denominator remain unresolved.",
+            "No trained author model inference or fitting occurred, and no author baseline, paper reproduction, improvement or current SOTA result is qualified.",
+            "A paired candidate comparison, effect/uncertainty rule and protected untrusted-candidate transport remain unqualified.",
+            "The independent observed review checked authenticated acquisition/preparation metadata and did not independently rehash raw EEG arrays or inspect targets.",
+            "Reported file pins identify execution and reviewed current snapshots; this report does not qualify arbitrary later source changes."
+          ],
+          "qualification_effect": "none",
+          "coverage": {
+            "edf_files": 654,
+            "participants": 109,
+            "imagery_runs": [
+              4,
+              6,
+              8,
+              10,
+              12,
+              14
+            ],
+            "epochs": 9837,
+            "split_epochs": {
+              "train": 6300,
+              "validation": 1734,
+              "test": 1803
+            },
+            "split_participants": {
+              "train": 70,
+              "validation": 19,
+              "test": 20
+            },
+            "raw_sampling_hz_file_counts": {
+              "160": 636,
+              "128": 18
+            },
+            "native_boundary_dropped_annotations": 1
+          },
+          "preparation_controls": {
+            "kind": "fixed_output_full_original_test_panel",
+            "test_events": 1803,
+            "test_participants": 20,
+            "targets_used_for_control_selection": false,
+            "trained_model_execution": false,
+            "event_identity_join_exercised": true,
+            "original_metric_path_exercised": true,
+            "paired_comparator_path_exercised": true,
+            "expected_metric_and_paired_difference_checks_passed": true,
+            "scoring_performed": true,
+            "prediction_policy": "Two separately identified identical constant-class outputs, frozen before derived test targets were opened."
+          },
+          "source_execution": {
+            "commit": "32598f9d55afffd1c4d84ebc8f9f5224f1618714",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+                "bytes": 9095,
+                "sha256": "8379b2a5f27420907343ac9c5064531190de7e2ee2001227422aba685bbab729"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+                "bytes": 10900,
+                "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+                "bytes": 13598,
+                "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+                "bytes": 21262,
+                "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+              }
+            ],
+            "binding_status": "recorded_execution_source_revision",
+            "identity_basis": "The full-panel receipt records the public source revision; the scorer control separately pins panel.py. Independent reviews pin panel.py, metrics.py and author_adapter.py. Adapter source was present but no model initialization or inference was executed.",
+            "executed_members": [
+              "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+              "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py"
+            ]
+          },
+          "current_source": {
+            "commit": "e8397886d8c7281335c5a43f4816bc8896a0f439",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+                "bytes": 10747,
+                "sha256": "4e50a6d8d9b41106e09fe15ddcdd0380094a6452bbcfe8fd989e5392856f1a9b"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+                "bytes": 10900,
+                "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+                "bytes": 13598,
+                "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+                "bytes": 21262,
+                "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+              }
+            ],
+            "verified_in_checkout_commit": "c7709275ac5937d064ff58ab14a002d75019eac7",
+            "relationship_to_execution": "panel.py, metrics.py and author_adapter.py retain the execution-source bytes. README.md changed to document the authentic preparation and software control; its changed hash is explicit. No model execution is inherited from the adapter source."
+          },
+          "input_exposure": "Operator-only raw public annotations and derived targets; constant-output control frozen before derived targets opened; no candidate or checkpoint selection. The original public source annotations are exposed; operator custody of derived targets does not make them an untouched evaluation population.",
+          "retained_evidence": [
+            {
+              "id": "evidence_index",
+              "bytes": 1974,
+              "sha256": "a1084a24ff65e5af968c6ff8e37ddc8b02e52ed9a42e9b8fa22edab8dd2ade88"
+            },
+            {
+              "id": "full_original_panel_receipt",
+              "bytes": 3963,
+              "sha256": "1e1a5c4e890542a321c8a7d100b8cea03f051f495c563d5dffbc7ac6a55c7fb2"
+            },
+            {
+              "id": "preparation_protocol",
+              "bytes": 5140,
+              "sha256": "4b2933a4e1f4477e6f02c863edeb74fe989dbf3b36ebece64102791b94d4d68e"
+            },
+            {
+              "id": "scorer_control_protocol",
+              "bytes": 1801,
+              "sha256": "3977293ca813fe17264092ca7e45398dcacbb07b2938e6d114eb1f65fe22c5ad"
+            },
+            {
+              "id": "scorer_control_summary",
+              "bytes": 819,
+              "sha256": "1d94ef18c5da1a762c04d08bc02a5c538d9014a47820e594a0196a0ece34ad77"
+            },
+            {
+              "id": "independent_observed_review",
+              "bytes": 7021,
+              "sha256": "4e02efae2040deaa4f2ef761ade6b67a972018b784098a9d8fc0d1fa268a6fca"
+            },
+            {
+              "id": "independent_panel_review",
+              "bytes": 4652,
+              "sha256": "05810fb449fab5a1875d57a01e13113d42c882febd7218d392699cd3ec4b4812"
+            },
+            {
+              "id": "independent_adapter_review",
+              "bytes": 717,
+              "sha256": "47dc97850ece9f16411be23415380545144ae202e5f5c728f2f7ea6c08440e9f"
+            },
+            {
+              "id": "independent_contract_review",
+              "bytes": 3597,
+              "sha256": "09d23573a4b86fc55163c91aff4f101cd4af44abe334bcb9d88a7812e1928a98"
+            }
+          ],
+          "model_attempts_recorded": 0,
+          "solver_attempts_recorded": 0,
+          "author_baseline_qualified": false,
+          "scientific_result": false,
+          "original_records_in_publication": false,
+          "report_date": "2026-11-16",
+          "execution_utc_date": "2026-11-17"
+        }
+      ]
     },
     {
       "id": "PAPER-paper-method-006",
@@ -25969,7 +26562,230 @@
           "sha256": "962f753f2f16490ba31209d0ea4d85b9e0dc3f4357c0574257b2c01d4daa091e"
         }
       },
-      "recorded_evidence": []
+      "recorded_evidence": [
+        {
+          "id": "deepcaimx-source-preparation-20261116",
+          "task_id": "PAPER-paper-method-013",
+          "category": "paper_source_preparation",
+          "source": {
+            "path": "docs/status/deepcaimx-source-preparation-20261116.json",
+            "bytes": 10750,
+            "sha256": "046f5ab41c3eb2d6ff11eb79514bd0fbd0f0c8ba000eb0dcb1f201b9a34aea10"
+          },
+          "source_pointer": "",
+          "scope": "Authenticated conversion of all ten original manual ROI files and complete-panel identity/empty segmentation arithmetic controls, plus bounded movie-header and inert checkpoint configuration inspection. No movie-to-mask model or author baseline was executed.",
+          "condition": "manual ROI conversion and complete-panel identity/empty scorer controls",
+          "limits": [
+            "No original movie-to-mask baseline, paper reproduction or same-task improvement is established.",
+            "Executed commit and executable hashes were not captured in the ROI control receipt; post-execution publication/review identity is a separate claim.",
+            "Movie-header structure and checkpoint bytes do not authenticate original crop, frame mapping or paper architecture.",
+            "All authentic target arrays, generated control masks and raw receipts remain in operator custody; only aggregate scope and immutable receipt identities are published.",
+            "No untouched evaluation, candidate authoring study or new solver/model trial occurred.",
+            "Matching collision semantics, published SD convention and the paper trace/runtime companions remain unresolved."
+          ],
+          "qualification_effect": "none",
+          "coverage": {
+            "manual_roi_files": 10,
+            "recordings": 10,
+            "manual_rois": 1563,
+            "donors": 8,
+            "image_shape": [
+              488,
+              488
+            ],
+            "complete_original_roi_panel": true,
+            "movie_headers_inspected": 10,
+            "source_movie_intervals_acquired": 0,
+            "model_inference_tiles": 0
+          },
+          "preparation_controls": {
+            "authentic_target_controls_passed": 2,
+            "conditions": [
+              "identity_software_control",
+              "empty_software_control"
+            ],
+            "generated_source_controls_passed": 30,
+            "retained_evaluator_controls_passed": 18,
+            "population": "All ten original recording IDs and all 1,563 manually labelled ROIs.",
+            "interpretation": "Identity masks and empty prediction masks exercised the retained segmentation arithmetic; they are not fitted predictions or model accuracy."
+          },
+          "source_execution": {
+            "commit": null,
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/source_panel.py",
+                "bytes": 13040,
+                "sha256": "e1cd3997ed4ceb5cdabb12de81d268ff5f176200471cb42dee157e1e40e3009a"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/roi_sources.json",
+                "bytes": 3255,
+                "sha256": "1be99b9055a9dac1c7be20380aac204fe815e7be796c8cf6569e992f2e93499c"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+                "bytes": 19170,
+                "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/range_source.py",
+                "bytes": 7677,
+                "sha256": "0ba750059519fd33ebc6ca6971844fa7b2beb513e150fb3bb2c749ec58e65a2d"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/checkpoint.py",
+                "bytes": 8962,
+                "sha256": "cb198dcfe0c2f15eecbb9d7682486da380504f4bd5435ca1c26c01f28180a3c8"
+              }
+            ],
+            "publication_commit": "666b6f3eeeed1ddcf47b4fc33c230f3d7823fac8",
+            "binding_status": "reviewed_post_execution_source_identity",
+            "identity_basis": "The control receipt records no contemporaneous source commit or executable digest. Independent post-execution source reviews pin converter, ROI-source, range-inspector and checkpoint-inspector files. The retained scoring dependency is identified by its unchanged publication bytes; these identities are not an execution-environment attestation."
+          },
+          "current_source": {
+            "commit": "c7709275ac5937d064ff58ab14a002d75019eac7",
+            "files": [
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/source_panel.py",
+                "bytes": 13040,
+                "sha256": "e1cd3997ed4ceb5cdabb12de81d268ff5f176200471cb42dee157e1e40e3009a"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/roi_sources.json",
+                "bytes": 3255,
+                "sha256": "1be99b9055a9dac1c7be20380aac204fe815e7be796c8cf6569e992f2e93499c"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+                "bytes": 19170,
+                "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/range_source.py",
+                "bytes": 7677,
+                "sha256": "0ba750059519fd33ebc6ca6971844fa7b2beb513e150fb3bb2c749ec58e65a2d"
+              },
+              {
+                "path": "benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/checkpoint.py",
+                "bytes": 8962,
+                "sha256": "cb198dcfe0c2f15eecbb9d7682486da380504f4bd5435ca1c26c01f28180a3c8"
+              }
+            ],
+            "comparison_to_execution_source": "All five listed current files equal the independently reviewed publication bytes. No new execution is inherited from this equality."
+          },
+          "input_exposure": "Manual ROI targets are publicly released upstream. Operator conversion read them internally and retained all target arrays outside public Git and participant input. Local separation does not make the targets historically unseen.",
+          "retained_evidence": [
+            {
+              "id": "roi-conversion-controls",
+              "bytes": 2086,
+              "sha256": "670f51d2951984e7ba6b749ee327a24e9db94799fa65a73a2f9a1348eb79dc57"
+            },
+            {
+              "id": "operator-protocol",
+              "bytes": 3503,
+              "sha256": "9303859a79257860d81ce2f1b11eb0232c8f685fbc4d647aff8c49f63d50c36d"
+            },
+            {
+              "id": "control-driver-source",
+              "bytes": 2035,
+              "sha256": "4b9f62ad264d69a9ed9246b42c2ebbcc5bb90b323fa464600cf3af2397af54f3"
+            },
+            {
+              "id": "converter-scorer-review",
+              "bytes": 3133,
+              "sha256": "c2bd5905e2d26ab5fbf54cd9727aac922242f6e03e1cc85b7c5c4dc4c5cb2bea"
+            },
+            {
+              "id": "source-component-review",
+              "bytes": 5917,
+              "sha256": "f7634c1e494a632862bb1aeff921bed8ec6c2e1859f45e0d503bc30811570228"
+            },
+            {
+              "id": "checkpoint-documentation-review",
+              "bytes": 2898,
+              "sha256": "b813406044981cbfa44390e9f300a9af501bda9f5f06cc1addc19968c4d78f0e"
+            },
+            {
+              "id": "checkpoint-structural-inspection",
+              "bytes": 2645,
+              "sha256": "6cd308ebb0fd2106ae32bbf44ca28794ad3501b0d17dfc3ce38788b6bf0cbf8f"
+            },
+            {
+              "id": "donor-and-source-review",
+              "bytes": 6900,
+              "sha256": "bf0a65a67919d67a252f1def9ea266b0ea4f2855a474c0627ec5b2ab25c75305"
+            },
+            {
+              "id": "generated-control-summary",
+              "bytes": 255,
+              "sha256": "365b82eab9b6257fedd6ccf78083f339000352103f21e9334ad9428a0c9f8786"
+            },
+            {
+              "id": "movie-header-501271265",
+              "bytes": 2258,
+              "sha256": "5e500595442c529c73f585f3db16717e57c56cfd60be982424457bb4dd77aebc"
+            },
+            {
+              "id": "movie-header-501704220",
+              "bytes": 2258,
+              "sha256": "fbf2239e50341c69b8633dd9d54e9566ef1a3c884ac5734d30bff8b3bed38990"
+            },
+            {
+              "id": "movie-header-524691284",
+              "bytes": 2258,
+              "sha256": "534155b66aafd921a1ec55fc08b32714f7fbad7e63cfb4e3e32271937303df40"
+            },
+            {
+              "id": "movie-header-531006860",
+              "bytes": 2258,
+              "sha256": "2cfe891b1087deba1788c0d260334548eadb472db736b18215e11cca6b827ed6"
+            },
+            {
+              "id": "movie-header-603516552",
+              "bytes": 2258,
+              "sha256": "bee16d4db7ffbcf2f290b2a093802666c77509a02afe949f102c1e1d33e9e315"
+            },
+            {
+              "id": "movie-header-604145810",
+              "bytes": 2258,
+              "sha256": "1d4240455cc771460a380dfbed00426a277180ebd10d14b399cb2ad2443a5d8f"
+            },
+            {
+              "id": "movie-header-607040613",
+              "bytes": 2258,
+              "sha256": "a38091710a0af6dee7de272ab3b233b47fc71febb9b6b9f557c51b13dd8f4d1b"
+            },
+            {
+              "id": "movie-header-669233895",
+              "bytes": 2258,
+              "sha256": "c5102e6aaae1f6c13f9309314714ee8ea5ac31ddd75c83881450494abf210296"
+            },
+            {
+              "id": "movie-header-671162628",
+              "bytes": 2258,
+              "sha256": "6a8f6d13d521cf230894f292fe865d02bf727203e03c05c22a8b268ce3381547"
+            },
+            {
+              "id": "movie-header-679353932",
+              "bytes": 2258,
+              "sha256": "5d2f228cb46f7bd3534dea3524aa5884bc85b703d27023598d3af6b90bac66cc"
+            }
+          ],
+          "model_attempts_recorded": 0,
+          "solver_attempts_recorded": 0,
+          "author_baseline_qualified": false,
+          "scientific_result": false,
+          "original_records_in_publication": false,
+          "source_parity": {
+            "checkpoint_architecture": "Unresolved: released checkpoint configuration has eight neuronal channels and conditional 396-sample temporal output, while the paper describes N=15/P=9; native output shapes were not executed.",
+            "crop_mapping": "Unresolved: official movies are 512 by 512 and manual targets are 488 by 488; the original crop origin is not established.",
+            "frame_mapping": "Unresolved: raw HDF frame-index origin for author filename labels 18501 through 23500 is not established.",
+            "tiling_assembly_trace": "Original complete tiling, assembly, trace-boundary support and paper-equivalent trace preprocessing remain unqualified."
+          },
+          "report_date": "2026-11-16",
+          "execution_utc_date": "2026-11-17"
+        }
+      ]
     },
     {
       "id": "PAPER-paper-method-018",

@@ -21,6 +21,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Paper source preparation](../../../docs/status/deepcaimx-source-preparation-20261116.json): Authenticated conversion of all ten original manual ROI files and complete-panel identity/empty segmentation arithmetic controls, plus bounded movie-header and inert checkpoint configuration inspection. No movie-to-mask model or author baseline was executed.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-paper-method-013`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)

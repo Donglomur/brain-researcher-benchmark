@@ -21,6 +21,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Paper source preparation](../../../docs/status/reve-source-preparation-20261116.json): Complete authentic PhysioNet-MI source preparation under the released direct-200-Hz profile and a fixed-output full-test scorer/comparator software control. This is not trained REVE performance, author-baseline qualification, historical paper reproduction or same-task improvement.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-paper-method-003`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
