@@ -58,7 +58,7 @@ The records document has `schema_version: 1`, the same `study_id`, and an `attem
 }
 ```
 
-Reproduction statuses are `success`, `failure`, `abstained`, `infrastructure_error`, and `pending`. A scientific discrepancy may be a valid completed task if that is how its task-specific rubric defines success; do not label a defensible null conclusion a failure merely because it differs from a published result. Unrecorded assigned attempts appear as pending with `record_present: false`.
+Reproduction statuses are `success`, `failure`, `abstained`, `infrastructure_error`, and `pending`. `success` means agreement with the original finding under the frozen task-specific reproduction rule. A defensible discrepancy or null conclusion can be scientifically valuable completed analysis, but does not become reproduction success merely because the analysis is valid. A null result can count as success when it reproduces an original null under that rule. Unrecorded assigned attempts appear as pending with `record_present: false`.
 
 Improvement statuses are `scored`, `unavailable`, `abstained`, `infrastructure_error`, and `pending`. Only `scored` contains numeric `candidate` and `baseline` fields. A loss or tie is valid. Scoring can follow reproduction failure when the task protocol permits a common baseline or continuation; this reporter does not condition improvement on successful reproduction. Task-specific phase barriers must be enforced by the runner.
 
@@ -66,7 +66,7 @@ Duplicate `(task_id, replicate, arm)` records are rejected. Retrying cannot over
 
 ## Interpretation
 
-Reproduction success is one for `success` and zero for scientific `failure` or `abstained`. Infrastructure errors and pending attempts remain unknown in [0, 1]. For each assigned pair, the logical lower bound on code-minus-no-code success is `B_lower - A_upper`; the upper bound is `B_upper - A_lower`. These are missing-outcome bounds, **not confidence intervals**. The report gives no point estimate when those bounds differ. It separately retains the cause of each missing outcome.
+Reproduction success is one for `success` and zero for scientific `failure` or `abstained`. This reporter aggregates trusted operator declarations; it does not verify their scientific meaning. A legacy report using a broader completed-analysis label cannot be interpreted as an original-finding reproduction success rate without separate evidence review. Historical records remain unchanged. Infrastructure errors and pending attempts remain unknown in [0, 1]. For each assigned pair, the logical lower bound on code-minus-no-code success is `B_lower - A_upper`; the upper bound is `B_upper - A_lower`. These are missing-outcome bounds, **not confidence intervals**. The report gives no point estimate when those bounds differ. It separately retains the cause of each missing outcome.
 
 Average first across the assigned replicates within a paper, then equally across papers. Also report the average within each declared source family and the equal-family average. Replicates and multiple tasks sharing a family do not silently receive extra weight in the corresponding summary. These family labels are declared overlap groups, not evidence of independent participants, laboratories or papers. Neither summary supplies inferential uncertainty.
 

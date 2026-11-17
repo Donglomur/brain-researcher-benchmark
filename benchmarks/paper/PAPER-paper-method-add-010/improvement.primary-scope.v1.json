@@ -1,0 +1,192 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-010",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The selected source task is CS↔PFC maximum-squared-DTW-barycenter face-versus-object decoding during task-irrelevant first-1000-ms ON in all 94 participants, with the complete paired Figure 3c(i–ii) feature/distribution and matching Figure 3a ten-fold classifier profile. The publication supplies a printed classifier mean and fold SD, and the pinned code provides a classifier recipe; exact publication-linked empirical/supplement/code identity, selected symmetric feature derivation, participant/observation/fold mapping and full-precision selected outputs remain unbound. Preserve the larger source search and post-QC domain as winner-selection provenance; the complete discovery matrix is not an unconditional rerun gate for this named result. The existing nested single-measure component changes selection, weighting and input assumptions; it cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "A data-driven approach to identifying and evaluating connectivity-based neural correlates of conscious visual perception",
+    "url": "https://doi.org/10.1093/nc/niag029"
+  },
+  "evidence": [
+    {
+      "id": "meg-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13338905/",
+      "locator": "Methods: Data-driven quantification of inter-areal coupling; Fitting classifiers; Results and Fig. 3b,c",
+      "supports": "Defines the original classification family, 94-person cohort, preprocessing and mean-fold accuracy; reports two named barycenter endpoints."
+    },
+    {
+      "id": "meg-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/anniegbryant/MEG_functional_connectivity/cab648bbe2eab7093f9ab7b9a5fcddabf28e60a0/classification/fit_pyspi_classifiers.py",
+      "locator": "classifier and scoring definitions; StratifiedGroupKFold; averaged classification branch, lines 63-100 and 185-291",
+      "supports": "Pinned source implements balanced L1 logistic regression, mixed-sigmoid scaling, group CV and unweighted mean test-fold accuracy."
+    },
+    {
+      "id": "meg-data-v1",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15315238",
+      "locator": "Version v1, description and Files",
+      "supports": "Canonical registration points to the 811.0 MB data.zip; metadata alone does not establish equality to the publication analysis inputs."
+    },
+    {
+      "id": "meg-data-v2",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/18294156",
+      "locator": "Version v2, description and Files",
+      "supports": "Later author release instead lists empirical.zip and model.zip. This requires a deliberate publication-to-input join, not silent version replacement."
+    },
+    {
+      "id": "meg-correction",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13669618/",
+      "locator": "Correction notice, 15 October 2026, supplementary data and HTML corrections",
+      "supports": "The supplied final_supplement_AGB.pdf replaced an earlier version; the selected supplement has not been authenticated against that correction."
+    },
+    {
+      "id": "meg-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/README.md",
+      "locator": "Scientific scope; two estimands; required complete inputs",
+      "supports": "The implementation is prospective nested evaluation; authentic feature extraction, historical 246-measure identity and corrected supplement remain held."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Stimulus-pair decoding across source region pairs, relevance conditions and onset/offset periods; supplementary relevance and cross-task analyses remain distinct. This is not consciousness detection.",
+      "evidence_ids": [
+        "meg-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "COGITATE-derived regional MEG data. Resolve registered Zenodo v1 against author v2 and corrected publication before fixing immutable empirical inputs.",
+      "evidence_ids": [
+        "meg-data-v1",
+        "meg-data-v2",
+        "meg-correction"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original analysis uses all 94 participants. An arbitrary smaller roster is not a same-task comparison.",
+      "evidence_ids": [
+        "meg-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stimulus/relevance analysis uses ten stratified participant-group folds; pinned code shuffles with random_state=127. Exact input ordering and realized membership must be reconstructed. Prospective nested folds are not interchangeable.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code",
+        "meg-local"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source FC values derive from regional time series averaged by participant and event type. Preserve this condition-averaged input task and its exposure; do not relabel it as single-trial unknown-category prediction.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The source z-scores and detrends time series, screens 262 FC measures to 246, then uses the pinned feature-quality and mixed-sigmoid classifier pipeline. Changing screening or train-only scaling must be declared as a method change, with identical evaluation support.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Accuracy at probability threshold 0.5: correct held-out predictions divided by held-out observations in each source fold. AUC and balanced accuracy are not replacement primary scores.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean and SD across the ten test folds for each source endpoint; region pairs, relevance and stimulus periods stay separately identified. No prospective equal-person aggregation substitution.",
+      "evidence_ids": [
+        "meg-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original mean test-fold face-versus-object accuracy for the selected task-irrelevant first-1000-ms CS↔PFC maximum-squared-DTW-barycenter result, with its complete paired Figure 3c(i–ii) feature/distribution and matching Figure 3a fold profile.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.643,
+      "description": "Fig. 3c CS–PFC, face versus object, task-irrelevant onset: 64.3% accuracy, SD 9.4 percentage points. Fig. 3b CS–PAR face/false-font is 67.0%, SD 8.3 points. The scalar is a named anchor, not an aggregate or whole-paper victory threshold.",
+      "evidence_ids": [
+        "meg-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated rerun. The pinned author classification route is available, but its publication-linked input/supplement/version/fold join, exact symmetric feature member and complete selected Figure 3c(i–ii) paired participant feature/distribution plus matching Figure 3a classifier profile must be authenticated. Retain the original larger-search winner-selection provenance separately from selected-result output coverage; no author baseline value is established.",
+      "evidence_ids": [
+        "meg-code",
+        "meg-data-v1",
+        "meg-data-v2",
+        "meg-correction"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a justified decoding-accuracy improvement and selection-aware decision rule on the complete selected Figure 3c(i–ii) paired participant feature/distribution and matching Figure 3a classifier-profile task support before candidate search, retaining the original full-search winner-selection exposure. Neither any positive delta nor stronger significance is a meaningful effect. No numeric margin or decision rule is established.",
+      "evidence_ids": [
+        "meg-local"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level uncertainty for matched candidate/reference predictions on the selected endpoint, accounting for within-participant face/object pairing, overlapping cross-validation training sets and winner-selection/multiplicity exposure across the original searched measures, relevance, timing and collapsed directions. Retaining that exposure does not itself require full-discovery numerical reconstruction for the named result. Fold SD is descriptive and cannot supply an independent-replicate test; a justified selection-aware uncertainty rule remains unresolved.",
+      "independent_unit": "participant; folds share training observations",
+      "rationale": "The original groups are participants, while the endpoint family is extensive and the published best FC measures were selected across it. A paired effect requires accounting for that selection, without silently changing the source task.",
+      "evidence_ids": [
+        "meg-code",
+        "meg-local"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the corrected publication, exact empirical release, all 94 participants, source measure domain and realized original folds.",
+      "Retain the complete selected Figure 3c(i–ii) paired participant feature/distribution and matching Figure 3a classifier point/fold profile, including separate AUC companions and source winner-selection exposure. Freeze a justified same-support comparison rule before candidate search; the complete discovery family remains provenance and is mandatory only for an explicitly expanded discovery/global-optimality claim.",
+      "Reproduce the author baseline as calibration, then compare the frozen candidate with both the published results and authenticated author rerun on the same inputs, folds and metric support.",
+      "Keep nested participant selection, new folds, balanced accuracy, new trial-level inputs or a 262-measure domain as explicitly labelled extensions unless original-task equivalence is established.",
+      "Require the predeclared meaningful effect and valid participant-level uncertainty under fixed access and resource budgets."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "This contract anchors the source paper only; no separately verified present-day best method comparison is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source admission, expose only declared training/validation feedback for method iteration within the original input condition. Log all searched measures and preprocessing choices. The existing nested proposal is an extension track.",
+    "candidate_freeze": "Commit candidate code, feature policy, preprocessing, endpoint family, seeds and selection rule before final scoring.",
+    "final_evaluation": "Replay authenticated reference and frozen candidate on identical original participant folds and selected face/object, irrelevant first-1000-ms ON, symmetric CS↔PFC task support. Retain complete paired participant features/distributions, observation-level probabilities and labels, fold identities/counts, threshold-0.5 accuracies, unweighted fold mean/population SD and separate AUC companions. Preserve condition-averaging and full-search winner exposure. Granular derivation, numerical agreement, meaningful improvement and participant-aware selection-adjusted inference remain unqualified until independently justified; generated engineering examples are not scientific evidence.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source numerical results, authenticated author rerun and any future SOTA comparator are separately labelled. No local nested classifier becomes the published baseline."
+  },
+  "blocking_issues": [
+    "Unresolved v1/v2 empirical input and corrected-supplement identity join.",
+    "Exact original observation identities and row order, all 94 empirical participant aliases and pairings, realized folds, the selected symmetric SPI member/configuration and full-precision paired Figure 3c(i–ii) features/distributions plus matching Figure 3a probability/label/count/accuracy/AUC profile are not frozen. The source post-QC 246-measure domain and measure/condition/direction-collapse winner-selection provenance also remain unbound; retaining those source identities does not impose an unconditional complete-discovery-matrix rerun.",
+    "No authenticated author baseline execution or protected same-task candidate evaluator.",
+    "A justified meaningful decoding-accuracy improvement and selection-aware decision rule on the complete selected result support, valid participant-aware uncertainty, and fixed feedback/compute budgets are not specified. Preserve original winner-search and condition-averaging exposure; no full-family win rule is imposed unless an explicitly expanded discovery or global-optimality claim is made."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the historical specification and nested-connectivity-v1 implementation. Its prospective folds and equal-participant balanced accuracy are explicitly an extension, not a paper-win grader."
+  }
+}

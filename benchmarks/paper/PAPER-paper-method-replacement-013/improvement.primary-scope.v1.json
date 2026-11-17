@@ -1,0 +1,200 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-013",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Behavioral and neural prediction are ordered tasks, but the exact published run, evaluated support and baseline version are unresolved. The source reports conflicting lateral speed correlations; current full-support protected components amend the historical first-200 support. These cannot certify surpassing the source task.",
+  "source_paper": {
+    "title": "Neuroformer: Multimodal and Multitask Generative Pretraining for Brain Data",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/b16e55ac49f93d33a4b87747d5121b64-Abstract-Conference.html"
+  },
+  "evidence": [
+    {
+      "id": "nf-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2311.00136v4",
+      "locator": "Sections 4.1, 4.3.3, Table 1, Fig. 5 and Section 5",
+      "supports": "Primary arXiv v4 reports lateral/medial speed correlations, few-shot data budgets and multimodal ablations."
+    },
+    {
+      "id": "nf-proceedings",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/b16e55ac49f93d33a4b87747d5121b64-Abstract-Conference.html",
+      "locator": "ICLR 2024 title, authors and abstract",
+      "supports": "Verifies canonical publication identity and neural-prediction/pretraining/behavior scope; the large linked PDF was not downloaded in this curation."
+    },
+    {
+      "id": "nf-dataset-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/a-antoniades/Neuroformer/36ed94084628c253098d448048c980d3dea0050d/neuroformer/datasets.py",
+      "locator": "split_data_by_interval; load_visnav; lines 10-17 and 77-106",
+      "supports": "Source samples random interval subsets, names 10 ms neural and 50 ms behavioral files, and returns data/interval support. Actual published split identities are not saved here."
+    },
+    {
+      "id": "nf-inference",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/a-antoniades/Neuroformer/36ed94084628c253098d448048c980d3dea0050d/neuroformer_inference.py",
+      "locator": "load_visnav, NFDataloader setup, behavior decoding and lines 225-234",
+      "supports": "Released plotting path computes Pearson correlation from the first 200 behavior predictions; this does not authenticate Table 1 support."
+    },
+    {
+      "id": "nf-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/a-antoniades/Neuroformer/36ed94084628c253098d448048c980d3dea0050d/README.md",
+      "locator": "Dataset descriptions; Pretraining; Finetuning",
+      "supports": "Author route supplies lateral Visnav and V1AL recipes, with modality options requiring exact per-result binding."
+    },
+    {
+      "id": "nf-version-audit",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-013/implementations/scientific-contract/TABLE1_VERSION_AUDIT.json",
+      "locator": "Primary-source table inspection retained by the repository, page 8, Table 1",
+      "supports": "Earlier direct PDF audit records proceedings lateral/medial .97/.97 versus arXiv v4 .95/.97; cause and source-run mapping remain unresolved. This retained audit is not a fresh PDF inspection."
+    },
+    {
+      "id": "nf-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-013/implementations/scientific-contract/CONTRACT_V2.md",
+      "locator": "Historical/protected comparison; Published target versus benchmark target",
+      "supports": "The component preserves all 46 slots/85 condition cells, distinguishes source-amended support, and has no scientific qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Source neural response generation and behavior decoding, including speed, gaze, full-data/few-shot pretraining and modality ablations; speed alone must not silently replace this original family.",
+      "evidence_ids": [
+        "nf-paper",
+        "nf-proceedings"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visnav lateral/medial sources are identified, but immutable released file identities and their exact joins to published runs remain unverified. Separate Passive-Stim/V1AL and simulation inputs are outside the retained empirical VisNav primary.",
+      "evidence_ids": [
+        "nf-readme",
+        "nf-dataset-code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper describes lateral 2022-neuron and medial 1905-neuron Visnav recordings. Animal/session identities and published exclusions must be bound; neurons and time windows are not independent animals. Separate Passive-Stim/V1AL populations are outside this primary.",
+      "evidence_ids": [
+        "nf-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Pinned loader randomly selects 80% of intervals and takes a training subset for fine-tuning; exact seed/order/published split is unbound. A new contiguous partition with guard bands is an extension, not the original split.",
+      "evidence_ids": [
+        "nf-dataset-code"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source calcium-derived neural-rate inputs are tokenized by the original author route; stimulus video and behavior modalities vary by source condition. Authenticate each condition’s original rate units, tokenization, visible modalities, pretraining/label budget and target visibility; a target appearing through another input invalidates the comparison.",
+      "evidence_ids": [
+        "nf-paper",
+        "nf-readme",
+        "nf-inference"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper describes deconvolved calcium activity. Released Visnav neural and behavior files have distinct 0.01/0.05 s clocks; original tokenization, windows, time alignment and author configuration must be joined to each result.",
+      "evidence_ids": [
+        "nf-paper",
+        "nf-dataset-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Table 1 behavioral regression uses Pearson r, sum((y-y_mean)*(prediction-prediction_mean))/sqrt(sum((y-y_mean)^2)*sum((prediction-prediction_mean)^2)). Undefined constant-series values cannot be replaced by a success score. Original neural metrics remain separately required; source classification metrics are required only if the classification result or control is authenticated as indispensable to the named VisNav primary.",
+      "evidence_ids": [
+        "nf-paper",
+        "nf-inference"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "The released inference plot uses first 200 rows per behavior mode; publication support and pooling/seed aggregation are not authenticated. Do not substitute full-support r or average speed and gaze.",
+      "evidence_ids": [
+        "nf-inference",
+        "nf-local"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Source-version-bound behavior Pearson r and separately bound original neural-prediction/ablation endpoints; full-family decision unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "arXiv v4 Table 1 gives lateral/medial Neuroformer r=.95/.97; the retained proceedings PDF audit gives .97/.97. No single lateral target or complete-family aggregate is selected; neither table is an executed local result.",
+      "evidence_ids": [
+        "nf-paper",
+        "nf-version-audit"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified rerun is established. Source code and a comparison component do not authenticate the paper checkpoint, training recipe, evaluated rows or baseline outcome.",
+      "evidence_ids": [
+        "nf-dataset-code",
+        "nf-inference",
+        "nf-local"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "For behavioral Pearson endpoints, justify any meaningful task-specific increase in correlation on each authenticated original result’s support after resolving the paper version and calibration. Original neural-prediction/ablation endpoints require independently justified source-metric effect and dependence-aware uncertainty criteria. Neither a behavioral correlation margin nor an observed speed gain establishes full-family improvement. No effect threshold or family-level decision rule is supplied; these remain unresolved.",
+      "evidence_ids": [
+        "nf-local"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify paired temporal dependence-aware uncertainty and seed replication after recovering original recording identities and support; do not treat adjacent windows or neurons as independent subjects.",
+      "independent_unit": "recording/animal where identifiable; temporal blocks only for within-recording conditional uncertainty",
+      "rationale": "Primary data are temporally dependent and biological replication is not established by the lateral/medial labels. Neither one seed nor first-200 correlation supplies a valid generalization uncertainty rule.",
+      "evidence_ids": [
+        "nf-dataset-code",
+        "nf-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Resolve the canonical paper version discrepancy and authenticate per-result author run/checkpoint/configuration and metric support.",
+      "Preserve each named original VisNav result’s recording cohort, exact source split, input clocks/windows, visible modalities and original pretraining/label budget. Bind Figure 5’s actual recording, behavioral head, run, label draw and pretrained/scratch/full-data comparison support, including the source-reported 1% and 10% budgets. The exact condition mapping remains unresolved; do not infer a two-locus Cartesian panel from the implementation inventory.",
+      "Retain the original empirical VisNav neural-prediction, pretrained-versus-scratch behavioral-decoding and joint-training/modality-input result family, including each named result’s source-required full-data comparisons and indispensable controls. A gain on one lateral speed cell does not establish success for that family. Hubnet simulation/connectivity, separate Passive-Stim/V1AL populations and broader source inventories remain associated evidence; their presence does not automatically make them mandatory primary outcomes.",
+      "Reproduce the authenticated author baseline as calibration, then freeze the candidate and compare on that same original support under declared budgets.",
+      "Treat new guarded chronological splits, full-row protected Pearson and altered generated-history paths as separate extensions unless exact original-task equivalence is proved.",
+      "Require a justified meaningful effect and prespecified dependence-aware uncertainty; report source score, rerun score and any future SOTA score separately."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No present-day SOTA comparator has been source-verified. The paper’s own comparator rows are historical baselines.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Held until original run/support identities are resolved. Then allow matched training and validation feedback, retaining per-condition pretraining and label budgets and logging all checkpoint selection.",
+    "candidate_freeze": "Freeze source code, weights/pretraining provenance, selected source conditions, configuration, preprocessing, seeds and prediction ordering before final access.",
+    "final_evaluation": "Require matched original ordered support and a qualified operator evaluator for every claimed source condition. Existing protected all-row components cannot directly compare to historical first-200 scores.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep version-specific published targets, authenticated author reruns and any separately verified SOTA distinct. Local recipes and source-amended metrics cannot replace the source baseline."
+  },
+  "blocking_issues": [
+    "Published lateral Table 1 discrepancy and exact run/support mapping remain unresolved.",
+    "Immutable data identities, original split realization, biological identities, modality visibility and all source condition recipes remain unbound.",
+    "No executed authenticated reference or qualified final evaluator for the complete original task.",
+    "Meaningful effect, dependence-aware uncertainty and concrete access/compute budgets are not frozen."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain registered-runtime and scientific-contract evidence, version-specific targets and all original scope-cell records as provenance. The 46-slot/85-condition inventory and wider Hubnet, Passive-Stim/V1AL and ancillary source results remain associated evidence; inventory membership does not enroll a result in the adopted VisNav primary. Require an ancillary source control only when its indispensable role in a named VisNav result is authenticated. Historical replay is calibration; amended protected support and generated examples are not a paper-win grader."
+  }
+}

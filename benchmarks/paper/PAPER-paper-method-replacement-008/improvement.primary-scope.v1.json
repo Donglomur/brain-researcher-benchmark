@@ -1,0 +1,203 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-008",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The explicitly selected primary is the complete fixed-channel-mask spatial-encoding comparison on sentence-onset and speech/non-speech, including chronological sensitivity. Ordered positive-class ROC-AUC endpoints exist, but authentic source support, fixed competent references, matched exposure/search budgets and defensible endpoint-specific improvement/uncertainty remain unresolved. Wider reconstruction/factorial/pretraining/scaling results are separate evidence; their gaps do not automatically block this primary. Candidate reproduction success is not a prerequisite to independently justified superiority.",
+  "source_paper": {
+    "title": "BaRISTA: Brain Scale Informed Spatiotemporal Representation of Human Intracranial Neural Activity",
+    "url": "https://arxiv.org/html/2512.12135v1"
+  },
+  "evidence": [
+    {
+      "id": "barista-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2512.12135v1",
+      "locator": "Sections 4.1–4.5; Tables 1–5; Appendices A, C, E, F, K and Tables 16–19",
+      "supports": "Defines source main and chronological classification, reconstruction, pretraining/exposure regimes, numeric tables and aggregation. Table 1 selects one pretraining seed using validation; Table 10 instead averages three."
+    },
+    {
+      "id": "barista-readme",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/README.md",
+      "locator": "Data Preparation; Data Segmentation; Finetuning the Model; Loading Pretrained Model",
+      "supports": "Release distinguishes main random nonoverlap from chronological experiments, documents force_nonoverlap, supplied checkpoint types and five chronological fold generation."
+    },
+    {
+      "id": "barista-config",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/braintreebank.yaml",
+      "locator": "subjects_to_process, finetune_sessions, segment_length_s, sampling, split and preprocessing configuration",
+      "supports": "Pinned session labels, 3-second/2048-Hz input geometry, split fractions and force_nonoverlap configuration; subject 6 hold-out identifier is HS6_4."
+    },
+    {
+      "id": "barista-metric",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py",
+      "locator": "run_epoch; validation checkpoint selection; final evaluation",
+      "supports": "Scores softmax positive-class probabilities using sklearn roc_auc_score and selects weights from validation. Native logs alone are not authenticated per-query predictions."
+    },
+    {
+      "id": "barista-aggregate",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py",
+      "locator": "parse_from_seeds, parse_summary_or_seeds, main",
+      "supports": "Released helper computes available-seed means/population SD, rounds before some higher aggregation and permits incomplete seed sets; this cannot certify manuscript SEM parity or complete support."
+    },
+    {
+      "id": "barista-seeds",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh",
+      "locator": "SEEDS=(0 1 2 3 4); session/checkpoint/experiment arguments",
+      "supports": "Five default fine-tuning seeds and explicit matching checkpoint/session experiments are available as a rerun route."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original spatial-encoding comparison with channel masking held fixed: pretrained channel/channel, parcel/channel and lobe/channel conditions and their three matching random-initialized encoding controls on sentence-onset and speech/non-speech decoding, including corresponding chronological sensitivity. Preserve the selected Table2 and Table17 language result support; no full-factorial, reconstruction, volume/optical-flow or whole-paper primary is selected.",
+      "evidence_ids": [
+        "barista-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Brain Treebank: 10 people, 26 movie-viewing sessions, 2048-Hz iEEG plus aligned transcripts and spatial metadata. Source provides the data family and session partition, but immutable raw/annotation/checkpoint hashes and the authentic upstream preprocessing join remain unbound.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seventeen pretraining, two downstream-validation and seven downstream-test sessions from people 1,2,3,4,6,7,10 are required. Table 5 labels person 6 test as Session 3; pinned code names HOLDSUBJ_6_HS6_4. Reconcile paper labels with native recording identities rather than assume equivalence. Standard pretraining includes test people; held-person-out is a distinct source condition.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-config"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Main analysis: nonoverlapping 3-second segments, random 80/10/10. Appendix K: overlapping segments within partitions but five chronological 80/10/10 splits with no between-partition overlap. Exact saved row identities, balancing and original fold choices are not authenticated. force_nonoverlap=True belongs to main tasks; False belongs to chronological tasks.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Complete original source channels and spatial labels for each selected three-second iEEG language segment, permitted training/development labels and authenticated source pretraining/checkpoint exposure. Classification uses the entire offline segment; final query labels remain evaluator-only. These source observations and comparator conditions do not prescribe candidate architecture.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-config"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source noisy/corrupted-channel exclusion, Laplacian rereferencing, ventricular exclusion, source filtering/normalization and word-centered segmentation. Native data/config-to-paper correspondence, clock alignment and exact channels must be authenticated; a normalized array of the right shape is insufficient.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-config"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Semantic-positive-class ROC-AUC for each selected language task, computed from all source query probabilities and labels within the original session/finetuning-seed/fold context, with half credit for score ties. Native source uses roc_auc_score. Random and chronological conditions remain separate; no cross-task scalar is a selected finding. Reconstruction MSE/R2 is separately retained source evidence, not this primary metric.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Selected main results aggregate7 test sessions x5 fine-tuning seeds (35 cells) per source condition/language task; selected chronological results aggregate7 sessions x5 original folds x5 fine-tuning seeds (175). Preserve every underlying session/fold/seed result and the source validation-selected pretraining-checkpoint regime. Figure3/Table10 three-pretraining-seed averaging is distinct associated evidence. Exact historical SEM/reduction and dependence-aware reproduction criteria remain unresolved; repeated cells are not independent people.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-aggregate"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Four separately reported positive-class ROC-AUC endpoints: sentence-onset and speech/non-speech under the original random nonoverlapping partition and original chronological folds. Preserve the selected six-condition source comparison and every session/fold/seed output; no across-task win scalar.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The selected reference is the complete Table2 channel-masking and Table17 language panel, with24 distinct source model/endpoint mean-plus-SEM pairs retained in the reproduction proposal. Its known printed values are not one scalar author baseline or executed reference. Existing0.862 sentence/main anchor is one source condition only; fixed competent comparator and authentic reference outputs remain to be qualified.",
+      "evidence_ids": [
+        "barista-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated original selected-query probability panel and competent author rerun are established. Released channel-mask checkpoints and source scoring are useful routes, but original source input/session identity, validation-selected checkpoint lineage and complete numerical reference require qualification. Three-pretraining-seed averaging and source-amended reconstruction cannot substitute.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-readme",
+        "barista-metric",
+        "barista-seeds"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No universal gain or aggregate victory rule is selected. Independently justify meaningful endpoint-specific improvement on the same named language support while preserving complete source comparisons. Published SEM, significance, candidate improvement over random-null controls or a favorable person/protocol cannot define the margin.",
+      "evidence_ids": [
+        "barista-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover source summaries and use a separately justified paired candidate/reference comparison across the complete selected original support. Preserve session/person/movie nesting and repeated seeds/folds; do not infer confidence thresholds or independent sample counts from source SEM. Report language tasks and random versus chronological regimes separately.",
+      "independent_unit": "Original person/session for the stated population claim, with five fine-tuning seeds and five chronological folds repeated within people; shared movie exposure may induce additional dependence. The original criterion and any valid comparison rule remain unresolved.",
+      "rationale": "Source35/175 summary cells are not35/175 independent people. The selected tables use validation-selected pretraining checkpoints, distinct from Figure3/Table10 three-seed sensitivity. No across-task averaging may hide a regression.",
+      "evidence_ids": [
+        "barista-paper",
+        "barista-aggregate"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate a fixed qualified competent author comparator, original selected observation support and source-compatible reference outputs. This is not a requirement that a candidate first numerically reproduce the author result.",
+      "Evaluate both language endpoints in each selected original random/chronological regime with all original session/fold/seed support and a frozen candidate information history. Preserve source query labels, positive-class convention and complete source-compatible output derivation.",
+      "Independently justify meaningful endpoint-specific gain, paired uncertainty and a complete comparison rule before evaluation. No universal margin or across-task scalar is selected; do not average tasks to hide a regression.",
+      "Preserve source pretrained and random-initialized controls as comparator/reproduction evidence. Random-null controls are not improvement targets, and source configurations do not automatically restrict candidate architecture.",
+      "Disclose and match the permitted observation/information boundary, pretraining exposure, validation selection and cumulative search/resource budgets. Changes to source cohort, split or exposure are extensions unless explicitly admitted.",
+      "State the exact fixed-channel-mask result scope. Superiority on this selected contrast does not establish full-factorial, causal spatial-scale, whole-paper or current-SOTA claims.",
+      "Assess superiority independently from the candidate reproduction outcome; require independently verified candidate/reference execution and the accepted same-result comparison criteria."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper compares against contemporary PopT/Brant; that historical comparison does not establish current SOTA. No later primary-source frontier audit is claimed.",
+      "evidence_ids": [
+        "barista-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "After authentic source binding, develop on the permitted original training/development observations for the selected fixed-channel-mask language contrast. Keep independent information histories across overlapping source protocols/folds and related BrainTreebank tasks; expose pretraining and search budgets explicitly. Candidate architecture is not fixed by source comparator configuration.",
+    "candidate_freeze": "Freeze candidate method, information/observation access, preprocessing, checkpoint/exposure history, validation selection and all selected endpoint outputs before final labels/comparisons. Retain all seven original sessions, five fine-tuning seeds and original main/five chronological folds; no favorable cell or control omission.",
+    "final_evaluation": "Independently verify candidate and qualified author reference outputs on the root-selected same-language observation support. Report each task/protocol and complete person/fold/seed results separately. Reproduction numerical agreement and candidate superiority use independently justified criteria; no across-task average hides regressions and no wider-paper claim follows.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep source table values separate from authenticated unrounded author reference outputs. Bind a fixed qualified competent comparator and original validation-selected checkpoint/exposure lineage; preserve three matching random-initialized controls without requiring candidate improvement over nulls. Do not duplicate checkpoints, substitute source-amended reconstruction or silently pool pretraining-seed regimes."
+  },
+  "blocking_issues": [
+    "Authenticate all original seven downstream test sessions/person/movie identities, raw recordings, channels, spatial labels, transcript/annotation clock and saved source partitions. Reconcile person6 paper Session3 versus native HS6_4/sub_6_trial004; shape or count agreement is insufficient.",
+    "Preserve both sentence-onset and speech/non-speech tasks under the original random nonoverlapping partition and all five chronological folds. Authenticate the selected Table2/Table17 channel-masking conditions and matching random-initialized encoding controls; the source checkpoint regime is validation-selected pretraining, distinct from Table10 three-pretraining-seed averaging.",
+    "Preserve every per-session/fold/finetuning-seed result and semantic-positive query probability, original query order, source masks/class support and source summaries. Source35/175 summary cells are repeated measurements across seven people, not35/175 independent people; shared movies may introduce additional dependence.",
+    "Authenticate pretrained exposure/checkpoints, source validation selection, competent author reference and complete source-compatible candidate execution. Existing scorer/report metadata and published numbers do not establish authentic computation; source comparator configurations do not restrict candidate architecture.",
+    "Keep wider factorial cells, three-pretraining-seed sensitivity, PopT/Brant comparisons, volume/optical-flow, reconstruction, held-person-out, scaling, interpretation, spectral and architecture results separately named. The selected fixed-channel-mask result does not establish encoding-versus-masking importance, full factorial ANOVA or whole-paper success.",
+    "A fixed qualified competent author comparator and its complete selected endpoint references must be bound before candidate comparison. The source model/control panel is not a demand to improve random-null controls or a restriction that candidate architecture equal source architecture.",
+    "No meaningful endpoint-specific gain, valid paired uncertainty or complete superiority decision is frozen. Do not pool tasks to hide a regression, reuse published SEM as a margin, infer current SOTA or require candidate numerical reproduction as a prerequisite.",
+    "Matched information/observation boundaries, pretraining exposure, cumulative search and compute budgets and independently verified execution remain unresolved. Final common anchors/selected full_panel and canonical task identity await accepted round03 successor preimages."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve registered-runtime classification, reconstruction and reference implementations. Their full-support admission, source-amended H, declared MSE and generated controls remain calibration/engineering artifacts. The local equal-person chronological AUC summary is not a reported source scalar and cannot alone yield paper success; original incomplete full-paper branches remain visible."
+  }
+}
