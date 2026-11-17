@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "PAPER-paper-method-replacement-011",
+  "delivery_class": "initial_word_responsiveness_component",
+  "canonical_contract": {
+    "path": "benchmarks/paper/PAPER-paper-method-replacement-011/task.json",
+    "sha256": "43a4653f5da2600d6df0733d2fff6a821aee5d9588234f236c5f147a6d302b12",
+    "bytes": 39979
+  },
+  "implementation_origin": "independent_original_code_no_official_code_vendored",
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "section4, AppendixA.4/A.6",
+      "use": "sampling rate and five paired response windows; no published results used as generated observations"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/stats/word_onset_tests.py",
+      "locator": "ttest_target_within_control, uncontrolled_ttest, get_pre_post_data",
+      "use": "paired t kernel and pooled population-SD effect; source minimum/final p mismatch explicitly corrected in prospective component"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/all_trials.json",
+      "use": "10 subject and26 run identity facts"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "use": "source split/window discrepancy audit only; not implemented"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_glms.py",
+      "use": "undefined-result-path discrepancy audit only; not implemented"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/stats/sentence_position_tests.py",
+      "use": "hardcoded population discrepancy audit only; not implemented"
+    }
+  ],
+  "policies": {
+    "response_windows": "source_derived_fixed",
+    "sample_conversion": "source_style_truncate_toward_zero_at_decimal_endpoints",
+    "paired_kernel": "source_derived",
+    "minimum_p_and_effect_pairing": "explicit_correction_not_historical_equivalence",
+    "family": "prospective_global_bonferroni_electrodes_times_five",
+    "degenerate_differences": "prospective_fail_closed_null_p"
+  },
+  "completed_construction_scope": [
+    "complete local processed-epoch word-response evaluator",
+    "fixed scientific kernel and full declared inventory checks",
+    "streaming run aggregation",
+    "raw full-window outputs and conservative prospective correction",
+    "bounded generated engineering verification"
+  ],
+  "incomplete_task_scope": [
+    "native acquisition and preprocessing validation",
+    "authentic full-electrode and full-word population",
+    "historical numerical reference and grading tolerance",
+    "sentence-position endpoint",
+    "joint acoustic visual speaker scene adjustment",
+    "time-resolved decoding",
+    "protected grouped evaluation and equal access",
+    "independent native scientific qualification",
+    "source/stimulus rights"
+  ],
+  "exposure_family": "braintreebank-human-movie-ieeg",
+  "independent_cohort_claim": false,
+  "scientific_runs": 0,
+  "research_qualified": false,
+  "full_contract_complete": false
+}

@@ -1,0 +1,120 @@
+{
+  "task_id": "PAPER-paper-method-add-006",
+  "implementation_version": "initial-evaluator-v1",
+  "contract_sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73",
+  "paper": "https://www.nature.com/articles/s41593-025-02183-y",
+  "paper_open_access_route": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12971491/",
+  "source_revision": "9674a6cb0c39926d70746024ce17de35f87df8f9",
+  "sources": {
+    "code/process_rats.py": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/process_rats.py",
+    "code/rat_utils.py": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/rat_utils.py",
+    "code/fit-GLMs-rat.py": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/fit-GLMs-rat.py",
+    "code/run-pfc-hp-analysis-rats.py": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/run-pfc-hp-analysis-rats.py",
+    "code/utils.py": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/utils.py",
+    "figures/Fig-readout-with-learning-hp-pfc.ipynb": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/figures/Fig-readout-with-learning-hp-pfc.ipynb"
+  },
+  "dandiset": {
+    "id": "000978",
+    "version": "0.240511.0307",
+    "assets": [
+      {
+        "name": "sub-JDS-SingleDay-JS14/sub-JDS-SingleDay-JS14_behavior+ecephys.nwb",
+        "bytes": 28291364968,
+        "asset_id": "4b7c7959-04b3-4817-8f96-1af6f41888c1"
+      },
+      {
+        "name": "sub-JDS-SingleDay-ER1/sub-JDS-SingleDay-ER1_behavior+ecephys.nwb",
+        "bytes": 30009167808,
+        "asset_id": "b6425692-0f32-4087-8412-aebcfc37cd96"
+      },
+      {
+        "name": "sub-JDS-SingleDay-JS21/sub-JDS-SingleDay-JS21_behavior+ecephys.nwb",
+        "bytes": 32484552528,
+        "asset_id": "f3a457e9-fa5b-45b4-9778-9c0e69de91a9"
+      },
+      {
+        "name": "sub-JDS-SingleDay-JS15/sub-JDS-SingleDay-JS15_behavior+ecephys.nwb",
+        "bytes": 33642353128,
+        "asset_id": "8fae63eb-84c2-4f7c-8a13-acb0832178f9"
+      },
+      {
+        "name": "sub-JDS-SingleDay-JS17/sub-JDS-SingleDay-JS17_behavior+ecephys.nwb",
+        "bytes": 35702063632,
+        "asset_id": "f1f51660-4c23-4b61-a6bd-64d817d141e5"
+      },
+      {
+        "name": "sub-JDS-SingleDay-KL8/sub-JDS-SingleDay-KL8_behavior+ecephys.nwb",
+        "bytes": 32802639552,
+        "asset_id": "9fcb710b-00ea-435b-900c-454a5af46ab3"
+      },
+      {
+        "name": "sub-JDS-SingleDay-JS34/sub-JDS-SingleDay-JS34_behavior+ecephys.nwb",
+        "bytes": 40959559064,
+        "asset_id": "b79b4575-b3c9-4449-ac4b-7a11c17bdbf9"
+      },
+      {
+        "name": "sub-JDS-SingleDay-ZT2/sub-JDS-SingleDay-ZT2_obj-u40err_behavior+ecephys.nwb",
+        "bytes": 41977536000,
+        "asset_id": "785df3db-c72d-4ac7-927f-d88725dd4944"
+      },
+      {
+        "name": "sub-JDS-SingleDay-ZT2/sub-JDS-SingleDay-ZT2_obj-1dss6zi_behavior+ecephys.nwb",
+        "bytes": 47112109304,
+        "asset_id": "efae9f4d-6628-4fcb-b1c1-414af48a9d08"
+      }
+    ],
+    "acquired": false,
+    "content_hashes_verified": false
+  },
+  "source_population": {
+    "animals": [
+      "KL8",
+      "ER1",
+      "JS34",
+      "JS14",
+      "JS17",
+      "JS21",
+      "JS15",
+      "ZT2"
+    ],
+    "asset_count": 9,
+    "glm_sessions_per_animal": 8,
+    "session_identity_status": "first_eight_processed_positions_known_native_epochs_unverified",
+    "ZT2_order": [
+      "obj-u40err",
+      "obj-1dss6zi"
+    ],
+    "unit_location_map": "session_specific"
+  },
+  "paper_source_discrepancies": [
+    {
+      "endpoint": "raw_readout_neuron_subsets",
+      "paper": {
+        "PFC": 19,
+        "CA1": 24
+      },
+      "pinned_script": {
+        "PFC": 19,
+        "CA1": 19
+      },
+      "resolution": "unresolved_no_automatic_choice"
+    },
+    {
+      "endpoint": "GLM_null_model",
+      "paper": "D2 < 0",
+      "pinned_source": "D2 <= 0 plus fewer than 9 valid folds of 10",
+      "implementation": "pinned_source_boundary; not paper equivalence"
+    }
+  ],
+  "rights": {
+    "implementation": "new independent mathematical implementation; no vendored source or copied notebook outputs",
+    "source_code_license": "unresolved at pinned repository; not inferred from paper license",
+    "data_license": "separate DANDI release review remains required",
+    "paper_license": "paper terms do not automatically license repository code"
+  },
+  "qualification": {
+    "native_reference_executed": false,
+    "scientifically_qualified": false,
+    "full_contract_complete": false
+  }
+}

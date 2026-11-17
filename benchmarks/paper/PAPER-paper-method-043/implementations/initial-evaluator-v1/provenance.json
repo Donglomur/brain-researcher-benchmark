@@ -1,0 +1,93 @@
+{
+  "task_id": "PAPER-paper-method-043",
+  "implementation_status": "engineering_prepared_tensor_panel_only",
+  "canonical_contract": {
+    "path": "benchmarks/paper/PAPER-paper-method-043/task.json",
+    "bytes": 39845,
+    "sha256": "02f3c335df986b9276f0026fff9ffcd1d16a410be55372299a19ca93e87468af"
+  },
+  "official_code": {
+    "repository": "https://github.com/jingyanghuo/neuropictor",
+    "commit": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+    "vendored": false,
+    "reuse_license": "unresolved_in_canonical_record; original independent implementation only"
+  },
+  "source_mapping": [
+    {
+      "requirement": "paired Pearson pixel similarity and strict per-prediction two-way feature identification",
+      "source": "eval_metrics.py",
+      "lines": "101-145",
+      "implemented_by": [
+        "paired_correlation",
+        "two_way_identification"
+      ]
+    },
+    {
+      "requirement": "paired correlation distance for EffNet and SwAV",
+      "source": "eval_metrics.py",
+      "lines": "229-266",
+      "implemented_by": [
+        "metric_panel"
+      ]
+    },
+    {
+      "requirement": "historical SSIM version ambiguity retained; explicitly prospective 2D policy",
+      "source": "eval_metrics.py",
+      "lines": "147-164",
+      "implemented_by": [
+        "ssim_2d"
+      ],
+      "native_parity_verified": false
+    },
+    {
+      "requirement": "complete per-subject identity pool rather than available-label subset",
+      "source": "dataset/dataset.py",
+      "lines": "60-79",
+      "implemented_by": [
+        "validate_protocol",
+        "_load_bundle"
+      ]
+    },
+    {
+      "requirement": "982 shared stimuli in subjects1,2,5,7 and macro subject averaging",
+      "source": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+      "sections": "4.1 and 4.2",
+      "implemented_by": [
+        "validate_protocol",
+        "evaluate"
+      ],
+      "membership_verified": false
+    },
+    {
+      "requirement": "separate fMRI encoder and multi-subject image pretraining ancestry",
+      "source": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+      "sections": "Table2 and 4.3",
+      "implemented_by": [
+        "evaluate"
+      ]
+    },
+    {
+      "requirement": "matched data/priors/tuning, neural-free controls and protected stimulus IDs",
+      "source": "task.json#/evaluation/comparability",
+      "implemented_by": [
+        "evaluate",
+        "_load_bundle"
+      ]
+    }
+  ],
+  "prospective_choices": [
+    "prepared tensor NPZ boundary with identity sidecars",
+    "explicit 2D SSIM semantics",
+    "receipt-based comparator validation",
+    "fail on undefined/nonfinite correlations",
+    "operator trust required; hashes are not provenance attestation"
+  ],
+  "never_established": [
+    "native model execution",
+    "authentic data evaluation",
+    "historical numeric targets",
+    "full benchmark qualification",
+    "right to redistribute stimuli or upstream assets"
+  ],
+  "new_scientific_runs": 0
+}
