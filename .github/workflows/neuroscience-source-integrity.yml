@@ -5455,7 +5455,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ulimit -t 120
+          # The existing child launcher requires CPU soft/hard limits of 120/121.
+          # Keep the parent's soft limit while allowing that one-second grace.
+          ulimit -t 121
+          ulimit -S -t 120
           timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s tests/numerical -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/tests/test_numerical_agreement.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/shared/four-programmes/_four_programmes_source_v1/tests/test_numeric_dmd.py -v
