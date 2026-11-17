@@ -24,7 +24,7 @@ MAX_TREE_ENTRIES = 30000
 MAX_DEPTH = 32
 SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml",
                    ".sh", ".lock", ".toml", ".in", ".author", ".list", ".template",
-                   ".rst", ".c", ".dockerignore"}
+                   ".rst", ".c", ".dockerignore", ".patch"}
 RETIRED_ROOTS = ("authoring", "components", "artifacts-build", "verification", "results", "tools",
                  "benchmarks/neuroscience", "benchmarks/manifests",
                  "benchmarks/scientific_components", "benchmarks/scientific_contracts")
