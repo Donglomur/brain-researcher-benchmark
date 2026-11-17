@@ -62,6 +62,13 @@ def fixture(root):
     write_json(root / checks.CURRENT_BINDINGS, {"scope": "fixture source binding, no qualification"})
     write_json(root / checks.CURRENT_CLOSURES / "example" / "binding.json", {
         "private_payload_locator": "/private/never-open-this-binding.json"})
+    write_json(root / checks.PARALLEL_CONTROL_MANIFEST, {
+        "scope": "generated source control metadata only",
+        "private_payload_locator": "/private/never-open-this-control.json"})
+    for relative in checks.PARALLEL_CONTROL_SOURCES[1:]:
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("raise AssertionError('CI sources must only be hashed')\n")
     rows = []
     for path in sorted(root.rglob("*")):
         if path.is_file():
@@ -124,7 +131,7 @@ class RepositoryChecksTests(unittest.TestCase):
         self.assertEqual(result["artifacts"], 2)
         self.assertEqual(result["artifact_files"], 2)
         self.assertEqual(result["current_binding_files"], 2)
-        self.assertEqual(result["source_files"], 8)
+        self.assertEqual(result["source_files"], 11)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         runtime = self.root / ".neurobench"
@@ -132,10 +139,48 @@ class RepositoryChecksTests(unittest.TestCase):
         (runtime / "not-source.bin").write_bytes(b"Local runtime output is not source.")
         self.assertEqual(self.check()["source_check"], "passed")
 
+    def test_parallel_control_sources_are_explicitly_owned_and_content_bound(self):
+        self.build()
+        inventory = json.loads((self.root / checks.INVENTORY).read_text())
+        records = {item["path"]: item for item in inventory["files"]}
+        for relative in checks.PARALLEL_CONTROL_SOURCES:
+            with self.subTest(path=relative):
+                self.assertEqual(records[relative]["owner"], "generated-source-controls")
+                path = self.root / relative
+                original = path.read_bytes()
+                path.write_bytes(original + b" ")
+                with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
+                    self.check()
+                path.write_bytes(original)
+        self.assertEqual(self.check()["source_check"], "passed")
+
+    def test_parallel_control_namespace_remains_closed_and_members_are_ordinary(self):
+        self.build()
+        unexpected = self.root / "benchmarks/integrity/parallel-source-controls.v2.json"
+        unexpected.write_text("{}")
+        with self.assertRaisesRegex(ValueError, "Orphan source file"):
+            self.check()
+        unexpected.unlink()
+        target = self.root / "alias-target.py"
+        target.write_text("source alias must be refused")
+        for relative in checks.PARALLEL_CONTROL_SOURCES:
+            with self.subTest(path=relative):
+                path = self.root / relative
+                original = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(ValueError, "Missing source path"):
+                    self.check()
+                path.symlink_to(target)
+                with self.assertRaisesRegex(ValueError, "ordinary single-link file"):
+                    self.check()
+                path.unlink()
+                path.write_bytes(original)
+        self.assertEqual(self.check()["source_check"], "passed")
+
     def test_versioned_paper_metadata_is_owned_and_preserves_historical_bytes(self):
         row = self.revise_paper()
         result = self.build()
-        self.assertEqual(result["source_files"], 10)
+        self.assertEqual(result["source_files"], 13)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
@@ -255,7 +300,7 @@ class RepositoryChecksTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires every paper revision"):
             self.build()
         self.revise_paper(1)
-        self.assertEqual(self.build()["source_files"], 13)
+        self.assertEqual(self.build()["source_files"], 16)
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
         self.assertIn(snapshot_path, {item["path"] for item in inventory["files"]})
