@@ -1,0 +1,249 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-059",
+  "title": "Retrospective pre-movement left-choice probability from brain-wide spikes",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The retained manifest describes a verified exposed one-session 93-query programme; its authoring bridge is a historical locator. The public full 29-session process source supplies real probability scoring and F/I boundaries but explicitly lacks an authentic structured-input extractor, admitted deployment and scientific qualification. Neither scope is an untouched held-animal causal test.",
+  "scientific_target": {
+    "question": "Within separately calibrated sessions, does neural activity in the one second before the known movement onset improve left-choice probabilities beyond signed stimulus and lawful preceding-trial history, with block-prior context tested separately?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Binary recorded choice: right=0 and left=1; candidate returns P(left). No-response trials and source-invalid trials retain explicit source dispositions.",
+    "answer_origin": "Original behavior choice field aligned to source-valid trial chronology; held query choice is private during collection and reconstructed by the independent evaluator.",
+    "case_unit": "An eligible original trial with complete [movement_onset-1 second, movement_onset) spike support.",
+    "independent_unit": "13 animals across 29 sessions and seven laboratories in the complete design; the exposed historical 93-query route is one mouse/session.",
+    "inference_scope": "Retrospective movement-aligned association with within-session train/validation calibration. Knowing movement onset and, in SBH/SBHN, block prior is privileged context; the design is not real-time onset prediction, unseen-animal learning or causal evidence.",
+    "exclusions": [
+      "Do not pool the one-session exposed route with the 29-session design as independent replication.",
+      "Do not call F/I a pure reasoning contrast or treat source-only transport as a model trial.",
+      "Do not read current outcomes, future trials or query labels through history."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "S: nine signed-contrast indicators; H: seven lawful original-predecessor/history indicators; optional B: three block-prior indicators.",
+      "N: all native units' spike counts during [movement_onset-1 second, movement_onset); condition arms are SH, SHN, SBH and SBHN.",
+      "Labeled same-session training and validation views; query inputs arrive under committed source/config/state artifacts."
+    ],
+    "forbidden_inputs": [
+      "Current choice, current reward/feedback, post-cutoff spikes, future-trial history, raw target-bearing HDF5 behavior groups and original target joins.",
+      "Inferring previous trial from the previous retained eligible row when an excluded original trial intervenes.",
+      "Cross-session/condition candidate state and target/evaluator feedback."
+    ],
+    "case_identity": "Full preparer computes case_ plus SHA256 of session_id, source identity and original ordinal. It preserves every original trial slot, sorted-to-raw mapping and predecessor relation; original session/animal/lab roster is fixed. No authentic full-cohort case manifest was produced here.",
+    "split": "Complete source uses each session's verified original TS1 train/validation/test domains, whole pre-movement-window containment and chronology. F source is frozen globally, but fitting is within session. The historical exposed route contains 211 training, 60 validation and 93 sequential query cases from 424 original slots.",
+    "coverage": "Full design requires all 29 sessions, 13 animals, seven labs and all eligible original trials; exact full counts are unresolved. Four information conditions and F/I arms are nested conditions. Historical 93-query software-route evidence remains separately scoped."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-macro left-choice log loss",
+      "direction": "lower",
+      "aggregation": "Pool required held trials across sessions within each animal, calculate mean log loss, then equal-weight all 13 animals; the historical single-session route reports its own 93-query mean.",
+      "rationale": "A proper probability score rewards calibrated known-choice inference; balanced accuracy alone loses confidence information."
+    },
+    "secondary": [
+      "Brier score, balanced accuracy at p_left>=0.5, tie-correct AUC and class/support counts.",
+      "Paired SH versus SHN and SBH versus SBHN neural gains; SH versus SBH privileged-context gains.",
+      "Per-session and pooled-trial diagnostics, leave-one-animal and leave-one-lab summaries."
+    ],
+    "comparators": [
+      {
+        "name": "Shared fitted class prior",
+        "inputs": "Labeled same-session calibration only.",
+        "procedure": "Use identical prior fitting identity across the four information conditions; preserve its complete query predictions."
+      },
+      {
+        "name": "L regularized logistic and H histogram-gradient-boosting references",
+        "inputs": "Exact same SH/SHN/SBH/SBHN inputs.",
+        "procedure": "Freeze source grids, fit preprocessing on train only, select on validation and retain original full refit policy; native competence remains unqualified."
+      },
+      {
+        "name": "Reference label/neural diagnostics",
+        "inputs": "Fixed reference data and already selected method families.",
+        "procedure": "20 D-label and 20 D-neural panels are association stress diagnostics; they cannot select primary methods or become null-distribution p-values."
+      }
+    ],
+    "nuisance_controls": [
+      "Movement-onset alignment is an explicit retrospective privilege.",
+      "Block-prior access is isolated as B; do not credit its information to spikes.",
+      "History follows original trial chronology and availability, including source-excluded predecessors.",
+      "All four information conditions use exact same held-trial support and correct condition-specific feature schema."
+    ],
+    "uncertainty": "Retain all 13 paired animal effects and seven-lab dependence. Source uses 1,999 deterministic animal resamples, explicitly an unqualified conditional spread without refitting or exchangeability assurance; no binary success/p-value claim follows.",
+    "failure_policy": "Require one finite [0,1] probability and exact session/case/ordinal/unit/config/state identity for every expected held trial. Missing or duplicate rows, failed commitments and invalid probabilities make the complete session/animal endpoint unavailable; supported subsets remain descriptive only. One-class BA/AUC is undefined, not zero."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-public-v1/README.md",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/contracts.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/preparation.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/evaluation.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/references.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/worker.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/runner.py",
+      "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/operator.py"
+    ],
+    "scorer_target": "Independent evaluation.py recomputes log loss (clipped at 1e-12 only for logarithms), Brier, confusion-derived balanced accuracy and exact-tie AUC from captured binary choice/probability pairs; complete animal macro requires all 13 animals. This is genuine behavioral target prediction, not reproducing paper values.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "The public complete-process package implements source-level preparation, references, captured fit/predict interfaces and protected scoring. Its README declares all authentic gates unpassed; the older manifest's passed software route covers only the exposed 93-query single session.",
+    "missing": [
+      "Authentic full original-to-structured extractor and verification of all 29 recordings.",
+      "Qualified Linux/Docker/native reference/model environment and external supervisor.",
+      "Fresh complete F/I collection with equal ceilings and protected targets; no such model run was made."
+    ],
+    "execution_evidence": "Source inspection in this revision only; no authentic-data preparation, candidate execution or model trial was performed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective probability response from the same fixed count/context vector without code or external model tools.",
+      "boundary": "Hold case observations, demonstrations and sequential history policy fixed; hide current choice and future cases.",
+      "evidence_ids": [
+        "source-4"
+      ],
+      "missing": [
+        "No direct no-tools participant transport or full support response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective spike raster/count plot with signed-stimulus/history context and captured P(left).",
+      "boundary": "Typed rendering and navigation only; target fields and raw array/tool execution unavailable.",
+      "evidence_ids": [
+        "source-4"
+      ],
+      "missing": [
+        "No rendered participant interface or image-equivalence control."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Full I policy fits on allowed calibration and can produce a session-specific committed predictor; source supports a bounded model tool.",
+      "boundary": "Same session and information condition; fresh predict process for each query; no protected targets or cross-case model conversation state.",
+      "evidence_ids": [
+        "source-2",
+        "source-3",
+        "participant-worker",
+        "participant-runner",
+        "participant-operator"
+      ],
+      "missing": [
+        "Authentic extractor, selected compatible model/runtime and qualified full process execution."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Full F source is captured before authentic input opening, fitted per session and retained unchanged as source with committed config/state.",
+      "boundary": "Training/validation only for fitting; query probability committed before protected grading. Historical prefix-adaptive single-session route remains explicitly different.",
+      "evidence_ids": [
+        "source-1",
+        "source-2",
+        "participant-worker",
+        "participant-runner",
+        "participant-operator"
+      ],
+      "missing": [
+        "Full-cohort data and native execution qualification; historical bridge locator must not be mistaken for a current public turnkey route."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-059/historical/task.pre-understanding.v1.json",
+      "sha256": "45383cdfe51e0ab9d8295c370524faf62c95ecebaf4932ed64d9fc1ccfe4270b",
+      "supports": "Original registered question, source identity, public-development status and source-specified population; retained without changing historical claims."
+    },
+    {
+      "id": "source-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/manifest.json",
+      "sha256": "e81e41c8931e40a3111a518efcd81e187a157728faeea755f0661c2daaf7767a",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-public-v1/README.md",
+      "sha256": "59db8d7bb0767296bb56ef2c75365670aaff3be2a4e943d9f9a6f03af1ddda61",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/contracts.py",
+      "sha256": "bfac56e3f7c30fb6a9f8d263706dd7578ee58e383a40d88f626cfcea52098557",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/preparation.py",
+      "sha256": "ac261ceb483e3b9d8d1e7a15befb59a9dad9dc8ac41f632fe42058f9807c3827",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/evaluation.py",
+      "sha256": "40a02d51e8db4d9aee0a4c0f983431b96caa769da2513d5591dd34826799e09d",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/scientific/references.py",
+      "sha256": "2c8fea4bc64a4f39d3639ce3ba8a622c46a2111452a0144a59035222da61db55",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "official-ts1-loader",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/brainbench-org/ibl-bwb/6fbd666fe8170a2165f5198c1f490911424a654d/src/ts1/ts1_dataset.py",
+      "locator": "IBLBrainWideBenchTS1 dataset_transform, _get_target and get_sampling_intervals at commit 6fbd666fe8170a2165f5198c1f490911424a654d",
+      "supports": "Official TS1 has task-specific target windows, masks and trial identity; all_units is the reference build. Its target extraction is distinct from the task-specific revised estimators."
+    },
+    {
+      "id": "participant-worker",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/worker.py",
+      "sha256": "ff44d3ed7a41e7d0874cbcd7bf7bb5026222b8457619634a645cad5683146731",
+      "supports": "Actual captured policy fit with unchanged F source check, fresh single-query prediction and actor-only model RPC."
+    },
+    {
+      "id": "participant-runner",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/runner.py",
+      "sha256": "9d8869f92c929731dea404878833217f73ed3950818da7486892f94af1692fef",
+      "supports": "Complete session/condition/arm actor fitting and fresh prediction launches with committed source/config/state and model accounting."
+    },
+    {
+      "id": "participant-operator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-059/implementations/registered-runtime/complete-process-v1/operator.py",
+      "sha256": "930fb5da9df8f1687d0b778832d94ee459118f88681e03addffc6cc8214a519a",
+      "supports": "Actual OCIStudy/Programme orchestration, explicit failed prefixes and outside final-supervision requirement."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Manifest preserves a passed local 93-query programme-route control on one exposed mouse/session, not an LLM campaign result. Public full-process source remains inactive and unqualified; this revision ran no model.",
+    "excluded_claims": [
+      "Within-session calibration is not held-animal predictive generalization.",
+      "Pre-movement alignment does not imply an online endpoint when the cutoff uses future-known movement onset."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Correct the endpoint to retrospective left-choice probability with explicit privileged alignment/block context.",
+      "Distinguish exposed 93-query history from the full 29-session source design.",
+      "Make log loss primary and require complete matched animal support with original-predecessor history."
+    ],
+    "source_review": "Read original task, delivered implementation documentation and the pinned local scorer/preparer or support source. Reused verified source provenance and rechecked the pinned official TS1 loader; the documentation URL was inaccessible through the web tool."
+  }
+}

@@ -16,11 +16,11 @@
     ],
     "task_family": "intracortical_motor"
   },
-  "scientific_question": "Does recalibration restore motor decoding after session drift beyond an unchanged decoder and timing prior?",
+  "scientific_question": "At fixed 0,5,10-second calibration budgets, does a prespecified recalibration procedure improve later-session velocity prediction beyond its unchanged decoder and clock-only control?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Paired later-session predictions and calibration-data cost curve."
+    "Seven OpenLoopKinematicsVelocity supervision channels at the source evaluation mask, and paired recalibrated-minus-unchanged R² at each fixed budget."
   ],
   "input_assets": {
     "routes": [
@@ -78,19 +78,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "NWB units multiunit spike times from two96channel arrays; reference bins20ms",
-    "allowed_context": "OpenLoopKinematicsVelocity,OpenLoopKinematics,TrialNum,eval_mask/Blacklist;7DoFattempted reach/grasp",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Reference loader derives kinematic timestamps from rate/offset and bins unit spikes to matching endpoints; trial transitions indicate trial boundaries.",
-    "source_contract_evidence": "DANDI description spells out cohort, split labels and DUA; actualcalibration assets; pinned loader and sklearn decoder"
+    "inputs": [
+      "NWB unit spike times binned to source kinematic endpoints at the pinned 20-ms policy, with declared unit/channel order.",
+      "Declared trial-boundary/timing context, training labels and exact 0/5/10-second calibration prefixes; compare neural_clock with clock_only."
+    ],
+    "forbidden_inputs": [
+      "Query OpenLoopKinematicsVelocity and derived kinematic proxies.",
+      "Future neural bins, query labels outside calibration, feedback or 067/068 cross-task target reuse."
+    ],
+    "case_identity": "Legacy manifest declares 14 later runs × two arms × three calibration budgets = 84 contexts. Exact prepared public case roster and source-ID binding are absent.",
+    "split": "Use source H1 session held-in/held-out mapping and complete run boundaries. Calibration prefixes must precede the scored suffix; no random-bin splits or shared target-session fitting beyond the declared budget.",
+    "coverage": "The manifest declares complete scope, not actual source ingestion or scored completion. All declared runs/arms/budgets must be recovered; labels/conditions do not add benchmarks."
   },
-  "biological_unit": "ONEHumanPitt person across sessions; held-in/out refers sessions",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One human participant; session-level repetition is not new biological replication.",
+  "case_definition": "Complete later recording run with ordered masked 20-ms prediction bins; runs nested within source session.",
   "split": {
-    "policy": "One participant; official session/held-in-out definitions and eval mask; calibration prefix separated from assessed future sessions.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Use source H1 session held-in/held-out mapping and complete run boundaries. Calibration prefixes must precede the scored suffix; no random-bin splits or shared target-session fitting beyond the declared budget.",
+    "coverage": "The manifest declares complete scope, not actual source ingestion or scored completion. All declared runs/arms/budgets must be recovered; labels/conditions do not add benchmarks."
   },
   "reference": {
     "source_code_url": "https://github.com/snel-repo/falcon-challenge",
@@ -106,50 +110,101 @@
     "data_url": "https://dandiarchive.org/dandiset/000954/draft"
   },
   "controls": [
-    "Identical later sessions",
-    "fixed calibration prefix",
-    "time-only reference",
-    "no assessment feedback."
+    "Audit timestamp rate/offset semantics against actual NWB version before spike bins are aligned.",
+    "Keep within-session set dependence and temporal drift; no bin-level independence assumption.",
+    "Remove query kinematics and future samples, record all permitted target-batch adaptation.",
+    "Resolve shared source and label exposure between067 and068."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A fixed neural observation packet with channel/time/coordinate units and the same declared calibration support, answered without execution.",
+      "boundary": "No evaluator targets, source-label lookup, other-case memory or model/numerical tools; a direct response is evaluated separately from programme results.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Authentic complete observation presentation and no-tools response collection have not been delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed navigation over the permitted neural observation, with units and calibration examples.",
+      "boundary": "Only rendered allowed observations; no raw target arrays or unrestricted filesystem/code access. A plot alone does not establish viewer execution.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Task-specific renderer/action API, complete case collection and restrictive transport are absent."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Case-local numerical/model-assisted investigation under a fixed observation and compute entitlement.",
+      "boundary": "Current query inspection may inform an allowed proposal; fit/selection remains training-only and evaluator outcomes are inaccessible. Fresh case state is required.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "A legacy manifest or prediction scorer does not deliver the participant investigation runtime."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted source, fitting/adaptation recipe and complete prediction output contract.",
+      "boundary": "Freeze before query access; equal declared calibration and no post-query selection from evaluator feedback. Programme success does not measure unaided interpretation.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "No executable participant programme is present in the assigned package."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed session-level R-squared improvement at fixed budget.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Paired later-session variance-weighted R² gain at each fixed calibration budget",
+      "direction": "higher",
+      "aggregation": "Prospective binding to the pinned official H1 evaluator: mask bins, combine sets within source session, compute variance-weighted multichannel R² per session, then equal sessions. Pair each calibrated prediction with the identical unchanged-decoder target suffix; report each budget separately.",
+      "rationale": "Preserves the official session and multichannel weighting rather than inflating support with correlated bins or averaging individual coordinate R² arbitrarily."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Per-session and per-channel errors, constant-target dispositions and complete masked row count.",
+      "Calibration cost, causal latency and neural_clock minus clock_only gain at each budget."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Frozen source sklearn decoder",
+        "inputs": "Same causal spikes and permitted training/calibration labels.",
+        "procedure": "Prospective independently frozen official example decoder; its exact source/runtime must be restored and qualified."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Clock-only and neural shuffle",
+        "inputs": "Same allowed trial/time history; shuffled training spike associations for the neural null.",
+        "procedure": "Prospective matched information controls; the current manifest does not deliver verifiable numerical execution."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Unchanged decoder",
+        "inputs": "Same later-session inputs and score suffix, no new calibration fitting.",
+        "procedure": "Freeze once before later sessions; compare to each predeclared calibrated recipe, never select the best budget after scoring."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Audit timestamp rate/offset semantics against actual NWB version before spike bins are aligned.",
+      "Keep within-session set dependence and temporal drift; no bin-level independence assumption.",
+      "Remove query kinematics and future samples, record all permitted target-batch adaptation.",
+      "Resolve shared source and label exposure between067 and068."
+    ],
+    "uncertainty": "One participant: descriptive paired session/run-block variation only; source sessions are dependent and no human-population confidence interval is justified.",
+    "failure_policy": "Prospectively require exact complete ordered row IDs, seven finite outputs and all masks/contexts; retain failures and undefined constant targets instead of zero/perfect score or dropped runs. Current public source does not implement this admission.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "c0d30ed5b399effd83d0d7f3e96acff3fa54b246181f602ca2cf750e2a8e0666",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "310db02fbb191098f5d9740a75f9301977b7894fd3aee173ce5559cfc6251293"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -230,6 +285,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

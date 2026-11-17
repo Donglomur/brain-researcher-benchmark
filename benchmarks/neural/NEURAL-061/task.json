@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-061",
   "track": "neural",
-  "title": "Regional predictive contribution with matched sampling",
+  "title": "Matched regional replacement effects in held-animal wheel decoding",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "regional_information"
   },
-  "scientific_question": "Which recorded regions add predictive information after unit count, firing rate and recording quality are matched?",
+  "scientific_question": "On the same held-animal wheel targets, does replacing a matched non-region population C with region R improve predictive performance given identical background B, and can a frozen participant programme predict competently under both BR and BC?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Matched regional-ablation prediction deltas and animal-level evidence."
+    "Measured signed wheel velocity supplies the participant known answer. The operator also estimates the regional contrast loss(BC)-loss(BR) under outcome-independent matching; its sign is not a preordained answer, and no participant interpretation-accuracy scorer is delivered."
   ],
   "input_assets": {
     "routes": [
@@ -65,19 +65,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "brainsets HDF5 spike times/unit metadata; linear reference bins20ms then maps counts to targets",
-    "allowed_context": "TS1 choice,wheel and other behavior via published readout specifications; trial_id,values,timestamps,mask; anatomy and QC metadata",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Readout uses trailing fixed1second target; context up to20seconds backed by split gaps; target-specific timestamps and masks",
-    "source_contract_evidence": "S3 H5manifest + AWSregistry + pinned task loader/baseline source"
+    "inputs": [
+      "Source-trained model inputs on the full original one-second windows, exact timestamps, clipping/exposure and target masks.",
+      "Matched R/C/B triples require same actual probe, QC/label and rate-band strata plus rate ratio <=1.25; k=10 and seeds 0–9 are fixed.",
+      "Reference arms B, BR, BC, R, C and ZERO; participant arms are exactly BR and BC, fitted separately from the same frozen source under A0/T0."
+    ],
+    "forbidden_inputs": [
+      "Evaluation-animal wheel labels, protected target joins and omitted extra evaluation-animal sessions in source/checkpoint fitting.",
+      "Outcome-driven region selection, relaxed matching, successful-seed-only means or resampling until favorable support.",
+      "Cross-cell/arm fitted-state transfer and unselected trained-reference tools; original source declares all target and publication authorities separately."
+    ],
+    "case_identity": "Source catalogue binds full original cohort/atlas, opaque window identities, masks and every session/region/seed/arm disposition. Actual region count and eligible support must be admitted from authentic source; no invented case IDs or eligible counts are supplied.",
+    "split": "423 source sessions from 126 animals in five animal folds; 29 sessions from 13 disjoint evaluation animals, with seven extra evaluation-animal sessions excluded from source lineage. Train-domain unit rates and source folds define selection before evaluation targets.",
+    "coverage": "Every original grey-matter region and ten seeds remain in the selected signed-velocity/k10/anatomy domain. A0 selects one frozen authoring condition/repeat with BR/BC; optional A1/A2/A3 and wider head/budget/anatomy catalogue remain NOT_SELECTED_PROSPECTIVELY, not completed negative results."
   },
-  "biological_unit": "Session UUID/eid, subject metadata; publisher reports disjoint126/13animals",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Animal: up to 13 eligible evaluation animals per region. Ten seeds are repeated matched populations, and sessions/probes/units do not increase n.",
+  "case_definition": "Original target window within session × region × matching seed × selected arm; prediction and matching cases remain nested observations.",
   "split": {
-    "policy": "Preserve official split gaps and animal boundaries; group sessions/probes/labs; any novel target window/calibration is separately frozen.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "423 source sessions from 126 animals in five animal folds; 29 sessions from 13 disjoint evaluation animals, with seven extra evaluation-animal sessions excluded from source lineage. Train-domain unit rates and source folds define selection before evaluation targets.",
+    "coverage": "Every original grey-matter region and ten seeds remain in the selected signed-velocity/k10/anatomy domain. A0 selects one frozen authoring condition/repeat with BR/BC; optional A1/A2/A3 and wider head/budget/anatomy catalogue remain NOT_SELECTED_PROSPECTIVELY, not completed negative results."
   },
   "reference": {
     "source_code_url": "https://github.com/brainbench-org/ibl-bwb",
@@ -94,50 +100,107 @@
     "data_url": "https://registry.opendata.aws/ibl-brain-wide-bench/"
   },
   "controls": [
-    "Equal unit budgets",
-    "quality/rate matching",
-    "anatomy shuffle",
-    "same target/time window."
+    "Match population size, probe, QC category and training-rate stratum, retaining residual rate/quality balance diagnostics.",
+    "Preserve one shared complete-ten-seed support object across every compared operand.",
+    "Keep whole atlas multiplicity denominator; unavailable p-values retain conservative slots, while prospectively unselected studies are not fabricated tests.",
+    "Expose region-specific animal coverage; between-region mean differences with different support are not rankings."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective frozen no-tools encoding of complete neural windows and matched populations with responses scored against the same target.",
+      "boundary": "Must demonstrate full target/support equivalence and manageable encoding before calling it a direct observation condition.",
+      "evidence_ids": [
+        "source-3"
+      ],
+      "missing": [
+        "No direct input encoding or response harness; T0 still permits code and fitting."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective typed raster/population viewer with matched arm-specific access and numerical prediction collection.",
+      "boundary": "Images must preserve declared observation scope; no query-union across regions/seeds/arms, labels or arbitrary compute.",
+      "evidence_ids": [
+        "source-2"
+      ],
+      "missing": [
+        "No typed image transport, rendering parity or complete response interface."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A1 investigation and T1 supplied-reference tool designs are documented but unselected; A0 is frozen-program T0 only.",
+      "boundary": "Any future I context is animal × region × seed × arm, with a common matched-support object and equal whole-panel ceilings.",
+      "evidence_ids": [
+        "source-2",
+        "source-3"
+      ],
+      "missing": [
+        "Select and implement complete adaptive/tool study before outcomes; current A0 cannot stand in for an F/I comparison."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "A0 captures one global frozen method, fits BR and BC separately per cell/arm, and keeps arbitrary fitted state within the same participant child across the full evaluation roster.",
+      "boundary": "No pickled state extraction into a proxy model; no cross-cell/arm sharing; exact ordered finite scalar outputs before private grading.",
+      "evidence_ids": [
+        "source-1",
+        "source-2",
+        "participant-child",
+        "operative-grading",
+        "response-loss"
+      ],
+      "missing": [
+        "Authentic data/native execution, complete reference competence and outside target/publication authorities remain absent."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed paired animal-level loss difference; region multiplicity explicitly controlled.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Participant BR signed-wheel-velocity mean squared error, reported per region",
+      "direction": "lower",
+      "aggregation": "Within each region, equal target timestamps within window, equal windows, all ten matching seeds, equal eligible sessions within animal, then equal animals on the one complete required-operand common support. No outcome-selected region average.",
+      "rationale": "This is the operative participant-dependent output already computed as candidate_BR_loss. The reference-only regional Holm family is an operator scientific endpoint, not a score of submitted programme or interpretation accuracy."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Participant BC mean squared error and BR/BC paired reference improvement on exact common support; these accompany the BR primary so degrading BC cannot earn credit.",
+      "Operator reference-only scientific estimand loss(BC)-loss(BR), with full six-arm B/R/C/ZERO diagnostics and exact eligibility/failed/unstarted census; this calculation alone is not participant performance.",
+      "Per-animal reference replacement effects and source-defined sign test/median intervals/Holm family; candidate competence and regional effects remain descriptive. A participant-submitted numerical-estimand or interpretation response is not currently scored."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Matched BC versus BR",
+        "inputs": "BR=B+R and BC=B+C each contain 2k units with identical B; R,C,B disjoint.",
+        "procedure": "Use fixed probe/QC/rate strata, rate ratio caliper 1.25 and seeds 0–9 without replacement or outcome-driven relaxation."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Complete six-arm evaluator reference",
+        "inputs": "B, BR, BC, R, C and ZERO on original permitted source/query support.",
+        "procedure": "Preserve full source-defined six-configuration × five-source-fold selection plus final refits; actual competence remains unmeasured."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Participant competence against corresponding reference arm",
+        "inputs": "Exact BR or BC input and common support.",
+        "procedure": "Report arm-specific absolute loss and paired reference difference; do not turn a deliberately weak BC into an apparent understanding gain."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Match population size, probe, QC category and training-rate stratum, retaining residual rate/quality balance diagnostics.",
+      "Preserve one shared complete-ten-seed support object across every compared operand.",
+      "Keep whole atlas multiplicity denominator; unavailable p-values retain conservative slots, while prospectively unselected studies are not fabricated tests.",
+      "Expose region-specific animal coverage; between-region mean differences with different support are not rankings."
+    ],
+    "uncertainty": "Source exact two-sided sign test concerns median directional animal effect, not the mean. Holm correction covers the complete original reference region family; candidate analyses remain descriptive. At 13 nonzero animals the smallest two-sided p is 2^(1-13), so first-step Holm at alpha .05 is impossible for 205 or more regions. Actual R and eligible n_r remain unknown; seeds never enlarge n.",
+    "failure_policy": "Every expected region/session/seed/arm gets a complete, scientific-unavailable, failed or unstarted disposition. Any one unavailable required seed removes the whole session from the common scientific estimator with reasons retained; missing/malformed output, failed fit or uncertain process exit is production failure and cannot become biological exclusion. All planned animals remain in coverage tables.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "458506ee12909d3fdb1975dc729597de2e00e10fc80feeeecb955dbccfd541e1",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "eb8c653eeea3e72ef301e1b53c8f171b73f7277833a159f84bf051e82dfcec8f"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -218,6 +281,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-063",
   "track": "neural",
-  "title": "Omission-evoked calcium response prediction",
+  "title": "Omission-conditional calcium population trajectory prediction",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "predictive_processing"
   },
-  "scientific_question": "Can preceding stimulus/neural history predict responses when an expected image is omitted?",
+  "scientific_question": "Can pre-omission calcium population history improve prediction of the next 0.6 seconds of population-average dF/F over preceding stimulus timing and recording context on held-out mice?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Cell/population calcium trajectories on omitted events."
+    "Three native-clock population-mean dF/F values in [0,0.2),[0.2,0.4),[0.4,0.6) seconds after scheduled omission, each minus the mean of the final [-0.2,0) history bin."
   ],
   "input_assets": {
     "routes": [
@@ -66,19 +66,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "NWB/SDK dff_traces,events,ophys_timestamps,cell_specimen_table with ROI identities",
-    "allowed_context": "stimulus_presentations image_name,omitted,start_time,end_time; trials go/hit/reward_time/response_latency; running_speed,eye_tracking,licks",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "ophys_timestamps for neural traces; stimulus/behavior tables in common seconds; preserve omissions and dropped frames",
-    "source_contract_evidence": "Full public manifest and metadata CSV parsed; one versioned neural NWB HEAD size; pinned notebook explicitly loads all streams"
+    "inputs": [
+      "T view: three preceding (image,omitted) tokens, their relative onset times, and seven recording-context fields (Cre, area, depth, image set, passive, experience level, session number).",
+      "N view: identical T observations plus 12 baseline-subtracted population-history bins over [-2.4,0) seconds; last history bin is structurally zero and gives 11 nonconstant neural features.",
+      "Training/validation views expose allowed development targets; query views expose only permitted history/context and opaque hierarchy IDs. Traces use native clocks and no interpolated future values."
+    ],
+    "forbidden_inputs": [
+      "Any query target dF/F sample, target summary or target-derived feature/normalization.",
+      "Visible history frames intersecting any held target frame; preparation performs a frame-index intersection guard.",
+      "Future stimulus/neural observations, unrestricted raw NWB lookup and evaluator feedback."
+    ],
+    "case_identity": "Prepared rows carry unique opaque event IDs nested under mouse/session/experiment. Source identity is table group plus native presentation ID; complete actual query event identities/counts remain unavailable until authenticated preparation.",
+    "split": "Within-Cre fixed hash over mouse IDs assigns 73 FIT, 15 validation and 19 query mice; all sessions/planes/lineages follow mouse. Feature dictionaries, weights and response SD are FIT-only. Reference selection is validation-only with no refit.",
+    "coverage": "Declared full source census is 107 mice, 703 sessions and 1,936 experiment planes with 133,066 ROI rows, which are not unique neurons. Eligible omissions require preceding 0.70–0.80 s cadence, no next stimulus before +0.6 s, and fixed three-second thinning; all exclusions remain counted. Authentic supported event counts are unknown."
   },
-  "biological_unit": "Versioned metadata includes mouse_id,ophys_session_id,ophys_experiment_id,ophys_container_id,cell IDs;107unique mouse IDs in inspected1936experiment rows",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Mouse; sessions and experiments are nested, and event observations from concurrent imaging planes are dependent.",
+  "case_definition": "One admitted omission event within mouse/session/experiment; each response is a three-bin population trajectory. F/I × T/N × G/R are eight within-task conditions.",
   "split": {
-    "policy": "Group mouse, container and registered cell lineage; separate familiar/novel sessions and all repeated images; cell selection uses training only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Within-Cre fixed hash over mouse IDs assigns 73 FIT, 15 validation and 19 query mice; all sessions/planes/lineages follow mouse. Feature dictionaries, weights and response SD are FIT-only. Reference selection is validation-only with no refit.",
+    "coverage": "Declared full source census is 107 mice, 703 sessions and 1,936 experiment planes with 133,066 ROI rows, which are not unique neurons. Eligible omissions require preceding 0.70–0.80 s cadence, no next stimulus before +0.6 s, and fixed three-second thinning; all exclusions remain counted. Authentic supported event counts are unknown."
   },
   "reference": {
     "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
@@ -94,50 +100,109 @@
     "data_url": "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html"
   },
   "controls": [
-    "Separate omission labels from targets",
-    "matched preceding sequence",
-    "no future traces",
-    "held-out omitted events."
+    "Use the same complete omission schedule and support in every mode; timing-exclusive T remains separate from history-augmented N.",
+    "Preserve recording context and preceding sequence in history perturbation; insufficient exchangeability support is reported, not repaired by dropping hard strata.",
+    "FIT-only target scale and feature dictionaries; opaque hierarchy tokens are for grouping and must not become predictive identifiers.",
+    "Retain source preprocessing/QC and release exposure limitations; baseline subtraction does not make this a causal or online assay."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A finite 12-bin numeric history with preceding context could support a direct no-tools three-value response, but no such transport is supplied.",
+      "boundary": "Keep the same baseline and eligible events, prevent target-frame or source lookup, and declare demonstrations separately.",
+      "evidence_ids": [
+        "implementation-2"
+      ],
+      "missing": [
+        "Implement complete numeric/context delivery, query-bound responses and matched demonstration conditions."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A plot of the same population-history bins could support typed zoom/inspection without exposing targets; no renderer exists here.",
+      "boundary": "No raw target arrays or future traces; a cell-level viewer would change the delivered target and information.",
+      "evidence_ids": [
+        "implementation-2"
+      ],
+      "missing": [
+        "Implement and qualify restricted rendering and complete image-to-answer transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I source interface supports per-event investigation with general numerical tools or the matched trained reference tool on the declared T/N view.",
+      "boundary": "Same complete query schedule, tool allowance and accounted resources as its comparator; event state and protected targets require independently qualified isolation.",
+      "evidence_ids": [
+        "implementation-7",
+        "participant-controller",
+        "participant-stages",
+        "participant-capsules"
+      ],
+      "missing": [
+        "Provision actual controller/model assets and trusted per-event containment; complete reference tool qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F source interface freezes the prediction recipe before query events and uses the same T/N information and G/R tool condition.",
+      "boundary": "Development and query separated; no query labels, query-directed tuning or undeclared cross-event adaptation.",
+      "evidence_ids": [
+        "implementation-5",
+        "implementation-7",
+        "participant-controller",
+        "participant-stages",
+        "participant-capsules"
+      ],
+      "missing": [
+        "Execute authentic preparation/reference stages and qualify full programme runtime."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro normalized RMSE versus timing/history-only predictor.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "query mouse-macro three-bin population dF/F normalized RMSE",
+      "direction": "lower",
+      "aggregation": "For each query mouse, average squared three-bin errors equally across supported sessions, experiments and events, then take RMSE divided by one FIT-only hierarchical target SD; average equally over all 19 query mice.",
+      "rationale": "Measures independently held neural response values and preserves biological replication without letting high-event planes dominate."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Raw RMSE, per-bin and per-mouse normalized errors, complete event/session/experiment support and all exclusions.",
+      "Paired N-minus-T and I-minus-F errors within matched information/tool conditions; reference-relative gain only after actual reference qualification.",
+      "Five cross-mouse history permutation controls with fixed sequence/context strata; report unchanged strata and changed hierarchical weight."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "timing/context T reference",
+        "inputs": "Three preceding image/omission tokens, relative starts and recording context; no neural history.",
+        "procedure": "Implemented frozen design: linear and explicitly quadratic ridge bases × seven lambda values (0.0001 to 100), FIT-only weighted preprocessing; validation selects one of 14, no validation refit. Unfitted."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "history-augmented N reference",
+        "inputs": "All T features plus 11 nonconstant neural-history bins.",
+        "procedure": "Same 14-fit search and weights as T; retain all 28 outcomes and independently reconstruct selected fits by SVD. N need not outperform T for a valid null finding."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "fixed simple controls",
+        "inputs": "No targets for zero; FIT targets only for three-bin weighted mean; recent four history bins for trend.",
+        "procedure": "Zero and last-bin persistence are the same vector and count once. FIT mean is trained only once; anchored linear trend is N-only. All are retained alongside selected references."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Use the same complete omission schedule and support in every mode; timing-exclusive T remains separate from history-augmented N.",
+      "Preserve recording context and preceding sequence in history perturbation; insufficient exchangeability support is reported, not repaired by dropping hard strata.",
+      "FIT-only target scale and feature dictionaries; opaque hierarchy tokens are for grouping and must not become predictive identifiers.",
+      "Retain source preprocessing/QC and release exposure limitations; baseline subtraction does not make this a causal or online assay."
+    ],
+    "uncertainty": "Source specifies 10,000 paired whole-mouse bootstrap draws with fixed validation/query seeds and retained draw identities. Intervals are descriptive for the fixed split/reference-selection design; no event-, cell- or plane-level independent replication claim.",
+    "failure_policy": "Every expected event needs exactly three finite predictions with exact ordered IDs. Missing or malformed output is a failure, not a scored subset. Constant FIT scale, missing mouse support or unqualified reference makes dependent gains unavailable. Genuine metric overflow is retained as typed positive infinity; unavailable contrasts/intervals never silently drop mice.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "42725ce5fe1dda6ae37c14f8e08d1ca2f2919ee9cf994c12195a5642f9978ff2",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "160385e1146019cef6b42b95f3ecb54ae082da8b6c43d3dfbd03ddddeff22ffe"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -218,6 +283,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

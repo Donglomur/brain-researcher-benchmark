@@ -1,0 +1,232 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-060",
+  "title": "Retrospective wheel-speed decoding beyond context and neural alignment controls",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "Current full programme source implements absolute wheel-speed decoding on all 29 evaluation sessions with matched nuisance/joint/test-neural-shift arms. This is an explicit narrowing of the historical wheel/choice and causal-context wording: choice is not delivered, and processed history plus simultaneous spikes is retrospective. Full authentic inputs, native execution and scientific competence remain unqualified.",
+  "scientific_target": {
+    "question": "Across all eligible movements in 29 calibrated sessions, how well do joint neural/context methods reconstruct measured wheel speed, and how do their predictions change when neural alignment is disrupted while method and fitted state are fixed?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "The original 50 absolute wheel-speed samples at 50 Hz in [movement_onset,movement_onset+1 second); each sample retains its actual offset.",
+    "answer_origin": "Publisher wheel-speed stream from the original all_units evaluation objects; no new interpolation is introduced by the selected task. Authentic complete source projection has not been executed for this source package.",
+    "case_unit": "A source movement whose full [onset-1 second,onset+1 second) window is inside one official domain and both neural/wheel support.",
+    "independent_unit": "13 mice, with 29 sessions nested within mice and seven laboratories; movement windows overlap and are not independent animals.",
+    "inference_scope": "Retrospective within-session calibrated decoding under privileged movement timing, experimental block context and processed behavioral history. A 10-bin cyclic test-neural roll is an alignment stress diagnostic, not causal intervention or a valid conditional randomization test.",
+    "exclusions": [
+      "No choice target is included in this revised named scope.",
+      "No prospective/online prediction claim: publisher wheel processing includes interpolation/FIR decimation and past-only dependence is unqualified.",
+      "No greater neural-contribution claim solely because a candidate makes nuisance predictions worse."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Nuisance view: 50 preceding speed values, 50 preceding positions translated by their last position, 50 history offsets, 50 target offsets, nine signed-contrast indicators, three block-prior indicators and stimulus-to-movement latency (213 scalars).",
+      "Joint view appends all native units in 50 simultaneous 20-ms count bins over the target second; all source units and original eligible cases remain.",
+      "Within-session original training/validation labels; I investigations additionally see original unlabeled test inputs under the declared transductive method-selection boundary."
+    ],
+    "forbidden_inputs": [
+      "Held wheel targets, original raw target-bearing HDF5 fields and private identity keys.",
+      "Shifted test views during authoring, any target feedback, or reauthoring/refitting between original and shifted replay.",
+      "Carrying test-derived fitted coefficients, prediction tables or numerical caches from investigation into final supervised fit."
+    ],
+    "case_identity": "Opaque 32-hex case IDs in JSON/HDF5 S32, bound to the exact complete ordered source roster and operator-private original joins; authentic Q/U counts remain unknown.",
+    "split": "Each of 29 official evaluation sessions uses its own original TS1 train/validation/test domains. Entire two-second contexts must lie in one domain. This is not held-animal or held-laboratory generalization; processed wheel boundary influence and within-split overlap must be reported.",
+    "coverage": "All 29 original evaluation sessions, 13 mice and seven labs, all units and every movement disposition. Two workflows, three independent authoring realizations and three scientific arms yield 18 candidate panels within one task. Full eligible query/unit counts require authentic preparation."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Joint-view equal-mouse wheel-speed mean squared error",
+      "direction": "lower",
+      "aggregation": "Mean squared error over 50 samples per movement, equal movements within session, equal sessions within mouse and equal mice; report every workflow and authoring realization.",
+      "rationale": "Scores actual held wheel prediction competence independently of the size of a potentially gameable neural-minus-nuisance difference."
+    },
+    "secondary": [
+      "MAE and all per-session/mouse/lab scores.",
+      "Paired nuisance-minus-joint MSE and shifted-minus-original-joint MSE with exact same fitted state and test support.",
+      "Within-family reference contrasts separately from contrasts of validation-selected families; all original/shifted adverse effects retained."
+    ],
+    "comparators": [
+      {
+        "name": "Nuisance-only predictor",
+        "inputs": "Complete fixed 213-scalar context without spikes.",
+        "procedure": "Matched workflow/replication and whole-panel authoring ceilings; independent numerical references provide a paired methodology."
+      },
+      {
+        "name": "Ridge, 512-tree ExtraTrees and fixed random Fourier/history references",
+        "inputs": "Complete nuisance history; joint appends full time-indexed log1p counts.",
+        "procedure": "Use source-frozen 13-setting train/validation searches and three family refits, training-only scaling and original train+validation final fitting; no test selection."
+      },
+      {
+        "name": "Joint TEST shift +10 bins",
+        "inputs": "Only final test counts rolled +10 along the 50-bin temporal axis.",
+        "procedure": "Reuse exact source, selected recipe, fitted state, preprocessing and RNG; nuisance/history and all targets fixed. Do not refit or allow the investigator to see the transformed replay."
+      }
+    ],
+    "nuisance_controls": [
+      "Movement onset, stimulus-to-movement latency and block prior are privileged variables disclosed in both matched arms.",
+      "Split containment and overlap/boundary-distance audits; no assumption that processed wheel history is causal.",
+      "The +10-bin roll has a wrap boundary and preserves per-unit totals; report it as alignment sensitivity, not a p-value-generating neural null.",
+      "Joint prediction competence is primary; an agent cannot earn scientific credit by degrading its context-only baseline."
+    ],
+    "uncertainty": "Report 13 paired animal effects for every realization with nested session/lab diagnostics. Current grader retains paired values but does not implement a training/authoring uncertainty estimator or a qualified inferential decision; three authored realizations do not multiply biological n.",
+    "failure_policy": "Require all cases, exactly 50 finite values per prediction, all native units and the exact 29/13/7 biological hierarchy. Malformed/missing panels, method/state mismatch or failed process closure blocks the complete score; no favorable case/arm/realization subset may replace the full selected design."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/README.md",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/DESIGN.md",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/grader.py",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/preparation/README.md",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/README.md",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/investigator.py",
+      "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/controller.py"
+    ],
+    "scorer_target": "grader.py recomputes genuine wheel-speed MSE/MAE and paired nuisance/joint/alignment differences from exact 50-sample target joins. It explicitly returns qualified_neural_contribution=null and contribution-ranking eligibility false.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Concrete source includes preparation/projection, HTTP typed action transport, offline tool/fitting/inference workers and protected target-last grading. Existing metadata/inert controls exercise source behavior; they are not authentic HDF5 preparation, estimator fits or model trials.",
+    "missing": [
+      "Complete admitted 29-object original dataset and exact eligible case/unit/overlap census.",
+      "Independent source/method semantic admission and selected provider, image, numerical and process-isolation qualification.",
+      "Complete authentic reference/candidate runs and empirical reference competence; no budget or source presence grants these."
+    ],
+    "execution_evidence": "Source inspection in this revision only; no authentic-data preparation, candidate execution or model trial was performed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective fixed no-tools representation of the full simultaneous neural tensor and matched context, returning all 50 speed values.",
+      "boundary": "Representational changes must retain the original observations and full target support; cannot quietly replace dense prediction with a qualitative plot question.",
+      "evidence_ids": [
+        "source-2"
+      ],
+      "missing": [
+        "No no-tools full-context response transport or demonstrated representation feasibility."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective raster/history viewer with typed navigation and complete numeric response collection.",
+      "boundary": "Rendered observations only; no hidden wheel target trace, raw arrays or unbounded computation.",
+      "evidence_ids": [
+        "source-2"
+      ],
+      "missing": [
+        "No typed image renderer/transport; plot subsampling would require an explicit changed-observation condition."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I workflow investigates one session/role with Python and bounded provider actions on original train/validation and unlabeled test input.",
+      "boundary": "Seal method/typed recipe, terminate investigation, refit fresh on train+validation and replay original/shifted test from identical state. No score feedback.",
+      "evidence_ids": [
+        "source-2",
+        "source-5",
+        "participant-investigator",
+        "participant-controller"
+      ],
+      "missing": [
+        "Actual provider/native/image qualification and external process/semantic-method observation."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F workflow freezes global source before dataset numerical exposure, then fits each session separately with its calibration data.",
+      "boundary": "No state transfer across sessions; no test-batch fitting in paired replay; identical initial method/state/RNG and internal paths in original/shifted inference.",
+      "evidence_ids": [
+        "source-2",
+        "source-5",
+        "participant-investigator",
+        "participant-controller"
+      ],
+      "missing": [
+        "Complete authentic data/reference work and admitted full-workload resources."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-060/historical/task.pre-understanding.v1.json",
+      "sha256": "b8795c740c4961bb51505b33a86465f111abaa9e0030ef2cd5dbda1209e52344",
+      "supports": "Original registered question, source identity, public-development status and source-specified population; retained without changing historical claims."
+    },
+    {
+      "id": "source-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/README.md",
+      "sha256": "da14bcdb18b1c8b72c59ac5b7dbcd5fc7516752f2b77f6a837adca3be84376b8",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/DESIGN.md",
+      "sha256": "206992a77c2470587fec83c84b2b4362c753b0d9f697a1e7d1923e5d5a82a471",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/grader.py",
+      "sha256": "b8f0bc61468e06d10abd1b2c2f279b51c3fececf44581901ecc1e3234a415fb5",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/preparation/README.md",
+      "sha256": "288ed51b8ed335774ad9c7696c76eee7c800d08f042dc6f39649578404b83080",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/README.md",
+      "sha256": "cd71c73df6b519dff88909eb1565168f8b5f3c0eca550c6157857c6a5195ceb2",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "official-ts1-loader",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/brainbench-org/ibl-bwb/6fbd666fe8170a2165f5198c1f490911424a654d/src/ts1/ts1_dataset.py",
+      "locator": "IBLBrainWideBenchTS1 dataset_transform, _get_target and get_sampling_intervals at commit 6fbd666fe8170a2165f5198c1f490911424a654d",
+      "supports": "Official TS1 has task-specific target windows, masks and trial identity; all_units is the reference build. Its target extraction is distinct from the task-specific revised estimators."
+    },
+    {
+      "id": "participant-investigator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/investigator.py",
+      "sha256": "808d2db728c1b39f94f6fcbf3da5db7d4ad04f073408f275df48939570a95ea5",
+      "supports": "Actual typed provider/Python/submit loop, global F versus current-session I exposure, captured source/recipe seal and independent method-admission boundary."
+    },
+    {
+      "id": "participant-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-060/implementations/full-central-programme/program/controller.py",
+      "sha256": "bf7495e2203b8bfd2f9eaa73a1d0c0a103b1c29af011810c63e1c74cfcf2d760",
+      "supports": "All global sources before adaptive exposure, actual final-fit state seal and original/shifted replay with shared source/state/seed."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source-engineering controls retain their original limited scope. No direct-observation or typed-viewer model result is established for this task.",
+    "excluded_claims": [
+      "A cyclic temporal shift is not a causal neural intervention.",
+      "This absolute-speed within-session endpoint does not implement the historical additional choice or held-animal question.",
+      "Concrete HTTP/tool source is not proof that an actual model or isolated runtime was exercised."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Declare the actual narrower absolute-speed endpoint and within-session calibration rather than implying wheel/choice or prospective prediction.",
+      "Separate primary predictive competence from descriptive neural/context and alignment contrasts.",
+      "Make unchanged final-fit state, no shifted authoring, complete support and preprocessing limitations explicit."
+    ],
+    "source_review": "Read original task, delivered implementation documentation and the pinned local scorer/preparer or support source. Reused verified source provenance and rechecked the pinned official TS1 loader; the documentation URL was inaccessible through the web tool."
+  }
+}

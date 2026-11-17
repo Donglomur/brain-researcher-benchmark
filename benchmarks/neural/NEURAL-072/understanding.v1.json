@@ -1,0 +1,193 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-072",
+  "title": "Contextual linguistic information beyond acoustics",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A prospective matrix encoder and independent arithmetic contrast scorer exist, but scoring accepts participant-supplied nuisance, lexical and contextual predictions without authenticating their fit provenance. A participant can inflate the contextual-minus-lexical effect by degrading its lexical predictions. The contrast is unusable for participant ranking until evaluator-owned fixed lexical/nuisance predictions are authenticated; authentic NEURAL-071 case equality and native extraction also remain unresolved.",
+  "scientific_target": {
+    "question": "On the same within-listener withheld story families, how much held-out response variance does contextual information add beyond matched lexical, timing and acoustic predictors?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Signed contextual-minus-fixed-lexical and fixed-lexical-minus-fixed-nuisance prediction contrasts recomputed from candidate contextual predictions, independently fitted evaluator-owned comparator predictions, and measured held-story BOLD; zero or adverse contrasts are valid answers. Current source does not enforce comparator ownership.",
+    "answer_origin": "Independent measured test response matrices aligned to the reviewed NEURAL-071 native scan/case manifest; no authentic manifest currently ships.",
+    "case_unit": "Listener × story-family cell, containing complete test runs and targets.",
+    "independent_unit": "Listener and shared story family; autocorrelated time rows and parcels are nested measurements.",
+    "inference_scope": "Conditional predictive increment for specified representations, capacity and observed incidence design; not a causal semantic mechanism.",
+    "exclusions": [
+      "The circular-shift diagnostic is not a calibrated significance p-value or refitted null encoder.",
+      "Matrix controls do not establish native timing, full Narratives coverage, equivalent071 case support or direct neural interpretation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Fixed nuisance columns acoustic_envelope, word_rate, lexical_log_frequency and time, plus separate lexical/contextual time-by-feature matrices.",
+      "Training/development response matrices, exact scanner TR/start/story bounds, permitted row indices, feature support bounds and stable target IDs."
+    ],
+    "forbidden_inputs": [
+      "Held-out response values or response-derived feature/timing selection.",
+      "Future context or feature/HRF support outside declared story/partition; retellings and repeated passages in multiple partitions."
+    ],
+    "case_identity": "cases.json uses unique run IDs, listener, story_family, story, scan_identity and passage_ids; binds ordered target_ids and the NEURAL-071 original task digest. These are supplied interfaces, not an authenticated current071 case list.",
+    "split": "Global story-family train/dev/test assignment across listeners; each listener must have all three partitions and test requires at least two listeners / two families. This stricter matrix recipe must be reconciled with071 leave-family-out cases, not assumed equivalent.",
+    "coverage": "Complete externally frozen run/target matrix manifest is checked; no native Narratives census/reader or authentic071 equality is delivered. The interface can validate declared identities but cannot discover undocumented retellings."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Contextual-minus-evaluator-owned-fixed-lexical held-out R² (not rankable under the current supplied-array scorer)",
+      "direction": "higher",
+      "aggregation": "For each listener/family, pool SSE and within-run-centered SST across complete test runs separately per target; average target contrasts, then family means within listener and equal listener means.",
+      "rationale": "Measures added contextual prediction only if lexical/nuisance alternatives are competent, fixed independently and unavailable for participant degradation. Current prediction_arrays accepts all three arrays and score does not authenticate the fit ledger, so the implemented arithmetic alone cannot support this primary comparison or participant ranking."
+    },
+    "secondary": [
+      "Lexical-minus-nuisance and contextual-minus-nuisance R² with per-target/cell/run support.",
+      "Crossed listener×family bootstrap intervals and all per-listener/per-family effects.",
+      "Run-bounded circular shift of contextual-minus-lexical predictions, reported only as an alignment diagnostic.",
+      "Contextual absolute R² and all arm SSE values must accompany the contrast to expose degraded-comparator effects; these diagnostics do not authenticate comparator provenance."
+    ],
+    "comparators": [
+      {
+        "name": "Nuisance encoder",
+        "inputs": "Acoustic envelope, word rate, lexical log-frequency, time",
+        "procedure": "Required evaluator-owned independently fitted and frozen comparator on identical permitted training/development support; authenticate source, fit ledger, method, selected hyperparameters, prediction identity and case support before scoring. The source provides this mathematical encoder but the current scorer does not enforce comparator provenance or ownership."
+      },
+      {
+        "name": "Lexical encoder",
+        "inputs": "Nuisance plus static lexical block",
+        "procedure": "Required evaluator-owned independently fitted and frozen comparator on identical permitted training/development support; authenticate source, fit ledger, method, selected hyperparameters, prediction identity and case support before scoring. The source provides this mathematical encoder but the current scorer does not enforce comparator provenance or ownership."
+      },
+      {
+        "name": "Contextual encoder",
+        "inputs": "Identical nuisance/lexical support plus contextual block",
+        "procedure": "Same declared rank/alpha-selection protocol; semantic benefit must exceed lexical rather than only intercept."
+      }
+    ],
+    "nuisance_controls": [
+      "Matched effective feature capacity and exact common test rows; no test-informed whitening or feature normalization.",
+      "Verify scan-specific audio offset and HRF lag bounds independently; missing alignments are not time zero.",
+      "Disclose checkpoint exposure and historical response-based layer selection where inheriting071 features.",
+      "Candidate must not supply or select lexical/nuisance comparator predictions used for the primary. Freeze and authenticate evaluator-owned comparators before candidate evaluation; fit_ledger fields alone are not enforcement."
+    ],
+    "uncertainty": "Implemented crossed-cluster pigeonhole percentile bootstrap preserves listener and family grouping; intervals are descriptive for the observed incidence design, with limited population inference for few clusters/nonrandom missing cells.",
+    "failure_policy": "Reject constant targets in frozen runs, nonfinite predictions, mismatched IDs/dimensions or incomplete arms; never omit difficult runs/targets. More than10% empty crossed bootstrap draws fails uncertainty construction. For the revised primary, refuse scoring/ranking without authenticated evaluator-owned lexical and nuisance prediction identities; the present implementation does not perform this check."
+  },
+  "implementation": {
+    "scorer_target": "evaluator.cell_metrics recomputes variance arithmetic from provided test targets and all three supplied prediction arms. prediction_arrays validates shapes/IDs but accepts participant-supplied nuisance/lexical/contextual arrays; score does not authenticate fit_ledger. Thus the contextual-minus-lexical contrast can be increased by degrading lexical predictions with unchanged contextual accuracy and is not an admissible participant-ranking score.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Executable NumPy matrix preparation/encoder/scorer plus source tests; native recording loader and authentic071 manifest absent.",
+    "missing": [
+      "Implement evaluator-owned fixed nuisance/lexical comparator fitting and prediction custody, authenticate their source/fit/prediction/case identities, and reject candidate-provided comparator substitution before any primary contrast is used for ranking.",
+      "Join the prospective global family partitions to the actual071 case definition or explicitly freeze a separately named same-task scope.",
+      "Authenticate clock/atlas/checkpoint/feature lineage and source rights; qualify native references and protected execution.",
+      "Implement a participant-facing per-case investigation actor/controller with bounded tools, explicit case state and captured responses; the current operator evaluator is not that transport."
+    ],
+    "execution_evidence": "Package documents generated engineering controls and prospective mathematics only; this revision ran no native source/model evaluation.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-072/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-072/docs/initial-evaluator-v1.md"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "Current answer is a complete held-out incremental-prediction calculation, not a single waveform/map label.",
+      "boundary": "Giving a precomputed effect plot would test interpretation of that plot rather than the registered numerical investigation.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": []
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "No viewer can replace the required full prediction/variance calculation without a separate observation-interpretation endpoint.",
+      "boundary": "Do not expose hidden BOLD through plots to the candidate.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": []
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The delivered source fits fixed matrix encoders and scores complete prediction arrays; it has no participant-facing per-case investigation actor, controller or tool transport.",
+      "boundary": "Candidate supplies contextual predictions only for the revised comparison; evaluator separately supplies authenticated fixed lexical/nuisance references. Freeze cases and outputs before protected targets; no scorer feedback. This comparator boundary is required but not enforced by current source.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Evaluator-owned authenticated comparator enforcement; current all-three-supplied-array scoring is gameable.",
+        "Participant transport/runtime and authentic data binding"
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Fixed train/dev/test matrix encoder and scorer entrypoints.",
+      "boundary": "Fit candidate transformations on training only, tune on development, freeze before test targets; comparator predictions must come from independently frozen evaluator-owned encoders. Current scorer does not verify that ownership or fit ledger.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Evaluator-owned authenticated comparator enforcement before primary ranking.",
+        "Native adapter, exact071 equivalence and protected execution"
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make exact signed variance endpoint and denominator executable-source aligned.",
+      "Expose actual072 global train/dev/test family rule versus071 leave-family-out programme; digest fields alone do not establish equality.",
+      "Preserve descriptive crossed uncertainty and explicitly reject significance claims from the temporal diagnostic.",
+      "Independent review found that fit_ledger is not authenticated by score and all three arms are supplied; require evaluator-owned fixed comparisons and mark the current contrast unrankable until enforced.",
+      "Final capability audit: operator fit/analyze/score functions do not deliver a per-case tool-assisted participant mode; tool_assisted is not_delivered until an actual actor/controller and transport exist."
+    ],
+    "source_review": "Inspected full matrix evaluator and implementation guide; reused pinned source audit for timing/code claims and reread official Narratives repository."
+  },
+  "evidence": [
+    {
+      "id": "original_definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-072/historical/task.pre-understanding.v1.json",
+      "sha256": "26b292bd06b0b3a11c7e9b96e44e4a7a1cd0a14ac559b579a3cb70db684630ae",
+      "supports": "Preserved registered scientific objective, source citations, original admission boundaries and prior construction review."
+    },
+    {
+      "id": "evaluator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-072/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "66acc703b7f169d87d0d6e334e30588e03af4e41409ecc48e975d213051e375f",
+      "supports": "Actual validated matrices, global family split, variance formula and uncertainty/diagnostic boundary."
+    },
+    {
+      "id": "implementation_guide",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-072/docs/initial-evaluator-v1.md",
+      "sha256": "fe9bbb7ba9556f8cdb20d77bceb57c01b8f93599e67b8e33f51130fc1c4f5915",
+      "supports": "Missing native reader/cases, prospective recipe and exact source timing observations."
+    },
+    {
+      "id": "narratives_code",
+      "kind": "primary_source",
+      "url": "https://github.com/snastase/narratives/tree/1736849ff80c80e1c73eda375ccf6497f5e234a9",
+      "locator": "Official source revision cited in existing implementation provenance",
+      "supports": "Preparation and ISC source; scan-clock and prediction adapter remain separate responsibilities."
+    },
+    {
+      "id": "narratives_data",
+      "kind": "primary_source",
+      "url": "https://openneuro.org/datasets/ds002345",
+      "locator": "Original source dataset route retained by registration",
+      "supports": "Origin of measured responses; route alone does not authenticate selected matrices."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No direct-observation, viewer or new model trial is established by this source review. Historical engineering controls retain their original scope; the four historical neural programme attempts concerned NEURAL-007 and NEURAL-077, not this task.",
+    "excluded_claims": [
+      "The circular-shift diagnostic is not a calibrated significance p-value or refitted null encoder.",
+      "Matrix controls do not establish native timing, full Narratives coverage, equivalent071 case support or direct neural interpretation.",
+      "A larger supplied-array contextual-minus-lexical contrast is not evidence of stronger contextual prediction or better investigation when the participant controls the lexical baseline."
+    ]
+  }
+}
