@@ -4,18 +4,20 @@
   "track": "paper",
   "title": "Estrogen modulates reward prediction errors and reinforcement learning",
   "status": "ineligible",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate proestrus-versus-diestrus dopamine response differences and estradiol/RPE/reward-history associations.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Estimate proestrus-versus-diestrus dopamine response differences and estradiol/RPE/reward-history associations.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate proestrus-versus-diestrus dopamine response differences and estradiol/RPE/reward-history associations.",
-    "Source-paper comparison for No ordered model-performance endpoint in the registered estrous/dopamine contrasts: Dopamine AUC contrasts and RPE/reward-history regression coefficients are biological estimands. AUC here means integrated fluorescence, not classifier ROC-AUC."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "No paper win is admitted for the registered descriptive associations.",
-    "Preserve the biological estimands, population and exclusions; stronger RPE modulation or lower P values are not success.",
-    "A new heldout behavior/dopamine predictor must be separately registered and compared with a task-matched source baseline.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "FIND-046",
   "canonical_position_one_based": 43,
@@ -252,51 +254,63 @@
     }
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-046/improvement.v1.json",
-      "bytes": 8173,
-      "sha256": "9fcc4b60121dd28378d26ede07f43d972f8ba2e853bf29f4e099a4214acb63f1"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "ineligible",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-046/historical/task.pre-improvement.v1.json",
-        "bytes": 17604,
-        "sha256": "35e8e70519700bb6b0a94468a19e179aa6ac06fe2f3c374299c938752243fe7f"
-      },
-      "implementation_ids": [
-        "construction-paper-find-046-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "No active improvement loop for the registered hormonal association task.",
-    "candidate_freeze": "Freezing a regression implementation supports reproducibility but does not create ordered paper performance.",
-    "final_evaluation": "Evaluate Figure 2 contrasts only as calibration; Figure 3 refitting is not implied by supplied BestFits.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published estimates, source reconstruction and any future longitudinal prediction extension distinct."
+    "improvement": {
+      "improvement_loop": "No active improvement loop for the registered hormonal association task.",
+      "candidate_freeze": "Freezing a regression implementation supports reproducibility but does not create ordered paper performance.",
+      "final_evaluation": "Evaluate Figure 2 contrasts only as calibration; Figure 3 refitting is not implied by supplied BestFits.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published estimates, source reconstruction and any future longitudinal prediction extension distinct."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "The registered source question has no ordered algorithm-performance endpoint.",
-    "Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "The registered source question has no ordered algorithm-performance endpoint.",
       "Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "The registered source question has no ordered algorithm-performance endpoint.",
+        "Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The registered target is estrous/hormone modulation of dopamine and reward-history associations. The paper explicitly avoids calling the behavioral modulation better or worse because the optimized costs/benefits are unobserved. A greater dopamine contrast or smaller P value cannot surpass that finding; fitting a new predictor would change the task. The registered source question has no ordered algorithm-performance endpoint. Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The registered target is estrous/hormone modulation of dopamine and reward-history associations. The paper explicitly avoids calling the behavioral modulation better or worse because the optimized costs/benefits are unobserved. A greater dopamine contrast or smaller P value cannot surpass that finding; fitting a new predictor would change the task. The registered source question has no ordered algorithm-performance endpoint. Full rat/session joins and native-export parity remain calibration gaps, not evidence of improvement eligibility.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -311,8 +325,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

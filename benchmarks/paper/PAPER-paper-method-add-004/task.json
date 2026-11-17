@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original empirical iSTTC-versus-comparator findings on the source-defined Allen spontaneous recordings: area-level timescale ordering and sampling stability, matched-unit estimator comparisons, duration/trial-count sensitivity, and the associated failure/inclusion and fit-quality support. Preserve source cohort, observation windows, parameter settings and panel-specific eligibility. Report synthetic known-truth accuracy separately; empirical pseudo-error measures stability against an estimated reference, not biological truth. Same-result empirical superiority remains unresolved without a scientifically justified criterion.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
-    "Source-paper comparison for Original synthetic relative timescale-estimation error and fit-coverage profile, with separately labeled empirical pseudo-error/stability companions: Methods4.8 Eq21 displays 100*(tau_est−tau_truth)/tau_truth. Registered policy uses 100*abs(tau_est−tau_ref)/tau_ref and conditional mean/median summaries. Resolve the original figure-producing absolute/signed convention and masks from primary code before assigning a lower-is-better success criterion. Empirical reference is full-duration ACF/iSTTC, so pseudo-REE is stability rather than truth error."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: The retained empirical Figure 7 result family and its directly related S12–S14 robustness support: source-selected Allen spontaneous recordings, area-level timescale ordering and sampling stability, four-estimator matched-unit comparisons, duration/trial sensitivity, complete failure/inclusion and quality support. Preserve original area versus unit fitting recipes and panel-specific eligible sets. Source 5,775 units are nested in 26 mice and eight areas; 50 resamplings are repeated sampling analyses, not independent animals. Mouse identities remain necessary, while historical mouse-bootstrap, held-out parameter and development-selected cutoff policies are prospective unless separately source-authenticated. No every-figure requirement is inferred.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained source work: Preserve the genuine original synthetic known-timescale error and fit-coverage comparisons as separately named method-validation evidence, including their original realization/condition support and source-defined reference semantics. Retain finite synthetic programme, fit-summary, runtime and aABC components in their declared roles without automatically making all of them primary empirical requirements. Synthetic improvement cannot satisfy empirical reproduction or superiority; a mixed-scope four-cell bundle is unavailable as full-primary success when the schema cannot represent the distinction."
   ],
   "success_criteria": [
-    "Recover original figure-producing error formula, failure masks, continuous/trial/duration grids, author fitter and numerical baseline before admission.",
-    "Use the same original 100000 synthetic realizations and all retained registered empirical obligations; a finite 600-second/40-trial subprogram cannot establish a whole-task win.",
-    "Require meaningful improvement in an authenticated truth-based synthetic error metric and a valid paired uncertainty rule while retaining all original fit failures and coverage; do not minimize signed bias to manufacture accuracy.",
-    "Keep real-data pseudo-REE and area contrasts as consistency evidence, not true-timescale accuracy. Stronger area significance or reproducing the reference is not superiority.",
-    "A new simulation, trial-window seed, QC threshold, fit mask or held-out-parameter split is a separately labeled extension and cannot be compared to paper results as a same-task win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful retained implementations with their declared coverage. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "paper-method-add-004",
   "canonical_position_one_based": 14,
@@ -474,61 +474,101 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-add-004/improvement.v1.json",
-      "bytes": 11918,
-      "sha256": "41723b498c629f8bfb35a4ca7658d8390bdbd7440b84556971cc8a1eb6bdb0f4"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-add-004/historical/task.pre-improvement.v1.json",
-        "bytes": 30897,
-        "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
-      },
-      "implementation_ids": [
-        "authoring-delivery-20261105-common-remaining-builds-wave14-isttc-program-registration",
-        "authoring-delivery-20261105-common-remaining-builds-wave14-next-paper-complete-program",
-        "components-isttc-empirical-diagnostics",
-        "isttc-empirical-estimation",
-        "components-isttc-sensitivity-and-fig7c"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_complete_primary_pairing"
   },
   "episode": {
-    "improvement_loop": "After source reconciliation, develop estimators on declared training/development observations with no access to final synthetic truths or empirical reference fits. Any development partition taken from the original panel must preserve an honestly labeled comparison; no new split is retroactively the paper task.",
-    "candidate_freeze": "Freeze estimator program, fitting/failure policy, original roster/condition manifest, trial windows, loss convention, reference recipe and access declarations before final truth scoring.",
-    "final_evaluation": "Evaluate candidate and publication-parity author method on the complete original condition support. Keep continuous, epoched and empirical stability results separate, with all failed estimates retained and no post-result eligibility changes.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "A current-source adapter, original paper contrast and publication-parity author rerun are different artifacts. Recover the original baseline before any paper-win claim; scientific runs and new resource allocations are outside this source curation."
+    "retained_secondary_improvement": {
+      "improvement_loop": "After source reconciliation, develop estimators on declared training/development observations with no access to final synthetic truths or empirical reference fits. Any development partition taken from the original panel must preserve an honestly labeled comparison; no new split is retroactively the paper task.",
+      "candidate_freeze": "Freeze estimator program, fitting/failure policy, original roster/condition manifest, trial windows, loss convention, reference recipe and access declarations before final truth scoring.",
+      "final_evaluation": "Evaluate candidate and publication-parity author method on the complete original condition support. Keep continuous, epoched and empirical stability results separate, with all failed estimates retained and no post-result eligibility changes.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "A current-source adapter, original paper contrast and publication-parity author rerun are different artifacts. Recover the original baseline before any paper-win claim; scientific runs and new resource allocations are outside this source curation."
+    },
+    "primary_source_limits": [
+      "The authentic empirical unit/mouse/area roster and original trial-window draws remain unmaterialized; paper amplitude cutoff 0.01 and retained loader policy 0.1 are unreconciled.",
+      "Figure 7 uses different matched-fit supports: 3,053 units for C, 5,674 for D/E and 4,588 for F/G. Complete failure/quality denominators, source masks and panel-specific eligibility cannot be replaced by one favorable subset.",
+      "Unit fits begin at lag 1, area fits at lag 2 using valid ACFs within the area. Publication/current-source fitter and uncertainty parameterization, native outputs and figure reductions remain unresolved.",
+      "Source 50 resamplings do not establish biological replication or original mouse-clustered uncertainty. Historical animal-grouped uncertainty and protected tuning policies must be labeled prospective unless exact native source shows otherwise.",
+      "Empirical full-duration references are estimates. Lower pseudo-error, greater apparent stability or stronger area significance does not alone establish more accurate biological timescales or a justified primary improvement criterion.",
+      "Signed Equation 21 versus absolute-error computation requires figure-specific formula/mask reconciliation. Do not minimize signed bias as accuracy or generalize one summary component to all source panels.",
+      "Original simulation realizations, baseline curves and source-comparable improvement criteria remain unresolved. New simulations or window draws are extensions.",
+      "The later synthetic inventory explicitly states metadata_only:true and scope_change:false. No explicit scientific instruction approving empirical-primary replacement was identified in the bounded gate and earlier curation log; component acceptance and a broad reproduction inventory are not such authority.",
+      "Full-panel reproduction tolerances, native independent verification and empirical superiority remain unavailable. Useful partial or secondary evidence must not grant full-primary success through a schema workaround."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
-    "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
-    "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
-    "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
-    "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
       "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
       "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
       "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
       "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
+    ],
+    "primary_source_limits": [
+      "The authentic empirical unit/mouse/area roster and original trial-window draws remain unmaterialized; paper amplitude cutoff 0.01 and retained loader policy 0.1 are unreconciled.",
+      "Figure 7 uses different matched-fit supports: 3,053 units for C, 5,674 for D/E and 4,588 for F/G. Complete failure/quality denominators, source masks and panel-specific eligibility cannot be replaced by one favorable subset.",
+      "Unit fits begin at lag 1, area fits at lag 2 using valid ACFs within the area. Publication/current-source fitter and uncertainty parameterization, native outputs and figure reductions remain unresolved.",
+      "Source 50 resamplings do not establish biological replication or original mouse-clustered uncertainty. Historical animal-grouped uncertainty and protected tuning policies must be labeled prospective unless exact native source shows otherwise.",
+      "Empirical full-duration references are estimates. Lower pseudo-error, greater apparent stability or stronger area significance does not alone establish more accurate biological timescales or a justified primary improvement criterion.",
+      "Signed Equation 21 versus absolute-error computation requires figure-specific formula/mask reconciliation. Do not minimize signed bias as accuracy or generalize one summary component to all source panels.",
+      "Original simulation realizations, baseline curves and source-comparable improvement criteria remain unresolved. New simulations or window draws are extensions.",
+      "The later synthetic inventory explicitly states metadata_only:true and scope_change:false. No explicit scientific instruction approving empirical-primary replacement was identified in the bounded gate and earlier curation log; component acceptance and a broad reproduction inventory are not such authority.",
+      "Full-panel reproduction tolerances, native independent verification and empirical superiority remain unavailable. Useful partial or secondary evidence must not grant full-primary success through a schema workaround."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
+        "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
+        "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
+        "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
+        "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "The authentic empirical unit/mouse/area roster and original trial-window draws remain unmaterialized; paper amplitude cutoff 0.01 and retained loader policy 0.1 are unreconciled.",
+      "Figure 7 uses different matched-fit supports: 3,053 units for C, 5,674 for D/E and 4,588 for F/G. Complete failure/quality denominators, source masks and panel-specific eligibility cannot be replaced by one favorable subset.",
+      "Unit fits begin at lag 1, area fits at lag 2 using valid ACFs within the area. Publication/current-source fitter and uncertainty parameterization, native outputs and figure reductions remain unresolved.",
+      "Source 50 resamplings do not establish biological replication or original mouse-clustered uncertainty. Historical animal-grouped uncertainty and protected tuning policies must be labeled prospective unless exact native source shows otherwise.",
+      "Empirical full-duration references are estimates. Lower pseudo-error, greater apparent stability or stronger area significance does not alone establish more accurate biological timescales or a justified primary improvement criterion.",
+      "Signed Equation 21 versus absolute-error computation requires figure-specific formula/mask reconciliation. Do not minimize signed bias as accuracy or generalize one summary component to all source panels.",
+      "Original simulation realizations, baseline curves and source-comparable improvement criteria remain unresolved. New simulations or window draws are extensions.",
+      "The later synthetic inventory explicitly states metadata_only:true and scope_change:false. No explicit scientific instruction approving empirical-primary replacement was identified in the bounded gate and earlier curation log; component acceptance and a broad reproduction inventory are not such authority.",
+      "Full-panel reproduction tolerances, native independent verification and empirical superiority remain unavailable. Useful partial or secondary evidence must not grant full-primary success through a schema workaround."
     ]
   },
   "next_implementation_action": {
-    "action": "Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales. Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation. Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results. Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved. Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints. No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales. Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation. Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results. Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved. Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints. No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -543,8 +583,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved improvement contract and its declared coverage. Complete primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "The retained empirical Figure 7 result family and its directly related S12–S14 robustness support: source-selected Allen spontaneous recordings, area-level timescale ordering and sampling stability, four-estimator matched-unit comparisons, duration/trial sensitivity, complete failure/inclusion and quality support. Preserve original area versus unit fitting recipes and panel-specific eligible sets. Source 5,775 units are nested in 26 mice and eight areas; 50 resamplings are repeated sampling analyses, not independent animals. Mouse identities remain necessary, while historical mouse-bootstrap, held-out parameter and development-selected cutoff policies are prospective unless separately source-authenticated. No every-figure requirement is inferred.",
+  "retained_secondary_scope": "Preserve the genuine original synthetic known-timescale error and fit-coverage comparisons as separately named method-validation evidence, including their original realization/condition support and source-defined reference semantics. Retain finite synthetic programme, fit-summary, runtime and aABC components in their declared roles without automatically making all of them primary empirical requirements. Synthetic improvement cannot satisfy empirical reproduction or superiority; a mixed-scope four-cell bundle is unavailable as full-primary success when the schema cannot represent the distinction.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-add-004"
   }
 }

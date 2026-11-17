@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "Acetylcholine demixes heterogeneous dopamine signals for learning and moving",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Candidate ordered source subtask is Figure 6g–h: predict whether contralateral reaction time is in the fastest or slowest within-session quartile from simultaneously recorded DMS spiking. This is explicitly a scoped paper subtask; Figure 3 timing and the paper’s full causal demixing claims remain distinct obligations, not silently replaced or won.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the complete original Figure 6h fast-versus-slow contralateral reaction-time decoding result from DMS spiking under the Figure 6g method boundary, including the source example traces and all eighteen qualifying sessions from eight rats. Preserve the source cohort, labels, input window, folds, penalty selection and aggregation. Report the historical result as selected within-session cross-validation performance. Assess candidate improvement only under a separately qualified comparison; a higher selected score alone does not establish scientific superiority, independent-test generalization, cross-rat transfer or causal demixing.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Candidate ordered source subtask is Figure 6g–h: predict whether contralateral reaction time is in the fastest or slowest within-session quartile from simultaneously recorded DMS spiking. This is explicitly a scoped paper subtask; Figure 3 timing and the paper’s full causal demixing claims remain distinct obligations, not silently replaced or won.",
-    "Source-paper comparison for Figure 6h mean within-session cross-validated fast/slow reaction-time classification accuracy (%): Per-session cross-validated classification accuracy in percent: 100 times one minus the minimum kfoldLoss among the 11 ridge penalties. It is a source selection-biased CV statistic, not an independent external test accuracy."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Explicitly bind the improvement objective to the original Figure 6 reaction-time decoder without claiming the full demixing mechanism or dropping historical timing obligations.",
-    "Recover the original full 18-session/eight-rat manifest, published numeric accuracy and fold/penalty-selection realization; qualify an author baseline after documenting any source-code correction.",
-    "Use the identical original spike window, contralateral rule, reaction-time quartiles and qualifying sessions; new rat splits or reduced sessions cannot count as the same-task paper win.",
-    "Freeze candidate, concrete access/resource budgets, meaningful effect and dependence-aware uncertainty before final comparison.",
-    "Latency reconstruction agreement, larger DA/ACh phase separation and stronger biological significance do not count as predictive improvement.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "ROOT-ADD-019",
   "canonical_position_one_based": 4,
@@ -255,63 +256,82 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-ROOT-ADD-019/improvement.v1.json",
-      "bytes": 11006,
-      "sha256": "fdfc26a94cc580a460672841b7e95d22e28452622ec8d939092c738ab44ce1b4"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-019/historical/task.pre-improvement.v1.json",
-        "bytes": 18816,
-        "sha256": "40ab45f8c238492b3e10c12547ced32fc62545d896e54008f660f95d486f6c5f"
-      },
-      "implementation_ids": [
-        "authoring-delivery-20261105-common-remaining-builds-wave21-paper019-full-design",
-        "benchmarks-neuroscience-paper-root-add-019",
-        "components-achda-timing-summary"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-019/implementations/registered-runtime/manifest.json",
-        "bytes": 5747,
-        "sha256": "24a3b9d897afc6ca70434d11679c10bfc5b18b363c394378f06b3d784659eb11"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "Inactive until native source comparison and scoped objective are resolved. Prospective candidate development may use only the admitted training/validation feedback under the original source task; no final-label adaptation is authorized.",
-    "candidate_freeze": "Freeze candidate code, session membership, timing/label preprocessing, fold realization and penalty selection before final scores are opened.",
-    "final_evaluation": "If admitted, compare source and candidate on the identical original within-session decoder protocol and report rat-aware paired uncertainty; keep all descriptive timing results separate.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    "improvement": {
+      "improvement_loop": "Inactive until native source comparison and scoped objective are resolved. Prospective candidate development may use only the admitted training/validation feedback under the original source task; no final-label adaptation is authorized.",
+      "candidate_freeze": "Freeze candidate code, session membership, timing/label preprocessing, fold realization and penalty selection before final scores are opened.",
+      "final_evaluation": "If admitted, compare source and candidate on the identical original within-session decoder protocol and report rat-aware paired uncertainty; keep all descriptive timing results separate.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "No exact published Figure 6h mean/session accuracy baseline recovered.",
-    "Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved.",
-    "Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified.",
-    "Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success.",
-    "Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "No exact published Figure 6h mean/session accuracy baseline recovered.",
       "Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved.",
       "Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified.",
       "Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success.",
       "Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "No exact published Figure 6h mean/session accuracy baseline recovered.",
+        "Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved.",
+        "Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified.",
+        "Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success.",
+        "Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json",
+    "current_primary_source_limits": [
+      "Authentic full session/rat/unit/trial manifests, exact qualifying cohort, label and source output-to-panel mapping remain unqualified; eighteen sessions and eight rat identifiers alone do not authenticate them.",
+      "Original fold realization, complete eighteen-by-eleven losses, OOF predictions, source example traces and published numerical mean/session accuracy remain unrecovered. The above-chance session count is not an accuracy baseline.",
+      "Preserve unresolved thres/thresh preprocessing, sequential trial-index label collision and inclusive quartile ties. No silently corrected branch may be called the historical executable baseline.",
+      "Caption SEM versus plotted SD, exact displayed uncertainty and numerical reproduction criteria remain unresolved. Sessions, trials and overlapping CV folds are not independent rats.",
+      "The original best-of-eleven statistic reuses CV outcomes for penalty selection and reporting. A higher selected score alone cannot admit scientific superiority, independent-test generalization, cross-rat transfer or causal demixing.",
+      "Candidate freeze, total search/exposure, matched comparison access/resources, meaningful effect and dependence/selection-aware uncertainty remain unqualified. An equal count of eleven candidate settings alone does not establish fair total search or independent generalization.",
+      "Any prospective nested or independent validation must be explicitly named, qualify both methods on the same task and remain distinct from historical source reproduction. No such experiment or new score is admitted by this scope selection.",
+      "Current supplied-prediction components do not independently authenticate original observations or native training/evaluation. Partial scalar findings cannot represent the complete selected traces and session panel.",
+      "No source-array identity, tolerance, superiority margin, runtime readiness, scientific outcome, SOTA claim or additional benchmark count follows from this selection. Canonical adoption must preserve predecessor bytes and bind consistent task/outcome/catalog/CLI/admission wording."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The source paper contains a genuine original reaction-time decoding subtask, but its numerical baseline, original fold assignments, native preprocessing and cohort identity are unrecovered. The registered Figure 3 latency reconstruction is descriptive and cannot itself be surpassed. Any eventual Figure 6 decoder result must be explicitly scoped rather than called a whole-paper demixing win. No exact published Figure 6h mean/session accuracy baseline recovered. Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved. Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified. Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success. Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source paper contains a genuine original reaction-time decoding subtask, but its numerical baseline, original fold assignments, native preprocessing and cohort identity are unrecovered. The registered Figure 3 latency reconstruction is descriptive and cannot itself be surpassed. Any eventual Figure 6 decoder result must be explicitly scoped rather than called a whole-paper demixing win. No exact published Figure 6h mean/session accuracy baseline recovered. Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved. Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified. Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success. Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -326,8 +346,32 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "Complete Figure 6h: source two-cell fast/slow example traces and all eighteen qualifying session scores/profile and summary from eight rats. Figure 6g supplies the schematic/method boundary. Preserve the source at-least-five-simultaneous-DMS-unit eligibility, contralateral fastest/slowest within-session reaction-time quartiles and ties, original 0–0.5-second post-assignment spike window, source tenfold within-session CV, original best-of-eleven ridge selection and equal-session aggregation. Source displayed uncertainty remains subject to the unresolved SD-versus-SEM discrepancy. This is same-trial classification, not a verified strictly pre-movement forecast.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-ROOT-ADD-019"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "Figure 3 timing/learning and other physiological/intervention result families remain separately named source evidence. Preserve their implementations and exact predecessor definitions. The selected Figure 6h result neither requires every source root/Extended Data panel nor claims reproduction or improvement of those distinct findings. Nested, independent or rat-held-out evaluation is a separately named prospective design for both methods on the same task; it cannot replace the paper's original selected-CV result.",
+    "retained_source_roles": null,
+    "remaining_source_limits": [
+      "Authentic full session/rat/unit/trial manifests, exact qualifying cohort, label and source output-to-panel mapping remain unqualified; eighteen sessions and eight rat identifiers alone do not authenticate them.",
+      "Original fold realization, complete eighteen-by-eleven losses, OOF predictions, source example traces and published numerical mean/session accuracy remain unrecovered. The above-chance session count is not an accuracy baseline.",
+      "Preserve unresolved thres/thresh preprocessing, sequential trial-index label collision and inclusive quartile ties. No silently corrected branch may be called the historical executable baseline.",
+      "Caption SEM versus plotted SD, exact displayed uncertainty and numerical reproduction criteria remain unresolved. Sessions, trials and overlapping CV folds are not independent rats.",
+      "The original best-of-eleven statistic reuses CV outcomes for penalty selection and reporting. A higher selected score alone cannot admit scientific superiority, independent-test generalization, cross-rat transfer or causal demixing.",
+      "Candidate freeze, total search/exposure, matched comparison access/resources, meaningful effect and dependence/selection-aware uncertainty remain unqualified. An equal count of eleven candidate settings alone does not establish fair total search or independent generalization.",
+      "Any prospective nested or independent validation must be explicitly named, qualify both methods on the same task and remain distinct from historical source reproduction. No such experiment or new score is admitted by this scope selection.",
+      "Current supplied-prediction components do not independently authenticate original observations or native training/evaluation. Partial scalar findings cannot represent the complete selected traces and session panel.",
+      "No source-array identity, tolerance, superiority margin, runtime readiness, scientific outcome, SOTA claim or additional benchmark count follows from this selection. Canonical adoption must preserve predecessor bytes and bind consistent task/outcome/catalog/CLI/admission wording."
+    ],
+    "scientific_outcome": "unknown",
+    "source_disposition": "explicit_primary_selection"
   }
 }

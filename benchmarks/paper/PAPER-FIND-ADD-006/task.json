@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "Learning reshapes the hippocampal representation hierarchy",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Figure 4D binary context decoding conditional on actual position from speed-equalized CA1 population vectors, preserving the source learning-session support and comparison to its conditional decoder. It is an original paper endpoint; changes in hierarchy depth or curve fidelity are not decoding improvement.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original Figure 4D context-decoding result from speed-equalized CA1 population vectors conditioned on actual position, with its global and shuffled-label comparisons across the complete original session panel; assess improvement on that identical decoding task only after source metric and comparator qualification.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Figure 4D binary context decoding conditional on actual position from speed-equalized CA1 population vectors, preserving the source learning-session support and comparison to its conditional decoder. It is an original paper endpoint; changes in hierarchy depth or curve fidelity are not decoding improvement.",
-    "Source-paper comparison for Figure 4D conditional context-decoding performance, pending source accuracy/error reconciliation: Paper Figure 4/Methods describe a normalized absolute label difference while calling it accuracy; code uses exact-match accuracy_score in the global route. For binary context, accuracy and one-minus-normalized-error can coincide, but the source scoring transformation must be explicitly reconciled and the conditional zero-return array cannot be used as a score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover exact Figure 4D numeric score, metric transformation and original aggregation.",
-    "Bind the source speed-equalized inputs, all 25 sessions, decoder configuration and original 100-repeat stratified 70/30 plus within-partition-bootstrap protocol. Recovered or regenerated draws are admissible when candidate and author share them and seed/environment provenance plus a justified calibration tolerance are declared in advance.",
-    "Resolve the author conditional-score output defect by independently verifying prediction-derived scoring, without treating zeros as the baseline to beat.",
-    "Freeze candidate and comparison rules before final evaluation; show meaningful performance gain under valid uncertainty on the identical original endpoint.",
-    "Keep hierarchy-curve reconstruction, alternate clustering, larger context separation and new held-animal/day/trial decoding as calibration or extensions, not paper wins.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "FIND-ADD-006",
   "canonical_position_one_based": 53,
@@ -179,63 +180,80 @@
     }
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-ADD-006/improvement.v1.json",
-      "bytes": 12164,
-      "sha256": "7ccfb8fd4c248ba93630dd0db600301c7b83998808940a8de06d2d05d4715230"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-ADD-006/historical/task.pre-improvement.v1.json",
-        "bytes": 13987,
-        "sha256": "b686265f0b9d9812befdb8a49afb339597d0c98070881b443a3e1946b2af80e6"
-      },
-      "implementation_ids": [
-        "authoring-next-two-unbuilt-papers-20261103",
-        "benchmarks-neuroscience-paper-find-add-006",
-        "components-hierarchy25a-original"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-FIND-ADD-006/implementations/registered-runtime/manifest.json",
-        "bytes": 11484,
-        "sha256": "8de7aa653dad69e34bebf52a3611e10f2f2d550a18971cc57c0400e02ee44d3b"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "Not admitted pending baseline, metric and executable source-protocol recovery. Once recovered, use training-only internal validation within the historical or documented regenerated source partitions for iterative decoder choices.",
-    "candidate_freeze": "Freeze the candidate, speed-equalization route, original resampling protocol, paired draw ledger and seeds, metric direction, aggregate, calibration tolerance and budget before protected final predictions.",
-    "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on all original support and the original stochastic protocol. Paired regenerated draws with recorded provenance and predeclared calibration tolerance retain the same task; altered animal/day/trial split schemes are extensions.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Numeric paper baseline and independently scored source-conformant author rerun remain distinct. Historical random identities are not mandatory if the original stochastic protocol is rerun transparently, paired across candidate/author and calibrated within a predeclared justified tolerance. Matching Ward curves or beating an unassigned zero return is not improvement."
+    "improvement": {
+      "improvement_loop": "Not admitted pending baseline, metric and executable source-protocol recovery. Once recovered, use training-only internal validation within the historical or documented regenerated source partitions for iterative decoder choices.",
+      "candidate_freeze": "Freeze the candidate, speed-equalization route, original resampling protocol, paired draw ledger and seeds, metric direction, aggregate, calibration tolerance and budget before protected final predictions.",
+      "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on all original support and the original stochastic protocol. Paired regenerated draws with recorded provenance and predeclared calibration tolerance retain the same task; altered animal/day/trial split schemes are extensions.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Numeric paper baseline and independently scored source-conformant author rerun remain distinct. Historical random identities are not mandatory if the original stochastic protocol is rerun transparently, paired across candidate/author and calibrated within a predeclared justified tolerance. Matching Ward curves or beating an unassigned zero return is not improvement."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
-    "Paper accuracy/error wording and author score implementation require reconciliation.",
-    "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
-    "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
-    "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
       "Paper accuracy/error wording and author score implementation require reconciliation.",
       "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
       "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
       "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
+        "Paper accuracy/error wording and author score implementation require reconciliation.",
+        "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
+        "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
+        "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json",
+    "current_primary_source_limits": [
+      "Existing scientific review explicitly accepted Figure 4D; current broader reproduction scope still needs consistent canonical alignment and final repinning. same_primary_unqualified refers to the reviewed named target, not admission of the existing mismatched draft.",
+      "Exact source accuracy/error ordinate, numerical targets and repeated/session/rat aggregation remain unresolved.",
+      "Speed-equalized input preparation, fine/coarse position identities, source eligibility and complete observation lineage remain unqualified.",
+      "The conditional routine returns an unassigned zero score vector; prediction-derived source scoring and other documented author-code defects require reviewed repair, not a zero baseline.",
+      "Preserve original repeated stratified partitions, within-partition bootstrap multiplicities, matched method/control draws and source session panel. A justified calibrated source-protocol rerun may be used; no new convenient split.",
+      "Authentic submitted computation, granular independent verification, complete references, comparison uncertainty, meaningful same-task gain and matched code exposure remain unresolved.",
+      "Improved decoding would establish this named readout result only, not a stronger or complete biological hierarchy explanation; all scientific outcomes remain unknown."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention and executable source-conformant resampling/speed-equalized input route are unresolved; the existing implementation only reconstructs descriptive Ward-tree curves. Recovery of historical random draw identities is not required for an otherwise documented calibrated rerun of the original protocol. Exact numeric Figure 4D baseline and aggregate provenance are missing. Paper accuracy/error wording and author score implementation require reconciliation. The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification. Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population. Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention and executable source-conformant resampling/speed-equalized input route are unresolved; the existing implementation only reconstructs descriptive Ward-tree curves. Recovery of historical random draw identities is not required for an otherwise documented calibrated rerun of the original protocol. Exact numeric Figure 4D baseline and aggregate provenance are missing. Paper accuracy/error wording and author score implementation require reconciliation. The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification. Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population. Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -250,8 +268,42 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "The explicitly reviewed original Figure 4D named result, with companion Figure 4B global/context-shuffle evidence, conditional context/position shuffles and complete source session support. This is a legitimate reviewed result-level revision, not a claim that decoding reproduces the full historical hierarchy/learning family. Broader reproduction obligations must be aligned to this accepted named target.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-FIND-ADD-006"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "separate_empirical_results: Preserve hierarchy/variance-depth reconstruction, learning/reward relationships, spatial decoding and other historical biological evidence separately. Their source status is retained; they do not automatically become required panels for Figure 4D.\npartial_primary_support: Preserve the accepted Figure4D prediction scorer and complete context-arm inventory. Operator-supplied labels and arithmetic checks do not establish authentic neural-input computation or source reproduction.\nprospective_extension: New animal/day/whole-trial holdouts and inferred-position conditioning are distinct extensions, not substitutions for the original protocol.",
+    "retained_source_roles": [
+      {
+        "role": "separate_empirical_results",
+        "scope": "Preserve hierarchy/variance-depth reconstruction, learning/reward relationships, spatial decoding and other historical biological evidence separately. Their source status is retained; they do not automatically become required panels for Figure 4D."
+      },
+      {
+        "role": "partial_primary_support",
+        "scope": "Preserve the accepted Figure4D prediction scorer and complete context-arm inventory. Operator-supplied labels and arithmetic checks do not establish authentic neural-input computation or source reproduction."
+      },
+      {
+        "role": "prospective_extension",
+        "scope": "New animal/day/whole-trial holdouts and inferred-position conditioning are distinct extensions, not substitutions for the original protocol."
+      }
+    ],
+    "remaining_source_limits": [
+      "Existing scientific review explicitly accepted Figure 4D; current broader reproduction scope still needs consistent canonical alignment and final repinning. same_primary_unqualified refers to the reviewed named target, not admission of the existing mismatched draft.",
+      "Exact source accuracy/error ordinate, numerical targets and repeated/session/rat aggregation remain unresolved.",
+      "Speed-equalized input preparation, fine/coarse position identities, source eligibility and complete observation lineage remain unqualified.",
+      "The conditional routine returns an unassigned zero score vector; prediction-derived source scoring and other documented author-code defects require reviewed repair, not a zero baseline.",
+      "Preserve original repeated stratified partitions, within-partition bootstrap multiplicities, matched method/control draws and source session panel. A justified calibrated source-protocol rerun may be used; no new convenient split.",
+      "Authentic submitted computation, granular independent verification, complete references, comparison uncertainty, meaningful same-task gain and matched code exposure remain unresolved.",
+      "Improved decoding would establish this named readout result only, not a stronger or complete biological hierarchy explanation; all scientific outcomes remain unknown."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

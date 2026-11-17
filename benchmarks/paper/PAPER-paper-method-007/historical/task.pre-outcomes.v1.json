@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-007",
+  "track": "paper",
+  "title": "Tracking neurons across days with high-density probes",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+    "Source-paper comparison for Original Fig. 4 cross-day ISI-fingerprint AUC, full 16-mouse population: ROC AUC separating ISI-histogram correlations of matches from nonmatches; use original exclusions and require at least 20 matched units per eligible recording comparison. Within-recording matched units are excluded."
+  ],
+  "success_criteria": [
+    "Restore and evaluate every original eligible16-mouse recording/location/day comparison using paper-equivalent matching and fingerprint construction.",
+    "Reproduce 0.88 under the original aggregation with a declared calibration tolerance; compare against both the published result and a competent author rerun.",
+    "Demonstrate the predeclared meaningful AUC gain with animal-level uncertainty while preserving matched-unit yield and eligible support; do not improve AUC by selecting fewer easy matches.",
+    "Do not count a five-mouse demo gain, new held-mouse split, changed code version, human-curation agreement or increased match count alone as surpassing the paper.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-007",
+  "canonical_position_one_based": 98,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41592-024-02440-1",
+    "publication_year": 2024,
+    "venue": "Nature Methods"
+  },
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/24305758"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "Mouse1.zip",
+          "bytes": 1808353763,
+          "url": "https://ndownloader.figshare.com/files/42664381",
+          "checksum": "7f00f0a899bf0dd0e8c6947ec40f6469"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "7f00f0a899bf0dd0e8c6947ec40f6469"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "Mouse2.zip",
+          "bytes": 668638293,
+          "url": "https://ndownloader.figshare.com/files/42664369",
+          "checksum": "125a0d36d8c8625ae796c11801436e7d"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "125a0d36d8c8625ae796c11801436e7d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "Mouse3.zip",
+          "bytes": 849282840,
+          "url": "https://ndownloader.figshare.com/files/42664375",
+          "checksum": "c2f6ca52d47e05d6332d7f1e9f69e2be"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "c2f6ca52d47e05d6332d7f1e9f69e2be"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "Mouse4.zip",
+          "bytes": 769416082,
+          "url": "https://ndownloader.figshare.com/files/42664372",
+          "checksum": "e8de4ea3161dd77cff17d082a2ab0764"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "e8de4ea3161dd77cff17d082a2ab0764"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "Mouse5.zip",
+          "bytes": 1718437790,
+          "url": "https://ndownloader.figshare.com/files/42664378",
+          "checksum": "d1b42a04bb5984c215014af041bc1be6"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "d1b42a04bb5984c215014af041bc1be6"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "README.docx",
+          "bytes": 19412,
+          "url": "https://ndownloader.figshare.com/files/42700708",
+          "checksum": "6c5f57f88bc663811ab0dd49ee19612c"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "6c5f57f88bc663811ab0dd49ee19612c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-007"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-007"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "Mouse1.zip",
+          "bytes": 1808353763,
+          "url": "https://ndownloader.figshare.com/files/42664381",
+          "checksum": "7f00f0a899bf0dd0e8c6947ec40f6469"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "7f00f0a899bf0dd0e8c6947ec40f6469"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-007"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "Mouse2.zip",
+          "bytes": 668638293,
+          "url": "https://ndownloader.figshare.com/files/42664369",
+          "checksum": "125a0d36d8c8625ae796c11801436e7d"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "125a0d36d8c8625ae796c11801436e7d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-007"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41592-024-02440-1",
+      "data_urls": [
+        "https://figshare.com/articles/dataset/24305758"
+      ],
+      "input_scope": "Figshare24305758v1 five-mouse/two-day UnitMatch data with waveforms and functional signals; waveform similarity is not independent ground-truth identity.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://api.figshare.com/v2/articles/24305758/versions/1",
+          "resolved_record_id": 24305758,
+          "title": "UnitMatch Demo - data",
+          "version": 1,
+          "license": {
+            "value": 1,
+            "name": "CC BY 4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "metadata_inspected": true,
+          "files_downloaded": false,
+          "manifest_file_count": 6,
+          "file_metadata_examples": [
+            {
+              "name": "Mouse1.zip",
+              "bytes": 1808353763,
+              "url": "https://ndownloader.figshare.com/files/42664381",
+              "checksum": "7f00f0a899bf0dd0e8c6947ec40f6469"
+            },
+            {
+              "name": "Mouse2.zip",
+              "bytes": 668638293,
+              "url": "https://ndownloader.figshare.com/files/42664369",
+              "checksum": "125a0d36d8c8625ae796c11801436e7d"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/EnnyvanBeest/UnitMatch",
+      "revision_or_archive_version": "9320f19b25ee5b06e469517ea94537e8f837d048",
+      "entrypoints": [
+        "MATLAB/DEMO_UNITMATCH.m",
+        "MATLAB/UnitMatchPipeline/DefaultParametersUnitMatch.m",
+        "MATLAB/FunctionalScores/ComputeFunctionalScores.m"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-007",
+        "versions_and_loader_contract": {
+          "scope_description": "Refit UnitMatch and independently validate cross-day matches on the released five-mouse, two-consecutive-day package.",
+          "unresolved_coverage": [
+            "Five released mice do not cover the whole study. Waveform matches require functional validation and are not ground-truth identities. Pin paper-era v1.0.0_UnitMatch if comparing exact published numbers; current commit is recorded."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-007",
+        "versions_and_loader_contract": {
+          "declared_scope": "Refit UnitMatch and independently validate cross-day matches on the released five-mouse, two-consecutive-day package."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/EnnyvanBeest/UnitMatch",
+    "revision_or_archive_version": "9320f19b25ee5b06e469517ea94537e8f837d048",
+    "entrypoints": [
+      "MATLAB/DEMO_UNITMATCH.m",
+      "MATLAB/UnitMatchPipeline/DefaultParametersUnitMatch.m",
+      "MATLAB/FunctionalScores/ComputeFunctionalScores.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-007",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/EnnyvanBeest/UnitMatch",
+            "commit": "9320f19b25ee5b06e469517ea94537e8f837d048",
+            "author_linkage": [
+              "https://www.nature.com/articles/s41592-024-02440-1",
+              "https://doi.org/10.6084/m9.figshare.24305758.v1",
+              "https://github.com/EnnyvanBeest/UnitMatch",
+              "https://doi.org/10.5522/04/24411841.v1"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/README.md",
+            "license_source": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/LICENSE"
+          },
+          "entrypoints": [
+            "MATLAB/DEMO_UNITMATCH.m",
+            "MATLAB/UnitMatchPipeline/DefaultParametersUnitMatch.m",
+            "MATLAB/FunctionalScores/ComputeFunctionalScores.m"
+          ],
+          "dependencies": [
+            "MATLAB",
+            "npy-matlab",
+            "bombcell",
+            "author spikes/general neuropixel utilities"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-007",
+        "recorded": {
+          "code_url": "https://github.com/EnnyvanBeest/UnitMatch",
+          "code_revision_or_archive_version": "9320f19b25ee5b06e469517ea94537e8f837d048",
+          "entrypoints": [
+            "MATLAB/DEMO_UNITMATCH.m",
+            "MATLAB/UnitMatchPipeline/DefaultParametersUnitMatch.m",
+            "MATLAB/FunctionalScores/ComputeFunctionalScores.m"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "f6088e14609eb7112a30e8b24a4e43dbd84483d86b29ee3ab118212e9da49525",
+    "audit_record_sha256": "548d43dc8d75041268e72bb1278d9d7a74a5abfca5f934269348f0a69a619ae3",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-007",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 6,
+        "record_sha256": "1c5fc24bc84fdc90913f63322924cb8970f140e1fa2671154c271bec652af118"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-007",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 89,
+        "record_sha256": "d1fc8974800bd6461157d122c3ad67127cb42ce306b50b1142b34d4ea35782f9"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_statement": "CPU workstation; approximately5.8GB packaged data",
+    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-007/improvement.v1.json",
+      "bytes": 10592,
+      "sha256": "fb0028def33b2be2f66c2c84ed5d5d9ed74118ec3fbb758f53578bb3d1fa1606"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-007/historical/task.pre-improvement.v1.json",
+        "bytes": 23235,
+        "sha256": "3e3892fcf6d8112e483f4d88b7aa35858a92504da07771f69813886b5c9cecaf"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-007",
+        "benchmarks-scientific_components-unitmatch_native_paired"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-007/implementations/registered-runtime/manifest.json",
+        "bytes": 18801,
+        "sha256": "2c3e3deb6c045b893e0907e72971f153af3e3190df47839093d15f357091f44e"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate waveform-only algorithms on permitted development recordings with final functional targets inaccessible. Freeze any use of development functional information explicitly; it cannot be assumed equivalent to source unsupervised calibration.",
+    "candidate_freeze": "Seal waveform feature definitions, matching policy, preprocessing, source revision, exclusions and all selection choices before final original-cohort functional evaluation.",
+    "final_evaluation": "Run candidate and paper-equivalent native reference on identical full original recordings; keep the legacy five-mouse paired report separately labeled. Compare paired animal endpoints only after full support and provenance admission.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published16-mouse AUC, paper-era author rerun and current v2 demo results are separate records; runtime declaration envelopes are not an approved same-task improvement budget."
+  },
+  "blocking_issues": [
+    "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+    "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+    "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+    "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+  ],
+  "holds": {
+    "task_specific": [
+      "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+      "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+      "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+      "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper reports an ordered waveform-only tracking validation endpoint and its numeric result. The existing five-mouse/two-day demo and v2 native runtime are a reduced, differently defined comparison, not the original 16-mouse cross-day endpoint; full original data, paper-era code equivalence and scientific admission remain incomplete. Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release. Paper-era default source and native result equivalence are not established for the selected v2 runtime. The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review. Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-007/historical/task.pre-improvement.v1.json",
+      "bytes": 23235,
+      "sha256": "3e3892fcf6d8112e483f4d88b7aa35858a92504da07771f69813886b5c9cecaf"
+    },
+    "notes": "Preserve the original native-paired source, all five-mouse materials and existing graders as calibration/extension evidence. Its strict equal-mouse proxy gain cannot admit a source-paper win."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

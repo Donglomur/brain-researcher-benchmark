@@ -1,0 +1,550 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-add-004",
+  "track": "paper",
+  "title": "iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
+    "Source-paper comparison for Original synthetic relative timescale-estimation error and fit-coverage profile, with separately labeled empirical pseudo-error/stability companions: Methods4.8 Eq21 displays 100*(tau_est−tau_truth)/tau_truth. Registered policy uses 100*abs(tau_est−tau_ref)/tau_ref and conditional mean/median summaries. Resolve the original figure-producing absolute/signed convention and masks from primary code before assigning a lower-is-better success criterion. Empirical reference is full-duration ACF/iSTTC, so pseudo-REE is stability rather than truth error."
+  ],
+  "success_criteria": [
+    "Recover original figure-producing error formula, failure masks, continuous/trial/duration grids, author fitter and numerical baseline before admission.",
+    "Use the same original 100000 synthetic realizations and all retained registered empirical obligations; a finite 600-second/40-trial subprogram cannot establish a whole-task win.",
+    "Require meaningful improvement in an authenticated truth-based synthetic error metric and a valid paired uncertainty rule while retaining all original fit failures and coverage; do not minimize signed bias to manufacture accuracy.",
+    "Keep real-data pseudo-REE and area contrasts as consistency evidence, not true-timescale accuracy. Stronger area significance or reproducing the reference is not superiority.",
+    "A new simulation, trial-window seed, QC threshold, fit mask or held-out-parameter split is a separately labeled extension and cannot be compared to paper results as a same-task win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-004",
+  "canonical_position_one_based": 14,
+  "paper_identity": {
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+    "publication_year": 2026,
+    "venue": "PLOS Computational Biology"
+  },
+  "input_assets": {
+    "routes": [
+      "https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/assets/0",
+        "recorded_fields": {
+          "path": "spike_trains.pkl",
+          "url": "https://gin.g-node.org/iinnpp/isttc/raw/faf0f69c22846e119312931cd6541d764136d7bb/spike_trains.pkl",
+          "bytes": 2410265523,
+          "immutable_identity": {
+            "provider": "GIN",
+            "repository": "https://gin.g-node.org/iinnpp/isttc",
+            "source_declared_revision": "faf0f69c22846e119312931cd6541d764136d7bb",
+            "path_at_revision": "spike_trains.pkl",
+            "publisher_content_checksum": null,
+            "version_limit": "Commit-bound GIN route; prior acquisition SHA256 is local evidence, not publisher digest."
+          }
+        },
+        "checksum_fields_as_recorded": [
+          {
+            "algorithm": "SHA256",
+            "value": "576d92d0339bf54931cfb3fbb6735d5e1ecd95c195620c3de0c23577519e691f",
+            "domain": "prior_local_acquired_raw_file_not_publisher_digest",
+            "verified_from_payload_by_this_wave": false
+          }
+        ],
+        "http_validators_not_checksums": {},
+        "evidence": [
+          {
+            "source_id": "isttc_acquisition_plan",
+            "json_pointer": "/assets/0"
+          },
+          {
+            "source_id": "isttc_acquisition_receipt",
+            "json_pointer": "/attempts/0"
+          },
+          {
+            "source_id": "isttc_bindings",
+            "json_pointer": "/source_pins/continuous"
+          }
+        ],
+        "role": "selected released Hawkes continuous observations for all100000 units",
+        "payload_read_or_hash_recomputed_by_this_wave": false,
+        "schema_or_scientific_readiness_promoted": false
+      },
+      {
+        "json_pointer": "/assets/1",
+        "recorded_fields": {
+          "path": "trials40.pkl",
+          "url": "https://gin.g-node.org/iinnpp/isttc/raw/faf0f69c22846e119312931cd6541d764136d7bb/trials40.pkl",
+          "bytes": 284891468,
+          "immutable_identity": {
+            "provider": "GIN",
+            "repository": "https://gin.g-node.org/iinnpp/isttc",
+            "source_declared_revision": "faf0f69c22846e119312931cd6541d764136d7bb",
+            "path_at_revision": "trials40.pkl",
+            "publisher_content_checksum": null,
+            "version_limit": "Commit-bound GIN route; prior acquisition SHA256 is local evidence, not publisher digest."
+          }
+        },
+        "checksum_fields_as_recorded": [
+          {
+            "algorithm": "SHA256",
+            "value": "336b9cb663c7a400fec93bf3dfe4cd0b012915739ff06a9a5342c0f01d8ae75e",
+            "domain": "prior_local_acquired_raw_file_not_publisher_digest",
+            "verified_from_payload_by_this_wave": false
+          }
+        ],
+        "http_validators_not_checksums": {},
+        "evidence": [
+          {
+            "source_id": "isttc_acquisition_plan",
+            "json_pointer": "/assets/1"
+          },
+          {
+            "source_id": "isttc_acquisition_receipt",
+            "json_pointer": "/attempts/1"
+          },
+          {
+            "source_id": "isttc_bindings",
+            "json_pointer": "/source_pins/trials"
+          }
+        ],
+        "role": "selected released Hawkes trials observations for all100000 units",
+        "payload_read_or_hash_recomputed_by_this_wave": false,
+        "schema_or_scientific_readiness_promoted": false
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Allen functional-connectivity spontaneous single-unit spike trains with source-defined duration/QC filters.",
+      "data_urls": [
+        "https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "role": "Actual Allen single-unit spike trains",
+          "loader": "notebooks/mice/load_dataset.ipynb via EcephysProjectCache.from_warehouse/get_session_data",
+          "selection": {
+            "session_type": "functional_connectivity",
+            "stimulus": "spontaneous",
+            "minimum_duration_seconds": 1200,
+            "isi_violations_max": 0.5,
+            "amplitude_cutoff_max": 0.1,
+            "presence_ratio_min": 0.9
+          },
+          "output_filename": "allen_func_conn_around30min_spont_with_quality_metrics.csv",
+          "metadata_inspected": true,
+          "source_commit": "e78cfd2b2ea79b7a7e707db7b79e218212497e43"
+        }
+      ],
+      "source_bridge": "iSTTC empirical Allen visual-coding single-unit timescales: reproduce estimator robustness and area-level timescale comparisons using author-selected spontaneous recordings.",
+      "code_url": "https://github.com/iinnpp/isttc",
+      "code_revision_or_archive_version": "e78cfd2b2ea79b7a7e707db7b79e218212497e43",
+      "entrypoints": [
+        {
+          "path": "notebooks/mice/load_dataset.ipynb",
+          "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/load_dataset.ipynb",
+          "role": "AllenSDK functional-connectivity session selection and actual spike extraction",
+          "inspected_as_text": true
+        },
+        {
+          "path": "src/isttc/scripts/run_allen_mice_data.py",
+          "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/run_allen_mice_data.py",
+          "role": "Empirical estimator batch analysis",
+          "inspected_as_text": true
+        },
+        {
+          "path": "src/isttc/scripts/calculate_acf.py",
+          "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_acf.py",
+          "role": "Autocorrelation/statistic computation",
+          "inspected_as_text": true
+        },
+        {
+          "path": "src/isttc/scripts/calculate_tau.py",
+          "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_tau.py",
+          "role": "Timescale fitting",
+          "inspected_as_text": true
+        },
+        {
+          "path": "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+          "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+          "role": "Four-estimator empirical comparison",
+          "inspected_as_text": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Exact downloaded Allen object digests must be frozen on materialization; loader and selection filters pinned now.",
+        "Known true timescales exist only for separate synthetic diagnostics; real-data stability is not proof of true timescale recovery.",
+        "Monkey examples and inaccessible external datasets excluded."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-004",
+        "versions_and_loader_contract": {
+          "scope_description": "iSTTC empirical Allen visual-coding single-unit timescales: reproduce estimator robustness and area-level timescale comparisons using author-selected spontaneous recordings.",
+          "unresolved_coverage": [
+            "Exact downloaded Allen object digests must be frozen on materialization; loader and selection filters pinned now.",
+            "Known true timescales exist only for separate synthetic diagnostics; real-data stability is not proof of true timescale recovery.",
+            "Monkey examples and inaccessible external datasets excluded."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "id": "PAPER-paper-method-add-004",
+      "selected_scope": "Installed V27 route preserved by V29: all100000 released Hawkes simulation units, continuous600000ms plus40 trials of1000ms/unit",
+      "selected_file_membership_complete": true,
+      "immutable_content_identity_complete": true,
+      "identity_limit": "GIN revision and prior local acquisition hash are recorded; this wave does not revalidate payloads or assert publisher hashes.",
+      "file_count": 2,
+      "declared_file_bytes": 2695156991,
+      "selected_panel_membership": {
+        "units": 100000,
+        "continuous_records": 100000,
+        "trial_records": 4000000,
+        "paired_observations_not_train_test": true
+      },
+      "gaps": [
+        "Biological Allen recordings and whole-paper reproduction remain separate, unqualified endpoints.",
+        "Publisher checksums are unknown; saved acquisition SHA256 is historical local evidence only.",
+        "Current scalar/payload/native/fit/scoring validation is absent."
+      ],
+      "evidence": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+        "bytes": 95149,
+        "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+      },
+      "metadata_only": true,
+      "scope_change": false,
+      "readiness_promotion": false,
+      "payload_validation_by_this_wave": false
+    }
+  },
+  "official_code": {
+    "url": "https://github.com/iinnpp/isttc",
+    "revision_or_archive_version": "e78cfd2b2ea79b7a7e707db7b79e218212497e43",
+    "entrypoints": [
+      {
+        "path": "notebooks/mice/load_dataset.ipynb",
+        "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/load_dataset.ipynb",
+        "role": "AllenSDK functional-connectivity session selection and actual spike extraction",
+        "inspected_as_text": true
+      },
+      {
+        "path": "src/isttc/scripts/run_allen_mice_data.py",
+        "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/run_allen_mice_data.py",
+        "role": "Empirical estimator batch analysis",
+        "inspected_as_text": true
+      },
+      {
+        "path": "src/isttc/scripts/calculate_acf.py",
+        "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_acf.py",
+        "role": "Autocorrelation/statistic computation",
+        "inspected_as_text": true
+      },
+      {
+        "path": "src/isttc/scripts/calculate_tau.py",
+        "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_tau.py",
+        "role": "Timescale fitting",
+        "inspected_as_text": true
+      },
+      {
+        "path": "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+        "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+        "role": "Four-estimator empirical comparison",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-004",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/iinnpp/isttc",
+            "commit": "e78cfd2b2ea79b7a7e707db7b79e218212497e43",
+            "author_linkage": [
+              "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+              "https://github.com/iinnpp/isttc",
+              "https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html",
+              "https://gin.g-node.org/iinnpp/isttc"
+            ],
+            "default_branch": "master",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/README.md",
+            "license_source": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/iinnpp/isttc/git/trees/e78cfd2b2ea79b7a7e707db7b79e218212497e43?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "benchmarks/benchmark_acf_sttc_fast.py",
+                "environment.yaml",
+                "examples/estimate_tau.ipynb",
+                "examples/generate_syn_data.ipynb",
+                "notebooks/abctau_tests/Tutorial1_fittingAutocorrelations-Copy1.ipynb",
+                "notebooks/abctau_tests/Tutorial1_fittingAutocorrelations.ipynb",
+                "notebooks/abctau_tests/syn_dataset.ipynb",
+                "notebooks/abctau_tests/syn_dataset_trials.ipynb",
+                "notebooks/abctau_tests/syn_dataset_trials_summ_stat.ipynb",
+                "notebooks/abctau_tests/syn_dataset_trials_summary_df.ipynb",
+                "notebooks/abctau_tests/syn_dataset_trials_visualize_results.ipynb",
+                "notebooks/abctau_tests/syn_dataset_trials_with_isttc.ipynb",
+                "notebooks/abctau_tests/tutorial1.ipynb",
+                "notebooks/abctau_tests/tutorial1_estimating_taus.ipynb",
+                "notebooks/abctau_tests/tutorial2_visualize_results.ipynb",
+                "notebooks/methods_example.ipynb",
+                "notebooks/mice/calculate_and_plot_acf.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_area.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_area_n_trials.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_area_signal_len.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_unit_n_trials.ipynb",
+                "notebooks/mice/calculate_and_plot_tau_per_unit_signal_len.ipynb",
+                "notebooks/mice/calculate_lv.ipynb",
+                "notebooks/mice/generate_trials_dataset.ipynb",
+                "notebooks/mice/load_dataset.ipynb",
+                "notebooks/mice/plot_dataset_info.ipynb",
+                "notebooks/mice/plot_tau_per_area_spread.ipynb",
+                "notebooks/mice/plot_taus_inclusion.ipynb",
+                "notebooks/mice/plot_taus_parametric_inclusion_n_trials-Copy1.ipynb",
+                "notebooks/mice/plot_taus_parametric_inclusion_var_duration-Copy1.ipynb",
+                "notebooks/mice/resampling_params_estimate.ipynb",
+                "notebooks/mice/test_bugs.ipynb",
+                "notebooks/monkey/calculate_acf.ipynb",
+                "notebooks/monkey/calculate_tau.ipynb",
+                "notebooks/monkey/paper_fig2.ipynb",
+                "notebooks/monkey/paper_plots/paper_calculate_dataset_constraints.ipynb",
+                "notebooks/monkey/paper_plots/paper_compare_unit_fits.ipynb",
+                "notebooks/monkey/paper_plots/paper_plot_dataset_info.ipynb",
+                "notebooks/monkey/paper_plots/paper_population_tau.ipynb",
+                "notebooks/monkey/paper_plots/plot_acf.ipynb",
+                "notebooks/monkey/paper_plots/plot_datasets_excluded_units_5papers.ipynb",
+                "notebooks/monkey/plot_dataset_info_and_sua_raster.ipynb",
+                "notebooks/monkey/todo_calculate_acf_parametric.ipynb",
+                "notebooks/monkey/todo_paper_fig2_extended_subsampling.ipynb",
+                "notebooks/synthetic/calculate_lv.ipynb",
+                "notebooks/synthetic/compute_time_full_signal.ipynb",
+                "notebooks/synthetic/compute_time_trials.ipynb",
+                "notebooks/synthetic/data_gen_examples.ipynb",
+                "notebooks/synthetic/generate_spike_trains.ipynb",
+                "notebooks/synthetic/generate_summary_datasets.ipynb",
+                "notebooks/synthetic/generate_trials_dataset.ipynb",
+                "notebooks/synthetic/plot_acf_full.ipynb",
+                "notebooks/synthetic/plot_acf_full_inclusion.ipynb",
+                "notebooks/synthetic/plot_acf_trials.ipynb",
+                "notebooks/synthetic/plot_taus.ipynb",
+                "notebooks/synthetic/plot_taus_n_lags.ipynb",
+                "notebooks/synthetic/plot_taus_unit_inclusion.ipynb",
+                "notebooks/synthetic/plot_taus_unit_inclusion_n_trials.ipynb",
+                "notebooks/synthetic/plot_taus_unit_inclusion_var_duration.ipynb",
+                "notebooks/synthetic/plot_taus_with_abctau.ipynb",
+                "notebooks/synthetic/resampling_params_estimate.ipynb",
+                "notebooks/synthetic/sttc_concat_zeros.ipynb",
+                "src/isttc/__init__.py",
+                "src/isttc/acfunc.py",
+                "src/isttc/scripts/__init__.py",
+                "src/isttc/scripts/calculate_acf.py",
+                "src/isttc/scripts/calculate_tau.py",
+                "src/isttc/scripts/cfg_global.py",
+                "src/isttc/scripts/estimate_resampling_params_mice.py",
+                "src/isttc/scripts/estimate_resampling_params_syn.py",
+                "src/isttc/scripts/load_monkey_data.py",
+                "src/isttc/scripts/run_allen_mice_data.py",
+                "src/isttc/scripts/run_fit_abctau.py",
+                "src/isttc/scripts/run_syn_data.py",
+                "src/isttc/scripts/spike_train_utils.py",
+                "src/isttc/scripts/timeout_tests_abctau.py",
+                "src/isttc/scripts/timeout_tests_working.py",
+                "src/isttc/spike_utils.py",
+                "src/isttc/tau.py",
+                "tests/test_acf_sttc_fast.py",
+                "tests/test_calculate_tau.py",
+                "tests/test_sttc_elephant.py"
+              ],
+              "all_file_count": 117,
+              "rate_remaining": "41"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "notebooks/mice/load_dataset.ipynb",
+              "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/load_dataset.ipynb",
+              "role": "AllenSDK functional-connectivity session selection and actual spike extraction",
+              "inspected_as_text": true
+            },
+            {
+              "path": "src/isttc/scripts/run_allen_mice_data.py",
+              "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/run_allen_mice_data.py",
+              "role": "Empirical estimator batch analysis",
+              "inspected_as_text": true
+            },
+            {
+              "path": "src/isttc/scripts/calculate_acf.py",
+              "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_acf.py",
+              "role": "Autocorrelation/statistic computation",
+              "inspected_as_text": true
+            },
+            {
+              "path": "src/isttc/scripts/calculate_tau.py",
+              "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_tau.py",
+              "role": "Timescale fitting",
+              "inspected_as_text": true
+            },
+            {
+              "path": "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+              "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+              "role": "Four-estimator empirical comparison",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "AllenSDK",
+            "NumPy/SciPy",
+            "pandas",
+            "author environment.yaml"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "f300a585ee946c8b731c64a948c8b4352f85ad085f16354e15fb01dbece974d0",
+    "audit_record_sha256": "ec3ab4c2a963f71924008e22c74440aee4ab011363fda5e079a31ab92284acb1",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-add-004",
+        "declared_record_sha256": "799492072548b5cd3341d7e758108fbee6a32c114191de266ea072d6fe6545b4",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 53,
+        "record_sha256": "799492072548b5cd3341d7e758108fbee6a32c114191de266ea072d6fe6545b4"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_metadata_followups": [
+      {
+        "checked_on": "2026-11-07",
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+          "bytes": 95149,
+          "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+        },
+        "previous_manifest": {
+          "path": "benchmarks/manifests/paper/PAPER-paper-method-add-004.json",
+          "bytes": 25419,
+          "sha256": "51f6bc70484f9d09e8319e12ac7c60905db37882606a350270aa56da9b1e6f71"
+        },
+        "scope_change": false,
+        "readiness_promotion": false
+      }
+    ]
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU/high; ~60GB source estimate for full empirical collection",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-004/improvement.v1.json",
+      "bytes": 11918,
+      "sha256": "41723b498c629f8bfb35a4ca7658d8390bdbd7440b84556971cc8a1eb6bdb0f4"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-004/historical/task.pre-improvement.v1.json",
+        "bytes": 30897,
+        "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave14-isttc-program-registration",
+        "authoring-delivery-20261105-common-remaining-builds-wave14-next-paper-complete-program",
+        "components-isttc-empirical-diagnostics",
+        "isttc-empirical-estimation",
+        "components-isttc-sensitivity-and-fig7c"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source reconciliation, develop estimators on declared training/development observations with no access to final synthetic truths or empirical reference fits. Any development partition taken from the original panel must preserve an honestly labeled comparison; no new split is retroactively the paper task.",
+    "candidate_freeze": "Freeze estimator program, fitting/failure policy, original roster/condition manifest, trial windows, loss convention, reference recipe and access declarations before final truth scoring.",
+    "final_evaluation": "Evaluate candidate and publication-parity author method on the complete original condition support. Keep continuous, epoched and empirical stability results separate, with all failed estimates retained and no post-result eligibility changes.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "A current-source adapter, original paper contrast and publication-parity author rerun are different artifacts. Recover the original baseline before any paper-win claim; scientific runs and new resource allocations are outside this source curation."
+  },
+  "blocking_issues": [
+    "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
+    "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
+    "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
+    "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
+    "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation.",
+      "Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results.",
+      "Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.",
+      "Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints.",
+      "No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales. Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation. Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results. Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved. Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints. No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-004/historical/task.pre-improvement.v1.json",
+      "bytes": 30897,
+      "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
+    },
+    "notes": "Historical specifications and implementations remain calibration evidence; they do not establish surpassing the source paper."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

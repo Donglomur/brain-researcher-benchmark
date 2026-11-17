@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
-    "Source-paper comparison for PhysioNet-MI four-class balanced accuracy: Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and support-weighted F1 are required supporting metrics, not substitute winning endpoints. The concrete scorer and paired comparator were exercised on all 1,803 original test events using frozen constant-output software controls; those controls are not author or candidate model performance."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover and bind the precise Table 12 preprocessing, all eligible epochs, original run aggregation and REVE-Base access.",
-    "Exceed the source-paper balanced accuracy and a calibrated author rerun under identical original subjects, runs, labels, preprocessing and inputs, by the predeclared justified effect with uncertainty.",
-    "Freeze candidate and hyperparameters using only participants 1–89 before final evaluation on all source test participants 90–109.",
-    "Do not treat better frozen-feature, few-shot, altered-montage, smaller-cohort or new-split results as a Table 12 paper win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-003",
   "canonical_position_one_based": 65,
@@ -218,55 +219,67 @@
     "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-003/improvement.v1.json",
-      "bytes": 16334,
-      "sha256": "3b7d04a02c39793f20f907dd1b6e64ce090067decd7effb9ceeea8a2fbcb7408"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-003/historical/task.pre-improvement.v1.json",
-        "bytes": 15505,
-        "sha256": "fe883d61f8d08161e5fcb53ca88ab41472fc40c4e8e81cb2b6f5202b708faf2e"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-003"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After admission, iterate on original training and validation participants; retain adaptation curves only as separately identified source endpoints.",
-    "candidate_freeze": "Freeze model/checkpoint, preprocessing, class/window manifests, label/pretraining access, hyperparameters, seeds, stopping rules and metric aggregation before test scoring.",
-    "final_evaluation": "One protected evaluation phase on the complete original test partition after exact author calibration and uncertainty/effect policies are accepted.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    "improvement": {
+      "improvement_loop": "After admission, iterate on original training and validation participants; retain adaptation curves only as separately identified source endpoints.",
+      "candidate_freeze": "Freeze model/checkpoint, preprocessing, class/window manifests, label/pretraining access, hyperparameters, seeds, stopping rules and metric aggregation before test scoring.",
+      "final_evaluation": "One protected evaluation phase on the complete original test partition after exact author calibration and uncertainty/effect policies are accepted.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
-    "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
-    "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
-    "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
       "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
       "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
       "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
+        "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
+        "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
+        "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved. Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment. Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately. No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign. Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved. Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment. Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately. No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign. Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -281,8 +294,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

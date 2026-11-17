@@ -1,0 +1,831 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-add-008",
+  "track": "paper",
+  "title": "Opening the black box toward a modular approach to spike sorting",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Recover individual unit spike trains from simulated extracellular recordings and exceed the source end-to-end sorter accuracy results under the original static and drifting conditions. This binds an actually evaluated task in the same paper, not a new proxy endpoint.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Recover individual unit spike trains from simulated extracellular recordings and exceed the source end-to-end sorter accuracy results under the original static and drifting conditions. This binds an actually evaluated task in the same paper, not a new proxy endpoint.",
+    "Source-paper comparison for Original main Figure7 ground-truth unit-accuracy panel with paired static/drifting conditions and companion unit-error counts; exact scalar or joint panel rule unresolved: Corrected per-ground-truth-unit spike accuracy is TPij/(Ni+Nj−TPij), higher is better. Source figure also reports well-detected, false-positive, redundant and overmerged counts. Exact native matching tolerance, assignment/default thresholds and their publication-version binding still require recovery; the erroneous first-preprint denominator must not be used."
+  ],
+  "success_criteria": [
+    "Recover the exact publication-compatible generator and native evaluator dependencies, full original seed/probe/condition manifest for the predeclared complete source panel, and its published score arrays before admission.",
+    "Compare a frozen end-to-end method with the original source methods, including Lupin and the strongest matching comparator, on all recordings of the predeclared original panel with identical scoring and permitted inputs.",
+    "Predeclare the exact source-panel claim, meaningful effects, required companion error-count outcomes, aggregation and dependence-aware uncertainty. Retain every source condition within that panel; no favorable SNR, unit, seed or motion subset may define victory after results. A complete main-panel win need not cover unrelated supplementary probes, but must not claim them.",
+    "Keep true spike assignments and other oracle component inputs out of end-to-end candidate inference. A perfect-template or true-peak component benchmark cannot replace end-to-end sorting.",
+    "Original public-seed performance and any newly protected-seed extension must be reported separately; the extension cannot become a same-task paper win.",
+    "The legacy Figure 8 curation/yield/raster implementation remains calibration only and cannot establish simulation accuracy.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-008",
+  "canonical_position_one_based": 21,
+  "paper_identity": {
+    "url": "https://doi.org/10.7554/eLife.110588.3",
+    "publication_year": 2026,
+    "venue": "eLife",
+    "publication_metadata": {
+      "status": "version_of_record",
+      "work_doi": "10.7554/eLife.110588",
+      "version_doi": "10.7554/eLife.110588.3",
+      "version_of_record_published": "2026-09-25",
+      "reviewed_preprint_v2_doi": "10.7554/eLife.110588.2",
+      "reviewed_preprint_v2_published": "2026-09-03",
+      "primary_source": "https://elifesciences.org/articles/110588",
+      "verified_on": "2026-11-07"
+    }
+  },
+  "input_assets": {
+    "routes": [
+      "https://api.dandiarchive.org/api/dandisets/000939/versions/0.250207.0025/assets/?page_size=100"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "sub-A1824/sub-A1824_behavior+ecephys+ogen.nwb",
+          "bytes": 1496267621,
+          "asset_id": "03683ad0-e0c4-4281-8328-8882df292728"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "sub-A1815/sub-A1815_behavior+ecephys+ogen.nwb",
+          "bytes": 1599805366,
+          "asset_id": "bdab958a-d477-4f97-a007-fac7f4fd53fd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "sub-A1808/sub-A1808_behavior+ecephys+ogen.nwb",
+          "bytes": 1612928856,
+          "asset_id": "86eea541-fb5e-4bfb-bb47-e987d04f9fc0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "sub-A1821/sub-A1821_behavior+ecephys+ogen.nwb",
+          "bytes": 1837525925,
+          "asset_id": "ffb0559f-773c-4d94-9187-0e07bf6a99ae"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "sub-A1813/sub-A1813_behavior+ecephys+ogen.nwb",
+          "bytes": 1857748324,
+          "asset_id": "b6fe281d-18e0-452b-92b7-bb9e8f26c83a"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "sub-A3703/sub-A3703_behavior+ecephys.nwb",
+          "bytes": 1072771120,
+          "asset_id": "5a4a92f6-7823-4c8b-b798-639babde0837"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "sub-A3702/sub-A3702_behavior+ecephys.nwb",
+          "bytes": 2007197177,
+          "asset_id": "af795820-bc09-4494-9da8-d2aa9aad4724"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "sub-A3701/sub-A3701_behavior+ecephys.nwb",
+          "bytes": 2313816221,
+          "asset_id": "b6ff2873-48bf-4175-a923-b8ca09e05ef8"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "sub-A3705/sub-A3705_behavior+ecephys.nwb",
+          "bytes": 1868265424,
+          "asset_id": "6599c37a-1521-4bc9-8246-52861da4ae30"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "sub-A3706/sub-A3706_behavior+ecephys.nwb",
+          "bytes": 1817319089,
+          "asset_id": "853e051e-8ef2-40ac-8772-d9b1360ba585"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "sub-A3708/sub-A3708_behavior+ecephys.nwb",
+          "bytes": 2158050961,
+          "asset_id": "6460e312-f337-4fdb-9083-91450ecbf3ba"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "sub-A3711/sub-A3711_behavior+ecephys.nwb",
+          "bytes": 1658628651,
+          "asset_id": "d74018d6-f575-452f-83d4-70dc50be1230"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "sub-A3710/sub-A3710_behavior+ecephys.nwb",
+          "bytes": 2033784228,
+          "asset_id": "1557c68d-2b04-4448-b702-319b1613002a"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "sub-A3712/sub-A3712_behavior+ecephys.nwb",
+          "bytes": 1842596003,
+          "asset_id": "7253aefe-4768-49cd-961d-3d32347f1086"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/14",
+        "recorded_fields": {
+          "name": "sub-A3713/sub-A3713_behavior+ecephys.nwb",
+          "bytes": 1844523465,
+          "asset_id": "5ef95246-61d1-4232-aeec-a37052faecc4"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/15",
+        "recorded_fields": {
+          "name": "sub-A3716/sub-A3716_behavior+ecephys.nwb",
+          "bytes": 1958949323,
+          "asset_id": "6c5babcc-e223-446d-a8dc-7649f302b633"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/16",
+        "recorded_fields": {
+          "name": "sub-A3717/sub-A3717_behavior+ecephys.nwb",
+          "bytes": 1947291044,
+          "asset_id": "301c5855-2d55-4a7c-b275-43d2ba47f678"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/17",
+        "recorded_fields": {
+          "name": "sub-A3723/sub-A3723_behavior+ecephys.nwb",
+          "bytes": 1910688213,
+          "asset_id": "f2d5eef1-c453-4010-8714-c23d7b26d525"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/18",
+        "recorded_fields": {
+          "name": "sub-A5505/sub-A5505_behavior+ecephys.nwb",
+          "bytes": 1748970246,
+          "asset_id": "4ed3b1ac-7173-4b5e-b978-88c816a92743"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/19",
+        "recorded_fields": {
+          "name": "sub-A5506/sub-A5506_behavior+ecephys.nwb",
+          "bytes": 1752465851,
+          "asset_id": "e110d46a-2a9e-481e-9579-2f69141ef85a"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/20",
+        "recorded_fields": {
+          "name": "sub-A5507/sub-A5507_behavior+ecephys.nwb",
+          "bytes": 1939471561,
+          "asset_id": "22889cfa-7e77-4a81-8c08-8cf1bb75cb87"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/21",
+        "recorded_fields": {
+          "name": "sub-A9701/sub-A9701_behavior+ecephys+ogen.nwb",
+          "bytes": 1481511776,
+          "asset_id": "1631676c-1031-463a-934c-486162eb0d4b"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/22",
+        "recorded_fields": {
+          "name": "sub-A5508/sub-A5508_behavior+ecephys.nwb",
+          "bytes": 1785163134,
+          "asset_id": "2f1f244b-d258-4db6-af85-07fd300b2360"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/23",
+        "recorded_fields": {
+          "name": "sub-A5801/sub-A5801_behavior+ecephys.nwb",
+          "bytes": 965416669,
+          "asset_id": "642360f3-2c70-42f1-b789-9bf493a7ac56"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/24",
+        "recorded_fields": {
+          "name": "sub-A3728/sub-A3728_behavior+ecephys.nwb",
+          "bytes": 1409002179,
+          "asset_id": "f07e179a-403d-4d11-9452-ffab2af83996"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/25",
+        "recorded_fields": {
+          "name": "sub-A3730/sub-A3730_behavior+ecephys.nwb",
+          "bytes": 1659612133,
+          "asset_id": "e9149ddb-0e69-4cbf-81d5-03ac75f980ad"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/26",
+        "recorded_fields": {
+          "name": "sub-A3707/sub-A3707_behavior+ecephys.nwb",
+          "bytes": 1802574224,
+          "asset_id": "4aa9c44e-922c-4397-9d58-e5ad96d9f48c"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/27",
+        "recorded_fields": {
+          "name": "sub-A3709/sub-A3709_behavior+ecephys.nwb",
+          "bytes": 2138102762,
+          "asset_id": "f0a6cefd-51a3-4e50-9caa-7746b9bbfcc9"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/28",
+        "recorded_fields": {
+          "name": "sub-A6211/sub-A6211_behavior+ecephys+ogen.nwb",
+          "bytes": 1752869757,
+          "asset_id": "67ec2d7e-8a3e-4697-a5cd-ef32530958c7"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/29",
+        "recorded_fields": {
+          "name": "sub-A6215/sub-A6215_behavior+ecephys+ogen.nwb",
+          "bytes": 1747875015,
+          "asset_id": "c46df8f5-b65e-48c4-a918-975e76481186"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/30",
+        "recorded_fields": {
+          "name": "sub-A6216/sub-A6216_behavior+ecephys+ogen.nwb",
+          "bytes": 1751403798,
+          "asset_id": "4356d217-a3df-4d79-80ab-79ff1493ab49"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "sub-A1824/sub-A1824_behavior+ecephys+ogen.nwb",
+          "bytes": 1496267621,
+          "asset_id": "03683ad0-e0c4-4281-8328-8882df292728"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "sub-A1815/sub-A1815_behavior+ecephys+ogen.nwb",
+          "bytes": 1599805366,
+          "asset_id": "bdab958a-d477-4f97-a007-fac7f4fd53fd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "sub-A1808/sub-A1808_behavior+ecephys+ogen.nwb",
+          "bytes": 1612928856,
+          "asset_id": "86eea541-fb5e-4bfb-bb47-e987d04f9fc0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-008"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Real extracellular NWB voltage recordings plus external sorter and curation dependencies.",
+      "data_urls": [
+        "https://api.dandiarchive.org/api/dandisets/000939/versions/0.250207.0025/assets/?page_size=100"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://api.dandiarchive.org/api/dandisets/000939/versions/0.250207.0025/assets/?page_size=100",
+          "version": "0.250207.0025",
+          "files": {
+            "listed_file_count": 31,
+            "representative_files": [
+              {
+                "name": "sub-A1824/sub-A1824_behavior+ecephys+ogen.nwb",
+                "bytes": 1496267621,
+                "asset_id": "03683ad0-e0c4-4281-8328-8882df292728"
+              },
+              {
+                "name": "sub-A1815/sub-A1815_behavior+ecephys+ogen.nwb",
+                "bytes": 1599805366,
+                "asset_id": "bdab958a-d477-4f97-a007-fac7f4fd53fd"
+              },
+              {
+                "name": "sub-A1808/sub-A1808_behavior+ecephys+ogen.nwb",
+                "bytes": 1612928856,
+                "asset_id": "86eea541-fb5e-4bfb-bb47-e987d04f9fc0"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "total_files": 31,
+          "metadata_inspected": true,
+          "recordings_downloaded": false
+        }
+      ],
+      "source_bridge": "Modular spike sorting on the paper-linked real rodent electrophysiology: compare official sorter configurations on predeclared DANDI000939 recordings and regenerate curation-quality comparisons.",
+      "code_url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper",
+      "code_revision_or_archive_version": "d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1",
+      "entrypoints": [
+        {
+          "path": "notebooks/real_data_figure/sort_all_real_data.py",
+          "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_all_real_data.py",
+          "role": "Paper real-data source list and batch orchestration",
+          "inspected_as_text": true
+        },
+        {
+          "path": "notebooks/real_data_figure/sort_one_piece_of_data.py",
+          "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_one_piece_of_data.py",
+          "role": "Exact sorter/preprocessing configurations and analysis",
+          "inspected_as_text": true
+        },
+        {
+          "path": "notebooks/real_data_figure/generate_curation_data.py",
+          "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/generate_curation_data.py",
+          "role": "Real recording curation metrics",
+          "inspected_as_text": true
+        },
+        {
+          "path": "notebooks/real_data_figure/make_drift_plots.py",
+          "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/make_drift_plots.py",
+          "role": "Drift visualization/analysis",
+          "inspected_as_text": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Real recordings lack universal spike ground truth; quality/yield is not accuracy and is susceptible to metric optimization.",
+        "Need pin external sorter and curation-model versions before reference qualification.",
+        "Exclude other paper sources and full synthetic suite from this bounded readiness claim."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-008",
+        "versions_and_loader_contract": {
+          "scope_description": "Modular spike sorting on the paper-linked real rodent electrophysiology: compare official sorter configurations on predeclared DANDI000939 recordings and regenerate curation-quality comparisons.",
+          "unresolved_coverage": [
+            "Real recordings lack universal spike ground truth; quality/yield is not accuracy and is susceptible to metric optimization.",
+            "Need pin external sorter and curation-model versions before reference qualification.",
+            "Exclude other paper sources and full synthetic suite from this bounded readiness claim."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper",
+    "revision_or_archive_version": "d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1",
+    "entrypoints": [
+      {
+        "path": "notebooks/real_data_figure/sort_all_real_data.py",
+        "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_all_real_data.py",
+        "role": "Paper real-data source list and batch orchestration",
+        "inspected_as_text": true
+      },
+      {
+        "path": "notebooks/real_data_figure/sort_one_piece_of_data.py",
+        "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_one_piece_of_data.py",
+        "role": "Exact sorter/preprocessing configurations and analysis",
+        "inspected_as_text": true
+      },
+      {
+        "path": "notebooks/real_data_figure/generate_curation_data.py",
+        "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/generate_curation_data.py",
+        "role": "Real recording curation metrics",
+        "inspected_as_text": true
+      },
+      {
+        "path": "notebooks/real_data_figure/make_drift_plots.py",
+        "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/make_drift_plots.py",
+        "role": "Drift visualization/analysis",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-008",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper",
+            "commit": "d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1",
+            "author_linkage": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC13614784/",
+              "https://github.com/SpikeInterface/sorting_components_benchmark_paper",
+              "https://github.com/SpikeInterface/spikeinterface",
+              "https://dandiarchive.org/dandiset/000939/0.250207.0025",
+              "https://zenodo.org/records/20407862"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/README.md",
+            "license_source": "https://raw.githubusercontent.com/SpikeInterface/sorting_components_benchmark_paper/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/SpikeInterface/sorting_components_benchmark_paper/git/trees/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "notebooks/clustering_drifting.ipynb",
+                "notebooks/clustering_drifting.py",
+                "notebooks/configuration.py",
+                "notebooks/dataset.py",
+                "notebooks/detection_method.ipynb",
+                "notebooks/detection_method.py",
+                "notebooks/figure_dataset.ipynb",
+                "notebooks/matching_drift.ipynb",
+                "notebooks/matching_drift.py",
+                "notebooks/matching_drift_aware.ipynb",
+                "notebooks/matching_drift_aware.py",
+                "notebooks/real_data_figure/generate_curation_data.py",
+                "notebooks/real_data_figure/make_drift_plots.py",
+                "notebooks/real_data_figure/sort_all_real_data.py",
+                "notebooks/real_data_figure/sort_one_piece_of_data.py",
+                "notebooks/slurm_tools.py",
+                "notebooks/sorters_simulation.ipynb",
+                "notebooks/sorters_simulation.py",
+                "notebooks/sorters_simulation_other_probes.ipynb",
+                "notebooks/sorters_simulation_other_probes.py"
+              ],
+              "all_file_count": 28,
+              "rate_remaining": "37"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "notebooks/real_data_figure/sort_all_real_data.py",
+              "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_all_real_data.py",
+              "role": "Paper real-data source list and batch orchestration",
+              "inspected_as_text": true
+            },
+            {
+              "path": "notebooks/real_data_figure/sort_one_piece_of_data.py",
+              "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/sort_one_piece_of_data.py",
+              "role": "Exact sorter/preprocessing configurations and analysis",
+              "inspected_as_text": true
+            },
+            {
+              "path": "notebooks/real_data_figure/generate_curation_data.py",
+              "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/generate_curation_data.py",
+              "role": "Real recording curation metrics",
+              "inspected_as_text": true
+            },
+            {
+              "path": "notebooks/real_data_figure/make_drift_plots.py",
+              "url": "https://github.com/SpikeInterface/sorting_components_benchmark_paper/blob/d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1/notebooks/real_data_figure/make_drift_plots.py",
+              "role": "Drift visualization/analysis",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "SpikeInterface",
+            "sorter-specific dependencies",
+            "CUDA for Kilosort4",
+            "Bombcell/UnitRefine as used"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 340247,
+      "sha256": "8c59d8d08d1dea4cad6b20ba695d0055ec70af840c34d487e67883430b21853b"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "e08cc419181a4af9a20494b62ee60aefe61b003a46ef4155d73a059152bcec0d",
+    "audit_record_sha256": "022f6d63b65f51b0e6bdbbf12cb6176a9878681720ada4236011ef702a9b607a",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-add-008",
+        "declared_record_sha256": "65240ceb66b05772c47274ec36e0ce41fd293ec272366baa736276b9f398124e",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 57,
+        "record_sha256": "65240ceb66b05772c47274ec36e0ce41fd293ec272366baa736276b9f398124e"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "catalog_metadata_history": [
+      {
+        "checked_on": "2026-11-07",
+        "before_paper_identity": {
+          "url": "https://doi.org/10.7554/eLife.110588",
+          "publication_year": 2026,
+          "venue": "eLife reviewed preprint"
+        },
+        "before_canonical_row_sha256": "27e0924c3cd0ff15732a506a2e6bdef7f1dddbdd4aeac9d13ba8f69107e2eb76",
+        "before_canonical_roster": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 333367,
+          "sha256": "25bf6dc0b42ab70c1cca19a094b489d3b16204abe7cabe3cdfd69f1b93f92c57"
+        },
+        "historical_construction_audit": {
+          "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+          "bytes": 879969,
+          "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+        },
+        "scientific_scope_change": false,
+        "readiness_promotion": false,
+        "primary_source": "https://elifesciences.org/articles/110588",
+        "before_roster_publication": {
+          "paper_url": "https://doi.org/10.7554/eLife.110588",
+          "publication_year": 2026,
+          "venue": "eLife reviewed preprint"
+        }
+      }
+    ]
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU/CPU high; individual NWBs~1–2GB in inspected subset, multiple sorter fits",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-008/improvement.v1.json",
+      "bytes": 15111,
+      "sha256": "78090e76e0b85e4b24b1c178dde1ccdf817a2615284a00eb949c7cd61977bcde"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-008/historical/task.pre-improvement.v1.json",
+        "bytes": 42776,
+        "sha256": "6350dbe7e3039ba9625ab4a5e28a31975b63cd8d2c09fbbb9c21ddd2eb0b10c6"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-add-008-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery and admission, use a predeclared development process for full sorter improvements under a common information and compute budget. Original public benchmark exposure must be recorded; newly generated development seeds cannot redefine the final source comparison.",
+    "candidate_freeze": "Freeze the original source panel and complete within-panel manifest, algorithm, code/dependencies, effective parameters, preprocessing, oracle-access exclusions, source comparators, metric aggregation and uncertainty rule before candidate selection/final scoring.",
+    "final_evaluation": "Score the fixed candidate and qualified author replay against the predeclared complete original panel ground truth; retain its required controls and companion outcomes. Report numerical source reproduction separately from meaningful superiority and name exactly which source result is surpassed; unrelated supplemental panels are separate claims.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published simulation results, rerun author sorter results and current SOTA remain separate. Real-recording quality proxies and local generated controls cannot replace the simulation source baseline."
+  },
+  "blocking_issues": [
+    "Exact published Figure 7/supplement accuracy and unit-error-count arrays are not pinned.",
+    "Publication-compatible SpikeInterface, generator, sorter versions and effective matching/default rules are unresolved.",
+    "Original simulated byte identity, source binning/weighting and numerical author replay have not been qualified.",
+    "A scalar or joint panel decision rule, meaningful effect, dependence-aware uncertainty and common episode budgets are not fixed.",
+    "Historical evaluator only reconstructs real-data curation/raster outputs; a working source-compatible simulation scorer is still required."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact published Figure 7/supplement accuracy and unit-error-count arrays are not pinned.",
+      "Publication-compatible SpikeInterface, generator, sorter versions and effective matching/default rules are unresolved.",
+      "Original simulated byte identity, source binning/weighting and numerical author replay have not been qualified.",
+      "A scalar or joint panel decision rule, meaningful effect, dependence-aware uncertainty and common episode budgets are not fixed.",
+      "Historical evaluator only reconstructs real-data curation/raster outputs; a working source-compatible simulation scorer is still required."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The same source paper evaluates end-to-end spike sorting against known simulated spike trains in Figure 7 and Figure 7 supplement 1. This is a legitimate ordered original-paper task even though the historical local implementation covers only real-data curation. The source generator and five-seed protocol are recovered, but exact published accuracy/count arrays, dependency-bound matching defaults and figure aggregation are not yet pinned, so no improvement episode is admitted. Exact published Figure 7/supplement accuracy and unit-error-count arrays are not pinned. Publication-compatible SpikeInterface, generator, sorter versions and effective matching/default rules are unresolved. Original simulated byte identity, source binning/weighting and numerical author replay have not been qualified. A scalar or joint panel decision rule, meaningful effect, dependence-aware uncertainty and common episode budgets are not fixed. Historical evaluator only reconstructs real-data curation/raster outputs; a working source-compatible simulation scorer is still required.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-008/historical/task.pre-improvement.v1.json",
+      "bytes": 42776,
+      "sha256": "6350dbe7e3039ba9625ab4a5e28a31975b63cd8d2c09fbbb9c21ddd2eb0b10c6"
+    },
+    "notes": "Preserve the historical real-recording four-sorter curation and raster implementation and its controls as calibration only. It does not constrain the whole-paper scope: the original Figure 7/supplement ground-truth task is now identified, without changing historical files or claiming readiness."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

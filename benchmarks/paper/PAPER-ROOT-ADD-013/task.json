@@ -4,17 +4,20 @@
   "track": "paper",
   "title": "Food intake enhances hippocampal sharp wave-ripples",
   "status": "ineligible",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate pre/post-feeding changes in hippocampal SWR power, duration and rate, and their association with meal amount and sleep depth. This is an observational/experimental biological effect-estimation task.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Estimate pre/post-feeding changes in hippocampal SWR power, duration and rate, and their association with meal amount and sleep depth. This is an observational/experimental biological effect-estimation task.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate pre/post-feeding changes in hippocampal SWR power, duration and rate, and their association with meal amount and sleep depth. This is an observational/experimental biological effect-estimation task.",
-    "Source-paper comparison for No eligible ordered method-performance metric for the registered feeding-effect estimand: Ripple fold changes, meal correlations and mediation coefficients describe physiology. None is an ordered method-performance loss whose improvement establishes a paper win."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "This registration cannot admit an improvement win while its target remains reproduction or re-estimation of feeding-related physiological effects.",
-    "Any proposed predictive benchmark needs a separately reviewed source task, original performance comparator and registration; neither a new split nor archive-summary agreement may be relabelled as surpassing this paper.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "ROOT-ADD-013",
   "canonical_position_one_based": 44,
@@ -240,57 +243,65 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-ROOT-ADD-013/improvement.v1.json",
-      "bytes": 8505,
-      "sha256": "a361a2a82717aa4b95e58cff346ecc78903422342c686773c4300ec931413501"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "ineligible",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-013/historical/task.pre-improvement.v1.json",
-        "bytes": 22842,
-        "sha256": "098ecc25b7f1047833bff4854d076a0c1eef1f85c31df358190a6ad96914b688"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-root-add-013"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-013/implementations/registered-runtime/manifest.json",
-        "bytes": 16411,
-        "sha256": "753d1b651b13f933ad453ce4bb91e5b53fcc1e9266099e11e861c6420437ab15"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive for paper-superiority scoring. Historical reanalysis may be retained as calibration and scientific critique.",
-    "candidate_freeze": "No active improvement episode is admitted for this source task.",
-    "final_evaluation": "Do not convert archived-report agreement, stronger dose association or more significant tests into a paper-win reward.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Retain native results and historical archive reconstruction as separate descriptive/calibration evidence; no authored reference or improved significance is a paper baseline."
+    "improvement": {
+      "improvement_loop": "Inactive for paper-superiority scoring. Historical reanalysis may be retained as calibration and scientific critique.",
+      "candidate_freeze": "No active improvement episode is admitted for this source task.",
+      "final_evaluation": "Do not convert archived-report agreement, stronger dose association or more significant tests into a paper-win reward.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Retain native results and historical archive reconstruction as separate descriptive/calibration evidence; no authored reference or improved significance is a paper baseline."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "The source task has no ordered predictive or estimation-accuracy endpoint for declaring superiority.",
-    "Primary metadata does not establish the 95-session/10-animal archive mapping to published experimental panels or resolve legacy condition/detector field names.",
-    "A predictive reformulation would change the task and needs separate source-grounded registration."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "The source task has no ordered predictive or estimation-accuracy endpoint for declaring superiority.",
       "Primary metadata does not establish the 95-session/10-animal archive mapping to published experimental panels or resolve legacy condition/detector field names.",
       "A predictive reformulation would change the task and needs separate source-grounded registration."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "The source task has no ordered predictive or estimation-accuracy endpoint for declaring superiority.",
+        "Primary metadata does not establish the 95-session/10-animal archive mapping to published experimental panels or resolve legacy condition/detector field names.",
+        "A predictive reformulation would change the task and needs separate source-grounded registration."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The registered task re-estimates feeding effects on ripple power, duration and NREM-normalized rates. The paper reports biological contrasts, correlations and mediation, not a predictive method with an ordered performance score. Larger feeding effects or smaller p-values would alter the scientific finding rather than surpass the paper. The preserved runtime explicitly measures archived-report fidelity, which is calibration only. The source task has no ordered predictive or estimation-accuracy endpoint for declaring superiority. Primary metadata does not establish the 95-session/10-animal archive mapping to published experimental panels or resolve legacy condition/detector field names. A predictive reformulation would change the task and needs separate source-grounded registration.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The registered task re-estimates feeding effects on ripple power, duration and NREM-normalized rates. The paper reports biological contrasts, correlations and mediation, not a predictive method with an ordered performance score. Larger feeding effects or smaller p-values would alter the scientific finding rather than surpass the paper. The preserved runtime explicitly measures archived-report fidelity, which is calibration only. The source task has no ordered predictive or estimation-accuracy endpoint for declaring superiority. Primary metadata does not establish the 95-session/10-animal archive mapping to published experimental panels or resolve legacy condition/detector field names. A predictive reformulation would change the task and needs separate source-grounded registration.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -305,8 +316,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

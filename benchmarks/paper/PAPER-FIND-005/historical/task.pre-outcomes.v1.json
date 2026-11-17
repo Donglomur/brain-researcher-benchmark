@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-005",
+  "track": "paper",
+  "title": "A brain-wide map of neural activity during complex behaviour",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+    "Source-paper comparison for Original per-target regional decoding effect vector: balanced accuracy or R-squared, with source session-null correction: Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores."
+  ],
+  "success_criteria": [
+    "Recover and pin the original numerical per-target/per-region baseline, masks, folds and coverage before admitting an improvement episode.",
+    "Replay the source decoder on its original within-session task and distinguish that rerun score from the published values.",
+    "Candidate and author comparator must share inputs, preprocessing, split, metric, aggregation and declared budgets; no dropped regions, easier target subsets or newly pooled score can establish paper superiority.",
+    "Freeze the candidate before final comparison and satisfy a justified meaningful-effect and uncertainty rule. More significant regions or smaller p-values alone do not qualify.",
+    "Treat new mouse-held-out splits and the local single-cell evaluator as separately labelled extensions/calibration, never as original-decoder wins.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-005",
+  "canonical_position_one_based": 26,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41586-025-09235-0",
+    "publication_year": 2025,
+    "venue": "Nature"
+  },
+  "input_assets": {
+    "routes": [
+      "https://int-brain-lab.github.io/iblenv/notebooks_external/data_release_brainwidemap.html"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/0",
+        "recorded_fields": {
+          "path": "brainwidemap/fixtures/2023_12_bwm_release.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/1",
+        "recorded_fields": {
+          "path": "spikes.times, spikes.clusters, clusters and trials ALF objects"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-005"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Public IBL sorted spikes, units and trial events under2023_12_bwm_release; no raw AP-sort reconstruction.",
+      "data_urls": [
+        "https://int-brain-lab.github.io/iblenv/notebooks_external/data_release_brainwidemap.html"
+      ],
+      "input_version": "IBL freeze 2023_12_bwm_release; author loader enforces unit-version hash",
+      "input_inventory_or_loader_evidence": {
+        "listed_file_count": 2,
+        "representative_files": [
+          {
+            "path": "brainwidemap/fixtures/2023_12_bwm_release.csv",
+            "source": "Author session selector; includes session/probe IDs"
+          },
+          {
+            "path": "spikes.times, spikes.clusters, clusters and trials ALF objects",
+            "source": "Author ONE loader and data_loading_examples.py"
+          }
+        ],
+        "limit": "Inventory examples; not payload/schema qualification."
+      },
+      "source_bridge": "Official bwm_query freeze=2023_12_bwm_release selects released sessions; load_good_units and load_trials_and_mask retrieve corresponding spike times, clusters and task events.",
+      "code_url": "https://github.com/int-brain-lab/paper-brain-wide-map",
+      "code_revision_or_archive_version": "118fc36cb3602934466ad2c6087c2b3b441f9f1f",
+      "entrypoints": [
+        "data_loading_examples.py",
+        "brainwidemap/bwm_loading.py",
+        "brainwidemap/decoding/04_decode_single_session.py"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-005",
+        "versions_and_loader_contract": {
+          "input_version": "IBL freeze 2023_12_bwm_release; author loader enforces unit-version hash",
+          "input_code_bridge": "Official bwm_query freeze=2023_12_bwm_release selects released sessions; load_good_units and load_trials_and_mask retrieve corresponding spike times, clusters and task events.",
+          "readiness_scope": "Only the central empirical outputs listed here; no claim of reproducing every figure or acquisition/preprocessing stage.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "input_version",
+          "input_code_bridge"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/int-brain-lab/paper-brain-wide-map",
+    "revision_or_archive_version": "118fc36cb3602934466ad2c6087c2b3b441f9f1f",
+    "entrypoints": [
+      "data_loading_examples.py",
+      "brainwidemap/bwm_loading.py",
+      "brainwidemap/decoding/04_decode_single_session.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-005",
+        "recorded": {
+          "code_url": "https://github.com/int-brain-lab/paper-brain-wide-map",
+          "code_revision": "118fc36cb3602934466ad2c6087c2b3b441f9f1f",
+          "entrypoints": [
+            "data_loading_examples.py",
+            "brainwidemap/bwm_loading.py",
+            "brainwidemap/decoding/04_decode_single_session.py"
+          ],
+          "dependencies": [
+            "Python 3.10",
+            "ONE-api, ibllib/brainbox, iblatlas",
+            "requirements_frozen.txt"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "4cb19d5fc782001ee071e0e7024b69f4eb55271e01886f208e22df2fa5799063",
+    "audit_record_sha256": "231726a832e30c5df9dadfc9ec2f61799a62fa1cfa384b03a0b61485cdf92239",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-005",
+        "declared_record_sha256": "3776f31501c2a69e9def280d2f655b53419eb42ac3b2724316139c17e867e3eb",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 4,
+        "record_sha256": "3776f31501c2a69e9def280d2f655b53419eb42ac3b2724316139c17e867e3eb"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "Multicore CPU server for full cohort; workstation for bounded regional analyses; estimated hours to days.",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-005/improvement.v1.json",
+      "bytes": 10845,
+      "sha256": "bd5d664c2ad3c3087597dfaa3d58d3c28c2e2aba4202bee675a22b0b00576ed2"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-005/historical/task.pre-improvement.v1.json",
+        "bytes": 15756,
+        "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
+      },
+      "implementation_ids": [
+        "construction-paper-find-005-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending baseline/source reconciliation. Once admitted, iterate only on the declared source training and validation folds with fixed full regional coverage.",
+    "candidate_freeze": "Before final outer-test replay, freeze method, feature windows, hyperparameters, source revision, fold manifest and access/resource ledger.",
+    "final_evaluation": "One protected comparison under the exact original nested-CV scoring contract after competent author replay; public historical targets are not newly blind.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published regional scores, reproduced author decoder scores and candidate scores remain distinct. Initial-evaluator-v1 single-cell sensitivity is calibration only."
+  },
+  "blocking_issues": [
+    "Original numerical per-target regional effect vector is not recovered.",
+    "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+    "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+    "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original numerical per-target regional effect vector is not recovered.",
+      "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+      "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+      "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The broad regional representation registration includes genuine original decoding endpoints. However, the reviewed paper/code do not establish the exact original regional score vector and complete cohort/scoring manifest needed for a paper comparison. The local single-cell significance/fraction evaluator cannot substitute for source population decoding. A new cross-mouse split or pooled scalar would be an extension. Original numerical per-target regional effect vector is not recovered. Complete source cohort, endpoint-specific masks and region coverage remain unfrozen. Manuscript versus pinned logistic configuration and unit/region filtering require adjudication. No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-005/historical/task.pre-improvement.v1.json",
+      "bytes": 15756,
+      "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
+    },
+    "notes": "Preserve initial-evaluator-v1 sorted-spike single-cell sensitivity and regional fractions. Its choice-window/profile discrepancy and prospective mouse-weighted summary cannot establish decoder superiority."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-020",
+  "track": "paper",
+  "title": "Separable neural signals for reward and emotion prediction errors",
+  "status": "ineligible",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Distinct relationships of reward and emotion prediction errors with FRN, P3a and P3b amplitudes, and associations with subsequent social choices; registered central scope reconstructs the fixed mixed-effects coefficients and uncertainty.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Distinct relationships of reward and emotion prediction errors with FRN, P3a and P3b amplitudes, and associations with subsequent social choices; registered central scope reconstructs the fixed mixed-effects coefficients and uncertainty.",
+    "Source-paper comparison for No ordered source-performance endpoint for the registered mixed-effects ERP coefficient dissociation.: Source fixed-effect estimates and uncertainty for PE terms in participant mixed-effects ERP models, including contrasts across PE coefficients; these are inferential estimands, not a predictive accuracy target."
+  ],
+  "success_criteria": [
+    "The current registered descriptive target cannot admit a same-task paper-performance win.",
+    "Matching published values or the local numerical reference is calibration only.",
+    "A predictive or reconstruction endpoint with an ordered source baseline would require separately reviewed registration; a new split, narrowed cohort or changed endpoint is an extension, never a victory on this task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-020",
+  "canonical_position_one_based": 66,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41467-025-63135-5",
+    "publication_year": 2025,
+    "venue": "Nature Communications"
+  },
+  "input_assets": {
+    "routes": [
+      "https://github.com/jpheffne/2025_epe_eeg/tree/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/data/clean",
+      "https://osf.io/ap4x7/",
+      "https://zenodo.org/records/15739722"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/1/example/0",
+        "recorded_fields": {
+          "name": "201_AYB_clean.set",
+          "bytes": 11062272,
+          "version": 1
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-020"
+      },
+      {
+        "json_pointer": "/data_inputs/1/example/1",
+        "recorded_fields": {
+          "name": "201_AYB_clean.fdt",
+          "bytes": 634470200,
+          "version": 1
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-020"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Pinned2025_epe_eeg source and actual7380trial/41participant behavior+FRN/N2/P3b tables; ERP files have no trial IDs and author bind_cols uses row order.41continuous cleanedEEG pairs exist but raw-to-ERP code is not located.",
+      "official_code": {
+        "url": "https://github.com/jpheffne/2025_epe_eeg",
+        "commit": "4f5767df1516e0ec3c234d51ba36e4b741eb60e8",
+        "license": "MIT",
+        "entrypoints": [
+          "analysis/eeg_epe_ms.Rmd",
+          "data/clean/BEH_ug.csv",
+          "data/clean/df_FRN_N2_offer.csv",
+          "data/clean/df_P3b_offer.csv"
+        ]
+      },
+      "input_routes": [
+        {
+          "url": "https://github.com/jpheffne/2025_epe_eeg/tree/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/data/clean",
+          "license": "MIT"
+        },
+        {
+          "url": "https://osf.io/ap4x7/",
+          "manifest": "https://api.osf.io/v2/nodes/ap4x7/files/osfstorage/685c043bf51ce7d93fd16588/?page[size]=100",
+          "license": "MIT, explicitly identified by OSF project license API"
+        },
+        {
+          "url": "https://zenodo.org/records/15739722",
+          "version": "v1.0.0"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-020",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Trial-level measured FRN/N2, P2, P3a and P3b amplitudes; 41 public continuous artifact-cleaned EEGLAB .set/.fdt pairs also verified by manifest.",
+            "labels": "Behavior table contains sub, trialGlobal, trialLocal, block, partnerID, actual and expected reward/valence/arousal, choice and RT; central prediction errors can be recalculated rather than accepted as opaque outputs.",
+            "alignment": "ERP CSV files have no explicit trial IDs. Official R source uses bind_cols with behavior; preserve original row order and pin all input hashes. Before any relabeling, create checked composite IDs from sub and trialGlobal.",
+            "split": "Participant-held-out generalization and complete social-partner blocks for trial-level extensions; original mixed-effects reproduction keeps participant random effects.",
+            "controls": "Reward versus affect collinearity, experienced outcome versus prediction error, baseline ERP/amplitude, partner identity and trial order. Compare signed and absolute errors without selecting the better result on evaluation data."
+          },
+          "scope_description": "Refit central mixed-effects neural and behavioral dissociation tests from actual trial-level ERP amplitudes and behavior, with continuous cleaned EEG available for a later preprocessing-sensitive extension. Initial scope is not a raw-to-ERP reconstruction."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/jpheffne/2025_epe_eeg",
+    "revision_or_archive_version": "4f5767df1516e0ec3c234d51ba36e4b741eb60e8",
+    "entrypoints": [
+      "analysis/eeg_epe_ms.Rmd",
+      "data/clean/BEH_ug.csv",
+      "data/clean/df_FRN_N2_offer.csv",
+      "data/clean/df_P3b_offer.csv"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-020",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/jpheffne/2025_epe_eeg",
+            "commit": "4f5767df1516e0ec3c234d51ba36e4b741eb60e8",
+            "license": "MIT",
+            "entrypoints": [
+              "analysis/eeg_epe_ms.Rmd",
+              "data/clean/BEH_ug.csv",
+              "data/clean/df_FRN_N2_offer.csv",
+              "data/clean/df_P3b_offer.csv"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "924607318c1d90b44bc5cbdb8d910ae956bdc22eefd59c8d1594bc1459ffb66e",
+    "audit_record_sha256": "da54d4658c16d59bd7de4817619854382e31da7d7b0e190d325fa8a0ffbadf89",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-020",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 19,
+        "record_sha256": "435433615caa904ab5f00bc7bc0c765f72817ba4ebbc8daefce65599059df9f0"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-signal-add-020",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-020/improvement.v1.json",
+      "bytes": 9620,
+      "sha256": "d8b97d011d9c4b1ed75e7842ce9866e4533d8d95aaf83d8e05e930c0596e4919"
+    },
+    "disposition": "ineligible",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-020/historical/task.pre-improvement.v1.json",
+        "bytes": 25938,
+        "sha256": "13331c9e48e24a71a00c713481ecdaa615726a5fda86c9e7d76ef0e4f9fc3292"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-signal-add-020-reward-emotion-erp"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-020/implementations/registered-runtime/manifest.json",
+        "bytes": 18963,
+        "sha256": "f386aad018dd2a8e75387633bea5303f6765e375ad1cfd42b82a1c0c69891e23"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive for this ineligible task; retain the original analysis as a calibration/reproduction component.",
+    "candidate_freeze": "No active improvement candidate is admitted. Any separately registered performance task must freeze its method and source-matched evaluation before final scoring.",
+    "final_evaluation": "No scientific improvement reward is issued from the existing descriptive or reference-reconstruction evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve published descriptive results, any author reruns and local reconstruction references as distinct artifacts; none is promoted to a paper-performance baseline."
+  },
+  "blocking_issues": [
+    "The central source estimands are coefficient/contrast inference, not an ordered predictive benchmark.",
+    "No original held-out predictive split or source score exists for the proposed log-loss extension.",
+    "Independent ERP/behavior trial-key correspondence and continuous-to-ERP extraction provenance are not established by the positional CSV joins."
+  ],
+  "holds": {
+    "task_specific": [
+      "The central source estimands are coefficient/contrast inference, not an ordered predictive benchmark.",
+      "No original held-out predictive split or source score exists for the proposed log-loss extension.",
+      "Independent ERP/behavior trial-key correspondence and continuous-to-ERP extraction provenance are not established by the positional CSV joins."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The registered task estimates source ERP–prediction-error associations. Its coefficients and contrasts have no monotone scientific improvement direction. The existing coefficient-to-reference RMSE rewards numerical reconstruction; a proposed held-out choice log-loss task would change the endpoint and split. The central source estimands are coefficient/contrast inference, not an ordered predictive benchmark. No original held-out predictive split or source score exists for the proposed log-loss extension. Independent ERP/behavior trial-key correspondence and continuous-to-ERP extraction provenance are not established by the positional CSV joins.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-020/historical/task.pre-improvement.v1.json",
+      "bytes": 25938,
+      "sha256": "13331c9e48e24a71a00c713481ecdaa615726a5fda86c9e7d76ef0e4f9fc3292"
+    },
+    "notes": "The qualified local numerical component scores equal-model coefficient RMSE normalized by reference coefficient standard errors for three fixed REML models, with secondary covariance/contrast consistency checks. These diagnose reconstruction, not better-than-paper neural prediction; all existing runs and references remain calibration evidence."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

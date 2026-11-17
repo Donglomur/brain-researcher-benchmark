@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Control of representation updating by higher-order thalamus enables history-based decision-making",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original Figure 3C and Figure 3G findings that PUL suppression and TRN activation reduce neuronal decoding of recent tone prevalence, retaining each panel's original neural inputs, sessions, paired control conditions and indispensable controls. Assess improvement only under an independently justified criterion for this same scientific finding; no such ordered criterion is currently qualified. Report candidate-versus-author decoder superiority separately.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
-    "Source-paper comparison for Original Figure3C/3G context-decoding ROC-AUC, pending exact author metric and aggregation recovery: Recover the original per-condition ROC-AUC calculation, class direction and source aggregation from the exact author runs before selecting a primary predictive score. The local implementation distinguishes source-auto pROC orientation from fixed Randomised-positive AUC; probability-MAE agreement and perturbation p-values are calibration/descriptive outputs."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: Original empirical paired perturbation-versus-control prevalence-decoding contrasts in Figures 3C and 3G: both condition AUCs and paired differences for each source session, with panel-specific neural inputs, six tone identities, session/condition/animal identities, original training procedure and shuffled-label comparator. Preserve the source session-level reproduction and distinguish it from a new animal-level inferential claim. This named result does not imply every surrounding figure or whole-paper reproduction.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: secondary_empirical_method_extension: Candidate-versus-author decoder ROC-AUC comparison on authenticated original inputs and support. This is genuine empirical methodology; higher decoding AUC alone does not establish reproduction or improvement of the perturbation-versus-control biological finding. [coverage: source_supported_measurement_path_native_qualification_unresolved]\nprospective_extension: New temporal or session-held-out evaluation remains separately labeled unless authenticated as the original source protocol. It cannot silently replace the original paired comparison."
   ],
   "success_criteria": [
-    "Recover the published numeric baseline and reconcile author preprocessing, class orientation, original partitions and source population for both 3C and3G.",
-    "Freeze candidate and author-reproduction recipes before final evaluation on the same original support and allowed neural inputs.",
-    "Exceed the faithful author decoder by a justified effect with valid paired uncertainty; reproduce the perturbation contrasts without using a larger contrast or smaller p-value as the win.",
-    "Retain all original sessions and both conditions; do not claim whole-paper improvement from the existing3C-only probability reconstruction.",
-    "Label temporally blocked, session-held-out or animal-held-out decoding as an extension, even if it improves over a rerun author algorithm on that new split.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "FIND-REP-009",
   "canonical_position_one_based": 6,
@@ -1443,62 +1443,98 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-REP-009/improvement.v1.json",
-      "bytes": 11624,
-      "sha256": "9cac22f47f687c0d5eb96259f3cfbfcb13a31bb219b7a80a597277beae9afb91"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-REP-009/historical/task.pre-improvement.v1.json",
-        "bytes": 71818,
-        "sha256": "200b04832b08f8898cc228ed775545f6f2c08573dfc47a6b8eaec40655855fae"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-find-rep-009",
-        "components-thalamus17-fixed-reference"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-FIND-REP-009/implementations/registered-runtime/manifest.json",
-        "bytes": 10851,
-        "sha256": "02047f00a8d096bb6a02f8f90b635599fd01b639b574b8e4d3021c0a91a861f0"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "Inactive until source recovery. A future episode may iterate only on declared development feedback inside the original training portion, keeping the same source task and exposing neither protected test labels nor reference probabilities.",
-    "candidate_freeze": "Commit the complete method, feature/access policy, preprocessing, tuning and seed policy before a single owner-controlled final comparison; no adaptive feedback between sessions.",
-    "final_evaluation": "Use the recovered original 3C and3G supports and source metric. Report all condition/session results and candidate-minus-author differences. Existing artifact grading remains a separate calibration outcome.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Recover and independently audit author scripts and numeric paper outputs; retain any source defects and local repairs as declared provenance. A repaired/new-split baseline must not silently replace the original paper result."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Inactive until source recovery. A future episode may iterate only on declared development feedback inside the original training portion, keeping the same source task and exposing neither protected test labels nor reference probabilities.",
+      "candidate_freeze": "Commit the complete method, feature/access policy, preprocessing, tuning and seed policy before a single owner-controlled final comparison; no adaptive feedback between sessions.",
+      "final_evaluation": "Use the recovered original 3C and3G supports and source metric. Report all condition/session results and candidate-minus-author differences. Existing artifact grading remains a separate calibration outcome.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Recover and independently audit author scripts and numeric paper outputs; retain any source defects and local repairs as declared provenance. A repaired/new-split baseline must not silently replace the original paper result."
+    },
+    "primary_source_limits": [
+      "Resolve the reported 20 versus released 18 Figure 3G session support discrepancy, original session-to-animal joins, panel-specific neural-input support and original train/test partitions.",
+      "Both author scripts explicitly set seed 101; the seed is source-supported. Input ordering, runtime versions and original paper-run partition provenance remain unverified.",
+      "Native AUC vectors, paired statistics, shuffled-label controls and independently qualified numerical agreement criteria remain unresolved.",
+      "Adaptation, arousal/time/drift and sensory-identity controls in S6M/N and S7A constrain broader mechanistic interpretation. Do not claim them reproduced or automatically require every surrounding panel; broader claims require their relevant control evidence.",
+      "No ordered primary superiority criterion is qualified. Higher decoder AUC, a larger perturbation difference or a smaller p-value alone does not establish an improved biological explanation.",
+      "All primary and secondary superiority outcomes remain unresolved; preserving the decoder extension does not establish a qualified candidate-versus-author improvement comparison.",
+      "No task-specific prior authority to replace the biological primary with decoder superiority was established in the bounded exact-artifact, commit and source-owner review. A deliberate method-primary revision needs an explicit recorded scope decision.",
+      "Do not admit mixed biological reproduction and decoder-method improvement as a same-primary bundle. Source recovery does not establish executed parity, scientific outcomes, qualification or SOTA."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
-    "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
-    "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
-    "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
-    "Existing exposed-label probability reconstruction cannot establish predictive superiority."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
       "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
       "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
       "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
       "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+    ],
+    "primary_source_limits": [
+      "Resolve the reported 20 versus released 18 Figure 3G session support discrepancy, original session-to-animal joins, panel-specific neural-input support and original train/test partitions.",
+      "Both author scripts explicitly set seed 101; the seed is source-supported. Input ordering, runtime versions and original paper-run partition provenance remain unverified.",
+      "Native AUC vectors, paired statistics, shuffled-label controls and independently qualified numerical agreement criteria remain unresolved.",
+      "Adaptation, arousal/time/drift and sensory-identity controls in S6M/N and S7A constrain broader mechanistic interpretation. Do not claim them reproduced or automatically require every surrounding panel; broader claims require their relevant control evidence.",
+      "No ordered primary superiority criterion is qualified. Higher decoder AUC, a larger perturbation difference or a smaller p-value alone does not establish an improved biological explanation.",
+      "All primary and secondary superiority outcomes remain unresolved; preserving the decoder extension does not establish a qualified candidate-versus-author improvement comparison.",
+      "No task-specific prior authority to replace the biological primary with decoder superiority was established in the bounded exact-artifact, commit and source-owner review. A deliberate method-primary revision needs an explicit recorded scope decision.",
+      "Do not admit mixed biological reproduction and decoder-method improvement as a same-primary bundle. Source recovery does not establish executed parity, scientific outcomes, qualification or SOTA."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+        "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+        "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+        "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+        "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Resolve the reported 20 versus released 18 Figure 3G session support discrepancy, original session-to-animal joins, panel-specific neural-input support and original train/test partitions.",
+      "Both author scripts explicitly set seed 101; the seed is source-supported. Input ordering, runtime versions and original paper-run partition provenance remain unverified.",
+      "Native AUC vectors, paired statistics, shuffled-label controls and independently qualified numerical agreement criteria remain unresolved.",
+      "Adaptation, arousal/time/drift and sensory-identity controls in S6M/N and S7A constrain broader mechanistic interpretation. Do not claim them reproduced or automatically require every surrounding panel; broader claims require their relevant control evidence.",
+      "No ordered primary superiority criterion is qualified. Higher decoder AUC, a larger perturbation difference or a smaller p-value alone does not establish an improved biological explanation.",
+      "All primary and secondary superiority outcomes remain unresolved; preserving the decoder extension does not establish a qualified candidate-versus-author improvement comparison.",
+      "No task-specific prior authority to replace the biological primary with decoder superiority was established in the bounded exact-artifact, commit and source-owner review. A deliberate method-primary revision needs an explicit recorded scope decision.",
+      "Do not admit mixed biological reproduction and decoder-method improvement as a same-primary bundle. Source recovery does not establish executed parity, scientific outcomes, qualification or SOTA."
     ]
   },
   "next_implementation_action": {
-    "action": "The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope. Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered. Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved. Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator. Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted. Existing exposed-label probability reconstruction cannot establish predictive superiority.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope. Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered. Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved. Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator. Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted. Existing exposed-label probability reconstruction cannot establish predictive superiority.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -1513,8 +1549,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "Original empirical paired perturbation-versus-control prevalence-decoding contrasts in Figures 3C and 3G: both condition AUCs and paired differences for each source session, with panel-specific neural inputs, six tone identities, session/condition/animal identities, original training procedure and shuffled-label comparator. Preserve the source session-level reproduction and distinguish it from a new animal-level inferential claim. This named result does not imply every surrounding figure or whole-paper reproduction.",
+  "retained_secondary_scope": "secondary_empirical_method_extension: Candidate-versus-author decoder ROC-AUC comparison on authenticated original inputs and support. This is genuine empirical methodology; higher decoding AUC alone does not establish reproduction or improvement of the perturbation-versus-control biological finding. [coverage: source_supported_measurement_path_native_qualification_unresolved]\nprospective_extension: New temporal or session-held-out evaluation remains separately labeled unless authenticated as the original source protocol. It cannot silently replace the original paired comparison.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-FIND-REP-009"
   }
 }

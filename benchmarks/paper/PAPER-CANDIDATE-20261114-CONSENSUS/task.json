@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Reproduce held-neuron prediction in a two-area visual cortical dynamics model",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Predict the held neuron’s single-trial firing-rate trajectory from the other simultaneously observed V1/LM neurons; Figure 2b residual Poisson log-likelihood is the original ordered target.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Predict the held neuron’s single-trial firing-rate trajectory from the other simultaneously observed V1/LM neurons; Figure 2b residual Poisson log-likelihood is the original ordered target.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Predict the held neuron’s single-trial firing-rate trajectory from the other simultaneously observed V1/LM neurons; Figure 2b residual Poisson log-likelihood is the original ordered target.",
-    "Source-paper comparison for Figure 2b residual Poisson log-likelihood: Residual LL = sum_t[y_t log(mu_t)-mu_t-lgamma(y_t+1)] minus the same sum for the leave-current-trial-out condition PSTH; mu is expected count per 5 ms bin. Higher is better."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover the numeric Figure 2b baseline and original trial/condition aggregation with complete seven-animal, three-fold support.",
-    "Resolve native held-target isolation, cached predictions and source-occurrence semantics before interpreting a gain.",
-    "Compare with both original constrained and unconstrained models under identical original inputs and PSTH definition.",
-    "Freeze candidate, meaningful effect, uncertainty and access/resource budgets before final evaluation.",
-    "A new trial split, training-only PSTH, reduced neuron cohort or higher line-attractor score cannot establish this paper win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "paper": {
     "title": "Reciprocal connections dynamically build consensus between neocortical areas",
@@ -84,56 +84,67 @@
     "status": "not_recorded_in_historical_specification"
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/improvement.v1.json",
-      "bytes": 9685,
-      "sha256": "0ae444f390b0867d4f9d24329b6d087acb773ed01502c9942a80858c22d6fb3e"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/historical/task.pre-improvement.v1.json",
-        "bytes": 16302,
-        "sha256": "7584103d81a57dd629606b8885d99b968529a96cb73f89a08519778171f5009e"
-      },
-      "implementation_ids": [
-        "benchmarks-scientific_components-consensus_held_neuron",
-        "components-consensus-occurrences"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Disabled pending source reconciliation. Once admitted, iterate using only original training/development observations and matched feedback.",
-    "candidate_freeze": "Freeze source/configuration/dependencies and every selection decision before owner evaluation of the original target queries.",
-    "final_evaluation": "Run the complete original Figure 2b endpoint only after historical parity and independent evaluator validation; public-source exposure remains disclosed.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Preserve reported, independently rerun author, and candidate scores separately. The corrected successor must not be relabelled as the historical author baseline. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    "improvement": {
+      "improvement_loop": "Disabled pending source reconciliation. Once admitted, iterate using only original training/development observations and matched feedback.",
+      "candidate_freeze": "Freeze source/configuration/dependencies and every selection decision before owner evaluation of the original target queries.",
+      "final_evaluation": "Run the complete original Figure 2b endpoint only after historical parity and independent evaluator validation; public-source exposure remains disclosed.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Preserve reported, independently rerun author, and candidate scores separately. The corrected successor must not be relabelled as the historical author baseline. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Numeric Figure 2b baseline and aggregation are unrecovered.",
-    "Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved.",
-    "Original model selection exposure and full-pool PSTH must be accounted for.",
-    "No complete native reference, evaluator, justified effect rule or fixed episode budgets."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Numeric Figure 2b baseline and aggregation are unrecovered.",
       "Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved.",
       "Original model selection exposure and full-pool PSTH must be accounted for.",
       "No complete native reference, evaluator, justified effect rule or fixed episode budgets."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Numeric Figure 2b baseline and aggregation are unrecovered.",
+        "Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved.",
+        "Original model selection exposure and full-pool PSTH must be accounted for.",
+        "No complete native reference, evaluator, justified effect rule or fixed episode budgets."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json"
   },
   "next_implementation_action": {
-    "action": "Figure 2b supplies an ordered held-neuron prediction task, but its numeric baseline and exact historical execution are unresolved. The local source correction and trial-occurrence adapter do not establish native target isolation or paper parity. Changing to a new blocked split or a training-only PSTH is an extension, not victory over Figure 2b. Numeric Figure 2b baseline and aggregation are unrecovered. Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved. Original model selection exposure and full-pool PSTH must be accounted for. No complete native reference, evaluator, justified effect rule or fixed episode budgets.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "Figure 2b supplies an ordered held-neuron prediction task, but its numeric baseline and exact historical execution are unresolved. The local source correction and trial-occurrence adapter do not establish native target isolation or paper parity. Changing to a new blocked split or a training-only PSTH is an extension, not victory over Figure 2b. Numeric Figure 2b baseline and aggregation are unrecovered. Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved. Original model selection exposure and full-pool PSTH must be accounted for. No complete native reference, evaluator, justified effect rule or fixed episode budgets.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -148,8 +159,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

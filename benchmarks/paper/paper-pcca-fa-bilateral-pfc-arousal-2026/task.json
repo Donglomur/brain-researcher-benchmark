@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original bilateral PFC covariance and pupil-association findings: across-versus-within shared variance and dimensionality across all 42 source sessions, and across-versus-within pupil association across the 41 sessions retained by the original pupil-quality rule, including the original one-latent and same-animal session-shuffle controls. Keep Figure 3 simulation recovery and any protected neural-to-pupil prediction extension separately identified; neither establishes primary empirical reproduction or improvement.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
-    "Source-paper comparison for Source Fig. 3 ground-truth recovery error for across/within %sv and d_shared; exact source loss and summary unresolved: Fig. 3 reports estimated versus true across/within %sv and d_shared; closeness to known truth is ordered, but an exact source-defined scalar recovery loss and its units/combination have not been recovered. Do not invent an average over these different endpoints. Source crossvalidated likelihood is an additional ordered fitting/comparison measure with separate normalization still unresolved."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: Original empirical Figure 4b/c covariance and Figure 6c pupil findings, with source-defined per-session/hemisphere quantities, pooled and animal-stratified comparisons, necessary one-latent and mismatched-session controls, and fixed examples preserved as illustrations rather than alternative aggregate criteria. Sessions/areas are nested within three animals. Original fitted pupil R-squared is descriptive; larger covariance, stronger significance or higher in-sample R-squared alone is not scientific improvement.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: Original Figure 3e/f simulation estimator recovery and its pCCA comparator remain genuine separately named methodological evidence with the complete source trial-count/endpoint conditions. Supplementary Figure 4 empirical model comparisons remain a separate source route with unresolved mapping/aggregation. The protected neural-to-pupil prediction proposal remains a prospective extension. None substitutes for the retained primary or validates a mixed-scope four-cell success claim."
   ],
   "success_criteria": [
-    "Recover the original Fig. 3 parameter draws/datasets, trial-count grid, dimension search, crossvalidation and final fitting protocol, exact ground-truth metrics and numeric pCCA-FA comparator.",
-    "Surpass the source pCCA-FA estimator on the same original recovery task and all original conditions with a justified loss and uncertainty rule; beating only the weaker pCCA control is insufficient.",
-    "Preserve %sv and d_shared endpoints separately unless the source supports an exact combined summary; no cherry-picked trial counts, altered generator or favorable seed subset.",
-    "A fresh simulation draw set, changed variance ratio/dimensionality, new empirical split or protected pupil prediction is an extension, even if both methods are rerun.",
-    "Higher in-sample pupil R², larger covariance components, stronger significance or closer descriptive reconstruction is not an estimator-recovery win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "paper": {
     "title": "Interactions across hemispheres in prefrontal cortex reflect global cognitive processing",
@@ -539,57 +539,98 @@
     "status": "not_recorded_in_historical_specification"
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/improvement.v1.json",
-      "bytes": 14564,
-      "sha256": "5cabc804948b95202b1ce34ace4280f89c381a292dd2f3bdcad4852a3ef418bc"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/historical/task.pre-improvement.v1.json",
-        "bytes": 59603,
-        "sha256": "e73f78befc63920315646c5a895072289427f6687aed8205f39eef5fb61cf654"
-      },
-      "implementation_ids": [
-        "benchmarks-scientific_components-pcca_descriptive_outputs"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "Blocked until the original source simulation artifacts, baseline and endpoint aggregation are recovered. After admission, permit estimator development only on declared source development inputs; keep assessment ground truth and original comparison artifacts evaluator-owned.",
-    "candidate_freeze": "Freeze estimation method, hyperparameters, dimension-selection policy, source condition coverage and scoring summary before final comparison on the recovered original Fig. 3 assessment datasets.",
-    "final_evaluation": "Compare candidate recovery with published and authenticated rerun pCCA-FA on identical original datasets and all source trial-count conditions. Any original Supplementary Fig. 4 likelihood comparison must retain its own exact empirical splits/normalization and be reported separately.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Source pCCA-FA is the performance comparator; pCCA/FA are source controls. Published results, author reruns and current SOTA remain distinct. Existing covariance/pupil reconstruction is calibration; new protected prediction or newly generated simulations cannot silently replace original paper assessment. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Blocked until the original source simulation artifacts, baseline and endpoint aggregation are recovered. After admission, permit estimator development only on declared source development inputs; keep assessment ground truth and original comparison artifacts evaluator-owned.",
+      "candidate_freeze": "Freeze estimation method, hyperparameters, dimension-selection policy, source condition coverage and scoring summary before final comparison on the recovered original Fig. 3 assessment datasets.",
+      "final_evaluation": "Compare candidate recovery with published and authenticated rerun pCCA-FA on identical original datasets and all source trial-count conditions. Any original Supplementary Fig. 4 likelihood comparison must retain its own exact empirical splits/normalization and be reported separately.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Source pCCA-FA is the performance comparator; pCCA/FA are source controls. Published results, author reruns and current SOTA remain distinct. Existing covariance/pupil reconstruction is calibration; new protected prediction or newly generated simulations cannot silently replace original paper assessment. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    },
+    "primary_source_limits": [
+      "Exact native data/channel/trial joins and the excluded pupil-session identity remain unresolved; published counts cannot justify selecting whichever session yields a desired result.",
+      "Historical crosstalk and pupil-filter discrepancies, full empirical reference fits/matrices/prediction arrays and observation-to-output provenance remain unresolved.",
+      "One-latent source mapping and degeneracy require preservation. Covariance/prediction invariants, not arbitrary loading signs or rotations, are the scientific comparison objects.",
+      "The inspected publication extraction has a known hash but is not a newly authenticated complete publisher article. The pupil driver's moving-main URL does not establish a release binding.",
+      "Figure 3 code blob identity is verified, while release commit-to-blob mapping, paper/code dimension-search differences, original baseline curves and justified recovery criteria remain unresolved. Signed-error cancellation is not automatically better recovery.",
+      "Original one-latent and same-animal session-shuffle controls are source-defined; the protected 42-session prediction route is explicitly prospective and must not replace the 41-session original pupil result.",
+      "No full-panel reproduction tolerances or same-result empirical superiority criterion are established. A schema unable to express empirical primary versus simulation secondary must leave full-primary success unavailable.",
+      "A prior assistant log records intentional Figure 3 selection and a claimed owner clarification, without the underlying approval message being authenticated. Current root preservation policy governs this routine correction."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
-    "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
-    "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
-    "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
-    "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
       "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
       "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
       "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
       "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+    ],
+    "primary_source_limits": [
+      "Exact native data/channel/trial joins and the excluded pupil-session identity remain unresolved; published counts cannot justify selecting whichever session yields a desired result.",
+      "Historical crosstalk and pupil-filter discrepancies, full empirical reference fits/matrices/prediction arrays and observation-to-output provenance remain unresolved.",
+      "One-latent source mapping and degeneracy require preservation. Covariance/prediction invariants, not arbitrary loading signs or rotations, are the scientific comparison objects.",
+      "The inspected publication extraction has a known hash but is not a newly authenticated complete publisher article. The pupil driver's moving-main URL does not establish a release binding.",
+      "Figure 3 code blob identity is verified, while release commit-to-blob mapping, paper/code dimension-search differences, original baseline curves and justified recovery criteria remain unresolved. Signed-error cancellation is not automatically better recovery.",
+      "Original one-latent and same-animal session-shuffle controls are source-defined; the protected 42-session prediction route is explicitly prospective and must not replace the 41-session original pupil result.",
+      "No full-panel reproduction tolerances or same-result empirical superiority criterion are established. A schema unable to express empirical primary versus simulation secondary must leave full-primary success unavailable.",
+      "A prior assistant log records intentional Figure 3 selection and a claimed owner clarification, without the underlying approval message being authenticated. Current root preservation policy governs this routine correction."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+        "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+        "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+        "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+        "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Exact native data/channel/trial joins and the excluded pupil-session identity remain unresolved; published counts cannot justify selecting whichever session yields a desired result.",
+      "Historical crosstalk and pupil-filter discrepancies, full empirical reference fits/matrices/prediction arrays and observation-to-output provenance remain unresolved.",
+      "One-latent source mapping and degeneracy require preservation. Covariance/prediction invariants, not arbitrary loading signs or rotations, are the scientific comparison objects.",
+      "The inspected publication extraction has a known hash but is not a newly authenticated complete publisher article. The pupil driver's moving-main URL does not establish a release binding.",
+      "Figure 3 code blob identity is verified, while release commit-to-blob mapping, paper/code dimension-search differences, original baseline curves and justified recovery criteria remain unresolved. Signed-error cancellation is not automatically better recovery.",
+      "Original one-latent and same-animal session-shuffle controls are source-defined; the protected 42-session prediction route is explicitly prospective and must not replace the 41-session original pupil result.",
+      "No full-panel reproduction tolerances or same-result empirical superiority criterion are established. A schema unable to express empirical primary versus simulation secondary must leave full-primary success unavailable.",
+      "A prior assistant log records intentional Figure 3 selection and a claimed owner clarification, without the underlying approval message being authenticated. Current root preservation policy governs this routine correction."
     ]
   },
   "next_implementation_action": {
-    "action": "The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R² is retained only as descriptive calibration. Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed. Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark. Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy. Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim. Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R² is retained only as descriptive calibration. Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed. Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark. Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy. Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim. Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -604,8 +645,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "Original empirical Figure 4b/c covariance and Figure 6c pupil findings, with source-defined per-session/hemisphere quantities, pooled and animal-stratified comparisons, necessary one-latent and mismatched-session controls, and fixed examples preserved as illustrations rather than alternative aggregate criteria. Sessions/areas are nested within three animals. Original fitted pupil R-squared is descriptive; larger covariance, stronger significance or higher in-sample R-squared alone is not scientific improvement.",
+  "retained_secondary_scope": "Original Figure 3e/f simulation estimator recovery and its pCCA comparator remain genuine separately named methodological evidence with the complete source trial-count/endpoint conditions. Supplementary Figure 4 empirical model comparisons remain a separate source route with unresolved mapping/aggregation. The protected neural-to-pupil prediction proposal remains a prospective extension. None substitutes for the retained primary or validates a mixed-scope four-cell success claim.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "paper-pcca-fa-bilateral-pfc-arousal-2026"
   }
 }

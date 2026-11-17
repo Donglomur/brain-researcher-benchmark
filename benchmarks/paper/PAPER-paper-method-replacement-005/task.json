@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Neural Encoding and Decoding at Scale",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce and improve the source's joint neural encoding and behavioral decoding result on the original IBL held-out sessions, retaining the source-defined multitask versus task-specific training comparison and multi-session versus single-session transfer comparison, with their original input masks, training exposure, model configurations and neural/behavioral endpoints. Preserve the existing Table 1/Table 10 summaries as partial evidence within this result family. Absolute pretrained scores alone do not establish the omitted comparative findings.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
-    "Source-paper comparison for All-behavior neural encoding bits/spike on the original ten held-out animals after multi-session pretraining and fine-tuning: Encoding: each neuron has [Poisson log likelihood(prediction)-log likelihood(evaluation-mean null)]/(total spikes*ln(2)). Choice/block use ordinary accuracy; wheel/whisker use un-clipped R2 across flattened test trials/time bins. Preserve source zero-rate/undefined-neuron behavior and audit its effects."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: The retained empirical IBL joint encoding/decoding comparative result: source Figure 2A multitask versus same-architecture unimodal training and source Figure 2B multi-session versus single-session performance, together with the already retained Table 1/Table 10 outcomes and original masks, cohorts, partitions and necessary controls. This does not add brain-region classification, monkey data or every separate masking ablation, and does not claim pretraining is causally isolated at fixed model capacity.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: The current 42 Table 1/Table 10 means and SEMs are genuine partial evidence within the SAME empirical primary result family, not an unrelated secondary task. Preserve them and their useful implementations. They do not by themselves establish the omitted same-architecture training contrast or multi-session/single-session transfer comparison."
   ],
   "success_criteria": [
-    "Recover the exact original cohort, eligible units, aligned trials, input masks, preprocessing and 70/10/20 partitions; resolve paper/code discrepancies against source result provenance.",
-    "Run native author NEDS and the frozen candidate with identical pretraining/fine-tuning exposure and fixed resource budgets; retain all 74 training and ten held-out sessions without a convenient subset.",
-    "Surpass published 0.27 encoding bits/spike and the qualified author rerun by the predeclared meaningful effect and uncertainty rule on the same original endpoint.",
-    "Evaluate all single-behavior encoding and four decoding outcomes with a predeclared joint/trade-off rule; an encoding improvement alone cannot silently replace the registered simultaneous encoding/decoding task.",
-    "Do not call a new animal split, corrected-preprocessing variant, local ridge win, improved p-value or reproduced figure a source-paper win; report such results separately as calibration or extensions.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "paper-method-replacement-005",
   "canonical_position_one_based": 57,
@@ -387,59 +387,94 @@
     "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
-      "bytes": 12936,
-      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
-        "bytes": 26106,
-        "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-replacement-005-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
-    "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
-    "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+    "retained_secondary_improvement": {
+      "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
+      "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
+      "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+    },
+    "primary_source_limits": [
+      "Exact required comparative panel membership, source counterpart mapping, Figure 2 values and session-level outputs remain to be frozen; the retained specification does not license invented all-figure coverage.",
+      "The original comparison uses different multi-session and single-session model sizes. Preserve the source configurations and limitation; a new equal-size/equal-compute causal experiment is a separately labeled extension.",
+      "Original recording versions, eligible units/trials, session/probe/animal joins, trial partitions and paper/code preprocessing equivalence remain unqualified, including the firing-rate threshold discrepancy.",
+      "Authentic native author replay, independent submitted-output verification and a predeclared joint neural/behavioral improvement rule remain unavailable. Published means and SEMs do not supply reproduction tolerances or superiority margins.",
+      "No explicit authorized revision narrowing the retained comparative primary to absolute Table 1/Table 10 scores was established in the inspected handoff/review/gate evidence. Such a deliberate replacement would require a scope decision.",
+      "Same-primary full-bundle admission remains unavailable until the comparative scope and scientific qualification gaps are resolved; existing source summaries remain useful partial evidence."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
-    "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
-    "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
-    "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
-    "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
-    "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
       "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
       "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
       "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
       "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
       "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+    ],
+    "primary_source_limits": [
+      "Exact required comparative panel membership, source counterpart mapping, Figure 2 values and session-level outputs remain to be frozen; the retained specification does not license invented all-figure coverage.",
+      "The original comparison uses different multi-session and single-session model sizes. Preserve the source configurations and limitation; a new equal-size/equal-compute causal experiment is a separately labeled extension.",
+      "Original recording versions, eligible units/trials, session/probe/animal joins, trial partitions and paper/code preprocessing equivalence remain unqualified, including the firing-rate threshold discrepancy.",
+      "Authentic native author replay, independent submitted-output verification and a predeclared joint neural/behavioral improvement rule remain unavailable. Published means and SEMs do not supply reproduction tolerances or superiority margins.",
+      "No explicit authorized revision narrowing the retained comparative primary to absolute Table 1/Table 10 scores was established in the inspected handoff/review/gate evidence. Such a deliberate replacement would require a scope decision.",
+      "Same-primary full-bundle admission remains unavailable until the comparative scope and scientific qualification gaps are resolved; existing source summaries remain useful partial evidence."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+        "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+        "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+        "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+        "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+        "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Exact required comparative panel membership, source counterpart mapping, Figure 2 values and session-level outputs remain to be frozen; the retained specification does not license invented all-figure coverage.",
+      "The original comparison uses different multi-session and single-session model sizes. Preserve the source configurations and limitation; a new equal-size/equal-compute causal experiment is a separately labeled extension.",
+      "Original recording versions, eligible units/trials, session/probe/animal joins, trial partitions and paper/code preprocessing equivalence remain unqualified, including the firing-rate threshold discrepancy.",
+      "Authentic native author replay, independent submitted-output verification and a predeclared joint neural/behavioral improvement rule remain unavailable. Published means and SEMs do not supply reproduction tolerances or superiority margins.",
+      "No explicit authorized revision narrowing the retained comparative primary to absolute Table 1/Table 10 scores was established in the inspected handoff/review/gate evidence. Such a deliberate replacement would require a scope decision.",
+      "Same-primary full-bundle admission remains unavailable until the comparative scope and scientific qualification gaps are resolved; existing source summaries remain useful partial evidence."
     ]
   },
   "next_implementation_action": {
-    "action": "The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model. Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility. Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task. Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values. Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations. Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates. Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model. Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility. Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task. Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values. Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations. Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates. Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -454,8 +489,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "The retained empirical IBL joint encoding/decoding comparative result: source Figure 2A multitask versus same-architecture unimodal training and source Figure 2B multi-session versus single-session performance, together with the already retained Table 1/Table 10 outcomes and original masks, cohorts, partitions and necessary controls. This does not add brain-region classification, monkey data or every separate masking ablation, and does not claim pretraining is causally isolated at fixed model capacity.",
+  "retained_secondary_scope": "The current 42 Table 1/Table 10 means and SEMs are genuine partial evidence within the SAME empirical primary result family, not an unrelated secondary task. Preserve them and their useful implementations. They do not by themselves establish the omitted same-architecture training contrast or multi-session/single-session transfer comparison.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-replacement-005"
   }
 }

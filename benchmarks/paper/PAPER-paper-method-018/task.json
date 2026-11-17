@@ -4,19 +4,21 @@
   "track": "paper",
   "title": "Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the ten-session Allen empirical neural-modeling results, including the matched source component-ablation comparisons and the supported coupling/dynamics outputs within the retained scope. Report the full-model Table S1 negative log-likelihood as a named empirical performance component. Assess any improvement on the same source-qualified observation conditions and metric; lower full-model NLL alone does not reproduce or establish improved coupling interpretation. Preserve target-conditioned inference. Keep the prospective equal-session interaction-gain comparison separate, and retain the original exclusions for unsupported anatomical/condition-specific subpanels.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
-    "Source-paper comparison for Allen Visual Coding Table S1 full-model test negative log likelihood: Table S1 names test negative log likelihood. Poisson NLL is sum(exp(eta)-y*eta+log(y!)); pinned loss_function instead averages the first two terms and adds beta times KL. Recover the exact total, constant, KL and model-flag convention that produced 4.218e7."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Reconcile the exact Table S1 dataset, split, preprocessing, model flags, posterior inference and total-NLL reduction before any active improvement episode.",
-    "Beat the full GLM-Transformer source result and its calibrated author rerun; increasing a local history-to-interaction difference does not establish that result.",
-    "Retain all ten sessions and the same available inputs; a new split or different target-conditioning rule is an extension.",
-    "Require predeclared meaningful effect and valid uncertainty; causal-interaction claims require separate evidence.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-method-018",
   "canonical_position_one_based": 48,
@@ -700,55 +702,80 @@
     "source_basis": "Inspection-based resource class, not a measured runtime."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-018/improvement.v1.json",
-      "bytes": 10323,
-      "sha256": "c5d750e8e18645662d1c968bd74e540590ef166f52f68cf3ef161b405ebe8ebd"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-018/historical/task.pre-improvement.v1.json",
-        "bytes": 38573,
-        "sha256": "7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-018-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "No active improvement episode until paper/code metric and split identities are recovered; then use only source training/validation feedback for iteration.",
-    "candidate_freeze": "Freeze model, source data/axes, trial memberships, inference batches, conditioning flags, normalization and original author baseline before final scoring.",
-    "final_evaluation": "Evaluate the complete original Table S1 held-out observations using its recovered score convention; local prospective gains remain separately labeled.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "The source full-model Table S1 score is the comparator. Reproduction of paper components, ablation reconstruction or generated engineering controls is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    "improvement": {
+      "improvement_loop": "No active improvement episode until paper/code metric and split identities are recovered; then use only source training/validation feedback for iteration.",
+      "candidate_freeze": "Freeze model, source data/axes, trial memberships, inference batches, conditioning flags, normalization and original author baseline before final scoring.",
+      "final_evaluation": "Evaluate the complete original Table S1 held-out observations using its recovered score convention; local prospective gains remain separately labeled.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "The source full-model Table S1 score is the comparator. Reproduction of paper components, ablation reconstruction or generated engineering controls is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Paper/code validation-test split naming and original memberships are unresolved.",
-    "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
-    "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
-    "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Paper/code validation-test split naming and original memberships are unresolved.",
       "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
       "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
       "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Paper/code validation-test split naming and original memberships are unresolved.",
+        "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
+        "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
+        "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json",
+    "current_primary_source_limits": [
+      "Original ten-session/trial membership, source eligibility, source preprocessing and final split interpretation are not fully reconciled.",
+      "Published total NLL must be reconciled with released loss reduction, Poisson constants, KL handling, model flags, posterior access and uncertainty aggregation.",
+      "A no-coupling ablation retains trial-wise dynamics and post-spike history; the historical history-only phrase does not authorize relabeling it or imposing a different pure-history comparison.",
+      "Anatomical/condition-specific subpanels excluded in the retained task remain excluded until their required source artifacts are reconstructed and validated; exact supported coupling/dynamics outputs remain unbound.",
+      "Target-conditioned latent inference must remain explicit; blind forecasting and unseen-neuron generalization would change the task.",
+      "The saved notebook repacking/split issue is attributed to the earlier source-recovery handoff; neither independent scope reviewer nor peer reviewer performed a new raw-notebook audit.",
+      "Transcribing Table S1 means and standard errors is not independent reproduction. Lower full-model NLL alone does not establish complete-family success, stronger coupling interpretation or causal influence.",
+      "Exact outcome scope and all required comparisons must be represented faithfully before admission; same_primary_unqualified does not admit a full-family reproduction/one-scalar improvement bundle.",
+      "No numerical tolerance, superiority margin, scientific outcome or runtime qualification is established."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The paper reports an ordered Allen test-NLL result, but the split, metric normalization and model flags needed to reproduce that number disagree with the available code path. The local equal-session interaction-gain endpoint is prospective and cannot substitute for exceeding the published full-model task. Paper/code validation-test split naming and original memberships are unresolved. Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved. Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation. No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper reports an ordered Allen test-NLL result, but the split, metric normalization and model flags needed to reproduce that number disagree with the available code path. The local equal-session interaction-gain endpoint is prospective and cannot substitute for exceeding the published full-model task. Paper/code validation-test split naming and original memberships are unresolved. Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved. Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation. No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -763,8 +790,44 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "Ten-session Allen empirical held-out neural modeling and matched original component comparisons, with supported coupling/dynamics outputs; the Table S1 full-model NLL is a named within-family performance component. No whole-paper, every-Figure-5-panel or simulation-column requirement.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-018"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "within_primary_empirical_performance_component: Retain full-model Table S1 Allen test NLL as a genuine performance component of the original empirical family. Its improvement does not establish completion or improvement of the complete ablation/coupling/dynamics family.\nprospective_extension: The equal-session interaction-gain implementation and proposed neuron-subsampling/shared-input robustness comparisons remain separate prospective extensions, not recovered Table S1 arithmetic or an authenticated pure-history comparator.\nsimulation_context: The original Table S1 GLM and EIF simulation columns remain distinct source context; they are not replacements for the Allen empirical column or compulsory additions to this retained primary scope.",
+    "retained_source_roles": [
+      {
+        "role": "within_primary_empirical_performance_component",
+        "scope": "Retain full-model Table S1 Allen test NLL as a genuine performance component of the original empirical family. Its improvement does not establish completion or improvement of the complete ablation/coupling/dynamics family."
+      },
+      {
+        "role": "prospective_extension",
+        "scope": "The equal-session interaction-gain implementation and proposed neuron-subsampling/shared-input robustness comparisons remain separate prospective extensions, not recovered Table S1 arithmetic or an authenticated pure-history comparator."
+      },
+      {
+        "role": "simulation_context",
+        "scope": "The original Table S1 GLM and EIF simulation columns remain distinct source context; they are not replacements for the Allen empirical column or compulsory additions to this retained primary scope."
+      }
+    ],
+    "remaining_source_limits": [
+      "Original ten-session/trial membership, source eligibility, source preprocessing and final split interpretation are not fully reconciled.",
+      "Published total NLL must be reconciled with released loss reduction, Poisson constants, KL handling, model flags, posterior access and uncertainty aggregation.",
+      "A no-coupling ablation retains trial-wise dynamics and post-spike history; the historical history-only phrase does not authorize relabeling it or imposing a different pure-history comparison.",
+      "Anatomical/condition-specific subpanels excluded in the retained task remain excluded until their required source artifacts are reconstructed and validated; exact supported coupling/dynamics outputs remain unbound.",
+      "Target-conditioned latent inference must remain explicit; blind forecasting and unseen-neuron generalization would change the task.",
+      "The saved notebook repacking/split issue is attributed to the earlier source-recovery handoff; neither independent scope reviewer nor peer reviewer performed a new raw-notebook audit.",
+      "Transcribing Table S1 means and standard errors is not independent reproduction. Lower full-model NLL alone does not establish complete-family success, stronger coupling interpretation or causal influence.",
+      "Exact outcome scope and all required comparisons must be represented faithfully before admission; same_primary_unqualified does not admit a full-family reproduction/one-scalar improvement bundle.",
+      "No numerical tolerance, superiority margin, scientific outcome or runtime qualification is established."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

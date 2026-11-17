@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Respiration shapes the neural dynamics of successful remembering in humans",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Recover object-versus-scene category information in retrieval EEG using the independent localizer, including exhalation-aligned remembered and not-remembered trials. Retain alpha/beta and respiratory coupling as distinct descriptive outcomes.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Recover object-versus-scene category information in retrieval EEG using the independent localizer, including exhalation-aligned remembered and not-remembered trials. Retain alpha/beta and respiratory coupling as distinct descriptive outcomes.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Recover object-versus-scene category information in retrieval EEG using the independent localizer, including exhalation-aligned remembered and not-remembered trials. Retain alpha/beta and respiratory coupling as distinct descriptive outcomes.",
-    "Source-paper comparison for Original localizer-to-retrieval object/scene ROC AUC on the source support; exact final-version aggregation unresolved.: Source classification metric is ROC AUC for object/scene discrimination (Figure 1c and Figure 3a code). Remembered-minus-not-remembered contrasts and significance are separate inferential results, not an optimization score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover exact final-paper data/version, category labels, preprocessing, original localizer→retrieval split and evaluation support.",
-    "Qualify an author baseline under that original protocol and retain its score separately from the printed paper result.",
-    "Freeze method and time/channel aggregation using only declared development access before final source-comparable evaluation.",
-    "Require a justified AUC gain and valid paired-participant uncertainty; stronger respiratory correlation, smaller p-values or a new participant split cannot count as a paper win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "ROOT-ADD-004",
   "canonical_position_one_based": 64,
@@ -318,55 +319,67 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-ROOT-ADD-004/improvement.v1.json",
-      "bytes": 10441,
-      "sha256": "1722d35399d677f5b5fd666c082f2ace39a9422ce0da09df1746fcccf8e80cd8"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-004/historical/task.pre-improvement.v1.json",
-        "bytes": 20069,
-        "sha256": "747c7a1b8d5a31d116bc510bfe68d987ef5afb4c3a139b297070390c9c2640d9"
-      },
-      "implementation_ids": [
-        "construction-paper-root-add-004-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Blocked pending native source recovery. A future decoder may iterate on localizer training/validation feedback while preserving the paper retrieval test conditions; respiratory effect hunting is not the objective.",
-    "candidate_freeze": "Freeze preprocessing, model, label orientation, searchlight/time aggregation, hyperparameter policy and source-version mapping before final retrieval evaluation.",
-    "final_evaluation": "Evaluate full source-matched retrieval support with the qualified native baseline and participant-level uncertainty; new held-out-participant or altered-window studies are separately labelled extensions.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published inferential findings, a native MATLAB rerun, and the existing prospective Python analysis in distinct roles. Only a qualified source-comparable performance baseline can support paper victory."
+    "improvement": {
+      "improvement_loop": "Blocked pending native source recovery. A future decoder may iterate on localizer training/validation feedback while preserving the paper retrieval test conditions; respiratory effect hunting is not the objective.",
+      "candidate_freeze": "Freeze preprocessing, model, label orientation, searchlight/time aggregation, hyperparameter policy and source-version mapping before final retrieval evaluation.",
+      "final_evaluation": "Evaluate full source-matched retrieval support with the qualified native baseline and participant-level uncertainty; new held-out-participant or altered-window studies are separately labelled extensions.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published inferential findings, a native MATLAB rerun, and the existing prospective Python analysis in distinct roles. Only a qualified source-comparable performance baseline can support paper victory."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "No exact final-article numeric AUC baseline or original aggregation recovered.",
-    "April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved.",
-    "Native reference execution, scorer admission, meaningful effect and uncertainty rule absent.",
-    "Concrete access/resource budgets and protected final evaluation not qualified."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "No exact final-article numeric AUC baseline or original aggregation recovered.",
       "April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved.",
       "Native reference execution, scorer admission, meaningful effect and uncertainty rule absent.",
       "Concrete access/resource budgets and protected final evaluation not qualified."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "No exact final-article numeric AUC baseline or original aggregation recovered.",
+        "April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved.",
+        "Native reference execution, scorer admission, meaningful effect and uncertainty rule absent.",
+        "Concrete access/resource budgets and protected final evaluation not qualified."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The source contains a genuine object-versus-scene decoding task (localizer-trained classifiers applied to retrieval EEG), but an exact final-article AUC comparator and complete native protocol are not recovered. Published remembered/nonremembered significance, effect size and respiration-memory correlation do not supply a decoding-performance baseline. The repository implementation explicitly changes preprocessing and time grids, so its results cannot establish a same-task paper win. No exact final-article numeric AUC baseline or original aggregation recovered. April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved. Native reference execution, scorer admission, meaningful effect and uncertainty rule absent. Concrete access/resource budgets and protected final evaluation not qualified.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source contains a genuine object-versus-scene decoding task (localizer-trained classifiers applied to retrieval EEG), but an exact final-article AUC comparator and complete native protocol are not recovered. Published remembered/nonremembered significance, effect size and respiration-memory correlation do not supply a decoding-performance baseline. The repository implementation explicitly changes preprocessing and time grids, so its results cannot establish a same-task paper win. No exact final-article numeric AUC baseline or original aggregation recovered. April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved. Native reference execution, scorer admission, meaningful effect and uncertainty rule absent. Concrete access/resource budgets and protected final evaluation not qualified.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -381,8 +394,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

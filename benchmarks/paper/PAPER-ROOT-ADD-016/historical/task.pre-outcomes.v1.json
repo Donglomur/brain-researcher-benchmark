@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-ROOT-ADD-016",
+  "track": "paper",
+  "title": "Age-related changes in cortical 1/f dynamics are linked to cardiac activity",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Reconstruct the simultaneously measured ECG time series from the original M/EEG recordings using the backward decoding task of Figure 3C,D. Retain MEG and EEG separately and all three source conditions: ECG components present, rejected and isolated. Higher reconstruction accuracy measures decoder performance under a fixed input condition, not better removal of cardiac artifacts or a stronger age association.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Reconstruct the simultaneously measured ECG time series from the original M/EEG recordings using the backward decoding task of Figure 3C,D. Retain MEG and EEG separately and all three source conditions: ECG components present, rejected and isolated. Higher reconstruction accuracy measures decoder performance under a fixed input condition, not better removal of cardiac artifacts or a stronger age association.",
+    "Source-paper comparison for Original Figure 3C,D held-out ECG reconstruction Pearson r, separately for MEG/EEG and the three source ICA conditions: Source reconstruction accuracy is Pearson r between predicted and measured ECG time series on the original test support: covariance divided by the product of standard deviations. Retain six modality-by-ICA-condition scores; zero-variance series must not receive an invented success score. Standardized EEG-versus-MEG contrasts and their significance are not decoder-accuracy baselines."
+  ],
+  "success_criteria": [
+    "Authenticate the original 20-person simultaneous Salzburg cohort, recordings, condition-specific channels, preprocessing and four-fold nested partitions for Figure 3C,D.",
+    "Recover exact published reconstruction scores and execute an independently checked author baseline on the same source support before comparing a frozen candidate.",
+    "Retain both modalities and all three original ICA conditions under a predeclared comparison rule; improved performance on one easier condition cannot silently replace the source task.",
+    "Match and disclose the original ECG-informed ICA/preprocessing exposure. Do not supply final ECG targets directly as decoder inputs, alter the permitted lag window, or claim a prospective causal predictor from the original acausal reconstruction.",
+    "Require a justified effect and valid paired subject-level uncertainty under fixed access and resource budgets; tighter posterior reconstruction or stronger modality/age significance cannot count as success.",
+    "Label new participant splits, new cohorts, changed cleaning targets or a different artifact-removal ground truth as extensions. An admitted win here concerns the source ECG reconstruction task, not improved removal of cardiac activity or a whole-paper physiological conclusion.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "ROOT-ADD-016",
+  "canonical_position_one_based": 29,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/100605",
+    "publication_year": 2025,
+    "venue": "eLife"
+  },
+  "input_assets": {
+    "routes": [
+      "https://osf.io/jcekr"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "dec_r_ecg.csv",
+          "bytes": 5222,
+          "url": "https://osf.io/download/fm5t8/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "source_record_id": "ROOT-ADD-016"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "meg_slope_data_sbg.csv",
+          "bytes": 47254,
+          "url": "https://osf.io/download/a5tb3/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "source_record_id": "ROOT-ADD-016"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "trf_data_meeg_sbg.csv",
+          "bytes": 287405,
+          "url": "https://osf.io/download/9rh8w/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "source_record_id": "ROOT-ADD-016"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "dec_r_ecg.csv",
+          "bytes": 5222,
+          "url": "https://osf.io/download/fm5t8/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-ROOT-ADD-016"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "meg_slope_data_sbg.csv",
+          "bytes": 47254,
+          "url": "https://osf.io/download/a5tb3/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-ROOT-ADD-016"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "trf_data_meeg_sbg.csv",
+          "bytes": 287405,
+          "url": "https://osf.io/download/9rh8w/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-ROOT-ADD-016"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Participant-level MEG spectral slopes and cardiac components/TRFs; no raw ICA recordings in initial contract.",
+      "data_urls": [
+        "https://osf.io/jcekr"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "url": "https://osf.io/jcekr",
+          "manifest_url": "https://api.osf.io/v2/nodes/jcekr/files/osfstorage/",
+          "files": {
+            "listed_file_count": 3,
+            "representative_files": [
+              {
+                "name": "dec_r_ecg.csv",
+                "bytes": 5222,
+                "url": "https://osf.io/download/fm5t8/"
+              },
+              {
+                "name": "meg_slope_data_sbg.csv",
+                "bytes": 47254,
+                "url": "https://osf.io/download/a5tb3/"
+              },
+              {
+                "name": "trf_data_meeg_sbg.csv",
+                "bytes": 287405,
+                "url": "https://osf.io/download/9rh8w/"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "input_schema": [
+            {
+              "file": "dec_r_ecg.csv",
+              "header": [
+                "",
+                "subject_id",
+                "device",
+                "condition",
+                "r"
+              ],
+              "data_rows": 120,
+              "bytes": 5222
+            },
+            {
+              "file": "meg_slope_data_sbg.csv",
+              "header": [
+                "",
+                "subject_id",
+                "age",
+                "ECG_components",
+                "ECG_not_rejected",
+                "ECG_rejected"
+              ],
+              "data_rows": 655,
+              "bytes": 47254
+            },
+            {
+              "file": "trf_data_meeg_sbg.csv",
+              "header": [
+                "",
+                "time",
+                "condition",
+                "amplitude (a.u.)",
+                "modality",
+                "subject_id"
+              ],
+              "data_rows": 4680,
+              "bytes": 287405
+            }
+          ],
+          "schema": "Participant-level neural spectral exponents under ECG retained/rejected/components, age and subject IDs; subject-resolved cardiac-to-MEEG temporal response functions. These are processed observations, not raw EEG/MEG recordings.",
+          "license": "OSF project terms not yet recorded; resolve before redistribution"
+        }
+      ],
+      "source_bridge": "Re-estimate how the age–neural-spectral-slope association changes after cardiac component removal using released participant-level measurements and compare neural versus cardiac interpretations.",
+      "code_url": "https://github.com/schmidtfa/cardiac_1_f",
+      "code_revision_or_archive_version": "4562c0dc318930c46b77732b73d85504b2b471c4",
+      "entrypoints": [
+        "notebooks/ c_1_f_age_sbg.ipynb",
+        "notebooks/eeg_meg_1f_preprocessing.py",
+        "notebooks/eeg_meg_1f_trf.py"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-016",
+        "versions_and_loader_contract": {
+          "scope_description": "Re-estimate how the age–neural-spectral-slope association changes after cardiac component removal using released participant-level measurements and compare neural versus cardiac interpretations.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/schmidtfa/cardiac_1_f",
+    "revision_or_archive_version": "4562c0dc318930c46b77732b73d85504b2b471c4",
+    "entrypoints": [
+      "notebooks/ c_1_f_age_sbg.ipynb",
+      "notebooks/eeg_meg_1f_preprocessing.py",
+      "notebooks/eeg_meg_1f_trf.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-016",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/schmidtfa/cardiac_1_f",
+            "commit": "4562c0dc318930c46b77732b73d85504b2b471c4",
+            "entrypoints": [
+              "notebooks/ c_1_f_age_sbg.ipynb",
+              "notebooks/eeg_meg_1f_preprocessing.py",
+              "notebooks/eeg_meg_1f_trf.py"
+            ],
+            "license": "BSD-3-Clause",
+            "inspection": "Pinned file tree, README and named analysis/loader source read statically; no author code run"
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "d3de18d450e751e34767784219de223f7f695ca29ccd588ec02b5e90e32a763f",
+    "audit_record_sha256": "cdf31139296fa94908e7d4cafc0c07ff8762cfc9a1ff4ab756ae097257f0f7df",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+          "bytes": 140656,
+          "sha256": "0cf7be08fe06c0b83492908e1ebb2c18eb5b9dd7a78fbd7ed8b10b2fb677bcb1"
+        },
+        "record_id": "ROOT-ADD-016",
+        "declared_record_sha256": "f4068fe15c0b575fa3fe791a67555010401a7c5437e145c467edd2b05c733c69",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 15,
+        "record_sha256": "f4068fe15c0b575fa3fe791a67555010401a7c5437e145c467edd2b05c733c69"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "unmeasured",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/improvement.v1.json",
+      "bytes": 16800,
+      "sha256": "12fe88747ce824fb946b758e6d178efd08f16c5513db2fc06afed1efca6d7138"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-016/historical/task.pre-improvement.v1.json",
+        "bytes": 19324,
+        "sha256": "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"
+      },
+      "implementation_ids": [
+        "authoring-cardiac-paired-execution",
+        "benchmarks-neuroscience-paper-root-add-016",
+        "components-cardiac-matched-artifacts",
+        "components-cardiac-six-model-summary",
+        "components-cardiac-full-cohort-admission-v1",
+        "construction-cardiac-candidate-delivery-v1"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/registered-runtime/manifest.json",
+        "bytes": 9320,
+        "sha256": "e2d0d8612087a9034d5432c186fdc99f5626749de9ea48f349927b23a61573ff"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source-native TRF baseline and information-boundary recovery. A future episode may iterate on only the original training/validation portions, preserving the source condition-specific preprocessing and explicit ECG exposure policy.",
+    "candidate_freeze": "Freeze decoder code, channel mapping, data-dependent preprocessing policy, lag/basis access, tuning procedure and the six-condition comparison rule before owner-controlled final scoring.",
+    "final_evaluation": "Evaluate against authenticated original ECG targets on the exact original test partitions and subjects; report per-subject and modality/condition results plus paired candidate-minus-author uncertainty. The existing 655-person posterior grader remains a separate calibration component.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Bind the source-author temporal-response-function implementation and numerical Figure 3 scores. A local Bayesian age model, OLS companion, reconstructed posterior or reimplemented decoder on new folds is not the source predictive baseline."
+  },
+  "blocking_issues": [
+    "Exact original Figure 3C,D reconstruction-r values, subject vectors and partition-to-summary aggregation are unrecovered.",
+    "Original 20-subject simultaneous recording IDs, immutable files, selection filters, available channels and source data access are not bound.",
+    "Eelbrain runtime/version/defaults, precise four-fold temporal split realization, artifact exclusions and source preprocessing exposure need authentication; the helper relies on predictor-column order after ECG003.",
+    "The historical implementations operate on age/slope summaries and do not implement the source-native ECG reconstruction evaluator.",
+    "The original source uses ECG-informed ICA and acausal lags; an honest evaluation must preserve and disclose that information regime without allowing candidate access to final ECG targets.",
+    "Meaningful effect, paired uncertainty, complete condition-level decision, protected episode budgets and working final evaluator remain unspecified."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original Figure 3C,D reconstruction-r values, subject vectors and partition-to-summary aggregation are unrecovered.",
+      "Original 20-subject simultaneous recording IDs, immutable files, selection filters, available channels and source data access are not bound.",
+      "Eelbrain runtime/version/defaults, precise four-fold temporal split realization, artifact exclusions and source preprocessing exposure need authentication; the helper relies on predictor-column order after ECG003.",
+      "The historical implementations operate on age/slope summaries and do not implement the source-native ECG reconstruction evaluator.",
+      "The original source uses ECG-informed ICA and acausal lags; an honest evaluation must preserve and disclose that information regime without allowing candidate access to final ECG targets.",
+      "Meaningful effect, paired uncertainty, complete condition-level decision, protected episode budgets and working final evaluator remain unspecified."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source paper contains an ordered ECG time-series reconstruction task in Figure 3C,D, using temporal response functions and the original 20-person simultaneous Salzburg M/EEG/ECG subset. This source-native task can supply the improvement route even though the historical registration emphasized descriptive age associations. Exact original decoder scores, source participant/file and fold identities, preprocessing exposure and runtime parity remain unrecovered; no active paper-win evaluator is admitted. Exact original Figure 3C,D reconstruction-r values, subject vectors and partition-to-summary aggregation are unrecovered. Original 20-subject simultaneous recording IDs, immutable files, selection filters, available channels and source data access are not bound. Eelbrain runtime/version/defaults, precise four-fold temporal split realization, artifact exclusions and source preprocessing exposure need authentication; the helper relies on predictor-column order after ECG003. The historical implementations operate on age/slope summaries and do not implement the source-native ECG reconstruction evaluator. The original source uses ECG-informed ICA and acausal lags; an honest evaluation must preserve and disclose that information regime without allowing candidate access to final ECG targets. Meaningful effect, paired uncertainty, complete condition-level decision, protected episode budgets and working final evaluator remain unspecified.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/historical/task.pre-improvement.v1.json",
+      "bytes": 19324,
+      "sha256": "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"
+    },
+    "notes": "Retain paired-execution, full-cohort-admission, matched-artifacts and six-model-summary implementations unchanged. Their 655-person Student-t summaries, reference-SD discrepancy, MCSE and OLS/HC3 checks remain association calibration/sensitivity work. The source-native Figure 3 ECG reconstruction route is identified separately and is not established by those historical graders."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Brain-wide representations of prior information in mouse decision-making",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
-    "Source-paper comparison for Source-paper pre-stimulus Bayes-optimal-prior decoding R-squared and regional null-corrected R-squared: R-squared measures prior decoding; corrected R-squared subtracts the median of 1,000 pseudosession scores. Counts of significant regions and smaller p-values do not measure prediction improvement."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover publication-linked numeric baseline scores and resolve all paper-versus-script configuration conflicts.",
-    "Use the original modality-specific inputs, windows, inclusion rules, prior target, trial splits and score aggregation for the complete declared source panel.",
-    "Retain movement/pseudosession controls; do not reward significance or anatomical coverage as if it were higher predictive performance.",
-    "Report new mouse-held-out/session-held-out testing only as an extension, and predeclare meaningful effect and valid paired uncertainty before final scoring.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "FIND-004",
   "canonical_position_one_based": 34,
@@ -174,55 +175,67 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-004/improvement.v1.json",
-      "bytes": 9064,
-      "sha256": "37b150019ca0eb11fc743616e70163237b7ea2332a51af3048413b5b626b246b"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-004/historical/task.pre-improvement.v1.json",
-        "bytes": 16157,
-        "sha256": "ac5ceceab1a9d99e37d891694395298a8f6da246f67cbe6ba982083174e255f8"
-      },
-      "implementation_ids": [
-        "construction-paper-find-004-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Source recovery blocks admission. Future iteration uses training/inner-validation folds under the original modality-specific protocol, with explicit public-target exposure accounting.",
-    "candidate_freeze": "Freeze preprocessing, prior construction, candidate, feature policy and search configuration before protected outer-fold scoring.",
-    "final_evaluation": "Score on exact original trial partitions and source cohort, preserving ten-run and null corrections; do not use generic-default reconstruction as a paper-win decision.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published regional results, a journal-compatible author rerun and generic-script reconstruction are distinct comparators. No local authored baseline replaces the source."
+    "improvement": {
+      "improvement_loop": "Source recovery blocks admission. Future iteration uses training/inner-validation folds under the original modality-specific protocol, with explicit public-target exposure accounting.",
+      "candidate_freeze": "Freeze preprocessing, prior construction, candidate, feature policy and search configuration before protected outer-fold scoring.",
+      "final_evaluation": "Score on exact original trial partitions and source cohort, preserving ten-run and null corrections; do not use generic-default reconstruction as a paper-win decision.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published regional results, a journal-compatible author rerun and generic-script reconstruction are distinct comparators. No local authored baseline replaces the source."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
-    "Original input roster/version and exact fold identities are not bound.",
-    "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
-    "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
       "Original input roster/version and exact fold identities are not bound.",
       "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
       "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
+        "Original input roster/version and exact fold identities are not bound.",
+        "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
+        "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The paper has an ordered neural-decoding R-squared endpoint, but exact regional baseline values and the paper-compatible runtime are unrecovered. Pinned generic author defaults and the local evaluator differ from journal cohort, folds and aggregation; significant regions or a mouse-held-out extension cannot substitute. Exact source baseline score vector and source-authorized overall comparison rule are missing. Original input roster/version and exact fold identities are not bound. Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit. No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper has an ordered neural-decoding R-squared endpoint, but exact regional baseline values and the paper-compatible runtime are unrecovered. Pinned generic author defaults and the local evaluator differ from journal cohort, folds and aggregation; significant regions or a mouse-held-out extension cannot substitute. Exact source baseline score vector and source-authorized overall comparison rule are missing. Original input roster/version and exact fold identities are not bound. Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit. No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -237,8 +250,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

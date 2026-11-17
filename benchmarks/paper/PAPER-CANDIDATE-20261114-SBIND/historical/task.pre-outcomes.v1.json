@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-CANDIDATE-20261114-SBIND",
+  "track": "paper",
+  "title": "Joint behavioral decoding and neural prediction from full spatial imaging fields",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Joint prediction of neural images and behavior from neural image history: WFCI1 continuous behavior, WFCI2 binary contact traces, and fUS trial target direction. Neural/continuous predictions are one-step-ahead; fUS direction is decoded from the final trial latent state.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Joint prediction of neural images and behavior from neural image history: WFCI1 continuous behavior, WFCI2 binary contact traces, and fUS trial target direction. Neural/continuous predictions are one-step-ahead; fUS direction is decoded from the final trial latent state.",
+    "Source-paper comparison for WFCI1 behavioral MSE is a numeric anchor only; full Table 2–3 joint vector required: MSE is mean squared prediction error (lower); WFCI2 behavior uses F1 (higher); fUS accuracy is correctly decoded trials divided by evaluated trials (higher). Full source vector must be retained; one chosen favorable endpoint cannot establish the joint claim."
+  ],
+  "success_criteria": [
+    "Reproduce all Table 2–3 SBIND cells on the original complete assays and thirteen fUS sessions before admitting a candidate comparison.",
+    "Recover original folds, preprocessing, trial masks, class metrics and aggregation; changed whole-trial/held-session/held-animal splits are extensions.",
+    "Predeclare a joint behavioral/neural rule with task-specific meaningful changes and uncertainty across the full vector; improving WFCI1 MSE alone does not establish this registered full-scope win.",
+    "Preserve original neural-history input and fUS supervised-sample restrictions with matched comparator budgets.",
+    "Separate published table scores, fresh author reruns and any independently sourced later SOTA scores.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "Full source-defined cropped128x128 widefield calcium fields with aligned behavior (248+412 trials) and all source-defined fUS sessions/conditions with2Hz Power Doppler fields; compressed factors only if exact input reconstruction is established.",
+  "provenance": {
+    "paper": {
+      "title": "Dynamical Modeling of Behaviorally Relevant Spatiotemporal Patterns in Neural Imaging Data",
+      "venue": "ICML / PMLR 267",
+      "year": 2025,
+      "doi": null,
+      "url": "https://proceedings.mlr.press/v267/hosseini25a.html",
+      "identity": "PMLR267:23846–23872; hosseini25a"
+    },
+    "data": [
+      {
+        "doi": "10.14224/1.38599",
+        "version": "CSHL October 2019 record; last modified 2020-07-28",
+        "url": "https://repository.cshl.edu/id/eprint/38599/",
+        "license": "Unresolved in retained landing-page metadata; no open license inferred from public links.",
+        "access": "Data description and storage-link documents public; deposit-request form alone staff-restricted. Exact full-array access/version remains to qualify.",
+        "representation": "Full reconstructed/cropped 128x128 calcium fields with synchronized behavior; compressed spatial/temporal factors may be used only if they exactly reconstruct the specified model input."
+      },
+      {
+        "doi": "10.22002/pa710-cdn95",
+        "version": "1.0.0",
+        "url": "https://data.caltech.edu/records/pa710-cdn95",
+        "license": "CC-BY-NC-4.0",
+        "access": "Open metadata, noncommercial-use restriction; external benchmark distribution/use rights need review.",
+        "observed_bytes": 34253258547,
+        "representation": "2 Hz Power Doppler fields and session metadata in fUS_BMI_Data.zip; no ultrasound RF acquisition needed."
+      }
+    ],
+    "official_code": {
+      "owner": "ShanechiLab",
+      "repo": "https://github.com/ShanechiLab/SBIND",
+      "commit": "c00e006dd298cb8c51d1543641fb3be77cc585ae",
+      "license": "USC educational/research/nonprofit permission; commercial use requires separate permission.",
+      "availability": "Pinned code/README/license and tutorial verified; tutorial uses placeholder random data, not evidence of a complete real-data loader.",
+      "publication_identity": "Current pinned commit, not a frozen paper environment."
+    },
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 5200,
+      "sha256": "c9086c43c0bc71239a45560a638333a08d7140e606562bfced9022cb5483733a"
+    }
+  },
+  "source_family_ids": [
+    "cshl-widefield-musall-38599",
+    "caltech-fus-pa710-cdn95"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 8448,
+    "source_definition_sha256": "d4643ea94d80bad372e4b94ebe4e95c35742645a8610c2939429a873f7213efa",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "resources": {
+    "storage_GiB": [
+      100,
+      300
+    ],
+    "host_RAM_GiB": [
+      32,
+      64
+    ],
+    "GPU_RAM_GiB": [
+      24,
+      48
+    ],
+    "GPU_hours": [
+      100,
+      2000
+    ],
+    "basis": "Full spatial models across 5/10 folds and baseline/ablation grids. Widefield cropped float32 arrays alone are roughly several GB; 34.25 GB fUS archive is observed, total expansion unknown."
+  },
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/improvement.v1.json",
+      "bytes": 9995,
+      "sha256": "8ff6ac8095404170558cf906171d136abfb9ea650a6a62e092e6a8ae735123af"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/historical/task.pre-improvement.v1.json",
+        "bytes": 9299,
+        "sha256": "edc73b054591ed5cc1a6a8f5710894c56968d1123982a18780ffa447b7e372b9"
+      },
+      "implementation_ids": [
+        "components-sbind-continuous-normalization",
+        "components-sbind-whole-trial-preparation"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source admission, iterate using the recovered original training/validation interface for both widefield assays and all fUS conditions; do not optimize on final table outcomes.",
+    "candidate_freeze": "Freeze code, selected architecture/hyperparameters, complete assay/session roster, transforms, folds, joint success rule and resource accounting before final scoring.",
+    "final_evaluation": "One admitted final evaluation emits every Table 2–3 metric with paired author-baseline predictions and all scope/mask receipts; preserve original input and split conditions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use the source SBIND procedure as the paper comparator; DPAD/CEBRA/TNDM and ablations remain controls. A newly corrected split has a separately rerun author baseline and is labelled an extension."
+  },
+  "blocking_issues": [
+    "Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated.",
+    "Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design.",
+    "Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity.",
+    "No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen.",
+    "No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated.",
+      "Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design.",
+      "Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity.",
+      "No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen.",
+      "No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper provides ordered behavioral and neural prediction results for both complete widefield assays and thirteen fUS sessions, including numerical Table 2–3 SBIND baselines. Exact data identities, published folds/preprocessing replay, full evaluator and a justified joint decision rule remain incomplete; no execution readiness or improvement is claimed. Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated. Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design. Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity. No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen. No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/historical/task.pre-improvement.v1.json",
+      "bytes": 9299,
+      "sha256": "edc73b054591ed5cc1a6a8f5710894c56968d1123982a18780ffa447b7e372b9"
+    },
+    "notes": "Whole-trial-preparation and continuous-normalization implementations prepare arrays and assert schemas; they are calibration/construction components. Their corrected trial boundaries must not be relabelled the published protocol."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

@@ -4,18 +4,20 @@
   "track": "paper",
   "title": "Perturbing human V1 degrades the fidelity of visual working memory",
   "status": "ineligible",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: TMS effects on spatial memory error, alpha lateralization and occipital alpha/beta responses.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: TMS effects on spatial memory error, alpha lateralization and occipital alpha/beta responses.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: TMS effects on spatial memory error, alpha lateralization and occipital alpha/beta responses.",
-    "Source-paper comparison for No ordered model-performance metric for the source perturbation effects: Paired behavioral-error and physiological contrasts; a larger contrast or smaller cluster p-value is not an accuracy score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "No paper-win admission under this descriptive perturbation contract.",
-    "Retain all paired participants and controls for reproduction; do not optimize exclusions or frequency windows against the reported effect.",
-    "Any new memory predictor, artifact-removal estimator or population/split requires a separately reviewed task with a matched source comparator.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-signal-add-021",
   "canonical_position_one_based": 60,
@@ -174,62 +176,65 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-signal-add-021/improvement.v1.json",
-      "bytes": 7311,
-      "sha256": "55bb6561ea0e5297c69149af51d8e39d50272d59701df3a126ae9c94e8d384e5"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "ineligible",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-signal-add-021/historical/task.pre-improvement.v1.json",
-        "bytes": 15142,
-        "sha256": "92fc7d5d9576592cb0c239092fc409a3922c0bb727a0704d3329117d923bd9d1"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-signal-add-021",
-        "benchmarks-neuroscience-tms-figure2b-construction-v1",
-        "benchmarks-neuroscience-tms-independent-condition-portable-profile-v1",
-        "components-tms-fixed-region-artifacts",
-        "components-tms-fixed-region-reference",
-        "tools-neuroscience_components-tms_behavior"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-signal-add-021/implementations/registered-runtime/manifest.json",
-        "bytes": 15085,
-        "sha256": "ff3daa31454f493610b5f5c3c9ae4f0f248f0dc317e60beeeb94554e6ee4a569"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive for same-task improvement; continue to identify historical profiles as numerical calibration.",
-    "candidate_freeze": "No candidate optimization against perturbation effect magnitude is admitted.",
-    "final_evaluation": "Behavioral cells, Figure 2B outputs, fixed-region statistics and portable reconstructions may be checked only as calibration.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Author effects and reconstruction references remain separate from any future predictive method benchmark."
+    "improvement": {
+      "improvement_loop": "Inactive for same-task improvement; continue to identify historical profiles as numerical calibration.",
+      "candidate_freeze": "No candidate optimization against perturbation effect magnitude is admitted.",
+      "final_evaluation": "Behavioral cells, Figure 2B outputs, fixed-region statistics and portable reconstructions may be checked only as calibration.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Author effects and reconstruction references remain separate from any future predictive method benchmark."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Source effect estimation has no monotonic model-performance success criterion.",
-    "Window/exclusion sensitivity is an extension, not surpassing the same scientific result.",
-    "Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Source effect estimation has no monotonic model-performance success criterion.",
       "Window/exclusion sensitivity is an extension, not surpassing the same scientific result.",
       "Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Source effect estimation has no monotonic model-performance success criterion.",
+        "Window/exclusion sensitivity is an extension, not surpassing the same scientific result.",
+        "Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The source tests a causal perturbation effect on behavior and EEG. Increasing an effect or its significance does not improve a prediction or estimator against known truth. Existing fixed-region and behavioral scorers reproduce specified summaries; selecting different windows or exclusions cannot become a same-task paper victory. Source effect estimation has no monotonic model-performance success criterion. Window/exclusion sensitivity is an extension, not surpassing the same scientific result. Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source tests a causal perturbation effect on behavior and EEG. Increasing an effect or its significance does not improve a prediction or estimator against known truth. Existing fixed-region and behavioral scorers reproduce specified summaries; selecting different windows or exclusions cannot become a same-task paper victory. Source effect estimation has no monotonic model-performance success criterion. Window/exclusion sensitivity is an extension, not surpassing the same scientific result. Original preprocessing parity and participant-position/source-code discrepancies remain calibration limitations.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -244,8 +249,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

@@ -1,0 +1,461 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-005",
+  "track": "paper",
+  "title": "Neural Encoding and Decoding at Scale",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+    "Source-paper comparison for All-behavior neural encoding bits/spike on the original ten held-out animals after multi-session pretraining and fine-tuning: Encoding: each neuron has [Poisson log likelihood(prediction)-log likelihood(evaluation-mean null)]/(total spikes*ln(2)). Choice/block use ordinary accuracy; wheel/whisker use un-clipped R2 across flattened test trials/time bins. Preserve source zero-rate/undefined-neuron behavior and audit its effects."
+  ],
+  "success_criteria": [
+    "Recover the exact original cohort, eligible units, aligned trials, input masks, preprocessing and 70/10/20 partitions; resolve paper/code discrepancies against source result provenance.",
+    "Run native author NEDS and the frozen candidate with identical pretraining/fine-tuning exposure and fixed resource budgets; retain all 74 training and ten held-out sessions without a convenient subset.",
+    "Surpass published 0.27 encoding bits/spike and the qualified author rerun by the predeclared meaningful effect and uncertainty rule on the same original endpoint.",
+    "Evaluate all single-behavior encoding and four decoding outcomes with a predeclared joint/trade-off rule; an encoding improvement alone cannot silently replace the registered simultaneous encoding/decoding task.",
+    "Do not call a new animal split, corrected-preprocessing variant, local ridge win, improved p-value or reproduced figure a source-paper win; report such results separately as calibration or extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-005",
+  "canonical_position_one_based": 57,
+  "paper_identity": {
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+    "publication_year": 2025,
+    "venue": "ICML"
+  },
+  "input_assets": {
+    "routes": [
+      "https://openalyx.internationalbrainlab.org"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "assessment": "NEDS61d2ef… official ONE loader and train/test session lists identify IBL repeated-site recordings; exact recording revisions/hashes remain materialization gates.",
+      "official_code": {
+        "url": "https://github.com/yzhang511/NEDS",
+        "commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+        "license": [
+          "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
+        ]
+      },
+      "input_routes": [
+        {
+          "metadata_url": "https://openalyx.internationalbrainlab.org",
+          "version": "Session membership pinned to NEDS commit; dataset revision/hash still must be frozen at acquisition."
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-005",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce multi-task neural/behavioral encoding and decoding on the paper’s public IBL repeated-site sessions, including multi-task versus single-task masking comparisons and held-out-session finetuning.",
+          "unresolved_coverage": [
+            "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
+            "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
+            "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
+            "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "id": "PAPER-paper-method-replacement-005",
+      "selected_scope": "All74 source training sessions plus10 source test sessions; no cohort reduction",
+      "selected_file_membership_complete": false,
+      "immutable_content_identity_complete": false,
+      "file_count": 0,
+      "declared_file_bytes": null,
+      "session_membership_complete": true,
+      "source_commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+      "counts": {
+        "training_sessions": 74,
+        "training_animals_paper_report": 73,
+        "heldout_sessions": 10,
+        "heldout_animals_paper_report": 10
+      },
+      "count_resolution": {
+        "paper_description": "Methods3.1 says one training animal has two insertions:74 sessions from73 animals, plus10 heldout animals. Exact source EID/PID/subject relationship still requires provenance join.",
+        "identity_join_status": "required_not_resolved_by_UUIDs",
+        "limit": "Reported73training animals versus74session entries is explained in held paper evidence; independent full EID/PID/animal join remains incomplete."
+      },
+      "provider_candidate_catalogue": {
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/provider-metadata/IBL_DATASETS.tsv",
+          "bytes": 3068884,
+          "sha256": "45bcbc8c217f5c27aacb8484238d7f1244dcccd0e9c0a4ad302f07bd534528af"
+        },
+        "summary_evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/provider-metadata/IBL_CATALOGUE_SUMMARY.json",
+          "bytes": 5187,
+          "sha256": "ccf077cc16d42737d57de1e6ccfff14f99e1e3935fbf32381ad8d23c003360cd"
+        },
+        "candidate_dataset_objects": 7346,
+        "sessions": 84,
+        "declared_name_filter_regex": "^(_ibl_)?((spikes|clusters|channels|trials|wheel)\\.|(leftCamera|rightCamera|bodyCamera)\\.(times|ROIMotionEnergy)\\.)",
+        "pagination_complete": true,
+        "all_unfiltered_provider_objects": 17084,
+        "exact_loader_selection_complete": false,
+        "original_scope_unchanged": true,
+        "representations": "One existing public-repository file_record per dataset UUID, prefer IBL public S3; mirror copies omitted. All dataset objects matching declared metadata family regex across84sessions retained if pagination_complete; other families not queried.",
+        "identity_fields": "dataset UUID,collection,revision,provider name,representative repository/path,file-record UUID,file_size,hash,version,tags,default flags",
+        "hash_semantics": "Provider hash copied verbatim; no hash-algorithm inference from32hex characters; no local payload digest computed.",
+        "release_limit": "Live public API snapshot bound by response digests and normalized table SHA256; no global immutable release version is claimed.",
+        "candidate_total_publisher_file_bytes": 293526851376,
+        "candidate_byte_sum_is_not_selected_storage_requirement": true
+      },
+      "required_original_object_families": [
+        "per-probe spikes/clusters/channels via SpikeSortingLoader.load_spike_sorting and merge_clusters",
+        "trials via SessionLoader.load_trials",
+        "wheel via SessionLoader.load_wheel",
+        "camera motion-energy and time objects via SessionLoader; actual left/right behavior selection requires source/parity review"
+      ],
+      "optional_LFP": "--use_lfp is separate; no default LFP inclusion or file list invented",
+      "unresolved_fields": [
+        "dataset UUID",
+        "selected probe/collection membership",
+        "selected revision",
+        "selected repository paths",
+        "selected byte total",
+        "publisher checksum algorithm",
+        "complete loader dependency listing"
+      ],
+      "gaps": [
+        "Anonymous403 is preserved. Documented public-service authentication subsequently returned the complete7346-row candidate-family listing across all84source sessions; it is not the exact dependency-resolved loader selection.",
+        "All84membership entries remain; no BWM H5 files, HuggingFace derivatives, one-session default or processed caches replace ONE originals.",
+        "Official env.yaml lists ONE-api,iblatlas,ibllib without versions. The independently held ibllib2.34 source is a comparison reference, not a silently adopted NEDS dependency. Probe collection/revision defaults and channel-location fallback can require further metadata; candidate families alone are not an exact loader inventory.",
+        "Original object identities, full animal join, eligibility/masks, LFP scope and dependency/environment parity still need resolution."
+      ],
+      "evidence": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+        "bytes": 95149,
+        "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+      },
+      "metadata_only": true,
+      "scope_change": false,
+      "readiness_promotion": false,
+      "payload_validation_by_this_wave": false
+    }
+  },
+  "official_code": {
+    "url": "https://github.com/yzhang511/NEDS",
+    "revision_or_archive_version": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+    "entrypoints": [
+      {
+        "path": "src/prepare_data.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/utils/ibl_data_utils.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/prepare_data.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/prepare_data.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/train.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/train.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/eval.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/eval.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/train.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/train.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/eval.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/eval.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "data/train_eids.txt",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "data/test_eids.txt",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-005",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/yzhang511/NEDS",
+            "commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+            "author_linkage": [
+              "https://proceedings.mlr.press/v267/zhang25bw.html",
+              "https://github.com/yzhang511/NEDS"
+            ],
+            "license": [
+              "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "src/prepare_data.py",
+                "src/utils/ibl_data_utils.py",
+                "script/prepare_data.sh",
+                "script/train.sh",
+                "script/eval.sh",
+                "src/train.py",
+                "src/eval.py",
+                "data/train_eids.txt",
+                "data/test_eids.txt"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "src/prepare_data.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/utils/ibl_data_utils.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/prepare_data.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/prepare_data.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/train.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/train.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/eval.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/eval.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/train.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/eval.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/eval.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "data/train_eids.txt",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "data/test_eids.txt",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "PyTorch",
+            "ONE-api",
+            "ibllib",
+            "datasets",
+            "Hydra",
+            "accelerate"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "fd24b1dd39124c142c4e103e7fc0f3dbc46409afcc6fc2da3f20a6033a62ba80",
+    "audit_record_sha256": "1b3b9162436013dfba06ec30a0a9be83a87a9c123b6888b901b7679dec910818",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 69,
+        "record_sha256": "657b2481913233e1e5393bad4e0c90c15ff0060bce09af9f48d8e5fb47769dea"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-replacement-005",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_metadata_followups": [
+      {
+        "checked_on": "2026-11-07",
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+          "bytes": 95149,
+          "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+        },
+        "previous_manifest": {
+          "path": "benchmarks/manifests/paper/PAPER-paper-method-replacement-005.json",
+          "bytes": 20392,
+          "sha256": "e32240a84506449b32df7ddc976b2e06c0c1f5f88b492b616ecb751f57095759"
+        },
+        "scope_change": false,
+        "readiness_promotion": false
+      }
+    ]
+  },
+  "resources": {
+    "roster_resource_statement": "GPU. Author paper reports16RTX8000(48GB)GPUs for full pretraining under2days and a singleA40 under2h for single-session training; these are author reports, not measurements.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
+      "bytes": 12936,
+      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
+        "bytes": 26106,
+        "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-replacement-005-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
+    "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
+    "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+  },
+  "blocking_issues": [
+    "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+    "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+    "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+    "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+    "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+    "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+      "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+      "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+      "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+      "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+      "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model. Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility. Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task. Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values. Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations. Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates. Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
+      "bytes": 26106,
+      "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+    },
+    "notes": "Retain the original registration and initial-evaluator-v1 for calibration. Its complete-cohort packets and source-derived metric kernels are useful engineering checks, but its train-only ridge, repaired inclusion/scaling choices and conditional animal bootstrap are prospective constructions rather than source-author results."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

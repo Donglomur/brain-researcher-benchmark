@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-013",
+  "track": "paper",
+  "title": "BOLD signal changes can oppose oxygen metabolism across the human cortex",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Investigate the original Figure5 estimation subtask: fit baseline CMRO2 from OEF, CBF and CBV, and task-related deltaCMRO2 from deltaOEF and deltaCBF, separately for concordant and discordant voxels. This is a source-native fitted-estimation task; preserve descriptive findings separately and do not reinterpret fitted agreement as external physiological accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Investigate the original Figure5 estimation subtask: fit baseline CMRO2 from OEF, CBF and CBV, and task-related deltaCMRO2 from deltaOEF and deltaCBF, separately for concordant and discordant voxels. This is a source-native fitted-estimation task; preserve descriptive findings separately and do not reinterpret fitted agreement as external physiological accuracy.",
+    "Source-paper comparison for Source Figure5 stratum-specific regression R-squared for baseline and task-related CMRO2 estimation; scientific improvement validity unresolved: Source Figure5 reports regression R-squared for each baseline/task-change and concordance stratum. Preserve the exact source R2 convention and fit support when recovered; it is fitted variance explanation, not held-out prediction or error against independently measured oxygen metabolism."
+  ],
+  "success_criteria": [
+    "Recover and authenticate the original Figure5 scripts, source map lineage, all original participants, voxel masks/strata, fitted rows and R2 conventions for all four regression cells.",
+    "Resolve scientific admissibility of improving this source-native fitted-estimation route: the target is calculated through Fick’s principle from related inputs. Directly evaluating that known identity or increasing fitted R2 through extra flexibility must not earn physiological improvement credit.",
+    "Reproduce the original named source regressions as calibration and freeze a justified effect, model-complexity/access policy and dependence-aware family decision rule before any candidate comparison.",
+    "Keep baseline .91/.91 and task-change .86/.84 results separate; no favorable stratum, invented average or changed masking/population substitutes for the original source task.",
+    "No current paper win is admitted. If meaningful superiority cannot be justified for the original derived-target task, keep it inactive; external ground-truth oxygen-metabolism prediction, new participants or new validation splits require separately identified extensions.",
+    "Preserve the original BOLD/metabolism physiological findings as calibration and safeguards. Larger discordance, stronger significance or tighter legacy map reconstruction never establishes the required improvement.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-013",
+  "canonical_position_one_based": 33,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-025-02132-9",
+    "publication_year": 2025,
+    "venue": "Nature Neuroscience"
+  },
+  "input_assets": {
+    "routes": [
+      "https://openneuro.org/datasets/ds004873/versions/2.0.6"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/1",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/qmri/sub-p019_task-calc_space-T2_oef.nii",
+          "bytes": "3010912"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      },
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/2",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/anat/sub-p019_BrMsk_CSF.nii",
+          "bytes": "376672"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      },
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/3",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/qmri/sub-p019_task-calc_space-MNI152_desc-orig_cmro2.nii.gz",
+          "bytes": "806714"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Per-subject quantitative-MRI/BOLD derivative maps after mqBOLD reconstruction.",
+      "data_urls": [
+        "https://openneuro.org/datasets/ds004873/versions/2.0.6"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "url": "https://openneuro.org/datasets/ds004873/versions/2.0.6",
+          "git": "eef50ff140a9863c412428b0bd1a14f46f5cd342",
+          "license": "CC0",
+          "metadata_url": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds004873/2.0.6/participants.tsv",
+          "participants_metadata_rows": 75,
+          "primary_analysis_subjects": 40,
+          "observed_artifacts_summary": {
+            "items": 4,
+            "evidence_retained_in_source_record": true
+          },
+          "example_cbf_sha256": "d1a66f4ab1a723aaa2265f7b77fea21edcba90ef960f821aa2836943853995b1",
+          "storage_note": "Four representative derivative artifacts HEAD-verified, not a total storage estimate. The unversionedS3listing points to older1.0.4and must not be used for current availability."
+        }
+      ],
+      "source_bridge": "Reproduce the central task-dependent BOLD-versus-metabolism comparison from released quantitative MRI/BOLD derivative maps in the exact2.0.6snapshot; scope starts after acquisition and mqBOLD reconstruction.",
+      "code_url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+      "code_revision_or_archive_version": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+      "entrypoints": [
+        "A_preprocessing.ipynb",
+        "B_Fig1.ipynb",
+        "C_Fig2A_PLS.ipynb",
+        "D_Fig2BD.ipynb",
+        "E_Fig3.ipynb",
+        "qBOLD_fun.ipynb"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-013",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Task-resolved CBF/OEF/CMRO2 and BOLD maps; exact versioned CBF/OEF/mask/CMRO2 URLs returned200 with sizes matching Git-annex metadata.",
+            "labels": "Actual75-row participants.tsv columns participant_id,sex,age,Hct,O2sat,comments; task names rest/control/mem/calc are encoded in map filenames and code.",
+            "biological_units": "Author source fixes40primary subject IDs, with30full-condition and10additional control/calculation cases. Do not infer75independent usable cases from manifest alone.",
+            "split": "Original within-person contrasts; extensions hold out people and conditions, with ROIs/masks chosen independently of evaluated effect.",
+            "controls": "Vascular/hemodynamic calibration, hematocrit/O2saturation, CBV correction, global signal and spatial autocorrelation; BOLD sign alone is not a direct neural firing measure."
+          },
+          "scope_description": "Reproduce the central task-dependent BOLD-versus-metabolism comparison from released quantitative MRI/BOLD derivative maps in the exact2.0.6snapshot; scope starts after acquisition and mqBOLD reconstruction."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+    "revision_or_archive_version": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+    "entrypoints": [
+      "A_preprocessing.ipynb",
+      "B_Fig1.ipynb",
+      "C_Fig2A_PLS.ipynb",
+      "D_Fig2BD.ipynb",
+      "E_Fig3.ipynb",
+      "qBOLD_fun.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-013",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+            "commit": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+            "license": "CC BY-NC-SA4.0",
+            "entrypoints": [
+              "A_preprocessing.ipynb",
+              "B_Fig1.ipynb",
+              "C_Fig2A_PLS.ipynb",
+              "D_Fig2BD.ipynb",
+              "E_Fig3.ipynb",
+              "qBOLD_fun.ipynb"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "6a7477739215527b7250afb9c433d630b9ebea62e973470bed751dcd86385da1",
+    "audit_record_sha256": "52f12c19818390c4e335574847be5ee5468091a964f9e3deec50506ecf4b83c4",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-013",
+        "declared_record_sha256": "cdfd15312dea0f33f0148866f2d38ec8debedfd9c19aaf4dba73bf6ecfe27d34",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 12,
+        "record_sha256": "cdfd15312dea0f33f0148866f2d38ec8debedfd9c19aaf4dba73bf6ecfe27d34"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "unmeasured",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-013/improvement.v1.json",
+      "bytes": 15129,
+      "sha256": "480c82e795dfcf0da4bab66e2e893bd867c041fa9adfeec2a4c0b547c3b53226"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-013/historical/task.pre-improvement.v1.json",
+        "bytes": 16711,
+        "sha256": "dc4aa310b2265d05b3cfa88b7f8093ebc82cbac96ca6d67628c9c83b899dcd64"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-signal-add-013-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery and resolution of the derived-target validity problem. A future source-native episode must declare the original information/exposure and model-selection conditions; no new split may silently replace the fitted-estimation task.",
+    "candidate_freeze": "Before any admitted comparison, freeze the estimator family, complexity, source masks/strata, map lineage, original fit support, effect rule and uncertainty. Do not select a favorable Figure5 model after seeing scores.",
+    "final_evaluation": "No paper-win evaluation is currently available. A future evaluator must reproduce all original named R2 cells and apply a separately justified source-native superiority rule; improved fit to the known CMRO2 identity alone receives no scientific credit.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original .91/.91/.86/.84 source results are fitted model statistics, not external validation. Authenticate the native author baseline rather than replacing it with the legacy CALC–CTRL array evaluator or newly authored predictive task."
+  },
+  "blocking_issues": [
+    "Exact Figure5 source script/version, participant and voxel support, mask/stratum construction and regression-array lineage are not authenticated.",
+    "CMRO2 is Fick-derived from related predictor inputs; a meaningful source-native performance improvement distinct from reproducing a known mathematical identity remains scientifically unresolved.",
+    "The source reports fitted R2 rather than a protected prediction split; original fitting/selection access and a valid comparison policy are unbound.",
+    "Four named R2 values are available but no source-defined aggregate or justified family superiority rule is recovered.",
+    "Author-baseline reproduction, paired participant/spatial uncertainty, meaningful effect, concrete access/resource budgets and a working evaluator are absent."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact Figure5 source script/version, participant and voxel support, mask/stratum construction and regression-array lineage are not authenticated.",
+      "CMRO2 is Fick-derived from related predictor inputs; a meaningful source-native performance improvement distinct from reproducing a known mathematical identity remains scientifically unresolved.",
+      "The source reports fitted R2 rather than a protected prediction split; original fitting/selection access and a valid comparison policy are unbound.",
+      "Four named R2 values are available but no source-defined aggregate or justified family superiority rule is recovered.",
+      "Author-baseline reproduction, paired participant/spatial uncertainty, meaningful effect, concrete access/resource budgets and a working evaluator are absent."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Source Figure 5 contains an ordered regression-estimation route: CMRO2 and its task changes are fitted from source hemodynamic inputs with reported stratum-specific R-squared values. This source-native subtask can be investigated independently of the legacy descriptive CALC–CTRL endpoint. Exact native row/mask/model binding and a scientifically valid improvement criterion remain unresolved: CMRO2 is itself derived from these inputs through Fick’s principle, so increasing fitted R-squared may only reconstruct a known identity and cannot by itself establish better physiological estimation. Exact Figure5 source script/version, participant and voxel support, mask/stratum construction and regression-array lineage are not authenticated. CMRO2 is Fick-derived from related predictor inputs; a meaningful source-native performance improvement distinct from reproducing a known mathematical identity remains scientifically unresolved. The source reports fitted R2 rather than a protected prediction split; original fitting/selection access and a valid comparison policy are unbound. Four named R2 values are available but no source-defined aggregate or justified family superiority rule is recovered. Author-baseline reproduction, paired participant/spatial uncertainty, meaningful effect, concrete access/resource budgets and a working evaluator are absent.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-013/historical/task.pre-improvement.v1.json",
+      "bytes": 16711,
+      "sha256": "dc4aa310b2265d05b3cfa88b7f8093ebc82cbac96ca6d67628c9c83b899dcd64"
+    },
+    "notes": "Preserve initial-evaluator-v1 and all original physiological source-contrast evidence as calibration. The source-native Figure5 estimation route is a proposed current rebinding, not an executed replacement; the fixed primary40 map calculations neither implement that regression baseline nor establish stronger-than-paper performance."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

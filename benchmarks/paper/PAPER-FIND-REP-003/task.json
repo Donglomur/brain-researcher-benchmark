@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Decode all 24 forelimb joint-angle trajectories from M1-fl and S1-fl neural activity for the original Figure 5 reaching/grasping task. Joint velocities, lagged variants and optogenetic disruption are separate analyses.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original M1-fl versus S1-fl joint-kinematic encoding/decoding finding and the separate M1-fl inactivation finding on reach/grasp disruption, using each result's source-defined cohort, inputs and indispensable controls. Preserve the complete original 24-joint Figure 5 comparison, its relevant partial/residual controls and source summaries, together with original intervention contact/event timing and disrupted-trajectory evidence. Do not treat decoding performance as causal intervention evidence or combine the five imaging mice with the two intervention mice. Assess improvement only for a clearly named, source-qualified result with an independently justified comparison; a Figure 5 decoding gain cannot establish the intervention finding or whole-paper superiority.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Decode all 24 forelimb joint-angle trajectories from M1-fl and S1-fl neural activity for the original Figure 5 reaching/grasping task. Joint velocities, lagged variants and optogenetic disruption are separate analyses.",
-    "Source-paper comparison for Figure 5 held-out variance explained per joint and source mouse/area summary: For every joint and held-out fold, VE = 1 - Var(y - yhat)/Var(y), with MATLAB sample-variance semantics over concatenated test-trial timepoints. Higher is better. This differs from 1 - SSE/SST when residual means are nonzero."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: Both expressly retained empirical result families: M1-fl/S1-fl joint-motion and reach/grasp encoding/decoding, and supplied M1-fl cortical-inactivation timing/trajectory disruption. Preserve source-specific populations and indispensable controls. Figure 5 provides genuine nested coverage of the first family. No all-figure/whole-paper requirement, S1 intervention, high-level target-decoding task, raw pose/segmentation revalidation or across-learning perturbation study is added.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained source work: Preserve the scientifically reviewed Figure 5 scorer/exporter, source-fold/VE provenance and reproduction proposal as partial primary coverage and a possible source-qualified result-level decoding comparison; it is not an unrelated secondary surrogate. Preserve the distinct intervention component without treating its conditional histogram or representative trajectories as a complete causal estimator. Keep new held-animal/session evaluation, local phase-template deltas and redesigned aggregates explicitly prospective. A Figure 5-only replacement primary would require a new explicit scope decision; none is selected here."
   ],
   "success_criteria": [
-    "Recover the numeric original Figure 5 score panel and reproduce the source author decoder on all ten sessions and all 24 joints.",
-    "Bind original folds, RADICaL inputs, cell selection, PCA exposure and exact source VE formula before candidate iteration.",
-    "Predeclare the source-summary comparison and meaningful effect/uncertainty so a favorable subset of joints, mice or areas cannot establish success.",
-    "A lower reconstruction error to saved figures, a gain over the local phase template, a new split or the separate optogenetic histogram does not establish a source-paper win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful retained implementations with their declared coverage. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "FIND-REP-003",
   "canonical_position_one_based": 16,
@@ -400,56 +401,93 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-REP-003/improvement.v1.json",
-      "bytes": 11196,
-      "sha256": "503bef245a651d8dd38e8b826055018a197ef289d6907a3d5cfc29b6e7583951"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-REP-003/historical/task.pre-improvement.v1.json",
-        "bytes": 24810,
-        "sha256": "6158f36058f07a4112a70cbca57d13e26fcfe9ce61a2384ba4f44f0c8de12a36"
-      },
-      "implementation_ids": [
-        "construction-paper-find-rep-003-initial-evaluator-v1",
-        "construction-opto-authentic-delivery-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_complete_primary_pairing"
   },
   "episode": {
-    "improvement_loop": "Blocked pending the original score panel and matched source route. Subsequent method iteration must use training and designated validation feedback under the declared source input condition.",
-    "candidate_freeze": "Freeze all trial identifiers, cell-selection and PCA choices, source fold manifest, candidate method, original summary comparison and uncertainty rule before final scoring.",
-    "final_evaluation": "Compare both methods on identical original folds and all eligible mouse/area/joint outputs; retain per-mouse paired results and source figure reductions. New held-animal evaluation is an extension.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "The author ridge/RADICaL decoder is the baseline. The locally authored phase template is a diagnostic control, not the published method, and has no authority to define paper victory."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Blocked pending the original score panel and matched source route. Subsequent method iteration must use training and designated validation feedback under the declared source input condition.",
+      "candidate_freeze": "Freeze all trial identifiers, cell-selection and PCA choices, source fold manifest, candidate method, original summary comparison and uncertainty rule before final scoring.",
+      "final_evaluation": "Compare both methods on identical original folds and all eligible mouse/area/joint outputs; retain per-mouse paired results and source figure reductions. New held-animal evaluation is an extension.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "The author ridge/RADICaL decoder is the baseline. The locally authored phase template is a diagnostic control, not the published method, and has no authority to define paper victory."
+    },
+    "primary_source_limits": [
+      "The prior Figure 5 source-native review is scientifically substantive, but the bounded authority audit found no explicit decision removing the second historical intervention output. Preserve that review, exact predecessor definitions and components while consistently correcting current task/outcome/catalog/CLI/admission semantics.",
+      "Figure 5 still lacks authenticated complete numeric references, original trial/fold identities and authentic computation/verification. Preserve all 24 joints, five mice/ten M1-S1 sessions, source top-cell/RADICaL and pre-CV PCA exposure, variance-based VE rather than uncentered SSE R-squared, original fold/median reductions and relevant partial/residual controls. Joints and repeated folds do not increase the animal sample size.",
+      "Intervention eligibility and source joins remain unresolved: two VGAT-ChR2 mice are distinct from the five imaging mice. Preserve source stimulation/control assignments, source event alignment and necessary controls. Methods specifies stimulation from 150 ms before cue through 3 seconds afterward; caption/text panel and event wording need reconciliation rather than silent normalization.",
+      "The source optogenetic histogram selects successful trials with additional problem/contact/lift/wrong-grab masks and normalizes contact-time histograms. That conditional display cannot alone verify the paper's overall within-3-second contact percentages; original denominators and computational provenance remain unbound.",
+      "The original trajectory display uses right-target stimulation trials and control trials with source index below 60. Preserve original example identities and display selections; do not relabel them as an all-trial quantitative kinematic effect. Source timing/trajectory numeric criteria, independent verification and animal-level uncertainty remain unfrozen.",
+      "A qualified same-task Figure 5 decoding gain can only support that named result-level comparison. Decoding accuracy is not causal motor control, and stronger disruption or smaller p-values do not establish intervention superiority. No arbitrary global threshold or whole-task superiority rule is created.",
+      "Scalar Figure 5 summaries do not cover complete decoder arrays/companions or the intervention family. Keep any mixed or incomplete whole-primary bundle unavailable if the schema cannot represent coverage and result-specific comparisons faithfully. No new task ID, execution, scientific outcome, source access, readiness or current SOTA is established."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered.",
-    "Complete versioned source inputs and original fold manifest have not been authenticated or executed.",
-    "Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation.",
-    "Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered.",
       "Complete versioned source inputs and original fold manifest have not been authenticated or executed.",
       "Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation.",
       "Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished."
+    ],
+    "primary_source_limits": [
+      "The prior Figure 5 source-native review is scientifically substantive, but the bounded authority audit found no explicit decision removing the second historical intervention output. Preserve that review, exact predecessor definitions and components while consistently correcting current task/outcome/catalog/CLI/admission semantics.",
+      "Figure 5 still lacks authenticated complete numeric references, original trial/fold identities and authentic computation/verification. Preserve all 24 joints, five mice/ten M1-S1 sessions, source top-cell/RADICaL and pre-CV PCA exposure, variance-based VE rather than uncentered SSE R-squared, original fold/median reductions and relevant partial/residual controls. Joints and repeated folds do not increase the animal sample size.",
+      "Intervention eligibility and source joins remain unresolved: two VGAT-ChR2 mice are distinct from the five imaging mice. Preserve source stimulation/control assignments, source event alignment and necessary controls. Methods specifies stimulation from 150 ms before cue through 3 seconds afterward; caption/text panel and event wording need reconciliation rather than silent normalization.",
+      "The source optogenetic histogram selects successful trials with additional problem/contact/lift/wrong-grab masks and normalizes contact-time histograms. That conditional display cannot alone verify the paper's overall within-3-second contact percentages; original denominators and computational provenance remain unbound.",
+      "The original trajectory display uses right-target stimulation trials and control trials with source index below 60. Preserve original example identities and display selections; do not relabel them as an all-trial quantitative kinematic effect. Source timing/trajectory numeric criteria, independent verification and animal-level uncertainty remain unfrozen.",
+      "A qualified same-task Figure 5 decoding gain can only support that named result-level comparison. Decoding accuracy is not causal motor control, and stronger disruption or smaller p-values do not establish intervention superiority. No arbitrary global threshold or whole-task superiority rule is created.",
+      "Scalar Figure 5 summaries do not cover complete decoder arrays/companions or the intervention family. Keep any mixed or incomplete whole-primary bundle unavailable if the schema cannot represent coverage and result-specific comparisons faithfully. No new task ID, execution, scientific outcome, source access, readiness or current SOTA is established."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered.",
+        "Complete versioned source inputs and original fold manifest have not been authenticated or executed.",
+        "Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation.",
+        "Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "The prior Figure 5 source-native review is scientifically substantive, but the bounded authority audit found no explicit decision removing the second historical intervention output. Preserve that review, exact predecessor definitions and components while consistently correcting current task/outcome/catalog/CLI/admission semantics.",
+      "Figure 5 still lacks authenticated complete numeric references, original trial/fold identities and authentic computation/verification. Preserve all 24 joints, five mice/ten M1-S1 sessions, source top-cell/RADICaL and pre-CV PCA exposure, variance-based VE rather than uncentered SSE R-squared, original fold/median reductions and relevant partial/residual controls. Joints and repeated folds do not increase the animal sample size.",
+      "Intervention eligibility and source joins remain unresolved: two VGAT-ChR2 mice are distinct from the five imaging mice. Preserve source stimulation/control assignments, source event alignment and necessary controls. Methods specifies stimulation from 150 ms before cue through 3 seconds afterward; caption/text panel and event wording need reconciliation rather than silent normalization.",
+      "The source optogenetic histogram selects successful trials with additional problem/contact/lift/wrong-grab masks and normalizes contact-time histograms. That conditional display cannot alone verify the paper's overall within-3-second contact percentages; original denominators and computational provenance remain unbound.",
+      "The original trajectory display uses right-target stimulation trials and control trials with source index below 60. Preserve original example identities and display selections; do not relabel them as an all-trial quantitative kinematic effect. Source timing/trajectory numeric criteria, independent verification and animal-level uncertainty remain unfrozen.",
+      "A qualified same-task Figure 5 decoding gain can only support that named result-level comparison. Decoding accuracy is not causal motor control, and stronger disruption or smaller p-values do not establish intervention superiority. No arbitrary global threshold or whole-task superiority rule is created.",
+      "Scalar Figure 5 summaries do not cover complete decoder arrays/companions or the intervention family. Keep any mixed or incomplete whole-primary bundle unavailable if the schema cannot represent coverage and result-specific comparisons faithfully. No new task ID, execution, scientific outcome, source access, readiness or current SOTA is established."
     ]
   },
   "next_implementation_action": {
-    "action": "Figure 5 defines a defensible original 24-joint decoding task and author code fixes its variance-explained calculation, but the published per-joint/per-mouse numerical baseline has not been recovered or rerun. The current scorer compares to a newly authored phase template and aggregates differently from the paper; beating that template is not beating the paper. Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered. Complete versioned source inputs and original fold manifest have not been authenticated or executed. Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation. Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "Figure 5 defines a defensible original 24-joint decoding task and author code fixes its variance-explained calculation, but the published per-joint/per-mouse numerical baseline has not been recovered or rerun. The current scorer compares to a newly authored phase template and aggregates differently from the paper; beating that template is not beating the paper. Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered. Complete versioned source inputs and original fold manifest have not been authenticated or executed. Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation. Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -464,8 +502,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved improvement contract and its declared coverage. Complete primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "Both expressly retained empirical result families: M1-fl/S1-fl joint-motion and reach/grasp encoding/decoding, and supplied M1-fl cortical-inactivation timing/trajectory disruption. Preserve source-specific populations and indispensable controls. Figure 5 provides genuine nested coverage of the first family. No all-figure/whole-paper requirement, S1 intervention, high-level target-decoding task, raw pose/segmentation revalidation or across-learning perturbation study is added.",
+  "retained_secondary_scope": "Preserve the scientifically reviewed Figure 5 scorer/exporter, source-fold/VE provenance and reproduction proposal as partial primary coverage and a possible source-qualified result-level decoding comparison; it is not an unrelated secondary surrogate. Preserve the distinct intervention component without treating its conditional histogram or representative trajectories as a complete causal estimator. Keep new held-animal/session evaluation, local phase-template deltas and redesigned aggregates explicitly prospective. A Figure 5-only replacement primary would require a new explicit scope decision; none is selected here.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-FIND-REP-003"
   }
 }

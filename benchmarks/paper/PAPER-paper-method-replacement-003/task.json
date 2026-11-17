@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "A deep learning strategy to identify cell types across species from high-density extracellular recordings",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Five-class cerebellar cell-type prediction; external mouse and macaque expert-label agreement remains a separate panel.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Five-class cerebellar cell-type prediction; external mouse and macaque expert-label agreement remains a separate panel.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Five-class cerebellar cell-type prediction; external mouse and macaque expert-label agreement remains a separate panel.",
-    "Source-paper comparison for Original classwise accuracy at matched retained coverage, with full external-validation panel: Per-class correct predictions among retained units, together with retained fraction. Confidence is the largest mean class probability divided by the second largest; original threshold is 2 and threshold-0 results are also reported."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover the complete original class/confidence/coverage outputs and their denominators; define an ordered comparison before candidate results are observed.",
-    "Retain the original LOO and external population regimes with matched input and VAE exposure; compare accuracy without obtaining a gain by discarding more units.",
-    "Use the full released author comparator, preserving disclosure of label-conditioned engineered-feature preprocessing; do not replace it with the local grouped reference.",
-    "Report descriptive behavioral analyses separately; changed animal/laboratory splits or a target-blind preprocessing successor cannot count as surpassing the original result.",
-    "Require a task-justified improvement and valid biological-dependence uncertainty, not repeated-seed significance.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-replacement-003",
   "canonical_position_one_based": 27,
@@ -449,55 +449,67 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-replacement-003/improvement.v1.json",
-      "bytes": 10931,
-      "sha256": "5eb71c2631813a025d2b017feeefa511b1139d41480a4223cb69097efbdd6ee9"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-003/historical/task.pre-improvement.v1.json",
-        "bytes": 29057,
-        "sha256": "6a04f3712303c36e046b0341ce7cc9a555a52365f1039384191cb02799f0fd23"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-method-replacement-003"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Once the original C4 panel and exposure policy are recovered, iterate using only each original LOO fit’s training units and separately declared development feedback. Keep all observations of the left-out unit out of fitting and preserve the permitted unlabeled VAE corpus. Log classifier, probability calibration and confidence-rule changes without feeding external mouse/macaque evaluation labels into selection.",
-    "candidate_freeze": "Before final LOO and transfer scoring, freeze the five-class ontology, complete unit roster, original QC and input conditions, VAE membership and initialization, per-fold fit recipe, ten-member probability reduction, confidence/coverage comparison, and budgets. The confidence threshold cannot be changed after seeing final labels to discard errors.",
-    "final_evaluation": "Produce the complete original 202-unit LOO and external expert-population outputs with the recovered source recipe; report every class’s accuracy and retained fraction at the original confidence conditions. Admit victory only under a predeclared ordered comparison that prevents selective coverage gains. Grouped animal-held-out results are a separately named extension.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Calibrate against the released author deep-classifier and its full confidence/coverage results. Preserve any label-conditioned engineered-feature baseline as a disclosed literal reconstruction; the local target-blind grouped successor cannot replace the paper comparator. Published figures, author reruns and prospective grouped references retain separate identities."
+    "improvement": {
+      "improvement_loop": "Once the original C4 panel and exposure policy are recovered, iterate using only each original LOO fit’s training units and separately declared development feedback. Keep all observations of the left-out unit out of fitting and preserve the permitted unlabeled VAE corpus. Log classifier, probability calibration and confidence-rule changes without feeding external mouse/macaque evaluation labels into selection.",
+      "candidate_freeze": "Before final LOO and transfer scoring, freeze the five-class ontology, complete unit roster, original QC and input conditions, VAE membership and initialization, per-fold fit recipe, ten-member probability reduction, confidence/coverage comparison, and budgets. The confidence threshold cannot be changed after seeing final labels to discard errors.",
+      "final_evaluation": "Produce the complete original 202-unit LOO and external expert-population outputs with the recovered source recipe; report every class’s accuracy and retained fraction at the original confidence conditions. Admit victory only under a predeclared ordered comparison that prevents selective coverage gains. Grouped animal-held-out results are a separately named extension.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Calibrate against the released author deep-classifier and its full confidence/coverage results. Preserve any label-conditioned engineered-feature baseline as a disclosed literal reconstruction; the local target-blind grouped successor cannot replace the paper comparator. Published figures, author reruns and prospective grouped references retain separate identities."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound.",
-    "Full original QC/preprocessing and current-source-to-paper equivalence require qualification.",
-    "Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted.",
-    "No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound.",
       "Full original QC/preprocessing and current-source-to-paper equivalence require qualification.",
       "Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted.",
       "No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound.",
+        "Full original QC/preprocessing and current-source-to-paper equivalence require qualification.",
+        "Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted.",
+        "No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The C4 classification task is ordered, but the complete original confidence/coverage baseline and authenticated original panel are not recovered. The implemented animal-grouped target-blind successor changes the historical comparison and cannot establish a same-task win. Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound. Full original QC/preprocessing and current-source-to-paper equivalence require qualification. Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted. No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The C4 classification task is ordered, but the complete original confidence/coverage baseline and authenticated original panel are not recovered. The implemented animal-grouped target-blind successor changes the historical comparison and cannot establish a same-task win. Exact original release/unit census, VAE/checkpoint membership and complete figure baseline remain unbound. Full original QC/preprocessing and current-source-to-paper equivalence require qualification. Animal/recording dependencies and original external truth provenance must be resolved before uncertainty can be admitted. No qualified original evaluator/rerun, meaningful-effect rule or fixed access/resource budget exists.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -512,8 +524,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

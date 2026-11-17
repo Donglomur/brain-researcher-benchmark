@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-036",
+  "track": "paper",
+  "title": "Population analyses reveal heterogenous encoding in the medial prefrontal cortex during naturalistic foraging",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+    "Source-paper comparison for Equal-session mean Figure 6B avoidance/escape balanced accuracy on original fivefold OOF predictions: Balanced accuracy per session = 0.5*(avoidance recall + escape recall), after pooling all five out-of-fold predictions and thresholding escape probability at >=0.5. Do not average fold accuracies or substitute probability reconstruction error."
+  ],
+  "success_criteria": [
+    "Authenticate all 40 original sessions, source preprocessing and source-protocol folds regenerated with random_state=622 or recovered historical membership; no easier subset, changed time window or altered population.",
+    "Establish a source-conformant author BernoulliNB rerun, document seed 622 and environment/fold provenance, and reconcile it with published 0.7271 under a predeclared justified calibration tolerance before judging candidate performance.",
+    "Exceed the source result on the original balanced-accuracy endpoint with predeclared meaningful effect and valid paired uncertainty; a fit-to-reference score is not success.",
+    "Freeze the candidate before final scoring on the same source-protocol folds as the author baseline, protect labels and prevent class-block row order or original indices from leaking the target.",
+    "Treat nested logistic controls as separate competence checks. A documented rerun of the source protocol retains the same task; whole-animal, episode, time-based or otherwise changed split schemes are extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-036",
+  "canonical_position_one_based": 22,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/93994",
+    "publication_year": 2026,
+    "venue": "eLife"
+  },
+  "input_assets": {
+    "routes": [
+      "https://doi.org/10.5061/dryad.v9s4mw78c"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_inventory/0",
+        "recorded_fields": {
+          "path": "BehaviorData.zip",
+          "size": 3491935,
+          "digest": "7b87df5f92304ebc6c453ab2c8f4ee44c0bd511665471cd6e8ed8c3f26a1b81c",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "7b87df5f92304ebc6c453ab2c8f4ee44c0bd511665471cd6e8ed8c3f26a1b81c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-036"
+      },
+      {
+        "json_pointer": "/input_inventory/1",
+        "recorded_fields": {
+          "path": "EventClassificationData_4C.zip",
+          "size": 15089711,
+          "digest": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-036"
+      },
+      {
+        "json_pointer": "/input_inventory/2",
+        "recorded_fields": {
+          "path": "FineDistanceDataset.zip",
+          "size": 151461370,
+          "digest": "be7cf486bda0d3510333d7de4349b932b1514a06b5100370bee4c14878488d48",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "be7cf486bda0d3510333d7de4349b932b1514a06b5100370bee4c14878488d48"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-036"
+      },
+      {
+        "json_pointer": "/input_inventory/3",
+        "recorded_fields": {
+          "path": "raw.zip",
+          "size": 1216513295,
+          "digest": "ef5d21db304f17483dce2a4cf2053cd334ea7d5f4ec92ed76645b7afb7f38024",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "ef5d21db304f17483dce2a4cf2053cd334ea7d5f4ec92ed76645b7afb7f38024"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-036"
+      },
+      {
+        "json_pointer": "/input_inventory/4",
+        "recorded_fields": {
+          "path": "README.md",
+          "size": 3048,
+          "digest": "baeb34644d086d2d9318248750068b063940e04d263f5ef1763ddcc5262d5cc2",
+          "mimeType": "text/markdown"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "baeb34644d086d2d9318248750068b063940e04d263f5ef1763ddcc5262d5cc2"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-036"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/0",
+        "recorded_fields": {
+          "path": "BehaviorData.zip",
+          "size": 3491935,
+          "digest": "7b87df5f92304ebc6c453ab2c8f4ee44c0bd511665471cd6e8ed8c3f26a1b81c",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "7b87df5f92304ebc6c453ab2c8f4ee44c0bd511665471cd6e8ed8c3f26a1b81c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-036"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/1",
+        "recorded_fields": {
+          "path": "EventClassificationData_4C.zip",
+          "size": 15089711,
+          "digest": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-036"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/2",
+        "recorded_fields": {
+          "path": "FineDistanceDataset.zip",
+          "size": 151461370,
+          "digest": "be7cf486bda0d3510333d7de4349b932b1514a06b5100370bee4c14878488d48",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "be7cf486bda0d3510333d7de4349b932b1514a06b5100370bee4c14878488d48"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-036"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Rat raw spike sessions/tracking and prepared event-neural MAT/CSV observations.",
+      "data_urls": [
+        "https://doi.org/10.5061/dryad.v9s4mw78c"
+      ],
+      "input_version": "418976",
+      "input_inventory_or_loader_evidence": {
+        "listed_file_count": 5,
+        "representative_files": [
+          {
+            "path": "BehaviorData.zip",
+            "size": 3491935,
+            "digest": "7b87df5f92304ebc6c453ab2c8f4ee44c0bd511665471cd6e8ed8c3f26a1b81c",
+            "mimeType": "application/x-zip-compressed"
+          },
+          {
+            "path": "EventClassificationData_4C.zip",
+            "size": 15089711,
+            "digest": "ed1e4551cc96acff35b895da5c608857c36c448e7b997f6f8fb4f7fefd462f2a",
+            "mimeType": "application/x-zip-compressed"
+          },
+          {
+            "path": "FineDistanceDataset.zip",
+            "size": 151461370,
+            "digest": "be7cf486bda0d3510333d7de4349b932b1514a06b5100370bee4c14878488d48",
+            "mimeType": "application/x-zip-compressed"
+          }
+        ],
+        "limit": "Inventory examples; not payload/schema qualification."
+      },
+      "source_bridge": "Dryad v4 documents raw per-session SU matrices with spike times, tracking CSV and timing; prepared event MATs contain X and y, whole-session neural CSVs align with tracking. Inspected MATLAB generates event datasets from SU; Python classification and location regression load the corresponding exported structures.",
+      "code_url": "https://github.com/knowblesse/Lobster",
+      "code_revision_or_archive_version": "2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678",
+      "entrypoints": [
+        "MatlabCode/Spike/loadAllUnitData.m",
+        "MatlabCode/ML/generateEventClassifierDataset.m",
+        "PythonCode/EventClassification/HierarchicalEventClassifier.py",
+        "PythonCode/LocationRegression/LocationRegressor/LocationRegressor.py"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-036",
+        "versions_and_loader_contract": {
+          "input_version": "418976",
+          "input_code_bridge": "Dryad v4 documents raw per-session SU matrices with spike times, tracking CSV and timing; prepared event MATs contain X and y, whole-session neural CSVs align with tracking. Inspected MATLAB generates event datasets from SU; Python classification and location regression load the corresponding exported structures.",
+          "readiness_scope": "Only the listed substantial empirical analyses are artifact-ready for an attempt. This is not whole-paper reproduction, environment qualification, or scientific validation.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "data_manifest",
+          "input_version",
+          "input_code_bridge"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/knowblesse/Lobster",
+    "revision_or_archive_version": "2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678",
+    "entrypoints": [
+      "MatlabCode/Spike/loadAllUnitData.m",
+      "MatlabCode/ML/generateEventClassifierDataset.m",
+      "PythonCode/EventClassification/HierarchicalEventClassifier.py",
+      "PythonCode/LocationRegression/LocationRegressor/LocationRegressor.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-036",
+        "recorded": {
+          "code_url": "https://github.com/knowblesse/Lobster",
+          "code_revision": "2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678",
+          "entrypoints": [
+            "MatlabCode/Spike/loadAllUnitData.m",
+            "MatlabCode/ML/generateEventClassifierDataset.m",
+            "PythonCode/EventClassification/HierarchicalEventClassifier.py",
+            "PythonCode/LocationRegression/LocationRegressor/LocationRegressor.py"
+          ],
+          "dependencies": [
+            "MATLAB",
+            "Python; Keras/TensorFlow/scikit-learn and scientific stack"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "75c6d53446eb609c346507d46a8707628c574d59c5a9d30c9af49d650db08224",
+    "audit_record_sha256": "f749404fae77d0d354722479fb04cfb8d377dba9c01984a9795756435fdbfa52",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-036",
+        "declared_record_sha256": "4b81f006de9c36a5d5afc1ca83eaaeeb441528d50e3b91be4dfd47c2954b2eb6",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 35,
+        "record_sha256": "4b81f006de9c36a5d5afc1ca83eaaeeb441528d50e3b91be4dfd47c2954b2eb6"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "1.39 GB release; CPU workstation for conventional models, optional GPU for ANN fitting; hours, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-036/improvement.v1.json",
+      "bytes": 12605,
+      "sha256": "d49371d0df65e06704c9826a187631b4c863803e78bd97837985edb49480443f"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-036/historical/task.pre-improvement.v1.json",
+        "bytes": 20498,
+        "sha256": "63dcde0b307111fa289be9acae02a33a3c0d7b3c3fe8f64d9333a632b61506d9"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave20-paper-program-g"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Once admitted, let candidates iterate using training data and internal validation confined to each original outer training partition; final outer-fold labels and other folds' fitted state remain unavailable.",
+    "candidate_freeze": "Commit code, feature handling, hyperparameter-selection rule, probability threshold, all budgets, calibration tolerance and uncertainty rule before source-protocol outer-test feedback. Persist regenerated or recovered fold identities with source seed 622 and environment provenance.",
+    "final_evaluation": "Evaluate every original HW row once out of fold and all 40 session scores against the source-conformant BernoulliNB rerun on identical source-seed-622 folds and the separately reported published 0.7271. Calibrate using the predeclared tolerance; report other comparator results separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Paper score, source-conformant author BNB rerun, unseeded historical shuffle, any documented newly seeded shuffle and local logistic reference are separately named. Regenerating source-protocol folds with seed 622 is admissible with paired membership and calibrated provenance; a changed split scheme cannot validate the same-task claim."
+  },
+  "blocking_issues": [
+    "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
+    "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
+    "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
+    "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
+      "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
+      "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
+      "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original Figure 6B endpoint has a verified ordered metric, reported 72.71% baseline and author-code route. Complete source cohort/fold admission, a rerun baseline, meaningful effect, uncertainty and fixed execution budgets are still missing, so this is a design rather than a ready improvement task. Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions. Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying. Specify a task-justified minimum effect and uncertainty rule using valid independent units. Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-036/historical/task.pre-improvement.v1.json",
+      "bytes": 20498,
+      "sha256": "63dcde0b307111fa289be9acae02a33a3c0d7b3c3fe8f64d9333a632b61506d9"
+    },
+    "notes": "Preserve the complete foraging-programme implementation. Native out-of-fold probability fidelity and seeded-control reconstruction remain calibration only. The existing separately proposed hidden-label decoder design does not yet establish an empirical paper improvement or operational readiness."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

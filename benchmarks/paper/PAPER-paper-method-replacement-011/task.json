@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Brain Treebank: Large-scale intracranial recordings from naturalistic language stimuli",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Original ordered task: single-electrode time-resolved classification of sentence onset versus no speech (Fig. 4), with word-onset and noun-versus-verb companion tasks in Figs. 6-7. Counts of significant electrodes and stronger word-response p-values are not performance improvements.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the complete original Figure 4a–c single-electrode linear decoding of sentence onset versus no speech, including the eligible-contact peak map, source example time course and training-selected temporal/frontal held-out curves. Separately assess improved prediction on the same qualified source inputs and held-out examples against an independently reproduced author linear-decoder baseline. Preserve the source populations, examples, preprocessing, windows, splits and training-only selection. A nonlinear prediction gain does not establish the original linear-specific timing claim or language-specificity beyond acoustic correlates.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Original ordered task: single-electrode time-resolved classification of sentence onset versus no speech (Fig. 4), with word-onset and noun-versus-verb companion tasks in Figs. 6-7. Counts of significant electrodes and stronger word-response p-values are not performance improvements.",
-    "Source-paper comparison for Held-out ROC-AUC for the original sentence-onset decoding panels, with source electrode/time aggregation: Higher ROC-AUC on held-out examples for each electrode/time window; probabilistic ranking AUC = P(score_positive > score_negative) + 0.5 P(tie). Chance is 0.5. Preserve score curves and source peak-over-time summaries rather than substituting accuracy or significance."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary."
   ],
   "success_criteria": [
-    "Recover exact original release, example/split manifest, electrode exclusions, top-ten selection and numerical author ROC-AUC results for the declared complete paper panel.",
-    "Reproduce the author logistic-regression baseline on the original examples and preserve its single-electrode input condition and all source windows.",
-    "Freeze a meaningful-effect and participant-aware uncertainty rule and show a gain against both the published source result and the reproduced author comparator under equal declared access/resources.",
-    "Do not claim a paper win from the local word-responsiveness t-tests, more significant contacts, new participant/movie splits, pooled multichannel inputs or a cherry-picked region/window.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "paper-method-replacement-011",
   "canonical_position_one_based": 77,
@@ -666,57 +667,98 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/improvement.v1.json",
-      "bytes": 11463,
-      "sha256": "88f7118def1db914f37c1a060f37b51422437bbf7822d7b9796af7b0e38aa7a9"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-011/historical/task.pre-improvement.v1.json",
-        "bytes": 39979,
-        "sha256": "43a4653f5da2600d6df0733d2fff6a821aee5d9588234f236c5f147a6d302b12"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-replacement-011-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "Blocked on source recovery. Once admitted, allow development feedback only from the original training/CV portion for the chosen full decoding panel; retain descriptive responsiveness analyses as calibration.",
-    "candidate_freeze": "Freeze decoder, training procedure, electrode selection, time-window handling and all source mappings before final test replay.",
-    "final_evaluation": "Use original held-out examples and the source paper panel aggregation. New blocked-movie or participant holdouts must be labeled extensions and cannot resolve the missing source baseline.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Compare against the source logistic regression with its training-only scaler and original split; do not relabel the independent paired-t evaluator as the author baseline."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Blocked on source recovery. Once admitted, allow development feedback only from the original training/CV portion for the chosen full decoding panel; retain descriptive responsiveness analyses as calibration.",
+      "candidate_freeze": "Freeze decoder, training procedure, electrode selection, time-window handling and all source mappings before final test replay.",
+      "final_evaluation": "Use original held-out examples and the source paper panel aggregation. New blocked-movie or participant holdouts must be labeled extensions and cannot resolve the missing source baseline.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Compare against the source logistic regression with its training-only scaler and original split; do not relabel the independent paired-t evaluator as the author baseline."
+    },
+    "primary_source_limits": [
+      "Original recording, transcript/annotation, example, contact and release-version manifests remain unqualified. The reviewed arXiv v1 source is not asserted to be byte/content equivalent to a separate proceedings version.",
+      "Exact source negative sampling and buffers, original split identities/seeds and correct configured regression runner remain unresolved. A later release, new split or multichannel input cannot silently replace the selected source task.",
+      "Source window endpoint handling and identities remain unresolved; nominal 250-ms windows, 100-ms steps and a −1 to +1 second interval do not justify inventing a 21-window manifest.",
+      "Original contact selection/tie policies, reference curves, map and example identities, source numerical arrays and justified reproduction tolerances remain unresolved. Published timing scalars cannot represent the complete selected panel.",
+      "Independent authentication of source observations, original training and native evaluation remains unresolved; supplied-score software components alone do not establish it.",
+      "A candidate may change decoder architecture for the same qualified prediction task, while retaining the independently reproduced original linear baseline. Nonlinear AUC gains do not establish the original linear-specific timing interpretation or language-specificity beyond acoustic correlates.",
+      "Meaningful effect, participant-aware and selection-aware superiority uncertainty, access/exposure and resource policies remain unresolved. Original electrode-level display intervals do not establish new confirmatory participant-level superiority uncertainty.",
+      "No AUC margin, original array identity, held-out score, runtime readiness, scientific success or additional task count is established by the selection. Canonical task, outcome, catalog/CLI and admission wording require consistent bounded adoption with predecessor preservation."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.",
-    "Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.",
-    "Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.",
-    "Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.",
-    "Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.",
       "Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.",
       "Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.",
       "Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.",
       "Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator."
+    ],
+    "primary_source_limits": [
+      "Original recording, transcript/annotation, example, contact and release-version manifests remain unqualified. The reviewed arXiv v1 source is not asserted to be byte/content equivalent to a separate proceedings version.",
+      "Exact source negative sampling and buffers, original split identities/seeds and correct configured regression runner remain unresolved. A later release, new split or multichannel input cannot silently replace the selected source task.",
+      "Source window endpoint handling and identities remain unresolved; nominal 250-ms windows, 100-ms steps and a −1 to +1 second interval do not justify inventing a 21-window manifest.",
+      "Original contact selection/tie policies, reference curves, map and example identities, source numerical arrays and justified reproduction tolerances remain unresolved. Published timing scalars cannot represent the complete selected panel.",
+      "Independent authentication of source observations, original training and native evaluation remains unresolved; supplied-score software components alone do not establish it.",
+      "A candidate may change decoder architecture for the same qualified prediction task, while retaining the independently reproduced original linear baseline. Nonlinear AUC gains do not establish the original linear-specific timing interpretation or language-specificity beyond acoustic correlates.",
+      "Meaningful effect, participant-aware and selection-aware superiority uncertainty, access/exposure and resource policies remain unresolved. Original electrode-level display intervals do not establish new confirmatory participant-level superiority uncertainty.",
+      "No AUC margin, original array identity, held-out score, runtime readiness, scientific success or additional task count is established by the selection. Canonical task, outcome, catalog/CLI and admission wording require consistent bounded adoption with predecessor preservation."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.",
+        "Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.",
+        "Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.",
+        "Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.",
+        "Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Original recording, transcript/annotation, example, contact and release-version manifests remain unqualified. The reviewed arXiv v1 source is not asserted to be byte/content equivalent to a separate proceedings version.",
+      "Exact source negative sampling and buffers, original split identities/seeds and correct configured regression runner remain unresolved. A later release, new split or multichannel input cannot silently replace the selected source task.",
+      "Source window endpoint handling and identities remain unresolved; nominal 250-ms windows, 100-ms steps and a −1 to +1 second interval do not justify inventing a 21-window manifest.",
+      "Original contact selection/tie policies, reference curves, map and example identities, source numerical arrays and justified reproduction tolerances remain unresolved. Published timing scalars cannot represent the complete selected panel.",
+      "Independent authentication of source observations, original training and native evaluation remains unresolved; supplied-score software components alone do not establish it.",
+      "A candidate may change decoder architecture for the same qualified prediction task, while retaining the independently reproduced original linear baseline. Nonlinear AUC gains do not establish the original linear-specific timing interpretation or language-specificity beyond acoustic correlates.",
+      "Meaningful effect, participant-aware and selection-aware superiority uncertainty, access/exposure and resource policies remain unresolved. Original electrode-level display intervals do not establish new confirmatory participant-level superiority uncertainty.",
+      "No AUC margin, original array identity, held-out score, runtime readiness, scientific success or additional task count is established by the selection. Canonical task, outcome, catalog/CLI and admission wording require consistent bounded adoption with predecessor preservation."
     ]
   },
   "next_implementation_action": {
-    "action": "The paper has an ordered decoding task, but the original release/splits, exact ROC-AUC panel numbers and full source aggregation have not been recovered. The registered implementation tests word responsiveness and cannot stand in for that baseline. Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel. Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration. Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent. Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions. Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The paper has an ordered decoding task, but the original release/splits, exact ROC-AUC panel numbers and full source aggregation have not been recovered. The registered implementation tests word responsiveness and cannot stand in for that baseline. Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel. Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration. Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent. Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions. Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -731,8 +773,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.",
+  "retained_secondary_scope": "Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-replacement-011"
   }
 }
