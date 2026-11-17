@@ -29,11 +29,11 @@ The cohort summary requires Pt01, Pt02 and Pt03, rejects duplicate segment ident
 
 ## Interfaces
 
-Python dependencies: NumPy and SciPy. Verified existing interpreter: `/opt/homebrew/opt/python@3.11/bin/python3.11`; no dependency installation was performed. Tests generate bounded signals and small temporary raw/MAT/NPZ files, never public recordings.
+Use Python 3.11 in an existing environment with NumPy and SciPy available. No dependency installation was performed during construction; the actual validation interpreter and versions are recorded in external evidence. Tests generate bounded signals and small temporary raw/MAT/NPZ files, never public recordings.
 
 ```sh
-/opt/homebrew/opt/python@3.11/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests -v
-/opt/homebrew/opt/python@3.11/bin/python3.11 benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/evaluator.py protocol.json results.json
+python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests -v
+python3.11 benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/evaluator.py protocol.json results.json
 ```
 
 The protocol is JSON with `task_id`, `source_commit`, `metric_status: "prospective_unqualified"`, `fixed_offset_um`, `rigid_settings` (`max_shift_bins`, `min_correlation`, `max_time_separation`, `huber_delta_um`, `iterations`), and `segments`. Each segment has:
