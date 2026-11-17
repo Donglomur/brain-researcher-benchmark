@@ -75,6 +75,7 @@ def check(root):
     need(len(agg['unit_commit_sha256'])==7 and agg['last_commit_sha256']==previous,'complete final commit')
     grade_b=read(root/'attempt/grade/score.json',150000);grade=decode(grade_b)
     need(sha(grade_b)==inner['grade']['score_sha256']and inner['grade'].get('absence_verified')is True,'closed exact grade')
+    need(inner['grade'].get('submission_sha256')==agg['submission_sha256'],'grade binds committed aggregate')
     need(grade.get('status')=='scored'and len(grade['per_mouse'])==7 and {r['fold']for r in grade['per_mouse']}==set(range(7)),'complete per-mouse scoring')
     for row in grade['per_mouse']:
         need(set(row)=={'fold','balanced_accuracy','log_loss'}and type(row['fold'])is int,'complete typed per-mouse fields')
@@ -82,6 +83,15 @@ def check(root):
     need(set(grade['co_primary_metrics'])=={'balanced_accuracy','log_loss'}and set(grade['signed_candidate_minus_reference'])==COMPARATORS,'both metrics and all six comparisons')
     for metrics in [grade['co_primary_metrics'],*grade['signed_candidate_minus_reference'].values()]:
         need(set(metrics)=={'balanced_accuracy','log_loss'}and all(type(v)in(int,float)and math.isfinite(v)for v in metrics.values()),'finite complete metrics')
+    primary=grade['co_primary_metrics']
+    need(0<=primary['balanced_accuracy']<=1 and primary['log_loss']>=0,'co-primary metric domains')
+    try:
+        expected={k:math.fsum(r[k]for r in grade['per_mouse'])/7 for k in ('balanced_accuracy','log_loss')}
+    except OverflowError as error:
+        raise ValueError('representable equal-mouse metrics')from error
+    # Recompute the exact reduction used by the frozen grader, without an
+    # arbitrary tolerance that could admit a different reported result.
+    need(primary==expected,'co-primary metrics equal the seven-mouse means')
     return {'status':'consistent_closed_seven_fold_result','cases':140,'mice':7,'score':grade['co_primary_metrics'],'actual_runtime_independently_attested_by_this_checker':False}
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',required=True);a=p.parse_args();print(json.dumps(check(a.output),allow_nan=False))

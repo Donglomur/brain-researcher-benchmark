@@ -1,6 +1,6 @@
 """Focused generated relocation/admission controls; no Docker/data/numerical run."""
 from pathlib import Path
-import copy,hashlib,importlib.util,json,os,shutil,sys,tempfile,time,unittest
+import copy,hashlib,importlib.util,json,math,os,shutil,sys,tempfile,time,unittest
 from unittest import mock
 ROOT=Path(__file__).resolve().parents[1]
 LOCAL='authoring/glial-context-v1/ordinary-completion-v1/'
@@ -98,6 +98,45 @@ class Portable(unittest.TestCase):
   linked=self.base/'linked';linked.symlink_to(locators['fold-00'])
   bad=dict(locators);bad['fold-00']=str(linked)
   with self.assertRaises(ValueError):p.provision(source,self.base/'linked-refused',bad,time.monotonic()+10,h)
+ def current_fixture(self):
+  source,inputs,_=self.fixture();old=b'# generated old inspector\n';new=b'# generated current inspector\n'
+  historical=json.loads((source/'SOURCE_MANIFEST.json').read_bytes());historical['files']['check_result.py']=pin(old)
+  old_pin=write(source/'SOURCE_MANIFEST.json',historical);(source/'check_result.py').write_bytes(new)
+  current={'schema':'neural034-current-source/v1','task_id':'NEURAL-034','execution_authority':False,'native_qualification':False,
+           'historical_manifest':{'path':'SOURCE_MANIFEST.json',**old_pin},'changed_members':['check_result.py'],
+           'files':{**historical['files'],'check_result.py':pin(new)}}
+  path=self.base/'current-source.json';current_pin=write(path,current)
+  return source,inputs,old_pin['sha256'],path,current_pin['sha256']
+ def test_current_source_provision_preserves_original_and_explicit_successor(self):
+  p=module('provision_current_generated',ROOT/'provision.py');source,inputs,h,path,current_hash=self.current_fixture()
+  original=(source/'SOURCE_MANIFEST.json').read_bytes();descriptor=path.read_bytes();dest=self.base/'current-workspace'
+  result=p.provision(source,dest,inputs,time.monotonic()+10,h,path,current_hash)
+  self.assertEqual(result['status'],'complete_inputs_and_source_only');self.assertFalse(result['execution_authority']);self.assertFalse(result['runtime_qualified'])
+  self.assertEqual((dest/'SOURCE_MANIFEST.json').read_bytes(),original)
+  self.assertEqual((dest/'CURRENT_SOURCE_MANIFEST.json').read_bytes(),descriptor)
+  self.assertEqual((dest/'check_result.py').read_bytes(),(source/'check_result.py').read_bytes())
+  self.assertEqual(result['current_source_manifest_sha256'],current_hash)
+  with self.assertRaises(ValueError):p.provision(source,self.base/'old-only-refused',inputs,time.monotonic()+10,h)
+  self.assertFalse((self.base/'old-only-refused').exists())
+ def test_current_source_requires_independent_paired_descriptor_hash(self):
+  p=module('provision_current_identity',ROOT/'provision.py');source,inputs,h,path,current_hash=self.current_fixture()
+  for i,args in enumerate(((path,None),(None,current_hash),(path,'0'*64))):
+   destination=self.base/f'bad-current-{i}'
+   with self.subTest(args=args),self.assertRaises(ValueError):p.provision(source,destination,inputs,time.monotonic()+10,h,*args)
+   self.assertFalse(destination.exists())
+ def test_current_source_rejects_member_predecessor_runtime_and_body_drift(self):
+  p=module('provision_current_drift',ROOT/'provision.py');source,inputs,h,path,_=self.current_fixture()
+  original=json.loads(path.read_bytes())
+  for case in ('predecessor','extra-member','source-body','runtime-change'):
+   current=copy.deepcopy(original);destination=self.base/case
+   if case=='predecessor':current['historical_manifest']['sha256']='0'*64
+   elif case=='extra-member':current['files']['unselected.py']=pin(b'# extra\n')
+   elif case=='source-body':current['files']['check_result.py']=pin(b'# different\n')
+   else:
+    current['files']['INPUTS.json']={'bytes':1,'sha256':'0'*64};current['changed_members']=['INPUTS.json','check_result.py']
+   cp=write(path,current)
+   with self.subTest(case=case),self.assertRaises(ValueError):p.provision(source,destination,inputs,time.monotonic()+10,h,path,cp['sha256'])
+   self.assertFalse(destination.exists())
  def completed(self):
   root=self.base/'result';attempt=root/'attempt';attempt.mkdir(parents=True);program=b'# arbitrary generated programme\n'
   (attempt/'program.py').write_bytes(program);ps=pin(program)['sha256'];prev=None;commits=[];units=[];rows=[]
@@ -115,11 +154,42 @@ class Portable(unittest.TestCase):
   metrics={'balanced_accuracy':.3,'log_loss':2.0}
   grade={'status':'scored','per_mouse':[{'fold':i,**metrics}for i in range(7)],'co_primary_metrics':metrics,'signed_candidate_minus_reference':{x:{'balanced_accuracy':-.2,'log_loss':1.}for x in module('result_checker_names',ROOT/'check_result.py').COMPARATORS}}
   gp=write(attempt/'grade/score.json',grade)
-  inner={'status':'program_scored','all_owned_absent':True,'private_grade_dispatched':True,'units':units,'program_sha256':ps,'grade':{'score_sha256':gp['sha256'],'absence_verified':True}}
+  inner={'status':'program_scored','all_owned_absent':True,'private_grade_dispatched':True,'units':units,'program_sha256':ps,'grade':{'score_sha256':gp['sha256'],'submission_sha256':ap['sha256'],'absence_verified':True}}
   ip=write(attempt/'execution.json',inner)
   outer={'candidate_id':'NEURAL-034','status':'program_scored','inner_execution_sha256':ip['sha256']}
   for k in ('all_owned_absent','all_process_groups_absent_and_reaped','all_owned_cli_processes_absent','controller_direct_handle_reaped'):outer[k]=True
   write(root/'outer_execution.json',outer);return root
+ def rehash_grade(self,root,grade):
+  updated=write(root/'attempt/grade/score.json',grade)
+  p=root/'attempt/execution.json';inner=json.loads(p.read_bytes());inner['grade']['score_sha256']=updated['sha256'];updated=write(p,inner)
+  p=root/'outer_execution.json';outer=json.loads(p.read_bytes());outer['inner_execution_sha256']=updated['sha256'];write(p,outer)
+ def test_co_primary_domains_and_equal_mouse_means_reject_rehashed_metrics(self):
+  c=module('result_checker_co_primary',ROOT/'check_result.py');root=self.completed()
+  baseline=json.loads((root/'attempt/grade/score.json').read_bytes())
+  for metrics in ({'balanced_accuracy':2.,'log_loss':-4.},
+                  {'balanced_accuracy':.9,'log_loss':.1},
+                  {'balanced_accuracy':math.nextafter(.3,1.),'log_loss':2.}):
+   with self.subTest(metrics=metrics):
+    grade=copy.deepcopy(baseline);grade['co_primary_metrics']=metrics;self.rehash_grade(root,grade)
+    with self.assertRaises(ValueError):c.check(root)
+ def test_unequal_mouse_metrics_use_the_frozen_graders_exact_reduction(self):
+  c=module('result_checker_equal_mouse',ROOT/'check_result.py');root=self.completed()
+  grade=json.loads((root/'attempt/grade/score.json').read_bytes())
+  accuracies=[0.,1.,.1,.2,.3,.4,.5];losses=[0.,.1,.2,.3,1.,2.,3.]
+  grade['per_mouse']=[{'fold':i,'balanced_accuracy':accuracies[i],'log_loss':losses[i]}for i in reversed(range(7))]
+  expected={'balanced_accuracy':math.fsum(accuracies)/7,'log_loss':math.fsum(losses)/7}
+  grade['co_primary_metrics']=expected;self.rehash_grade(root,grade)
+  self.assertEqual(c.check(root)['score'],expected)
+ def test_grade_submission_identity_is_required_and_matches_aggregate(self):
+  c=module('result_checker_submission_binding',ROOT/'check_result.py');root=self.completed()
+  for identity in (None,'0'*64):
+   with self.subTest(identity=identity):
+    p=root/'attempt/execution.json';inner=json.loads(p.read_bytes())
+    if identity is None:inner['grade'].pop('submission_sha256',None)
+    else:inner['grade']['submission_sha256']=identity
+    updated=write(p,inner)
+    p=root/'outer_execution.json';outer=json.loads(p.read_bytes());outer['inner_execution_sha256']=updated['sha256'];write(p,outer)
+    with self.assertRaisesRegex(ValueError,'grade binds committed aggregate'):c.check(root)
  def test_last_setup_write_cannot_publish_late_success(self):
   p=module('provision_late_generated',ROOT/'provision.py');source,locators,h=self.fixture();clock=[0.];original=Path.write_text
   def late(path,*args,**kw):
