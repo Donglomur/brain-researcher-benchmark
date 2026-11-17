@@ -175,19 +175,19 @@ jobs:
           fd = os.open(p, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
           try:
               before = os.fstat(fd)
-              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 14177:
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 16454:
                   raise SystemExit('verifier type or size mismatch')
               with os.fdopen(fd, 'rb', closefd=False) as stream:
-                  source = stream.read(14177 + 1)
+                  source = stream.read(16454 + 1)
               after, linked = os.fstat(fd), p.lstat()
               fields = ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
               if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
                   raise SystemExit('verifier changed while reading')
           finally:
               os.close(fd)
-          if len(source) != 14177 or hashlib.sha256(source).hexdigest() != '6e53e633f6088a827d6e009d013873703c7c09a58da43674317efb20e38ecced':
+          if len(source) != 16454 or hashlib.sha256(source).hexdigest() != 'bf91d4fdde2fd99290386ea154182f483d3852512fd0cba3e48325da13b8e6e5':
               raise SystemExit('verifier identity mismatch')
-          sys.argv = [str(p), 'check', '--root', str(root), '--manifest-bytes', str(7199), '--manifest-sha256', '0afba4c97bfde7728ab84b0a8fc7aed9b55b679ee85d2c6518d9145a1cfe8163']
+          sys.argv = [str(p), 'check', '--root', str(root), '--current-manifest', str(pathlib.Path('benchmarks/integrity/current-closures/numeric-find050/SOURCE_MANIFEST.json').absolute()), '--manifest-bytes', str(7377), '--manifest-sha256', '91a8ac10c383c5b992a02af29c932e34b6a961a5753986997a0f0c4bec0a7e51']
           name = '_neurobench_find050_source_bootstrap'
           if name in sys.modules:
               raise SystemExit('bootstrap module name occupied')
@@ -332,17 +332,17 @@ jobs:
           fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
           try:
               before = os.fstat(fd)
-              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 10727:
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 12131:
                   raise SystemExit('verifier type or size mismatch')
               with os.fdopen(fd, 'rb', closefd=False) as stream:
-                  source = stream.read(10728)
+                  source = stream.read(12132)
               after, named = os.fstat(fd), path.lstat()
               fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_uid', 'st_gid', 'st_mtime_ns', 'st_ctime_ns')
               if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(named, k) for k in fields):
                   raise SystemExit('verifier changed while reading')
           finally:
               os.close(fd)
-          if len(source) != 10727 or hashlib.sha256(source).hexdigest() != '9b49f50406bc136f681a2f83125ade937452ab684831b4a408cdab38a5610946':
+          if len(source) != 12131 or hashlib.sha256(source).hexdigest() != 'bcb62143efa4129de5a3782fbc00546617ee2e358cc7cc98f81f053143148cc5':
               raise SystemExit('verifier identity mismatch')
           name = '_neurobench_neural078_ci_verifier'
           if name in sys.modules:
@@ -351,14 +351,16 @@ jobs:
           module.__file__ = str(path)
           sys.modules[name] = module
           exec(compile(source, str(path), 'exec'), module.__dict__)
-          module.main(['verify', '--source-bytes', '5873', '--source-sha256',
-                       '5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61'])
+          current_manifest = root.parents[4] / 'benchmarks/integrity/current-closures/input-neural078/SOURCE_MANIFEST.json'
+          module.main(['verify', '--source-manifest', str(current_manifest),
+                       '--source-bytes', '6014', '--source-sha256',
+                       '147d12c27da182604f7f69a943a8ca35a1acb939e3491c233af1cec8d9d392e3'])
 
           # Some accepted controls monkeypatch subprocess or module globals. Each suite
           # therefore runs in its own interpreter after complete source authentication.
           # The workflow-owned checkout must remain stable throughout these children.
           environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
-          suites = [('test_portable.py', 15), ('test_generated.py', 11),
+          suites = [('test_portable.py', 18), ('test_generated.py', 12),
                     ('test_namespace_isolation.py', 16), ('test_publication_deadline.py', 5)]
           for filename, count in suites:
               command = [sys.executable, '-I', '-S', '-B', str(root / filename)]
@@ -385,7 +387,7 @@ jobs:
                           raise SystemExit('complete namespace controls required')
                   elif len(report['cases']) != count or not all(row['passed'] is True for row in report['cases']):
                       raise SystemExit('complete publication controls required')
-          print(json.dumps({'package': 'NEURAL-078', 'source_only': True, 'source_controls_passed': 47,
+          print(json.dumps({'package': 'NEURAL-078', 'source_only': True, 'source_controls_passed': 51,
                             'python': sys.version.split()[0], 'dependencies': 'standard_library_only',
                             'scientific_execution': False, 'scientific_qualification': False}), flush=True)
           PY

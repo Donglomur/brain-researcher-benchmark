@@ -2113,7 +2113,7 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11.6'
-      - name: Authenticate all 29 APCx source files and run 43 invented controls
+      - name: Authenticate historical and current APCx source and run 55 invented controls
         shell: bash
         working-directory: benchmarks/neural/apcx-odor-pulse-evidence/implementations/deposited-label
         run: |
@@ -2137,9 +2137,15 @@ jobs:
 
           LOCK_BYTES = 4550
           LOCK_SHA256 = '3d365ce8277fb561ea3de191fa87f29debe0e4feb3847c49cc0bae282de68951'
-          SOURCE_BYTES = 230169
-          TEST_MODULES = ('test_task', 'test_native_source', 'test_rss_guard', 'test_provision_bytes')
-          EXPECTED_TESTS = 43
+          HISTORICAL_SOURCE_BYTES = 230169
+          SOURCE_BYTES = 241178
+          SOURCE_FILES = 30
+          COMPONENT_RELATIVE = 'benchmarks/neural/apcx-odor-pulse-evidence/implementations/deposited-label'
+          CURRENT_RELATIVE = 'benchmarks/integrity/current-closures/numeric-apcx/SOURCE.json'
+          CURRENT_BYTES = 6719
+          CURRENT_SHA256 = '07da730b11c2dd54b606144058d741d68565ba9e2e3f52cf647bce0ea66c9d4e'
+          TEST_MODULES = ('test_task', 'test_native_source', 'test_rss_guard', 'test_provision_bytes', 'test_numeric')
+          EXPECTED_TESTS = 55
           FIELDS = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
 
 
@@ -2179,10 +2185,50 @@ jobs:
               raw = capture(root/'SOURCE_LOCK.json', LOCK_BYTES, LOCK_SHA256)
               lock = json.loads(raw)
               require(set(lock) == {'schema', 'files'} and lock['schema'] == 'relative-public-source-lock-v1',
-                      'fixed source lock schema')
-              rows = lock['files']
-              require(len(rows) == 29 and len({row['path'] for row in rows}) == 29, 'complete 29-file roster')
-              require(sum(row['bytes'] for row in rows) == SOURCE_BYTES, 'complete source byte extent')
+                      'fixed historical source lock schema')
+              historical = lock['files']
+              require(len(historical) == 29 and len({row['path'] for row in historical}) == 29,
+                      'complete historical 29-file roster')
+              require(sum(row['bytes'] for row in historical) == HISTORICAL_SOURCE_BYTES,
+                      'historical source byte extent')
+              old = {row['path']: row for row in historical}
+
+              repository = Path(os.environ['GITHUB_WORKSPACE'])
+              require(repository.is_absolute() and root == repository/COMPONENT_RELATIVE,
+                      'exact checked-out component location')
+              current = json.loads(capture(repository/CURRENT_RELATIVE, CURRENT_BYTES, CURRENT_SHA256))
+              require(current['schema'] == 'apcx-current-source-closure-v1'
+                      and current['task_id'] == 'apcx-odor-pulse-evidence'
+                      and current['component_root'] == COMPONENT_RELATIVE, 'current source identity')
+              require(current['predecessor_lock'] == {
+                  'path': COMPONENT_RELATIVE + '/SOURCE_LOCK.json',
+                  'bytes': LOCK_BYTES, 'sha256': LOCK_SHA256}, 'unchanged historical lock binding')
+              require(current['scientific_qualification'] is False and current['authentic_data_read'] is False
+                      and current['execution_selected'] is False
+                      and type(current['benchmark_count_delta']) is int and current['benchmark_count_delta'] == 0,
+                      'current descriptor remains source-only')
+              changes = current['approved_changes']
+              additions = current['approved_additions']
+              require(isinstance(changes, list) and len(changes) == 1
+                      and set(changes[0]) == {'path', 'previous', 'current'}
+                      and changes[0]['path'] == 'grader.py', 'only reviewed grader replacement')
+              require(changes[0]['previous'] == {key: old['grader.py'][key] for key in ('bytes', 'sha256')}
+                      and set(changes[0]['current']) == {'bytes', 'sha256'}, 'grader predecessor and replacement pins')
+              require(isinstance(additions, list) and len(additions) == 1
+                      and set(additions[0]) == {'path', 'bytes', 'sha256'}
+                      and additions[0]['path'] == 'test_numeric.py', 'only reviewed numerical control addition')
+              approved = dict(old)
+              approved['grader.py'] = {'path': 'grader.py', **changes[0]['current']}
+              approved['test_numeric.py'] = additions[0]
+              rows = current['files']
+              require(isinstance(rows, list) and len(rows) == SOURCE_FILES
+                      and len({row['path'] for row in rows}) == SOURCE_FILES, 'complete current 30-file roster')
+              require({row['path']: row for row in rows} == approved,
+                      'all other historical source pins remain unchanged')
+              require(current['source_files'] == SOURCE_FILES and current['source_bytes'] == SOURCE_BYTES
+                      and sum(row['bytes'] for row in rows) == SOURCE_BYTES, 'complete current source byte extent')
+              require(current['test_modules'] == list(TEST_MODULES) and current['expected_tests'] == EXPECTED_TESTS,
+                      'all 43 historical plus 12 numerical controls selected')
               expected = {'SOURCE_LOCK.json'}
               expected_dirs = set()
               for row in rows:
@@ -2205,7 +2251,7 @@ jobs:
                       actual_dirs.add(relative)
                   else:
                       raise ValueError('no special node in component')
-              require(actual_files == expected and actual_dirs == expected_dirs, 'closed complete source tree')
+              require(actual_files == expected and actual_dirs == expected_dirs, 'closed complete current source tree')
               return rows
 
 
@@ -2235,7 +2281,7 @@ jobs:
               finder = StdlibAndSelectedSourceOnly(rows)
               sys.meta_path.insert(0, finder)
               suite = unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name) for name in TEST_MODULES)
-              require(suite.countTestCases() == EXPECTED_TESTS, 'all 43 invented controls must load')
+              require(suite.countTestCases() == EXPECTED_TESTS, 'all 55 invented controls must load')
               result = unittest.TextTestRunner(verbosity=2).run(suite)
               authenticate(root)
               require(not any(name.split('.', 1)[0] in {'pyarrow', 'numpy'} for name in sys.modules),
@@ -2244,7 +2290,9 @@ jobs:
               require(peak_bytes <= 512 * 1024**2, 'observed 512-MiB CI soft stop')
               complete = (result.testsRun == EXPECTED_TESTS and result.wasSuccessful()
                           and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses)
-              print(json.dumps({'source_files': 29, 'source_bytes': SOURCE_BYTES, 'source_lock_sha256': LOCK_SHA256,
+              print(json.dumps({'historical_manifest_members': 29, 'historical_manifest_source_bytes': HISTORICAL_SOURCE_BYTES,
+                                'unchanged_source_members': 28, 'source_files': SOURCE_FILES, 'source_bytes': SOURCE_BYTES,
+                                'source_lock_sha256': LOCK_SHA256, 'current_descriptor_sha256': CURRENT_SHA256,
                                 'source_pre_post_verified': True, 'tests_run': result.testsRun,
                                 'expected_tests': EXPECTED_TESTS, 'complete': complete,
                                 'invented_controls_only': True, 'original_data_read': False,
@@ -2874,8 +2922,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
       - name: Check Cardiac executable public relocation with generated metadata
@@ -2942,27 +2992,140 @@ jobs:
           ulimit -t 60
           ulimit -v 131072
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'REWARD_SOURCE'
-          import hashlib, importlib.util, json, pathlib, sys, unittest
-          if sys.flags.optimize:
-              raise RuntimeError("source controls require assertions enabled")
+          import hashlib, importlib.util, json, pathlib, stat, sys, unittest
+
+          def require(condition, message):
+              if not condition:
+                  raise RuntimeError(message)
+
+          def safe_path(value):
+              require(isinstance(value, str) and value, "nonempty source path required")
+              path = pathlib.PurePosixPath(value)
+              require(not path.is_absolute() and path.as_posix() == value
+                      and ".." not in path.parts and "\\" not in value,
+                      "ordinary relative source path required: " + value)
+              return pathlib.Path(value)
+
+          def read_pin(row):
+              path = safe_path(row["path"])
+              require(type(row["bytes"]) is int and row["bytes"] >= 0,
+                      "nonnegative source length required")
+              for part in (path, *path.parents):
+                  require(not part.is_symlink(), "source symlink refused: " + str(part))
+              info = path.lstat()
+              require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1
+                      and info.st_size == row["bytes"], "ordinary source size changed: " + str(path))
+              body = path.read_bytes()
+              require(len(body) == row["bytes"] and hashlib.sha256(body).hexdigest() == row["sha256"],
+                      "source bytes changed: " + str(path))
+              return body
+
+          def index_rows(rows, prefix=""):
+              result = {}
+              for row in rows:
+                  require(set(row) == {"path", "bytes", "sha256"}, "exact source pin fields required")
+                  safe_path(row["path"])
+                  path = prefix + row["path"]
+                  require(path not in result, "duplicate source member: " + path)
+                  result[path] = {**row, "path": path}
+              return result
+
+          require(not sys.flags.optimize, "source controls require assertions enabled")
           root = pathlib.Path("benchmarks/shared/reward-spacing/programme")
-          body = (root / "SOURCE.json").read_bytes()
-          if len(body) != 12836 or hashlib.sha256(body).hexdigest() != "2dca8ebda561d2cd0f6aa24d50d062026eb2a27a531fa01cd3a7830295e2f1f6":
-              raise RuntimeError("selected reward source distribution changed")
-          distribution = json.loads(body)
-          for member in distribution["files"]:
-              content = (root / member["path"]).read_bytes()
-              if len(content) != member["bytes"] or hashlib.sha256(content).hexdigest() != member["sha256"]:
-                  raise RuntimeError("reward source member changed before test import: " + member["path"])
+          prefix = root.as_posix() + "/"
+          distribution_pin = {"path": prefix + "SOURCE.json", "bytes": 12836,
+                              "sha256": "2dca8ebda561d2cd0f6aa24d50d062026eb2a27a531fa01cd3a7830295e2f1f6"}
+          historical_lock_pin = {"path": prefix + "SOURCE_LOCK.json", "bytes": 10437,
+                                 "sha256": "fd0c305c66052a38ef76a42f874b9d798703753b3c12b85db861152c225907e9"}
+          descriptor_pin = {"path": "benchmarks/integrity/current-closures/numeric-reward/SOURCE_BINDINGS.json",
+                            "bytes": 20596, "sha256": "3040c50316252f14c2f8d25412f174169e8040e4cf3c932c96d2a73c59e22804"}
+          distribution = json.loads(read_pin(distribution_pin))
+          historical_lock = json.loads(read_pin(historical_lock_pin))
+          descriptor = json.loads(read_pin(descriptor_pin))
+          require(distribution["schema"] == "reward_complete_public_source_v1"
+                  and distribution["file_count"] == 71 and distribution["total_bytes"] == 991897,
+                  "historical reward distribution identity changed")
+          require(descriptor["schema"] == "reward_numeric_current_source_bindings_v1"
+                  and descriptor["package_root"] == root.as_posix()
+                  and descriptor["comparison_commit"] == "68a9ae5c9bd927949fee99b1add5793f7e7d88b0",
+                  "current reward descriptor identity changed")
+          require(descriptor["historical_manifests"] == [distribution_pin, historical_lock_pin],
+                  "reward predecessor manifest identity changed")
+          for value in (distribution, descriptor):
+              require(value["scientific_qualification"] is False
+                      and value["authentic_execution_available"] is False,
+                      "generated controls do not grant scientific qualification")
+          require(descriptor["execution_authority"] is False and descriptor["new_benchmark_ids"] == 0,
+                  "current source repair grants no execution authority or new benchmark IDs")
+          historical = index_rows(distribution["files"], prefix)
+          require(len(historical) == 71 and sum(row["bytes"] for row in historical.values()) == 991897,
+                  "historical distribution membership changed")
+          require(historical_lock_pin == historical[prefix + "SOURCE_LOCK.json"]
+                  and {**distribution["source_lock"], "path": prefix + distribution["source_lock"]["path"]}
+                  == historical_lock_pin, "historical lock binding changed")
+          historical_locked = index_rows(historical_lock["files"], prefix)
+          require(len(historical_locked) == 61
+                  and all(historical.get(path) == row for path, row in historical_locked.items()),
+                  "historical runtime lock differs from historical distribution")
+          historical[distribution_pin["path"]] = distribution_pin
+          current = index_rows(descriptor["current_package_files"])
+          expected_changes = {prefix + path for path in (
+              "README.md", "central/comparisons.py", "central/execute.py", "central/source.py",
+              "examples/make_engineering_request.py", "run.py", "tests/test_public_programme.py")}
+          require(len(current) == 73 and set(current) == set(historical) | {prefix + "CURRENT_SOURCE_LOCK.json"},
+                  "current reward package must preserve all historical paths and add exactly the current lock")
+          require({path for path in historical if current[path] != historical[path]} == expected_changes,
+                  "current reward source changed outside the reviewed seven-member override")
+          changes = descriptor["changed_files"]
+          require(len(changes) == 7 and {row["path"] for row in changes} == expected_changes,
+                  "current reward override declaration changed")
+          for row in changes:
+              path = row["path"]
+              require(row["predecessor"] == {key: historical[path][key] for key in ("bytes", "sha256")}
+                      and row["current"] == {key: current[path][key] for key in ("bytes", "sha256")},
+                      "current reward override disagrees with authenticated manifests: " + path)
+          require(descriptor["current_source_lock"] == current[prefix + "CURRENT_SOURCE_LOCK.json"],
+                  "current reward runtime lock binding changed")
+          current_lock = json.loads(read_pin(descriptor["current_source_lock"]))
+          require(current_lock["schema"] == "reward_complete_central_current_source_lock_v1"
+                  and current_lock["scientific_qualification"] is False
+                  and current_lock["authentic_execution_available"] is False,
+                  "current runtime source identity or qualification changed")
+          require(index_rows(current_lock["files"], prefix) == {
+              path: row for path, row in current.items()
+              if path not in {prefix + "CURRENT_SOURCE_LOCK.json", prefix + "README.md"}},
+              "current runtime lock must bind all 71 required source members")
+          for field, pin in (("predecessor_distribution", distribution_pin),
+                             ("predecessor_source_lock", historical_lock_pin)):
+              require({**current_lock[field], "path": prefix + current_lock[field]["path"]} == pin,
+                      "current runtime lock lost historical identity")
+          for row in descriptor["canonical_tasks_unchanged"] + descriptor["source_tests"]:
+              read_pin(row)
+
+          def verify_current_package():
+              actual = set()
+              for path in root.rglob("*"):
+                  info = path.lstat()
+                  require(not stat.S_ISLNK(info.st_mode), "reward package symlink refused: " + str(path))
+                  if stat.S_ISREG(info.st_mode):
+                      actual.add(path.as_posix())
+                  else:
+                      require(stat.S_ISDIR(info.st_mode), "reward package special node refused: " + str(path))
+              require(actual == set(current), "reward current package namespace changed")
+              for row in current.values():
+                  read_pin(row)
+
+          verify_current_package()
           spec = importlib.util.spec_from_file_location("reward_public_controls", root / "tests/test_public_programme.py")
           module = importlib.util.module_from_spec(spec)
           spec.loader.exec_module(module)
           suite = unittest.defaultTestLoader.loadTestsFromModule(module)
-          if suite.countTestCases() != 6:
-              raise RuntimeError("all six relocated source controls required")
+          require(suite.countTestCases() == 10, "all ten current reward source controls required")
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          if not (result.testsRun == 6 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
-              raise SystemExit(1)
+          verify_current_package()
+          require(result.testsRun == 10 and result.wasSuccessful() and not result.skipped
+                  and not result.expectedFailures and not result.unexpectedSuccesses,
+                  "all ten current reward source controls must pass without skips or expected failures")
           REWARD_SOURCE
 
   hierarchy25a-original-program-source:
@@ -3160,14 +3323,36 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11'
-      - name: Check dfine-missing-observation source and relocated generated interface
-        run: python3 -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/implementations/missing-observation/test_portability.py
+      - name: Authenticate current DFINE source and run generated numeric and relocation controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python3 -I -S -B - <<'DFINE_CURRENT_SOURCE'
+          import hashlib, stat, sys
+          from pathlib import Path
+          path = Path('tests/benchmarks/test_numeric_dfine.py').absolute()
+          if any(part.is_symlink() for part in (path, *path.parents)):
+              raise ValueError('DFINE control path must be ordinary')
+          info = path.lstat()
+          if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size != 5910:
+              raise ValueError('DFINE current control extent differs')
+          body = path.read_bytes()
+          if len(body) != 5910 or hashlib.sha256(body).hexdigest() != 'ff058afb22c9dcd1cc48a47c813546a7f04777e1ff463afddd51a465dac23ed7':
+              raise ValueError('DFINE current control identity differs')
+          # The pinned wrapper authenticates the unchanged historical manifest,
+          # exact current eight-member namespace and current descriptor before
+          # importing the numeric and retained relocated CLI controls.
+          __file__ = str(path)
+          sys.argv = [str(path), '-v']
+          exec(compile(body, str(path), 'exec'), globals())
+          DFINE_CURRENT_SOURCE
 
   pcca-descriptive-outputs-portable-source:
     runs-on: ubuntu-24.04
@@ -3289,13 +3474,20 @@ jobs:
 
   ccep-pairing-source-delivery:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
       - name: Check CCEP pairing public relocation with invented inputs
-        run: python3 -I -S -B benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-pairing/test_delivery.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python3 -I -S -B benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-pairing/test_delivery.py
 
   npvc-signed-motif-portable-source:
     runs-on: ubuntu-24.04
@@ -3348,31 +3540,83 @@ jobs:
           ulimit -t 60
           ulimit -v 131072
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'SBIND_SOURCE'
-          import hashlib, json, pathlib, sys, unittest
+          import hashlib, json, pathlib, stat, sys, unittest
           if sys.flags.optimize:
-              raise RuntimeError("assertions must remain enabled")
-          root = pathlib.Path("benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-preparation")
-          manifest = root / "SOURCE.json"
-          if root.is_symlink() or not root.is_dir() or manifest.is_symlink() or not manifest.is_file():
-              raise RuntimeError("ordinary component namespace required")
-          body = manifest.read_bytes()
-          if len(body) != 1452 or hashlib.sha256(body).hexdigest() != "9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d":
-              raise RuntimeError("component manifest identity changed")
-          source = json.loads(body)
-          expected = {member["path"] for member in source["files"]} | {"SOURCE.json"}
-          entries = list(root.iterdir())
-          if {entry.name for entry in entries} != expected or any(entry.is_symlink() or not entry.is_file() for entry in entries):
-              raise RuntimeError("exact ordinary component members required before import")
-          for member in source["files"]:
-              data = (root / member["path"]).read_bytes()
-              if len(data) != member["bytes"] or hashlib.sha256(data).hexdigest() != member["sha256"]:
-                  raise RuntimeError("component member changed before import: " + member["path"])
+              raise RuntimeError('source controls require assertions enabled')
+
+          def verified_document(path, extent, digest):
+              if any(p.is_symlink() for p in (path, *path.parents)):
+                  raise RuntimeError('ordinary source descriptor path required')
+              info = path.lstat()
+              if not stat.S_ISREG(info.st_mode) or info.st_size != extent:
+                  raise RuntimeError('selected source descriptor extent changed')
+              raw = path.read_bytes()
+              if len(raw) != extent or hashlib.sha256(raw).hexdigest() != digest:
+                  raise RuntimeError('selected source descriptor changed')
+              return json.loads(raw)
+
+          def rows(document):
+              members = document['files']
+              names = [item['path'] for item in members]
+              if len(names) != 8 or len(names) != len(set(names)) or any(
+                      pathlib.PurePosixPath(name).name != name for name in names):
+                  raise RuntimeError('exact flat eight-member source namespace required')
+              return {item['path']: item for item in members}
+
+          def metadata(document, current=False):
+              ignored = {'files', 'current_dependencies'} if current else {'files'}
+              return {key: value for key, value in document.items() if key not in ignored}
+
+          def exact_delta(original, selected, changed):
+              old_rows, new_rows = rows(original), rows(selected)
+              if set(old_rows) != set(new_rows) or {
+                      name for name in old_rows if old_rows[name] != new_rows[name]} != changed:
+                  raise RuntimeError('current source differs beyond the reviewed repair')
+
+          def authenticate(root, historical_pin, current_path, current_pin, changed,
+                           dependency_binding=None, predecessor=None):
+              if any(p.is_symlink() for p in (root, *root.parents)) or not stat.S_ISDIR(root.lstat().st_mode):
+                  raise RuntimeError('ordinary component directory required')
+              original = verified_document(root / 'SOURCE.json', *historical_pin)
+              selected = verified_document(current_path, *current_pin)
+              if metadata(selected, current=True) != metadata(original):
+                  raise RuntimeError('original source metadata must be preserved')
+              if dependency_binding is None:
+                  if 'current_dependencies' in selected:
+                      raise RuntimeError('unexpected current source dependencies')
+              elif selected.get('current_dependencies') != dependency_binding:
+                  raise RuntimeError('exact reviewed current dependency binding required')
+              exact_delta(original, selected, changed)
+              if predecessor is not None:
+                  predecessor_path, predecessor_pin = predecessor
+                  prior = verified_document(predecessor_path, *predecessor_pin)
+                  if metadata(prior) != metadata(original):
+                      raise RuntimeError('previous source metadata changed')
+                  exact_delta(original, prior, {'test_public_delivery.py'})
+                  exact_delta(prior, selected, changed)
+              members = rows(selected)
+              if {path.name for path in root.iterdir()} != set(members) | {'SOURCE.json'}:
+                  raise RuntimeError('exact source namespace required before discovery')
+              for name, item in members.items():
+                  member = root / name
+                  info = member.lstat()
+                  if not stat.S_ISREG(info.st_mode) or info.st_size != item['bytes']:
+                      raise RuntimeError('ordinary source member with exact extent required')
+                  body = member.read_bytes()
+                  if len(body) != item['bytes'] or hashlib.sha256(body).hexdigest() != item['sha256']:
+                      raise RuntimeError('selected source changed before imports: ' + name)
+
+          root = pathlib.Path('benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-preparation')
+          current = pathlib.Path('benchmarks/integrity/current-closures/input-sbind/WHOLE_TRIAL_SOURCE.json')
+          authenticate(root, (1452, '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d'), current, (1453, '19fe75433f4ac67ee15d16ced4d96d906e37d24195270acf9d85cc753a6d5afb'),
+              {'trial_preparation.py', 'test_trial_preparation.py', 'test_public_delivery.py'})
           sys.path.insert(0, str(root.resolve()))
-          suite = unittest.defaultTestLoader.discover(str(root), pattern="test_*.py")
-          if suite.countTestCases() != 11:
-              raise RuntimeError("complete generated component test discovery required")
+          suite = unittest.defaultTestLoader.discover(str(root), pattern='test_*.py')
+          if suite.countTestCases() != 12:
+              raise RuntimeError('complete twelve-method generated component test discovery required')
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          if not (result.testsRun == 11 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+          if not (result.testsRun == 12 and result.wasSuccessful() and not result.skipped
+                  and not result.expectedFailures and not result.unexpectedSuccesses):
               raise SystemExit(1)
           SBIND_SOURCE
 
@@ -3528,61 +3772,96 @@ jobs:
           import hashlib, json, pathlib, stat, sys, unittest
           if sys.flags.optimize:
               raise RuntimeError('source controls require assertions enabled')
-          def authenticate(root, extent, digest, current_manifest=None, current_extent=None, current_digest=None):
-              if not stat.S_ISDIR(root.lstat().st_mode):
-                  raise RuntimeError('ordinary component directory required')
-              manifest = root / 'SOURCE.json'
-              if not stat.S_ISREG(manifest.lstat().st_mode):
-                  raise RuntimeError('ordinary source manifest required')
-              raw = manifest.read_bytes()
+
+          def verified_document(path, extent, digest):
+              if any(p.is_symlink() for p in (path, *path.parents)):
+                  raise RuntimeError('ordinary source descriptor path required')
+              info = path.lstat()
+              if not stat.S_ISREG(info.st_mode) or info.st_size != extent:
+                  raise RuntimeError('selected source descriptor extent changed')
+              raw = path.read_bytes()
               if len(raw) != extent or hashlib.sha256(raw).hexdigest() != digest:
-                  raise RuntimeError('selected component manifest changed')
-              original = json.loads(raw)
-              selected = original
-              if current_manifest is not None:
-                  if any(p.is_symlink() for p in (current_manifest, *current_manifest.parents)) or not stat.S_ISREG(current_manifest.lstat().st_mode):
-                      raise RuntimeError('ordinary current source descriptor required')
-                  current_raw = current_manifest.read_bytes()
-                  if len(current_raw) != current_extent or hashlib.sha256(current_raw).hexdigest() != current_digest:
-                      raise RuntimeError('selected current component descriptor changed')
-                  selected = json.loads(current_raw)
-                  if {k: v for k, v in selected.items() if k != 'files'} != {k: v for k, v in original.items() if k != 'files'}:
-                      raise RuntimeError('original source metadata must be preserved')
-                  old_rows = {item['path']: item for item in original['files']}
-                  new_rows = {item['path']: item for item in selected['files']}
-                  if set(old_rows) != set(new_rows) or {name for name in old_rows if old_rows[name] != new_rows[name]} != {'test_public_delivery.py'}:
-                      raise RuntimeError('only the current delivery-test source pin may differ')
-              members = selected['files']
+                  raise RuntimeError('selected source descriptor changed')
+              return json.loads(raw)
+
+          def rows(document):
+              members = document['files']
               names = [item['path'] for item in members]
-              if len(names) != len(set(names)) or any(pathlib.PurePosixPath(name).name != name for name in names):
-                  raise RuntimeError('flat unique source namespace required')
-              if {p.name for p in root.iterdir()} != set(names) | {'SOURCE.json'}:
+              if len(names) != 8 or len(names) != len(set(names)) or any(
+                      pathlib.PurePosixPath(name).name != name for name in names):
+                  raise RuntimeError('exact flat eight-member source namespace required')
+              return {item['path']: item for item in members}
+
+          def metadata(document, current=False):
+              ignored = {'files', 'current_dependencies'} if current else {'files'}
+              return {key: value for key, value in document.items() if key not in ignored}
+
+          def exact_delta(original, selected, changed):
+              old_rows, new_rows = rows(original), rows(selected)
+              if set(old_rows) != set(new_rows) or {
+                      name for name in old_rows if old_rows[name] != new_rows[name]} != changed:
+                  raise RuntimeError('current source differs beyond the reviewed repair')
+
+          def authenticate(root, historical_pin, current_path, current_pin, changed,
+                           dependency_binding=None, predecessor=None):
+              if any(p.is_symlink() for p in (root, *root.parents)) or not stat.S_ISDIR(root.lstat().st_mode):
+                  raise RuntimeError('ordinary component directory required')
+              original = verified_document(root / 'SOURCE.json', *historical_pin)
+              selected = verified_document(current_path, *current_pin)
+              if metadata(selected, current=True) != metadata(original):
+                  raise RuntimeError('original source metadata must be preserved')
+              if dependency_binding is None:
+                  if 'current_dependencies' in selected:
+                      raise RuntimeError('unexpected current source dependencies')
+              elif selected.get('current_dependencies') != dependency_binding:
+                  raise RuntimeError('exact reviewed current dependency binding required')
+              exact_delta(original, selected, changed)
+              if predecessor is not None:
+                  predecessor_path, predecessor_pin = predecessor
+                  prior = verified_document(predecessor_path, *predecessor_pin)
+                  if metadata(prior) != metadata(original):
+                      raise RuntimeError('previous source metadata changed')
+                  exact_delta(original, prior, {'test_public_delivery.py'})
+                  exact_delta(prior, selected, changed)
+              members = rows(selected)
+              if {path.name for path in root.iterdir()} != set(members) | {'SOURCE.json'}:
                   raise RuntimeError('exact source namespace required before discovery')
-              for item in members:
-                  member = root / item['path']
-                  if not stat.S_ISREG(member.lstat().st_mode):
-                      raise RuntimeError('ordinary source member required')
+              for name, item in members.items():
+                  member = root / name
+                  info = member.lstat()
+                  if not stat.S_ISREG(info.st_mode) or info.st_size != item['bytes']:
+                      raise RuntimeError('ordinary source member with exact extent required')
                   body = member.read_bytes()
                   if len(body) != item['bytes'] or hashlib.sha256(body).hexdigest() != item['sha256']:
-                      raise RuntimeError('selected source changed before imports')
+                      raise RuntimeError('selected source changed before imports: ' + name)
+
           root = pathlib.Path('benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/continuous-normalization')
           dependency = pathlib.Path('benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-preparation')
-          current_manifest = pathlib.Path('benchmarks/integrity/current-closures/sbind-continuous-normalization/SOURCE.json')
-          authenticate(root, 1871, 'f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea',
-              current_manifest, 1871, '0a126ace920578179e5406bc3fbdd9cfdd135f3360463454868e751200f1d490')
-          authenticate(dependency, 1452, '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d')
+          whole_current = pathlib.Path('benchmarks/integrity/current-closures/input-sbind/WHOLE_TRIAL_SOURCE.json')
+          current = pathlib.Path('benchmarks/integrity/current-closures/input-sbind/CONTINUOUS_NORMALIZATION_SOURCE.json')
+          previous = pathlib.Path('benchmarks/integrity/current-closures/sbind-continuous-normalization/SOURCE.json')
+          authenticate(dependency, (1452, '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d'), whole_current, (1453, '19fe75433f4ac67ee15d16ced4d96d906e37d24195270acf9d85cc753a6d5afb'),
+              {'trial_preparation.py', 'test_trial_preparation.py', 'test_public_delivery.py'})
+          authenticate(root, (1871, 'f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea'), current, (2394, '0e1a2b16275e72e67a3261954612bf99398a0bb29f730b2062699efb68c403cf'),
+              {'test_numerical_preparation.py', 'test_public_delivery.py'},
+              dependency_binding=[{'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-preparation', 'source': {'path': 'benchmarks/integrity/current-closures/input-sbind/WHOLE_TRIAL_SOURCE.json', 'bytes': 1453, 'sha256': '19fe75433f4ac67ee15d16ced4d96d906e37d24195270acf9d85cc753a6d5afb'}, 'historical_source': {'bytes': 1452, 'sha256': '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d'}}], predecessor=(previous, (1871, '0a126ace920578179e5406bc3fbdd9cfdd135f3360463454868e751200f1d490')))
           sys.path[:0] = [str(root.resolve()), str(dependency.resolve())]
           suite = unittest.defaultTestLoader.discover(str(root), pattern='test_*.py')
-          if suite.countTestCases() != 9:
-              raise RuntimeError('exactly seven numerical and two delivery methods required')
-          if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
+          if suite.countTestCases() != 10:
+              raise RuntimeError('exactly eight numerical and two delivery methods required')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 10 and result.wasSuccessful() and not result.skipped
+                  and not result.expectedFailures and not result.unexpectedSuccesses):
               raise SystemExit(1)
           SBIND_NUMERICAL_SOURCE
+
   fly-pid-calibration-source:
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11.6'
@@ -3657,6 +3936,8 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11.6'
@@ -4626,43 +4907,79 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
-      - name: Authenticate portable source and run generated relocation checks
+      - name: Authenticate current portable source and run generated relocation checks
+        shell: bash
         run: |
-          python -I -B - <<'NEURAL034_SOURCE'
-          import hashlib, json, runpy, stat
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'NEURAL034_SOURCE'
+          import hashlib, json, os, stat, sys, types, unittest
           from pathlib import Path
-          root = Path('benchmarks/neural/NEURAL-034/implementations/neural034-portable')
-          manifest = root / 'SOURCE_MANIFEST.json'
-          body = manifest.read_bytes()
-          assert len(body) == 6598
-          assert hashlib.sha256(body).hexdigest() == 'fe66143cda6de7f54c4e63b8751262aa6d892f0ae9074c8cbc86665795c9e4f3'
-          selected = json.loads(body)['files']
-          assert len(selected) == 37
+
+          def need(ok, message):
+              if not ok:
+                  raise ValueError(message)
+
+          def read_exact(path, pin):
+              path = path.absolute()
+              need(not any(part.is_symlink() for part in (path, *path.parents)), 'ordinary source path required')
+              need(set(pin) == {'bytes', 'sha256'} and type(pin['bytes']) is int and 0 < pin['bytes'] <= 1048576, 'bounded exact source pin required')
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              with os.fdopen(fd, 'rb') as stream:
+                  before = os.fstat(stream.fileno())
+                  need(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], 'ordinary exact source extent required')
+                  body = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              linked = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              need(all(getattr(before, key) == getattr(after, key) == getattr(linked, key) for key in fields), 'source changed while reading')
+              need(len(body) == pin['bytes'] and hashlib.sha256(body).hexdigest() == pin['sha256'], 'source identity differs')
+              return body
+
+          root = Path('benchmarks/neural/NEURAL-034/implementations/neural034-portable').absolute()
+          historical_pin = {'bytes': 6598, 'sha256': 'fe66143cda6de7f54c4e63b8751262aa6d892f0ae9074c8cbc86665795c9e4f3'}
+          historical = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', historical_pin))
+          current_path = Path('benchmarks/integrity/current-closures/input-neural034/SOURCE_MANIFEST.json')
+          current = json.loads(read_exact(current_path, {'bytes': 6799, 'sha256': '2fc0406d021d9b74c43f15808c34f6ec32f7daa4ef3d88e0666315c8cc7ba267'}))
+          need(set(current) == {'schema', 'task_id', 'execution_authority', 'native_qualification', 'historical_manifest', 'changed_members', 'files'}, 'exact current descriptor required')
+          need(current['schema'] == 'neural034-current-source/v1' and current['task_id'] == 'NEURAL-034', 'current task identity differs')
+          need(current['execution_authority'] is False and current['native_qualification'] is False, 'source checks confer no execution qualification')
+          need(current['historical_manifest'] == {'path': 'SOURCE_MANIFEST.json', **historical_pin}, 'historical predecessor differs')
+          selected = current['files']
+          need(type(selected) is dict and len(selected) == 37 and set(selected) == set(historical['files']), 'complete original source member set required')
+          changed = sorted(name for name in selected if selected[name] != historical['files'][name])
+          need(changed == current['changed_members'] == ['check_result.py', 'provision.py', 'tests/test_relocation.py'], 'only reviewed inspection and provisioning changes permitted')
           seen = set()
           for path in root.rglob('*'):
               info = path.lstat()
-              assert not path.is_symlink()
+              need(not path.is_symlink(), 'linked source namespace entry')
               if stat.S_ISREG(info.st_mode):
-                  assert info.st_nlink == 1
+                  need(info.st_nlink == 1, 'hardlinked source namespace entry')
                   seen.add(path.relative_to(root).as_posix())
               else:
-                  assert stat.S_ISDIR(info.st_mode)
-          assert seen == set(selected) | {'SOURCE_MANIFEST.json'}
+                  need(stat.S_ISDIR(info.st_mode), 'special source namespace entry')
+          need(seen == set(selected) | {'SOURCE_MANIFEST.json'}, 'closed source namespace differs')
+          bodies = {}
           for name, pin in selected.items():
               path = Path(name)
-              assert not path.is_absolute() and '..' not in path.parts
-              info = (root / name).stat()
-              assert info.st_size == pin['bytes'] <= 1048576
-              data = (root / name).read_bytes()
-              assert len(data) == pin['bytes']
-              assert hashlib.sha256(data).hexdigest() == pin['sha256']
-          runpy.run_path(str(root / 'tests/test_relocation.py'), run_name='__main__')
+              need(type(name) is str and name and not path.is_absolute() and '..' not in path.parts and path.as_posix() == name, 'canonical relative source member required')
+              bodies[name] = read_exact(root / path, pin)
+          name = 'tests/test_relocation.py'
+          module = types.ModuleType('neural034_current_generated_controls')
+          module.__file__ = str(root / name)
+          sys.modules[module.__name__] = module
+          exec(compile(bodies[name], module.__file__, 'exec'), module.__dict__)
+          suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+          need(suite.countTestCases() == 16, 'complete sixteen generated controls required')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.testsRun == 16 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses else 1)
           NEURAL034_SOURCE
-
   rep013-purkinje-portable-source:
     runs-on: ubuntu-24.04
     timeout-minutes: 4
@@ -4827,8 +5144,10 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
       - name: Authenticate REP012 paired API and check generated relocation
@@ -5116,3 +5435,45 @@ jobs:
           sys.argv = [str(path), '--manifest-bytes', str(manifest_pin[0]), '--manifest-sha256', manifest_pin[1], '--check']
           exec(compile(bodies['verify_source.py'], str(path), 'exec'), {'__name__':'__main__', '__file__':str(path)})
           NEURAL021_SOURCE
+
+  generated-numerical-regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Install fixed numerical dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6
+      - name: Run generated numerical boundary controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 120
+          timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s tests/numerical -p 'test_*.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/tests/test_numerical_agreement.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/shared/four-programmes/_four_programmes_source_v1/tests/test_numeric_dmd.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/test_metric_core.py -v
+
+  neural042-candidate-validation-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check malformed candidate handling with generated records
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-042/implementations/original-analysis-source -p 'test_score_validation.py' -v

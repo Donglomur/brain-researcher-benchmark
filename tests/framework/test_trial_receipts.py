@@ -2,16 +2,15 @@
 import json
 from pathlib import Path
 import sys
-
-import pytest
+import tempfile
+import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from neurobench.trials import capture
 from neurobench.task_validation import Audit
 
 
-@pytest.fixture
-def case(tmp_path):
+def make_case(tmp_path):
     task = tmp_path / "sample"
     task.mkdir()
     (task / "instruction.md").write_text("Synthetic fixture")
@@ -33,39 +32,47 @@ def case(tmp_path):
                 run_id="fixture-only")
 
 
-def test_capture_preserves_controls_and_raw_files(case):
-    capture(**case)
-    q = json.loads((case["authoring"] / "evidence/qualification.json").read_text())
-    assert q["local_controls"] == ["retained"]
-    assert q["runs"]["oracle"]["status"] == "recorded"
-    assert (case["authoring"] / q["runs"]["oracle"]["result_path"]).read_bytes() == (case["trial"] / "result.json").read_bytes()
+class TrialReceiptTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.case = make_case(Path(temporary.name))
 
-
-def test_changed_task_rejected(case):
-    (case["task"] / "instruction.md").write_text("Edited after execution")
-    with pytest.raises(ValueError, match="changed"):
+    def test_capture_preserves_controls_and_raw_files(self):
+        case = self.case
         capture(**case)
+        q = json.loads((case["authoring"] / "evidence/qualification.json").read_text())
+        self.assertEqual(q["local_controls"], ["retained"])
+        self.assertEqual(q["runs"]["oracle"]["status"], "recorded")
+        self.assertEqual(
+            (case["authoring"] / q["runs"]["oracle"]["result_path"]).read_bytes(),
+            (case["trial"] / "result.json").read_bytes())
+
+    def test_changed_task_rejected(self):
+        (self.case["task"] / "instruction.md").write_text("Edited after execution")
+        with self.assertRaisesRegex(ValueError, "changed"):
+            capture(**self.case)
+
+    def test_job_aggregate_rejected(self):
+        (self.case["trial"] / "result.json").write_text('{"stats": {}}')
+        with self.assertRaisesRegex(ValueError, "single trial"):
+            capture(**self.case)
+
+    def test_missing_behavioral_evidence_rejected(self):
+        (self.case["trial"] / "verifier/ctrf.json").unlink()
+        with self.assertRaisesRegex(ValueError, "Missing regular ctrf"):
+            capture(**self.case)
+
+    def test_capture_never_overwrites(self):
+        capture(**self.case)
+        with self.assertRaisesRegex(ValueError, "overwrite"):
+            capture(**self.case)
+
+    def test_path_traversal_rejected(self):
+        self.case["run_id"] = "../outside"
+        with self.assertRaisesRegex(ValueError, "simple directory"):
+            capture(**self.case)
 
 
-def test_job_aggregate_rejected(case):
-    (case["trial"] / "result.json").write_text('{"stats": {}}')
-    with pytest.raises(ValueError, match="single trial"):
-        capture(**case)
-
-
-def test_missing_behavioral_evidence_rejected(case):
-    (case["trial"] / "verifier/ctrf.json").unlink()
-    with pytest.raises(ValueError, match="Missing regular ctrf"):
-        capture(**case)
-
-
-def test_capture_never_overwrites(case):
-    capture(**case)
-    with pytest.raises(ValueError, match="overwrite"):
-        capture(**case)
-
-
-def test_path_traversal_rejected(case):
-    case["run_id"] = "../outside"
-    with pytest.raises(ValueError, match="simple directory"):
-        capture(**case)
+if __name__ == "__main__":
+    unittest.main()

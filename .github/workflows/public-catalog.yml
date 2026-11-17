@@ -31,11 +31,8 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/catalog.py --check
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/check_repository.py
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_repository_checks.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_catalog.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_cli_delivery.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_program_admission.py' -v
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_campaign_authority.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_*.py' -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/benchmarks -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/maintenance -p 'test_*.py' -v
           python -I -S -B scripts/check_navigation.py
           bash -n examples/original-three/scripts/run_task.sh
