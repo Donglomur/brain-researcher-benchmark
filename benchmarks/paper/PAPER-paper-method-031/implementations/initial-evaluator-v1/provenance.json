@@ -1,0 +1,132 @@
+{
+  "task_id": "PAPER-paper-method-031",
+  "implementation": "initial-evaluator-v1",
+  "status": "prospective_measurement_source_only",
+  "canonical_contract": {
+    "path": "benchmarks/paper/PAPER-paper-method-031/task.json",
+    "bytes": 17637,
+    "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
+  },
+  "official_code_commit": "6f92663f7a36589507cac57c8d24cfd8adbce7b1",
+  "sources": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12552699/fullTextXML",
+      "bytes": 145767,
+      "sha256": "a8c2314a9a62d17ec37676e3b341b6206c9dccf00281e329df9373acdb6fa1de"
+    },
+    {
+      "url": "https://zenodo.org/api/records/15872025/files/README.md/content",
+      "bytes": 2395,
+      "sha256": "559ae0d32044175b1d87839af3443e9bc456fdd705188196064ac7e3ae7132b5"
+    },
+    {
+      "url": "https://zenodo.org/api/records/15872025"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/README.md"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/params.json"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/datasets/dataset.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/datasets/data_process.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/test.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/train.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FDU-donglab/FAST/6f92663f7a36589507cac57c8d24cfd8adbce7b1/models/loss/loss.py"
+    }
+  ],
+  "requirements_and_source_mapping": [
+    {
+      "requirement": "actual single-cell voltage and neuronal calcium scope",
+      "source": "canonical input_assets scope; deposit README",
+      "semantics": "File1 neuronal calcium 8Hz; file3 pyramidal-cell voltage 1000Hz with patch clamp; file2 synthetic and file5 astrocytes separate; do not silently replace either scoped real collection with simulations or claim all five collections"
+    },
+    {
+      "requirement": "temporal fidelity",
+      "source": "paper Fig3b/c and Fig3f",
+      "semantics": "Pearson correlation of denoised dF/F traces against synthetic GT (2,4,6,8ms spikes, 10 neurons) and simultaneous electrophysiology for real single-cell voltage (caption100 single-pixel traces; displayed1000 pixels;4982 frames). Zero-lag synchronized reference; correlation cannot certify amplitude preservation alone"
+    },
+    {
+      "requirement": "real data has no universal clean target",
+      "source": "canonical evaluation/holds; real-data paper endpoints",
+      "semantics": "Electrophysiology is a temporal reference, not clean pixel-level fluorescence; raw/smoothed real images must not become PSNR ground truth"
+    },
+    {
+      "requirement": "timing and hardware match",
+      "source": "canonical comparability; paper methods System latency and pipeline integration",
+      "semantics": "Include acquisition, transfer, motion correction and downstream steps plus compute; declare dimensions, GPU, temporal context, lookahead, queue delay and synchronization. FPS does not alone prove end-to-end latency or causal real-time operation"
+    },
+    {
+      "requirement": "scientific unknowns remain explicit",
+      "source": "canonical evaluation.missing_common_contract",
+      "semantics": "No frozen score/tolerance, scientific reference run, independent protected panel, complete input population, or measured native resource envelope is established by source inspection"
+    },
+    {
+      "requirement": "rights separated by artifact",
+      "source": "deposit README licensing paragraph, pinned README GPLv3",
+      "semantics": "Only original files2 and5 explicitly CC-BY4.0. Reused real files1,3,4 subject to original licenses. Deposit metadata cannot override. Code GPL-3.0; model weights separately unresolved"
+    }
+  ],
+  "source_discrepancies_and_limits": [
+    "Paper methods Adam weight_decay1e-4 differs from pinned params.json0.9; freeze source/version route without silently harmonizing.",
+    "Paper describes16 mask cells; pinned data_process.py enumerates8 directed spatial neighbor pairs. This is a documented method/code difference, not grounds to rewrite either.",
+    "Pinned dataset train crops odd spatial dimensions, uses adjacent frame pairs; load3DImages2Tensor may truncate to train_frames and silently skips exceptions. Native admission must independently verify full requested file/frame coverage.",
+    "Pinned inference appends up-to100 reversed tail frames, subtracts global augmented-stack mean, runs overlapping temporal windows with sequential0.5 averaging, restores mean and clips/casts uint16. This is not an unbiased whole-stack mean/overlap arithmetic average or streaming latency proof.",
+    "Paper does not freeze dF/F baseline rule, SNR estimator, PSNR range or protected benchmark split. Final supplement retrieval failed from public endpoints during this read; unknowns remain gates.",
+    "Native training withGT=false validates on training folder; original protocol is self-supervised/transductive, not automatically cross-recording holdout."
+  ],
+  "implementation_mapping": [
+    {
+      "requirement": "fixed full-recording inputs and shared ROI extraction",
+      "function": "load_array, validate_record, extract_traces, evaluate"
+    },
+    {
+      "requirement": "source-supported temporal correlation with no real clean target",
+      "function": "correlation, trace_measurements, evaluate"
+    },
+    {
+      "requirement": "explicit prospective baseline/event diagnostics",
+      "function": "delta_f_over_f, trace_measurements"
+    },
+    {
+      "requirement": "separate known synthetic truth and full image error",
+      "function": "validate_record, image_error"
+    },
+    {
+      "requirement": "matched declared end-to-end timing including future context",
+      "function": "timing_metrics, evaluate"
+    },
+    {
+      "requirement": "prospective group-held-out panel and fit declarations",
+      "function": "evaluate"
+    },
+    {
+      "requirement": "no silent omission, no qualification or scalar reward",
+      "function": "strict_mean, evaluate, main"
+    }
+  ],
+  "preserved_gates": [
+    "exact_native_preprocessing_and_full_file_frame_coverage",
+    "real_source_original_licenses",
+    "dff_baseline_roi_sync_and_snr_policy_freeze",
+    "figure_specific_reference_outputs_and_tolerances",
+    "independent_protected_labels_and_panel",
+    "native_FAST_and_matched_baseline_runs",
+    "measured_end_to_end_resource_envelope",
+    "complete_scoped_real_calcium_and_voltage_population",
+    "whole_five_collection_paper_scope",
+    "scientific_and_improvement_qualification"
+  ],
+  "native_scientific_runs": 0,
+  "qualification_claim": false,
+  "source_reuse": "Independent measurement implementation; no author source code or dataset assets copied or vendored."
+}
