@@ -223,6 +223,22 @@ class EpisodeTests(unittest.TestCase):
             manager = patch.object(episode, name, value)
             manager.start()
             cls.addClassCleanup(manager.stop)
+        # Only generated /materials mounts need UID65534 readability. Preserve
+        # the frozen exporter and every non-mounted fixture's original mode.
+        _, public_members = episode.public_context(F.pair_path, F.task)
+        cls.public_fixture_files = {}
+        for condition, members in public_members.items():
+            for name, expected in members.items():
+                leaf = F.pair_root / condition / name
+                if file_pin(leaf) != expected:
+                    raise ValueError("Generated public fixture differs from authenticated manifest")
+                cls.public_fixture_files[leaf] = expected
+        cls.nonpublic_fixture_modes = {
+            leaf: stat.S_IMODE(leaf.stat().st_mode) for leaf in F.root.rglob("*")
+            if leaf not in cls.public_fixture_files
+        }
+        for leaf in cls.public_fixture_files:
+            leaf.chmod(0o444)
         episode.source_identity()
         episode.provider_class()  # Authenticate unchanged seven-file provider; no call or socket.
         GeneratedProvider.contract = sys.modules["_smc_existing_transport.contract"]
@@ -247,6 +263,38 @@ class EpisodeTests(unittest.TestCase):
     def grade(self, closed_path=None, closed_sha=None, output=None):
         return episode.grade(closed_path or self.closed_path, closed_sha or self.closed_sha,
             self.target, self.evaluator, output or self.case / "grade.json", 2 * 1024**2)
+
+    def test_public_mount_modes_survive_umask077_without_exposing_private_files(self):
+        public, private = self.case / "public.json", self.case / "private.json"
+        previous = os.umask(0o077)
+        try:
+            episode.publish(public, b"public metadata\n", 0o444)
+            episode.publish(private, b"private metadata\n")
+        finally:
+            current = os.umask(previous)
+        self.assertEqual(current, 0o077)
+        self.assertEqual(stat.S_IMODE(public.stat().st_mode), 0o444)
+        self.assertEqual(stat.S_IMODE(private.stat().st_mode), 0o400)
+        GeneratedProvider.bounds.native_readable(public.stat())
+        # Select the real provider's outsider permission branch independently
+        # of the host test user's UID; no container or permission guard mock.
+        private_stat = list(private.stat())
+        private_stat[4] = private_stat[5] = 0
+        with self.assertRaisesRegex(ValueError, "UID/GID65534"):
+            GeneratedProvider.bounds.native_readable(os.stat_result(private_stat))
+        for leaf, expected in self.public_fixture_files.items():
+            self.assertEqual(file_pin(leaf), expected)
+            self.assertEqual(stat.S_IMODE(leaf.stat().st_mode), 0o444)
+            GeneratedProvider.bounds.native_readable(leaf.stat())
+        for leaf, mode in self.nonpublic_fixture_modes.items():
+            self.assertEqual(stat.S_IMODE(leaf.stat().st_mode), mode)
+        for condition in episode.CONDITIONS:
+            folder = self.shared["protocol"].parent / condition
+            self.assertEqual(stat.S_IMODE(folder.stat().st_mode), 0o700)
+            for leaf in (folder / "program.py", folder / "declaration.json",
+                         self.shared_execution / "jobs" / condition / "EXECUTION.json"):
+                self.assertEqual(stat.S_IMODE(leaf.stat().st_mode), 0o444)
+                GeneratedProvider.bounds.native_readable(leaf.stat())
 
     def test_shared_execution_has_exact_profiles_mounts_and_immutable_capture(self):
         self.assertEqual(len(self.first_calls), 2)
