@@ -1,4 +1,4 @@
-# Phoneme decoding from listening MEG
+# Event-aligned phoneme classification in the original LibriBrain participant
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Original annotated phoneme identity in the fixed 39-class vocabulary for each eligible held-recording event.
+
+**Source delivery:** partial\_delivery. A complete full 90 programme and genuine held-event scorer are present as source. They retain the native 88/1/1 run split, which does not implement the older proposed story-family-held-out split. Authentic full preparation, runtime qualification and reference competence remain unresolved.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A complete event-aligned multichannel numerical window could define direct classification, but no direct presentation/answer harness is supplied. Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded. | No bounded direct-response representation, participant transport or complete response collection is delivered. |
+| Typed viewer | not\_delivered | A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme. No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata. | No typed viewer or viewer-model evaluation for this task. |
+| Tool assisted | not\_delivered | A future per-event investigator could use the same 306x125 observation and a frozen decoder tool. Equal calibration and tool budget, case-state reset and no private feedback must be specified; current pointwise executable inference is not an adaptive investigator. | No separately implemented case-adaptive investigator and matched tool ablations. |
+| Frozen program | source\_available | Full 90 fit/seal/pointwise-inference programme with four matched arms and independent reference. Source frozen before numerical exposure; models sealed before query; complete candidate/reference closures precede target access. | Authentic preparation and execution qualification; measured complete-panel feasibility. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 15395 bytes; SHA-256 `bf44ebc628b2f87d612b45db4f4da2e86a3c6ec71e188ae3bfb2275712fe1bf1`.
+- Specification identity: 20425 bytes; SHA-256 `d157468ec84cf6326ba47145b5deec9fcd6c24b65b03c065cfb2a1aa7a2aadb6`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

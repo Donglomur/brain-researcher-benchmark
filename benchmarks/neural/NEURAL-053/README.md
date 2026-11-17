@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+One of 1,854 source concept IDs for each experimental image/epoch, with exactly two held images per concept and held person.
+
+**Source delivery:** partial\_delivery. A complete current source programme grades known-concept decoding from fixed processed MEG summaries on held people and held exemplars. Authentic full input/header qualification, trusted target custody and complete workload execution remain absent; older three-arm delivery prose is not the V4 four-arm programme.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A no-tools summary interpretation condition is conceivable but absent. Current model receives analysis tools/training summaries, not a direct query observation protocol. | Define a separate source-faithful compact view and comparable answer key. |
+| Typed viewer | not\_delivered | No rendered-MEG viewer is supplied. A future viewer must preserve exact summary/temporal information and hide source markers. | Implement typed render/answer transport. |
+| Tool assisted | not\_delivered | No per-query tool-assisted investigation is delivered. Current training\_investigation uses permitted summary arrays and tools before query prediction. This is training-stage investigation; no arbitrary per-query analysis code or query-batch fitting. | Qualify actual provider/context execution and resources.; Implement a participant-facing held-query investigation condition if this capability is required; do not relabel training-only investigation as query interpretation. |
+| Frozen program | source\_available | Current fixed\_program predicts full four-arm panels from frozen training state. Source and fit/selection recipe frozen before query; isolated folds and target-last complete scoring. | Authenticate full inputs and native execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11087 bytes; SHA-256 `8625f4e54764a380276290291a4743eee578d5aaac7205e1dadf684a3c8f3347`.
+- Specification identity: 14710 bytes; SHA-256 `6c8e6553629cb355d17a73cba973b6d199247422385da8dc9dd0e6a79fb53dcc`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

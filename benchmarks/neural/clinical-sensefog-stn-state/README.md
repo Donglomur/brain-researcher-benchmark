@@ -5,15 +5,33 @@
 - **Task ID:** `clinical-sensefog-stn-state`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Original behavioral/clinical interval annotations for freezing, voluntary stop, continuous walking, sitting and standing, subject to authentic dictionary and boundary validation.
+
+**Source delivery:** partial\_delivery. Complete recording-grid lag-map source exists, but no primary gait-state scorer, authentic labels/signal packets or candidate runner is delivered. Target-free lag controls alone do not measure neural understanding.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed complete all-channel 2 secondLFP numeric/waveform case. No tools and no movement/annotation context; full montage must be retained. | Authenticated signal packets, answer schema and no-tools transport. |
+| Typed viewer | not\_delivered | Potential calibrated bilateral LFP trace/spectrum display. Typed action policy cannot expose state-labelled IMU/EMG or event overlays. | Viewer implementation and protected capture. |
+| Tool assisted | not\_delivered | Proposed same LFP with causal spectral/model tools. Fixed per-case evidence/compute; models fitted only in other 11 people. | Full participant inputs, scorer and qualified frozen decoder. |
+| Frozen program | not\_delivered | Proposed precommitted gait-state probability program. Freeze causal lookback and training recipe; mapper does not execute or grade predictions. | Primary scorer and frozen lifecycle. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 22573 bytes; SHA-256 `bed1ca6e62e74e05d80e93d5b62cc9477f4cddb8d99b56283c7af23391a6a8d3`.
+- Specification identity: 30289 bytes; SHA-256 `4ed035ea7c136d7ae06fd4b1d3ace4db071ded67a002d0385df99db9850283b2`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

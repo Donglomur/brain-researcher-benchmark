@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Recomputable per-cell d-prime, regional fractions and animal-level before/after contrasts from measured neural arrays; the estimated effect may be null, negative or undefined. Reward-location d-prime is a separate unmatched statistic, not a known reward-coding truth.
+
+**Source delivery:** partial\_delivery. The evaluator computes real neural selectivity, behavioral-common-support contrasts and held-animal residuals from explicit array packets. It neither authenticates native cohorts nor grades participant investigation answers, and reward-location selectivity remains behavior-unmatched. Narrow the current claim to conditional stimulus-selectivity evidence; retain reward analysis as an unresolved companion.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed direct interpretation of complete precomputed neural effect tables plus uncertainty could test evidence reading, but that is a separately defined representation. Do not expose evaluator-computed answers while claiming inference from raw observations; freeze what is provided and what must be inferred. | Non-answer-bearing direct observations and independently known response targets. |
+| Typed viewer | not\_delivered | Potential typed cell/region/phase plots from permitted arrays; no viewer source exists. Keep observational selection fixed and avoid target-directed outcome filtering. | Viewer, access limits and answer-grading contract. |
+| Tool assisted | not\_delivered | Operator-only numerical source is present: Operator analysis backend computes selectivity, common-support contrasts, nulls and held-animal residuals. This does not deliver a participant-facing tool assisted mode. Current evaluator compound packets remain operator-only; a participant needs separate allowed views and no scoring feedback. | Investigator transport, public/private split and submission-claim grader. |
+| Frozen program | not\_delivered | Operator-only numerical source is present: Deterministic numerical analysis and frozen before-only explanatory reference. This does not deliver a participant-facing frozen program mode. Fixed preprocessing/threshold/model choices before outcome access; no after-phase fitting or held-mouse leakage. | External programme harness, authentic inputs and qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16180 bytes; SHA-256 `d3c7673c371b01421467ac792f66dc14e0e345e7c6b8ce5496377d80cd576bb9`.
+- Specification identity: 20420 bytes; SHA-256 `85ed89b64c56491bfe88bef44a44c34e4119986873f4b6e1fff76fd37b8bf223`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

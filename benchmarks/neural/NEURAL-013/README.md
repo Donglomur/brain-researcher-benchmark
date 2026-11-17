@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The source phoneme sequence for each retained attempted-speech trial, including the declared word-boundary symbol and edit denominator policy.
+
+**Source delivery:** design\_only. The assigned registered-runtime artifact is a historical declaration with empty entrypoints and unscored full45 semantics; its referenced authoring paths are not present in this task delivery. It does not deliver a usable phoneme evaluator or qualified programme. The adjacent NEURAL-014 implementation is a different calibration protocol and cannot silently substitute.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Direct numerical interpretation of a complete 512-feature trial would require learned mapping and a declared demonstration budget; no such observation-only condition is delivered. Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity. | No delivered participant condition establishes this mode for the same scientific target. |
+| Typed viewer | not\_delivered | A feature heatmap may aid inspection but has no delivered validated mapping to phoneme sequences. A viewer must preserve full observations and score the same sequence target to be comparable. Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant. | No delivered participant condition establishes this mode for the same scientific target. |
+| Tool assisted | not\_delivered | A tool-assisted per-trial decoder investigation is possible with declared checkpoints and equal inputs; no active case broker or scorer is delivered here. Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query. | No delivered participant condition establishes this mode for the same scientific target. |
+| Frozen program | not\_delivered | Historical manifest describes one frozen fit and every pointwise query, but referenced programme bodies/entrypoint are not delivered and results are explicitly unscored. Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases. | No delivered participant condition establishes this mode for the same scientific target. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 37716 bytes; SHA-256 `68bac3c77c96bd547c11e37b96f6b921de9df4752d673ee0d8832e7e91e81ac7`.
+- Specification identity: 41348 bytes; SHA-256 `d605442b20543a9ae38c5d4fc53d8529b9406f62a96aadf611419ec23a9769fd`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

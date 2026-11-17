@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Measured BOLD time series for each source participant and ordered native parcel at each eligible held-out TR, not the published challenge score or output of another model.
+
+**Source delivery:** partial\_delivery. The task package contains a legacy producer/collection manifest for16 Movie10 transcript-development cases and explicitly no grader; its historical adapter paths are not delivered here. This is narrower than the full multimodal objective. Bind an executable source/target packet and independent scorer before using either scope.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A future bounded numeric/visual stimulus-and-calibration packet could ask for neural-response predictions; the full1000-parcel encoding task is not already such an episode. Use the same held stimulus identities and private neural targets; specify representation loss before comparison. | No direct observer presentation or response collector. |
+| Typed viewer | not\_delivered | No typed stimulus/neural calibration viewer is present. A viewer must not expose the held BOLD answers. Typed actions and faithful permitted observations only; protect held labels and raw answers. | Task-specific viewer, action limits and endpoint-preserving case representation. |
+| Tool assisted | not\_delivered | Legacy manifest mentions programme production only, without delivered per-case investigation execution. Future tools must use the same observation and compute budget and no evaluator feedback. | Present callable task implementation and isolated per-case transport. |
+| Frozen program | not\_delivered | The manifest declares one frozen Python candidate source for16 transcript cases; the referenced producer and grader are not delivered in this task package. Freeze candidate and adaptation recipe before query access; a declaration alone is not execution. | Recover current producer/collection path plus scorer and source bindings. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16432 bytes; SHA-256 `a0d167e76de2c9b75df5da0c9b799178c8927a810c88e318ee173f658d75ea58`.
+- Specification identity: 21040 bytes; SHA-256 `857645a5eb7317e68245e291307952357bde5633754c521e11e6f9a2bad26831`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

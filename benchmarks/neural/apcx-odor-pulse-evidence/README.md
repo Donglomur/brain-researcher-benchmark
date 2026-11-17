@@ -5,15 +5,33 @@
 - **Task ID:** `apcx-odor-pulse-evidence`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Integer Total\_pulse deposited with each retained trial; optional low/high category is derived as \<=8 versus \>=9.
+
+**Source delivery:** delivered\_named\_scope. Delivered source evaluates deposited Total\_pulse labels on the complete 43-session release, not the original physical-event target or paper-reported 42-session roster. This revision names that conditional endpoint without removing unresolved physical/QC/chronology holds.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Prepared target-free numeric session episodes exist, containing the complete 90-bin signals and permitted support; a no-tools participant controller is not supplied. A no-execution participant could consume the episode only after capacity/fresh-context controls; episode source itself does not enforce no tools. | Matched complete-context serialization and actual no-tools transport/model trial.; Actual direct-answer or per-case investigator controller; the shipped CLI prepares episodes and consumes results but launches no candidate. |
+| Typed viewer | not\_delivered | Possible raster/count heatmap view of all retained units and 90 bins; no current typed renderer. Must preserve complete observation and cannot reveal physical-command diagnostic overlays. | Typed actions, complete rendering and answer protocol. |
+| Tool assisted | not\_delivered | Prepared one-session evidence and a fixed numerical reference kernel exist; no per-case investigator loop or tool-calling controller is supplied. Mount one episode only, fixed same-support tooling/compute, no owner targets/other sessions; this source does not enforce an LLM sandbox. | Externally enforced case/session state isolation and investigator run.; Actual direct-answer or per-case investigator controller; the shipped CLI prepares episodes and consumes results but launches no candidate. |
+| Frozen program | not\_delivered | Actual task.py reference entrypoint runs the precommitted calibration-mean, count-ridge and temporal-ridge numerical procedures on one authenticated session episode; it is not an arbitrary candidate launcher. The fixed reference CLI executes only the shipped mean/ridge panel. Complete candidate prediction validation is an operator scoring route, not a candidate executable lifecycle or external predictor callback. | New-host frozen lifecycle and any candidate capability study.; A genuine candidate executable/predictor lifecycle with frozen input scope and captured complete outputs. Fixed reference or negative-control source alone is insufficient. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31810 bytes; SHA-256 `53b90eef0657f5b2089aed05ecd0b4243b0ec05c031cecc50c0eeb72f75a1ed1`.
+- Specification identity: 40986 bytes; SHA-256 `e8e8dde23e34f822360928cdacac653f0f92a2de9a2d27987d05448dabb75309`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

@@ -1,4 +1,4 @@
-# Brain-wide choice prediction
+# Retrospective pre-movement left-choice probability from brain-wide spikes
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Binary recorded choice: right=0 and left=1; candidate returns P(left). No-response trials and source-invalid trials retain explicit source dispositions.
+
+**Source delivery:** partial\_delivery. The retained manifest describes a verified exposed one-session 93-query programme; its authoring bridge is a historical locator. The public full 29-session process source supplies real probability scoring and F/I boundaries but explicitly lacks an authentic structured-input extractor, admitted deployment and scientific qualification. Neither scope is an untouched held-animal causal test.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Prospective probability response from the same fixed count/context vector without code or external model tools. Hold case observations, demonstrations and sequential history policy fixed; hide current choice and future cases. | No direct no-tools participant transport or full support response collection. |
+| Typed viewer | not\_delivered | Prospective spike raster/count plot with signed-stimulus/history context and captured P(left). Typed rendering and navigation only; target fields and raw array/tool execution unavailable. | No rendered participant interface or image-equivalence control. |
+| Tool assisted | source\_available | Full I policy fits on allowed calibration and can produce a session-specific committed predictor; source supports a bounded model tool. Same session and information condition; fresh predict process for each query; no protected targets or cross-case model conversation state. | Authentic extractor, selected compatible model/runtime and qualified full process execution. |
+| Frozen program | source\_available | Full F source is captured before authentic input opening, fitted per session and retained unchanged as source with committed config/state. Training/validation only for fitting; query probability committed before protected grading. Historical prefix-adaptive single-session route remains explicitly different. | Full-cohort data and native execution qualification; historical bridge locator must not be mistaken for a current public turnkey route. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 10997 bytes; SHA-256 `45383cdfe51e0ab9d8295c370524faf62c95ecebaf4932ed64d9fc1ccfe4270b`.
+- Specification identity: 16364 bytes; SHA-256 `06bbfe107dfc02defa6e3e8a2191c9387c2b1e1ec24beb1351b5621a9cbd1d6c`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

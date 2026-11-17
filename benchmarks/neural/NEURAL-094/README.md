@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Recorded final response on every required query trial, with source -1,0,+1 mapped to right,NoGo,left probabilities. Region-wise predictive effects are recomputed from paired losses rather than scored against a preferred biological conclusion.
+
+**Source delivery:** partial\_delivery. The complete regional comparison and both deployment strategies are implemented in portable scientific source, with exact full-cohort geometry. Authentic prepared-data custody, competent reference fits, native limits and current complete execution remain unqualified. Use the whole-choice endpoint and retain regional contrasts as descriptive; do not promote software geometry to anatomical or performance evidence.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | No-tools inference from a fixed per-trial raster/context representation is a possible separately specified view; complete regional contrasts require the full numerical panel. A few selected plots cannot substitute for all query probabilities and regional support. | No fixed direct-observation packet or response collector. |
+| Typed viewer | not\_delivered | Potential raster/context inspection with restricted typed rendering, retaining fixed timing and blind regional aliases. Rendered views cannot expose protected choices, source mappings or future observations. | No typed viewer implementation; numerical transport is not an image viewer. |
+| Tool assisted | source\_available | Concrete investigator\_policy.py actor alternates fixed-broker model generation with bounded Python actions and captured output/error feedback, then emits sealed fit state or a complete query-probability table. The episode is a whole source-defined session/view or regional-pair/view bundle stage; all its query observations are visible together. The globally frozen prompt/action policy retains code state and conversation within one stage, resets at fresh stages, and permits within-arm unlabeled query adaptation. It is not fresh-trial investigation. Exact native adapter mounts no query during training and only readonly fitted state during query; no cross-bundle feedback or query labels. Equal aggregate model reservations include authoring and identical per-condition non-model ceilings remain. | Authentic complete operator data/capsule staging and qualified native image, process/storage isolation and provider/token admission.; Executed investigator/model trial with complete matched references; source\_available records actor/transport code only, not a callable qualified service.; A separate fresh-trial observation/response episode if per-trial adaptive understanding is to be measured. |
+| Frozen program | source\_available | F strategy freezes globally authored numerical code and runs exact complete whole/regional fit/query bundles. No runtime model access; same observation support and resource rules, full outputs/reference closure before grading. | Native complete execution, competent reference fits and authentic-data custody qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12001 bytes; SHA-256 `864c46737c8f413df6c23d159b25820d551965dce16ad0785dba7fd9035058ec`.
+- Specification identity: 19265 bytes; SHA-256 `fef432d1fad1ac585077affa2cd501f0a2bc9698e6c9364278a9997cb19b3a5e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

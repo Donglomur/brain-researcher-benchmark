@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Siena recording-relative seizure intervals after explicit reconciliation of source clock annotations and native EDF start clocks.
+
+**Source delivery:** partial\_delivery. A within-Siena event evaluator, causal line-length and timing references are delivered as construction source. Selected complete-patient support is checked, but source authentication and full-cohort qualification are not established; CHB-to-Siena transfer belongs to NEURAL-012.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Complete continuous EEG could be interpreted directly with calibrated displays, but no no-tools full-record protocol is delivered. Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity. | No delivered participant condition establishes this mode for the same scientific target. |
+| Typed viewer | not\_delivered | Typed multichannel viewing would be suitable for interval annotation; no Siena image transport is delivered. Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant. | No delivered participant condition establishes this mode for the same scientific target. |
+| Tool assisted | not\_delivered | The evaluator and fit/predict commands are analysis tools; an interactive case-level investigator protocol and target-withholding broker are not delivered. Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query. | No delivered participant condition establishes this mode for the same scientific target. |
+| Frozen program | not\_delivered | reference.py supplies preselected fit/predict implementations for line-length and timing arms; a protected arbitrary-candidate runner and authentic source packet are absent. Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases. | The inspected source supports reconstruction or fixed-reference computation; a participant condition for the revised withheld scientific target is not delivered. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 13904 bytes; SHA-256 `044340155db14895d22a711e2a892261d0377603714125502e911dd7181fd0ea`.
+- Specification identity: 18134 bytes; SHA-256 `93deb7919ee477e0e46c62bcba6cf0390fd27d6577563cc9063fe07a3798f46c`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

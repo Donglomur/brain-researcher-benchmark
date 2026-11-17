@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Independently measured held-out response counts divided by the actual bin exposure and eligible recorded-unit denominator, in spikes/s/source-unit on a frozen region/depth schema. A CSD trajectory is a separately declared outcome with separate units, never pooled with spike-rate error.
+
+**Source delivery:** target\_mismatch. The registration proposes held-animal region/depth spike-rate or CSD trajectories, but the only published implementation member is a manifest for nominal released-event-rate prediction. Its packet, preparation and numerical scorer are absent from this checkout. The declared26-animal/1010-query scope cannot authenticate biological spike rates or the intended shared anatomical target; retain it as a historical alternative until the bridge is supplied.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential numeric or plotted trial/history interpretation under a separately frozen response contract. No-tools condition must use the same permitted measured history and withhold target trajectory. | No executable observation/scoring path or authenticated case packet in this checkout. |
+| Typed viewer | not\_delivered | Potential region/depth/time response-history viewer; no delivered renderer. Typed views may show only input history and fixed anatomy, never query response arrays. | No executable observation/scoring path or authenticated case packet in this checkout. |
+| Tool assisted | not\_delivered | Per-case numerical/model investigation is proposed, not supplied by the manifest. Keep tool/checkpoint exposure and calibration matched to the frozen-program comparison. | No executable observation/scoring path or authenticated case packet in this checkout. |
+| Frozen program | not\_delivered | Manifest describes timing/history programme conditions but refers to absent source packages. Declared per-view timing/history entrypoints reference absent source files; their argv and registration metadata do not supply an authenticated method freeze or complete scorer. | No executable observation/scoring path or authenticated case packet in this checkout. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 14177 bytes; SHA-256 `96c5439446c1ed583f59d42f683ac8e6d8d2d40b823e81bdc83bf9d560e198d0`.
+- Specification identity: 18973 bytes; SHA-256 `4f81c6e386aba438d7b6711c550a505b6f39b3773f67777b2b4f806730aff103`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

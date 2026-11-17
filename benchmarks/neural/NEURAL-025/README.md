@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The 24 ordered measured jointAngles trajectories in degrees OR the 24 jointVelocities trajectories in degrees/second, scored in separate requests; they are not a single 48-channel endpoint.
+
+**Source delivery:** partial\_delivery. The complete five-mouse/ten-session normalized-data decoder and measured-target scorer exist. Authentic native extraction, trial eligibility, clock/ROI alignment and protected participant delivery remain unverified; use the declared retrospective session-local endpoint, not an author-reproduction or cross-animal-transfer claim.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed numeric calcium matrices and fixed lift grid could support direct complete-trajectory answers; no no-tools context/collector is supplied. Only public calibration labels and query neural/context values; hold all evaluation kinematics private. | Complete no-tools observation and response protocol. |
+| Typed viewer | not\_delivered | A source-faithful trace/raster viewer could expose 100-ROI calcium windows; none is supplied. Typed trace selection/rendering must preserve fixed observations without returning target trajectories. | Renderer, restricted action schema and matched numerical observation budget. |
+| Tool assisted | not\_delivered | Numerical fit/score functions are operator APIs; a case-adaptive investigator transport is not supplied. Proposed equal data, tool/checkpoint and compute access with no private compound scoring request. | Per-case tool transport and independently protected scorer. |
+| Frozen program | not\_delivered | Operator-only numerical source is present: Training-only numerical decoder and complete external-prediction scoring API. This does not deliver a participant-facing frozen program mode. Freeze recipe, eligibility and observation support before evaluation; candidate receives training labels and query neural values only. | Candidate runner and authentic-input/protected-execution qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 25265 bytes; SHA-256 `4791d12573c04b19cac2f29b849771b363cc0b5463172d6c88af16e747471b33`.
+- Specification identity: 29280 bytes; SHA-256 `6c3261c1883d99e6e4207302f6218ba403d578076889c33c4e9d797195487bb3`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

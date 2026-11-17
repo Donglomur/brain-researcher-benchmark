@@ -8,7 +8,7 @@
   "goal": "Surpass the source-paper result on the same task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
   "primary_outputs": [
     "Candidate method and outputs for the source task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
-    "Source-paper comparison for PhysioNet-MI four-class balanced accuracy: Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and weighted F1 are separately reported supporting metrics, not substitute winning endpoints."
+    "Source-paper comparison for PhysioNet-MI four-class balanced accuracy: Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and support-weighted F1 are required supporting metrics, not substitute winning endpoints. The concrete scorer and paired comparator were exercised on all 1,803 original test events using frozen constant-output software controls; those controls are not author or candidate model performance."
   ],
   "success_criteria": [
     "Recover and bind the precise Table 12 preprocessing, all eligible epochs, original run aggregation and REVE-Base access.",
@@ -221,8 +221,8 @@
     "objective": "surpass_source_paper_same_task",
     "contract": {
       "path": "benchmarks/paper/PAPER-paper-method-003/improvement.v1.json",
-      "bytes": 10122,
-      "sha256": "e240691e755cb499b5d18944f60b92ecbf6332c157cb43ef5d950ae0b913bce3"
+      "bytes": 16334,
+      "sha256": "3b7d04a02c39793f20f907dd1b6e64ce090067decd7effb9ceeea8a2fbcb7408"
     },
     "disposition": "design_ready",
     "reproduction_role": "calibration_only",
@@ -250,21 +250,21 @@
     "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
   },
   "blocking_issues": [
-    "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
-    "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
-    "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
-    "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+    "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
+    "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
+    "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
+    "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
   ],
   "holds": {
     "task_specific": [
-      "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
-      "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
-      "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
-      "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+      "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
+      "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
+      "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
+      "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
     ]
   },
   "next_implementation_action": {
-    "action": "The original four-class PhysioNet-MI endpoint, participant split and numeric REVE-Base result are recoverable. A same-task design is defensible, but historical preprocessing, run aggregation and checkpoint/recipe parity remain unresolved; the extensive local source proposal is not an executed author baseline. Paper versus released PhysioNet preprocessing discrepancy is unresolved. Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent. No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule. Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution.",
+    "action": "The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved. Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment. Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately. No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign. Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established.",
     "basis": "Current source-paper improvement contract disposition and blockers",
     "execution_authorized_by_manifest": false
   },
@@ -275,7 +275,7 @@
       "bytes": 15505,
       "sha256": "fe883d61f8d08161e5fcb53ca88ab41472fc40c4e8e81cb2b6f5202b708faf2e"
     },
-    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win."
+    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win. The separate additive original-physionet route now provides authenticated full-panel preparation, scoring and a strict classifier adapter; it neither activates the preserved S8 execution entrypoint nor establishes author-model reproduction or improvement."
   },
   "admission": {
     "runnable": false,

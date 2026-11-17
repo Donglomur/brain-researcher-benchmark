@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The actually presented image identity, joined to its source trial/response and the fixed candidate-image roster.
+
+**Source delivery:** design\_only. The public implementation directory contains a manifest, not the named adapter or a numerical image-retrieval evaluator. Its six-case JPEG-RGB-1 scope is a prospective within-person retrieval condition; source recovery and authenticated query/target mapping are required before execution.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed no-tools voxel summary or independently frozen response-map display No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support. | Define a faithful manageable response view and strict answer collector. |
+| Typed viewer | not\_delivered | Proposed ROI response-map and candidate-image viewer No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support. | Implement typed image delivery without event/answer metadata. |
+| Tool assisted | not\_delivered | Proposed per-person retrieval investigation on permitted voxel arrays No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support. | Publish actual inspection/decoder route with matched inputs and resources. |
+| Frozen program | not\_delivered | Manifest names one precommitted Python source across all six cases No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support. | Recover the referenced executable and separately bound numerical grader. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12018 bytes; SHA-256 `8a660b196c5150e6be60cdd5636b977eadbf3ee9b88da4254cfda43e224865b2`.
+- Specification identity: 14543 bytes; SHA-256 `236c2eeb3aa3e3733db2697b494813cda6f66985e875f412594f6c997d6dca21`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

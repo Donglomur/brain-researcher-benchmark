@@ -5,15 +5,33 @@
 - **Task ID:** `NEURAL-SCOPE-20261114-ABR-TRANSFER`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Expert threshold in dB SPL for each animal×stimulus series, or an explicitly documented censored interval; it is an annotation of averaged physiology.
+
+**Source delivery:** partial\_delivery. Threshold-loss arithmetic and complete prediction ledgers are delivered, but the evaluator deliberately emits aggregate scores only for generated engineering controls. Native annotation semantics, complete waveform census and source-only comparators must be authenticated before an actual transfer score can be admitted.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Complete numeric or fixed waveform stack plus four labeled source stacks is scientifically meaningful. No tools, source lookup or target labels; all levels and samples must fit the frozen context. | Authentic serializer, complete packet capacity and transport not delivered. |
+| Typed viewer | not\_delivered | A typed waveform-stack viewer could expose time/level panels without raw export. Actions must retain full stack access and hide annotations; no viewer currently exists for this registration. | Typed action protocol and observation-only renderer. |
+| Tool assisted | not\_delivered | Per-case numerical investigation of the same complete stack and identical calibration support. No target feedback; models fitted on extra support form a separately named information condition. | Candidate investigation interface, fixed tools and isolated episode. |
+| Frozen program | not\_delivered | Freeze waveform predictor and fitting recipe before held-lab cases. Identical four-stack evidence in matched mode; full-support source-only programme reported separately. | Only scoring exists; no waveform predictor/executor or qualified authentic input route. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28166 bytes; SHA-256 `3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86`.
+- Specification identity: 35927 bytes; SHA-256 `901977bc05022d4923efd865161b344a20c46f1e1be12ddcfd01f53a92ec07d1`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

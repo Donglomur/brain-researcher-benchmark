@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The ordered mapped V1 typed-button classes for each eligible sentence; this is observed keypress content, not corrected intended sentence text.
+
+**Source delivery:** partial\_delivery. A real typed-button CER evaluator and strict packet checks are delivered. Authentic neural observation delivery, decoder execution and intended-key paper parity are not; qualify the measured typed-button endpoint before adding access claims.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A fixed neural observation packet with channel/time/coordinate units and the same declared calibration support, answered without execution. No evaluator targets, source-label lookup, other-case memory or model/numerical tools; a direct response is evaluated separately from programme results. | Authentic complete observation presentation and no-tools response collection have not been delivered. |
+| Typed viewer | not\_delivered | Proposed typed navigation over the permitted neural observation, with units and calibration examples. Only rendered allowed observations; no raw target arrays or unrestricted filesystem/code access. A plot alone does not establish viewer execution. | Task-specific renderer/action API, complete case collection and restrictive transport are absent. |
+| Tool assisted | not\_delivered | Case-local numerical/model-assisted investigation under a fixed observation and compute entitlement. Current query inspection may inform an allowed proposal; fit/selection remains training-only and evaluator outcomes are inaccessible. Fresh case state is required. | A legacy manifest or prediction scorer does not deliver the participant investigation runtime. |
+| Frozen program | not\_delivered | Precommitted source, fitting/adaptation recipe and complete prediction output contract. Freeze before query access; equal declared calibration and no post-query selection from evaluator feedback. Programme success does not measure unaided interpretation. | No executable participant programme is present in the assigned package. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11607 bytes; SHA-256 `1888547c763c67793b92ae4d1602c51917aa9d898755291e421ed545a54f7c47`.
+- Specification identity: 14956 bytes; SHA-256 `86203e9c4e6e1458d241d4c1e62ffabc79c811870057a94acfa0d962bc3df669`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

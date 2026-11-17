@@ -5,15 +5,33 @@
 - **Task ID:** `NEURAL-SCOPE-20261114-LOCALIZATION`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Two-coordinate nearest-contact spatial proxy in verified probe-plane micrometres; strict Euclidean error \< 50 µm is the registered accuracy convention, not known ground-truth precision.
+
+**Source delivery:** partial\_delivery. Complete 880-case scoring/projection and a real geometry-centroid negative-control producer are delivered. The target is explicitly a nearest-contact location proxy, and the centroid is not a competent waveform method. Authentic normalizer/units/animal joins and target-independent COM/triangulation/grid-convolution references remain missing.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential numeric or spatial waveform display for one identified source. Would need complete waveform/geometry representation; current native/program claim cannot be inferred from scoring outputs. | Complete direct observation packet and no-tools response interface. |
+| Typed viewer | not\_delivered | A probe-geometry-linked multichannel waveform viewer is scientifically plausible. Restrict to permitted signals and geometry; never show nearest-contact target or private degradation mask. | Typed waveform/geometry actions and target-free renderer. |
+| Tool assisted | not\_delivered | Per-case waveform localization with fixed scientific tools. Same inputs/compute; no target-conditioned retries or author cached answers. | Actual investigator transport, admitted waveform methods and runtime boundary. |
+| Frozen program | not\_delivered | Existing frozen-program hash submission ABI and executable geometry-centroid programme. The supplied centroid programme is a fixed geometry-only negative-control producer. It supplies no candidate module/callback or frozen participant lifecycle. | Competent waveform programmes, authentic normalized inputs and qualified executor.; A genuine candidate executable/predictor lifecycle with frozen input scope and captured complete outputs. Fixed reference or negative-control source alone is insufficient. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 13564 bytes; SHA-256 `0ac263619ad8daaba5eb074348bb6fb95f34a18207329467070cbcd380a147fe`.
+- Specification identity: 21840 bytes; SHA-256 `a3c90fc7a7af96c07ffeb66e9cdfeeb4b41330870717bbc220f1a916445c52be`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

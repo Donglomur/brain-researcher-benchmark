@@ -1,4 +1,4 @@
-# Recall-context identification from glial calcium
+# Held-mouse recall-context decoding from processed astrocytic calcium
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Observed context A=0 or B=1 for each fixed30-second window. This is an experimental context label, not a ground-truth memory strength or causal astrocyte mechanism.
+
+**Source delivery:** delivered\_named\_scope. A portable programme path and exact140-probability scorer exist for the complete selected seven-mouse subset. Scientific interpretation remains limited by processed-ROI selection, behavior polarity, context/day-order confounding, historical exposure and unqualified relocated runtime; a probability score alone cannot establish neural contribution.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed no-tools numeric or visual presentation of the active held-mouse30-second calcium window. No such participant transport is present. Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation. | Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance. |
+| Typed viewer | not\_delivered | Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer. Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable. | Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here. |
+| Tool assisted | not\_delivered | Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget. Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback. | No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode. |
+| Frozen program | source\_available | One frozen Python programme over seven fresh held-mouse folds, fitting only each active training set. Commit source and allowed fitting recipe before query access; no target feedback or source updates; require complete case coverage before protected grading. | Authentic external inputs and current runtime qualification remain required.; Other folds’ training targets must never enter the active candidate workspace. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17493 bytes; SHA-256 `7bdc7239b804ff669547b7fa3818e7cc11ef2a2d5461a126aeec0bba116ba2aa`.
+- Specification identity: 22379 bytes; SHA-256 `429408cf4c26bfcfc90b30089e6f2e09bfbbebab555df0397049e86eec9b450f`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

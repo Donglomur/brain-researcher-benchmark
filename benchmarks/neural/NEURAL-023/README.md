@@ -10,6 +10,24 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Measured trailing 20 ms finger velocity in m/s, x then y, at each assessment endpoint. This is continuous movement reconstruction from neural observations, not reproduction of a published score table.
+
+**Source delivery:** partial\_delivery. A complete numerical artifact scorer is present for one exposed Indy day pair and 22,091 trailing-velocity endpoints. Exact prepared arrays remain operator-provisioned; the registered historical program runner and legacy scorer dependency are absent from the published source. The source-wide later-session/second-animal claim and matched investigation modes remain unfinished.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed numeric spike-raster/count view plus fixed labeled calibration, with a complete structured velocity response. No numerical/model tools or evaluator feedback; a reduced visual case would be a separately declared endpoint, not a score on the full current batch. | No no-tools observation/answer transport or tested model trial. |
+| Typed viewer | not\_delivered | Potential typed raster/count-history visualization for the same designated observations; dense 22,091-by-96 full support must not silently become a hand-picked example set. Typed bounded rendering only, with no raw-array/target return and fixed response coverage. | No typed viewer, rendering/answer binding or complete-support viewer protocol. |
+| Tool assisted | not\_delivered | Proposed per-session numerical/model-assisted investigation of transfer, calibration and neural dependence; external artifact scorer can grade resulting full-support predictions. Same data, calibration labels, checkpoint access and accounted compute as comparison; numerical claims must be recomputed without evaluator feedback. | No current actor/tool controller or matched investigation outcome grader; artifact scoring alone supplies neither. |
+| Frozen program | not\_delivered | Historical one-file frozen-program route receives source, calibration and full target-free assessment batch. Commit program and fitting recipe before assessment; full-batch assessment counts are permitted; scoring must follow producer shutdown with private assets excluded. | Historical runner source and required local execution dependencies absent from current publication; only the prediction artifact scorer is delivered. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Recorded public evidence
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
@@ -21,7 +39,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 26305 bytes; SHA-256 `8c2e1e2ecc846e4a046de8fc87a59623c905d3f6e7d5e7d9a5af8ac579963c4b`.
+- Specification identity: 32026 bytes; SHA-256 `b831d7047d7c6e658f497afa80d23bce826a3f2cf5d4f4120a980473d0cc77dd`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

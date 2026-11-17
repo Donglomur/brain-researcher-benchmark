@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Canonical visual stimulus category0–6 mapped explicitly from source UniqWalls/stim\_id and held privately for each complete trial/position packet; the plan freezes a subset before outcomes.
+
+**Source delivery:** partial\_delivery. A genuine stimulus-probability scorer and source-frame-to-position-packet construction path exist on safe decoded arrays. Original NPY intake/export identity, native cohort/phase completeness, units and anatomical pooling validity remain unverified; participant-facing direct/viewer delivery and protected runs are absent.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Compact four-value neural plus two-value context records are suitable for a prospective no-tools probability condition; no fixed contexts/demos/collector exist. Only allowlisted numeric query and declared training demonstrations, no source labels/identities. | Frozen direct prompts, demonstrations and full response collection. |
+| Typed viewer | not\_delivered | A rendering of the same regional values could support visual interpretation, but no typed viewer exists. Render only permitted regional/context observations; do not imply raw-cell spatial or temporal structure absent from packet. | Renderer and a defensible matched-observation visual condition. |
+| Tool assisted | not\_delivered | Numerical construction/reference APIs exist, but no bounded per-case investigator transport is supplied. Same training/query observations and model-tool exposure as comparator; no report/label access. | Tool transport, per-case reset and matched budget enforcement. |
+| Frozen program | not\_delivered | Operator-only numerical source is present: Frozen train-only numerical classifier and complete probability scorer on normalized source arrays. This does not deliver a participant-facing frozen program mode. Training only before reward/evaluation access; no query fitted normalization or label feedback. | Authentic full inputs, participant programme runner and protected execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 15976 bytes; SHA-256 `9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9`.
+- Specification identity: 19495 bytes; SHA-256 `c3ea225629a1a51dd3ec241354fe2978858184b43d9af0148c039d805244bd3e`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

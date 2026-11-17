@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Independently recomputed recording and mouse/area population-onset contrasts in milliseconds, exact defined/undefined support, and typed scientific assertions derived from that same full reference result. The direction of the biological effect is not prescribed.
+
+**Source delivery:** partial\_delivery. Actual numerical and typed-claims investigation source covers the complete47-recording/41-mouse released cortical panel and eight prespecified conditions. It measures fixed-analysis reproduction plus bounded interpretation under potentially exposed reference code. The complete authenticated operator export, physical source timing/anatomy and native qualification remain external; case-adaptive and direct/viewer delivery are absent.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_suitable | The full47-recording estimator-reconstruction task requires cohort computations; one no-tools waveform answer would change its endpoint. A future direct reading of rendered summaries must be a separately frozen interpretation condition, not credited by this programme MAE. | No direct participant interface or empirical direct interpretation result. |
+| Typed viewer | not\_delivered | Potential typed latency/laminar plots for bounded interpretation; current component exposes programme input and typed claims, not a viewer. A renderer must preserve all47records/support and withhold independent reference answers and raw-data capabilities outside its declared view. | Renderer, typed action protocol and matched observation comparison. |
+| Tool assisted | not\_delivered | Case-adaptive scientific investigation is contemplated by the umbrella question; only frozen programme source is delivered. Keep complete cohort, allowed analysis tools and exposure policy matched to the frozen arm; no feedback. | Actual case-adaptive participant runner and empirical comparison. |
+| Frozen program | source\_available | One precommitted Python programme consumes the full public analysis view and writes report.json and claims.json. Capture complete stopped artifacts, retire candidate public view/resources, admit both artifacts, then invoke independent numeric/claims grade against one reference. | Complete operator export and native/scientific qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12242 bytes; SHA-256 `88741dbde3633d4a2104d4d44c97c4024662d7794641eab337058f6794e34d73`.
+- Specification identity: 18615 bytes; SHA-256 `fcf38b601539da91f0e51a73aecdfd0ec14d7efbaeda2a9401a91b979e53b7ef`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

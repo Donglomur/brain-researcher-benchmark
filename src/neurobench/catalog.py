@@ -22,7 +22,9 @@ OUTPUT = 'benchmarks/catalog'
 COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'input_assets', 'evaluation', 'resources', 'holds',
           'next_implementation_action', 'provenance', 'admission'}
-READ_LIMIT = 24 * 1024 * 1024
+# Covers both tracks' versioned contracts plus exact preserved predecessors.
+# Per-member bounds and the cumulative refusal remain independent controls.
+READ_LIMIT = 32 * 1024 * 1024
 PAPER_PRE_IMPROVEMENT_COUNT = 116
 
 

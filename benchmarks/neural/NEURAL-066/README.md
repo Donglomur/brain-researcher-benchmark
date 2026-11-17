@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Mapped observed positive-duration keypress classes and paired per-person CER contrasts. Null or unfavorable contrasts are valid outcomes; prose agreement with a favored mechanism is not a label.
+
+**Source delivery:** delivered\_named\_scope. The public source implements a complete prospective, event-assisted observed-key comparison with independent scoring. Its source integrity is inspectable, but authentic geometry, support, environment and full execution are unqualified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A fixed neural observation packet with channel/time/coordinate units and the same declared calibration support, answered without execution. No evaluator targets, source-label lookup, other-case memory or model/numerical tools; a direct response is evaluated separately from programme results. | Authentic complete observation presentation and no-tools response collection have not been delivered. |
+| Typed viewer | not\_delivered | Proposed typed navigation over the permitted neural observation, with units and calibration examples. Only rendered allowed observations; no raw target arrays or unrestricted filesystem/code access. A plot alone does not establish viewer execution. | Task-specific renderer/action API, complete case collection and restrictive transport are absent. |
+| Tool assisted | source\_available | Case-local numerical/model-assisted investigation under a fixed observation and compute entitlement. Current query inspection may inform an allowed proposal; fit/selection remains training-only and evaluator outcomes are inaccessible. Fresh case state is required. | Authentic inputs, bounded participant execution and reference competence remain unqualified. |
+| Frozen program | source\_available | Precommitted source, fitting/adaptation recipe and complete prediction output contract. Freeze before query access; equal declared calibration and no post-query selection from evaluator feedback. Programme success does not measure unaided interpretation. | Exact environment, source/data joins and complete execution qualification are outstanding. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11823 bytes; SHA-256 `cd668b1dd1fc8210918499c2994b8607ae3b3c3cd5d9f05c6d3c2bac2c76e3b4`.
+- Specification identity: 16125 bytes; SHA-256 `3c9af872f7ea875117380c48d3734e4cb5bc8a366e73a2ab1eb6a4c0a15212ec`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

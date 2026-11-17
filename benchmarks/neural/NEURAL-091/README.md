@@ -1,4 +1,4 @@
-# Visual tuning prediction in Neuropixels recordings
+# Stimulus-family response prediction for calibrated Neuropixels units
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Protected integer spike count over each eligible presentation after invalid neural intervals are removed; exposure is the remaining valid duration.
+
+**Source delivery:** partial\_delivery. An exposure-aware adapter, train-only controls and genuine held-out spike scorer exist. Complete authenticated native export, permitted stimulus content, competent stimulus-transfer reference and participant execution remain missing, so the old not\_implemented wording is superseded only for this construction component.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Direct quantitative prediction could use calibration counts and allowed stimulus/state tables; a screenshot of spikes would reveal the target and changes the encoding task. Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded. | No bounded direct-response representation, participant transport or complete response collection is delivered. |
+| Typed viewer | not\_delivered | A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme. No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata. | No typed viewer or viewer-model evaluation for this task. |
+| Tool assisted | not\_delivered | Numerical analysis could fit/calibrate on public training rows and predict query rates. Public/private files are an interface, not a sandbox; query counts/source bundle must remain unavailable and any model tools must be matched. | No protected adaptive participant transport or per-case episode budget. |
+| Frozen program | not\_delivered | The scorer accepts predictions and supplies fixed controls; a general frozen candidate fit/inference lifecycle is not delivered. Freeze candidate and fit recipe before query; preserve the complete keyed cohort and pre-outcome eligibility. | Candidate lifecycle and authenticated native input/operator execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11330 bytes; SHA-256 `b42c6803c1aede42efe4f65e422494247b355b2dd2799e5817ef61d759cc2445`.
+- Specification identity: 17043 bytes; SHA-256 `e82fb3edeceadb5297038eb1a3c8e2d03737ceb522c7598292ff07fbee16037a`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

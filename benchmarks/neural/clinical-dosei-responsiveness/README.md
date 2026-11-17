@@ -5,15 +5,33 @@
 - **Task ID:** `clinical-dosei-responsiveness`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Released ordered MOAAS categories 1,2,3,4,5, with source-reported merging of original 0/1 and 5/6; missing/ambiguous ratings stay null.
+
+**Source delivery:** partial\_delivery. Exact ordinal primary/paired artifact scoring and secondary ordinal metrics exist. Source person/assessment joins, causal EEG packets, trained physiological comparators and participant execution remain unqualified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Complete 7,500 value causal two-channel EEG or an explicitly matched waveform rendering. No execution; exact full observation and mask/capacity policy required. | Complete authentic packet and no-tools transport. |
+| Typed viewer | not\_delivered | Potential calibrated two-channel 30 second waveform display with typed time/scale actions. No clinical timestamps/labels or dose overlays; cannot silently crop to salient segments. | Restricted viewer and response-capture implementation. |
+| Tool assisted | not\_delivered | Same pre-assessment waveform plus causal spectral/entropy tools. No centered/future-aware features; train-only fitted tools and fixed case budget. | Audited physiological tools and protected input path. |
+| Frozen program | not\_delivered | Precommitted ordinal predictor with fixed train-only fitting recipe. Group all recordings per person; scorer schema does not enforce fit custody. | Frozen execution lifecycle and authentic baseline. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19691 bytes; SHA-256 `745b4798914bfbdd763c0e4cf81bac1d894fc4448c99fa422e50b96921a6f1e8`.
+- Specification identity: 27617 bytes; SHA-256 `a3a94564277fda5dff8a8951cfb97bbb83b11b4f05f54ff3d08e5c6cf6737502`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

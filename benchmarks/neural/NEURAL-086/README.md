@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+A reproducible finite-panel quantity D\_R = log\_loss(R\_COVARIATES) - log\_loss(R\_PLUS\_EEG), with its complete person/item matrix, support, uncertainty and limitations. Its sign is not presupposed and no published narrative supplies the answer.
+
+**Source delivery:** partial\_delivery. Installed source implements a meaningful complete-panel prediction/investigation design, but original-source joins, matched-item support, native operators and execution/isolation remain unqualified. Current task is source-condition inference; fixed chronology leaves causal reading-demand interpretation unidentified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A frozen sentence EEG/gaze observation or fixed evidence panel could support direct responses; existing programme arrays and downstream analysis are not a no-tools presentation. A future no-tools condition must fix representation and context, match query support, disclose demonstrations and withhold source-condition metadata. | No direct observation transport, complete response collection or matched empirical condition. |
+| Typed viewer | not\_delivered | Potential EEG waveform/band-topography plus permitted gaze views for each case; no typed renderer is shipped for this task. Rendering must preserve declared information support and suppress task labels, raw-file identifiers and unrestricted array return. | No task-specific typed actions, rendering provenance or isolated participant transport. |
+| Tool assisted | not\_delivered | The source accepts a case\_adaptive label and frozen bundled offline code, but executes the same FIT → immutable state → single INFER process chain. It does not deliver a separate interactive investigator or model/tool action loop. The current code may perform calculations inside a precommitted participant programme. That execution is counted as frozen-programme support; a future tool-assisted condition must define an actual adaptive actor, matching observations/tools/budget and case resets without evaluator feedback. | No distinct adaptive actor/controller or model/tool request-response protocol is implemented.; Authentic source preparation, fixed-tool comparisons and execution/isolation qualification remain unresolved. |
+| Frozen program | source\_available | Concrete entry and campaign driver launch a captured FIT process, freeze its output state, then launch a single INFER process on the held-person/held-item case. Candidate code and bundled offline numerical tools are precommitted. Programme frozen before views; all selected cases/arms complete, training-only fitting and protected targets opened after global submission admission. | Complete authenticated input/operator/runtime qualification and real fixed-reference runs. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11976 bytes; SHA-256 `58d8894b307b187122059bb99f8f0702865fede92272e67522c96dcd00d3ca51`.
+- Specification identity: 19874 bytes; SHA-256 `91ab0739c38af319ee61ee590d16ad960df2c48e3b91640d6279276369ec14c6`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

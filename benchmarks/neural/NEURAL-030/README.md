@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Integer capacitive-contact0→1 onset counts in every100 ms bin of \[0,planned\_delay) after movement end:10 bins for1s or20 for2s.
+
+**Source delivery:** partial\_delivery. A real count-target scorer and all16-session/four-input frozen-procedure executor source exist. Authentic Dryad payload, complete five-mouse mapping, clocks and QC support remain unverified. The actual frozen executor refuses adaptive generation; broader historical fixed/adaptive orchestration prose does not establish an equivalent implemented adaptive experiment.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | No no-tools observation/complete-count collection condition exists for16-session neural contact prediction. Direct context may contain only permitted query neural/handle observations and declared calibration labels. | Fixed direct representation, matched calibration and all-query response collection. |
+| Typed viewer | not\_delivered | No typed GrC/CF/handle trace viewer is delivered. Never render query contact traces or reward/QC information; preserve full permitted planned-window support. | Renderer/action bounds and complete count response protocol. |
+| Tool assisted | not\_delivered | Historical four-cell source describes case-adaptive orchestration, but the concrete frozen executor rejects adaptive generation. A future investigator must match observations/tools/compute and prevent query feedback; new source/seed does not establish matched stochastic state. | Separately specified and qualified per-case adaptive execution. |
+| Frozen program | source\_available | Inactive select.py/fit.py/infer.py executor with frozen finite recipe grid over16 sessions×4 input conditions. Selection sees train/dev labels; final fit training only; inference query plus captured model; only selected recipe index crosses selection channel. | Authentic preparation, native capacity/isolation and external authority qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28619 bytes; SHA-256 `aa73814cf900f73438b3832638245e58c78a06ab8ad638b30766f62a8f253a55`.
+- Specification identity: 26529 bytes; SHA-256 `6fc193026f18f4d2819dbb646aa5f5dd1c8be9fa68a826566fcd0d1dc634bca9`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -10,6 +10,24 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The binary target/standard identity bound to each of the 400 public opaque trial IDs; answer is an experimental event label, not presence of an idealized P3 shape.
+
+**Source delivery:** delivered\_named\_scope. The current source implements target-stimulus probability for the complete exposed 400-trial/two-person development panel, numerical no-tools contexts, a typed image viewer and a restricted local image/action transport. Authentic400 fresh scripted macOS client processes produced a complete unscored NPZ under tested local denials. Physical display timing, independent amplitude calibration, actual model/provider image delivery and context isolation, and scientific performance remain unqualified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | source\_available | Complete numerical Cz/Pz waveforms and four labeled examples, one query per fresh no-tools context. Only the exact prompt and scalar response; no tools/retrieval/files or cross-query memory. | Qualified no-tools transport and full-context model capacity; no direct model result. |
+| Typed viewer | source\_available | PNG traces with typed inspect/select/window/scroll/zoom/gain/channels/finalize, carried as raw PNG bytes through two framed anonymous pipes. zero\_shot and four\_demo remain separate; default transport bounds are128 actions,32 images,128 MiB outbound data and300 seconds. The actual local macOS route starts one fresh participant process/empty cwd per query, minimal environment and deny-default Seatbelt policy; tested denials cover operator packets/sessions, writes, network, process fork and parent argv/environment sysctl. Only declared viewer actions are accepted; first finalized response is immutable and all 400homogeneous sessions must audit before collection. protocol\_only gives no host filesystem isolation; trusted runner/operator/macOS remain in the trust base. | Model/provider bridge and actual fresh remote model context, permitted-tool policy and image/context-capacity qualification.; No model or human trials, no adversarial OS-security attestation and no unseen-population evaluation. |
+| Tool assisted | not\_delivered | The matched\_waveform\_programme source constructs the same four demonstrations and one-query prompt for a predeclared numerical programme. It does not implement an adaptive model investigator or a participant numerical-tool controller. A future adaptive episode must receive only this one-query information and accounted tools/compute, with fresh state and no evaluator feedback or richer feature bank. | An actual adaptive participant/controller/tool boundary, distinct from frozen-programme context export.; Executed per-case model/tool comparison and independently verified query isolation. |
+| Frozen program | source\_available | Precommitted feature programme with six-person training bank, or separately predeclared matched waveform method. Freeze code/fitting/adaptation recipe before queries; richer feature and waveform conditions must be reported separately. | Prospective protected evaluation and independently verified complete execution for a new candidate. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Recorded public evidence
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
@@ -27,7 +45,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12168 bytes; SHA-256 `94c0e586f28c199d7b1605ebc87b931ad2387d3c50958a4e15a527757f63f5b2`.
+- Specification identity: 19829 bytes; SHA-256 `9fd32eb130a92b3d7a32e8ede727e1e801aff7653cfa8cc08f2028cd173325d1`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

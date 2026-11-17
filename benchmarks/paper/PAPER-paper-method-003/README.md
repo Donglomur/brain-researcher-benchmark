@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 **Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
 
-**Disposition:** design\_ready. The original four-class PhysioNet-MI endpoint, participant split and numeric REVE-Base result are recoverable. A same-task design is defensible, but historical preprocessing, run aggregation and checkpoint/recipe parity remain unresolved; the extensive local source proposal is not an executed author baseline.
+**Disposition:** design\_ready. The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved.
 
 - [Source-grounded improvement contract](improvement.v1.json)
 - [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
@@ -24,7 +24,7 @@ Existing reproduction graders and pilot scores remain calibration evidence. They
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16187 bytes; SHA-256 `44b9f1a10706dfdc0ea888b9016750df86d23fd58fd12ccb35a95948065f609a`.
+- Specification identity: 18420 bytes; SHA-256 `2325143fbf783f0810a84e4d4de71f40148c2c5a23eaed37b516c4cbac2ba816`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

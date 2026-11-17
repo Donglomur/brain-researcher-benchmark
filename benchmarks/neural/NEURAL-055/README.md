@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+A private bijection between200 opaque EEG query IDs and200 candidate-image IDs within each held-person panel.
+
+**Source delivery:** partial\_delivery. Public source implements a ten-person,200-candidate batch retrieval study with complete independent/programme/investigator comparisons. Authentic packets, numerical parity, execution containment and all30 scientific gates remain unqualified; source inspection is available but no current model result follows.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | No-tools reading of compact EEG traces or candidate displays is not a current condition. Current batch arrays and training/image models are tool/programme observations. | Define faithful no-tools information view and independent response collector. |
+| Typed viewer | not\_delivered | No typed EEG/candidate-image viewer is supplied. A viewer must preserve80-repeat representation and fixed candidate priors while hiding query associations. | Audited viewer transport and complete-panel answer collection. |
+| Tool assisted | source\_available | I: bounded online investigator decisions over authorized full-batch data/tools. Fresh same-cell context; only sealed action set; no new query fitting; full costs/failed operations retained. | Actual semantic/native/resource qualification. |
+| Frozen program | source\_available | F: one precommitted numerical learning/search policy and sealed state. No investigator decisions or generated analysis policy in F; fixed scientific predictor calls permitted only in their declared role. | Full authentic execution and reference qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11777 bytes; SHA-256 `4f0956ffa8be24e64f0060a785b5189bb145c1d3d36a3980cc64729fde901298`.
+- Specification identity: 15049 bytes; SHA-256 `2b8db9ada2710eb289fcfb98ef709cecd41598ce3d969c2eb3f0e261e905e5e7`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

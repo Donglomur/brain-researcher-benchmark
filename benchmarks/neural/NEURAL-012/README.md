@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Siena equal-person event F1 and paired harmonized-minus-native, normalized-minus-harmonized and harmonized-minus-timing contrasts, with mandatory sensitivity and false alarms.
+
+**Source delivery:** partial\_delivery. The source now separates frozen-detector performance from analyst reconstruction. Its four-arm full CHB/Siena programme is source-available, but authentic channel/clock adjudication and observed complete execution remain missing; report reconstruction alone cannot establish transfer.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Whole-cohort transfer contrasts require complete quantitative evidence; a single EEG trace is not a suitable substitute. A direct numerical-summary condition is possible but not delivered with withheld answers. Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity. | No delivered participant condition establishes this mode for the same scientific target. |
+| Typed viewer | not\_delivered | Waveform viewing can assist montage/artifact inspection but does not replace the full transfer estimand; no typed viewer condition is supplied. Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant. | No delivered participant condition establishes this mode for the same scientific target. |
+| Tool assisted | not\_delivered | Source analysis and reconstruction CLI are available; actual exploratory per-case interpretation with withheld targets remains unqualified. Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query. | The analysis/reconstruction CLI is operator computation; a target-withholding adaptive participant investigation condition is not delivered. |
+| Frozen program | source\_available | Source phased fit/predict programme and fixed references are available for the full panel; authentic staging, host protection and execution remain unestablished. Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases. | Authentic source admission, protected runtime/environment and complete original fit/predict execution remain unqualified. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16574 bytes; SHA-256 `b5242449dfe9a858a50cd61ac3f367669c2f7a33f90194cb6afd45e3a01da82b`.
+- Specification identity: 20338 bytes; SHA-256 `7d8f9bdab6de4e8ae37fbb1628323a18e4887f65fb8e20e2095defe5d0b781e7`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
