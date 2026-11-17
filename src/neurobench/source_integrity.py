@@ -12,6 +12,11 @@ import stat
 MEMBER_LIMIT = 1024 * 1024
 TOTAL_LIMIT = 16 * MEMBER_LIMIT
 FILE_LIMIT = 512
+REGISTRY_LIMIT = 4 * MEMBER_LIMIT
+PAPER_REVISION = "paper-improvement/v1"
+PAPER_OBJECTIVE = "surpass_source_paper_same_task"
+PAPER_HISTORY = "historical/task.pre-improvement.v1.json"
+PAPER_DISPOSITIONS = {"improvement_ready", "design_ready", "source_unresolved", "ineligible"}
 
 
 class InvalidSource(ValueError):
@@ -73,7 +78,9 @@ class Reader:
         self.bytes_read = 0
         self.cache = {}
 
-    def read(self, name):
+    def read(self, name, *, limit=None):
+        if limit is None:
+            limit = MEMBER_LIMIT
         relative(name)
         path = self.root / name
         for part in (path, *path.parents):
@@ -81,7 +88,7 @@ class Reader:
         before = path.lstat()
         require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1,
                 "Single-link regular source file required: " + name)
-        require(0 <= before.st_size <= MEMBER_LIMIT, "Source member too large: " + name)
+        require(0 <= before.st_size <= limit, "Source member too large: " + name)
         if name in self.cache:
             old_stamp, body = self.cache[name]
             require(stamp(before) == old_stamp, "Cached source changed: " + name)
@@ -148,6 +155,82 @@ def historical_member(package, value, style="package"):
         require(name.startswith(old_prefix), "Inventory member escapes its package")
         name = name[len(old_prefix):]
     return package["root"] + "/" + name
+
+
+def task_registry(reader):
+    """Read only current public registration metadata, never old source locators."""
+    document = strict_json(reader.read("benchmarks/registry.json", limit=REGISTRY_LIMIT))
+    require(type(document) is dict and document.get("schema_version") == 1
+            and document.get("kind") == "neuroscience_benchmark_registry",
+            "Unsupported task registry for specification revision")
+    rows = document.get("tasks")
+    require(type(rows) is list and 0 < len(rows) <= 1000, "Bounded task registry required")
+    result = {}
+    for row in rows:
+        require(type(row) is dict and type(row.get("id")) is str and row["id"] not in result,
+                "Invalid or duplicate registered task identity")
+        result[row["id"]] = row
+    return result
+
+
+def checked_paper_revision(reader, task_id, task_pin, task_doc, registered):
+    """Authenticate an explicitly versioned PAPER revision and its exact predecessor.
+
+    This verifies source lineage and binding only. Contract scientific validation
+    remains the responsibility of the paper-improvement validator and catalog.
+    """
+    home = "benchmarks/paper/" + task_id
+    revision = task_pin["specification_revision"]
+    require(type(revision) is dict and set(revision) ==
+            {"version", "previous_specification", "improvement_contract"}
+            and revision["version"] == PAPER_REVISION, "Unsupported paper specification revision")
+    previous, contract_pin = revision["previous_specification"], revision["improvement_contract"]
+    for pin, name in ((previous, home + "/" + PAPER_HISTORY),
+                      (contract_pin, home + "/improvement.v1.json")):
+        require(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"}
+                and pin["path"] == name, "Paper revision member location or descriptor mismatch")
+        descriptor(pin)
+    require(same_pin(previous, task_pin["predecessor"]),
+            "Historical paper specification does not match registered predecessor")
+    historical_body = reader.checked(previous["path"], previous)
+    historical_doc = strict_json(historical_body)
+    expected_id = registered.get("specification_id", task_id) if type(registered) is dict else task_id
+    require(type(historical_doc) is dict
+            and historical_doc.get("id", historical_doc.get("candidate_id", historical_doc.get("task_id"))) == expected_id
+            and historical_doc.get("track", "paper") == "paper"
+            and historical_doc.get("objective") != PAPER_OBJECTIVE,
+            "Historical paper specification identity or revision mismatch")
+    contract = strict_json(reader.checked(contract_pin["path"], contract_pin))
+    require(type(contract) is dict and contract.get("schema_version") == PAPER_REVISION
+            and contract.get("task_id") == task_id and contract.get("objective") == PAPER_OBJECTIVE,
+            "Paper improvement contract identity mismatch")
+    legacy = contract.get("legacy")
+    require(type(legacy) is dict and legacy.get("original_task") == PAPER_HISTORY
+            and legacy.get("role") == "calibration_only", "Paper contract historical calibration mismatch")
+    disposition = contract.get("disposition")
+    require(type(disposition) is str and disposition in PAPER_DISPOSITIONS,
+            "Unknown paper improvement disposition")
+    evaluation = task_doc.get("evaluation")
+    require(task_doc.get("objective") == PAPER_OBJECTIVE and task_doc.get("status") == disposition
+            and type(evaluation) is dict and evaluation.get("objective") == PAPER_OBJECTIVE
+            and evaluation.get("contract") == contract_pin
+            and evaluation.get("disposition") == disposition
+            and evaluation.get("reproduction_role") == "calibration_only",
+            "Current paper task is not bound to its improvement contract")
+    calibration = evaluation.get("calibration")
+    require(type(calibration) is dict and calibration.get("historical_task") == previous,
+            "Current paper task historical calibration binding mismatch")
+    require(type(registered) is dict and registered.get("id") == task_id
+            and registered.get("track") == "paper" and registered.get("task_directory") == home
+            and registered.get("specification") == {key: task_pin[key] for key in ("path", "bytes", "sha256")}
+            and registered.get("specification_revision") == revision,
+            "Paper revision differs from current task registration")
+    original = registered.get("original_specification")
+    require(type(original) is dict and set(original) == {"path", "bytes", "sha256"}
+            and original["path"] == task_pin["original_path"]
+            and same_pin(original, task_pin["predecessor"]),
+            "Paper revision changed its original registered identity")
+    return historical_body
 
 
 def check_complete_inventory(reader, package, selected, current):
@@ -231,6 +314,11 @@ def check_complete_inventory(reader, package, selected, current):
 def check(root, registry="benchmarks/integrity/current.json"):
     reader = Reader(root)
     config = strict_json(reader.read(registry))
+    return check_configuration(reader, config)
+
+
+def check_configuration(reader, config):
+    """Check an in-memory proposed registry before a maintenance write."""
     require(type(config) is dict and set(config) ==
             {"schema_version", "scope", "predecessor_commit", "packages"},
             "Closed current registry schema required")
@@ -265,8 +353,9 @@ def check(root, registry="benchmarks/integrity/current.json"):
         implementation_ids.add(implementation_id)
         roots.add(prefix.casefold())
         task_pin = package["registered_task"]
-        require(type(task_pin) is dict and set(task_pin) ==
-                {"path", "bytes", "sha256", "original_path", "predecessor"},
+        task_fields = {"path", "bytes", "sha256", "original_path", "predecessor"}
+        require(type(task_pin) is dict and set(task_pin) in
+                (task_fields, task_fields | {"specification_revision"}),
                 "Closed registered task descriptor required")
         require(task_pin["path"] == home + "/task.json", "Registered task location mismatch")
         require(relative(task_pin["original_path"]).startswith("benchmarks/manifests/" + track + "/")
@@ -276,12 +365,19 @@ def check(root, registry="benchmarks/integrity/current.json"):
         require(type(task_predecessor) is dict and set(task_predecessor) == {"bytes", "sha256"},
                 "Closed registered task predecessor required")
         descriptor({"path": task_pin["original_path"], **task_predecessor})
-        require(same_pin(task_pin, task_predecessor),
-                "Registered scientific task definition changed")
+        revised = "specification_revision" in task_pin
+        require(not revised or track == "paper", "Only paper tasks support specification revisions")
+        if not revised:
+            require(same_pin(task_pin, task_predecessor),
+                    "Registered scientific task definition changed")
         task_body = reader.checked(task_pin["path"], task_pin)
         task_doc = strict_json(task_body)
         require(type(task_doc) is dict and task_doc.get("id") == task_id and task_doc.get("track") == track,
                 "Canonical task ID or track mismatch")
+        historical_task_body = task_body
+        if revised:
+            historical_task_body = checked_paper_revision(
+                reader, task_id, task_pin, task_doc, task_registry(reader).get(task_id))
 
         rows = package["files"]
         require(type(rows) is list and 0 < len(rows) <= FILE_LIMIT, "Bounded current files required")
@@ -349,7 +445,7 @@ def check(root, registry="benchmarks/integrity/current.json"):
             require(canonical_path == task_pin["original_path"], "Unexpected external canonical location")
             descriptor(canonical)
             require(same_pin(canonical, task_predecessor), "Historical canonical binding mismatch")
-            canonical_body = task_body
+            canonical_body = historical_task_body
         else:
             canonical_name = prefix + "/" + canonical_path
             require(canonical_name in selected, "Local canonical is not covered")

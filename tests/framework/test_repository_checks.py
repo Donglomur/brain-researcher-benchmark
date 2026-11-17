@@ -1,5 +1,6 @@
 """Small ordinary-source fixtures; never run scientific or candidate code."""
 
+import copy
 import hashlib
 import importlib.util
 import json
@@ -89,6 +90,35 @@ class RepositoryChecksTests(unittest.TestCase):
     def save_registry(self):
         write_json(self.root / checks.REGISTRY, self.registry)
 
+    def revise_paper(self, index=0):
+        row = self.registry["tasks"][index]
+        directory = row["task_directory"]
+        original = (self.root / row["specification"]["path"]).read_bytes()
+        previous_path = directory + "/historical/task.pre-improvement.v1.json"
+        path = self.root / previous_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(original)
+        previous = {**row["specification"], "path": previous_path}
+        row["original_specification"] = {**row["specification"], "path": "former-source/" + row["id"] + ".json"}
+        contract_path = directory + "/improvement.v1.json"
+        contract = {"schema_version": checks.PAPER_REVISION, "task_id": row["id"],
+                    "objective": checks.PAPER_OBJECTIVE, "disposition": "source_unresolved",
+                    "legacy": {"role": "calibration_only", "original_task": "historical/task.pre-improvement.v1.json"}}
+        contract_pin = write_json(self.root / contract_path, contract)
+        contract_pin["path"] = contract_path
+        row["specification_revision"] = {"version": checks.PAPER_REVISION, "previous_specification": previous,
+                                         "improvement_contract": contract_pin}
+        row.update(scientific_readiness="source_unresolved", submission_readiness="not_qualified_by_binding")
+        document = {"id": row["specification_id"], "track": "paper", "objective": checks.PAPER_OBJECTIVE,
+                    "status": "source_unresolved", "evaluation": {"contract": contract_pin,
+                    "objective": checks.PAPER_OBJECTIVE, "disposition": "source_unresolved",
+                    "calibration": {"historical_task": previous}, "reproduction_role": "calibration_only"}}
+        pin = write_json(self.root / row["specification"]["path"], document)
+        pin["path"] = row["specification"]["path"]
+        row["specification"] = pin
+        self.save_registry()
+        return row
+
     def test_all_artifacts_and_task_specs_are_hashed_without_running_source(self):
         result = self.build()
         self.assertEqual(result["artifacts"], 2)
@@ -101,6 +131,138 @@ class RepositoryChecksTests(unittest.TestCase):
         runtime.mkdir()
         (runtime / "not-source.bin").write_bytes(b"Local runtime output is not source.")
         self.assertEqual(self.check()["source_check"], "passed")
+
+    def test_versioned_paper_metadata_is_owned_and_preserves_historical_bytes(self):
+        row = self.revise_paper()
+        result = self.build()
+        self.assertEqual(result["source_files"], 10)
+        self.assertFalse(result["scientific_qualification"])
+        self.assertEqual(self.check()["source_check"], "passed")
+        inventory = json.loads((self.root / checks.INVENTORY).read_text())
+        records = {item["path"]: item for item in inventory["files"]}
+        for key in ("previous_specification", "improvement_contract"):
+            pin = row["specification_revision"][key]
+            self.assertEqual(records[pin["path"]]["owner"], "task:" + row["id"])
+            self.assertEqual(records[pin["path"]]["sha256"], pin["sha256"])
+
+    def test_forged_paper_history_cannot_be_enrolled_with_a_new_pin(self):
+        row = self.revise_paper()
+        old = row["specification_revision"]["previous_specification"]
+        forged = write_json(self.root / old["path"], {"id": row["id"], "track": "paper", "forged": True})
+        forged["path"] = old["path"]
+        row["specification_revision"]["previous_specification"] = forged
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, "does not preserve its original"):
+            self.build()
+
+    def test_paper_revision_rejects_rehashed_current_objective_change(self):
+        row = self.revise_paper()
+        path = row["specification"]["path"]
+        document = json.loads((self.root / path).read_text())
+        document["objective"] = "reproduction_is_success"
+        row["specification"] = write_json(self.root / path, document)
+        row["specification"]["path"] = path
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, "not bound to its improvement"):
+            self.build()
+
+    def test_paper_revision_requires_exact_version_paths_and_closed_pins(self):
+        row = self.revise_paper()
+        original = copy.deepcopy(row["specification_revision"])
+        for change, error in (
+                (lambda revision: revision.update(version="paper-improvement/v2"), "Unsupported task"),
+                (lambda revision: revision.update(authorized=True), "Unsupported task"),
+                (lambda revision: revision["previous_specification"].update(path="elsewhere.json"), "exact location"),
+                (lambda revision: revision["improvement_contract"].update(bytes=True), "Invalid Paper"),
+                (lambda revision: revision["improvement_contract"].update(allow_changes=True), "Closed Paper")):
+            row["specification_revision"] = copy.deepcopy(original)
+            change(row["specification_revision"])
+            self.save_registry()
+            with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
+                self.build()
+
+    def test_rehashed_paper_evaluation_requires_current_objective_disposition_and_history(self):
+        row = self.revise_paper()
+        path = row["specification"]["path"]
+        original = json.loads((self.root / path).read_text())
+        for mutation in (
+                lambda evaluation: evaluation.update(objective="reproduce_source_paper"),
+                lambda evaluation: evaluation.update(disposition="improvement_ready"),
+                lambda evaluation: evaluation["calibration"].update(historical_task=row["original_specification"]),
+                lambda evaluation: evaluation.update(calibration=None)):
+            document = copy.deepcopy(original)
+            mutation(document["evaluation"])
+            row["specification"] = write_json(self.root / path, document)
+            row["specification"]["path"] = path
+            self.save_registry()
+            with self.subTest(evaluation=document["evaluation"]), self.assertRaisesRegex(
+                    ValueError, "not bound to its improvement"):
+                self.build()
+
+    def test_paper_contract_and_history_drift_are_rejected_before_inventory_write(self):
+        row = self.revise_paper()
+        for key in ("previous_specification", "improvement_contract"):
+            path = self.root / row["specification_revision"][key]["path"]
+            original = path.read_bytes()
+            path.write_bytes(original + b" ")
+            with self.subTest(member=key), self.assertRaisesRegex(ValueError, "pin mismatch"):
+                self.build()
+            path.write_bytes(original)
+        contract_pin = row["specification_revision"]["improvement_contract"]
+        path = contract_pin["path"]
+        contract = json.loads((self.root / path).read_text())
+        for disposition in ("qualified", [], {}):
+            contract["disposition"] = disposition
+            new_pin = write_json(self.root / path, contract)
+            new_pin["path"] = path
+            row["specification_revision"]["improvement_contract"] = new_pin
+            self.save_registry()
+            with self.subTest(disposition=disposition), self.assertRaisesRegex(
+                    ValueError, "identity or disposition mismatch"):
+                self.build()
+
+    def test_paper_revisions_cannot_relax_neural_readiness_or_admit_neural_history(self):
+        paper = self.revise_paper()
+        neural = self.registry["tasks"][2]
+        neural["specification_revision"] = copy.deepcopy(paper["specification_revision"])
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, "Unsupported task specification revision"):
+            self.build()
+        del neural["specification_revision"]
+        neural["scientific_readiness"] = "source_unresolved"
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, "cannot grant scientific qualification"):
+            self.build()
+        neural["scientific_readiness"] = "unknown"
+        self.save_registry()
+        self.build()
+        self.assertEqual(self.check()["source_check"], "passed")
+        history = self.root / neural["task_directory"] / "historical/task.pre-improvement.v1.json"
+        history.parent.mkdir()
+        history.write_text("{}\n")
+        with self.assertRaisesRegex(ValueError, "Orphan source directory"):
+            self.build()
+
+    def test_pre_improvement_registry_snapshot_is_pinned_and_full_coverage_required(self):
+        snapshot_path = "docs/provenance/registrations/paper-pre-improvement-v1.json"
+        pin = write_json(self.root / snapshot_path, copy.deepcopy(self.registry))
+        pin["path"] = snapshot_path
+        self.revise_paper(0)
+        self.registry["paper_improvement"] = {"schema_version": checks.PAPER_REVISION,
+            "objective": checks.PAPER_OBJECTIVE, "coverage_required": True, "registered_count": 2,
+            "pre_improvement_registry": pin}
+        self.save_registry()
+        with self.assertRaisesRegex(ValueError, "requires every paper revision"):
+            self.build()
+        self.revise_paper(1)
+        self.assertEqual(self.build()["source_files"], 13)
+        self.assertEqual(self.check()["source_check"], "passed")
+        inventory = json.loads((self.root / checks.INVENTORY).read_text())
+        self.assertIn(snapshot_path, {item["path"] for item in inventory["files"]})
+        path = self.root / snapshot_path
+        path.write_bytes(path.read_bytes() + b" ")
+        with self.assertRaisesRegex(ValueError, "Pre-improvement registry pin mismatch"):
+            self.build()
 
     def test_changed_source_and_mode_refuse(self):
         self.build()

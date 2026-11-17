@@ -14,6 +14,10 @@ CHECKER = Path(__file__).absolute().parents[2] / "src/neurobench/source_integrit
 spec = importlib.util.spec_from_file_location("source_integrity_checker", CHECKER)
 checker = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(checker)
+REFRESH = CHECKER.parents[2] / "scripts/maintenance/refresh_paper_integrity.py"
+refresh_spec = importlib.util.spec_from_file_location("paper_integrity_refresh", REFRESH)
+refresh = importlib.util.module_from_spec(refresh_spec)
+refresh_spec.loader.exec_module(refresh)
 
 
 def encoded(value):
@@ -120,6 +124,175 @@ class SourceIntegrityTests(unittest.TestCase):
     def reject(self, message):
         with self.assertRaisesRegex(checker.InvalidSource, message):
             checker.check(self.root)
+
+    def make_paper_revision(self):
+        """Create explicit old/current PAPER source metadata, with no scientific run."""
+        old_home = self.package.parent.parent
+        self.task_id = "PAPER-INVENTED"
+        home = "benchmarks/paper/" + self.task_id
+        new_home = self.root / home
+        new_home.parent.mkdir(parents=True)
+        old_home.rename(new_home)
+        self.prefix = home + "/implementations/registered-runtime"
+        self.package = self.root / self.prefix
+        self.canonical_path = home + "/task.json"
+        self.original_canonical_path = "benchmarks/manifests/paper/" + self.task_id + ".json"
+        self.canonical = {"id": self.task_id, "track": "paper"}
+        old_body = encoded(self.canonical)
+        (self.root / self.canonical_path).write_bytes(old_body)
+        self.enrollment.update(id=self.task_id, track="paper", root=self.prefix)
+        self.manifest.update(id=self.task_id,
+                             canonical_specification=descriptor(self.original_canonical_path, old_body))
+        self.sync_inventory()
+        current_path = self.root / "benchmarks/integrity/current.json"
+        self.current = json.loads(current_path.read_text())
+        self.history_path = home + "/" + checker.PAPER_HISTORY
+        history = self.root / self.history_path
+        history.parent.mkdir()
+        history.write_bytes(old_body)
+        self.contract_path = home + "/improvement.v1.json"
+        self.contract = {"schema_version": checker.PAPER_REVISION, "task_id": self.task_id,
+                         "objective": checker.PAPER_OBJECTIVE, "disposition": "source_unresolved",
+                         "legacy": {"role": "calibration_only", "original_task": checker.PAPER_HISTORY}}
+        contract_body = encoded(self.contract)
+        (self.root / self.contract_path).write_bytes(contract_body)
+        self.revision = {"version": checker.PAPER_REVISION,
+                         "previous_specification": descriptor(self.history_path, old_body),
+                         "improvement_contract": descriptor(self.contract_path, contract_body)}
+        self.current_task = {**self.canonical, "objective": checker.PAPER_OBJECTIVE,
+                             "status": "source_unresolved", "evaluation": {
+                                 "objective": checker.PAPER_OBJECTIVE, "disposition": "source_unresolved",
+                                 "contract": self.revision["improvement_contract"],
+                                 "reproduction_role": "calibration_only",
+                                 "calibration": {"historical_task": self.revision["previous_specification"]}}}
+        self.registered = {"id": self.task_id, "track": "paper", "task_directory": home,
+                           "original_specification": descriptor(self.original_canonical_path, old_body),
+                           "specification_revision": self.revision}
+        self.sync_paper_revision()
+
+    def sync_paper_revision(self):
+        body = encoded(self.current_task)
+        (self.root / self.canonical_path).write_bytes(body)
+        self.registered["specification"] = descriptor(self.canonical_path, body)
+        self.current["packages"][0]["registered_task"].update(
+            self.registered["specification"], specification_revision=self.revision)
+        self.save_paper_metadata()
+
+    def save_paper_metadata(self):
+        (self.root / "benchmarks/integrity/current.json").write_bytes(encoded(self.current))
+        (self.root / "benchmarks/registry.json").write_bytes(encoded({
+            "schema_version": 1, "kind": "neuroscience_benchmark_registry", "tasks": [self.registered]}))
+
+    def test_versioned_paper_retains_exact_historical_canonical(self):
+        self.make_paper_revision()
+        old_manifest = (self.package / "manifest.json").read_bytes()
+        result = checker.check(self.root)
+        self.assertEqual(result["status"], "source_integrity_passed")
+        self.assertEqual(result["packages"][0]["changed_files"], 0)
+        self.assertEqual((self.package / "manifest.json").read_bytes(), old_manifest)
+        self.assertFalse(result["benchmark_execution"])
+
+    def test_paper_revision_cannot_forge_predecessor(self):
+        self.make_paper_revision()
+        forged = encoded({**self.canonical, "goal": "forged history"})
+        (self.root / self.history_path).write_bytes(forged)
+        self.revision["previous_specification"].update(descriptor(self.history_path, forged))
+        self.sync_paper_revision()
+        self.reject("does not match registered predecessor")
+
+    def test_paper_revision_rejects_tampered_current_task(self):
+        self.make_paper_revision()
+        (self.root / self.canonical_path).write_bytes(encoded(self.current_task) + b" ")
+        self.reject("hash or length mismatch")
+
+    def test_paper_revision_rehash_does_not_excuse_changed_objective_or_calibration(self):
+        for field in ("objective", "calibration"):
+            with self.subTest(field=field):
+                if field == "objective":
+                    self.make_paper_revision()
+                self.current_task = copy.deepcopy(self.current_task)
+                if field == "objective":
+                    self.current_task["objective"] = "reproduction_is_success"
+                else:
+                    self.current_task["objective"] = checker.PAPER_OBJECTIVE
+                    self.current_task["evaluation"]["calibration"]["historical_task"] = {}
+                self.sync_paper_revision()
+                self.reject("not bound|calibration binding")
+
+    def test_paper_revision_requires_exact_authoritative_registration(self):
+        self.make_paper_revision()
+        self.registered["original_specification"]["sha256"] = "0" * 64
+        self.save_paper_metadata()
+        self.reject("original registered identity")
+
+    def test_paper_revision_rejects_unknown_version_and_cross_task_history(self):
+        self.make_paper_revision()
+        self.revision["version"] = "paper-improvement/v2"
+        self.save_paper_metadata()
+        self.reject("Unsupported paper specification revision")
+        self.revision["version"] = checker.PAPER_REVISION
+        self.revision["previous_specification"]["path"] = "benchmarks/paper/PAPER-OTHER/" + checker.PAPER_HISTORY
+        self.save_paper_metadata()
+        self.reject("member location")
+
+    def test_paper_revision_cannot_change_legacy_implementation_evidence(self):
+        self.make_paper_revision()
+        (self.package / "manifest.json").write_bytes(encoded(self.manifest) + b" ")
+        self.reject("hash or length mismatch")
+
+    def test_neural_task_cannot_use_paper_revision_exception(self):
+        path = self.root / "benchmarks/integrity/current.json"
+        current = json.loads(path.read_text())
+        current["packages"][0]["registered_task"]["specification_revision"] = {"version": checker.PAPER_REVISION}
+        path.write_bytes(encoded(current))
+        self.reject("Only paper tasks")
+
+    def test_refresh_preserves_history_retargets_closure_and_is_idempotent(self):
+        self.make_paper_revision()
+        old = copy.deepcopy(self.current)
+        task_pin = old["packages"][0]["registered_task"]
+        del task_pin["specification_revision"]
+        task_pin.update(task_pin["predecessor"])
+        (self.root / "benchmarks/integrity/current.json").write_bytes(encoded(old))
+        closure_name = "benchmarks/integrity/current-closures/invented/SOURCE.json"
+        closure_path = self.root / closure_name
+        closure_path.parent.mkdir(parents=True)
+        closure = {"schema": "invented", "files": [{"path": self.canonical_path, **task_pin["predecessor"]}]}
+        closure_body = encoded(closure)
+        closure_path.write_bytes(closure_body)
+        workflow_name = refresh.WORKFLOWS[0]
+        workflow_path = self.root / workflow_name
+        workflow_path.parent.mkdir(parents=True)
+        workflow_path.write_text("# exact source literal\n" + json.dumps(descriptor(closure_name, closure_body)) + "\n")
+        outputs, changes = refresh.build_outputs(self.root)
+        self.assertEqual(set(outputs), {"benchmarks/integrity/current.json", closure_name, workflow_name})
+        refreshed = json.loads(outputs[closure_name])
+        self.assertEqual(refreshed["files"][0], self.revision["previous_specification"])
+        self.assertEqual(refreshed[refresh.REVISION_FIELD][0]["role"], "calibration_only")
+        self.assertEqual(changes[0]["previous"], descriptor(closure_name, closure_body))
+        self.assertIn(changes[0]["current"]["sha256"].encode(), outputs[workflow_name])
+        self.assertEqual(json.loads(outputs["benchmarks/integrity/current.json"])["packages"][0]["files"], old["packages"][0]["files"])
+        for name, body in outputs.items():
+            (self.root / name).write_bytes(body)
+        self.assertEqual(refresh.build_outputs(self.root), ({}, []))
+        self.assertEqual(checker.check(self.root)["status"], "source_integrity_passed")
+
+    def test_refresh_refuses_stale_closure_and_workflow_pins(self):
+        self.make_paper_revision()
+        closure_name = "benchmarks/integrity/current-closures/invented/SOURCE.json"
+        closure_path = self.root / closure_name
+        closure_path.parent.mkdir(parents=True)
+        value = {"files": [{"path": self.canonical_path, "bytes": 0, "sha256": "0" * 64}]}
+        closure_path.write_bytes(encoded(value))
+        with self.assertRaisesRegex(refresh.integrity.InvalidSource, "does not authenticate historical"):
+            refresh.build_outputs(self.root)
+        value["files"][0] = {"path": self.canonical_path, **self.current["packages"][0]["registered_task"]["predecessor"]}
+        closure_path.write_bytes(encoded(value))
+        workflow = self.root / refresh.WORKFLOWS[0]
+        workflow.parent.mkdir(parents=True)
+        workflow.write_text(json.dumps({"path": closure_name, "bytes": 0, "sha256": "0" * 64}))
+        with self.assertRaisesRegex(refresh.integrity.InvalidSource, "Stale workflow"):
+            refresh.build_outputs(self.root)
 
     def test_valid_bundle_is_checked_without_execution(self):
         result = checker.check(self.root)
