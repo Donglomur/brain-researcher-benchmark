@@ -18,6 +18,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Current metadata validation command](docs/current-metadata-cli.md)
+
 ## Implementation artifacts
 
 - [Clinical ccep artifact grading](implementations/clinical-ccep-artifact-grading) — Task implementation source.

@@ -19,6 +19,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
+## Task documentation
+
+- [Current complete programme and deployment requirements](docs/current-programme.md)
+
 ## Implementation artifacts
 
 - [Programme source](implementations/programme-source) — Task implementation.

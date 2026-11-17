@@ -17,6 +17,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Current source inspection](docs/current-inspection.md)
+
 ## Implementation artifacts
 
 - [Paper method 011](implementations/paper-method-011) — Task implementation source.
