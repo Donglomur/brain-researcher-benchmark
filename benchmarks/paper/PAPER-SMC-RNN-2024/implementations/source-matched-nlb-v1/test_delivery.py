@@ -124,12 +124,17 @@ class DeliveryTests(unittest.TestCase):
         result = self.export()
         self.assertEqual(result["status"], "participant_materials_prepared")
         self.assertFalse(result["episode_executed"])
+        self.assertFalse(result["temporal_access_enforced"])
         for name, digest in result["shared_files"].items():
             for condition in delivery.CONDITIONS:
                 self.assertEqual(delivery.contract.sha256(self.output / condition / name), digest)
         self.assertIn("inputs/mc_maze/val/eval_target_20ms.h5", result["shared_files"])
         self.assertNotIn("inputs/mc_maze/test/eval_target_20ms.h5", result["shared_files"])
         self.assertFalse((self.output / "paper_only" / "official_source").exists())
+        task = json.loads((self.output / "paper_only" / "task.json").read_text())
+        self.assertEqual(task["temporal_access"]["status"], "specified_not_enforced_by_complete_h5_materials")
+        self.assertEqual(task["temporal_access"]["same_trial_heldin_prefix_end_inclusive"],
+                         {"causal": "max(t,13)", "noncausal": "min(t+17,34)"})
         all_files = [path for path in self.output.rglob("*") if path.is_file()]
         self.assertFalse(any(path.suffix == ".pkl" for path in all_files))
         self.assertFalse(any("cached_prediction" in path.name for path in all_files))
