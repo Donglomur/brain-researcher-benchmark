@@ -30,7 +30,7 @@ CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
 MAX_READ_BYTES = 192 * 1024 * 1024
-MAX_FILES = 12000
+MAX_FILES = 16384
 MAX_TREE_ENTRIES = 30000
 MAX_DEPTH = 32
 SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml",

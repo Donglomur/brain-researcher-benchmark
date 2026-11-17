@@ -350,7 +350,7 @@ jobs:
                   raise SystemExit('verifier changed while reading')
           finally:
               os.close(fd)
-          if len(source) != 12131 or hashlib.sha256(source).hexdigest() != 'bcb62143efa4129de5a3782fbc00546617ee2e358cc7cc98f81f053143148cc5':
+          if len(source) != 12131 or hashlib.sha256(source).hexdigest() != 'c891292c0406be9ef36ddbfb90ab6bd9f7ca6a3bb97793946f37a19453249713':
               raise SystemExit('verifier identity mismatch')
           name = '_neurobench_neural078_ci_verifier'
           if name in sys.modules:
@@ -362,7 +362,7 @@ jobs:
           current_manifest = root.parents[4] / 'benchmarks/integrity/current-closures/input-neural078/SOURCE_MANIFEST.json'
           module.main(['verify', '--source-manifest', str(current_manifest),
                        '--source-bytes', '6014', '--source-sha256',
-                       '147d12c27da182604f7f69a943a8ca35a1acb939e3491c233af1cec8d9d392e3'])
+                       'a681a439e234e2584fcc6797043d670791bc1939c54d25596819f7a5bc2d0637'])
 
           # Some accepted controls monkeypatch subprocess or module globals. Each suite
           # therefore runs in its own interpreter after complete source authentication.

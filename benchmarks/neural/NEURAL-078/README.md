@@ -39,7 +39,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Task documentation
 
-- [Current source inspection and original grading hold](docs/current-source-inspection.md)
+- [Historical source inspection before public-mode repair](docs/current-source-inspection.md)
+- [Current public-mode source inspection](docs/current-publication-mode-source.md)
 
 ## Implementation artifacts
 
@@ -47,6 +48,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Neural078 deferred grade](implementations/neural078-deferred-grade) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Publication mode repair v1](implementations/publication-mode-repair-v1) — Reviewed source component.
+  Scope: Explicit public directory modes and bounded generated permission controls under restrictive umask; historical source manifests and private defaults remain preserved. Source/control enrollment does not establish Docker behavior, authentic-data correctness, native runtime qualification, model outcomes or scientific qualification.
 - [Understanding metrics v1](implementations/understanding-metrics-v1) — Measured target artifact scorer.
   Scope: Matched FCz ERP waveform target MAE in native units over exact support. Adds a direct target-error endpoint while retaining the historical195-field reconstruction grader; no native cohort run, protected-data qualification or model result is claimed.
 - [Reference audit v1](implementations/reference-audit-v1) — Reviewed source component.
