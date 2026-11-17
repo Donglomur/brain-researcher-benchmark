@@ -24,6 +24,14 @@ Preparation needs NumPy, SciPy and MNE. It processes one recording at a time. Th
 
 `inputs/panel.json` binds every signal shard, event ID, source identity, split, runtime and target-manifest hash. `operator/targets.json` contains labels; `operator/epoch-accounting.json` contains every annotation/drop. The preparation directory must be fresh, so a partial failed run cannot silently become a completed panel. Invalid or missing recordings fail explicitly. A source bad-channel flag requires authenticated interpolation geometry; none is guessed.
 
+## Observed complete-panel preparation
+
+The 2026-11-16 operator qualification authenticated all 654 official EDFs (1,668,148,896 bytes) and prepared **9,837 epochs: 6,300 train, 1,734 validation, 1,803 test**. Every original participant and imagery run was retained. The EDF headers show 636 recordings at 160 Hz and 18 at 128 Hz; the latter belong to participants 88, 92 and 100. The released MNE epoch rule drops one final imagery annotation in S104R08 because its four-second window exceeds the recording. This drop was recorded, not repaired by padding or cohort changes.
+
+Preparation took 64.92 seconds with numerical-runtime thread limits set to six and a measured maximum resident set of 495,370,240 bytes, using the versions above. The preceding interpreter-path failure was recorded before data processing; the successful run used an explicit existing interpreter. A constant-output software control then exercised the real scorer and paired comparator on all 1,803 original test events. It verified exact event joins and expected metric behavior; it ran no model and supplies no scientific performance evidence.
+
+The official checksum manifest has SHA-256 `7f5d16957d8ee7bce86cc7ccba0e5994f63f33781607eb3f838392d49311a208`. The prepared panel identity is `7d67c330bbd111b393c7ab72a5008e0b6fb6b90e891045336f15d3c3437b3ee9`. Matching the published epoch count resolves source completeness for this released-code profile. Historical filtering identity, downstream checkpoint identity, original run aggregation and author-model performance remain unresolved. This result does not change the task's scientific readiness or establish a paper win.
+
 ## Frozen prediction interface
 
 `author_adapter.py` is the concrete author REVE-Base classifier adapter. Set `REVE_AUTHOR_SOURCE` to the unpacked pinned author source. It verifies exact imported source files and geometry, uses the source four-patch 64-channel classifier, divides microvolts by 100 before float32 conversion, and requires a complete **downstream classifier** state dictionary with strict loading. It never substitutes random classifier weights or an encoder-only checkpoint. CPU float32 SDPA math is explicit; backend and historical numerical parity remain qualification questions. Its declared dependencies must be available in a task-local or existing environment; the adapter never installs packages or downloads weights.
