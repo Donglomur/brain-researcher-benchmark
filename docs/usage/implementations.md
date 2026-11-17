@@ -204,7 +204,13 @@ continue to apply after relocation.
 For existing finished-submission routes, see [artifact grading](artifact-grading.md).
 For a controlled paper or neural comparison, use the [study-design guide](../science/study-design/README.md)
 and bind its complete endpoint and access conditions before collecting outcomes.
-The generic `run` and `score` commands retain their own admission checks. Campaign
+The generic `run` and `score` commands retain their own admission checks. For a
+revised neural contract whose source evaluates a different target, has no target
+evaluator, or has unresolved target fidelity, these commands require explicit
+`--calibration` before reading a submission or candidate. A verified historical
+adapter cannot establish success on the current neural target. Inspect
+`neural-contract TASK_ID` for its exact scope; calibration does not bypass runtime
+verification. Campaign
 commands refuse execution without explicit `campaign_authority` and the required
 private inputs. A source binding or successful metadata query does not enable
 execution automatically. Delivery exports are local generated files under the

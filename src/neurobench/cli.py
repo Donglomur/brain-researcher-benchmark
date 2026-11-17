@@ -479,11 +479,29 @@ def require_paper_role(row, calibration):
                          'or paper-contract and compare-paper for the current objective.')
 
 
+def require_neural_role(row, calibration, root=ROOT):
+    """A passing old adapter cannot redefine a revised neural scientific target."""
+    if (row['track'] != 'neural'
+            or row.get('specification_revision', {}).get('version') != 'neural-understanding/v1'):
+        return
+    # Authenticate the current contract; the registry's display summary is not
+    # an authority for target fidelity. This precedes runtime verification and
+    # candidate/target I/O; the catalog only reads public declaration metadata.
+    contract = neural_contract(row['id'], root)
+    fidelity = contract['implementation']['target_fidelity']
+    if fidelity in {'different_target', 'no_target_evaluator', 'unresolved'} and not calibration:
+        raise ValueError('The current neural target has ' + fidelity + ' source fidelity. '
+                         'A verified historical adapter cannot establish that target. '
+                         'Use --calibration explicitly for its historical scope, or inspect '
+                         'neural-contract ' + row['id'] + ' for the current observations and target.')
+
+
 def score_command(task_id, submission, output, root=ROOT, *, review=None, other_reserve_bytes=None, calibration=False):
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
     require_paper_role(canonical[task_id], calibration)
+    require_neural_role(canonical[task_id], calibration, root)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local scoring adapter is registered for this command and task: ' + task_id
@@ -541,6 +559,7 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
     require_paper_role(canonical[task_id], calibration)
+    require_neural_role(canonical[task_id], calibration, root)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is registered for this command and task: ' + task_id
@@ -605,11 +624,11 @@ def main(argv=None, root=None):
     p = subs.add_parser('score'); p.add_argument('id'); p.add_argument('--submission', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
-    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration adapter; cannot establish paper success')
+    p.add_argument('--calibration', action='store_true', help='Explicitly use historical calibration scope; cannot establish current paper or neural success')
     p = subs.add_parser('run'); p.add_argument('id'); p.add_argument('--program', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
-    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration program; cannot establish paper success')
+    p.add_argument('--calibration', action='store_true', help='Explicitly use historical calibration scope; cannot establish current paper or neural success')
     args = parser.parse_args(argv)
     if args.action == 'paper-contract':
         result = paper_contract(args.id, root)
@@ -633,11 +652,12 @@ def main(argv=None, root=None):
                                          review=args.review, other_reserve_bytes=args.other_reserve_bytes)
         if not args.dry_run:
             if args.calibration:
-                print(json.dumps({'evaluation_role': 'calibration_only', 'paper_win': False}), file=sys.stderr)
+                print(json.dumps({'evaluation_role': 'calibration_only', 'paper_win': False,
+                                  'current_task_success': False}), file=sys.stderr)
             return subprocess.run(command, cwd=cwd, check=False).returncode
         result = {'argv': command, 'working_directory': str(cwd), 'executed': False}
         if args.calibration:
-            result.update(evaluation_role='calibration_only', paper_win=False)
+            result.update(evaluation_role='calibration_only', paper_win=False, current_task_success=False)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if args.action == 'compare-paper' and result.get('comparison_admitted') is not True:
         return 2
