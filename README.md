@@ -6,7 +6,7 @@ and understand neural data.
 **Under construction.** The catalogs describe task drafts and supporting source.
 Qualification across complete scientific contracts has not been established.
 
-**[Paper track](benchmarks/catalog/paper.md) · [Neural-data track](benchmarks/catalog/neural.md) · [Source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) · [Evidence and status](docs/neuroscience-benchmarks/REPO_QUALITY_20261116.md)**
+**[Paper track](benchmarks/paper/README.md) · [Neural-data track](benchmarks/neural/README.md) · [Source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) · [Evidence and status](docs/neuroscience-benchmarks/REPO_QUALITY_20261116.md)**
 
 ## Two research tracks
 
@@ -19,7 +19,8 @@ Qualification across complete scientific contracts has not been established.
 
 | Measure | Current coverage |
 | --- | --- |
-| Registered task drafts | **234** — 116 paper and 118 neural |
+| Original specifications | **200** — 100 paper and 100 neural |
+| Registered task drafts, including expansions | **234** — 116 paper and 118 neural |
 | Linked runtime manifests | **95** |
 | Portable programme source packages | **6** — NEURAL-029/030/061/078, CBraMod and PAPER-FIND-050 |
 | Supporting source component collections | **73** |
@@ -48,7 +49,7 @@ They do not download data or run scientific evaluations.
 
 | Next step | Guide |
 | --- | --- |
-| Find a task and its sources | [Paper catalog](benchmarks/catalog/paper.md), [neural catalog](benchmarks/catalog/neural.md), [catalog format](benchmarks/catalog/README.md) |
+| Find a task and its sources | [Paper task folders](benchmarks/paper/README.md), [neural task folders](benchmarks/neural/README.md), [catalog format](benchmarks/catalog/README.md) |
 | Use a published implementation | [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) and [component index](benchmarks/catalog/components.md) |
 | Check source or grade an artifact | [Source integrity](docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) and [artifact grading](docs/neuroscience-benchmarks/ARTIFACT_GRADING.md) |
 | Design a matched comparison | [Paired-study reporting](docs/neuroscience-benchmarks/PAIRED_STUDY_REPORTING.md) and [study-description validator](components/study_binding_validator_v1/README.md) |
@@ -61,15 +62,20 @@ protected references and qualified runtimes are separate requirements; the gener
 
 | Directory | Contents |
 | --- | --- |
-| [`benchmarks/`](benchmarks/README.md) | Task definitions, expansion registries, task packages and generated catalog |
+| [`benchmarks/paper/`](benchmarks/paper/README.md) | Paper reproduction and improvement: one folder per task; 100 original specifications plus 16 expansion drafts |
+| [`benchmarks/neural/`](benchmarks/neural/README.md) | Neural-data understanding: one folder per task; 100 original specifications plus 18 expansion drafts |
+| [`benchmarks/catalog/`](benchmarks/catalog/README.md) | Shared machine-readable inventory and component index |
+| [`benchmarks/`](benchmarks/README.md) | Authoritative specifications, existing implementation packages and versioned registries |
 | [`components/`](components/) · [`benchmarks/scientific_components/`](benchmarks/scientific_components/) | Reusable preparation, scoring and execution source |
 | [`contracts/curation/`](contracts/curation/README.md) | Paper intake and evaluation-design contracts |
 | [`docs/`](docs/README.md) | Scientific scope, operator guides, evidence and development workflow |
 | [`tools/`](tools/) · [`tests/`](tests/) | Public catalog tools and software checks |
 | [`examples/original-three/`](examples/original-three/README.md) | Inherited worked examples and their archived planning/results documents |
 
-Task IDs and scientific package paths remain stable because manifests, hashes and
-operator commands refer to them. The catalog supplies a common way to browse them.
+Each task folder has a guide linking its authoritative specification, source
+references and implementation, where available. These folders organize the same task
+inventory; they are not new standalone runnable packages. Scientific package paths
+remain stable so existing commands and saved verification records still apply.
 The root `TOPIC_TRIAGE_CONTROLLER_PROMPT.md` remains the active curation worker
 contract used by its validator.
 

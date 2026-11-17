@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 import posixpath
+import re
 import stat
 from urllib.parse import quote, urlsplit
 
@@ -109,11 +110,21 @@ def external_links(doc):
     return [{'kind': kind, 'url': url} for kind, url in sorted(found)]
 
 
+def task_directory(identifier, track):
+    need(track in ('paper', 'neural'), 'Unknown task track')
+    need(isinstance(identifier, str)
+         and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*', identifier)
+         and len(identifier) <= 200
+         and identifier.casefold() != 'readme.md', 'Unsafe task directory ID')
+    return f'benchmarks/{track}/{identifier}'
+
+
 def task_row(identifier, title, track, pin, stage, registry, doc):
     need(isinstance(identifier, str) and identifier and isinstance(title, str) and title,
          'Task ID and title must be nonempty strings')
     need(track in ('paper', 'neural'), 'Unknown task track')
     return {'id': identifier, 'title': title, 'track': track,
+            'task_directory': task_directory(identifier, track),
             'specification_id': doc.get('id', doc.get('candidate_id', doc.get('task_id'))),
             'specification_alias': doc.get('id', doc.get('candidate_id', doc.get('task_id'))) != identifier,
             'track_source': 'registry' if registry else 'canonical_specification',
@@ -264,7 +275,12 @@ def validate(catalog, root=ROOT):
     need(all(catalog['counts'][key] == value for key, value in counts(tasks).items()), 'Catalog task totals disagree')
     need(catalog['scientific_readiness'] == catalog['submission_readiness'] == 'unknown',
          'Catalog must not manufacture readiness')
+    directories = set()
     for row in tasks:
+        directory = task_directory(row['id'], row['track'])
+        need(row.get('task_directory', directory) == directory, 'Task directory does not match its track and ID')
+        need(directory.casefold() not in directories, 'Ambiguous task directory ID')
+        directories.add(directory.casefold())
         need(row['scientific_readiness'] == row['submission_readiness'] == 'unknown'
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
@@ -280,8 +296,8 @@ def load(root=ROOT):
     return validate(json.loads(path.read_text()), root)
 
 
-def markdown_link(label, path):
-    relative = posixpath.relpath(path, OUTPUT)
+def markdown_link(label, path, base=OUTPUT):
+    relative = posixpath.relpath(path, base)
     return '[' + label + '](' + quote(relative, safe='/.-_') + ')'
 
 
@@ -296,6 +312,8 @@ def render(catalog):
         f"Browse **{c['total']} registered questions**: [{c['paper']} paper tasks](paper.md) and "
         f"[{c['neural']} neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications "
         f"with {c['expansion_drafts']} expansion drafts.\n\n"
+        'Browse the task folders in [paper research](../paper/README.md) and '
+        '[neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.\n\n'
         f"The checkout also contains {c['runtime_manifests']} one-level runtime manifests and "
         f"{c['source_components']} [supporting source components/collections](components.md). "
         'Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.\n\n'
@@ -315,7 +333,7 @@ def render(catalog):
             title = row['title'].replace('\\', '\\\\').replace('[', '\\[').replace(']', '\\]').replace('|', '\\|').replace('\n', ' ').replace('\r', ' ')
             identifier = row['id'].replace('|', '\\|')
             runtime = markdown_link('manifest', row['runtime_manifest']['path']) if row['runtime_manifest'] else 'not included'
-            text += '| ' + identifier + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + row['registration_stage'] + ' | ' + runtime + ' |\n'
+            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + row['registration_stage'] + ' | ' + runtime + ' |\n'
         files[track + '.md'] = text.encode()
     text = '# Supporting source components\n\n[Catalog](README.md)\n\n' + intro
     text += 'These packages and shared contracts are not additional registered benchmark IDs. No task association is inferred from a folder name.\n\n'
@@ -330,20 +348,130 @@ def render(catalog):
     return files
 
 
+def markdown_text(value):
+    text = str(value).replace('\\', '\\\\').replace('\n', ' ').replace('\r', ' ')
+    for character in ('[', ']', '|', '*', '_', '`', '<', '>'):
+        text = text.replace(character, '\\' + character)
+    return text
+
+
+def render_tracks(catalog):
+    """Render browse entries without copying or relocating scientific sources."""
+    files = {}
+    descriptions = {
+        'paper': ('Paper research', 'Reproduce a defined neuroscience result, then evaluate prospective improvement. '
+                  'Compare paper + data with paper + data + official code under matched budgets.'),
+        'neural': ('Neural-data understanding', 'Interpret neural and behavioral observations and make predictions. '
+                   'Compare a prediction program written in advance with case-by-case investigation.'),
+    }
+    for track, (title, description) in descriptions.items():
+        base = f'benchmarks/{track}'
+        rows = [row for row in catalog['tasks'] if row['track'] == track]
+        groups = [('Original canonical specifications', [row for row in rows if row['registry'] is None]),
+                  ('Expansion drafts', [row for row in rows if row['registry'] is not None])]
+        text = f'# {title}\n\n[All benchmarks](../README.md) · [Other track](../' + ('neural' if track == 'paper' else 'paper') + '/README.md)\n\n'
+        text += description + '\n\n'
+        text += (f"**{len(rows)} registered task drafts: {len(groups[0][1])} original specifications + "
+                 f"{len(groups[1][1])} expansion drafts.** Scientific and submission readiness remain **unknown**.\n\n"
+                 'Each task has a browse folder below. These pages link to authoritative specifications and existing '
+                 'source; they are not newly self-contained runnable packages. Scientific code, pinned source paths '
+                 'and shared components stay in their existing locations. Conditions, aliases and source components '
+                 'do not add independent benchmarks.\n\n')
+        for heading, group in groups:
+            text += f'## {heading} ({len(group)})\n\n'
+            text += '| Task | Scientific question / title | Linked runtime source |\n| --- | --- | --- |\n'
+            for row in group:
+                task = task_directory(row['id'], track)
+                runtime = markdown_link('manifest', row['runtime_manifest']['path'], base) if row['runtime_manifest'] else 'not linked'
+                text += ('| ' + markdown_link(row['id'], task + '/README.md', base) + ' | '
+                         + markdown_text(row['title']) + ' | ' + runtime + ' |\n')
+        text += ('\nGenerated with `python3 tools/build_public_catalog.py` from the repository root. '
+                 'Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.\n')
+        files[base + '/README.md'] = text.encode()
+        for row in rows:
+            task = task_directory(row['id'], track)
+            pin = row['specification']
+            group = 'Original canonical specification' if row['registry'] is None else 'Expansion draft'
+            text = '# ' + markdown_text(row['title']) + '\n\n'
+            text += markdown_link(title, base + '/README.md', task) + ' · ' + markdown_link('All benchmarks', 'benchmarks/README.md', task) + '\n\n'
+            text += (f"- **Task ID:** `{row['id']}`\n- **Track:** {title}\n"
+                     f"- **Registration:** {group}\n"
+                     f"- **Declared specification status:** {markdown_text(row['declared_specification_status'] or 'Not declared')}\n"
+                     "- **Scientific and submission readiness:** Unknown\n\n"
+                     'This is a task browse entry. It is not a new self-contained runnable package or evidence of '
+                     'successful execution. The linked specification defines the scientific scope and admission rules.\n\n')
+            if row['specification_alias']:
+                text += ('**Specification alias:** This registered ID refers to specification '
+                         + markdown_text(row['specification_id'])
+                         + '; the alias does not establish another independent study or dataset.\n\n')
+            text += '## Specification and implementation\n\n'
+            text += '- ' + markdown_link('Authoritative task specification', pin['path'], task) + '\n'
+            text += f"- Specification identity: {pin['bytes']} bytes; SHA-256 `{pin['sha256']}`.\n"
+            if row['registry']:
+                text += '- ' + markdown_link('Registration and provenance', row['registry'], task) + '\n'
+            if row['runtime_manifest']:
+                text += '- ' + markdown_link('Linked runtime manifest', row['runtime_manifest']['path'], task) + '\n'
+                text += '- ' + markdown_link('Existing implementation folder', row['runtime_package'], task) + '\n'
+                text += '\nA linked runtime manifest does not establish a qualified run; follow its source and prerequisite documentation.\n'
+            else:
+                text += '\nNo runtime manifest is linked to this registered ID in the public catalog. This does not rule out other supporting source.\n'
+            text += '\n## Public source citations\n\n'
+            if row['external_links']:
+                for link in row['external_links']:
+                    url = quote(link['url'], safe=":/%.-_~!$&'*,;=@+")
+                    text += '- [' + markdown_text(link['kind'].title()) + '](' + url + ')\n'
+                text += '\nCitations come from the specification; their availability was not rechecked when generating this page.\n'
+            else:
+                text += 'No public HTTP(S) citation was extracted for this catalog entry. Consult the authoritative specification and its provenance.\n'
+            text += '\nGenerated from the public catalog; edit the authoritative definition and regenerate instead of editing this page.\n'
+            files[task + '/README.md'] = text.encode()
+    return files
+
+
+def output_path(root, relative):
+    """Validate every output before any write; do not follow output aliases."""
+    path = root / relative
+    need(path.is_relative_to(root), 'Output escapes repository')
+    for current in (root, *reversed(path.parents[:-1]), path):
+        # Only inspect ancestors inside the selected repository.
+        if not current.is_relative_to(root):
+            continue
+        try:
+            info = current.lstat()
+        except FileNotFoundError:
+            continue
+        if current == path:
+            need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1,
+                 'Generated output must be an ordinary single-link file: ' + relative)
+        else:
+            need(stat.S_ISDIR(info.st_mode), 'Generated output ancestor must be an ordinary directory: ' + relative)
+    return path
+
+
 def generate(root=ROOT, check=False, catalog=None):
-    root = Path(root)
+    root = Path(root).resolve()
     result = discover(root) if catalog is None else validate(catalog, root)
-    contents = render(result)
-    target = root / OUTPUT
+    catalog_contents = render(result)
+    contents = {OUTPUT + '/' + name: raw for name, raw in catalog_contents.items()}
+    contents.update(render_tracks(result))
+    paths = {name: output_path(root, name) for name in contents}
+    memberships = {OUTPUT: set(catalog_contents)}
+    for track in ('paper', 'neural'):
+        memberships['benchmarks/' + track] = {'README.md'} | {row['id'] for row in result['tasks'] if row['track'] == track}
+    for directory, expected in memberships.items():
+        parent = root / directory
+        actual = {p.name for p in parent.iterdir()} if parent.exists() else set()
+        need(not (actual - expected), 'Unexpected or misplaced generated directory entry: ' + directory)
+        if check:
+            need(parent.is_dir() and actual == expected, 'Generated navigation entries are missing: ' + directory)
     if check:
-        need(target.is_dir() and {p.name for p in target.iterdir()} == set(contents),
-             'Public catalog files are missing or unexpected; regenerate')
         for name, raw in contents.items():
-            need((target / name).read_bytes() == raw, 'Public catalog is stale: ' + name)
+            need(paths[name].is_file(), 'Generated navigation file is missing: ' + name)
+            need(paths[name].read_bytes() == raw, 'Public catalog is stale: ' + name)
     else:
-        target.mkdir(parents=True, exist_ok=True)
         for name, raw in contents.items():
-            (target / name).write_bytes(raw)
+            paths[name].parent.mkdir(parents=True, exist_ok=True)
+            paths[name].write_bytes(raw)
     return result
 
 

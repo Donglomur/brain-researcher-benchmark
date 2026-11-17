@@ -11,6 +11,8 @@ PAGES = (
     "README.md",
     "CONTRIBUTING.md",
     "benchmarks/README.md",
+    "benchmarks/paper/README.md",
+    "benchmarks/neural/README.md",
     "docs/README.md",
     "docs/DEVELOPMENT.md",
     "docs/history/BRANCH_ARCHIVE_20261116.md",
@@ -46,7 +48,13 @@ PAGES = (
 def main():
     failures = []
     checked = 0
-    for name in PAGES:
+    task_pages = sorted(
+        path.relative_to(ROOT).as_posix()
+        for track in ("paper", "neural")
+        for path in (ROOT / "benchmarks" / track).glob("*/README.md")
+    )
+    pages = (*PAGES, *task_pages)
+    for name in pages:
         page = ROOT / name
         if not page.is_file():
             failures.append(f"{name}: missing navigation page")
@@ -66,7 +74,7 @@ def main():
             checked += 1
     for failure in failures:
         print(failure)
-    print(f"Checked {len(PAGES)} navigation pages and {checked} local paths; {len(failures)} failures.")
+    print(f"Checked {len(pages)} navigation pages and {checked} local paths; {len(failures)} failures.")
     return int(bool(failures))
 
 

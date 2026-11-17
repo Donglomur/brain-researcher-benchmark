@@ -1,46 +1,75 @@
-# Benchmark catalog and source packages
+# Two benchmark tracks
 
-The programme has **234 registered task drafts: 116 paper and 118 neural**.
-Registration, source implementation, historical local acceptance and current
-scientific qualification are separate stages. Task conditions, folds, scorers
-and components do not create additional independent benchmarks.
+Start with the track you want. Each contains one folder per registered task,
+with a task guide, source references and links to its existing implementation
+when one is registered.
 
-| Browse | Contents |
-| --- | --- |
-| [Paper tasks](catalog/paper.md) | Reproduction/improvement definitions and their source links. |
-| [Neural tasks](catalog/neural.md) | Neural/behavioral interpretation and prediction definitions. |
-| [Components](catalog/components.md) | Public source packages and their own instructions. |
-| [Machine-readable catalog](catalog/catalog.json) | Deterministic metadata, specification identities and declared status. |
-| [Catalog guide](catalog/README.md) | Coverage, aliases and regeneration. |
+| Track folder | Original specifications | Expansion drafts | Total registered |
+| --- | --- | --- | --- |
+| [Paper reproduction and improvement](paper/README.md) | 100 | 16 | 116 |
+| [Neural-data understanding](neural/README.md) | 100 | 18 | 118 |
+
+The track indexes separate the original 100 from later expansion drafts. A task
+folder is a navigation home, not a newly packaged runnable benchmark. Registration,
+source implementation and scientific qualification remain separate stages.
+Conditions, folds, scorers and components do not create additional benchmarks.
+
+```text
+benchmarks/
+  paper/
+    README.md
+    PAPER-FIND-050/
+      README.md
+    ...
+  neural/
+    README.md
+    NEURAL-029/
+      README.md
+    ...
+  catalog/                   # shared generated inventory
+  manifests/paper/           # original paper specifications
+  manifests/neural/          # original neural specifications
+  neuroscience/              # existing implementations and expansion registries
+  scientific_components/     # reusable scientific source
+  scientific_contracts/      # shared scientific contracts
+```
+
+## Browse and inspect
+
+- [Paper task folders](paper/README.md) and [neural task folders](neural/README.md).
+- [Portable source packages](../docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md).
+- [Supporting components](catalog/components.md).
+- [Machine-readable catalog](catalog/catalog.json) and [catalog guide](catalog/README.md).
 
 From the repository root:
 
 ```sh
 python3 tools/neurobench.py list --track paper
+python3 tools/neurobench.py list --track neural
 python3 tools/neurobench.py show NEURAL-017
 python3 tools/neurobench.py status
 python3 tools/neurobench.py check
 ```
 
-These public metadata operations do not require private receipts or scientific
-input files. They do not certify task execution. The original private-ledger
-`score` and `run` admission remains separate; follow each component's guide for
-an executable route and its prerequisites.
+These commands inspect public metadata. They do not require private receipts or
+scientific input files, and do not certify execution. Follow the linked
+implementation's guide for its commands and prerequisites.
 
-## Source organization
+## Definitions and source
 
-- `manifests/paper/` and `manifests/neural/` contain the original 200 specifications.
-- Expansion registries and their task definitions live under `neuroscience/`.
-- `neuroscience/<package>/` contains task-specific source, manifests and guides.
-- `scientific_components/` and the repository's `components/` contain reusable software.
-- `catalog/` is generated navigation. Edit the underlying definitions before regenerating it.
+The original 200 specifications remain in `manifests/paper/` and
+`manifests/neural/`. Expansion registries and task implementations retain their
+existing locations under `neuroscience/`. Scientific manifests and saved source
+verification refer to those paths. Shared software also lives in
+`scientific_components/` and the repository's `components/` directory.
 
-The catalog enumerates registrations, including explicit specification aliases;
-it is not a count of unique papers, data sources or completed evaluations.
-Scoring software and runtime declarations alone do not establish current
-scientific readiness.
+The track guides and `catalog/` are generated from those authoritative definitions.
+Edit the definitions, then run `python3 tools/build_public_catalog.py` and
+`python3 tools/build_public_catalog.py --check`. Do not edit generated task guides
+by hand. Registration aliases are preserved and do not represent independent
+papers or datasets.
 
-For practical commands see [artifact grading](../docs/neuroscience-benchmarks/ARTIFACT_GRADING.md),
-[source checks](../docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) and the
-[dated construction record](../docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md).
-The [main README](../README.md) explains the two research tracks and public scope.
+For commands and evidence see [artifact grading](../docs/neuroscience-benchmarks/ARTIFACT_GRADING.md),
+[source checks](../docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md), the
+[construction record](../docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md),
+and the [main README](../README.md).

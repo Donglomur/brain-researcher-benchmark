@@ -99,6 +99,7 @@ def fixture(root):
            'verification': {'status': 'passed', 'receipt_path': 'private-ledger-sentinel/receipt.json'},
            'entrypoints': {'score': {'argv': ['python3', 'private-ledger-sentinel/score.py']}}})
     (root / 'components/generated-source-component').mkdir(parents=True)
+    (root / 'benchmarks/README.md').write_text('# Benchmark sources\n')
 
 
 class PublicCatalogTests(unittest.TestCase):
@@ -136,6 +137,125 @@ class PublicCatalogTests(unittest.TestCase):
         target.write_text(target.read_text() + 'stale\n')
         with self.assertRaisesRegex(ValueError, 'stale'):
             catalog.generate(self.root, check=True)
+
+    def test_track_directories_group_the_original_roster_and_expansions(self):
+        result = catalog.generate(self.root)
+        for track, expansion in (('paper', 16), ('neural', 18)):
+            folder = self.root / 'benchmarks' / track
+            rows = [row for row in result['tasks'] if row['track'] == track]
+            self.assertEqual({path.name for path in folder.iterdir() if path.is_dir()},
+                             {row['id'] for row in rows})
+            index = (folder / 'README.md').read_text()
+            self.assertIn('Original canonical specifications (100)', index)
+            self.assertIn(f'Expansion drafts ({expansion})', index)
+            for row in rows:
+                self.assertEqual(row['task_directory'], f"benchmarks/{track}/{row['id']}")
+                page = (self.root / row['task_directory'] / 'README.md').read_text()
+                self.assertIn(row['specification']['sha256'], page)
+                self.assertIn('Unknown', page)
+                self.assertIn('**Declared specification status:** ' + catalog.markdown_text(row['declared_specification_status']), page)
+                self.assertIn('not a new self-contained runnable package', page)
+                self.assertEqual('**Specification alias:**' in page, row['specification_alias'])
+                self.assertEqual('Existing implementation folder' in page, bool(row['runtime_manifest']))
+                self.assertNotIn('token=', page)
+        for name, raw in catalog.render_tracks(result).items():
+            page = self.root / name
+            for target in re.findall(r'\]\(([^)]+)\)', raw.decode()):
+                if not target.startswith(('http://', 'https://')):
+                    self.assertTrue((page.parent / unquote(target)).exists(), (name, target))
+
+    def test_track_checks_detect_missing_stale_and_misplaced_entries(self):
+        result = catalog.generate(self.root)
+        task = self.root / result['tasks'][0]['task_directory']
+        page = task / 'README.md'
+        original = page.read_bytes()
+        page.unlink()
+        with self.assertRaisesRegex(ValueError, 'missing'):
+            catalog.generate(self.root, check=True, catalog=result)
+        page.write_bytes(original + b'stale\n')
+        with self.assertRaisesRegex(ValueError, 'stale'):
+            catalog.generate(self.root, check=True, catalog=result)
+        page.write_bytes(original)
+        wrong_track = 'paper' if result['tasks'][0]['track'] == 'neural' else 'neural'
+        misplaced = self.root / 'benchmarks' / wrong_track / task.name
+        task.rename(misplaced)
+        for check in (True, False):
+            with self.assertRaisesRegex(ValueError, 'missing|Unexpected|misplaced'):
+                catalog.generate(self.root, check=check, catalog=result)
+        self.assertFalse(task.exists())
+
+    def test_unsafe_task_output_ids_refuse_before_writes(self):
+        result = catalog.discover(self.root)
+        for identifier in ('../escape', '/absolute', 'two/parts', 'two\\parts', '.', '..',
+                           'README.md', 'rEaDmE.Md', 'A' * 201):
+            changed = copy.deepcopy(result)
+            changed['tasks'][0]['id'] = identifier
+            with self.subTest(identifier=identifier), self.assertRaisesRegex(ValueError, 'Unsafe'):
+                catalog.generate(self.root, catalog=changed)
+            self.assertFalse((self.root / catalog.OUTPUT).exists())
+            self.assertFalse((self.root / 'benchmarks/neural').exists())
+        changed = copy.deepcopy(result)
+        changed['tasks'][0]['task_directory'] = 'benchmarks/paper/elsewhere'
+        with self.assertRaisesRegex(ValueError, 'does not match'):
+            catalog.generate(self.root, catalog=changed)
+        changed = copy.deepcopy(result)
+        changed['tasks'][1]['id'] = changed['tasks'][0]['id'].lower()
+        changed['tasks'][1]['task_directory'] = catalog.task_directory(changed['tasks'][1]['id'], changed['tasks'][1]['track'])
+        with self.assertRaisesRegex(ValueError, 'Ambiguous'):
+            catalog.generate(self.root, catalog=changed)
+        self.assertFalse((self.root / catalog.OUTPUT).exists())
+
+    def test_output_aliases_and_conflicting_types_refuse_without_other_writes(self):
+        result = catalog.generate(self.root)
+        task = self.root / result['tasks'][0]['task_directory']
+        page = task / 'README.md'
+        before = (self.root / catalog.OUTPUT / 'catalog.json').read_bytes()
+        original = page.read_bytes()
+        for kind in ('dangling_symlink', 'directory', 'hardlink'):
+            page.unlink()
+            if kind == 'dangling_symlink':
+                page.symlink_to(self.root / 'absent-target')
+            elif kind == 'directory':
+                page.mkdir()
+            else:
+                target = self.root / 'unrelated-output-target'
+                target.write_bytes(b'preserve me')
+                page.hardlink_to(target)
+            with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, 'ordinary single-link'):
+                catalog.generate(self.root, catalog=result)
+            self.assertEqual((self.root / catalog.OUTPUT / 'catalog.json').read_bytes(), before)
+            if kind == 'directory':
+                page.rmdir()
+            else:
+                page.unlink()
+            page.write_bytes(original)
+        page.unlink()
+        task.rmdir()
+        task.write_text('not a directory')
+        with self.assertRaisesRegex(ValueError, 'ordinary directory'):
+            catalog.generate(self.root, catalog=result)
+        self.assertEqual((self.root / catalog.OUTPUT / 'catalog.json').read_bytes(), before)
+        task.unlink()
+        task.mkdir()
+        page.write_bytes(original)
+        for parent in (task, task.parent):
+            saved = self.root / 'saved-output-directory'
+            parent.rename(saved)
+            parent.symlink_to(saved, target_is_directory=True)
+            with self.subTest(parent=parent), self.assertRaisesRegex(ValueError, 'ordinary directory'):
+                catalog.generate(self.root, catalog=result)
+            parent.unlink()
+            saved.rename(parent)
+        self.assertEqual((self.root / catalog.OUTPUT / 'catalog.json').read_bytes(), before)
+
+    def test_regeneration_preserves_additional_authored_task_files(self):
+        result = catalog.generate(self.root)
+        authored = self.root / result['tasks'][0]['task_directory'] / 'notes.txt'
+        authored.write_bytes(b'Unrelated authored task material.\n')
+        before = authored.read_bytes()
+        catalog.generate(self.root, catalog=result)
+        catalog.generate(self.root, check=True, catalog=result)
+        self.assertEqual(authored.read_bytes(), before)
 
     def test_public_cli_never_follows_private_verification_paths(self):
         catalog.generate(self.root)

@@ -4,6 +4,8 @@ This is a public source inventory, not a list of qualified benchmarks. Scientifi
 
 Browse **234 registered questions**: [116 paper tasks](paper.md) and [118 neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications with 34 expansion drafts.
 
+Browse the task folders in [paper research](../paper/README.md) and [neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.
+
 The checkout also contains 95 one-level runtime manifests and 73 [supporting source components/collections](components.md). Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
 
 The [machine-readable catalog](catalog.json) includes exact specification pins and links to existing public files. External citations are copied from public specifications; their availability was not rechecked.

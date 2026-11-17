@@ -40,8 +40,12 @@ cherry-pick. Publish only the reviewed public source subset on this fork's histo
 
 ## Catalog and layout changes
 
-The public catalog is generated from the checked-in canonical specifications and
-expansion registries. It does not read the private execution ledger. Regenerate it
+The public catalog and task homes under `benchmarks/paper/<ID>/` and
+`benchmarks/neural/<ID>/` are generated from the checked-in canonical specifications
+and expansion registries. Each track index groups its original 100 separately
+from expansion drafts. Task homes link to existing definitions and implementations;
+they do not relocate or duplicate scientific source. Do not edit generated guides
+by hand. The generator does not read the private execution ledger. Regenerate it
 with `python3 tools/build_public_catalog.py`, then check the generated diff and run
 `python3 tools/build_public_catalog.py --check`.
 
