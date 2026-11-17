@@ -1,0 +1,577 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original decoding panel supports genuine individual scalar/categorical findings, including the printed 163-of-201 wheel-speed result, but the complete authenticated regional numeric panel, original cohort/fold identities, reducer adjudication and granular verification remain unresolved. The scalar schema is used only for actual individual quantities; mandatory array-level source prerequisites are retained explicitly and prevent eligibility.",
+  "source_paper": {
+    "title": "A brain-wide map of neural activity during complex behaviour",
+    "url": "https://doi.org/10.1038/s41586-025-09235-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12408349/",
+      "locator": "Methods: Neural analyses; Inclusion criteria; Overview of decoding; Decoding target variables; Decoding cross-validation; Decoding significance testing with null distributions",
+      "supports": "Original regional decoding uses balanced accuracy for stimulus/choice/feedback and R-squared for wheel variables, with repeated nested within-session cross-validation and null-corrected regional effects."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/bwm_loading.py",
+      "locator": "bwm_query; bwm_units; load_good_units; filter_units_region; filter_sessions",
+      "supports": "The 2023_12_bwm_release fixture, unit-version check and unit/session/region QC define the source loading route; a complete published scoring roster still needs reconciliation."
+    },
+    {
+      "id": "settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_stimside.py",
+      "locator": "TARGET, align_time, time_window, n_runs, estimator_kwargs and trial-mask settings",
+      "supports": "Stimulus-side decoding uses nonzero contrast and 0-100 ms stimulus-aligned input; pinned logistic maximum iterations differs from the manuscript."
+    },
+    {
+      "id": "decoder",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/decoding.py",
+      "locator": "run-specific random seeds; shuffled KFold; balanced_accuracy_score/r2_score; concatenated prediction scoring",
+      "supports": "Author code supplies deterministic run seeds and nested scoring machinery, but no rerun result is established by this inspection."
+    },
+    {
+      "id": "outputs",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/process_outputs.py",
+      "locator": "create_pdtable_from_raw and check_scores",
+      "supports": "Real/null scores are averaged over runs; predictions can be rescored; summary effects retain session and regional identities."
+    },
+    {
+      "id": "pipeline",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/README.md",
+      "locator": "Full-cohort decoding and summary-table generation workflow",
+      "supports": "The source provides a complete-cohort execution route. Debugging subsets are not equivalent to the paper cohort."
+    },
+    {
+      "id": "regional-source",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/meta/bwm_figs.py",
+      "locator": "group_into_regions; significance_by_region (cached lines 1982-2058)",
+      "supports": "Source regional effects subtract separately computed medians; session Fisher p-values, BH q-values and fraction of significant sessions are retained. Minimum source figure eligibility is five units and two sessions."
+    },
+    {
+      "id": "source-format",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/05_format_results.py",
+      "locator": "Formatted result rows: run_id=i_run+1; R2_test from Rsquared_test_full; balanced_acc_test from balanced_acc_test_full",
+      "supports": "Raw run IDs and formatted run IDs differ by one. Original whole-run scores, trial-indexed prediction arrays, targets and fold indices are source-native granular outputs."
+    },
+    {
+      "id": "wheel-speed-settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_wheel-speed.py",
+      "locator": "TARGET; TIME_WINDOW; BINSIZE; N_BINS_LAG; N_PSEUDO; N_RUNS; SAVE_PREDICTIONS_PSEUDO",
+      "supports": "Wheel speed uses 20-ms bins and ten causal lag bins around first movement, two repeats and 100 null sessions; source settings do not save null predictions."
+    },
+    {
+      "id": "wheel-velocity-settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_wheel-vel.py",
+      "locator": "TARGET; TIME_WINDOW; BINSIZE; N_BINS_LAG; N_PSEUDO; N_RUNS; SAVE_PREDICTIONS_PSEUDO",
+      "supports": "Wheel velocity is a separate original endpoint with the same source timing, repeat and null counts, not a replacement or pooled wheel score."
+    },
+    {
+      "id": "source-summary",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/06_generate_summary_tables.py",
+      "locator": "create_pdtable_from_raw and bwm_units session-region filtering",
+      "supports": "The complete source table is filtered by source unit/session/region eligibility; neither a small debug cohort nor an arbitrary region subset recovers the original vector."
+    },
+    {
+      "id": "accepted-scorer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-FIND-005/implementations/decoder-score-import-v1/scorer.py",
+      "locator": "score_real; evaluate; summarize_session; summarize_regions; main",
+      "supports": "Accepted operator-only software rescores original-trial-order real predictions, checks full run/null identity support and returns both reducer profiles. It does not authenticate source cohorts, independently rescore null predictions, execute AI analyses, or establish scientific reproduction."
+    },
+    {
+      "id": "paper-visual-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of the visual stimulus; Fig. 4a,f,i and caption",
+      "supports": "The source names VISp among visual-stimulus decoding regions and presents its original decoding result. Fig. 4a/f reports the region-level null-corrected balanced-accuracy quantity; Fig. 4i is a distinct example probability curve."
+    },
+    {
+      "id": "paper-choice-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of choice; Fig. 5a,f,g,i and caption",
+      "supports": "The source identifies GRN among strongest choice decoding regions and states that choice decoding covers more brain regions than visual-stimulus decoding. The original window is the 100 ms preceding first wheel movement."
+    },
+    {
+      "id": "paper-feedback-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of feedback; Fig. 6a,f,i and caption",
+      "supports": "The source presents the IRN feedback decoding example and the complete regional feedback map, using the 200 ms after feedback onset. The original region-level quantity is null-corrected balanced accuracy; a selected example is not the entire regional panel."
+    },
+    {
+      "id": "paper-wheel-result",
+      "kind": "paper",
+      "url": "https://doi.org/10.1038/s41586-025-09235-0",
+      "locator": "Representation of wheel movement; Fig. 7a,c,e,f,g; Supplementary Fig. 7; Methods Decoding target variables",
+      "supports": "The paper reports wheel speed decoding in 163 of 201 reportable regions, names GRN among strongest speed effects, and presents GRN speed and velocity decoding examples. Methods specify wheel R-squared; the Fig. 7a caption instead says balanced accuracy, an unresolved wording discrepancy that must not silently change the metric."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "IBL 2023_12_bwm_release with source sorted-spike/trial loaders and unit-version verification.",
+      "evidence_ids": [
+        "loader"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper reports 139 mice, 459 sessions/699 insertions, and 201 analyzed regions/62,857 neurons. The exact endpoint-specific session/unit/region manifest and paper eligibility parity are not frozen here.",
+      "evidence_ids": [
+        "paper",
+        "loader"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Nested fivefold random interleaved trial CV within each session; ten repetitions for binary targets and two for wheel targets. Retain original fold/seed rules; mouse-held-out evaluation would change the task.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-QC neural population spikes per session/region and declared event windows; behavioral targets are labels, not additional decoder features.",
+      "evidence_ids": [
+        "paper",
+        "settings"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source windows and QC are documented, but manuscript logistic max_iter=20000 versus pinned stimulus config max_iter=1000 and downstream region/unit eligibility require reconciliation before baseline replay.",
+      "evidence_ids": [
+        "paper",
+        "settings",
+        "loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Score concatenated outer-test predictions per run, average runs per session, then report regional median of session score minus its null median. Significance combines session evidence separately.",
+      "evidence_ids": [
+        "paper",
+        "outputs",
+        "regional-source"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The required original panel is the complete five-target stimulus-side, choice, feedback, wheel-speed and wheel-velocity decoder output over every authentic endpoint-specific session, merged population and region. Required arrays include every original real and null full-run score and target/prediction derivation; repeated-run means; full null distributions; both unresolved paper/source session-null correction and regional reducer branches; all regional effect magnitudes, source session p-values, region Fisher p-values, full-family BH q-values/calls and significant-session fractions; original example probability/time-course outputs; and the retained/excluded cohort, mask, unit, trial and fold identities. These arrays are required source prerequisites, never scalar finding placeholders. The individually identified findings below do not exhaust or replace this panel: authentic full region/session coverage, numeric targets and an admissible representation of every required finding are still missing, so no small named-region subset, count, significance category or selected example can qualify reproduction.",
+      "evidence_ids": [
+        "paper",
+        "paper-visual-result",
+        "paper-choice-result",
+        "paper-feedback-result",
+        "paper-wheel-result",
+        "loader",
+        "decoder",
+        "outputs",
+        "regional-source",
+        "source-summary"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The original decoder observes source-QC sorted neural population spikes, with probes merged within each session and region, in the original target-specific event windows. Trial events provide alignment and source masks; behavioral stimulus, choice, feedback and wheel values are targets rather than extra predictive features. Preserve original within-session nested trial folds and the causal wheel lag/bin structure. Paper+data and paper+data+author-code must use identical original data, masks, folds, endpoint coverage, target access and budgets; only the pinned author code may be added in the latter condition. Source targets and operator scoring arrays are not silently delivered as candidate features.",
+      "evidence_ids": [
+        "paper",
+        "settings",
+        "decoder",
+        "wheel-speed-settings",
+        "wheel-velocity-settings"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "stimulus_side_VISp_regional_effect",
+      "kind": "scalar",
+      "description": "Original VISp region-level stimulus-side decoding effect in Fig. 4a/f; this is one named-region scalar, not the whole stimulus-region vector.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-visual-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-visual-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-visual-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "choice_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level choice decoding effect in Fig. 5a/f; distinguish it from the selected-session probability curve in Fig. 5i.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-choice-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "feedback_IRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original IRN region-level feedback decoding effect within Fig. 6a/f; the selected IRN session in Fig. 6i establishes an example, not the regional scalar value.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "balanced-accuracy fraction",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-feedback-result",
+        "paper",
+        "outputs",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-feedback-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-feedback-result",
+          "paper",
+          "outputs",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level wheel-speed decoding effect in Fig. 7a/e; distinguish it from the example trial speed trace in Fig. 7f.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "decoder",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_velocity_GRN_regional_effect",
+      "kind": "scalar",
+      "description": "Original GRN region-level wheel-velocity decoding effect within Fig. 7c/e; distinguish it from the example trial velocity trace in Fig. 7g.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "One scalar for this named target and named region. Paper Methods subtract each session null median then take the median of session-corrected scores. Pinned source includes the observed score in the null median and subtracts separate regional medians. Both branches must be retained in required outputs; the original numerical comparison branch remains unresolved, and neither a selected-session example nor a cross-region average substitutes for this regional quantity.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "decoder",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "decoder",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_significantly_decodable_region_count",
+      "kind": "scalar",
+      "description": "Printed original finding: wheel speed was significantly decodable from 163 reportable areas. This authentic scalar count is a companion only and never replaces all regional magnitudes, identities and null controls.",
+      "status": "verified",
+      "expected": 163,
+      "units": "regions",
+      "aggregation": "Count all source-reportable regions meeting the original combined-session and full-region-family corrected significance criterion for wheel speed. The original printed denominator is 201; derive this count from every authentic regional result rather than emit the known number.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "regional-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "regional-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "regional-source"
+        ]
+      }
+    },
+    {
+      "id": "wheel_speed_reportable_region_count",
+      "kind": "scalar",
+      "description": "Printed denominator for the original wheel-speed decoding coverage: 201 reportable areas. This count does not authenticate which regions or their trial/session/unit support.",
+      "status": "verified",
+      "expected": 201,
+      "units": "regions",
+      "aggregation": "Count the complete original eligible region roster used for the wheel-speed panel before applying its significant-region count; preserve exact retained and excluded source identities.",
+      "evidence_ids": [
+        "paper-wheel-result",
+        "paper",
+        "loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The original quantity is preserved, but no source-grounded numerical agreement tolerance has been frozen. For unrecovered effects neither the numeric value nor source precision is known; for printed integer counts, copying the number is not execution and no reproduction acceptance rule is inferred.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "loader"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-wheel-result",
+          "paper",
+          "loader"
+        ]
+      }
+    },
+    {
+      "id": "choice_vs_stimulus_decodable_region_count_order",
+      "kind": "categorical",
+      "description": "Original source statement: choice decoding represents a larger number of brain regions than visual-stimulus decoding. This is one categorical ordering finding; it cannot replace either complete regional effect vector or the actual two counts.",
+      "status": "verified",
+      "expected": "choice_more",
+      "units": "ordering of original significantly decodable region counts",
+      "aggregation": "Compare counts derived separately from the complete original choice and stimulus-side region families using source eligibility and original combined-session/BH evidence. Preserve both underlying count values and all regional magnitudes/controls; do not invent or choose a cross-target significance family.",
+      "evidence_ids": [
+        "paper-choice-result",
+        "paper",
+        "regional-source"
+      ],
+      "categories": [
+        "choice_more",
+        "equal",
+        "stimulus_more"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source states an ordering, so the expected category is exact; quantitative magnitudes, identities, counts and uncertainty remain mandatory companions and are not supplied by a categorical match.",
+        "evidence_ids": [
+          "paper-choice-result"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified numerical equivalence or categorical reproduction-inference rule has been frozen; source significance alone is not reproduction evidence.",
+        "independent_unit": "Mouse for biological uncertainty; deterministic panel counts and original score derivations are separately checked computations, not additional independent biological replicates.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original folds/runs and sessions within a mouse are dependent. Neither an interval confidence level nor a sample minimum nor an acceptance threshold is invented from source information-presence tests.",
+        "evidence_ids": [
+          "paper-choice-result",
+          "paper",
+          "regional-source"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The eight individually identified scalar/categorical findings are genuine source quantities, not a complete admissible finding panel. All original five-target arrays and companion outputs in full_panel remain mandatory. Exact authentic region/session identities, numerical per-region targets and the complete per-finding specification remain unrecovered; no named-region subset, count or category may stand in for them.",
+    "Exact endpoint-specific source cohort, merged-probe/unit UUID inventory, trial masks, retained/excluded region roster and realized original nested folds are not authenticated. Headline study counts cannot substitute for source identity manifests.",
+    "Paper Methods use null-only session correction followed by median paired differences; source includes the observed score in the null median and uses a regional difference of medians. Both must be preserved until the original-result comparison branch is adjudicated.",
+    "The Fig. 7a wheel decoding caption calls the metric balanced accuracy, whereas Methods and pinned decoder use R-squared. Retain the Methods/code wheel R-squared metric and explicitly reconcile the caption inconsistency; do not silently apply a binary score to a continuous target.",
+    "Manuscript versus pinned logistic iteration settings and downstream unit/region eligibility remain unresolved; no convenient prospective recipe may be substituted as the original reproduction.",
+    "Accepted scorer checks supplied real OOF arrays and complete null scalar grids but does not authenticate the data or independently rescore null predictions, which the original settings do not save. Independent source-native real/null execution and verification sufficient to exclude aggregate copying are absent.",
+    "No authenticated common data, cohort, fold, panel, permitted-observation, target-exposure and independent-verifier identities exist for both matched information conditions; no admission_policy hashes or delivery protocols are fabricated.",
+    "No per-finding justified numerical tolerance, deterministic equivalence rule or biological reproduction uncertainty design is frozen. Source p<0.05 and BH q<0.01 are original information-presence calculations, not reproduction acceptance or improvement criteria.",
+    "Reproduction and improvement remain independent first-class outcomes, with separate unresolved paired protocols and cumulative budgets. Printed source values, historical attempts, software controls and operator calibration do not populate either AI outcome."
+  ]
+}
