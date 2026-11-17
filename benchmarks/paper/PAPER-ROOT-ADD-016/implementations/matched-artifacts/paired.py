@@ -15,7 +15,12 @@ import uuid
 HERE = Path(__file__).resolve().parent
 SPEC_SHA = '48dcebc6b2687b07cabf18dec00441f489e002d8c1d45c2958246bca0b40798c'
 FILES_SHA = 'cd334f0f0e83f96f3f1bf00baf741e7b792970585cb11bff69279c188bc376f0'
-SCORER_SHA = 'a622dc6b7780e49b20879fdf5fddb76aac62d6a20c1b93be993b57d0000ee99a'
+SCORER_SHA = '3d40ba1ff118059cf6df88e0a8bd29688486a1b6b57d3cfbcdf597cae04696b9'
+PREDECESSOR_SCORER = {
+    'root': 'repository', 'path': 'components/cardiac-six-model-summary/summary_score.py',
+    'bytes': 9860, 'sha256': 'a622dc6b7780e49b20879fdf5fddb76aac62d6a20c1b93be993b57d0000ee99a',
+}
+CURRENT_SCORER = {**PREDECESSOR_SCORER, 'bytes': 9874, 'sha256': SCORER_SHA}
 
 
 def need(ok, text):
@@ -105,7 +110,10 @@ def write(path, raw, mode=0o600):
 
 class Packet:
     def __init__(self, spec, repository, bundle=HERE, operands=None):
-        self.spec = spec
+        # Keep the frozen packet file intact; new receipts bind the repaired
+        # scorer explicitly, including when using a generated packet fixture.
+        need(spec.get('scorer') in (PREDECESSOR_SCORER, CURRENT_SCORER), 'Exact predecessor or current scorer binding')
+        self.spec = spec = {**spec, 'scorer': dict(CURRENT_SCORER)}
         self.roots = {'repository': unlinked(repository), 'bundle': unlinked(bundle)}
         if operands is not None:
             self.roots['operands'] = unlinked(operands)

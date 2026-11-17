@@ -1,0 +1,83 @@
+{
+  "schema": "cardiac_numeric_current_source_bindings_v1",
+  "benchmark_id": "PAPER-ROOT-ADD-016",
+  "new_benchmark_ids": 0,
+  "change": "Reject RMS division underflow through existing unsupported_derived_numerics policy; preserve six models, five parameter summaries and raw ages 18 through 73.",
+  "canonical_scorer": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py",
+  "files": [
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py",
+      "bytes": 9874,
+      "sha256": "3d40ba1ff118059cf6df88e0a8bd29688486a1b6b57d3cfbcdf597cae04696b9"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/grade.py",
+      "bytes": 4948,
+      "sha256": "ea10fdcc598be139610b6c64e7094a6b62d9159b1c6eda8b3b7140b8f09c7f3a"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/paired.py",
+      "bytes": 16304,
+      "sha256": "cf1a385c36ff1809ff291797d86c5165addbe03fa0da734ce15a9c1dbbdbc337"
+    },
+    {
+      "path": "tests/benchmarks/test_numeric_cardiac.py",
+      "bytes": 9003,
+      "sha256": "5933d52216858a2c9eb366b8916de74cba5632f496d880b545d53fb6061d67c8"
+    }
+  ],
+  "preserved_manifests": [
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/SOURCE_PINS.json",
+      "bytes": 1172,
+      "sha256": "350b42f407ebac5aa9b4b871888ed7d29b094ced7d01e173f9b222c2463e7ce8"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/SOURCE_PINS.json",
+      "bytes": 2889,
+      "sha256": "7db167620df60015e3c0d6e243ae903885257f65f95f24799a455f4262a5b36e"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/PACKET_SPEC.json",
+      "bytes": 12281,
+      "sha256": "48dcebc6b2687b07cabf18dec00441f489e002d8c1d45c2958246bca0b40798c"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/SOURCE_PINS.json",
+      "bytes": 5571,
+      "sha256": "d986d7f17dc5960a681a2a0cc4c744f08fc9ba2b7fc8a12b9a49203fc963d7bc"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/DEPENDENCIES.json",
+      "bytes": 4930,
+      "sha256": "77986cf79eba3d438731a264d696a6b06b5d458a697c3595eff90b9826f89bda"
+    },
+    {
+      "path": "benchmarks/integrity/current-closures/cardiac-six-model-summary/SOURCE_PINS.json",
+      "bytes": 1943,
+      "sha256": "694990ea2c9d46a628b6811dc00ae31df7a8b154a3ffe369413d4e873c1a45f0"
+    }
+  ],
+  "paired_execution_dependency_manifest": "benchmarks/integrity/current-closures/cardiac-paired-execution/DEPENDENCIES.json",
+  "shared_execution_sources": [
+    "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py",
+    "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/paired.py"
+  ],
+  "consumer_bindings": {
+    "portable_adapter": "grade.py authenticates the adjacent repaired helper by exact size and SHA256.",
+    "matched_artifacts": "paired.py authenticates the canonical scorer and replaces only the exact predecessor scorer descriptor with the exact current descriptor before constructing new packet receipts. Historical PACKET_SPEC.json remains unchanged.",
+    "paired_execution": "The active shared DEPENDENCIES.json must bind both repaired canonical scorer and matched-artifact consumer; its owner preserves predecessor descriptor bytes separately."
+  },
+  "validation": {
+    "command": "python3 -I -S -B tests/benchmarks/test_numeric_cardiac.py",
+    "generated_only": true
+  },
+  "source_only": true,
+  "scientific_qualified": false,
+  "historical_qualification_transferred": false,
+  "execution_authority": false,
+  "limitations": [
+    "Conservative supported floating-point policy remains: the existing hypot-then-divide path is refused when its nonzero norm rounds to zero. This does not promise correctly rounded RMS for every extreme vector.",
+    "No authentic data, model fitting, native execution or scientific qualification was performed."
+  ]
+}
