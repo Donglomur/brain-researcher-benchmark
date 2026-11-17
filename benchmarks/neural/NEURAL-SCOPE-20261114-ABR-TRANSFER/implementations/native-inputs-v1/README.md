@@ -123,3 +123,21 @@ Primary release documentation: [target](https://zenodo.org/records/15619100),
 [support](https://zenodo.org/records/17584961),
 [ABRA paper](https://www.nature.com/articles/s41598-026-38045-1), and the
 [target collection paper](https://doi.org/10.1016/j.heares.2025.109328).
+
+## Executed validation
+
+The root-reviewed complete cached-source preparation ran once on 2026-11-17:
+13.212 seconds, 214,089,728 bytes peak child RSS, zero downloads and zero model
+runs. It produced 117 private files containing 271,631,813 logical bytes. A
+separate audit verified every file hash, complete decompression of all 36,440,024
+waveform samples, all 30,256 traces, the 104-animal/936-case target join, all 104
+private wave1 tables and observation-field separation. All three above-range
+threshold annotations remain unresolved. There were no candidate attempts.
+
+[Machine-readable validation receipt](validation.json) records the exact source,
+control, execution, completion and independent-audit hashes. Fifteen generated
+controls cover complete archive-to-bundle transport, binary sample transport and
+complete sample counts, repeated levels, source hash rejection, path safety, missing cases, private
+annotation projection and duplicate wave1 animal aliases. Authentic data and the
+opaque-ID key remain outside the repository. This evidence closes complete
+native preparation; it does not close the scientific admission holds above.
