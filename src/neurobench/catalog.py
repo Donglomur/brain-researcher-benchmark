@@ -99,7 +99,9 @@ def external_links(doc):
     for key, kind in [('paper_identity', 'paper'), ('paper', 'paper'),
                       ('official_code', 'code'), ('code', 'code'), ('data', 'data')]:
         collect(doc.get(key), kind)
-    collect(doc.get('input_assets', {}).get('routes', []), 'source')
+    input_assets = doc.get('input_assets', {})
+    need(isinstance(input_assets, dict), 'Task input_assets must be an object when declared')
+    collect(input_assets.get('routes', []), 'source')
     collect(doc.get('sources'), 'source')
     return [{'kind': kind, 'url': url} for kind, url in sorted(found)]
 
@@ -234,12 +236,19 @@ def discover(root=ROOT):
         classification = row['registration_class']
         need(classification in classes, 'Unknown registration class')
         if classification == 'canonical':
-            need(COMMON.issubset(doc) and doc['schema_version'] == 1 and identity == identifier
+            need(COMMON.issubset(doc) and type(doc['schema_version']) is int
+                 and doc['schema_version'] == 1 and identity == identifier
                  and row['registry'] is None and row['track_source'] == 'canonical_specification',
                  'Canonical task lineage mismatch')
+            need(doc['track'] == track, 'Canonical task track must match its registry track')
         else:
             need(row['registry'] in historical_paths and row['track_source'] == 'registry',
                  'Expansion task lineage mismatch')
+        # Expansion drafts may omit a title, but a declared authoritative title
+        # cannot silently disagree with the registry's display value.
+        if 'title' in doc:
+            need(isinstance(doc['title'], str) and bool(doc['title'].strip())
+                 and row['title'] == doc['title'], 'Task title must match its registry title')
         need(row['declared_specification_status'] == doc.get('status', doc.get('state')),
              'Declared specification status differs from task.json')
         task = task_row(identifier, row['title'], track, row['specification'],
