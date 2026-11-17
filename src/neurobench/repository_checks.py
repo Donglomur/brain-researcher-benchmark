@@ -722,6 +722,11 @@ def prepare(reader):
             need(outcome_module.SCOPE_PATH not in members, "Duplicate paper scope-decision provenance")
             members[outcome_module.SCOPE_PATH] = "registration-provenance"
             expected_pins[outcome_module.SCOPE_PATH] = prior_outcome_rows.scope_pin
+        if prior_outcome_rows.source_declaration_gap_pin is not None:
+            gap_path = outcome_module.SOURCE_DECLARATION_GAP_PATH
+            need(gap_path not in members, "Duplicate paper source-declaration provenance")
+            members[gap_path] = "registration-provenance"
+            expected_pins[gap_path] = prior_outcome_rows.source_declaration_gap_pin
     artifact_files = artifact_members(root, artifacts)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)

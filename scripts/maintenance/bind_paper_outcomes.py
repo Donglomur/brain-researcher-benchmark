@@ -52,6 +52,14 @@ def read_pinned(reader, pin, label):
     return checker.metadata_pin(reader, pin, pin["path"], label)
 
 
+def gap_sidecars_absent(root, row):
+    """An explicit missing-contract route cannot adopt physical substitutes."""
+    if row["id"] in binding.SOURCE_DECLARATION_GAP_IDS:
+        for filename in (*binding.REPRODUCTION_FILES.values(), binding.OUTCOMES):
+            path = checker.checked_path(root, row["task_directory"] + "/" + filename, missing=True)
+            binding.need(not path.exists(), "Source declaration gap cannot contain reproduction or outcomes sidecars")
+
+
 def roster(registry):
     binding.need(type(registry) is dict and registry.get("schema_version") == 1
                  and registry.get("kind") == "neuroscience_benchmark_registry", "Invalid current registry")
@@ -126,6 +134,7 @@ def validate_existing(root=ROOT):
     snapshot_enrollment(registry, registry["paper_outcomes"]["pre_outcomes_registry"])
     contexts = {}
     for row in papers:
+        gap_sidecars_absent(root, row)
         document = read_pin(row["specification"], "Current paper definition")
         contexts[row["id"]] = binding.context(row, document, previous, read_pin)
     # Use the full preserved registry for original/initial registration checks.
@@ -158,6 +167,9 @@ def build_outputs(root=ROOT):
             decision_raw, decision_pin = raw(reader, binding.SCOPE_PATH)
             previous.scope_decisions = binding.scope_decisions(binding.engine().loads_contract(decision_raw.decode("utf-8")))
             previous.scope_pin = decision_pin
+        if (binding.SOURCE_DECLARATION_GAP_IDS & {row["id"] for row in papers}
+                or checker.checked_path(root, binding.SOURCE_DECLARATION_GAP_PATH, missing=True).exists()):
+            binding.bind_source_declaration_gaps(previous, binding.SOURCE_DECLARATION_GAP_PIN, read_pin)
         existing = checker.checked_path(root, binding.SNAPSHOT, missing=True)
         if existing.exists():
             old_snapshot, _ = raw(reader, binding.SNAPSHOT)
@@ -170,6 +182,7 @@ def build_outputs(root=ROOT):
     contexts = {}
     for row in papers:
         identifier, home = row["id"], row["task_directory"]
+        gap_sidecars_absent(root, row)
         prior = previous[identifier]
         improvement_pin = prior["specification_revision"]["improvement_contract"]
         improvement = read_pin(improvement_pin, "Improvement contract")
@@ -198,6 +211,27 @@ def build_outputs(root=ROOT):
                 return binding.engine().loads_contract(archived_raw.decode("utf-8"))
             return read_pin(member_pin, label)
         scopes = previous.scope_decisions
+        if identifier in binding.SOURCE_DECLARATION_GAP_IDS:
+            # Explicit, reviewed documentary absence is distinct from a normal
+            # bundle or a scope mismatch. No missing contract is manufactured.
+            module = binding.declaration_gap_module()
+            record_pin = previous.source_declaration_gap_pin
+            binding.need(record_pin is not None, "Source declaration gap record is required before adoption")
+            handle = module.authenticate(record_pin, prior, archive_pin, planned_read,
+                                         improvement_contract=improvement)
+            captured = handle.snapshot()
+            projected = module.project(binding.project_task(captured["previous_task"], prior,
+                                                            captured["improvement_contract"]), handle)
+            new_binding = {"schema_version": binding.VERSION, "previous_specification": archive_pin,
+                           "source_declaration_gap": copy.deepcopy(record_pin)}
+            current_body = binding.encode(projected)
+            current_pin = binding.pin(home + "/task.json", current_body)
+            updated_rows[identifier]["specification"] = current_pin
+            updated_rows[identifier]["paper_outcomes"] = new_binding
+            outputs[archive_pin["path"]] = archived_raw
+            outputs[current_pin["path"]] = current_body
+            binding.context(updated_rows[identifier], projected, previous, planned_read, improvement_contract=improvement)
+            continue
         outcomes_raw, outcomes_pin = raw(reader, home + "/" + binding.OUTCOMES)
         outcomes = binding.engine().loads_contract(outcomes_raw.decode("utf-8"))
         binding.need(type(outcomes) is dict, "Supplied paper outcomes must be an object")
@@ -264,6 +298,8 @@ def build_outputs(root=ROOT):
                                  "registered_count": len(papers), "pre_outcomes_registry": snapshot_pin}
     if previous.scope_pin is not None:
         updated["paper_outcomes"]["scope_decisions"] = previous.scope_pin
+    if previous.source_declaration_gap_pin is not None:
+        updated["paper_outcomes"]["source_declaration_gaps"] = previous.source_declaration_gap_pin
     outputs[binding.REGISTRY] = binding.encode(updated)
     for relative in outputs:
         checker.checked_path(root, relative, missing=True)

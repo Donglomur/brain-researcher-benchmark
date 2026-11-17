@@ -187,7 +187,9 @@ class PrimaryScopeCatalogTests(unittest.TestCase):
         discovery_reader = next(iter(readers.values()))
         paths = [path for _, path in observed]
         self.assertEqual(paths.count(catalog.REGISTRY), 2)
-        self.assertEqual(paths.count(binding.SCOPE_PATH), 2)
+        # Validation authenticates the original roster to rule out omitted
+        # declaration-gap tasks; its scope reads remain fresh and cumulative.
+        self.assertEqual(paths.count(binding.SCOPE_PATH), 3)
         with patch.object(catalog, 'READ_LIMIT', discovery_reader.bytes - 1):
             with self.assertRaisesRegex(ValueError, 'metadata read limit exceeded'):
                 catalog.discover(self.root)
@@ -196,7 +198,8 @@ class PrimaryScopeCatalogTests(unittest.TestCase):
             observed.clear()
             with patch.object(catalog.Reader, 'read', observe):
                 catalog.validate(discovered, self.root)
-            self.assertEqual([path for _, path in observed], [catalog.REGISTRY, binding.SCOPE_PATH])
+            self.assertEqual([path for _, path in observed],
+                             [catalog.REGISTRY, binding.SNAPSHOT, binding.SCOPE_PATH, binding.SCOPE_PATH])
             reader = observed[0][0]
             self.assertTrue(all(current is reader for current, _ in observed))
             self.assertIsNot(reader, discovery_reader)

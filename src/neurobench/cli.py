@@ -429,6 +429,8 @@ def paper_contract(task_id, root=ROOT, *, outcome='improvement'):
             raise ValueError('No current paper outcome contracts are bound for ' + task_id)
         pin = binding.get('reproduction_contract')
         if pin is None:
+            if binding.get('availability') == 'source_declaration_unavailable':
+                raise ValueError('No source-grounded reproduction declaration is bound for ' + task_id)
             raise ValueError('No reproduction proposal is bound for inspection: ' + task_id)
     else:
         binding = task.get('paper_outcomes')
@@ -460,6 +462,9 @@ def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
     unavailable = binding.get('availability') == 'unavailable'
     if unavailable and not allow_unavailable:
         raise ValueError('Primary paper outcomes are unavailable: ' + binding['reason'])
+    gap = binding.get('availability') == 'source_declaration_unavailable'
+    if gap and not allow_unavailable:
+        raise ValueError('Paired paper outcome admission is unavailable without a source-grounded reproduction declaration: ' + task_id)
     outcome_binding = builder.companion_module('paper_outcomes_binding')
     parser = builder.improvement_module().loads_contract
     documents = {}
@@ -471,6 +476,8 @@ def _paper_outcome_documents(task_id, root, *, allow_unavailable=False):
             continue
         raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
         documents[name] = parser(raw.decode('utf-8'))
+    if gap:
+        return task, binding, documents, None
     engine = outcome_binding.engine(documents['reproduction'])
     if unavailable:
         return task, binding, documents, engine
@@ -484,12 +491,14 @@ def paper_outcomes(task_id, root=ROOT):
     """Inspect one task's four declared cells without supplying or inferring runs."""
     task, binding, documents, engine = _paper_outcome_documents(task_id, root, allow_unavailable=True)
     summary = ({'task_id': task_id, 'task_count': 1, **binding}
-               if binding.get('availability') == 'unavailable' else
+               if binding.get('availability') in ('unavailable', 'source_declaration_unavailable') else
                engine.summary(documents['outcomes'], documents['reproduction'], documents['improvement']))
     if 'primary_scope_correction' in binding:
         summary['primary_scope_correction'] = binding['primary_scope_correction']
     pins = {key: binding[key] for key in
             ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')}
+    if binding.get('availability') == 'source_declaration_unavailable':
+        pins.update(source_declaration_gap=binding['source_declaration_gap'], original_task=binding['original_task'])
     if binding.get('primary_policy_revision') is not None:
         for field in public_catalog_module().PRIMARY_SUCCESSOR_PUBLIC_FIELDS:
             summary[field] = binding[field]

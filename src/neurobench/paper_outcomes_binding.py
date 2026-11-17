@@ -28,6 +28,14 @@ OUTCOMES = "outcomes.v1.json"
 REGISTRY = "benchmarks/registry.json"
 PRIMARY_SUCCESSOR_TASK = "PAPER-SMC-RNN-2024"
 PRIMARY_SUCCESSOR_FIELDS = frozenset(("primary_policy_revision", "primary_improvement_contract"))
+SOURCE_DECLARATION_GAP_IDS = frozenset(("PAPER-paper-method-011", "PAPER-paper-method-replacement-009"))
+SOURCE_DECLARATION_GAP_PATH = "docs/provenance/paper-outcome-source-declaration-gaps.v1.json"
+# Initial adoption trusts this independently reviewed record, never a self-pin
+# derived from whichever valid-shaped document happens to occupy the path.
+SOURCE_DECLARATION_GAP_PIN = {
+    "path": SOURCE_DECLARATION_GAP_PATH, "bytes": 27831,
+    "sha256": "5e990248b79841bba0d5aa6099c71d357d29e6ba61f70c75a0f2cf63acbdc53a",
+}
 CONDITIONS = ("paper_data", "paper_data_author_code")
 SCOPE_PATH = "docs/provenance/paper-outcome-scope-decisions.v1.json"
 SCOPE_VERSION = "paper-outcome-scope-decisions/v1"
@@ -150,6 +158,55 @@ def has_primary_successor(row):
         require_pin(declared[field], home + "/" + filename, "SMC " + field)
         need(0 < declared[field]["bytes"] <= 65536, "SMC successor metadata must be bounded")
     return True
+
+
+def declaration_gap_module():
+    """Load only the fixed reviewed metadata authenticator, never task code."""
+    path = Path(__file__).resolve().with_name("paper_declaration_gaps.py")
+    name = "_neurobench_declaration_gaps_" + hashlib.sha256(str(path).encode()).hexdigest()[:16]
+    if name not in sys.modules:
+        need(path.is_file() and not path.is_symlink() and path.stat().st_size <= 1024 * 1024,
+             "Expected bounded source declaration framework source")
+        spec = importlib.util.spec_from_file_location(name, path)
+        need(spec is not None, "Cannot load source declaration framework source")
+        module = importlib.util.module_from_spec(spec)
+        exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+        sys.modules[name] = module
+    return sys.modules[name]
+
+
+def has_source_declaration_gap(row):
+    """Validate the explicit two-task route; source-only rows stay unbound."""
+    declared = row.get("paper_outcomes")
+    if declared is None:
+        return False
+    need(type(declared) is dict, "Paper outcome binding must be an object")
+    if row.get("id") not in SOURCE_DECLARATION_GAP_IDS:
+        need("source_declaration_gap" not in declared,
+             "Source declaration gap selector is restricted to the reviewed two tasks")
+        return False
+    need(set(declared) == {"schema_version", "previous_specification", "source_declaration_gap"}
+         and declared["schema_version"] == VERSION,
+         "Adopted source declaration gap requires its exact missing-contract route")
+    declaration_gap_module().require_pin(declared["source_declaration_gap"], SOURCE_DECLARATION_GAP_PATH,
+        "source declaration record", maximum=declaration_gap_module().MAX_RECORD_BYTES)
+    return True
+
+
+def bind_source_declaration_gaps(previous, record_pin, read_pin):
+    """Authenticate this invocation's fixed record and applicable original IDs."""
+    required = SOURCE_DECLARATION_GAP_IDS & {identifier for identifier, row in previous.items()
+                                           if row.get("track") == "paper"}
+    need(bool(required), "Source declaration record must apply to original registered paper tasks")
+    module = declaration_gap_module()
+    module.require_pin(record_pin, SOURCE_DECLARATION_GAP_PATH, "source declaration record",
+                       maximum=module.MAX_RECORD_BYTES)
+    document = module.validate_record(read_pin(copy.deepcopy(record_pin), "Paper source declaration gaps"))
+    scopes = previous.scope_decisions
+    active = (set(scopes["entries"]) | set(scopes.get("same_primary_corrections", {}))) if scopes else set()
+    need(not required & active, "Source declaration gaps cannot combine active scope corrections")
+    previous.source_declaration_gaps = document
+    previous.source_declaration_gap_pin = copy.deepcopy(record_pin)
 
 
 def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1",
@@ -295,6 +352,8 @@ class PreviousRows(dict):
     """An authenticated prior roster with separately pinned scope decisions."""
     scope_decisions = None
     scope_pin = None
+    source_declaration_gaps = None
+    source_declaration_gap_pin = None
 
 
 def read_reproduction(member_pin, home, read_pin):
@@ -383,9 +442,14 @@ def coverage(registry, read_pin):
     meta = registry.get("paper_outcomes")
     if meta is None:
         need(not any("paper_outcomes" in row for row in rows), "Paper outcome rows require coverage metadata")
+        histories = registry.get("historical_registries", [])
+        need(not (type(histories) is list and any(type(item) is dict and item.get("path") == SNAPSHOT
+                                                for item in histories)),
+             "Enrolled pre-outcomes history requires current paper outcome coverage")
         return None
     base_keys = {"schema_version", "coverage_required", "registered_count", "pre_outcomes_registry"}
-    need(type(meta) is dict and set(meta) in (base_keys, base_keys | {"scope_decisions"})
+    need(type(meta) is dict and base_keys <= set(meta)
+         and set(meta) <= base_keys | {"scope_decisions", "source_declaration_gaps"}
          and meta["schema_version"] == VERSION and meta["coverage_required"] is True
          and type(meta["registered_count"]) is int,
          "Invalid paper outcome coverage metadata")
@@ -414,12 +478,19 @@ def coverage(registry, read_pin):
         referenced = (set(old.scope_decisions["entries"]) | set(old.scope_decisions.get("same_primary_corrections", {}))
                       | set(old.scope_decisions.get("source_gap_confirmations", {})))
         need(bool(referenced & old_paper), "Scope decisions must apply to registered paper tasks")
+    required_gaps = SOURCE_DECLARATION_GAP_IDS & old_paper
+    need(not required_gaps or "source_declaration_gaps" in meta,
+         "Adopted source declaration gaps require their exact public record")
+    if "source_declaration_gaps" in meta:
+        bind_source_declaration_gaps(old, meta["source_declaration_gaps"], read_pin)
     need(all("paper_outcomes" in row for row in papers)
          and all("paper_outcomes" not in row for row in rows if row.get("track") != "paper"),
          "Paper outcome binding requires exactly every registered paper task")
     for row in papers:
         prior = old[row["id"]]
         need("paper_outcomes" not in prior, "Pre-outcomes row must precede outcome adoption")
+        need(has_source_declaration_gap(row) == (row["id"] in required_gaps),
+             "Original source declaration gap task cannot omit its adopted route")
         successor_selected = has_primary_successor(row)
         for field in PRESERVED_ROW_FIELDS:
             if field == "title" and successor_selected:
@@ -502,6 +573,12 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     identifier, home = row["id"], row["task_directory"]
     need(home == "benchmarks/paper/" + identifier, "Paper outcome task home mismatch")
     binding = row.get("paper_outcomes")
+    gap_selected = has_source_declaration_gap(row)
+    if identifier in SOURCE_DECLARATION_GAP_IDS:
+        need(gap_selected, "Original source declaration gap task cannot omit its adopted route")
+    if gap_selected:
+        return source_declaration_gap_context(row, document, previous_rows, read_pin,
+                                              improvement_contract=improvement_contract)
     base_keys = {"schema_version", "previous_specification", "outcomes"}
     successor_selected = has_primary_successor(row)
     allowed_keys = ((base_keys | {"reproduction_contract"} | PRIMARY_SUCCESSOR_FIELDS,)
@@ -591,6 +668,41 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
             "members": members}
 
 
+def source_declaration_gap_context(row, document, previous_rows, read_pin, *, improvement_contract=None):
+    """Authenticate missing declarations without disabling retained policy."""
+    declared, identifier = row["paper_outcomes"], row["id"]
+    prior, home = previous_rows[identifier], row["task_directory"]
+    record_pin = getattr(previous_rows, "source_declaration_gap_pin", None)
+    need(record_pin is not None and encode(declared["source_declaration_gap"]) == encode(record_pin),
+         "Source declaration row and global record pins disagree")
+    scopes = previous_rows.scope_decisions
+    need(not scopes or identifier not in set(scopes["entries"]) | set(scopes.get("same_primary_corrections", {})),
+         "Source declaration gaps cannot combine active scope corrections")
+    module = declaration_gap_module()
+    handle = module.authenticate(record_pin, prior, declared["previous_specification"], read_pin,
+                                 improvement_contract=improvement_contract)
+    captured = handle.snapshot()
+    previous_document, improvement = captured["previous_task"], captured["improvement_contract"]
+    errors = engine().improvement.contract_validate(improvement, task_id=identifier)
+    need(not errors, "Invalid retained source declaration improvement: " + "; ".join(errors))
+    projected = module.project(project_task(previous_document, prior, improvement), handle)
+    expected = pin(home + "/task.json", encode(projected))
+    need(encode(document) == encode(projected) and encode(row.get("specification")) == encode(expected),
+         "Current paper definition differs from the deterministic source declaration projection")
+    improvement_pin = {key: captured["entry"]["retained_improvement"][key] for key in ("path", "bytes", "sha256")}
+    summary = module.public_summary(handle)
+    return {"previous_row": prior, "previous_document": previous_document,
+            "previous_pin": captured["previous_specification"],
+            "improvement_contract": improvement, "improvement_contract_pin": improvement_pin,
+            "retained_improvement_contract": improvement, "retained_improvement_contract_pin": improvement_pin,
+            "primary_policy_revision": None, "primary_policy_provenance": None,
+            "candidate_interface": None, "author_reproduction_routes": None,
+            "reproduction_contract": None, "outcomes": None, "summary": summary,
+            "availability": "source_declaration_unavailable", "source_declaration_gap": summary,
+            "primary_scope_correction": None, "scope_decision_pin": getattr(previous_rows, "scope_pin", None),
+            "members": {captured["previous_specification"]["path"]}}
+
+
 def public_primary_scope_correction(entry, scope_pin, task_id):
     """Project an authenticated scope entry without adding scientific claims."""
     result = {
@@ -611,6 +723,23 @@ def public_primary_scope_correction(entry, scope_pin, task_id):
 def public_summary(row, bound):
     """Expose declarations without treating metadata consistency as performance."""
     binding = row["paper_outcomes"]
+    if bound["availability"] == "source_declaration_unavailable":
+        gap = bound["source_declaration_gap"]
+        return {"schema_version": VERSION, "objective": OBJECTIVE,
+                "availability": gap["availability"],
+                "previous_specification": copy.deepcopy(gap["previous_specification"]),
+                "original_task": copy.deepcopy(gap["original_task"]),
+                "reproduction_contract": None,
+                "improvement_contract": copy.deepcopy(bound["improvement_contract_pin"]), "outcomes": None,
+                "source_declaration_gap": copy.deepcopy(gap["record"]),
+                "reason_code": gap["reason_code"], "reason": gap["reason"], "source_relation": gap["source_relation"],
+                "remaining_source_limits": copy.deepcopy(gap["remaining_source_limits"]),
+                "reproduction_eligibility": None, "reproduction_blocking_issues": [],
+                "scientific_ineligibility_inferred": False,
+                "improvement_disposition": gap["improvement_disposition"],
+                "improvement_unavailable_by_reproduction_dependency": False,
+                "paired_outcome_admission": "unavailable", "cells": copy.deepcopy(gap["cells"]),
+                "scientific_outcomes": copy.deepcopy(gap["scientific_outcomes"]), "assurance": gap["assurance"]}
     reproduction = bound["reproduction_contract"]
     result = {"schema_version": VERSION, "objective": OBJECTIVE,
             "availability": bound["availability"],

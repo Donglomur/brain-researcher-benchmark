@@ -21,8 +21,8 @@ which never selects a validator or changes an inspected contract. Neither an
 author baseline nor a historical reconstruction is promoted to
 a newly qualified AI reproduction.
 
-The registry separately pins the current definition, the two contracts and the
-outcome descriptor. The exact immediately previous definition is retained at
+For normal paired declarations, the registry separately pins the current
+definition, the two contracts and the outcome descriptor. The exact immediately previous definition is retained at
 `historical/task.pre-outcomes.v1.json`. The complete pre-outcomes registry is
 retained at `docs/provenance/registrations/paper-pre-outcomes-v1.json`. Existing
 pre-improvement definitions and initial-registration snapshots remain immutable.
@@ -30,8 +30,9 @@ Original lineage checks use the authenticated predecessor row and definition;
 current bytes are never substituted into old histories.
 
 Run `python -I -S -B scripts/maintenance/bind_paper_outcomes.py` to inspect the
-deterministic metadata plan. Scientific sidecars must already exist and pass
-validation. `--check` requires the planned bytes to be current; `--write` applies
+deterministic metadata plan. Required scientific sidecars must already exist and
+pass validation; the explicit source-declaration-gap route below has no such
+sidecars. `--check` requires the planned bytes to be current; `--write` applies
 the complete validated plan. The binder preserves scientific contracts, refuses
 stale pins and conflicting archives, and verifies inputs again before writing.
 It does not run task implementations, acquire data or generate scientific
@@ -72,10 +73,41 @@ Source-gap confirmations use the separate passive `source_gap_confirmations`
 map with `projection_action: "none"`. They cannot also appear in an active
 correction map, and do not change a task's accepted projection or eligibility.
 
+Two tasks, `PAPER-paper-method-011` and
+`PAPER-paper-method-replacement-009`, retain compatible original scope and an
+independent improvement contract but lack an honest complete reproduction
+declaration. Their distinct `source_declaration_unavailable` route pins
+`docs/provenance/paper-outcome-source-declaration-gaps.v1.json` globally and in
+each task's outcome binding. Initial adoption requires the exact independently
+reviewed raw record; it cannot replace that authority by hashing a different
+valid-shaped file. Later checks authenticate the explicit registered pins and
+the exact original task, improvement contract, source paper and scientific
+anchors. This route does not classify the task as a scope mismatch or infer
+scientific ineligibility.
+
+These two task definitions keep reproduction as an independent goal while their
+reproduction and paired-protocol references are null. No reproduction or outcomes
+sidecar is created. The binder refuses physical sidecars that conflict with this
+absence, and the repository namespace gate rejects unowned extra metadata. The
+unchanged improvement contract remains independently inspectable and keeps its
+own comparison and eligibility rules. All four scientific cells remain unknown;
+paired receipt admission is unavailable until honest source declarations and
+matched access protocols are separately reviewed and adopted.
+
+Once paper-outcomes coverage is adopted, the immutable original roster determines
+which tasks require this gap route. Removing a current selector or catalog row
+cannot hide that requirement. Source-only registries remain unbound. Every new
+validation authenticates the record and predecessor bytes again; previously
+loaded catalogs do not authorize changed files. External documentary assessment
+locators are retained provenance and are never opened as runtime inputs.
+
 `paper-outcomes TASK_ID` exposes both outcomes and their access conditions.
 `paper-contract TASK_ID --outcome reproduction` exposes an adopted reproduction
 contract or proposal. The default improvement contract route remains compatible
 for normal bundles. `check-paper-outcome TASK_ID --receipt FILE` validates receipt
 metadata through the selected versioned validator; it does not qualify scientific
 truth or execute an evaluator. Unavailable primary bundles refuse this route and
-the primary improvement comparison route.
+the primary improvement comparison route. Source-declaration gaps instead retain
+independent improvement inspection and comparison: `paper-outcomes` shows the
+gap with a null descriptor, reproduction inspection refuses the absent contract,
+and paired receipt checking refuses before reading the supplied receipt.
