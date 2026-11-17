@@ -1,0 +1,75 @@
+{
+  "schema": "figure7-simulation-counts-source/v1",
+  "task_id": "PAPER-paper-method-add-008",
+  "paper": "https://doi.org/10.7554/eLife.110588.3",
+  "source_repository": "https://github.com/SpikeInterface/sorting_components_benchmark_paper",
+  "source_revision": "d93ca4e101c822dfe12b99cc59bdb9d0ca1045b1",
+  "sources": [
+    {
+      "path": "README.md",
+      "bytes": 2046,
+      "sha256": "b745bb528394044482984126728f35dfbc74c4e9aff3cca8af29d8cbb80dd8ca",
+      "git_blob_sha1": "74a461219fd60eb2e6ca5c89e84b432d16818d7b",
+      "supports": "Figure 7 script/notebook route; README still links reviewed preprint v1"
+    },
+    {
+      "path": "notebooks/sorters_simulation.py",
+      "bytes": 4890,
+      "sha256": "46244d18a77d14e59c5a737362ea4ed464fa9cc8833842b0cac21657801adcc2",
+      "git_blob_sha1": "9e9c20058c6ebef2911ae12740fb80b1381c7994",
+      "supports": "Original five seeds, static/drifting pairing, four sorters, complete main dataset, preprocessing and motion-conditional correction"
+    },
+    {
+      "path": "notebooks/dataset.py",
+      "bytes": 8949,
+      "sha256": "7700d5aa59a5064d23d0bb9f34c07ad1a600ab51e8976e400bc9b1ab72eadff0",
+      "git_blob_sha1": "eb5eb954d9341f389344680f8446e709a38efbb9",
+      "supports": "Shared sorting for paired recordings, 500-unit/1800-second main dataset, source generator parameters; library defaults remain unpinned"
+    },
+    {
+      "path": "notebooks/sorters_simulation.ipynb",
+      "bytes": 1029725,
+      "sha256": "c984c0612e8f93868d44387cd79564ca321ab11ac390113a268680ded51fa174",
+      "git_blob_sha1": "912e9886a1e0a9c8681dcaa39f2790e9d01dd8ab",
+      "supports": "Cell 2 records 10 datasets/40 computed cases; cell 5 requests separate static/drifting SNR-binned accuracy, grouped ordered accuracy, runtimes and four companion counts"
+    }
+  ],
+  "metric_source": {
+    "url": "https://journal-symfony7.elifesciences.org/articles/110588/peer-reviews",
+    "locator": "Author response to Reviewer 2 item 3",
+    "inherited_evidence": "Current improvement.v1.json metric_correction and preserved whole-paper source audit; not newly fetched in this component",
+    "formula": "TPij / (Ni + Nj - TPij)",
+    "implementation_identity": "Ni = TP + FN; Nj = TP + FP; therefore denominator = TP + FN + FP"
+  },
+  "archive_metadata": {
+    "url": "https://zenodo.org/api/records/20407862",
+    "sha256": "304dd16c7c48cd6384f98a4848d7d56059c1001070dc924adeb6902468f67e36",
+    "bytes": 4636,
+    "archive_name": "sorting_components_benchmark_paper_v2.zip",
+    "archive_bytes": 3430815,
+    "archive_source_reported_md5": "0b0a56dcfb2643c0199000b4db659999",
+    "archive_downloaded": false
+  },
+  "implemented": [
+    "Corrected accuracy arithmetic from evaluator-owned count triples",
+    "All five original seeds, both motion conditions, four source sorters and 500 ground-truth identities per seed",
+    "Paired original ground-truth and recording hash binding",
+    "Preservation of native companion unit counts and runtime",
+    "Optional complete candidate panel with unitwise paired differences against every source method"
+  ],
+  "engineering_conventions_not_claimed_as_author_methods": [
+    "Strict owner/export JSON schemas and canonical identity digests",
+    "Lossless native unit IDs represented as strings",
+    "Undefined zero-denominator accuracy retained as null pending native convention recovery",
+    "Unitwise candidate-minus-source differences without an aggregation or superiority decision"
+  ],
+  "not_implemented_or_qualified": [
+    "Original trace generation or byte-identity verification",
+    "Native spike matching or score-count export adapter",
+    "Publication-compatible SpikeInterface/sorter/generator environment and effective parameters",
+    "Original SNR bins, plot weighting and ordered-curve aggregation",
+    "Exact published numerical reference arrays and author replay",
+    "Reproduction tolerance, improvement effect, uncertainty and decision rules",
+    "Paired paper/data versus paper/data/author-code participant delivery"
+  ]
+}
