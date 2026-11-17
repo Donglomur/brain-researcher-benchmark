@@ -16,6 +16,7 @@ Each record keeps the scope of its original report. It is not current runtime qu
 
 - [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): EEG and permitted nuisance-feature programme: two exposed development people and all 400 trials; not direct or viewer interpretation.
 - [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): EEG and permitted nuisance-feature programme: two exposed development people and all 400 trials; not direct or viewer interpretation.
+- [Native operator control](../../../docs/status/operator-controls-20261116.json): Authenticated operator input inspection/preparation and existing finished-file grading for the previously exposed two-person EEG and sleep development panels. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.
 - [Authentic input materialization](implementations/complete-direct-condition-v1/EVIDENCE.json): Complete waveform delivery independently compared with pinned raw samples; no model execution or scoring.
 - [Authentic viewer rendering](implementations/visual-viewer-v1/EVIDENCE.json): Authentic packet authentication and selected visual rendering; no evaluated viewer-model episode.
 
