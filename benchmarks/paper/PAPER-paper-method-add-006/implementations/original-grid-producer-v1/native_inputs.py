@@ -115,8 +115,8 @@ def load_packet(data, case):
             version = np.lib.format.read_magic(stream)
             need(version in ((1, 0), (2, 0)), "supported numeric NPY version required")
             shape, fortran, dtype = np.lib.format._read_array_header(stream, version, max_header_size=16384)
-            need(not fortran and dtype.kind in "biuf" and not dtype.hasobject,
-                 "plain C-order numeric arrays required")
+            need(type(fortran) is bool and dtype.kind in "biuf" and not dtype.hasobject,
+                 "plain numeric arrays with a boolean C/F storage-order flag required")
             need(all(type(v) is int and v >= 0 for v in shape), "array dimensions required")
             nbytes = math.prod(shape) * dtype.itemsize
             need(nbytes <= 128 * 1024**2 and stream.tell() + nbytes == len(raw),
@@ -129,6 +129,9 @@ def load_packet(data, case):
         need(shapes["z"] == (n, 7) and shapes["t"] == shapes["trial"] == (n,)
              and shapes["unit_ids"] == (shapes["x"][1],) and len(shapes["strict_columns"]) == 1,
              "native member header dimensions differ")
+        # Original advanced column selection followed by astype(order='K') can
+        # legitimately produce Fortran storage. Let NumPy decode each recorded
+        # C/F flag; never reinterpret its flat bytes with a default-C reshape.
         arrays = {key: np.load(io.BytesIO(raw), allow_pickle=False) for key, raw in raw_members.items()}
     z = K.latents(arrays["z"])
     x = K.counts_array(arrays["x"], len(z))

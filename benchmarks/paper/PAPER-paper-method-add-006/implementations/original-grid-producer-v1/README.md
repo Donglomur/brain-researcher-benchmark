@@ -36,6 +36,12 @@ IDs. The old design's `units`, `unit_ids` and `strict_columns` describe a separa
 prospective training filter and **do not select native units**. Native units come
 from the complete packet arrays and the source's own rate mask.
 
+Original NumPy preparation can produce either C-order or Fortran-order numeric
+arrays. Both layouts are admitted after the same header, dtype, shape, payload
+length and byte-limit checks. NumPy decodes the recorded order; the loader never
+reshapes raw bytes with an assumed default order. Native row/unit order and the
+original packet hashes remain unchanged.
+
 The optional frozen `TRIAL_COVERAGE.json` receipt binds all 128 complete original
 trial sets. Its SHA256 is
 `82cf82f172ebbe00908517f6bef429f30eb0ec3904f225da9e761aa3282f473d`.
