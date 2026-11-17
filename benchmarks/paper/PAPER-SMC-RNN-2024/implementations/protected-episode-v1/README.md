@@ -84,6 +84,17 @@ selection remain allowed. Original **test** targets remain operator-only here;
 their historical public exposure is unchanged. Programs producing final test
 predictions must not invoke source evaluation with operator test targets.
 
+Public program, declaration and execution-contract copies explicitly receive
+mode `0444` on their exclusively created file descriptors, including under
+`umask 077`. Private publications and directories retain their existing modes.
+The supplied material files must separately satisfy the retained transport's
+UID/GID 65534 readability check; this adapter does not change their permissions.
+Generated controls set only their authenticated `/materials` fixture members
+readable. The original packet and exporter remain unchanged. The retained
+Provider's own request/policy publisher still needs a separate permissions
+correction and qualification; this source repair does not establish native
+runtime readiness.
+
 ## Operator commands
 
 Let `ENTRY` be this directory's `episode.py`, `PAIR` the exact validated

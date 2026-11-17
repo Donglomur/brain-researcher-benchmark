@@ -103,6 +103,9 @@ def publish(value, raw, mode=0o400):
     with os.fdopen(fd, 'wb') as stream:
         stream.write(raw)
         stream.flush()
+        if mode == 0o444:
+            # These exact public mount files must remain readable under umask077.
+            os.fchmod(stream.fileno(), 0o444)
         os.fsync(stream.fileno())
     return pin(raw)
 
