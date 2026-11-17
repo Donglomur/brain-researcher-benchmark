@@ -17,10 +17,13 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source-bytes',type=int,required=True)
     parser.add_argument('--source-sha256',required=True)
+    parser.add_argument('--current-source-binding',help='Explicit absolute current inspection binding; inspect only')
     parser.add_argument('command',choices=('inspect','prepare','run','reference','candidate','collect','grade','report'))
     parser.add_argument('--program');parser.add_argument('--output');parser.add_argument('--review')
     parser.add_argument('--deployment');parser.add_argument('--other-reserve-bytes',type=int)
     a=parser.parse_args(argv)
+    if a.current_source_binding is not None and a.command!='inspect':
+        raise ValueError('Current source binding is inspection only; no prepare/run authority')
     if a.command in ('reference','candidate','collect','grade','report'):
         raise ValueError('This method selects a product from the same live complete MotorMINT invocation; it is not an independently executable scientific stage. Use run.')
     root=os.path.dirname(os.path.abspath(__file__))
@@ -90,9 +93,41 @@ def main(argv=None):
         limits=review['central_limits'];need(set(limits)==set(counters) and all(type(x) is int and x>0 for x in limits.values()),'finite original source ledger')
         need(all(counters[k]<=limits[k] for k in counters),'initial review capture in same prepaid ledger');tick()
     need(0<a.source_bytes<=1048576 and len(a.source_sha256)==64,'bounded selected package manifest')
-    body=capture(root+'/SOURCE_MANIFEST.json',{'bytes':a.source_bytes,'sha256':a.source_sha256})
+    current_binding=None
+    selected={'bytes':a.source_bytes,'sha256':a.source_sha256}
+    if a.current_source_binding is not None:
+        binding_body=capture(a.current_source_binding,selected)
+        charge(metadata_bytes=65*len(binding_body));binding=parse(binding_body)
+        need(set(binding)=={'schema','task','historical_manifest','overrides'}
+             and binding['schema']=='motormint_current_inspection_binding_v1'
+             and binding['task']=='PAPER-paper-method-011','explicit current inspection identity')
+        previous=binding['historical_manifest']
+        need(type(previous) is dict and set(previous)=={'path','bytes','sha256'}
+             and previous['path']=='SOURCE_MANIFEST.json','fixed historical source manifest')
+        selected={k:previous[k] for k in ('bytes','sha256')}
+        current_binding=(binding,binding_body)
+    body=capture(root+'/SOURCE_MANIFEST.json',selected)
     charge(metadata_bytes=65*len(body));manifest=parse(body)
     need(type(manifest['files']) is dict and 1<=len(manifest['files'])<=512,'complete bounded portable closure')
+    if current_binding is not None:
+        overrides=current_binding[0]['overrides']
+        allowed={'run.py','central_sources.py','runtime/mintbench/scoring.py'}
+        need(type(overrides) is list and len(overrides)==len(allowed)
+             and all(type(row) is dict and set(row)=={'path','historical','current'} for row in overrides)
+             and {row['path'] for row in overrides}==allowed,'exact current inspection replacement members')
+        manifest=dict(manifest,files=dict(manifest['files']),runtime_files=dict(manifest['runtime_files']))
+        for row in overrides:
+            name=row['path']
+            need(row['historical']==manifest['files'][name],'historical replacement identity')
+            p=row['current']
+            need(type(p) is dict and set(p)=={'bytes','sha256'} and type(p['bytes']) is int
+                 and 0<p['bytes']<=1048576 and type(p['sha256']) is str and len(p['sha256'])==64,
+                 'bounded current replacement identity')
+            manifest['files'][name]=p
+            if name.startswith('runtime/'):
+                key=name[len('runtime/'):]
+                need(manifest['runtime_files'][key]==row['historical'],'historical runtime replacement join')
+                manifest['runtime_files'][key]=p
     deferred={r['path'] for r in manifest['deferred_dependencies']}
     files={}
     for name,p in manifest['files'].items():
@@ -122,10 +157,17 @@ def main(argv=None):
     # subsequent lazy source execution cannot escape the actual Meter.
     for name in central:load(name)
     common=loaded['central_common'];meter=common.Meter(limits,clock);meter.charge(**counters)
-    sources=loaded['central_sources'].Sources(root,manifest,body,files,meter)
+    sources=loaded['central_sources'].Sources(root,manifest,body,files,meter,current_binding=current_binding)
     failure=None
     if a.command=='inspect':
-        result=sources.inspect();result['canonical_source_routes']=loaded['central_routes'].source_preflight(sources)
+        result=sources.inspect()
+        if current_binding is None:
+            result['canonical_source_routes']=loaded['central_routes'].source_preflight(sources)
+        else:
+            result['canonical_source_routes']={
+                'status':'not_selected_for_current_inspection',
+                'reason':'Historical synthetic run-route preflight does not select this inspection-only binding',
+                'qualification_or_runtime_admission':False,'deferred_bodies_read':False}
         result['source_meter_after_preflights']=meter.snapshot()
     else:
         failure=common.Meter(review['failure_limits'],review['clock'])
