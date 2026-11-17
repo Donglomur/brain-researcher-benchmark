@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Independently measured held-out response counts divided by the actual bin exposure and eligible recorded-unit denominator, in spikes/s/source-unit on a frozen region/depth schema. A CSD trajectory is a separately declared outcome with separate units, never pooled with spike-rate error.
 
-**Source delivery:** target\_mismatch. The registration proposes held-animal region/depth spike-rate or CSD trajectories, but the only published implementation member is a manifest for nominal released-event-rate prediction. Its packet, preparation and numerical scorer are absent from this checkout. The declared26-animal/1010-query scope cannot authenticate biological spike rates or the intended shared anatomical target; retain it as a historical alternative until the bridge is supplied.
+**Source delivery:** target\_mismatch. The complete MGN source metadata now authenticates deposited spike-event identity,26 source files,2,053 clusters and literal contact anatomy. The retained runtime still declares a different all-cluster nominal-rate target. Physically justified observation exposure, anatomical denominator, exact prediction cases and executable current-target scoring remain unqualified; no target substitution or readiness promotion.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -31,16 +31,23 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18973 bytes; SHA-256 `4f81c6e386aba438d7b6711c550a505b6f39b3773f67777b2b4f806730aff103`.
+- Specification identity: 20946 bytes; SHA-256 `d43f4fea731088ee5d7621dccf94bcb9517c814be43b4ad0086cff0eb012cbe1`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
+## Task documentation
+
+- [Preserved first neural-understanding definition (historical scope)](docs/understanding-first-v1/task.json)
+- [Preserved first neural-understanding contract (historical scope)](docs/understanding-first-v1/understanding.v1.json)
+
 ## Implementation artifacts
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Source anatomy census v1](implementations/source-anatomy-census-v1) — Authenticated auditory source anatomy and observation clock census.
+  Scope: Authenticates26 original MGN source files and reports literal contact locations and observation/clock metadata without loading response arrays or estimating rates.666 of2053clusters have blank contact assignments; a broad MGN group does not establish a pooled anatomical denominator. Missing optional observation\_intervals alone is not fatal: valid alternative observation, duration and common-clock support can qualify a future estimand. This metadata census is not a neural score, new model result or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

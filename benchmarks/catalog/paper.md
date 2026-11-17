@@ -1,10 +1,12 @@
-# Paper tasks (116)
+# Paper tasks (117)
 
 [Catalog](README.md)
 
 This is a public source inventory, not a list of qualified benchmarks. Scientific and submission readiness are **unknown here**. Runtime manifests and source components do not establish successful execution. Registered IDs may alias earlier contract identifiers; they do not count independent studies or datasets.
 
-Paper improvement audit: **116/116 covered**; **0 improvement-ready**, **20 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.
+The project targets four first-class outcomes: paper reproduction, paper improvement, native neural interpretation, and neural tool/model building. Outcome conditions share scientific task IDs while retaining separate evidence and qualification. [Read the four-outcome design](../../docs/design/four-outcomes.md).
+
+Current paper-improvement contract audit: **117/117 covered**; **0 improvement-ready**, **21 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Paper reproduction is a separate first-class outcome; these counts describe the existing improvement contracts, not reproduction qualification. Numerical fidelity remains a necessary comparison check. A new split is an extension, never a same-task paper victory.
 
 | ID | Scientific question / title | Current improvement disposition | Source stage | Implementation artifacts | Legacy runtime declaration |
 | --- | --- | --- | --- | --- | --- |
@@ -71,6 +73,7 @@ Paper improvement audit: **116/116 covered**; **0 improvement-ready**, **20 sour
 | [PAPER-ROOT-ADD-026](../paper/PAPER-ROOT-ADD-026/README.md) | [Temporal dynamics of short-term neural adaptation across human visual cortex](../paper/PAPER-ROOT-ADD-026/task.json) | source_unresolved | canonical_source_specification | 1 | [manifest](../paper/PAPER-ROOT-ADD-026/implementations/registered-runtime/manifest.json) |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](../paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | [Latent circuit inference from heterogeneous neural responses during cognitive tasks](../paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/task.json) | source_unresolved | registered_construction_draft | 1 | not included |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](../paper/PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | [Low-dimensional population dynamics in the brainstem gate REM sleep](../paper/PAPER-SCOPE-20261114-REM-DYNAMICS/task.json) | source_unresolved | registered_construction_draft | 1 | not included |
+| [PAPER-SMC-RNN-2024](../paper/PAPER-SMC-RNN-2024/README.md) | [SMC-RNN: same-task improvement on the complete MC_Maze 20-ms panel](../paper/PAPER-SMC-RNN-2024/task.json) | design_ready | registered_source_grounded_design | 1 | not included |
 | [PAPER-paper-method-001](../paper/PAPER-paper-method-001/README.md) | [Estimating Dimensionality of Neural Representations from Finite Samples](../paper/PAPER-paper-method-001/task.json) | source_unresolved | canonical_source_specification | 2 | [manifest](../paper/PAPER-paper-method-001/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-002](../paper/PAPER-paper-method-002/README.md) | [Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics](../paper/PAPER-paper-method-002/task.json) | design_ready | canonical_source_specification | 2 | [manifest](../paper/PAPER-paper-method-002/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-003](../paper/PAPER-paper-method-003/README.md) | [REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects](../paper/PAPER-paper-method-003/task.json) | design_ready | canonical_source_specification | 2 | not included |

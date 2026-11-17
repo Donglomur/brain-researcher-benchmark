@@ -37,6 +37,7 @@ PAGES = (
     'docs/provenance/assessments/LEGACY_TASK_RECOVERY_20261116.md',
     'docs/provenance/execution/historical-evidence-v1/README.md',
     'docs/development/source-integrity.md',
+    'docs/design/four-outcomes.md',
     'examples/original-three/CONTRIBUTING.md',
     'docs/provenance/status-snapshots/CONSTRUCTION_STATUS_20261115.md',
     'docs/usage/artifact-grading.md',

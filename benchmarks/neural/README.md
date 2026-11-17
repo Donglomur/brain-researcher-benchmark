@@ -2,9 +2,9 @@
 
 [All benchmarks](../README.md) · [Other track](../paper/README.md)
 
-Infer specified targets from permitted neural and behavioral observations. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes are distinct conditions; each requires its own competent comparator and evidence.
+Native interpretation and tool/model building are separate first-class outcomes. Infer specified targets from permitted neural and behavioral observations. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes are distinct conditions; each requires its own competent comparator and evidence.
 
-Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 design only, 94 partial delivery, 4 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Programme performance does not establish direct interpretation.
+Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 design only, 94 partial delivery, 4 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Native interpretation and tool/model building are separate first-class outcomes. Programme performance does not establish direct interpretation.
 
 **118 registered task drafts: 100 original specifications + 18 expansion drafts.** Scientific and submission readiness remain **unknown**.
 
@@ -95,7 +95,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 1 | not linked |
 | [NEURAL-081](NEURAL-081/README.md) | Imagined melody identification | 2 | not linked |
-| [NEURAL-082](NEURAL-082/README.md) | Rhythm versus melody information in music imagery | 1 | [manifest](NEURAL-082/implementations/registered-runtime/manifest.json) |
+| [NEURAL-082](NEURAL-082/README.md) | Rhythm versus melody information in music imagery | 2 | [manifest](NEURAL-082/implementations/registered-runtime/manifest.json) |
 | [NEURAL-083](NEURAL-083/README.md) | Motor-imagery protocol classification with fixed calibration | 4 | not linked |
 | [NEURAL-084](NEURAL-084/README.md) | Overt-gaze steady-state visual target decoding | 2 | not linked |
 | [NEURAL-085](NEURAL-085/README.md) | Natural versus task-directed reading from EEG | 2 | [manifest](NEURAL-085/implementations/registered-runtime/manifest.json) |
@@ -109,10 +109,10 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-093](NEURAL-093/README.md) | Sensory evidence decoding during decisions | 1 | [manifest](NEURAL-093/implementations/registered-runtime/manifest.json) |
 | [NEURAL-094](NEURAL-094/README.md) | Decision correlates beyond movement | 2 | [manifest](NEURAL-094/implementations/registered-runtime/manifest.json) |
 | [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 5 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
-| [NEURAL-096](NEURAL-096/README.md) | Prior-dependent neural timing representations | 2 | [manifest](NEURAL-096/implementations/registered-runtime/manifest.json) |
+| [NEURAL-096](NEURAL-096/README.md) | Prior-dependent neural timing representations | 3 | [manifest](NEURAL-096/implementations/registered-runtime/manifest.json) |
 | [NEURAL-097](NEURAL-097/README.md) | Task-irrelevant stimulus-content decoding | 1 | [manifest](NEURAL-097/implementations/registered-runtime/manifest.json) |
 | [NEURAL-098](NEURAL-098/README.md) | Sustained versus transient content information | 2 | [manifest](NEURAL-098/implementations/registered-runtime/manifest.json) |
-| [NEURAL-099](NEURAL-099/README.md) | Auditory-evoked spike or declared CSD response prediction | 1 | [manifest](NEURAL-099/implementations/registered-runtime/manifest.json) |
+| [NEURAL-099](NEURAL-099/README.md) | Auditory-evoked spike or declared CSD response prediction | 2 | [manifest](NEURAL-099/implementations/registered-runtime/manifest.json) |
 | [NEURAL-100](NEURAL-100/README.md) | Early deep-layer auditory response evidence | 2 | [manifest](NEURAL-100/implementations/registered-runtime/manifest.json) |
 ## Expansion drafts (18)
 
