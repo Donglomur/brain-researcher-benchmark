@@ -54,7 +54,7 @@ jobs:
           umask 077
           ulimit -f 1024
           NIDER_ROOT="/tmp/nider-arm64-admission-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          NIDER_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/nider-reporting-controls-v1"
+          NIDER_SOURCE="$GITHUB_WORKSPACE/benchmarks/shared/nider/nider-reporting-controls-v1"
           test -d "$NIDER_ROOT"
           set +e
           /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B -c 'import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})' "$NIDER_SOURCE/run_synthetic.py" 5604 05e59cece89041f12dad00d0fa421301017cfbd3afdbdfebbc391eba9c5e5476 --out "$NIDER_ROOT/artifact" >"$NIDER_ROOT/stdout.log" 2>"$NIDER_ROOT/stderr.log"

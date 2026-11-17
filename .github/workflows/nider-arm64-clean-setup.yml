@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          NIDER_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/nider-arm64-owner-setup-v1"
+          NIDER_SOURCE="$GITHUB_WORKSPACE/benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-arm64-owner-setup-v1"
           NIDER_OWNER="$RUNNER_TEMP/nider-clean-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           NIDER_CAPTURE="$RUNNER_TEMP/nider-clean-capture-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           python -I -S -B -c 'import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})' "$NIDER_SOURCE/ci/observe_hosted.py" 8621 9f47f27a7869923ebdd1dcc4fb1c939a46b7763db419c14bfdb1c15ff4190ba7 "$NIDER_SOURCE" 45a7806b4e2bfdd08e4501683dee7dec9d3fcffc25a56b895637d72bee838a38 "$NIDER_OWNER" "$NIDER_CAPTURE"

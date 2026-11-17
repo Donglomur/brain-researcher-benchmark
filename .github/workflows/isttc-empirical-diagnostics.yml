@@ -1,13 +1,7 @@
 name: iSTTC empirical diagnostics source
 on:
   pull_request:
-    paths:
-      - 'components/isttc-empirical-diagnostics/**'
-      - '.github/workflows/isttc-empirical-diagnostics.yml'
   push:
-    paths:
-      - 'components/isttc-empirical-diagnostics/**'
-      - '.github/workflows/isttc-empirical-diagnostics.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,4 +17,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Check complete generated support and relocated CLI
-        run: python3 -I -S -B components/isttc-empirical-diagnostics/test_public_package.py
+        run: python3 -I -S -B benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/test_public_package.py

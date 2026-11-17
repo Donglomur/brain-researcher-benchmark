@@ -2,14 +2,8 @@ name: PFC independent analytical baseline invented controls
 
 on:
   pull_request:
-    paths:
-      - 'components/pfc-independent-analytical-baseline/**'
-      - '.github/workflows/pfc-independent-analytical-baseline.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'components/pfc-independent-analytical-baseline/**'
-      - '.github/workflows/pfc-independent-analytical-baseline.yml'
   workflow_dispatch:
 
 permissions:
@@ -27,7 +21,7 @@ jobs:
         with:
           python-version: '3.11.18'
       - name: Run twelve invented-only baseline controls
-        working-directory: components/pfc-independent-analytical-baseline
+        working-directory: benchmarks/paper/PAPER-EXP-20261113-005/implementations/independent-analytical-baseline
         shell: bash
         run: |
           set -euo pipefail

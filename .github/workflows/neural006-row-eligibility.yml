@@ -2,14 +2,8 @@ name: N006 row eligibility invented controls
 
 on:
   pull_request:
-    paths:
-      - 'components/neural006-row-eligibility/**'
-      - '.github/workflows/neural006-row-eligibility.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'components/neural006-row-eligibility/**'
-      - '.github/workflows/neural006-row-eligibility.yml'
   workflow_dispatch:
 
 permissions:
@@ -27,7 +21,7 @@ jobs:
         with:
           python-version: '3.11.18'
       - name: Run sixteen invented-only row controls
-        working-directory: components/neural006-row-eligibility
+        working-directory: benchmarks/neural/NEURAL-006/implementations/row-eligibility
         shell: bash
         run: |
           set -euo pipefail

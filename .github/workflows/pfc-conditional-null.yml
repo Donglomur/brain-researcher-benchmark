@@ -2,14 +2,8 @@ name: PFC conditional-null mathematical controls
 
 on:
   pull_request:
-    paths:
-      - 'components/pfc-conditional-null/**'
-      - '.github/workflows/pfc-conditional-null.yml'
   push:
     branches: ['publish/neuroscience-200']
-    paths:
-      - 'components/pfc-conditional-null/**'
-      - '.github/workflows/pfc-conditional-null.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +28,7 @@ jobs:
           PFC_CONTROL_ROOT="/tmp/pfc-conditional-null-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           mkdir -m 700 "$PFC_CONTROL_ROOT"
           set +e
-          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B components/pfc-conditional-null/test_conditional_kernel.py -v >"$PFC_CONTROL_ROOT/stdout.log" 2>"$PFC_CONTROL_ROOT/stderr.log"
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B benchmarks/paper/PAPER-EXP-20261113-005/implementations/conditional-null/test_conditional_kernel.py -v >"$PFC_CONTROL_ROOT/stdout.log" 2>"$PFC_CONTROL_ROOT/stderr.log"
           PFC_CONTROL_STATUS=$?
           set -e
           printf '%s\n' "$PFC_CONTROL_STATUS" >"$PFC_CONTROL_ROOT/exit-status.txt"
