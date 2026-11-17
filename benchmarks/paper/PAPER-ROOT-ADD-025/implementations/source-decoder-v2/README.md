@@ -1,0 +1,28 @@
+# Original decoder selection and prediction scoring
+
+This component prepares recorded, count-matched ten-fold row designs and scores supplied stimulus and estimate predictions for the original supplementary decoder. It fixes two restrictions in the earlier constructed analysis: importing the information analysis's 81-row cutoff, and requiring every stimulus sample in a trial to be present. The earlier implementation is preserved unchanged.
+
+The source linear script selects each sample separately, pools adjacent sample positions in MATLAB column-major order, matches all three consistency classes to their minimum row count, and draws five subsamples. It then uses ten observation-level folds. There is no 81-row gate in that script. This implementation retains all six pairs and all three classes; fewer than ten matched rows are reported as unavailable for ten folds, and singleton-fold correlations remain undefined. A missing stimulus sample affects that sample's eligibility, while missed choices, missing estimates and missing generative means exclude the complete trial. S11's `fgmu=0` population is retained.
+
+`prepare_design` consumes normalized behavior, the complete context's ordered neural trial IDs, participant/parcel/context identities, the original PC count and a recorded seed. It emits selected pooled row indices and folds for every repeat, plus a value hash binding the behavior. Each row index maps to `context_trial_ids[index % n_trials]` and sample position `2*(pair-1) + index // n_trials + 1`. The complete context roster is checked before behavioral exclusions. The plan contains identities and hashes, but no stimulus or estimate values.
+
+Random draws use independent participant/parcel/context/pair/class streams. The selected observations and ten folds are identical for candidate and reference when both use the same frozen design. This is a recorded NumPy rerun of the source sampling scheme, **not recovered historical MATLAB folds or validated MATLAB RNG equivalence**. As in the original row split, two samples from one trial can cross folds. The original all-trial PCA representation and its exposure remain unchanged. No resampling, PCA, model fitting or inference occurs here.
+
+`score_predictions` consumes that design, operator-owned behavior and exactly one entry per planned pair/class. It replays selection and folds to reject changed plans or changed behavior. Each entry contains `pair`, `consistency`, the exact `repeats` metadata, and finite `stimulus` and `estimate` predictions shaped `[5, matched_rows, PCs, 129]`. Time indices are −0.1 through +0.7 seconds at 160 Hz, in the source order. All source PCs must be supplied in their declared order; this module does not select features or score a different representation.
+
+The output preserves `[repeat, fold, metric, PC, time]` correlations and their arithmetic mean over folds. Metrics are signed `corr(S,S_hat)`, companion `corr(E,E_hat)`, and descriptive `corr(E,S_hat)`. It never substitutes pooled out-of-fold correlation or absolute correlation. Constant and singleton-fold results propagate as undefined; `json_safe` converts them to JSON null without omitting their axes. It does not choose a PC, subsample, parcel, time, region or participant aggregate: the exact S11 upstream `gCORR/gSCR` producer remains unresolved.
+
+```python
+design = prepare_design(behavior, neural_trial_ids,
+                        participant=participant, parcel=parcel, context="choice",
+                        n_components=original_pc_count, seed=recorded_seed)
+# The evaluator owner freezes the design and obtains both prediction arms.
+candidate_scores = score_predictions(design, behavior, candidate_predictions)
+author_scores = score_predictions(design, behavior, author_predictions)
+```
+
+This is an operator library. The caller must obtain authentic arrays, authenticate the author comparator, enforce prediction freezing and keep final targets outside candidate access. A supplied prediction cannot prove it was held out, and a hash cannot establish scientific provenance. Input/output arrays and identities belong in external operator evidence, never Git. Complete cohort/parcel coverage, MAT export, 200→160 Hz parity, the source fit-only `1e12` scaling discrepancy, exact S11 aggregation, a paired participant decision rule and native qualification remain open. There is no benchmark win or ready-benchmark claim.
+
+The [pinned regression entrypoint](https://github.com/DonnerLab/2025_Park_ConfirmationBias-through-Selective-Readout-of-Information-Encoded-in-Human-Parietal-Cortex/blob/8b79caa5b95fadce826ea39bf6c69828991a4b28/confbias_regress_sample_int12_cic.m) supplies row eligibility, sampling and fold correlations; [S11](https://github.com/DonnerLab/2025_Park_ConfirmationBias-through-Selective-Readout-of-Information-Encoded-in-Human-Parietal-Cortex/blob/8b79caa5b95fadce826ea39bf6c69828991a4b28/Figures/FigureS11_PK_Decoding_int12_cic_tc.m) supplies its distinct population and figure consumption. `provenance.json` binds the previously acquired source bytes read for this repair. No source code or author data is copied here.
+
+Generated controls in `test_decoder.py` cover missing-sample locality, the 40-row decoder case, source eligibility, Cue/Choice consistency, trial alignment, repeated-row exposure, parcel streams, signed correlation, independent scalar references, mean-fold versus pooled correlation, undefined folds, changed targets/plans, missing cells and prediction identity/shape. They establish software behavior only. Tests require existing NumPy and must run through the project two-slot test pool.
