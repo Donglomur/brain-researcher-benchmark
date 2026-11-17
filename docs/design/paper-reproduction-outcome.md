@@ -119,8 +119,13 @@ The computation policy names source-grounded granular outputs: for example,
 observation-level predictions, source-native masks, time courses, coefficients
 or derived contrasts, with original identities, units and required controls.
 Each required finding must be covered by a declared output. The policy has no
-universal output choice and does not require the author's algorithm. It must
-provide enough task-specific evidence to distinguish calculation using the
+universal output choice and does not require the author's code or an identical
+numerical implementation. Independent implementations and justified numerical
+techniques must preserve the scientific model, estimand and method defining each
+claimed source finding. An unrelated method matching a printed score does not
+reproduce that method-specific finding; permitted method changes are assessed
+separately as improvement. The policy must provide enough task-specific evidence
+to distinguish calculation using the
 authentic data from copying the published aggregates. There are no invented
 hidden perturbations or changed-task checks.
 
