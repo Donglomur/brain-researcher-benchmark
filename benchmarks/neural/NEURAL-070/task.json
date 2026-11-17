@@ -119,12 +119,12 @@
       "Source-equivalence groups and shared stimulus/pretraining exposure cannot be replaced with random video folds."
     ],
     "uncertainty": "Shared participant/source-group resamples across primary and both fixed-reference families; three separate46-ROI multiplicity families. Intervals remain descriptive until ten-person calibration; undefined required resamples block intervals.",
-    "failure_policy": "Exact all50 joins/all1102 out-of-fold videos/all46 ROIs/all8 models and both fixed references are mandatory. Nonfinite/constant-target coordinates make the required cell undefined; complete aggregate is null, not silently filtered or clipped. Intended finite-score admission remains an implementation gap: current coordinate_scores checks input finiteness but does not reject residual-square overflow before marking the result defined.",
+    "failure_policy": "Exact all50 joins/all1102 out-of-fold videos/all46 ROIs/all8 models and both fixed references are mandatory. Nonfinite or constant-target coordinates and nonrepresentable coordinate R² arithmetic make the required cell undefined; the complete aggregate is null, never filtered or clipped. Current arithmetic promotes supported inputs to binary64, rejects wider floats and integer magnitudes outside the exact consecutive integer range, and distinguishes arithmetic-range failure from constant support. Exact-rational means avoid intermediate finite-score sum overflow; an unrepresentable nonzero final mean refuses instead of silently becoming zero. These guards retain the raw mathematical R² and complete-denominator policy; historical lower-precision bitwise parity is not claimed.",
     "neural_understanding": {
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "230024e961fe497056f374dd75c3c8da7f37c37f1b91f071fa0af02f8a5059c2",
+      "contract_sha256": "da0e8bd0ba203e54a4a9e0a8cf72991546007e0f75c4597a96db69ae145dc76a",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "44400dba8f3cda86196c9c6743294771cf5517f0b488ad9956ad36169d6815c1"
     }
