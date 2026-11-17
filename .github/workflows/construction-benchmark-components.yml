@@ -49,7 +49,7 @@ jobs:
               {
                   "path": "benchmarks/integrity/current-closures/construction-cardiac-admission/SOURCE_BINDINGS.json",
                   "bytes": 4924,
-                  "sha256": "a666c3cc53e3104700704477cdc555cad14577f03ff9608fb0a21ad9f8cf7b37"
+                  "sha256": "e4772aa7cf85bd4d7c2e0cdad22b2ed9a79f32c69ff43beb3a79094ff4ff1b38"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
@@ -223,13 +223,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/README.md",
-                  "bytes": 10649,
-                  "sha256": "50484b817debb48c612f8dbeb81759fa433ccd9021ae5888cc3410693b79b74c"
+                  "bytes": 10679,
+                  "sha256": "91aaac7d388960873a16ebdf04873a4a53ce4c215413f1ae8703ab1d0234b2c6"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/admission.py",
-                  "bytes": 22735,
-                  "sha256": "82d048f99da42230508ed3ca8b042fbcce0e0a67921fd028b3ba5434956d653d"
+                  "bytes": 22765,
+                  "sha256": "de4e8026523b10f22bbbd9c105d540ffaac34a0430cd4cee29b5a3f6b1d39275"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/test_admission.py",
@@ -375,7 +375,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 866795 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 866855 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -418,7 +418,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 866795,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 866855,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

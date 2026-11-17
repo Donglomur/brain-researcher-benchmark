@@ -478,8 +478,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1909,
-                  "sha256": "363e8418f48447b7364718fc700f838ffe7f7fff12b3328e2c80dd6893bc5f54"
+                  "bytes": 1999,
+                  "sha256": "ee8b14ef270f37c92299e48ba1822dba4d88c55534626dc15f5ea066e0e44cab"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/implementations/initial-evaluator-v1/evaluator.py",
@@ -488,8 +488,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/implementations/initial-evaluator-v1/provenance.json",
-                  "bytes": 7310,
-                  "sha256": "85206e8a67acf1382768a9197630020a171b6186b969aa4fa86029928ba82a27"
+                  "bytes": 7340,
+                  "sha256": "b968aa43e991ed418059214470aa0281aeec256066067900aea9d62391598d0a"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/implementations/initial-evaluator-v1/tests/independent_reference_fixture.json",
@@ -498,8 +498,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 15609,
-                  "sha256": "44407532bff7e7db966cd45f075617f532f3225555d2a1628aad08fc97e3a09d"
+                  "bytes": 15669,
+                  "sha256": "898165b9dd4cdccb96de7bd41a55b23c06a68a54d0045b12a19278e8b8b047a8"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-020/historical/task.pre-improvement.v1.json",
@@ -683,7 +683,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 53 > 0
-          assert sum(row['bytes'] for row in rows) == 3028523 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 3028703 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -726,7 +726,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3028523,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3028703,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
