@@ -1,0 +1,109 @@
+{
+  "schema": "dosei_secondary_artifact_interface_v2",
+  "task": "clinical-dosei-responsiveness",
+  "callable": "score_artifacts(policy_raw, predictions_raw, targets_raw, secondary_raw, *, primary_source, expected_policy_sha256, expected_predictions_sha256, expected_targets_sha256, expected_secondary_sha256)",
+  "secondary_policy": {
+    "schema": "dosei_secondary_policy_v2",
+    "task": "clinical-dosei-responsiveness",
+    "primary_policy_sha256": "external hex SHA256",
+    "original_packet_set_sha256": "external hex SHA256",
+    "arms": [
+      "candidate",
+      "reference"
+    ],
+    "contrasts": [
+      {
+        "contrast_id": "candidate_minus_reference",
+        "comparison_arm": "candidate",
+        "reference_arm": "reference"
+      }
+    ],
+    "hard_category": "lower_probability_median OR lowest_probability_mode; no default",
+    "mae_aggregation": "equal_person_equal_within_person",
+    "recall_aggregation": "equal_supported_person_per_category",
+    "calibration": {
+      "method": "classwise_reliability_ece",
+      "weighting": "equal_person_equal_within_person",
+      "bin_edges": [
+        "0",
+        "0.5",
+        "1"
+      ],
+      "boundary": "left_closed_right_open_last_closed"
+    },
+    "bootstrap": {
+      "method": "iid_biological_person_percentile",
+      "seed_sha256": "64 hex chars",
+      "replicates": "integer2..4096",
+      "confidence": "decimal string strictly0..1",
+      "quantile": "linear_type7",
+      "metrics": [
+        "normalized_rps",
+        "ordinal_mae"
+      ],
+      "difference": "comparison_minus_reference"
+    },
+    "freeze_receipts": {
+      "metric_policy": "external hex SHA256",
+      "before_outcomes": "external hex SHA256",
+      "same_inputs_and_training": "external hex SHA256"
+    }
+  },
+  "prediction_bundle": {
+    "schema": "dosei_secondary_predictions_v2",
+    "task": "clinical-dosei-responsiveness",
+    "original_packet_set_sha256": "must equal policy receipt",
+    "arms": [
+      {
+        "arm_id": "candidate",
+        "predictions": "unchanged full dosei_predictions_v1"
+      }
+    ]
+  },
+  "primary_source": {
+    "path": "../ordinal-and-paired/dosei_score.py",
+    "bytes": 15749,
+    "sha256": "09560538d472f0b99c65532bf371c8e9af56635e1ec437f68dd2f83b5f7bde77"
+  },
+  "scope_counts": {
+    "recordings": 171,
+    "assessments": 7328,
+    "transitions": 1129
+  },
+  "bootstrap_generator": {
+    "domain_hex": "646f7365692d706572736f6e2d626f6f7473747261702d763200",
+    "input": "domain || 32 seed bytes || replicate_index:uint64be || draw_position:uint64be || rejection_attempt:uint64be; all indexes start0",
+    "draw": "SHA256 unsigned big-endian; accept only h < floor(2**256/P)*P; index=h%P in declared primary policy people order; increment rejection attempt otherwise",
+    "draw_digest": "SHA256 of ASCII json.dumps(tuple-of-index-tuples,separators=(comma,colon))"
+  },
+  "output_scope": "all7328assessment slots/171recordings/1129transitions via exact unchanged primary source. Allarms admitted beforetargets opened. Original primary output unmodified under each arm. Allpeople remain; anyunsupportedperson makes fullpersonMAE andcalibration null andallpairedbootstrapintervals null, withno dropping. Perclassrecall isexplicit supported-personmean plus full perperson supports andunsupportedlist. Calibration weights each eligible case1/(P*n_person), binsleftclosed rightopen exceptlastclosed, perclassECE sum weightmass*abs(meanprob-observedfraction). No calibration/recall bootstrap is claimed; paired intervals cover original RPSandMAE only. No permutationpvalue/physical/sourcefreezingproof/clinicalqualification.",
+  "io_caps_bytes": {
+    "policy": 4194304,
+    "predictions": 16777216,
+    "targets": 1048576,
+    "secondary": 131072,
+    "output": 41943040
+  },
+  "limits": {
+    "arms": [
+      2,
+      8
+    ],
+    "contrasts": [
+      1,
+      28
+    ],
+    "calibration_bins": [
+      1,
+      20
+    ],
+    "bootstrap_replicates": [
+      2,
+      4096
+    ]
+  },
+  "limits_interpretation": "Format ceilings only, not proven CPU/RAM guarantees. Every input and output is materialized; complete accepted-source deployment needs separate resource qualification.",
+  "scientific_qualification": false,
+  "new_task_count": 0,
+  "original_report_identity": "Exact unchanged score_admitted report bodies; standalone per-artifact hash metadata is not fabricated for nested arm objects. The outer report binds the received bundle bytes."
+}

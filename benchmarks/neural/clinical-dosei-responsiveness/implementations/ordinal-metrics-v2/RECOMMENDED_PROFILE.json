@@ -1,0 +1,61 @@
+{
+  "schema": "dosei_prospective_metric_recommendation_v2",
+  "task": "clinical-dosei-responsiveness",
+  "status": "recommended_construction_profile_not_an_author_protocol_or_qualified_benchmark",
+  "hard_category": "lower_probability_median",
+  "mae_aggregation": "equal_person_equal_within_person",
+  "recall_aggregation": "equal_supported_person_per_category",
+  "calibration": {
+    "method": "classwise_reliability_ece",
+    "weighting": "equal_person_equal_within_person",
+    "bin_edges": [
+      "0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1"
+    ],
+    "boundary": "left_closed_right_open_last_closed"
+  },
+  "bootstrap": {
+    "method": "iid_biological_person_percentile",
+    "seed_sha256": "5a3270cd7827301dba130fe34002b348655c472a72be9fbb79291d065e3e87a4",
+    "replicates": 2000,
+    "confidence": "0.95",
+    "quantile": "linear_type7",
+    "metrics": [
+      "normalized_rps",
+      "ordinal_mae"
+    ],
+    "difference": "comparison_minus_reference"
+  },
+  "seed_rule": "SHA256 of the UTF-8 literal dosei-secondary-prospective-v2, chosen independently of authentic outcomes",
+  "missing_support": "Full-person MAE/calibration/paired intervals undefined if any biological person has no evaluable original assessment. Category recall is explicitly limited to persons with that category and lists all unsupported persons.",
+  "rationale": {
+    "hard_category": "The lower probability median minimizes expected absolute ordinal loss, with an explicit deterministic tie convention. Recall uses the same decision rather than changing it by metric.",
+    "aggregation": "Equal-person weighting follows the primary estimand and prevents dense clinical assessment schedules from dominating the result.",
+    "calibration": "Fixed five equal-width bins provide a simple prospective descriptive reliability partition. Counts are always shown; ECE depends on binning and does not certify calibration.",
+    "bootstrap": "Joint biological-person resampling keeps repeated recordings/assessments together and preserves arm pairing. Percentile intervals are transparent conditional summaries of fixed predictions; no refitting or empirical coverage claim."
+  },
+  "alternatives": {
+    "hard_category": "lowest_probability_mode is supported only when explicitly selected in a separately frozen policy; it optimizes a different loss.",
+    "calibration": "Finer bins, adaptive bins and alternate calibration functionals require a distinct prospective definition; no outcome-driven switch is supplied.",
+    "uncertainty": "BCa, hierarchical or retraining-aware intervals require a distinct validated protocol; none is implied by these conditional percentile intervals."
+  },
+  "identity_operands_still_required": [
+    "Exact primary-policy SHA256",
+    "Same-input packet-set SHA256",
+    "Complete arm and directed-contrast roster",
+    "External policy, before-outcome and same-input/training receipt hashes"
+  ],
+  "scientific_qualification": false,
+  "ordinal_distance_unit": "Unit steps on released collapsed category indices1..5, not equal clinical-severity distance",
+  "conditional_uncertainty_scope": "Fixed cross-fitted predictions can share overlapping training folds. These are descriptive conditional intervals, not validated new-patient/generalization confidence intervals or training/refitting uncertainty.",
+  "recommended_initial_qualification_comparators": [
+    "Outer-training participant-weighted released-category prior",
+    "Audited causal spectral/entropy ordinal model on identical packet and training evidence",
+    "Train-only random forest on the same audited causal packet/features"
+  ],
+  "comparator_qualification": "Exact models/features and competence remain independent scientific gates; no qualified reference is supplied here."
+}
