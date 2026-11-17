@@ -27,6 +27,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Comparison contract](../../shared/sleep-eog/comparison-contract) — Comparison contract.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Frozen neural lifecycle v1](../../shared/frozen-neural-lifecycle-v1) — Shared programme lifecycle.
+  Scope: Commits source/method before separate per-person development processes, preserves terminal failures, requires all 5450 sleep epochs or 400 EEG trials, and freezes canonical submissions before the unchanged native scoring route. Authentic input staging is verified; Linux hard-memory execution, exact native layouts, four-GiB private grading, protected authoring and scientific qualification remain unestablished.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

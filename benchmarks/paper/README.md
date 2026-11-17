@@ -35,7 +35,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-NEW-002](PAPER-FIND-NEW-002/README.md) | Recurrent cortical networks encode natural sensory statistics via sequence filtering | 1 | [manifest](PAPER-FIND-NEW-002/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-NEW-003](PAPER-FIND-NEW-003/README.md) | Distributed control circuits across a brain-and-cord connectome | 1 | [manifest](PAPER-FIND-NEW-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-001](PAPER-FIND-REP-001/README.md) | Learning produces an orthogonalized state machine in the hippocampus | 1 | not linked |
-| [PAPER-FIND-REP-003](PAPER-FIND-REP-003/README.md) | Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping | 1 | not linked |
+| [PAPER-FIND-REP-003](PAPER-FIND-REP-003/README.md) | Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping | 2 | not linked |
 | [PAPER-FIND-REP-007](PAPER-FIND-REP-007/README.md) | Unsupervised pretraining in biological neural networks | 1 | not linked |
 | [PAPER-FIND-REP-009](PAPER-FIND-REP-009/README.md) | Control of representation updating by higher-order thalamus enables history-based decision-making | 2 | [manifest](PAPER-FIND-REP-009/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-011](PAPER-FIND-REP-011/README.md) | Local and global predictors of synapse elimination during motor learning | 1 | not linked |
@@ -53,7 +53,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-ROOT-ADD-010](PAPER-ROOT-ADD-010/README.md) | A geometric shape regularity effect in the human brain | 1 | not linked |
 | [PAPER-ROOT-ADD-013](PAPER-ROOT-ADD-013/README.md) | Food intake enhances hippocampal sharp wave-ripples | 1 | [manifest](PAPER-ROOT-ADD-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-014](PAPER-ROOT-ADD-014/README.md) | Precise spatial tuning of visually driven alpha oscillations in human visual cortex | 1 | not linked |
-| [PAPER-ROOT-ADD-016](PAPER-ROOT-ADD-016/README.md) | Age-related changes in cortical 1/f dynamics are linked to cardiac activity | 5 | [manifest](PAPER-ROOT-ADD-016/implementations/registered-runtime/manifest.json) |
+| [PAPER-ROOT-ADD-016](PAPER-ROOT-ADD-016/README.md) | Age-related changes in cortical 1/f dynamics are linked to cardiac activity | 6 | [manifest](PAPER-ROOT-ADD-016/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-018](PAPER-ROOT-ADD-018/README.md) | The orbitofrontal cortex updates beliefs for state inference | 3 | [manifest](PAPER-ROOT-ADD-018/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-019](PAPER-ROOT-ADD-019/README.md) | Acetylcholine demixes heterogeneous dopamine signals for learning and moving | 3 | [manifest](PAPER-ROOT-ADD-019/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-020](PAPER-ROOT-ADD-020/README.md) | Temporal multiplexing of perception and memory codes in IT cortex | 2 | [manifest](PAPER-ROOT-ADD-020/implementations/registered-runtime/manifest.json) |

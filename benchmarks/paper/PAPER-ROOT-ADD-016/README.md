@@ -35,6 +35,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Six model summary](implementations/six-model-summary) — Six model summary.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Candidate delivery v1](implementations/candidate-delivery-v1) — Reproduction calibration preparation.
+  Scope: Calibration/preparation only; never active same-task paper-improvement success. Authenticates the complete 655-person processed table, matched paper/data/shared-specification packets with optional official code, and complete six-model/30-parameter submission capture and pair closure. Native fitting dependencies, independent inference/reference admission and scientific qualification remain blocked; this method-assisted association reconstruction does not define a better-than-paper performance ordering.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
