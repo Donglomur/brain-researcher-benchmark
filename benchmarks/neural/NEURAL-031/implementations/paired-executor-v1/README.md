@@ -37,11 +37,12 @@ python -I -B targets.py --targets-npz /operator/original/private/targets.npz \
 ```
 
 The fresh directory has mode 0700 and contains mode-0600 `targets.json` plus
-`TARGETS_RECEIPT.json`, which records the new target digest. This authentic
-conversion has **not been executed**. The complete source identities are
-verified from existing sealed metadata and source code; generated parser tests
-do not stand in for authentic conversion. The public executor never receives
-these private paths as participant mounts.
+`TARGETS_RECEIPT.json`, which records the new target digest. The complete
+authentic conversion and its joins against all 40 existing input contexts ran
+once on 2026-11-17 and passed independent saved-output review. The compact
+[validation receipt](AUTHENTIC_VALIDATION.json) binds the exact source, protocol,
+outputs and acceptance. Private targets remain outside Git, and the public
+executor never receives their paths as participant mounts.
 
 ## One frozen program, 40 fresh contexts
 
@@ -151,9 +152,17 @@ cross-context mounting attempts, frozen-source changes, deadline and removal
 failures. Simulated transport cannot establish actual container isolation,
 daemon behavior, candidate feasibility or runtime resource enforcement.
 
-No authentic target bodies, neural arrays, candidate programs or Docker
-containers were run during this construction. No models, dependencies or data
-were installed or downloaded. Remaining steps are separately reviewed authentic
-target conversion, an exact image/runtime inventory, actual full lifecycle and
-isolation qualification, and an admitted complete matched-method study. This
-source supplies the missing executable path without claiming those results.
+The later authentic target/input validation retained all 1,143 rows, 774
+requests, 731 observed ratios and 43 unavailable requested targets. Every one
+of the 40 existing contexts matched the new private JSON: 29,412 training-label
+joins and 1,548 query identities. It reused the original projection and wrote
+139,739 bytes of private targets and receipts. This cohort has no observed-zero
+ratio, so zero preservation remains supported by generated controls.
+
+`TESTING.json`, its recorded source pins, and `SOURCE_POLICY.json` construction
+boundaries preserve the original construction checkpoint. The additive
+`AUTHENTIC_VALIDATION.json` records the subsequent authentic check. No candidate,
+Docker execution, model fit or scientific score was performed. Remaining steps
+are an exact image/runtime inventory, actual full lifecycle and isolation
+qualification, and an admitted complete matched-method study. Target/input
+compatibility does not establish those results or whole-benchmark readiness.
