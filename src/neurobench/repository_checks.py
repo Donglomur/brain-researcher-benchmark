@@ -161,7 +161,7 @@ def check_namespace(root, prefix, boundaries, allowed_files):
                     need(child in allowed_files, "Orphan source file: " + child)
 
 
-def artifact_members(root, artifacts, *, json_only=False):
+def artifact_members(root, artifacts, *, binding_metadata_only=False):
     members = {}
     folded = {}
     visited = 0
@@ -184,8 +184,9 @@ def artifact_members(root, artifacts, *, json_only=False):
                         stack.append((child, depth + 1))
                     else:
                         checked_path(root, child)
-                        if json_only:
-                            need(Path(child).suffix == ".json", "Non-JSON current-binding member: " + child)
+                        if binding_metadata_only:
+                            need(Path(child).suffix == ".json" or Path(child).name == "README.md",
+                                 "Unexpected current-binding member: " + child)
                         need(Path(child).suffix.lower() in SOURCE_SUFFIXES, "Non-source member type: " + child)
                         need(child not in members, "Overlapping source ownership: " + child)
                         members[child] = "artifact:" + artifact["id"]
@@ -197,6 +198,12 @@ def prepare(reader):
     root = reader.root
     for relative in RETIRED_ROOTS:
         need(info_or_none(root / relative) is None, "Retired active root is present: " + relative)
+    # Check the parent namespace too: a misspelled track must not disappear
+    # from the ownership inventory simply because it is outside both tracks.
+    check_namespace(root, "benchmarks", {
+        "benchmarks/paper", "benchmarks/neural", "benchmarks/shared",
+        "benchmarks/catalog", "benchmarks/integrity",
+    }, {"benchmarks/README.md", REGISTRY})
     registry, registry_pin = reader.document(REGISTRY)
     need(registry.get("schema_version") == 1 and registry.get("kind") == "neuroscience_benchmark_registry",
          "Unsupported current registry")
@@ -325,10 +332,11 @@ def prepare(reader):
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)
     # These are live source-binding descriptors, not additional benchmark artifacts.
-    # Hash their JSON bytes without following any source or private-payload locators.
+    # Hash JSON descriptors and their exact README.md guides without following
+    # any source or private-payload locators.
     check_namespace(root, "benchmarks/integrity", {CURRENT_CLOSURES}, {CURRENT_BINDINGS, INVENTORY})
     checked_path(root, CURRENT_BINDINGS)
-    binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}], json_only=True)
+    binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}], binding_metadata_only=True)
     binding_files[CURRENT_BINDINGS] = "current-binding-metadata"
     binding_files = dict.fromkeys(binding_files, "current-binding-metadata")
     need(not set(members) & set(binding_files), "Current binding metadata overlaps artifact source")
