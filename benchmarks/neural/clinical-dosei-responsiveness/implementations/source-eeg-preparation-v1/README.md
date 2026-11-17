@@ -15,4 +15,3 @@ python3 -I -S -B -m unittest discover -s benchmarks/neural/clinical-dosei-respon
 ```
 
 The archive uses POSIX file locks and signals; Windows compatibility is not asserted. The native environment and resource controller are intentionally not reconstructed by these generated tests. `PROVENANCE.json` records exact source pins and the limited packaging validation. The controls' original behavioral suites were already reviewed separately; the packaging check exercises repository-relative loading, source bootstrap and one complete generated171-record pipeline without repeating all unchanged groups. No original data or authentic preparation is rerun for packaging.
-
