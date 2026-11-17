@@ -1,0 +1,11 @@
+# Initial evaluator v1: PAPER-FIND-ADD-005
+
+The new [implementation](../implementations/initial-evaluator-v1/README.md) provides a complete prospective trial-to-score encoding component: source-informed normalization of spike/event/eye/history fields, author-form event kernels, paired conditional direction models, nested trial-block ridge Poisson fitting, and auditable held-out scores. It uses Python and NumPy; the implementation is accompanied by independently derived boundary, likelihood, exposure, leakage and end-to-end controls.
+
+This is a bounded construction deliverable, not completion of the canonical paper task. The direct attention estimand, behavioral decoding, authentic MAT import/population reconciliation, native MATLAB reproduction, figure targets/tolerances and protected scientific qualification remain unresolved. The canonical task and historical records are unchanged. Every evaluation report retains `scientific_qualification: unknown` and `benchmark_complete: false`.
+
+The pinned author source revealed a consequential scope distinction: `fitSingleCellGLM.m` excludes cue-event kernels and C-location categories; its retained category variables concern current/previous gap and saccade directions. The prospective full model therefore tests gap-direction modulation conditional on event/eye/history/saccade terms. It does not relabel that association as causal attention. The paper methods specify 25-ms bins, while the converter default is 50 ms; both facts are preserved.
+
+The paper's reported 305 neurons across two macaques are source statements rather than an acquired denominator. Source-preserved removal of empty-spike trials conditions the new endpoint on retained spike-containing trials. Higher-order population claims, entire-recording prediction claims, complete behavioral reproduction and authentic runtime claims are not supported.
+
+Public provenance, exact upstream source hashes, prospective analysis choices, input bridge requirements and all remaining gates are documented in the [package](../implementations/initial-evaluator-v1/README.md) and [source provenance](../implementations/initial-evaluator-v1/source-provenance.json). No additional benchmark ID or binary grading policy is introduced.
