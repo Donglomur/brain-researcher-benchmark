@@ -87,7 +87,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-add-001](PAPER-paper-method-add-001/README.md) | Stabilizing brain-computer interfaces through alignment of latent dynamics | 1 | not linked |
 | [PAPER-paper-method-add-002](PAPER-paper-method-add-002/README.md) | Dimensionality reduction beyond neural subspaces with slice tensor component analysis | 1 | [manifest](PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-add-003](PAPER-paper-method-add-003/README.md) | DREDge: robust motion correction for high-density extracellular recordings across species | 0 | not linked |
-| [PAPER-paper-method-add-004](PAPER-paper-method-add-004/README.md) | iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings | 3 | not linked |
+| [PAPER-paper-method-add-004](PAPER-paper-method-add-004/README.md) | iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings | 4 | not linked |
 | [PAPER-paper-method-add-005](PAPER-paper-method-add-005/README.md) | Generating realistic neurophysiological time series with denoising diffusion probabilistic models | 0 | not linked |
 | [PAPER-paper-method-add-006](PAPER-paper-method-add-006/README.md) | Neural population geometry and optimal coding of tasks with shared latent structure | 0 | not linked |
 | [PAPER-paper-method-add-008](PAPER-paper-method-add-008/README.md) | Opening the black box toward a modular approach to spike sorting | 0 | not linked |

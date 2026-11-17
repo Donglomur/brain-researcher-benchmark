@@ -19,6 +19,10 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
+## Task documentation
+
+- [Current response identity validation](docs/response-validation.md)
+
 ## Implementation artifacts
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.

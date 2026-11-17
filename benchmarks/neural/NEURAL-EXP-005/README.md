@@ -32,7 +32,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Complete support evaluator](implementations/complete-support-evaluator) — Complete support evaluator.
+  Scope: Complete normalized 79-infant probability endpoint, exact causal EEG packets and equal-infant Brier comparisons. Generated controls and source review do not verify authentic EDF/annotation alignment, input quality flags, reference competence, protected execution or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

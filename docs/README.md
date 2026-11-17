@@ -5,6 +5,7 @@
 - [Browse the two tracks](../benchmarks/README.md).
 - [Current inventory and qualification status](status/README.md).
 - [Use an implementation](usage/implementations.md) or [grade a finished artifact](usage/artifact-grading.md).
+- [Use the new preparation, estimation and evaluation components](usage/construction-components.md).
 
 ## Scientific design
 
