@@ -30,7 +30,13 @@ CONDITIONS = ("paper_data", "paper_data_author_code")
 SCOPE_PATH = "docs/provenance/paper-outcome-scope-decisions.v1.json"
 SCOPE_VERSION = "paper-outcome-scope-decisions/v1"
 UNAVAILABLE = "paper-outcomes-unavailable/v1"
+UNAVAILABLE_REASONS = {
+    "unavailable_primary_secondary_scope_mismatch": "primary_secondary_scope_mismatch",
+    "unavailable_complete_primary_pairing": "full_primary_pairing_unavailable",
+}
+NORMAL_SCOPE_DISPOSITIONS = frozenset(("same_primary_unqualified", "explicit_primary_selection"))
 SCOPE_IDS = frozenset(("PAPER-EXP-20261113-005", "PAPER-FIND-REP-007", "PAPER-FIND-013", "PAPER-CANDIDATE-20261114-PLEXUS"))
+SCOPE_ID = re.compile(r"(?:PAPER-[A-Za-z0-9_-]{1,121}|paper-pcca-fa-bilateral-pfc-arousal-2026)\Z")
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 PRESERVED_ROW_FIELDS = (
     "id", "title", "track", "task_directory", "specification_id", "specification_alias",
@@ -176,7 +182,10 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
     need(scope_entry is None or primary_correction is None, "A task cannot have both scope correction routes")
     if primary_correction is not None:
         need(primary_correction["task_id"] == identifier
-             and primary_correction["disposition"] == "same_primary_unqualified", "Unexpected same-primary correction")
+             and primary_correction["disposition"] in NORMAL_SCOPE_DISPOSITIONS
+             and (primary_correction["disposition"] != "explicit_primary_selection"
+                  or primary_correction.get("adoption_route") == "normal_same_primary_unqualified"),
+             "Unexpected same-primary correction")
         result["goal"] = primary_correction["primary_goal"]
         result["primary_scope"] = primary_correction["primary_scope"]
         result["scope_decision"] = {"path": SCOPE_PATH, "task_entry_id": identifier}
@@ -187,6 +196,8 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
             "remaining_source_limits": copy.deepcopy(primary_correction["remaining_source_limits"]),
             "scientific_outcome": "unknown",
         }
+        if primary_correction["disposition"] == "explicit_primary_selection":
+            result["source_scope_correction"]["source_disposition"] = "explicit_primary_selection"
         result["success_criteria"].append(
             "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply.")
         result["evaluation"]["scope_disposition"] = "same_primary_unqualified"
@@ -216,7 +227,11 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
         result["evaluation"]["contracts"] = {"reproduction": None, "improvement": None}
         result["evaluation"]["reproduction_proposal"] = "Only a proposal explicitly bound in outcomes.v1.json is adopted."
         result["evaluation"]["retained_secondary_improvement"] = "improvement.v1.json"
-        result["evaluation"]["primary_bundle_status"] = "unavailable_primary_secondary_scope_mismatch"
+        result["evaluation"]["primary_bundle_status"] = scope_entry["paired_bundle_status"]
+        if scope_entry["paired_bundle_status"] == "unavailable_complete_primary_pairing":
+            result["status_basis"] = "The retained status describes the preserved improvement contract and its declared coverage. Complete primary reproduction and same-result improvement require their own source-grounded eligibility decisions."
+            result["primary_outputs"][2] = "Retained source work: " + scope_entry["retained_secondary_scope"]
+            result["success_criteria"][5] = "Preserve prior task definitions, improvement criteria and useful retained implementations with their declared coverage. Historical attempts and source metadata do not become qualified AI results."
         for field in ("episode", "blocking_issues"):
             if field in previous:
                 result[field] = {"retained_secondary_improvement": copy.deepcopy(previous[field]),
@@ -259,7 +274,7 @@ def scope_decisions(value):
          "Invalid paper scope-decision artifact")
     entries = value.get("entries")
     need(type(entries) is dict and SCOPE_IDS <= set(entries) and len(entries) <= 1000
-         and all(type(identifier) is str and re.fullmatch(r"PAPER-[A-Za-z0-9_-]{1,121}", identifier) for identifier in entries),
+         and all(type(identifier) is str and SCOPE_ID.fullmatch(identifier) for identifier in entries),
          "Scope decision must retain the adjudicated tasks and explicit bounded paper identities")
     for identifier, entry in entries.items():
         need(type(entry) is dict and entry.get("task_id") == identifier, "Invalid scope-decision task identity")
@@ -267,17 +282,20 @@ def scope_decisions(value):
              "A passive scope confirmation cannot be an active correction")
         need(entry.get("adoption_route", "full_primary_pairing_unavailable") == "full_primary_pairing_unavailable",
              "Scope decision adoption route differs from its unavailable map")
+        need(entry.get("paired_bundle_status") != "unavailable_complete_primary_pairing"
+             or entry.get("adoption_route") == "full_primary_pairing_unavailable",
+             "Neutral full-primary unavailability requires an explicit reviewed route")
         for field in ("primary_goal", "primary_scope", "retained_secondary_scope"):
             need(type(entry.get(field)) is str and bool(entry[field].strip()), "Missing source-grounded scope field: " + field)
         need(type(entry.get("remaining_source_limits")) is list and all(type(item) is str and item.strip() for item in entry["remaining_source_limits"]), "Invalid remaining source limits")
         need(entry.get("primary_same_task_improvement") == "unavailable_until_independently_justified"
-             and entry.get("paired_bundle_status") == "unavailable_primary_secondary_scope_mismatch"
+             and entry.get("paired_bundle_status") in UNAVAILABLE_REASONS
              and entry.get("scientific_outcome") == "unknown", "Scope decisions cannot qualify a primary outcome")
     corrections = value.get("same_primary_corrections", {})
     need(type(corrections) is dict and len(entries) + len(corrections) <= 1000
          and not (set(entries) & set(corrections)), "Primary correction routes must be bounded and disjoint")
     for identifier, entry in corrections.items():
-        need(type(identifier) is str and re.fullmatch(r"PAPER-[A-Za-z0-9_-]{1,121}", identifier)
+        need(type(identifier) is str and SCOPE_ID.fullmatch(identifier)
              and type(entry) is dict and entry.get("task_id") == identifier, "Invalid same-primary correction identity")
         need(entry.get("projection_action", "revise_primary_scope") == "revise_primary_scope",
              "A passive scope confirmation cannot be an active correction")
@@ -288,9 +306,12 @@ def scope_decisions(value):
         need(type(entry.get("remaining_source_limits")) is list
              and all(type(item) is str and item.strip() for item in entry["remaining_source_limits"]),
              "Invalid same-primary source limits")
-        need(entry.get("disposition") == "same_primary_unqualified"
+        need(entry.get("disposition") in NORMAL_SCOPE_DISPOSITIONS
              and entry.get("paired_bundle_status") == "same_primary_unqualified"
              and entry.get("scientific_outcome") == "unknown", "Same-primary correction cannot qualify an outcome")
+        need(entry.get("disposition") != "explicit_primary_selection"
+             or entry.get("adoption_route") == "normal_same_primary_unqualified",
+             "Explicit primary selection requires an explicit reviewed normal route")
         notes, roles = entry.get("retained_secondary_scope"), entry.get("retained_source_roles")
         need(notes is None or type(notes) is str and bool(notes.strip()), "Invalid retained source scope notes")
         need(roles is None or type(roles) in (dict, list), "Invalid retained source roles")
@@ -299,7 +320,7 @@ def scope_decisions(value):
          and not ((set(entries) | set(corrections)) & set(confirmations)),
          "Passive confirmations must be bounded and separate from scope corrections")
     for identifier, entry in confirmations.items():
-        need(type(identifier) is str and re.fullmatch(r"PAPER-[A-Za-z0-9_-]{1,121}", identifier)
+        need(type(identifier) is str and SCOPE_ID.fullmatch(identifier)
              and type(entry) is dict and entry.get("task_id") == identifier
              and entry.get("projection_action") == "none"
              and entry.get("adoption_route", "source_gap_confirmation") == "source_gap_confirmation"
@@ -375,7 +396,7 @@ def unavailable_summary(identifier):
 
 
 def validate_unavailable(outcomes, reproduction, improvement, row, previous_rows):
-    """Authenticate a scope mismatch marker without admitting any primary result."""
+    """Authenticate full-primary unavailability without admitting a result."""
     keys = {"schema_version", "task_id", "original_task_sha256", "status", "reason_code", "reason",
             "primary_scope", "retained_secondary_improvement", "root_scope_decision"}
     need(type(outcomes) is dict and set(outcomes) in (keys, keys | {"reproduction_proposal"})
@@ -386,7 +407,8 @@ def validate_unavailable(outcomes, reproduction, improvement, row, previous_rows
          "Unavailable primary scope requires a registered source decision")
     entry = previous_rows.scope_decisions["entries"][identifier]
     need(outcomes["task_id"] == identifier and outcomes["original_task_sha256"] == row["specification"]["sha256"]
-         and outcomes["status"] == "unavailable" and outcomes["reason_code"] == "primary_secondary_scope_mismatch"
+         and outcomes["status"] == "unavailable"
+         and outcomes["reason_code"] == UNAVAILABLE_REASONS[entry["paired_bundle_status"]]
          and type(outcomes["reason"]) is str and bool(outcomes["reason"].strip())
          and outcomes["primary_scope"] == entry["primary_scope"], "Unavailable marker does not bind its corrected primary scope")
     need(outcomes["root_scope_decision"] == {"path": SCOPE_PATH, "raw_sha256": previous_rows.scope_pin["sha256"],
@@ -487,7 +509,7 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
 
 def public_primary_scope_correction(entry, scope_pin, task_id):
     """Project an authenticated scope entry without adding scientific claims."""
-    return {
+    result = {
         "disposition": "same_primary_unqualified", "primary_goal": entry["primary_goal"],
         "primary_scope": entry["primary_scope"],
         "remaining_source_limits": copy.deepcopy(entry["remaining_source_limits"]),
@@ -497,6 +519,9 @@ def public_primary_scope_correction(entry, scope_pin, task_id):
                                 "task_entry_id": task_id},
         "scientific_outcome": "unknown",
     }
+    if entry["disposition"] == "explicit_primary_selection":
+        result["source_disposition"] = "explicit_primary_selection"
+    return result
 
 
 def public_summary(row, bound):

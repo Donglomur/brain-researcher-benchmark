@@ -47,6 +47,15 @@ not a normal paired bundle, a scientific failure or evidence of ineligibility.
 All four primary scientific cells remain unknown, and primary receipt admission
 is refused. Secondary source work retains its own scope.
 
+A reviewed source component can also belong to the original finding family while
+covering too little of it to establish the complete primary result. New decisions
+use `unavailable_complete_primary_pairing` with the explicit
+`full_primary_pairing_unavailable` route for this neutral representation. Its
+marker must use `reason_code: "full_primary_pairing_unavailable"`; the existing
+scope-mismatch status keeps its original reason code. Neither route accepts a
+normal paired bundle. The exact source relation and declared coverage remain in
+the pinned decision, without treating a genuine component as an unrelated result.
+
 The public scope artifact separately records `same_primary_corrections`. These
 retain normal paired declarations and the unchanged same-paper and scientific
 anchor checks. Their reviewed goal, source scope and outstanding limits appear
@@ -55,6 +64,10 @@ This reviewed adoption requires unresolved reproduction source eligibility and
 an improvement contract that is not improvement-ready. Partial source components
 cannot qualify the complete primary family. Removing these source and criterion
 holds requires separately reviewed evidence and an explicit adoption revision.
+An explicitly selected original primary family may retain the source disposition
+`explicit_primary_selection` when its reviewed route is
+`normal_same_primary_unqualified`. The source disposition remains visible; it
+does not change the contract-anchor checks or grant eligibility.
 Source-gap confirmations use the separate passive `source_gap_confirmations`
 map with `projection_action: "none"`. They cannot also appear in an active
 correction map, and do not change a task's accepted projection or eligibility.
