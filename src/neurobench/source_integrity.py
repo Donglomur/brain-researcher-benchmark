@@ -17,6 +17,9 @@ PAPER_REVISION = "paper-improvement/v1"
 PAPER_OBJECTIVE = "surpass_source_paper_same_task"
 PAPER_HISTORY = "historical/task.pre-improvement.v1.json"
 PAPER_DISPOSITIONS = {"improvement_ready", "design_ready", "source_unresolved", "ineligible"}
+NEURAL_REVISION = "neural-understanding/v1"
+NEURAL_OBJECTIVE = "infer_neural_or_behavioral_targets_from_permitted_observations"
+NEURAL_HISTORY = "historical/task.pre-understanding.v1.json"
 
 
 class InvalidSource(ValueError):
@@ -233,6 +236,83 @@ def checked_paper_revision(reader, task_id, task_pin, task_doc, registered):
     return historical_body
 
 
+def checked_neural_revision(reader, task_id, task_pin, task_doc, registered):
+    """Authenticate a neural definition revision without promoting its evidence.
+
+    The task owns a current understanding contract and exact historical task
+    bytes. This validates their source binding only; scientific content and
+    access-mode capability are checked by the neural-understanding validator.
+    Historical implementation manifests continue to name the original task.
+    """
+    home = "benchmarks/neural/" + task_id
+    expected_id = registered.get("specification_id", task_id) if type(registered) is dict else task_id
+    require(task_pin["path"] == home + "/task.json"
+            and type(task_doc) is dict
+            and task_doc.get("id", task_doc.get("candidate_id", task_doc.get("task_id"))) == expected_id
+            and task_doc.get("track", "neural") == "neural",
+            "Current neural task is not bound to its understanding contract and history")
+    revision = task_pin["specification_revision"]
+    require(type(revision) is dict and set(revision) ==
+            {"version", "previous_specification", "understanding_contract"}
+            and revision["version"] == NEURAL_REVISION,
+            "Unsupported neural specification revision")
+    previous, contract_pin = revision["previous_specification"], revision["understanding_contract"]
+    for pin, name in ((previous, home + "/" + NEURAL_HISTORY),
+                      (contract_pin, home + "/understanding.v1.json")):
+        require(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"}
+                and pin["path"] == name, "Neural revision member location or descriptor mismatch")
+        descriptor(pin)
+    require(same_pin(previous, task_pin["predecessor"]),
+            "Historical neural specification does not match registered predecessor")
+    historical_body = reader.checked(previous["path"], previous)
+    historical_doc = strict_json(historical_body)
+    require(type(historical_doc) is dict
+            and historical_doc.get("id", historical_doc.get("candidate_id", historical_doc.get("task_id"))) == expected_id
+            and historical_doc.get("track", "neural") == "neural"
+            and historical_doc.get("objective") != NEURAL_OBJECTIVE,
+            "Historical neural specification identity or revision mismatch")
+    contract = strict_json(reader.checked(contract_pin["path"], contract_pin))
+    require(type(contract) is dict and contract.get("schema_version") == NEURAL_REVISION
+            and contract.get("task_id") == task_id and contract.get("objective") == NEURAL_OBJECTIVE,
+            "Neural understanding contract identity mismatch")
+    evaluation = task_doc.get("evaluation")
+    binding = evaluation.get("neural_understanding") if type(evaluation) is dict else None
+    require(task_doc.get("objective") == NEURAL_OBJECTIVE
+            and binding == {
+                "schema_version": NEURAL_REVISION,
+                "objective": NEURAL_OBJECTIVE,
+                "contract_path": "understanding.v1.json",
+                "contract_sha256": contract_pin["sha256"],
+                "original_definition_path": NEURAL_HISTORY,
+                "original_definition_sha256": previous["sha256"],
+            }, "Current neural task is not bound to its understanding contract and history")
+    require(type(registered) is dict and registered.get("id") == task_id
+            and registered.get("track") == "neural" and registered.get("task_directory") == home
+            and registered.get("specification") == {key: task_pin[key] for key in ("path", "bytes", "sha256")}
+            and registered.get("specification_revision") == revision,
+            "Neural revision differs from current task registration")
+    original = registered.get("original_specification")
+    require(type(original) is dict and set(original) == {"path", "bytes", "sha256"}
+            and original["path"] == task_pin["original_path"]
+            and same_pin(original, task_pin["predecessor"]),
+            "Neural revision changed its original registered identity")
+    return historical_body
+
+
+def checked_specification_revision(reader, task_id, task_pin, task_doc, registered):
+    """Dispatch only the explicitly supported revision for the task's track."""
+    require(type(task_doc) is dict, "Revised task must be an object")
+    track = task_doc.get("track")
+    if track == "paper":
+        return checked_paper_revision(reader, task_id, task_pin, task_doc, registered)
+    require(track == "neural", "Unknown revised task track")
+    revision = task_pin.get("specification_revision")
+    require(type(revision) is dict, "Specification revision must be an object")
+    require(revision.get("version") != PAPER_REVISION,
+            "Only paper tasks support paper specification revisions")
+    return checked_neural_revision(reader, task_id, task_pin, task_doc, registered)
+
+
 def check_complete_inventory(reader, package, selected, current):
     """One explicitly enrolled source profile; no task code or native semantics."""
     profile = package["complete_inventory"]
@@ -366,7 +446,11 @@ def check_configuration(reader, config):
                 "Closed registered task predecessor required")
         descriptor({"path": task_pin["original_path"], **task_predecessor})
         revised = "specification_revision" in task_pin
-        require(not revised or track == "paper", "Only paper tasks support specification revisions")
+        if revised:
+            require(type(task_pin["specification_revision"]) is dict,
+                    "Specification revision must be an object")
+            require(track == "paper" or task_pin["specification_revision"].get("version") != PAPER_REVISION,
+                    "Only paper tasks support paper specification revisions")
         if not revised:
             require(same_pin(task_pin, task_predecessor),
                     "Registered scientific task definition changed")
@@ -376,7 +460,7 @@ def check_configuration(reader, config):
                 "Canonical task ID or track mismatch")
         historical_task_body = task_body
         if revised:
-            historical_task_body = checked_paper_revision(
+            historical_task_body = checked_specification_revision(
                 reader, task_id, task_pin, task_doc, task_registry(reader).get(task_id))
 
         rows = package["files"]
