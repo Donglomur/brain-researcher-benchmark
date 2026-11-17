@@ -90,6 +90,11 @@ zero-shot waveform viewer and the feature programme that can learn from six
 training people's labels use different information budgets. Shared task and query
 IDs alone cannot establish an information-matched tool effect.
 
+The recovered finite sleep programme now has a [reviewed source component](benchmarks/neural/NEURAL-007/implementations/registered-programme-v1/README.md).
+It preserves the six-person training and two-person development endpoint; six
+historical metadata bodies and all scientific operands remain external. Current
+runtime selection and qualification are unchanged.
+
 For paper tasks, `paper-contract --outcome reproduction` and `paper-outcomes`
 inspect adopted reproduction definitions and their separate improvement and access
 conditions. `paper-contract` defaults to the current improvement contract.
