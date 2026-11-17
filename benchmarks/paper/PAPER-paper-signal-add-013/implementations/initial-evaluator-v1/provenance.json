@@ -1,0 +1,269 @@
+{
+  "task_id": "PAPER-paper-signal-add-013",
+  "component_version": "initial-evaluator-v1",
+  "component_scope": "Fixed source-selected primary40 CALC-minus-CTRL map-array contrast, source Figure2B reductions, explicit source-original sensitivity and descriptive participant resampling",
+  "contract": {
+    "path": "benchmarks/paper/PAPER-paper-signal-add-013/task.json",
+    "bytes": 16711,
+    "sha256": "dc4aa310b2265d05b3cfa88b7f8093ebc82cbac96ca6d67628c9c83b899dcd64"
+  },
+  "source_code": {
+    "repository": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+    "revision": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+    "recorded_license": "CC BY-NC-SA4.0",
+    "upstream_code_bundled": false
+  },
+  "source_data": {
+    "dataset": "ds004873",
+    "version": "2.0.6",
+    "git_revision": "eef50ff140a9863c412428b0bd1a14f46f5cd342",
+    "recorded_license": "CC0",
+    "metadata_rows": 75,
+    "primary_analysis_subjects": 40,
+    "authentic_map_acquisition": false
+  },
+  "sources": {
+    "participants": {
+      "url": "https://github.com/OpenNeuroDatasets/ds004873/blob/eef50ff140a9863c412428b0bd1a14f46f5cd342/participants.tsv",
+      "bytes": 2435,
+      "sha256": "635e7bf39587a732d7054c9dbc3c66f6a3a051e05f3f9a94a7b96b93ca7308f5",
+      "git_blob_sha1": "65fe22991e8af899116fbaac5711b155ca35f1d4",
+      "github_short_path": "65fe229",
+      "short_path_match": true,
+      "rows": 75,
+      "reconstruction": {
+        "line_separator": "\n",
+        "trailing_separator": ""
+      }
+    },
+    "C_Fig2A_PLS.ipynb": {
+      "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics/blob/1b22c2cb03bab0d5cf70da6a45c4d720194dc523/C_Fig2A_PLS.ipynb",
+      "bytes": 83736,
+      "sha256": "4c39fb02caa2027029fdc9ff6dba4ba57fb63217de39e135dc32bcd28a125b6f",
+      "git_blob_sha1": "42ae112b4edb9e640f528c39f70fae30616a9791",
+      "github_short_path": "42ae112",
+      "short_path_match": true,
+      "method": "GitHub pinned blob embedded rawLines joined with newline plus final newline; Git blob hash matches GitHub shortPath"
+    },
+    "D_Fig2BD.ipynb": {
+      "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics/blob/1b22c2cb03bab0d5cf70da6a45c4d720194dc523/D_Fig2BD.ipynb",
+      "bytes": 84354,
+      "sha256": "899fb3c251261f8c5aa63ecf64cfef604aeaebcaf1def8aae3c468ab949217dc",
+      "git_blob_sha1": "c55cb69e6b22769ce40383f906c1af83deab797d",
+      "github_short_path": "c55cb69",
+      "short_path_match": true,
+      "method": "GitHub pinned blob embedded rawLines joined with newline plus final newline; Git blob hash matches GitHub shortPath"
+    },
+    "paper": {
+      "url": "https://www.nature.com/articles/s41593-025-02132-9",
+      "bytes": 671225,
+      "sha256": "2ccad8b45ca0cc3dfc25cbc53da6996863554657920cbf4117095693fde34750"
+    },
+    "A_preprocessing.ipynb": {
+      "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics/blob/1b22c2cb03bab0d5cf70da6a45c4d720194dc523/A_preprocessing.ipynb",
+      "bytes": 125011,
+      "sha256": "fa4047f69100c3d56ae51707bcd604e8b66358d2237c5f1f6851311f44b0af30",
+      "git_blob_sha1": "e63b63f19b72ddba4b78ea951aa6818e34ba35f7",
+      "github_short_path": "e63b63f",
+      "short_path_match": true,
+      "method": "GitHub pinned blob embedded rawLines joined with newline plus final newline; Git blob hash matches GitHub shortPath"
+    }
+  },
+  "contract_mapping": [
+    {
+      "contract_pointer": "/next_implementation_action/action",
+      "implemented": "Fixed primary40 and first30/last10 original-versus-corrected lineage; explicit required preceding-mask receipts; one complete CALC-CTRL contrast",
+      "unresolved": "Native mask derivation/execution and authenticated derivatives; spatial-null qualification"
+    },
+    {
+      "contract_pointer": "/evaluation/source_recorded_metrics/0/recorded_metrics",
+      "implemented": "Per-person metabolic contrasts, exact group-median reductions and descriptive spatial association",
+      "unresolved": "PLS modes and spatial inferential uncertainty"
+    },
+    {
+      "contract_pointer": "/input_assets/source_contract_locators/0/versions_and_loader_contract/data_contract/biological_units",
+      "implemented": "Exact source-ordered40; no metadata75/full-condition30 substitution"
+    },
+    {
+      "contract_pointer": "/evaluation/comparability",
+      "implemented": "Separate primary corrected and source-original sensitivity; fixed source PLS masks; no favorable-map selection"
+    },
+    {
+      "contract_pointer": "/access_conditions",
+      "implemented": "Owner external manifest digest and immutable data hash interface; public exposure and source rights retained",
+      "unresolved": "Protected evaluation/harness isolation and candidate public packet"
+    }
+  ],
+  "semantics": [
+    {
+      "name": "fixed_central_contrast",
+      "established": "calc minus control, paired within participant; exact40 for calc-control; first30 for contrasts involving mem/rest",
+      "source": "C cell3; D cell7"
+    },
+    {
+      "name": "corrected_cmro2_lineage",
+      "established": "calc task desc-CBV; control baseline desc-orig; standard MNI152 (res-2 route), independently selected mask; lowres is separate lineage",
+      "source": "D cell11; C cell10"
+    },
+    {
+      "name": "source_original_sensitivity",
+      "established": "A cell5 writes calc desc-orig for first30, calc desc-CBV for extra10 with two acquired CBV scans, and control desc-orig for all40. Therefore all40 uniform calc desc-orig is not established by this source. A cell7/cell8 creates surrogate corrected calc CBV/OEF/CMRO2 for first30 using Glasser correction factor from extra10.",
+      "source": "A cells5,7,8; Paper Methods Estimation of a realistic surrogate for CBV during CALC"
+    },
+    {
+      "name": "cmro2_percent_change",
+      "established": "100*(task_voxel-baseline_voxel)/baseline_voxel before any spatial reduction",
+      "source": "D cell11"
+    },
+    {
+      "name": "bold_percent_change",
+      "established": "D cell11 consumes precomputed calccontrol MNI152 desc-fmriprep BOLD_percchange maps. A cell19 forms each voxel baseline median over control frames, computes temporal percent signal change, then median across calc frames. C cell8 PLS-input BOLD uses a distinct scalar baseline median without axis across masked voxels and time. These must not be silently treated as identical.",
+      "source": "A cell19; C cell8; D cell11"
+    },
+    {
+      "name": "frame_indices_zero_based",
+      "established": {
+        "first30_control": [
+          [
+            80,
+            100
+          ],
+          [
+            205,
+            225
+          ],
+          [
+            280,
+            300
+          ],
+          [
+            355,
+            375
+          ]
+        ],
+        "first30_calc": [
+          [
+            55,
+            75
+          ],
+          [
+            155,
+            175
+          ],
+          [
+            255,
+            275
+          ],
+          [
+            305,
+            325
+          ]
+        ],
+        "extra10_control": [
+          [
+            5,
+            25
+          ],
+          [
+            55,
+            75
+          ],
+          [
+            105,
+            125
+          ],
+          [
+            155,
+            175
+          ]
+        ],
+        "extra10_calc": [
+          [
+            30,
+            50
+          ],
+          [
+            80,
+            100
+          ],
+          [
+            130,
+            150
+          ],
+          [
+            180,
+            200
+          ]
+        ],
+        "interval_convention": "half-open"
+      },
+      "source": "A cell19; C cell8"
+    },
+    {
+      "name": "fig2b_order",
+      "established": "For each positive/negative group mask, take median across subjects independently per voxel, then nanmedian across voxels. D separately retains per-subject nanmedian across voxels; median of those summaries is distinct.",
+      "source": "D cell11"
+    },
+    {
+      "name": "calibration",
+      "established": "A cell5 CBF_upscaled=CBF/0.75; CaO2=0.334*Hct*55.6*O2sat/100; CMRO2=CBF_upscaled*OEF*CaO2/100. CBF common scaling cancels from paired percent change.",
+      "source": "A cell5; D cell11"
+    },
+    {
+      "name": "mask_dependency",
+      "established": "C cell3 consumes preexisting derivatives/task-all_space-MNI152_res-2_SNR_YEO_group_mask.nii.gz; A cell39 also reads it, does not generate it. Paper describes exclude low15th-percentile temporal SNR for >66% people, cerebellum, GM<0.5. C uses mean-centered pyls with3000 permutations+3000 bootstraps, BSR abs2 + cluster threshold30, applies Yeo mask, orients positive/negative via task design-score sign and exports binary maps consumed D cell11.",
+      "source": "C cells3,12-14,40,46; D cell11; A cell39; Paper Methods Artifact correction and GM masking, Statistics"
+    },
+    {
+      "name": "fig2d_separate",
+      "established": "Regional Fig2d uses BSR\u00b13 and separate connected-cluster/visual merge handling; must not conflate with Fig2b binary group masks.",
+      "source": "Paper Methods BOLD clusters; D cells17-21"
+    },
+    {
+      "name": "spatial_inference",
+      "established": "No geometry-preserving spatial null was established in inspected primary sources. PLS resampling and source participant summary uncertainty do not establish spatial independence. A spatial correlation coefficient can be descriptive; spatial p-values require a separately frozen scientifically validated null.",
+      "source": "Canonical controls and holds; negative source inspection result"
+    }
+  ],
+  "prospective_policies": [
+    "Fail closed on all nonfinite map values or nonpositive CMRO2 within frozen whole-brain support; no silent source population/voxel reduction",
+    "Fixed external owner manifest digest binds complete ordered packet; metadata/receipt truth remains operator-attested",
+    "Source-original convention sensitivity explicitly first30 desc-orig, last10 measured desc-CBV",
+    "Descriptive Pearson and nonzero-pair sign disagreement, no spatial p-value",
+    "Paired full-participant spatial-field bootstrap with recomputation of source median statistic; conditional on frozen exposed masks, not source PLS uncertainty"
+  ],
+  "source_hazards": [
+    "C cell2 has data_dir assignment commented before use.",
+    "C cell8 active sub-r prefix despite primary subject IDs; C cell10 sub assignment is commented, retaining stale loop variable.",
+    "C cell31 has OLDOLD/design_scores_df_BOLD inconsistent variable assignment.",
+    "D CMRO2_mode setting is not consulted for the cell11 calc-CBV branch.",
+    "B source padding issue was reported by lead, not independently rederived by this worker.",
+    "D percent changes do not explicitly reject zero denominators; stricter fail-closed validity is a prospective evaluator policy, not literal notebook behavior.",
+    "C/A mask filename lineage is identified, but native mask construction artifact and exact snapshot assets remain unverified."
+  ],
+  "preserved_gates": [
+    "Exact snapshot2.0.6 full derivative asset acquisition/checksums and native schema compatibility",
+    "Source GM/SNR/Yeo and PLS mask provenance and native artifact execution",
+    "Corrected/original map existence per subject and exact resolution",
+    "Frozen numerical target/tolerances and protected references/information boundaries",
+    "Raw reconstruction and independent replication outside initial scope",
+    "Spatial-null scientific validity and physiological calibration sensitivity",
+    "Native environment/notebook execution and meaningful difficulty",
+    "Rights: official code CC BY-NC-SA4.0 independently of data CC0",
+    "No empirical reproduction, baseline competence, admission or scientific qualification claim"
+  ],
+  "status": {
+    "scientific_qualification": false,
+    "full_contract_complete": false,
+    "authentic_reference_established": false,
+    "binary_reward_registered": false,
+    "new_scientific_runs": 0
+  },
+  "engineering_validation": {
+    "independent_source_reference_controls": 4,
+    "package_unit_tests": 9,
+    "independent_final_review": "External exact-byte review required before coordinator commit",
+    "data_kind": "bounded generated controls only",
+    "no_dataset_archives_or_installs": true
+  }
+}
