@@ -4,7 +4,7 @@ These functions are scientific source only. Calling them requires separately
 qualified target access after predictions have been captured immutably.
 """
 from dataclasses import dataclass
-from .cohort import CLASSES, SupportError, validate_transfer_ensemble
+from .cohort import CLASSES, UnitKey, SupportError, validate_transfer_ensemble
 
 @dataclass(frozen=True)
 class Prediction:
@@ -15,6 +15,37 @@ class Prediction:
     model_identity: tuple
     member_support: object = None
 
+def _validate_unit_order(units):
+    """Each biological observation contributes once to every denominator."""
+    if not units:
+        raise SupportError('nonempty biological unit support required')
+    for unit in units:
+        if not isinstance(unit, UnitKey):
+            raise SupportError('typed biological unit identity required')
+        unit.validate()
+    if len(set(units)) != len(units):
+        raise SupportError('duplicate biological row would change class denominators')
+
+def _model_token(value):
+    """Compare the same model identity before and after its JSON round trip."""
+    if type(value) is dict and set(value) == set(UnitKey.__dataclass_fields__):
+        value = UnitKey(**value)
+    if isinstance(value, UnitKey):
+        value.validate()
+        return ('unit', tuple(getattr(value, field) for field in UnitKey.__dataclass_fields__))
+    if type(value) in (tuple, list):
+        return ('sequence', tuple(_model_token(part) for part in value))
+    if type(value) in (str, int):
+        return (type(value).__name__, value)
+    raise SupportError('unsupported captured model identity')
+
+def _validate_model_roster(models):
+    if not models:
+        raise SupportError('complete model roster required')
+    tokens = tuple(_model_token(model) for model in models)
+    if len(set(tokens)) != len(tokens):
+        raise SupportError('duplicate model identity would change ensemble weighting')
+
 def validate_member_support(units, models, support):
     """Bind tensor columns to the full roster without interpreting identity as data.
 
@@ -23,9 +54,10 @@ def validate_member_support(units, models, support):
     roster; the repeat and held-unit identities must match that row and column.
     """
     units=tuple(units);models=tuple(models)
+    _validate_unit_order(units)
+    _validate_model_roster(models)
     if type(support) is not dict or set(support)!={'layout','row_model_indices'}:
         raise SupportError('explicit capture member-support schema required')
-    if not models:raise SupportError('complete model roster required')
     if support['layout']=='global_members':
         if support['row_model_indices'] is not None:
             raise SupportError('global members cannot carry a row subset')
@@ -79,6 +111,9 @@ def loo_prediction(ensemble, source_identity):
 
 def validate_prediction(prediction, expected_units):
     import numpy as np
+    expected_units=tuple(expected_units)
+    _validate_unit_order(expected_units)
+    _validate_model_roster(prediction.model_identity)
     if prediction.units!=tuple(expected_units) or prediction.classes!=CLASSES:
         raise SupportError('prediction/target ordered identity mismatch')
     p=np.asarray(prediction.probabilities)
