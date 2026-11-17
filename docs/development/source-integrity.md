@@ -73,3 +73,84 @@ filesystem sandbox or protection against coordinated edits to source and pins.
 Update current inventories with reviewed source changes, preserve original evidence,
 and run the affected checks. See [development](../DEVELOPMENT.md) and
 [provenance](../provenance/README.md).
+
+## Workflow pin preflight and bounded maintenance
+
+Before pushing source or task-definition changes, run:
+
+```sh
+python3 -I -S -B scripts/maintenance/workflow_source_pins.py --output /tmp/workflow-source-audit.json
+python3 -I -S -B scripts/check_source_integrity.py
+```
+
+The first command is the same source-only preflight used by the shared
+[CI gate](../../.github/workflows/source-maintenance-preflight.yml). Every existing
+workflow job depends on that gate, directly or through its existing source job;
+package jobs retain their parallelism after it passes. The gate also runs the
+focused rejection controls. It installs no benchmark dependencies and executes
+no benchmark pipeline.
+
+The [reviewed occurrence ledger](../../scripts/maintenance/workflow_source_pins.json)
+binds every literal SHA256 occurrence to a repository source path or an explicit
+pip wheel hash. Expectations are read from the actual workflow text, including
+shell arguments, Python scalar/tuple pins, dictionary rows, and semantic hash
+assertions. Exact workflow snapshots and occurrence positions make changed,
+missing, or new forms fail closed. The initial audit covers 978 occurrences:
+839 local source occurrences over 702 files and 139 wheel occurrences. It also
+checks 42 literal package groups, their complete member sets and aggregate byte
+totals, preserved task predecessors, and the numerical launcher's parent/child
+CPU limits. The JSON report lists every local occurrence with its path, line,
+size, and hash. Wheel hashes are classified, not downloaded or authenticated.
+
+These checks retain all existing package-specific source validators and
+scientific tests. The ledger is reviewed repository metadata, not an external
+trust root: coordinated changes to source, workflows, and the ledger require
+code review. Its baseline commit identifies the reviewed migration; subsequent
+bounded updates retain explicit old/new identities and their review reasons.
+No source path is inferred by searching for matching file content at runtime.
+
+For a reviewed source change, provide an explicit JSON request:
+
+```json
+{
+  "schema": "workflow-pin-changes/v1",
+  "reason": "Describe the reviewed source correction and its evidence",
+  "updates": [
+    {
+      "previous": {"path": "path/to/source.py", "bytes": 100, "sha256": "<old SHA256>"},
+      "current": {"path": "path/to/source.py", "bytes": 110, "sha256": "<reviewed new SHA256>"}
+    }
+  ]
+}
+```
+
+```sh
+python3 -I -S -B scripts/maintenance/workflow_source_pins.py --plan changes.json --output reviewed-plan.json
+# Review the request, plan, source diff, and resulting workflow diff.
+python3 -I -S -B scripts/maintenance/workflow_source_pins.py --apply reviewed-plan.json
+```
+
+Planning is read-only; applying checks the complete plan again before writing.
+It changes only bound pin tokens and the corresponding literal-array byte
+aggregates, preserves all other workflow code, and updates the occurrence ledger.
+A stale plan fails. There is no recompute-all-pins option. Scalar pins support
+same-size hash corrections; size-changing or redirected computed/scalar paths
+fail for explicit manual review rather than guessing which integer or expression
+to rewrite. New workflow syntax or unrelated workflow edits require review of
+both the changed workflow and its exact ledger snapshot and occurrence bindings.
+
+Canonical task changes use a historical redirect, preserving the original size
+and hash. Only the same task's registered `previous_specification` at the exact
+`historical/task.pre-improvement.v1.json` or
+`historical/task.pre-understanding.v1.json` path is accepted. A current task may
+not be rehashed in place to satisfy a legacy source validator. Unrelated current
+task readers are not redirected by the pin updater.
+
+The task integrity refresher supports both revision types. Use
+`python3 -I -S -B scripts/maintenance/refresh_paper_integrity.py --metadata-only`
+for its read-only current-inventory and closure plan, or add `--write` to apply
+those authenticated metadata changes. Feed its explicit old/new closure pins and
+the registered task predecessor redirects into the workflow plan above. Run both
+preflight commands and the affected package validators after integration. A
+passing source audit still does not establish authentic-data execution or
+scientific qualification.

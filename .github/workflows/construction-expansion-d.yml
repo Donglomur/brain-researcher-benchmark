@@ -25,7 +25,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   expansion-d-source-identities:
+    needs: source-preflight
     name: Expansion D source identities
     runs-on: ubuntu-24.04
     timeout-minutes: 3

@@ -19,7 +19,10 @@ env:
   PYTHONDONTWRITEBYTECODE: '1'
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   clock-arithmetic-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
