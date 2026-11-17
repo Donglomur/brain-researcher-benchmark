@@ -1,0 +1,11 @@
+# Initial NEDS evaluation component
+
+The additive `implementations/initial-evaluator-v1` package provides a complete evaluation path from explicitly partitioned, binned IBL trials through target-free modality packets, a train-only prospective ridge reference, source-derived neural/behavior scores, and paired full-session comparisons. It preserves all 74 training and ten heldout source EIDs and rejects missing authentic sessions.
+
+The six task masks cover all-behavior encoding, each single-behavior encoding, and spike-only decoding of all four behaviors. The evaluator reports nine separate primary endpoints, neuron-macro bits/spike with the source evaluation-mean null, un-clipped continuous R², choice/block accuracy, source training versus heldout-session panels, conditional animal grouping and Pareto relations. Source-null values never enter model-facing inputs. Hash-bound packets and declared training receipts support audit but do not establish sandboxed execution or actual matched compute.
+
+A bounded generated suite independently checks Poisson math, neuron versus spike weighting, zero-only rate replacement, negative R², zero-spike/constant targets, trial/cohort/unit ordering, target aliases, modality masking, test-target isolation, complete 84-session coverage, paired declarations, conditional animal versus session weighting, and the command-line reference path. No authentic inputs or native NEDS model were run.
+
+Important preserved source discrepancies include paper 2 Hz versus code greater-than-5 Hz eligibility; all-trial presplit scaling and scale disagreement; list-truthiness validity masks; camera lineage; and an apparent last-dataloader-batch evaluation path. This implementation's full-trial scoring, strict complete support, ridge reference, selected validation grid and animal bootstrap are explicitly labeled new construction choices. They are not historical reference results.
+
+See the package README and `provenance.json` for schemas, commands, source identities and detailed semantics. Scientific qualification remains **unknown**. Exact ONE original-object membership/revisions, full animal/probe joins, native producer parity, protected references/tolerances, rights and compute parity remain unresolved. This component is not a qualified full-paper reproduction or a new benchmark ID.
