@@ -3,7 +3,6 @@ import ast
 import copy
 import hashlib
 import io
-import importlib.util
 import json
 import logging
 import math
@@ -96,10 +95,10 @@ class MetricControls(unittest.TestCase):
         e.poisson_bits_per_spike(target, prediction)
         self.assertTrue(np.all(prediction == 0))
 
-    @unittest.skipUnless(os.environ.get('NLB_OFFICIAL_SOURCE') and importlib.util.find_spec('scipy'),
-                         'optional exact pinned official source parity requires source and SciPy')
     def test_official_byte_pinned_parity(self):
-        raw = Path(os.environ['NLB_OFFICIAL_SOURCE']).read_bytes()
+        bundled_source = Path(__file__).resolve().parents[1] / 'vendor' / 'nlb_evaluation.py'
+        source_path = Path(os.environ.get('NLB_OFFICIAL_SOURCE', str(bundled_source)))
+        raw = source_path.read_bytes()
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
                          '05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476')
         tree = ast.parse(raw)
@@ -213,8 +212,6 @@ class PacketControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             e.score_submission(gold, e.mean_rate_reference(self.training, self.query))
 
-    @unittest.skipUnless(importlib.util.find_spec('sklearn') and importlib.util.find_spec('scipy'),
-                         'optional smoothing controls require scikit-learn and SciPy')
     def test_smoothing_source_recipe_constant_target_control(self):
         training = copy.deepcopy(self.training); training['target_counts'][:] = 2
         query = copy.deepcopy(self.query); query['visible_counts'][:] = 10
@@ -225,8 +222,6 @@ class PacketControls(unittest.TestCase):
         self.assertTrue(audit['training_only'])
         self.assertFalse(audit['authentic_reference_qualified'])
 
-    @unittest.skipUnless(importlib.util.find_spec('sklearn') and importlib.util.find_spec('scipy'),
-                         'optional smoothing controls require scikit-learn and SciPy')
     def test_smoothing_rejects_unsupported_missingness_and_zero_training_unit(self):
         training = copy.deepcopy(self.training); training['visible_counts'][0, 0, 0] = np.nan
         with self.assertRaises(ValueError):
