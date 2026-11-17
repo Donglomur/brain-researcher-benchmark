@@ -135,6 +135,27 @@ class PaperCatalogBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "original registration roster"):
             catalog.discover(self.root)
 
+    def test_later_neural_expansion_does_not_invalidate_paper_history(self):
+        current = self.registry()
+        row = copy.deepcopy(next(row for row in current["tasks"] if row["id"] == "NEURAL-EXP-0-0"))
+        spec = json.loads((self.root / row["specification"]["path"]).read_bytes())
+        row["id"] = row["specification_id"] = spec["id"] = "NEURAL-NEW-001"
+        row["task_directory"] = "benchmarks/neural/NEURAL-NEW-001"
+        relative = row["task_directory"] + "/task.json"
+        body = binding_fixture.put(self.root, relative, spec)
+        row["specification"] = builder.pin(relative, body)
+        row["original_specification"] = builder.pin("former-source/NEURAL-NEW-001.json", body)
+        current["tasks"].append(row)
+        for key in ("neural", "total", "expansion_drafts"):
+            current["source_counts"][key] += 1
+        self.save_registry(current)
+        checked = builder.write_or_check(self.root, check=True, validator=engine.contract_validate)
+        self.assertEqual(checked["changed_files"], 0)
+        discovered = catalog.discover(self.root)
+        self.assertEqual(discovered["counts"]["neural"], 119)
+        self.assertEqual(discovered["paper_improvement_counts"]["covered"], 116)
+        self.assertEqual((self.root / builder.SNAPSHOT).read_bytes(), self.original_registry)
+
     def test_rehashed_snapshot_original_pin_drift_is_rejected(self):
         def change(doc):
             row = next(row for row in doc["tasks"] if row["track"] == "paper")
