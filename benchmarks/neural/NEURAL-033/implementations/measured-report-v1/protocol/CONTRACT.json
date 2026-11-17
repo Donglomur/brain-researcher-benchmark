@@ -1,0 +1,44 @@
+{
+  "task_id": "NEURAL-033",
+  "protocol_version": "rank_activity_interaction_v1",
+  "design": "Prospective analysis of the full released Early control and Kir spine cohorts; not a historical paper estimator or a randomized treatment effect.",
+  "source_release": "Zenodo 15047046",
+  "cohorts": {
+    "control_members": 27,
+    "control_mice": 20,
+    "kir_members": 17,
+    "kir_mice": 10,
+    "compartments": [
+      "apical",
+      "basal"
+    ]
+  },
+  "eligible": "Source-stable at both visits (no New Spine, Eliminated Spine or Absent label), neither visit labeled Shaft Spine, strictly positive finite baseline/followup volume, finite nonnegative activity rate. Retain all excluded rows with reasons. This is a persistent-spine estimand, not survival or spine formation.",
+  "outcome": "log2(followup_volume / baseline_volume), computed as the difference of logs",
+  "activity": "Equal-mouse weighted empirical mid-CDF of source spine_activity_rate within each treatment x compartment group. Dimensionless; no assumption that Kir/control raw rate units match.",
+  "baseline": "Equal-mouse weighted empirical mid-CDF of baseline_volume within each treatment x compartment group.",
+  "weights": "Within each treatment x compartment, every eligible mouse has equal total initial mass and its eligible rows share that mass equally.",
+  "panels": {
+    "all": "Weighted least squares of outcome on intercept, activity rank and baseline-volume rank in each of four groups.",
+    "balanced": "Divide each rank into fixed thirds [0,1/3),[1/3,2/3),[2/3,1]. For each compartment and joint rank bin, target mass is the minimum control/Kir initial mass. Scale row weights by target mass / cohort-bin mass, then normalize each cohort. Zero-overlap bins are excluded explicitly. Rebalancing changes mouse influence; report effective mouse count. It balances relative ranks, not raw physical covariates. Ranks are fixed from initial equal-mouse weights within each replicate and are not recomputed after balancing. Effective mouse count is 1/sum(normalized mouse mass squared). Zero overlap, fewer than two post-balance mice or deficient design produce an unavailable fit."
+  },
+  "contrasts": [
+    "apical_kir_minus_control_activity_slope",
+    "basal_kir_minus_control_activity_slope",
+    "apical_minus_basal_slope_difference"
+  ],
+  "uncertainty": "Stratified delete-one-mouse jackknife: remove every row of each mouse across both compartments; recompute eligibility-dependent ranks, weights, balancing and fits. Within each treatment sum (M-1)/M times squared deviations of delete-one estimates from their treatment-specific mean; add the two treatment contributions and take sqrt. All required deletions must be defined. Report min/max deletion estimates. This is a specified approximate sensitivity/uncertainty diagnostic, not validated coverage or a p-value. The mouse deletion roster is the original eligible treatment-specific union across both compartments before balancing, not the post-balanced subset. Preserve the main estimate even if uncertainty is unavailable.",
+  "rank_policy": "No ridge or pseudoinverse fallback. Weighted design must have three singular values with smallest > 1e-10 times largest, at least two represented mice and positive mass; otherwise return an explicit unavailable reason.",
+  "primary_metric": "Compute mean abs(candidate-reference)/(1+abs(reference)) over reference-defined point contrasts within each panel, then average the two panel means. Both panels must have at least one reference-defined contrast; otherwise primary is null. Any candidate/reference availability mismatch makes primary null and is separately reported. No missing candidate value can improve the score. Availability, counts, support IDs and other diagnostics are checked separately. Any structural mismatch (including support identities, exclusion reasons, ranks, availability or counts) also makes the primary null; numerical secondary claims remain continuous diagnostics.",
+  "success_threshold": null,
+  "information": "Investigation: full released primitive observations, including longitudinal volumes and cohort labels, are public. The private trusted implementation recomputes numerical claims. This is not a blinded prediction panel. No executable candidate source is run by the artifact scorer.",
+  "scope_limits": [
+    "No assumption of randomization, matched acquisition dates or equal raw activity units.",
+    "Relative-rank slope differences do not measure Kir's total activity suppression effect.",
+    "Shared mouse identities across compartments remain grouped; control and Kir mouse IDs do not overlap.",
+    "Previously exposed control cohort overlaps NEURAL031, NEURAL032 and PAPER-FIND-REP-012.",
+    "Published basal-control count differs from the selected released roster; keep all released source members and disclose the mismatch.",
+    "No empirical regression, jackknife, candidate or scientific scoring is authorized in this construction phase.",
+    "Removing raw units does not prove measurement construct equivalence; rank slopes compare different cohort-relative distributions. Baseline Shaft Spine is also excluded prospectively, unlike the inherited followup-only shaft rule."
+  ]
+}
