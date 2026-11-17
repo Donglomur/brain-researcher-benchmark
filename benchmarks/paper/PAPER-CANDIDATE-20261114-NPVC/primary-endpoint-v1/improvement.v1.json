@@ -1,0 +1,174 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-NPVC",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The selected primary is now the original Figure 2 method endpoint, not a biological effect-size target. Authentic Figure 2 support, final source baseline vector, real-data fitting/split route and a source-grounded full-panel superiority policy remain unresolved. Existing arithmetic accepts supplied likelihood operands and does not establish a fitted original-data baseline.",
+  "source_paper": {
+    "title": "Specialized structure of neural population codes in parietal cortex outputs",
+    "url": "https://www.nature.com/articles/s41593-025-02095-x"
+  },
+  "evidence": [
+    {
+      "id": "npvc-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Results: Vine copula models to analyze encoding in multivariate neural and behavioral data; Fig. 2b,c; Extended Data Fig. 1g",
+      "supports": "Frame-by-frame neural response prediction is an ordered endpoint; FDE is displayed as a distribution. The paper reports ten mice and 59 sessions."
+    },
+    {
+      "id": "npvc-methods",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Methods: NPvC models of single-neuron activity, Eq. 6 and following two paragraphs; calcium-imaging preprocessing",
+      "supports": "Defines conditional inputs, OASIS deconvolution, fivefold fitting, five task epochs, eight trial types, minimum trial support and model-specific deviance normalization."
+    },
+    {
+      "id": "npvc-code",
+      "kind": "author_code",
+      "url": "https://github.com/houman1359/Triplets/tree/68d9f18993f7a33c5c1df21b5fe392f857aed4fa",
+      "locator": "README.md; NPvC/ and SIMULATIONS/ directories",
+      "supports": "Author repository supplies NPvC, glmnet and simulation comparisons. Its README does not establish a complete real-data Figure 2 evaluation or historical fold ledger."
+    },
+    {
+      "id": "npvc-data",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Data availability",
+      "supports": "Names Harvard Dataverse DOI 10.7910/DVN/NL1CAQ as the original data source; this does not authenticate the release-to-session mapping."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recreate and improve the original Figure 2b,c held-out conditional prediction of deconvolved PPC activity using NPvC and GLM comparisons, retaining the complete source neuronwise FDE distribution and source-defined companion outputs across the original five epochs and eight trial types.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Harvard Dataverse DOI 10.7910/DVN/NL1CAQ, recorded release 1.0 (2025-08-15). The inherited registration records 70 files: 64 session archives and six support files. This inventory is not the authenticated Figure 2 release-to-session/neuron eligibility manifest; pin that mapping before admission. No substitute dataset.",
+      "evidence_ids": [
+        "npvc-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original Figure 2 eligible projection-defined and unlabeled PPC neuron population from the reported ten mice and 59 sessions; the paper reports 2860 analyzed cells but panel-specific inclusion is not authenticated. Preserve source behavioral performance >70% and at least five trials of every one of eight trial types, all eligible epochs, exclusions and animal/session/neuron/projection joins. Do not treat archive count as eligible session count.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Use the original fivefold cross-validation and bandwidth-fitting protocol. The precise frame/time-point versus whole-trial assignment unit remains unresolved. Recover that protocol, then authenticate historical memberships or a documented source-conformant stochastic rerun with recorded seeds, shared candidate-author folds and predeclared justified publication calibration. Do not replace it with whole-mouse holdout.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Time; virtual heading; lateral/forward running velocities and accelerations; trial type defined by sample cue, test cue and correct/incorrect outcome, in all five original event epochs. These are original conditional inputs, including outcome information; this is not a causal forecasting or native raw-signal claim.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Retain source OASIS AR1 cell-specific deconvolution, source activity scales and -0.5 to +2 second sample/delay/test/turn/reward epochs. Release-field mapping, alignment, full real-data fit caller and observed-density interpolation remain unresolved. No rounding deconvolved activity, clipping FDE or silently changing transforms.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Eq. 6 neuronwise held-out FDE=(L_model-L_null)/(L_sat-L_null), summing log-likelihood differences over held-out observations before the ratio. Preserve distinct original model-specific normalizers: NPvC conditional peak over the source 200-point activity grid and marginal null; GLM Poisson saturated mean equal to observed activity and fitted null mean, including lgamma(y+1) for noninteger deconvolved activity. Preserve source grid coordinates spaced (max-min)/199 and integration step (max-min)/200. Preserve signed/out-of-range FDE and explicit undefined zero-denominator states with full row support. No shared replacement denominator.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original Figure 2 neuronwise FDE cumulative distributions and their complete per-neuron/per-epoch source records. Authentic panel membership, native summary/contrast and source-reference mapping remain unresolved. Do not collapse to a newly selected mean, a favorable projection subgroup, neuron count or larger denominator gain.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 2 neuronwise held-out FDE performance panel with source-specific NPvC and GLM normalizers; no replacement scalar aggregate",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Recover the complete source Figure 2 NPvC and GLM FDE vectors, matched support and reference convention. The publication shows distributions; no exact numeric vector or scalar baseline is currently authenticated. Null/saturated likelihoods are mandatory fidelity operands, not superiority targets.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No full authentic real-data Figure 2 author fit/reference run is established. Retain original NPvC and GLM; calibrate any recorded source-conformant stochastic rerun against the publication with a justified predeclared tolerance. The supplied-operand FDE arithmetic and signed-motif component do not establish this run.",
+      "evidence_ids": [
+        "npvc-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Unresolved until source reference variability and the complete original performance panel are authenticated. Freeze a scientifically justified effect/uncertainty policy before candidates; no universal numeric margin or new scalar is invented.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the original model-comparison and resampling design, then predeclare a paired analysis respecting neurons nested within sessions and mice.",
+      "independent_unit": "Mouse for biological replication; original neuronwise corpus metric retained separately.",
+      "rationale": "Triplets, cells, folds and time points cannot become independent mice. Exact animal/session mapping is needed before selecting an uncertainty rule.",
+      "evidence_ids": [
+        "npvc-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Resolve original dataset/cohort/split/inputs/preprocessing and recover the complete NPvC and GLM performance panels, not only an easier baseline or selected neurons.",
+      "Use the same original source protocol and full support for candidate and author. Preserve original model-specific Eq. 6 conventions for reproduction. Candidate model admissibility and its denominator must be independently justified from the source task before evaluation; they are currently unresolved. An evaluator-owned source-grounded policy must prevent candidate-chosen density scaling/grid changes while not silently imposing a new universal normalizer.",
+      "Predeclare a scientifically justified complete-panel comparison and uncertainty/effect policy against the strongest relevant source author method and both published and reproduced references. Beating GLM alone does not surpass the paper NPvC result; a candidate-selected denominator or subgroup cannot establish a win.",
+      "Retain null, saturated, likelihood and source-control operands as fidelity/diagnostic outputs, never maximize them. No significance, motif enrichment or biological interaction-information reward.",
+      "Implement pending panel-admission support without inventing a scalar alias. Source-paper superiority remains separate from any independently researched current-SOTA claim."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was verified; source-paper results and any future author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Once admitted, develop candidate conditional neural predictors on declared original-protocol training/internal validation information. Source recovery and author calibration precede protected final comparison.",
+    "candidate_freeze": "Freeze candidate code, hyperparameters, transformations, permitted observations, source-conformant folds/seeds, source density and normalization admissibility, complete support and declared effect/uncertainty policies before final scoring.",
+    "final_evaluation": "Evaluate the complete original Figure 2 source performance panel on matched candidate-author held-out observations; independently compute the original method-specific likelihoods and FDE, retaining every eligible row and undefined-score state. No selected-subgroup completion.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep publication NPvC/GLM vectors and independently reproduced author vectors distinct. A source-grounded fixed panel policy must select the strongest relevant author comparison without candidate cherry-picking. Null/saturated/control outputs are fidelity requirements, not optimization objectives."
+  },
+  "blocking_issues": [
+    "Authenticate original release-to-animal/session/neuron/epoch eligibility and all required observations; the 70-file metadata inventory is not complete source support.",
+    "Recover the original fivefold split unit/protocol, real-data fit construction, interpolation and executable preprocessing/fit route; preserve original scales and conditional information.",
+    "Recover full publication/reference NPvC and GLM FDE vectors, model-specific likelihood/normalization operands and publication-equivalent author calibration.",
+    "Resolve the source-grounded candidate density/normalization admissibility and full-panel superiority rule before admission. Neither shared-denominator substitution nor density scaling is an accepted policy.",
+    "Freeze matching access conditions, meaningful effect, dependence-aware uncertainty, justified reproduction tolerance and measured episode budgets.",
+    "Panel improvement admission/interface is pending. Preserve the full source performance vector and mandatory controls; do not invent a scalar mean, favorable subgroup, win count or significance objective. No new AI/model study is required to finish source construction; an AI outcome requires a separate subsequent qualifying execution."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The previous biological primary task is preserved at historical/primary-biological-20261117-v1/task.json; its unchanged root reproduction/improvement/outcomes metadata keep their historical meanings. implementations/signed-motifs remains calibration for supplied graphs. implementations/fde-equations-v1 computes supplied-operand arithmetic and does not establish Figure 2 source fitting or authentic readiness."
+  }
+}

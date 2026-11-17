@@ -1,0 +1,51 @@
+{
+  "schema_version": "paper-paired-source-conditions-candidate/v1",
+  "task_id": "PAPER-paper-method-add-006",
+  "status": "unresolved",
+  "selection": "selection.v1.json",
+  "source_defined_input_scope": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+  "original_split": "Original per-unit tenfold CV over ten L2 strengths plus shared basis-hyperparameter selection. Recover native row order/folds, source library behavior and relationship between selection and reported scoring. Preserve source full-session covariate standardization and resolve rate >0.1 Hz/boundaries; a new rat/session holdout is a separate task.",
+  "common_artifacts": "Same authentic original covariate/spike representation and original eligibility/fold metadata; any 500-ms prepared arrays or source-derived masks supplied to both conditions must be declared and pinned. No fitted GLM/grid outputs as candidate answers.",
+  "common_input_manifest_sha256": null,
+  "author_code_manifest_sha256": null,
+  "source_condition_definitions": {
+    "paper_data": {
+      "available": [
+        "Original paper and selected-task contract",
+        "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+        "Same authentic original covariate/spike representation and original eligibility/fold metadata; any 500-ms prepared arrays or source-derived masks supplied to both conditions must be declared and pinned. No fitted GLM/grid outputs as candidate answers."
+      ],
+      "excluded": [
+        "Official algorithm-bearing implementation unless individually declared as a common artifact",
+        "Author fitted solution, cached result table or test-label answer files"
+      ],
+      "label_limit": "This is paper plus declared data/common preparation, never a claim of unassisted raw-data understanding."
+    },
+    "paper_data_author_code": {
+      "available": [
+        "Exactly the same paper, inputs, target representation, original split and declared common artifacts as paper_data",
+        "Original official code and archive revisions remain as pinned in task.json/improvement.v1.json, with source fit-GLMs-rat.py and necessary loader/model dependencies curated for the code condition."
+      ],
+      "excluded": [
+        "Undeclared answer-bearing source notebook outputs or fitted comparator solutions"
+      ]
+    }
+  },
+  "parity_requirements": [
+    "Same original target population, source inputs/preprocessing, split, metric and complete condition support.",
+    "Official author implementation is the intended information difference; common tools/pretrained weights/derived artifacts are explicitly declared in both.",
+    "Recover actual input/exposure/evaluator/runtime and cumulative budget manifests before paired execution."
+  ],
+  "runtime_or_result_qualified": false,
+  "budget_limits": {
+    "access": null,
+    "resource": null
+  },
+  "blocking_issues": [
+    "Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+    "Recover native tenfold membership, full grid/libraries and selection/reporting behavior without substituting new held-out splits.",
+    "Recover exact fold/unit/session/rat reductions and original null/replaced-unit convention.",
+    "Qualify complete native source-grid predictions and both original regional means/SDs; independent local ridge/GLM components are not author references.",
+    "Freeze paired biological uncertainty across both regions, meaningful gain, reproduction tolerance, access/resource limits and complete independent execution evidence."
+  ]
+}

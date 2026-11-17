@@ -1,0 +1,111 @@
+{
+  "schema_version": "paper-paired-source-conditions/v1",
+  "task_id": "PAPER-paper-method-011",
+  "selection": "selection.v1.json",
+  "status": "uninstantiated",
+  "same_endpoint_for_both_outcomes": "Original Figure 5 behavioral decoding comparison on all 15 behavioral groups over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT, using all source-eligible author decoders and their runs, original causal neural histories and 5-ms evaluation. Reproduce the complete author panel; compare a candidate against MINT and the strongest relevant original comparator on the same group support. No whole-paper superiority is implied.",
+  "common_observations": {
+    "description": "Original Figure 5 training/validation data and matched causal spike input; evaluation behavioral truth is operator-held. Any AutoLFADS-derived trajectory library provided in common must be source-pinned and disclosed in both assistance conditions; it is not raw-data-only access.",
+    "manifest_sha256": null,
+    "scientific_anchors": {
+      "target": {
+        "status": "verified",
+        "description": "Original Figure 5 prediction of all 15 source behavioral groups from simultaneous neural spikes over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT. Reproduction covers original source-eligible method/run outputs; candidate improvement uses identical behavioral targets and information boundaries against the strongest relevant author comparator. Other paper families remain separate.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric"
+        ]
+      },
+      "dataset": {
+        "status": "unresolved",
+        "description": "The four original Figure 5 datasets are Area2_Bump, MC_Cycle, MC_Maze and MC_RTT. Paper-cited DANDI versions and MC_Cycle Zenodo route are retained in source SCOPE.json. Immutable original payload equivalence and trajectory-library provenance are unbound; other paper datasets and newly generated simulations cannot substitute.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-code-scope"
+        ]
+      },
+      "cohort": {
+        "status": "unresolved",
+        "description": "Table 2 reports Area2_Bump 65 neurons/364 trials; MC_Cycle 112/273; MC_Maze 182/2295; MC_RTT 130/1080. Retain all 15 group definitions and source method eligibility. Original unit/trial identities, animal/session joins and scored-row masks are not authenticated by these counts.",
+        "evidence_ids": [
+          "mint-paper-task"
+        ]
+      },
+      "split": {
+        "status": "unresolved",
+        "description": "Original Table 4 train/test counts are Area2_Bump 272/92, MC_Cycle 174/99, MC_Maze 1721/574 and MC_RTT 810/268. MC_RTT excludes the first two of 270 candidate test segments for common history. Recover original trial order, membership and training-only validation folds; do not use NLB splits or a newly easier split.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric"
+        ]
+      },
+      "inputs": {
+        "status": "verified",
+        "description": "All candidates and author baselines receive the same permitted training data and causal trailing spike observations with 20-ms bins. Source MINT histories are 240/200/300/480 ms for Area2_Bump/MC_Cycle/MC_Maze/MC_RTT. Future neural observations and final-test behavioral labels are unavailable to candidate fitting. Acausal factorial cells remain separate.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric",
+          "mint-code-area2"
+        ]
+      },
+      "preprocessing": {
+        "status": "unresolved",
+        "description": "Preserve Tables 3–4 dataset-specific alignments, smoothing, trajectory averaging/dimensionality and evaluation epochs. Authenticate MC_RTT behavioral AutoLFADS libraries, MC_Cycle phase units/period/branch cut and original 5-ms phase aggregation. A basic three-dataset MATLAB example does not prove the complete source recipe.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric",
+          "mint-code-scope",
+          "mint-code-area2"
+        ]
+      },
+      "metric": {
+        "status": "verified",
+        "description": "Evaluate original 5-ms behavior R2, 1 minus summed squared prediction error divided by summed squared deviations about the original target mean, with circular distances and circular mean for MC_Cycle phase. Insufficient-history masks and original eligible samples must match. Do not substitute Pearson correlation, MAE, linear phase R2 or an invented pooled scalar.",
+        "evidence_ids": [
+          "mint-paper-metric",
+          "mint-code-score"
+        ]
+      },
+      "aggregation": {
+        "status": "verified",
+        "description": "Average per-dimension R2 within each source behavioral group and groups within each dataset, retaining all 15 groups and per-dimension outputs. Original feedforward/GRU results average ten initializations. Preserve source method eligibility, all original method/run bundles and undefined cases; no invented overall scalar or averaging over a favorable subset.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric"
+        ]
+      }
+    },
+    "input_representation_and_artifact_inventory": "Requires source-specific immutable observations, transformations, weights/trajectory/feature artifacts and exposed labels to be declared identically. Algorithm-bearing author-derived inputs are disclosed common assistance, never silently raw data."
+  },
+  "conditions": {
+    "paper_data": {
+      "available": "Original source paper, same declared selected-task data, source endpoint contract and explicitly named common artifacts.",
+      "excluded": "Official method implementation and algorithm-bearing author solution artifacts except those explicitly declared common in both conditions.",
+      "author_code_manifest_sha256": null
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same paper/data/common artifacts plus the source-pinned official implementation for this endpoint.",
+      "official_source": "seanmperkins/mint at 347206a402ac71ea528752365eebea17e3c770da; basic MATLAB implementation plus exact source-pinned comparator/variant routes once authenticated. The release does not cover all selected panel requirements.",
+      "author_code_manifest_sha256": null
+    }
+  },
+  "operator_only": [
+    "Authentic held-out evaluation labels where the source protocol withholds them.",
+    "Reference predictions/outputs and independent derivation/comparison process, except values already exposed by the source paper."
+  ],
+  "paired_controls": [
+    "Same original data/split, task targets, candidate input information, complete support, metric and comparator.",
+    "Same prespecified resource/access accounting; official code is the intended difference.",
+    "Separate condition traces, candidate freezes and outcomes; no cross-condition solution leakage."
+  ],
+  "unresolved": [
+    "Authenticate all four original payloads, unit/trial/order/animal identities, Table 4 membership, source validation folds and every scored sample/mask.",
+    "Recover all 15-group author R2 profiles and per-dimension/method/run outputs; 11/15 best groups and 37/42 comparison counts are not numeric baselines. MINT/Wiener/Kalman/feedforward/GRU eligibility and the extra MC_Maze naive-Bayes condition must match source; the retained 93 bundle inventory is a support obligation, not authenticated results.",
+    "Resolve MC_Cycle circular phase units/period and native aggregation; retain source histories and dataset-specific recipes. MC_RTT behavioral AutoLFADS trajectory-library provenance and complete native comparator implementation remain unqualified.",
+    "The basic official MATLAB release omits variants/search automation and its native bridge excludes MC_Cycle. Complete selected-panel source producers and independent derivation verification are still required.",
+    "Freeze original-panel reproduction tolerance, meaningful R2 effect, paired trial/contiguous-block uncertainty, seed treatment and full 15-group improvement decision before final scoring.",
+    "Paired input representations, any common pretrained trajectory artifacts, original author-code manifest, candidate access/resource budgets and executable scorer/runtime are not admitted."
+  ],
+  "runtime_or_result_claim": false,
+  "execution_authorized_by_manifest": false
+}

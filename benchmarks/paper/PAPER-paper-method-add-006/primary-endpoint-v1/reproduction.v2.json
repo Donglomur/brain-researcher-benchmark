@@ -1,0 +1,418 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-add-006",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicit original-performance endpoint selection; exact source references/support and independent scientific reproduction acceptance remain unresolved. Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction.",
+  "source_paper": {
+    "title": "Neural population geometry and optimal coding of tasks with shared latent structure",
+    "url": "https://www.nature.com/articles/s41593-025-02183-y"
+  },
+  "evidence": [
+    {
+      "id": "geometry-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Methods: Spatial representations in rat PFC and CA1 / Rat data processing, Generalized linear model analysis, Readout analysis; Fig. 7",
+      "supports": "Defines the rat spike-count prediction, reported regional cross-validated D2, preprocessing and distinct descriptive coding-geometry analyses."
+    },
+    {
+      "id": "geometry-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/fit-GLMs-rat.py",
+      "locator": "dt/vmin/n_rat/n_sesh; get_test_scores; param_grid/cv; lines 74-126",
+      "supports": "Eight rats and eight sessions; ten-fold PoissonRegressor grid search, session-wide covariate standardization, firing-rate exclusion and saved fold scores."
+    },
+    {
+      "id": "geometry-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/README.md",
+      "locator": "reproducing the results; Pre-processed results; references [2]",
+      "supports": "Identifies DANDI 000978 version 0.240511.0307 and the author rat-processing, GLM and geometry route; saved results require LFS and were not read here."
+    },
+    {
+      "id": "geometry-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+      "locator": "paper_source_discrepancies; qualification; source_population",
+      "supports": "Records incomplete native verification, first-eight-session mapping and paper/code CA1-subset and null-boundary disagreements in the historical component."
+    },
+    {
+      "id": "previous-reproduction-geometry-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Methods: Spatial representations in rat PFC and CA1 / Rat data processing, Generalized linear model analysis, Readout analysis; Fig. 7",
+      "supports": "Defines the empirical learning-dependent CA1/PFC geometry and navigation readout, raw versus GLM-expected activity, source covariance/normalization and trend analyses. GLM D2 is supporting fit evidence."
+    },
+    {
+      "id": "previous-reproduction-geometry-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/fit-GLMs-rat.py",
+      "locator": "dt/vmin/n_rat/n_sesh; get_test_scores; param_grid/cv; lines 74-126",
+      "supports": "Eight rats and eight sessions; ten-fold PoissonRegressor grid search, session-wide covariate standardization, firing-rate exclusion and saved fold scores."
+    },
+    {
+      "id": "previous-reproduction-geometry-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/README.md",
+      "locator": "reproducing the results; Pre-processed results; references [2]",
+      "supports": "Identifies DANDI 000978 version 0.240511.0307 and the author rat-processing, GLM and geometry route; saved results require LFS and were not read here."
+    },
+    {
+      "id": "previous-reproduction-geometry-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+      "locator": "paper_source_discrepancies; qualification; source_population",
+      "supports": "Records incomplete native verification, first-eight-session mapping and paper/code CA1-subset and null-boundary disagreements in the historical component."
+    },
+    {
+      "id": "previous-reproduction-geometry-rat-utils",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/rat_utils.py",
+      "locator": "get_all_lat; process_dat; format_glm_results; get_pr; Gaussian covariate construction",
+      "supports": "Source-native masks, separately processed GLM and raw-geometry observations, source null-unit handling and raw/fitted participation-ratio outputs. Paper/code boundary differences and native outputs remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-geometry-equations",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/utils.py",
+      "locator": "get_geometry; theory_part",
+      "supports": "Covariance geometry quantities and a direct theoretical readout-error expression. Matching a closed-form software identity does not reproduce measured neural geometry or empirical readout performance."
+    },
+    {
+      "id": "previous-reproduction-geometry-rat-analysis",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/run-pfc-hp-analysis-rats.py",
+      "locator": "Rat PFC/hippocampal session analysis, region-specific processed responses, neuronal subsets and readouts",
+      "supports": "Original rat geometry/readout companion route. Source-native output identities, random draws and the paper CA1-24 versus pinned-code-19 unit discrepancy remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-geometry-figure-analysis",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/figures/Fig-readout-with-learning-hp-pfc.ipynb",
+      "locator": "Frozen GLM figure basis, raw/fitted dimensionality and session-learning comparisons",
+      "supports": "Figure route for joint predictive and geometry findings; the preceding basis search and exact curve/trend targets must be reconstructed instead of selecting one favorable output."
+    },
+    {
+      "id": "previous-reproduction-geometry-accepted-components",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-006/implementations/oof-prediction-replay-v2/README.md",
+      "locator": "initial-evaluator-v1/evaluator.py: source_glm_fit, run_source_glm_panel, covariance_geometry, glm_geometry_summary; oof-prediction-replay-v2/replay.py: prepare_reference, score_session, replay_panel",
+      "supports": "Independently reviewed partial software interfaces: full 64-session paired OOF replay with retained identities/folds and geometric components. Generated controls are not authentic source preparation, author replay, AI reproduction or AI improvement."
+    },
+    {
+      "id": "previous-reproduction-geometry-primary-rat-findings",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12971491/",
+      "locator": "Fig.7 and Results cached lines64-70; GLM Methods lines112-119; Readout analysis lines120-122; primary cache SHA256 de4d22f91a8d9e66c2715df7d0301feb19ddc64d79b2858af336ccae434baec3",
+      "supports": "Original eight-rat learning geometry and navigation readout: regional curves mean/SEM over eight rats, raw versus conditional-expected-activity participation ratio, empirical versus equation(1) readout, behavioral association, mixed-intercept quadratic and follow-up linear trends. Known protocol uses 19 PFC/24 CA1 units, 500 analysis observations, p=300 training observations and 500-subset averages. CA1 behavioral/readout R2 is 0.48 in main text versus 0.49 in caption; PFC 0.51 agrees. No numerical reproduction tolerance follows from printed values or significance bounds."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Nature Neuroscience 10.1038/s41593-025-02183-y, Methods GLM analysis and Figure 7 support; original fit-GLMs-rat.py.",
+      "supports": "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Eight rats with eight learning sessions per rat, both PFC and CA1, all original eligible units and movement periods. Exact native NWB-to-session/anatomical/unit mappings and ZT2 identity remain unauthenticated.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original per-unit tenfold CV over ten L2 strengths plus shared basis-hyperparameter selection. Recover native row order/folds, source library behavior and relationship between selection and reported scoring. Preserve source full-session covariate standardization and resolve rate >0.1 Hz/boundaries; a new rat/session holdout is a separate task.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms. Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27. Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction. Eight rats with eight learning sessions per rat, both PFC and CA1, all original eligible units and movement periods. Exact native NWB-to-session/anatomical/unit mappings and ZT2 identity remain unauthenticated. Require independently derived complete observation-level predictions, source condition/fold membership and exact source reductions, not copied published values. Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27. Numerical-reference equivalence applies only to the retained scientific members in findings.representation.members. Raw predictions and source-support records remain mandatory through unchanged required_granular_output_ids and selection.v1.json audit_output_obligations; independently recompute the reported metrics from them without requiring author prediction equality. Authentic original labels, folds, inputs and eligibility remain fixed. Original figure curves, reported score matrices and expressly selected scientific companions remain targets.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Same authentic original covariate/spike representation and original eligibility/fold metadata; any 500-ms prepared arrays or source-derived masks supplied to both conditions must be declared and pinned. No fitted GLM/grid outputs as candidate answers. Both assistance conditions use identical data, original split and declared common tools. Original official code and archive revisions remain as pinned in task.json/improvement.v1.json, with source fit-GLMs-rat.py and necessary loader/model dependencies curated for the code condition. Exposure manifests, independent execution/verification and resource limits remain unqualified.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "pfc_population_d2_mean",
+      "kind": "scalar",
+      "description": "Original published regional Poisson D² mean; source weighting remains to be qualified.",
+      "status": "verified",
+      "expected": 0.29,
+      "units": "dimensionless Poisson D2",
+      "aggregation": "Original region-specific fold/unit/session/rat reduction; never pool regions. SDs are source variability references, not equivalence margins.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published numeric reference is not a source-justified reproduction tolerance. Native source outputs and numerical variability remain unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover complete native source outputs and independently justify reproduction agreement; no tolerance or statistical threshold is inferred from printed precision.",
+        "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original dependent repetitions/units do not create independent biological replication; comparison remains unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      }
+    },
+    {
+      "id": "ca1_population_d2_mean",
+      "kind": "scalar",
+      "description": "Original published regional Poisson D² mean; source weighting remains to be qualified.",
+      "status": "verified",
+      "expected": 0.25,
+      "units": "dimensionless Poisson D2",
+      "aggregation": "Original region-specific fold/unit/session/rat reduction; never pool regions. SDs are source variability references, not equivalence margins.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published numeric reference is not a source-justified reproduction tolerance. Native source outputs and numerical variability remain unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover complete native source outputs and independently justify reproduction agreement; no tolerance or statistical threshold is inferred from printed precision.",
+        "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original dependent repetitions/units do not create independent biological replication; comparison remains unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      }
+    },
+    {
+      "id": "pfc_rat_d2_sd",
+      "kind": "scalar",
+      "description": "Original published regional Poisson D² rat-level SD of session-averaged D².",
+      "status": "verified",
+      "expected": 0.022,
+      "units": "dimensionless Poisson D2",
+      "aggregation": "Original region-specific fold/unit/session/rat reduction; never pool regions. SDs are source variability references, not equivalence margins.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published numeric reference is not a source-justified reproduction tolerance. Native source outputs and numerical variability remain unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover complete native source outputs and independently justify reproduction agreement; no tolerance or statistical threshold is inferred from printed precision.",
+        "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original dependent repetitions/units do not create independent biological replication; comparison remains unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      }
+    },
+    {
+      "id": "ca1_rat_d2_sd",
+      "kind": "scalar",
+      "description": "Original published regional Poisson D² rat-level SD of session-averaged D².",
+      "status": "verified",
+      "expected": 0.1,
+      "units": "dimensionless Poisson D2",
+      "aggregation": "Original region-specific fold/unit/session/rat reduction; never pool regions. SDs are source variability references, not equivalence margins.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published numeric reference is not a source-justified reproduction tolerance. Native source outputs and numerical variability remain unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover complete native source outputs and independently justify reproduction agreement; no tolerance or statistical threshold is inferred from printed precision.",
+        "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original dependent repetitions/units do not create independent biological replication; comparison remains unqualified.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      }
+    },
+    {
+      "id": "rat_pfc_ca1_native_encoding",
+      "kind": "indexed_array_family",
+      "description": "Complete original reported Poisson encoding D² and regional mean/SD reductions under native unit/fold support; observation-level predictions and original grid-selection provenance remain mandatory audit evidence, not numerical-equivalence targets.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "rat_pfc_ca1_native_encoding",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "regional_d2_reductions",
+            "manifest_key": "rat_pfc_ca1_native_encoding.regional_d2_reductions",
+            "source_quantity": "All unit/fold/session/rat scores, null/invalid-unit dispositions and final PFC/CA1 means/SDs.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "dimensionless Poisson D2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Authenticate original nesting/weighting and source Poisson null convention; no invented combined score.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "region",
+                "rat",
+                "session",
+                "unit",
+                "fold"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "required_granular_output_ids": [
+        "native_fold_predictions",
+        "original_grid_selection",
+        "regional_d2_reductions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently recompute the selected original source metrics and compare only the scientific score, curve or reported-summary members retained in representation.members with authenticated publication-equivalent references. Required granular prediction/support outputs and selection.audit_output_obligations are mandatory audit evidence for coverage, provenance and metric recomputation; their prediction values, raw confusion counts and intermediate model-selection settings are not numerical-reference-equivalence targets. Original support identities, labels, folds and source-permitted information remain authenticated requirements. Numeric tolerances and uncertainty criteria remain unresolved.",
+        "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+        "dependence": "Retain original animal/session/trial nesting and shared folds, model selections, random draws and controls; no independent-unit inflation.",
+        "multiplicity": "All declared source conditions and companions are mandatory. A justified joint agreement policy is unresolved.",
+        "rationale": "Exact native output/coordinate manifests, source equivalence and independent comparison programs remain absent; no hashes or criterion are invented. The separation of reported scientific targets from mandatory computation evidence does not waive original data/support authentication, native analysis verification or any retained source control.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+    "Recover native tenfold membership, full grid/libraries and selection/reporting behavior without substituting new held-out splits.",
+    "Recover exact fold/unit/session/rat reductions and original null/replaced-unit convention.",
+    "Qualify complete native source-grid predictions and both original regional means/SDs; independent local ridge/GLM components are not author references.",
+    "Freeze paired biological uncertainty across both regions, meaningful gain, reproduction tolerance, access/resource limits and complete independent execution evidence."
+  ]
+}

@@ -12,33 +12,48 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Retain Figure 4B joint all-shape oddball decoding as an explicitly partial, separately reported ordered empirical improvement component on the original participant/run/shape task. It is not an unrelated proxy, simulation or preprocessing substitute. A same-target component comparison can be useful, but a mixed whole-family-reproduction/component-improvement bundle is unavailable as full-primary success when the schema cannot express this coverage relationship. Reviewed source limits: The retained task does not designate shared oddball AUROC as the sole original primary. Replacing the family with Figure 4B alone would require a new scientific scope decision. Official publisher search-index excerpts support Figure 4B/C/D panel roles; direct publisher/PDF requests returned a challenge, so frozen final-version bytes and final-paper/code equivalence remain unresolved. Exact smoothing, epoch, normalization, source AUROC aggregation and baseline criteria remain unresolved. Complete separate-training, regularity and sensor-RSA companion outputs and their source-defined control roles must be preserved. The plotter's All\_References branch alone does not establish an indispensable published control; producer/publication mapping remains unresolved. The packaged decoder matches an existing source-lock and legacy-copy receipt, but this review did not newly authenticate its upstream bytes. Larger regularity correlations, smaller p-values or changed model-peak timing do not automatically constitute scientific improvement. Scalar-schema limitations cannot justify granting whole-family success from a component.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The retained empirical human-MEG sensor finding family: shape-dependent decoding and regularity, temporal representational geometry, and symbolic/geometric-feature versus visual-model comparison. Figure 4B shared oddball AUROC is a genuine component within this family, with source-supported separate-training and sensor-RSA companions. Source-space and fMRI findings are not automatically added. Full-family reproduction requires the family and indispensable controls; improvement on the named AUROC component alone cannot establish full-family reproduction or improvement.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Retain Figure 4B joint all-shape oddball decoding as an explicitly partial, separately reported ordered empirical improvement component on the original participant/run/shape task. It is not an unrelated proxy, simulation or preprocessing substitute. A same-target component comparison can be useful, but a mixed whole-family-reproduction/component-improvement bundle is unavailable as full-primary success when the schema cannot express this coverage relationship.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate final Version-of-Record Figure 4B/code/data correspondence and the exact retained-epoch identities for all twenty participants and 158 runs; inventory entries do not establish authentic prepared data.
+- Resolve source -0.1..1.1 second/301-point code grid versus paper -0.15..1.15 second description, training-fold StandardScaler versus stated per-epoch normalization, and the actual published smoothed producer. Do not crop, interpolate or invent either branch.
+- Recover complete original author AUROC/reference-prediction arrays and strongest relevant same-endpoint author configuration. The 428-ms latency and a new local baseline are not accuracy comparators.
+- Recover and fix the original descriptive temporal aggregation before candidate comparison; source regularity-selected cluster unions cannot be reselected for a favorable candidate. A meaningful complete-support improvement decision, participant-level dependence/multiplicity policy and numerical reproduction tolerances remain unresolved.
+- Authenticate all-shape training, label and preprocessing access, source exclusions and epoch lineage; complete producer/runtime/isolation and independent full-output verification remain unqualified. Matched access/resource budgets are unspecified, not assumed.
+- The source endpoint is a complete AUROC array family, not one scalar. Existing improvement/v1 can retain unresolved source declarations but cannot yet express/admit the exact paired full-panel superiority decision. A source-faithful vector comparison/admission policy and meaningful participant-level uncertainty must be implemented and independently justified before any win; do not invent a mean, win-count, selected cell/window or arbitrary tolerance.
+- Restrict model covariates to source-authorized MEG features. Metadata for run/trial/shape/rotation/scaling/miniblock joins or scoring is not an extra decoder feature. Authenticate a file/column-level exposure manifest and keep held-run conditions/event-code label proxies evaluator-only, with isolation across reused directional folds.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The paper has a legitimate same-task oddball AUROC endpoint with explicit run-held-out folds, but the exact published numeric baseline and source-matched summary have not been recovered. The current evaluator computes RSA only, so its reconstruction cannot establish a decoding improvement.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +61,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 233205 bytes; SHA-256 `8db3fe6090e325ee326b517f108d580b94429446b9dcf6de1ed7a5eb8bbf654b`.
+- Specification identity: 231754 bytes; SHA-256 `0b9e62de38c6fda8d4b33d9e414329e4ac819ab03f0bcf8b5fcd7dc784120d59`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

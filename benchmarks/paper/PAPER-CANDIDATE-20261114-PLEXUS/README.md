@@ -1,4 +1,4 @@
-# Network-aware neuronal activity phenotyping across a complete CRISPRi screen
+# Plexus: reproduce and improve original guide-discrimination AUROC
 
 [Paper research](../README.md) · [All benchmarks](../../README.md)
 
@@ -12,32 +12,48 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Source-code Figure 4 per-guide/fold/donor AUROC is a genuine empirical but explicitly partial result pending final-paper mapping. No active narrowed primary scope is selected by this decision. Reviewed source limits: Do not assert that all four lines belong to Figure 4 or that two WT donor strata exhaust the main result. Whole-plate/FDR redesigns are prospective extensions, not authenticated original-paper requirements. Retain both complementary well folds, eligible guide/donor/well/plate identities and source comparisons; a plotted 0.8 line is not a reproduction tolerance or FDR rule.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** Original main CRISPRi activity phenotyping and its source-defined comparisons/negative controls; complete final-paper panel and code/data version mapping remain unresolved.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Source-code Figure 4 per-guide/fold/donor AUROC is a genuine empirical but explicitly partial result pending final-paper mapping. No active narrowed primary scope is selected by this decision.
+**Disposition:** source\_unresolved.
 
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Map the immutable Figure 4 code and Zenodo release to the final published Figure 4 endpoint; archive/version correspondence remains unresolved.
+- Authenticate ordered WT WTC11/Patient guide/well roster, source-specific preprocessing and asymmetric reciprocal fold identities, complete eligible score support and skip states.
+- Recover original representation/classifier producer and independently verified publication-equivalent Plexus/manual-feature reference vectors; a supplied-score split scorer is insufficient.
+- Freeze one common observation and checkpoint/embedding assistance profile, with exact artifacts and training/exposure provenance, for both code-access conditions.
+- Justify reproduction tolerance, full-panel superiority/effect and dependence-aware uncertainty; bind measured cumulative access/compute budgets.
+- Panel improvement admission/interface is pending. Preserve the full source performance vector and mandatory controls; do not invent a scalar mean, favorable subgroup, win count or significance objective. No new AI/model study is required to finish source construction; an AI outcome requires a separate subsequent qualifying execution.
+- Bind every retained audit/recompute output to an authentic computation.required\_outputs and independent source-protocol/derivation verifier. These outputs remain mandatory but are not numerical-reference targets. Any additional exact source-reported numerical companion must first be identified and source-bound; unresolved diagnostic groups do not imply author-intermediate equality.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original guide-versus-control AUROC is ordered, but the complete final-paper baseline vector and its archive/version mapping are unrecovered. The installed whole-plate, four-line evaluation changes the original Figure 4 split and population and cannot establish a same-task paper win.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -45,7 +61,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 13241 bytes; SHA-256 `9c7618cd1fc164c7a5ad2b985b519984f5e95a829c05c65a755dc34dbe24ec32`.
+- Specification identity: 18084 bytes; SHA-256 `2ad58b9986bab53b69e8c1f2b71691180911b69972481b6f8dc5cdd05afb5a06`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

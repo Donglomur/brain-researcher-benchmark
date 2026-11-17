@@ -19,6 +19,7 @@ FixtureMethods = support["SuccessorFixture"]
 
 
 class ScopePolicyFixture(FixtureMethods):
+    @support["pre_endpoint_selection_fixture"]
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="invented-four-policy-binding-")
         self.addCleanup(temporary.cleanup)

@@ -37,6 +37,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/maintenance/refresh_paper_integrity.py --check
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/check_repository.py
           timeout --signal=TERM --kill-after=5s 600s python -I -S -B -m unittest discover -s tests/framework -p 'test_*.py' -v
+          timeout --signal=TERM --kill-after=5s 120s python -B tests/test_paper_endpoint_selection.py
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/benchmarks -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/maintenance -p 'test_*.py' -v
           python -I -S -B scripts/check_navigation.py

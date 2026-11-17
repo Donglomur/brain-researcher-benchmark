@@ -1,0 +1,201 @@
+{
+  "schema_version": "paper-selected-original-endpoint-selection/v1",
+  "task_id": "PAPER-ROOT-ADD-026",
+  "version": "selected-original-endpoint/v1",
+  "status": "construction_candidate_not_canonical_adoption",
+  "source_snapshot_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "policy_sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "authority": "Root scientific policy explicitly permits selecting an original author-reported empirical predictive/method endpoint while retaining broader biological reproduction separately. Construction authorization is not execution or scientific qualification.",
+  "selected_scope": "Complete original Figure 3C broadband-response prediction under source condition cross-validation for all 79 responsive electrodes in four participants, 72 conditions and 12 folds per electrode. Reproduce unscaled DN and category-input-scaled DN(S); compare candidates against the stronger DN(S) comparator while retaining both model families and all three original regional summaries.",
+  "source_figure_or_table": "Figure 3C, original condition-cross-validated DN and category-scaled DN(S) response prediction",
+  "source_paper": {
+    "title": "Temporal dynamics of short-term neural adaptation across human visual cortex",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161"
+  },
+  "strongest_relevant_author_comparator": "Category-input-scaled DN(S), with unscaled DN as required source comparison; beating only the weaker unscaled model does not qualify. Exact complete Figure 3C numerical region/electrode reference arrays are missing. Output-scaled P and full-fit R² are different quantities.",
+  "original_information_and_support": {
+    "target": {
+      "status": "verified",
+      "description": "Predict each selected visual electrode’s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visual ECoG dataset OpenNeuro ds004194 is author-linked. Registration names version 3.0.0, but the reviewed primary sources do not pin that version’s exact processed files to the published Figure 3 fit inputs. Freeze the source release, trial manifest and preprocessing lineage before comparison.",
+      "evidence_ids": [
+        "adapt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Four participants p11–p14; all 79 visually responsive electrodes and their V1–V3/VOTC/LOTC memberships must be preserved. The Data summary gives 17/15/47, while Figure 2C reverses the first two counts; exact electrode-to-area identities require source-roster reconciliation, not selection of whichever grouping favors a candidate.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stochastic rule:12 folds over72 conditions,66 training/six test traces per fold with one test condition per image category and12 temporal conditions per category. Published assignments are absent from the inspected unseeded random.sample implementation. Recover them if available, or reproduce this exact source-authorized stochastic recipe with a logged seed and immutable fold manifest. Candidate and author must share rerun folds; source-protocol parity and a predeclared justified tolerance to published results are required. A changed split unit, altered condition allocation or new participant holdout is an extension.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Binary stimulus-presence time course and image-category identity; target traces comprise six image categories crossed with six single-stimulus durations and six repeated-stimulus ISIs. Fitted parameters, published target traces and assessment labels are not candidate prediction inputs.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source common-average rereferencing, broadband extraction, artifact/trial/responsiveness selection, run-wise prestimulus correction and averages for all 72 conditions. Original full fits use named response samples 0..818; source CV positional columns2:821 include temp_cond and omit the last response. Resolve publication lineage before choosing source_positional_cv versus corrected named_response_columns. Figure3 responsive/none/S and active category-selective/P callers are not interchangeable.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each held-out trace, R² = 1 − sum_t(y_t−prediction_t)² / sum_t(y_t−mean(y))², using the pinned NaN handling; higher is better. Code rounds condition values to three decimals and fold means to four.",
+      "evidence_ids": [
+        "adapt-score",
+        "adapt-fit"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "For each held condition compute original trace R² with source NaN behavior, round to three decimals; average six conditions and round fold to four; average all twelve folds and round electrode to four. Retain every electrode and separately summarize V1–V3, VOTC and LOTC using source 1,000 electrode-resample medians, median of medians and16th/84th percentiles. These descriptive electrode bootstraps are not independent-participant superiority inference.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    }
+  },
+  "previous_broader_scope": {
+    "scope": "The retained named empirical family comprises DN/category-scaled model refitting and source-defined adaptation-hierarchy/category-selectivity comparisons. Figure 3C prediction is a legitimate within-family model result supported by the original prediction-improvement proposal. Preserve the appropriate populations and indispensable controls for each named finding. No automatic every-figure requirement or sole-primary Figure 3C replacement is selected.",
+    "decision": {
+      "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+      "task_entry_id": "PAPER-ROOT-ADD-026"
+    },
+    "interpretation": "Original adaptation hierarchy and category-selectivity findings, their full-data model/mechanistic traces and indispensable biological controls remain a separately named reproduction family. Full-fit response quality, category/P diagnostics or altered biological recipes do not replace Figure 3C held-out prediction."
+  },
+  "predecessor_files_at_source_commit": {
+    "task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/task.json",
+      "bytes": 52772,
+      "sha256": "bd97166d0c40b716747c76ec6c869ab07d8f2fa6464392a9fcab73f03d936f21"
+    },
+    "improvement": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/improvement.v1.json",
+      "bytes": 13908,
+      "sha256": "8e037ba9d6cc7f6822118c953b198ded61aa3fa8f10e9d6d3603bef93b1576dd"
+    },
+    "outcomes": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/outcomes.v1.json",
+      "bytes": 5371,
+      "sha256": "b6bd024f4af91aa0192fadf36aaa94e2d9c75dfff07a5c4f92f688150cbec111"
+    }
+  },
+  "existing_component": {
+    "path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1/README.md",
+    "bytes": 13033,
+    "sha256": "81997875d9c07bfada6235658c5cd380f2177f21f7f06590fcb86730fa9f9801"
+  },
+  "contracts": {
+    "task": "../task.json",
+    "reproduction": "reproduction.v2.json",
+    "improvement": "improvement.v1.json",
+    "outcomes": "outcomes.v1.json",
+    "paired_source_conditions": "access-conditions.v1.json"
+  },
+  "unresolved_requirements": [
+    "Bind publication-equivalent processed response inputs and the exact 79-electrode/four-participant/area roster, resolving the 17/15 caption reversal without selecting a favorable area assignment.",
+    "Resolve source positional CV columns2:821 versus named response0..818 and active P/category-selective versus Figure3 none/S/responsive callers against result-producing evidence. Corrected columns are a separate branch until parity is justified.",
+    "Authenticate historical 12-fold/72-condition assignments or qualify the exact source stochastic recipe with logged folds, paired candidate/author exposure and justified published-result calibration; preserve66 train/six query conditions with one query per category.",
+    "Recover complete native DN and DN(S) Figure3C reference outputs, original runtime/numerical parity including scalar-SSE least_squares objective, source rounding and source region reduction. No authentic fits have been run by this construction.",
+    "Specify full-region superiority and participant/electrode dependence, meaningful effect and reproduction tolerance; freeze common artifacts, exact author-code package, finite episode/search/resource limits and protected final scoring.",
+    "The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted."
+  ],
+  "scope_change_is_not_stale_status_repair": true,
+  "integration_limit": "Requires parent-owned reviewed central selection/registry binding; existing old contracts and scope declarations remain unchanged. These candidate files alone do not make the canonical binder select this endpoint.",
+  "readiness_change": false,
+  "authentic_runs_created": 0,
+  "model_evaluations_created": 0,
+  "scientific_outcomes": {
+    "reproduction": {
+      "paper_data": "unknown",
+      "paper_data_author_code": "unknown"
+    },
+    "improvement": {
+      "paper_data": "unknown",
+      "paper_data_author_code": "unknown"
+    }
+  },
+  "audit_output_obligations": [
+    {
+      "output_id": "prediction_traces",
+      "component": "observation_level_prediction_and_original_support",
+      "mandatory": true,
+      "role": "audit_and_metric_recomputation",
+      "numerical_reference_equivalence_target": false,
+      "applies_to": [
+        "original_author_reproduction",
+        "candidate_same_task_improvement"
+      ],
+      "source_specification_preserved": {
+        "id": "prediction_traces",
+        "manifest_key": "prediction_traces",
+        "source_quantity": "Granular held-condition target/prediction traces underlying all scores",
+        "membership": "fixed",
+        "shape": null,
+        "axes": null,
+        "allowed_dtypes": null,
+        "units": "Source broadband response units",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Complete original model/electrode/fold/query/time support; native positional-column versus corrected-column branch unresolved.",
+        "derivation_policy_sha256": null,
+        "collection": null,
+        "evidence_ids": [
+          "adapt-paper",
+          "adapt-fit",
+          "adapt-figure",
+          "adapt-score"
+        ]
+      },
+      "verification_requirement": "Independently authenticate original evaluation identities, labels, masks, class/target ordering and split membership; verify complete submitted prediction coverage and recompute the retained source metrics from each submission. Predicted values are method-specific audit evidence and are not required to equal author predictions element by element.",
+      "observation_boundary": "Original labels and protected reference predictions remain operator-side; this role correction does not expand participant input access."
+    }
+  ],
+  "output_role_revision": {
+    "version": "reported_target_vs_audit_support-20261117-v2",
+    "reason": "Independent cross-case review separated mandatory computation evidence from author-value-equivalence targets.",
+    "previous_reproduction_sha256": "b042df62d2fcca1f12d6fd6879b004c588a3c7c48d247b376f163d80add9e435",
+    "previous_selection_sha256": "9a66d84064c6c51d964d8721aa9b18d95c2862f763b639f388693da864eb01bd",
+    "previous_aggregate_manifest_sha256": "258b36631ec49174169e59f4891bb4eced3eb76ef16a67a5cd39fe8014a8f606",
+    "reported_metric_and_full_support_unchanged": true,
+    "required_granular_output_ids_preserved": [
+      "held_condition_r2",
+      "region_summaries",
+      "prediction_traces"
+    ],
+    "reference_target_member_ids": [
+      "held_condition_r2",
+      "region_summaries"
+    ],
+    "runtime_results_and_admission_promoted": false,
+    "same_task_and_access_conditions": "The existing eight shared same-task anchors, task and access-conditions files remain unchanged; audit evidence is operator-only, not extra candidate information."
+  }
+}

@@ -12,33 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The Figure 4C-D real/shuffled time decoder is a genuine empirical decoding/modeling result, not simulation or preprocessing. Retain the complete seven-bin short/long source comparison, standard-cue trial masks, leave-one-trial-out evaluation, correlations and confusion matrices. Figure 4D improvement is a separately named partial result; it cannot satisfy complete primary behavior/sequence/information reproduction or improvement, so the mixed-target primary-reproduction/partial-decoder-improvement bundle remains unavailable. Reviewed source limits: Exact source trial/session/ROI joins, complete native outputs, published numerical reference panels, agreement/superiority criteria, paired exposure/budget manifests and final task identity remain unresolved. The short-window analysis uses standard-short and standard-long trials, including standard trials acquired on reversal-session days; this does not establish decoding of reversed cue trials. Preserve the seven-bin source computation despite the stale ten-bin code comment. Retain behavioral accuracy and latency, cue/trial-specific sequence and peak outputs with even/odd validation, baseline-versus-current information curves, and real/shuffled time and odor outputs. Preserve undefined source positions and distinct cohorts. The historical odor\_information label must not imply direct mutual information with odor identity when the actual computation compares baseline and current time bins. A larger short-minus-long biological contrast, smaller p-value or invented combined behavior/sequence score is not a method improvement. Changed preprocessing or held-out designs are explicit prospective extensions. No native parity, AI outcome or full primary-family completion follows from source inspection or arithmetic/metadata checks. An explicitly time-only new primary would require a separate scope choice.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The retained empirical family comprises unexpected-delay working-memory accuracy and lick latency (Figure 1C-D), cue-specific CA1 sequences and their validation (Figure 2D-F and relevant S1 controls), baseline-versus-current activity information and time decoding (Figure 4A-D), and original odor-identity decoding companions (S6). Preserve the distinct 23-mouse behavior and 11-mouse imaging cohorts, source trial/session identities and indispensable controls; no every-figure, raw-movie reprocessing or unrelated trajectory/PCA requirement is inferred.
+### Current selected paper endpoint
 
-**Retained secondary policy:** The Figure 4C-D real/shuffled time decoder is a genuine empirical decoding/modeling result, not simulation or preprocessing. Retain the complete seven-bin short/long source comparison, standard-cue trial masks, leave-one-trial-out evaluation, correlations and confusion matrices. Figure 4D improvement is a separately named partial result; it cannot satisfy complete primary behavior/sequence/information reproduction or improvement, so the mixed-target primary-reproduction/partial-decoder-improvement bundle remains unavailable.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate original processed rawtrialsstand2torev2\_n11.mat and complete44session/140row trial/ROI joins with recorded-delay masks.
+- Authenticate protected timedecodeforpanels\_onlystandards\_binsize10justallcells.mat and complete original176panel correlations/confusions; saved answers never become candidate input.
+- Qualify TimeDecoding.m native author replay, MATLABR2021a fitcecoc defaults, source RNG and once-per-helper training-label shuffle; collect complete7bin whole-trial LOO predictions.
+- Implement protected opaque/randomized query/submission mapping: source trial/bin identities, actual-bin order and solution-bearing timing metadata are evaluator-only, while original scientific folds remain unchanged.
+- Bind real-label full-panel superiority/reproduction criteria, meaningful effect and mouse-level uncertainty. Vector-admission/interface work remains pending; no invented headline aggregate and no reward for increased shuffle scores.
+- Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original Fig. 4 time-decoding protocol and author baseline route are identifiable, but its exact published numeric panel has not been recovered and independently reproduced. The existing combined prospective score and alternate preprocessing are extensions, not the original source-paper score; the descriptive sequence and behavior findings cannot be optimized into a paper win.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 27408 bytes; SHA-256 `54eb698c1a7c26908d0abbe14f414959552ad673db3c2a1a94ffcbbcd0416ea8`.
+- Specification identity: 24319 bytes; SHA-256 `63c36fa00f2766d6ef41475a7ed21590b28faf2fcc5d9955e0d40eee979c7f93`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

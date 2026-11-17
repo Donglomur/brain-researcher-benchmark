@@ -50,6 +50,7 @@ class InitialPaperContractTests(unittest.TestCase):
 
 
 class InitialPaperRepositoryTests(unittest.TestCase):
+    @fixture.pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

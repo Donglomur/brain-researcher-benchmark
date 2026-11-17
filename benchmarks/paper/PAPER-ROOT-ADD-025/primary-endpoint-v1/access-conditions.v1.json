@@ -1,0 +1,114 @@
+{
+  "schema_version": "paper-selected-endpoint-paired-source-conditions/v1",
+  "task_id": "PAPER-ROOT-ADD-025",
+  "selection_version": "selected-original-endpoint/v1",
+  "status": "unresolved",
+  "common_input_representation": "Original all-trial PCA regional neural time courses, aligned behavior and source participant/parcel/context/PC identities; this author-derived PCA representation is intentionally common assistance in both conditions and its full-trial exposure must be disclosed. Preserve source row selection/ten-fold schedule and training labels; held-out scoring labels and detailed diagnostics are operator-owned. No claim of participant-held-out or globally unseen-trial generalization.",
+  "author_code_boundary": "Only the code condition receives the pinned author regression and S11 figure/aggregation implementation. Common PCA arrays are explicitly exempt as the original supplied representation, but do not silently expose regression code or precomputed gCORR/gSCR answer arrays to the paper+data condition. Reference arrays remain operator artifacts in both conditions.",
+  "conditions": {
+    "paper_data": {
+      "available": "Original paper, exact selected-task data/common representation, public task contract and explicitly common preparation artifacts.",
+      "excluded": "Official implementation, algorithm-bearing author solutions and native reference output artifacts except explicitly common prepared representations listed above."
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same common materials plus the authenticated source-pinned author implementation for this selected endpoint.",
+      "comparison": "Same observations, train/evaluation support, metric and complete companion policy. Author code is the intended access difference."
+    }
+  },
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict presented stimulus angle S from each original regional neural principal component using the original Supplementary Figure S11 ten-fold decoder. Retain corr(E,E_hat) estimate prediction and descriptive corr(E,S_hat) readout as companions. The primary ordered quantity is signed held-out corr(S,S_hat), not MI/II or an absolute readout contrast.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Released regional component and behavior arrays from the source human MEG study; exact published S11 input-file version, trial alignment and precomputed-result-to-paper binding remain unverified.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "S11 requests get_sinfo(setdiff(1:34,[12,14,19,21]),2): thirty source participants, with all original parcels and PCs. Authenticate actual included identities and missing-value handling; do not substitute the twenty-nine-participant MI/II cohort. Retain all six adjacent sample pairs, three consistency classes, five subsamples and 129 timepoints for every applicable source context.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original count-matched row selection pools adjacent sample positions in MATLAB column-major order, takes five subsamples and applies cvpartition(Ntr,KFold,10) at observation-row level. Two rows from one trial can cross folds. Authenticate historical folds, or a calibrated source-protocol-equivalent stochastic rerun with recorded state and shared candidate/author folds; the current NumPy schedule is not recovered MATLAB state. No new grouped-trial or participant-held-out split.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original regional neural PCA time courses predict stimulus angles and final estimates separately in Cue and Choice conditions, keeping source sample-pair and consistency identities. Source all-trial PCA is part of the historical representation condition and must be disclosed.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source all-trial PCA exposure, 200-to-160-Hz resampling, baseline correction and -0.1 to 0.7 s epoch, 129 ordered samples, per-sample row eligibility, five count-matched subsamples per consistency class and S11 fgmu=0 all-finite-generative-mean population. Resolve exact native arrays and fit-only 1e12 scaling; do not import the main MI 81-row cutoff or require all trial stimulus samples present.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source predictive endpoint is signed Pearson correlation between held-out predicted and actual stimulus, averaged over ten folds; the companion estimate predictor uses corr(E,E_hat). Readout corr(S_hat,E), absolute consistency differences and MI/II are distinct and cannot substitute for decoding accuracy.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain signed correlation per repeat/fold/PC/time, mean the ten fold correlations as in source rather than pooling predictions, and authenticate S11 upstream gCORR/gSCR reduction over PCs/subsamples/parcels/participants. Preserve all condition/pair/class/time support and undefined cells; exact complete published baseline arrays and figure aggregation remain missing.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    }
+  },
+  "common_input_manifest_sha256": null,
+  "author_code_manifest_sha256": null,
+  "evaluation_identity_manifest_sha256": null,
+  "exposure_policy_sha256": null,
+  "resource_budget": null,
+  "access_budget": null,
+  "official_code_source": {
+    "url": "https://github.com/DonnerLab/2025_Park_ConfirmationBias-through-Selective-Readout-of-Information-Encoded-in-Human-Parietal-Cortex",
+    "revision_or_archive_version": "8b79caa5b95fadce826ea39bf6c69828991a4b28",
+    "limit": "Source metadata only; the exact permitted file/member package and publication-equivalent endpoint implementation are not yet authenticated."
+  },
+  "publication_exposure": "Original published data/protocol may already be public; disclose historical and common-representation exposure. Do not claim adversarial isolation or prospective unseen-data generalization from an operator library.",
+  "outputs": "Independent reproduction/improvement cells for both conditions. Reference outputs and final target diagnostics are evaluator-owned; any leakage or new assistance must be disclosed and cannot silently preserve the condition label.",
+  "activation_blocks": [
+    "Authenticate S11 thirty-subject identities, complete parcel/PC/context coverage and source array/trial alignment; the main twenty-nine-subject MI/II cohort is a different support.",
+    "Recover original gCORR/gSCR producer, exact PC/subsample/parcel/participant aggregation and all published signed stimulus-decoding arrays; no favorable time/region/PC summary may substitute.",
+    "Reconcile source MATLAB resampling, missing-value behavior and fit-only 1e12 scaling; retain prospective corrected branches separately.",
+    "Authenticate historical fold/subsample realization or qualify a provenance-complete source-protocol stochastic rerun with published-result calibration and candidate/author pairing; original row-level trial overlap and all-trial PCA remain disclosed.",
+    "Set a complete-support paired participant comparison, meaningful effect and reproduction criterion plus exact common artifacts, author-code access and finite resource/search budgets before activation.",
+    "The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted."
+  ],
+  "runtime_qualified": false,
+  "scientific_outcome": "unknown"
+}

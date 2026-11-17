@@ -1,0 +1,695 @@
+{
+  "schema_version": "paper-primary-endpoint-selection/v1",
+  "task_id": "PAPER-EXP-20261113-002",
+  "version": "primary-endpoint-v1",
+  "status": "candidate_source_unresolved",
+  "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "selection_kind": "explicit_versioned_author_reported_method_endpoint",
+  "scope_policy": {
+    "path": "/Users/nicholas/Documents/Codex/benchmark-engineering-evidence/comprehensive-revision-20261116-v2/completion7-v1/paper-primary-recovery/SCOPE_POLICY.json",
+    "sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702"
+  },
+  "selected_primary": "Original Figures 2h and 4d,e six-speed V1 decoder performance on all five primary mice, both stationary and locomotion states, complete within-time curves and cross-time accuracy matrices, with source relative-generalization profiles and their raw numerator/denominator. This version selects empirical decoder performance; it does not define biological superiority as a larger locomotion effect.",
+  "endpoint_locator": "Figures2h and4d,e; original independent-neuron and cross-time decoding Methods",
+  "source_evidence": [
+    {
+      "id": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-50563-y",
+      "locator": "Results Figures 2h and 4d,e; Methods: Independent-neuron decoding of binned spike counts, Cross-time decoding of binned spike counts; equation 21. Methods cross-time text internally calls the panel Figure 5d,e."
+    },
+    {
+      "id": "within",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/processSession_decoding.m",
+      "locator": "normal state criteria; unit filtering; options.kfold=3; GammaOpt/GammaOne sections"
+    },
+    {
+      "id": "cross_full",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/CrossTimeDecodingAnalysis.m",
+      "locator": "Five source sessionTags; all goodUnits; stat/run.perm.perf; five random half splits; 20 by 20 train/test windows."
+    },
+    {
+      "id": "within_reduce",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/analyseDiscriminantAnalysis_spikeCounts.m",
+      "locator": "just gamma=1 section: average five perm.meanPerf curves per session; mean and SEM across five sessions, -150:10:1750 ms."
+    },
+    {
+      "id": "cross_reduce",
+      "url": "https://github.com/eabhorrocks/Horrocksetal24_TemporalDynamics/blob/e3796c13fe7afe7a84854cd5a02c36de268e88f4/Decoding/analyseTrainTestDecoding.m",
+      "locator": "mean perm.perf; full matrix means; train_idx=4 early row and diagonal companions; normalized performance timeIdx2Use=3:12 and trainIdx=4."
+    }
+  ],
+  "strongest_author_comparator": "Strongest relevant original author routes on the same admitted data: within-time independent-neuron diagonal-covariance GammaOne LDA with source nested delta tuning; cross-time source LDA with source gamma/delta tuning and half splits. Full source native performance vectors remain unrecovered. Frozen-coefficient transport, pooled chronological LDA, chance1/6 and Figure4e relative scalars are not substitutes.",
+  "contracts": {
+    "reproduction": "reproduction.v2.json",
+    "improvement": "improvement.v1.json",
+    "outcomes": "outcomes.v1.json",
+    "access_conditions": "access-conditions.v1.json"
+  },
+  "predecessor_contracts": {
+    "task.json": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-002/task.json",
+      "raw_sha256": "2445fbe65c82ab17b943efa6d7808fb595dc3705216dc5acc1c26ea066e74d9d",
+      "canonical_sha256": "5bc034041df93b53cf2ad2256494cabed5ef13f83c1f23528723767a5ffcbe20",
+      "bytes": 18499
+    },
+    "reproduction.v1.json": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-002/reproduction.v1.json",
+      "raw_sha256": "d014cf070c36bc4bde033a5c8eb6cef4c7d61c68e29ea12ad9b4cfb1f3a62eb6",
+      "canonical_sha256": "dd6ca8011af5efe361800382d2e04239dc68a4efb01e4b7486013e05b7499ace",
+      "bytes": 30492
+    },
+    "improvement.v1.json": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-002/improvement.v1.json",
+      "raw_sha256": "1a4406e68307cb98f977387f9f277916ba6b1fb789ad0a09a7ee2ae6d4c4d439",
+      "canonical_sha256": "1ee543d7cecf19a65e8f288823a24b28554147589bca4bd802d09465ebd31595",
+      "bytes": 10799
+    },
+    "outcomes.v1.json": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-002/outcomes.v1.json",
+      "raw_sha256": "4bffb88753033a6d2782526c54549518401affcbbeee8578f4648c2726ed56ea",
+      "canonical_sha256": "918ce4ba506f850d397a947457642e306534a9f9bd3b601b4f36177c76bf985c",
+      "bytes": 4690
+    }
+  },
+  "archived_task": {
+    "path": "benchmarks/paper/PAPER-EXP-20261113-002/historical/primary-biological-20261117-v1/task.json",
+    "raw_sha256": "2445fbe65c82ab17b943efa6d7808fb595dc3705216dc5acc1c26ea066e74d9d"
+  },
+  "retained_biological_reproduction": {
+    "description": "The prior paired mouse-level state/time biological interpretation and indispensable original biological contrasts remain first-class separately scoped reproduction under the unchanged root reproduction.v1.json and archived prior task. Method improvement neither verifies nor invalidates that broader interpretation automatically.",
+    "path": "benchmarks/paper/PAPER-EXP-20261113-002/reproduction.v1.json",
+    "raw_sha256": "d014cf070c36bc4bde033a5c8eb6cef4c7d61c68e29ea12ad9b4cfb1f3a62eb6",
+    "independent_of_selected_method_outcomes": true
+  },
+  "retained_prospective_extension": {
+    "description": "Earlier chronological adaptation and existing components retain their explicit historical coverage; they cannot populate original method outcome cells.",
+    "canonical_files_modified": false
+  },
+  "method_evidence_and_limits": [
+    "Authenticate the complete original five-mouse trial/unit identities, inclusion masks, class order, full-population figure-producing configuration and nTrials workspace dependency in CrossTimeDecodingAnalysis.m; source code recovery alone is not a native-array receipt.",
+    "Recover complete Figure2h/4d accuracy arrays and Figure4e ratios plus numerator/denominator, independently linked to authentic observations and source splits. Four published relative-performance mean/SEM scalars are companions, not a full accuracy reference.",
+    "Preserve within-time threefold/five-repeat diagonal-covariance GammaOne decoding and cross-time half-split/five-repeat decoding. Where historic random state is absent, justify a recorded source-protocol-equivalent replay with calibrated agreement tolerance and paired candidate/author draws; do not require an unobtainable exact historical seed as an independent gate.",
+    "The delivered source_metrics.py reduces operator accuracy exports and held-fold predictions; it does not prepare authentic observations, fit either decoder, prove training access or independently verify a submitted full-panel analysis.",
+    "Define source-supported reference equivalence, meaningful accuracy gain, full-panel comparison/multiplicity, mouse-level uncertainty and denominator-protection rules without selecting favorable cells. Current improvement/v1 final-result schema is scalar-only; no arbitrary scalarization or numerical threshold is authorized for this panel.",
+    "Freeze exact common participant allowlists, official-code-only delta, private evaluator/ref output boundaries, exposure manifests and finite cumulative access/resource budgets. All readiness and scientific outcome states remain unqualified."
+  ],
+  "primary_outcome_claims": {
+    "reproduction": "unknown",
+    "improvement": "unknown",
+    "current_sota": "not_claimed"
+  },
+  "construction_does_not_promote": [
+    "source authenticity",
+    "runtime readiness",
+    "complete contract admission",
+    "author reproduction",
+    "AI evaluation",
+    "paper win",
+    "publication equivalence"
+  ],
+  "central_integration_needed": [
+    "Explicit additive primary-endpoint version selection in catalog/provenance binder; unchanged root contracts remain historical/secondary scoped sources.",
+    "Bind new task bytes and contract/path digests without treating the old unavailable bundle as the selected endpoint.",
+    "Prospective versioned full-panel comparator is under construction; wire its independently reviewed performance-versus-control policy without inventing scalar aggregation, win-count proxies or numeric margins. Current improvement/v1 alone cannot admit these panel results.",
+    "Complete source and runtime/paired access admission independently; absent AI model studies are not construction prerequisites."
+  ],
+  "endpoint_roles": {
+    "directional_performance_targets": [
+      "fig2h_within_time_accuracy: complete original true-label accuracy curves",
+      "fig4d_cross_time_accuracy: complete original true-label accuracy matrices"
+    ],
+    "mandatory_fidelity_and_protection_companions": [
+      "fig4e_relative_generalization: retain raw numerator, diagonal denominator and source reported scalar companions; ratio increase alone not rewarded",
+      "Original source null/shuffle controls if required by authenticated figure route, never optimization targets",
+      "Separately retained biological state/time effects are not maximization targets"
+    ],
+    "admission_rule_status": "unresolved_pending_versioned_complete_panel_policy",
+    "no_null_control_maximization": true,
+    "role_rule": "Directional improvement concerns true-label within-time and cross-time accuracy on the original full source support only. Relative-generalization ratios, their numerator/denominator, source biological contrasts and any shuffle/null outputs are fidelity/protection companions, never targets rewarded merely for increasing. Ratios cannot improve by degrading their diagonal denominator."
+  },
+  "audit_output_obligations": [
+    {
+      "id": "audit_fig2h_within_time_accuracy_repeat_accuracy",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig2h_within_time_accuracy",
+      "associated_numerical_finding_ids": [
+        "fig2h_within_time_accuracy"
+      ],
+      "typed_member_definition": {
+        "id": "repeat_accuracy",
+        "manifest_key": "fig2h_within_time_accuracy/repeat_accuracy",
+        "source_quantity": "GammaOne.perm.meanPerf",
+        "membership": "data_dependent",
+        "shape": [
+          5,
+          191
+        ],
+        "axes": [
+          {
+            "name": "repeat",
+            "units": "source index",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": 0,
+              "step": 1,
+              "count": 5
+            }
+          },
+          {
+            "name": "time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 10,
+              "count": 191
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "proportion correct",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Equal three-fold mean within repeat, then all five repeats; preserve every time window.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "within_time_trial_unit_fold_predictions",
+        "within_time_full_native_accuracy"
+      ],
+      "purpose": "Retain source-native granular operands, original complete support and protected control semantics for independent computation/provenance verification. This operand is not a separately targeted numerical paper result; no source observation or required audit output is waived."
+    },
+    {
+      "id": "audit_fig4d_cross_time_accuracy_repeat_accuracy",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4d_cross_time_accuracy",
+      "associated_numerical_finding_ids": [
+        "fig4d_cross_time_accuracy"
+      ],
+      "typed_member_definition": {
+        "id": "repeat_accuracy",
+        "manifest_key": "fig4d_cross_time_accuracy/repeat_accuracy",
+        "source_quantity": "perm.perf",
+        "membership": "data_dependent",
+        "shape": [
+          5,
+          20,
+          20
+        ],
+        "axes": [
+          {
+            "name": "repeat",
+            "units": "source index",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": 0,
+              "step": 1,
+              "count": 5
+            }
+          },
+          {
+            "name": "train_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          },
+          {
+            "name": "test_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "proportion correct",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Retain all five half-split repetitions and all train/test cells.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_trial_unit_split_predictions",
+        "cross_time_full_native_accuracy"
+      ],
+      "purpose": "Retain source-native granular operands, original complete support and protected control semantics for independent computation/provenance verification. This operand is not a separately targeted numerical paper result; no source observation or required audit output is waived."
+    },
+    {
+      "id": "audit_fig4e_relative_generalization_raw_numerator",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4e_relative_generalization",
+      "associated_numerical_finding_ids": [
+        "fig4e_relative_generalization"
+      ],
+      "typed_member_definition": {
+        "id": "raw_numerator",
+        "manifest_key": "fig4e_relative_generalization/raw_numerator",
+        "source_quantity": "Source rowwise positive above-chance sum",
+        "membership": "data_dependent",
+        "shape": [
+          20
+        ],
+        "axes": [
+          {
+            "name": "train_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "sum of proportion differences",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Compute after repeat averaging; chance1/6; no denominator weakening.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_full_native_accuracy",
+        "relative_generalization_derivations"
+      ],
+      "purpose": "Retain source-native granular operands, original complete support and protected control semantics for independent computation/provenance verification. This operand is not a separately targeted numerical paper result; no source observation or required audit output is waived."
+    },
+    {
+      "id": "audit_fig4e_relative_generalization_raw_diagonal_denominator",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4e_relative_generalization",
+      "associated_numerical_finding_ids": [
+        "fig4e_relative_generalization"
+      ],
+      "typed_member_definition": {
+        "id": "raw_diagonal_denominator",
+        "manifest_key": "fig4e_relative_generalization/raw_diagonal_denominator",
+        "source_quantity": "Source matching diagonal positive above-chance sum",
+        "membership": "data_dependent",
+        "shape": [
+          1
+        ],
+        "axes": [
+          {
+            "name": "denominator",
+            "units": "source index",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": 0,
+              "step": 1,
+              "count": 1
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "sum of proportion differences",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Same source0–1000ms test-window support; retain zero explicitly, no epsilon or dropped mouse.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_full_native_accuracy",
+        "relative_generalization_derivations"
+      ],
+      "purpose": "Retain source-native granular operands, original complete support and protected control semantics for independent computation/provenance verification. This operand is not a separately targeted numerical paper result; no source observation or required audit output is waived."
+    },
+    {
+      "id": "audit_fig4e_relative_generalization_relative_profile",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4e_relative_generalization",
+      "associated_numerical_finding_ids": [
+        "fig4e_relative_generalization"
+      ],
+      "typed_member_definition": {
+        "id": "relative_profile",
+        "manifest_key": "fig4e_relative_generalization/relative_profile",
+        "source_quantity": "Relative above-chance generalization per training row",
+        "membership": "data_dependent",
+        "shape": [
+          20
+        ],
+        "axes": [
+          {
+            "name": "train_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "dimensionless ratio",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Ratio of positive above-chance numerator sums over source0–1000ms test windows to corresponding diagonal sum; preserve source first12 plotted rows and all20 diagnostic reductions; undefined denominator remains undefined.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_full_native_accuracy",
+        "relative_generalization_derivations"
+      ],
+      "purpose": "Retain complete20 mathematical training-row reductions as source-native audit evidence. Source publication plots first12 training rows and selects early MATLABrow4/Pythonrow3; diagnostic rows13–20 are not independently invented numerical paper targets."
+    },
+    {
+      "id": "audit_fig4e_relative_generalization_cohort_mean_profile",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4e_relative_generalization",
+      "associated_numerical_finding_ids": [
+        "fig4e_relative_generalization"
+      ],
+      "typed_member_definition": {
+        "id": "cohort_mean_profile",
+        "manifest_key": "fig4e_relative_generalization/cohort_mean_profile",
+        "source_quantity": "Equal-mouse relative profile",
+        "membership": "data_dependent",
+        "shape": [
+          20
+        ],
+        "axes": [
+          {
+            "name": "train_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "dimensionless ratio",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Compute ratios per mouse first; preserve undefined source states.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_full_native_accuracy",
+        "relative_generalization_derivations"
+      ],
+      "purpose": "Retain complete20 mathematical training-row reductions as source-native audit evidence. Source publication plots first12 training rows and selects early MATLABrow4/Pythonrow3; diagnostic rows13–20 are not independently invented numerical paper targets."
+    },
+    {
+      "id": "audit_fig4e_relative_generalization_cohort_sem_profile",
+      "mandatory": true,
+      "role": "audit_not_numerical_target",
+      "source_finding_id": "fig4e_relative_generalization",
+      "associated_numerical_finding_ids": [
+        "fig4e_relative_generalization"
+      ],
+      "typed_member_definition": {
+        "id": "cohort_sem_profile",
+        "manifest_key": "fig4e_relative_generalization/cohort_sem_profile",
+        "source_quantity": "Mouse sample SEM of relative profile",
+        "membership": "data_dependent",
+        "shape": [
+          20
+        ],
+        "axes": [
+          {
+            "name": "train_time_center",
+            "units": "ms",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "arithmetic",
+              "start": -150,
+              "step": 100,
+              "count": 20
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "dimensionless ratio",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Source sample SEM; no tolerance inferred.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "state"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Original ordered source record, trial/unit and coordinate identities require authentic binding; schema counts are not authenticity.",
+            "evidence_ids": [
+              "paper",
+              "within_reduce",
+              "cross_reduce"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "within_reduce",
+          "cross_reduce"
+        ]
+      },
+      "required_granular_output_ids": [
+        "cross_time_full_native_accuracy",
+        "relative_generalization_derivations"
+      ],
+      "purpose": "Retain complete20 mathematical training-row reductions as source-native audit evidence. Source publication plots first12 training rows and selects early MATLABrow4/Pythonrow3; diagnostic rows13–20 are not independently invented numerical paper targets."
+    }
+  ],
+  "numerical_target_audit_separation": {
+    "revision": "audit-obligation-separation-v2",
+    "rationale": "Source-native operands, fold/repeat records and null/native-condition controls remain mandatory typed audit evidence. Reported mouse/cohort curves, matrices, session scores, ratio summaries, z-score profiles and author source exports remain numerical targets as enumerated in reproduction.v2.json. No required source support or denominator protection is removed. Relative-generalization numerical profile targets follow original source first12 plotted training rows and early row4; full20 diagnostic reductions stay mandatory audits. Full20x20 accuracy matrices and full20 test-time early accuracy profile remain unchanged.",
+    "numerical_finding_ids": [
+      "fig2h_within_time_accuracy",
+      "fig4d_cross_time_accuracy",
+      "fig4e_relative_generalization",
+      "fig4e-stationary-early-relative-mean",
+      "fig4e-stationary-early-relative-sem",
+      "fig4e-locomotion-early-relative-mean",
+      "fig4e-locomotion-early-relative-sem"
+    ],
+    "audit_obligation_ids": [
+      "audit_fig2h_within_time_accuracy_repeat_accuracy",
+      "audit_fig4d_cross_time_accuracy_repeat_accuracy",
+      "audit_fig4e_relative_generalization_raw_numerator",
+      "audit_fig4e_relative_generalization_raw_diagonal_denominator",
+      "audit_fig4e_relative_generalization_relative_profile",
+      "audit_fig4e_relative_generalization_cohort_mean_profile",
+      "audit_fig4e_relative_generalization_cohort_sem_profile"
+    ],
+    "admission_policy": "absent; future computation/admission design must bind every audit output and association before qualified execution",
+    "no_scientific_readiness_promotion": true
+  },
+  "published_profile_selection": {
+    "finding_id": "fig4e_relative_generalization",
+    "source_locator": {
+      "repository_path": "benchmarks/paper/PAPER-EXP-20261113-002/implementations/source-decoding-metrics-v1/README.md",
+      "section": "Native arrays and reduction order",
+      "source_analysis": "analyseTrainTestDecoding.m; independently retained SOURCE_FINDINGS.md"
+    },
+    "published_training_rows": {
+      "matlab_one_based": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "python_zero_based": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "early_training_row": {
+      "matlab_one_based": 4,
+      "python_zero_based": 3
+    },
+    "coordinate_identity_sha256": null,
+    "test_aggregation_indices_are_distinct": "Source test-window indices3:12 (MATLAB) define ratio sums; they do not change published training profile rows1:12.",
+    "unmodified_full_accuracy_targets": [
+      "fig4d_cross_time_accuracy/mouse_mean_accuracy",
+      "fig4d_cross_time_accuracy/cohort_mean_accuracy",
+      "fig4d_cross_time_accuracy/early_train_profile"
+    ],
+    "full20_ratio_profiles_retained_as_mandatory_audit": true
+  }
+}

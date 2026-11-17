@@ -24,13 +24,14 @@ COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'next_implementation_action', 'provenance', 'admission'}
 # Covers both tracks' versioned contracts plus exact preserved predecessors.
 # Per-member bounds and the cumulative refusal remain independent controls.
-READ_LIMIT = 80 * 1024 * 1024
+READ_LIMIT = 160 * 1024 * 1024
 PAPER_PRE_IMPROVEMENT_COUNT = 116
 PRIMARY_SUCCESSOR_PUBLIC_FIELDS = (
     'improvement_disposition', 'retained_improvement_contract', 'retained_improvement_role',
     'primary_policy_revision', 'primary_policy_provenance', 'candidate_interface', 'author_reproduction_routes',
 )
 RETAINED_POLICY_ROLE = 'retained_pre_outcomes_policy'
+ENDPOINT_SELECTION_KIND = 'original_author_reported_computational_endpoint'
 
 
 def improvement_module():
@@ -127,6 +128,13 @@ def neutral_unavailable_reason(outcomes):
 
 def source_declaration_gap(outcomes):
     return outcomes.get('availability') == 'source_declaration_unavailable'
+
+
+def endpoint_selection(outcomes):
+    """Recognize public wording only; validate authenticates its source authority."""
+    provenance = outcomes.get('primary_policy_provenance')
+    return (type(provenance) is dict
+            and provenance.get('selection_kind') == ENDPOINT_SELECTION_KIND)
 
 
 def registered_improvement_summary(bound, registered):
@@ -606,6 +614,9 @@ def discover(root=ROOT):
                     'The selected offline candidate and retained author-source routes are separate source interfaces; '
                     'their metadata does not establish execution or scientific qualification.'
                     if bound_outcomes['candidate_interface'] is not None else
+                    'The selected author-reported computational endpoint and broader biological predecessor scope remain separate. '
+                    'This source selection does not establish executable delivery, paired access or scientific results.'
+                    if endpoint_selection(task['paper_outcomes']) else
                     'The selected primary policy and retained predecessor policy are separate metadata records; '
                     'neither establishes execution or scientific qualification.')
         if understanding is not None:
@@ -713,7 +724,10 @@ def source_links(catalog):
             if outcomes.get('primary_policy_revision') is not None:
                 for field in ('improvement_contract', 'retained_improvement_contract', 'primary_policy_revision'):
                     yield outcomes[field]['path']
-                for pin in outcomes['primary_policy_provenance'].values():
+                for field, pin in outcomes['primary_policy_provenance'].items():
+                    if field == 'selection_kind':
+                        need(pin == ENDPOINT_SELECTION_KIND, 'Unsupported primary endpoint selection kind')
+                        continue
                     yield pin['path']
                 if outcomes['candidate_interface'] is not None:
                     for field in ('delivery', 'scorer', 'policy'):
@@ -786,23 +800,31 @@ def validate(catalog, root=ROOT, *, _reader=None):
     # current roster has removed a fixed declaration-gap task. Source-only
     # coverage returns None without reading an unregistered snapshot.
     authenticated_previous_rows = module.coverage(source_registry, read_bound)
-    gap_ids = (set(authenticated_previous_rows) & module.SOURCE_DECLARATION_GAP_IDS
-               if authenticated_previous_rows is not None else set())
-    need(gap_ids <= {row['id'] for row in tasks}, 'Source declaration gap tasks cannot be omitted')
+    # Only the separately authenticated current authority can supersede an old
+    # active gap/scope classification. The original records and roster persist.
+    endpoint_ids = module.endpoint_selection_ids(authenticated_previous_rows)
+    need(type(endpoint_ids) in (set, frozenset) and endpoint_ids <= set(source_by_id),
+         'Endpoint selections require authenticated current registered identities')
+    historical_gap_ids = (set(authenticated_previous_rows) & module.SOURCE_DECLARATION_GAP_IDS
+                          if authenticated_previous_rows is not None else set())
+    need(historical_gap_ids <= {row['id'] for row in tasks}, 'Source declaration gap tasks cannot be omitted')
+    gap_ids = historical_gap_ids - endpoint_ids
     if type(source_metadata) is dict and 'scope_decisions' in source_metadata:
         module.require_pin(source_metadata['scope_decisions'], module.SCOPE_PATH, 'scope decisions')
         source_scope = module.scope_decisions(read_bound(source_metadata['scope_decisions'], 'Outcome scope decision'))
         source_entries = source_scope['entries']
-    neutral_ids = {identifier for identifier, entry in source_entries.items()
-                   if entry['paired_bundle_status'] == 'unavailable_complete_primary_pairing'
-                   and identifier in source_by_id
-                   and type(source_by_id[identifier].get('paper_outcomes')) is dict}
-    need(neutral_ids <= {row['id'] for row in tasks}, 'Neutral unavailable source tasks cannot be omitted')
+    historical_neutral_ids = {identifier for identifier, entry in source_entries.items()
+                              if entry['paired_bundle_status'] == 'unavailable_complete_primary_pairing'
+                              and identifier in source_by_id
+                              and type(source_by_id[identifier].get('paper_outcomes')) is dict}
+    need(historical_neutral_ids <= {row['id'] for row in tasks}, 'Neutral unavailable source tasks cannot be omitted')
+    neutral_ids = historical_neutral_ids - endpoint_ids
     fixed_successors = ({module.PRIMARY_SUCCESSOR_TASK} | module.SCOPE_POLICY_SUCCESSOR_TASKS
                         | module.REFERENCE_SUCCESSOR_TASKS)
     successor_ids = ({identifier for identifier, original in authenticated_previous_rows.items()
                       if original.get('track') == 'paper' and identifier in fixed_successors}
                      if authenticated_previous_rows is not None else set())
+    successor_ids |= endpoint_ids
     need(successor_ids <= {row['id'] for row in tasks}, 'Adopted primary successor tasks cannot be omitted')
     for registered in source_by_id.values():
         declaration = registered.get('paper_outcomes')
@@ -810,6 +832,9 @@ def validate(catalog, root=ROOT, *, _reader=None):
             module.has_primary_successor(registered)
         if type(declaration) is dict and 'source_declaration_gap' in declaration:
             module.has_source_declaration_gap(registered)
+        if type(declaration) is dict and 'endpoint_selection' in declaration:
+            need(module.has_endpoint_selection(registered) and registered['id'] in endpoint_ids,
+                 'Endpoint selector requires its authenticated current authority')
     directories = set()
     for row in tasks:
         directory = task_directory(row['id'], row['track'])
@@ -836,7 +861,7 @@ def validate(catalog, root=ROOT, *, _reader=None):
         retained_policy = row.get('paper_improvement')
         retained_role = type(retained_policy) is dict and retained_policy.get('role') == RETAINED_POLICY_ROLE
         need(row['id'] in successor_ids or not (successor_fields or retained_role),
-             'Primary successor claims require an adopted fixed reviewed source task')
+             'Primary successor claims require an adopted reviewed source task')
         if row['id'] in successor_ids:
             need(type(outcomes) is dict and outcomes.get('primary_policy_revision') is not None,
                  'Adopted primary successor selection cannot be omitted or replaced by a retained policy')
@@ -858,6 +883,21 @@ def validate(catalog, root=ROOT, *, _reader=None):
                  and all(type(cell) is dict and cell.get('scientific_outcome') == 'unknown'
                          and cell.get('receipt') is None for cell in cells),
                  'Paper catalog requires four unscored outcome conditions')
+            if row['id'] in endpoint_ids:
+                need(outcomes.get('availability') == 'available'
+                     and outcomes.get('reproduction_eligibility') in ('source_unresolved', 'schema_blocked')
+                     and (outcomes.get('improvement_disposition') == 'source_unresolved'
+                          or row['id'] in ('PAPER-paper-method-replacement-005', 'PAPER-paper-signal-add-012')
+                          and outcomes.get('improvement_disposition') == 'design_ready'
+                          and row.get('paper_improvement', {}).get('disposition') == 'design_ready')
+                     and endpoint_selection(outcomes)
+                     and outcomes.get('candidate_interface') is None
+                     and outcomes.get('author_reproduction_routes') is None
+                     and outcomes.get('primary_scope_correction') is None
+                     and all(cell.get('endpoint_eligible') is False
+                             and cell.get('pairing_status') == 'unresolved'
+                             and cell.get('condition_available') is False for cell in cells),
+                     'Endpoint selection declares source scope only, never execution or qualification')
             if row['id'] in gap_ids:
                 registered = source_by_id.get(row['id'])
                 need(type(registered) is dict and registered.get('track') == 'paper'
@@ -995,8 +1035,11 @@ def paper_count_text(catalog):
     outcomes = catalog['paper_outcome_counts']
     neutral_count = sum(neutral_unavailable_reason(row.get('paper_outcomes', {})) for row in catalog['tasks'])
     successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
+    endpoint_selection_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
+                                   and endpoint_selection(row['paper_outcomes']) for row in catalog['tasks'])
     scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
                                 and row['paper_outcomes']['candidate_interface'] is None
+                                and not endpoint_selection(row['paper_outcomes'])
                                 and row['id'] not in ('PAPER-ROOT-ADD-001', 'PAPER-paper-method-029') for row in catalog['tasks'])
     reference_successor_count = sum(row['id'] == 'PAPER-ROOT-ADD-001'
                                     and row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
@@ -1007,7 +1050,8 @@ def paper_count_text(catalog):
     continuous_count = sum(continuous_paper_selection(row.get('paper_outcomes', {})) is not None
                            for row in catalog['tasks'])
     official_assets_count = sum('continuous_outcomes_v2' in row.get('paper_outcomes', {}) for row in catalog['tasks'])
-    temporal_successor_count = successor_count - scope_successor_count - reference_successor_count - deeprecon_reference_count - continuous_count
+    temporal_successor_count = (successor_count - scope_successor_count - reference_successor_count
+                                - deeprecon_reference_count - continuous_count - endpoint_selection_count)
     dual_text = ''
     if outcomes['covered']:
         eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
@@ -1052,6 +1096,10 @@ def paper_count_text(catalog):
             if deeprecon_reference_count:
                 dual_text += ('The Deeprecon reference successor records recovered publisher pair means; '
                               'native replay, matched candidate comparison and scientific qualification remain unresolved. ')
+            if endpoint_selection_count:
+                dual_text += (f'**{endpoint_selection_count} tasks** select exact original author-reported computational endpoints under a new scope version. '
+                              'Broader biological reproduction and prior contracts remain separately preserved; '
+                              'data, comparator, access and runtime gaps remain explicit, with no scientific results or qualification. ')
             if scope_successor_count:
                 dual_text += (' ' if temporal_successor_count else '')
                 dual_text += ('For the reviewed scope-policy selections, the current primary policy governs improvement; '
@@ -1401,6 +1449,7 @@ def render_tracks(catalog):
                     candidate = outcomes['candidate_interface']
                     author = outcomes['author_reproduction_routes']
                     text += ('### Current continuous measurement policy\n\n' if continuous is not None else
+                             '### Current selected paper endpoint\n\n' if endpoint_selection(outcomes) else
                              '### Current primary improvement policy\n\n')
                     text += '**Disposition:** ' + markdown_text(outcomes['improvement_disposition']) + '.\n\n'
                     if continuous is not None:
@@ -1456,6 +1505,18 @@ def render_tracks(catalog):
                         text += ('**Unchanged reproduction/source limits:**\n\n'
                                  + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
                                  + '\n')
+                    elif endpoint_selection(outcomes):
+                        provenance = outcomes['primary_policy_provenance']
+                        text += ('This version selects an exact author-reported computational result as the primary benchmark endpoint. '
+                                 'The broader biological finding and prior contracts retain their original scope. '
+                                 'The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; '
+                                 'both access conditions remain uninstantiated.\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated endpoint selection', outcomes['primary_policy_revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Reviewed endpoint selection authority', provenance['endpoint_selection_authority']['path'], task) + '\n\n'
+                                 '**Remaining reproduction/source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
+                                 + '\n')
                     elif candidate is None:
                         text += ('The reviewed current policy selects the primary scientific scope. '
                                  'Runtime routes are not declared by this policy metadata.\n\n'
@@ -1482,6 +1543,7 @@ def render_tracks(catalog):
                         text += '\nBoth source routes remain scientifically unknown; these selectors do not authorize execution.\n\n'
                 if outcomes.get('reproduction_contract') is not None and continuous is None:
                     text += ('- ' + markdown_link('Reproduction proposal (inspection only)' if unavailable else
+                                                 'Selected-endpoint reproduction contract' if endpoint_selection(outcomes) else
                                                  'Original-finding reproduction contract',
                                                  outcomes['reproduction_contract']['path'], task) + '\n')
                 if unavailable:

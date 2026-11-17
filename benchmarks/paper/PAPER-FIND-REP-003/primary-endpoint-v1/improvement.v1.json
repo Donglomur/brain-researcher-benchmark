@@ -1,0 +1,319 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "A named original computational result supports meaningful method improvement, but original support/reference/runtime and a justified complete-family comparison remain unqualified. Existing scalar improvement admission cannot represent the full required panel; scope selection is not improvement readiness.",
+  "source_paper": {
+    "title": "Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping",
+    "url": "https://doi.org/10.7554/eLife.106270.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12885482/",
+      "locator": "Version of Record; Figure 5 A–H; Methods: Joint angle and velocity decoding",
+      "supports": "Original joint-angle reconstruction, five-mouse comparison, 90/10 trial splits repeated 50 times, input processing and figure aggregation."
+    },
+    {
+      "id": "cv",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/cvRegress.m",
+      "locator": "Cross-validation partition loop and VEs assignments",
+      "supports": "Trial-level modulo splits and VE = 1 - var(test residual)/var(test target), not uncentered SSE-based R-squared."
+    },
+    {
+      "id": "decode",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decode.m",
+      "locator": "PCA and cvRegress call",
+      "supports": "Source pre-CV neural PCA and nPartitions=10, nFolds=5: the implementation loops five repetitions of ten held-out partitions despite potentially confusing variable names."
+    },
+    {
+      "id": "population",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_analysis.m",
+      "locator": "mouseInfoM1, mouseInfoS1 and rng(240926)",
+      "supports": "Pins five mice, their ten M1/S1 sessions, RADICaL and deconvolved branches, and source RNG seed."
+    },
+    {
+      "id": "load",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/loadDecode.m",
+      "locator": "preT/postT, ZETA sorting and ROIs",
+      "supports": "Uses lift-locked -100 to 400 ms and top 100 lift-modulated cells; instantaneous and lagged branches are distinct."
+    },
+    {
+      "id": "repo",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/README.md",
+      "locator": "Repository introduction and data DOI",
+      "supports": "Connects the source figure implementation to Figshare 28326998."
+    },
+    {
+      "id": "local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "score_arrays, evaluate and aggregation output",
+      "supports": "Local normalized scorer preserves source VE but its phase-template delta, fold/joint reduction and equal-mouse summary are prospective choices."
+    },
+    {
+      "id": "main",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_main.m",
+      "locator": "A-H panel construction, jointsToPlot, median-VE trial selection",
+      "supports": "Main per-joint score distributions, selected joint time courses, skeletal postures and all-mouse summaries."
+    },
+    {
+      "id": "plot_all",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/plots/plotVEAll.m",
+      "locator": "jointsP=1:7, jointsD=8:24; median(median(VEs(:,joints)))",
+      "supports": "Each mouse and area has one median-over-joint-medians summary for each proximal/distal group; preserve the separate per-joint medians."
+    },
+    {
+      "id": "supp1",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp1.m",
+      "locator": "A-B outputsM1_sd/outputsS1_sd; C-D outputsM1_rv/outputsS1_rv",
+      "supports": "Required smoothed deconvolved-angle and RADICaL-velocity companions."
+    },
+    {
+      "id": "supp2",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp2.m",
+      "locator": "outputPrxDst, outputD2S and plotVEvsVar",
+      "supports": "Required proximal/distal partial, distance-to-spout partial and actual-kinematic-variance versus VE companions."
+    },
+    {
+      "id": "supp3",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/fig5_supp3.m",
+      "locator": "A-B outputResL; C-D outputResR; E-F outputWc; G-H outputWa",
+      "supports": "Required target-residual and causal/acausal lag companions; source plotting order conflicts with article caption target labels."
+    },
+    {
+      "id": "partial_pd",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodePartialPrxDst.m",
+      "locator": "Source mutual proximal/distal regression before PCA and CV",
+      "supports": "Preserve full-data target residualization and its actual observation exposure."
+    },
+    {
+      "id": "partial_d2s",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodePartialD2S.m",
+      "locator": "Source distance-to-spout regression before PCA and CV",
+      "supports": "Preserve source distance predictors and target residualization before CV."
+    },
+    {
+      "id": "residual",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodeResiduals.m",
+      "locator": "LR==1 defines L, LR==2 defines R; condition-wise mean subtraction",
+      "supports": "Preserve target identities, trial membership and source all-trial mean subtraction; do not silently swap L/R labels to fit the caption."
+    },
+    {
+      "id": "wiener",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/decodeWiener.m",
+      "locator": "Lagged neural predictors and cvRegress",
+      "supports": "Preserve source causal/acausal lags, outcome alignment, PCA and 50 fits."
+    },
+    {
+      "id": "variance",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/plots/plotVEvsVar.m",
+      "locator": "var(outcomes(testInds,j)) paired with VEs(f,j)",
+      "supports": "Source scatter consists of each held-out joint/fold target variance and its VE, not a newly invented correlation scalar."
+    },
+    {
+      "id": "pca",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/pca4Regression.m",
+      "locator": "Pre-CV PCA and random orthogonal rotation",
+      "supports": "PCA uses source pre-CV exposure; random rotation consumes the source RNG before subsequent fold generation."
+    },
+    {
+      "id": "bagged",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/baggedDecode.m",
+      "locator": "Held-out model reconstruction and trial-wise outputs",
+      "supports": "Original trajectory/posture route requires source jointAnglesRecon and posXYZRecon, beyond the current VE exporter."
+    },
+    {
+      "id": "inverse",
+      "kind": "author_code",
+      "url": "https://github.com/kaufmanlab/GSK26-public/blob/815b610b3beddfed5a3abf611d3a465ab9e4ce5c/main/fig5/analysis/inverseKinematics_PD_vAF.m",
+      "locator": "Angle-to-skeleton reconstruction",
+      "supports": "Source geometric reconstruction required for displayed skeletal postures."
+    },
+    {
+      "id": "author_data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.6084/m9.figshare.28326998",
+      "locator": "Data archive linked by pinned author README; exact article-version/file set unresolved",
+      "supports": "Identifies the original data collection, not an authenticated complete Figure 5 input manifest."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Explicit versioned selection: the original Figure 5 instantaneous RADICaL neural-to-24-joint-angle decoding result for M1 and S1, including complete source scores/reductions, original prediction/trajectory outputs and relevant decoder companions. Reproduction and improvement share this computational result. Separate M1-fl intervention biology is retained outside this primary.",
+      "evidence_ids": [
+        "paper",
+        "population",
+        "decode",
+        "main"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original Figure 5 neural/kinematic inputs from Figshare DOI 10.6084/m9.figshare.28326998 and GSK26-public revision 815b610b3beddfed5a3abf611d3a465ab9e4ce5c. Authenticate all ten source session datafiles, derived RADICaL inputs and release/member identities; inventory records and code pins do not establish complete payload/reference manifests.",
+      "evidence_ids": [
+        "repo",
+        "author_data",
+        "population"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All five imaging mice cfa17, cfa19, cfa20, cfa22 and cfa24, one original M1 and one S1 session each, all original eligible trials and all 24 ordered joints. Authenticate source date/area joins, including the later cfa24 M1 date. Ten anonymous structs alone are insufficient; the distinct intervention cohort is outside this decoder primary.",
+      "evidence_ids": [
+        "paper",
+        "population",
+        "load"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve five repetitions of ten source trial partitions and all 50 held-out fits per session. Models 1-10 hold permutation residues 1-9 then 0; bind original trial order, complementary train/test identities and once-per-repeat coverage. Seed 240926 alone is insufficient because PCA and six source model configurations advance shared RNG. No newly chosen split substitutes.",
+      "evidence_ids": [
+        "population",
+        "cv",
+        "decode",
+        "pca"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original instantaneous RADICaL rates from the top 100 source lift-modulated cells predict all 24 joint angles. Bind original ZETA cell selection, observation horizon and feature ordering. Candidate methods may improve the decoder but may not gain extra neurons, biological observations or target exposure. Relevant author alternative/control branches keep their distinct original inputs.",
+      "evidence_ids": [
+        "paper",
+        "load",
+        "decode"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source joint-angle interpolation and 15-ms Gaussian smoothing, lift-locked -100 to +400 ms on the 10-ms grid (51 timepoints), unsmoothed RADICaL rates and pre-CV PCA retaining 90% of neuron count. Authenticate source ordering and exposure of ZETA/PCA instead of silently substituting train-only processing or permitting extra test-target access; controls retain branch-specific processing.",
+      "evidence_ids": [
+        "paper",
+        "load",
+        "decode",
+        "pca"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Per joint and original fit, VE = 1 - Var(y - yhat)/Var(y), using MATLAB sample-variance semantics over concatenated held-out trial timepoints. Retain negative VE and resolve source zero-variance handling. This is not SSE/SST R-squared; constant prediction offsets leave VE unchanged. Exact complete numeric references and qualified agreement/improvement rules remain unresolved.",
+      "evidence_ids": [
+        "cv",
+        "plot_all",
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve the complete 5-mouse x 2-area x 50-fit x 24-joint panel. plotVEAll takes median over 50 fits per joint, then median of those joint medians for proximal joints 1-7 and distal joints 8-24 within each mouse/area. Compare differences of original summaries, not median paired-score differences or a pooled scalar. Keep all four area/group outputs, mouse pairing and companions; favorable subsets cannot win.",
+      "evidence_ids": [
+        "plot_all",
+        "main",
+        "population"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 5 held-out VE panel and source proximal/distal within-mouse M1/S1 reductions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The complete source per-fit/joint/mouse VE panel and original source reductions are not recovered as qualified full-precision references. Graphical summaries do not supply an exact numeric scalar baseline.",
+      "evidence_ids": [
+        "paper",
+        "cv",
+        "population",
+        "main",
+        "plot_all"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source fig5_analysis -> loadDecode -> decode -> cvRegress provides the author route, but complete authentic ten-session original-fold computation and numeric parity are unqualified. Resolve the strongest relevant author configuration under identical input scope; a phase-template reference is calibration only.",
+      "evidence_ids": [
+        "paper",
+        "cv",
+        "population",
+        "main",
+        "plot_all"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Recover source performance/reference variability and justify meaningful improvement on the complete original panel before selecting a threshold. No new scalar, universal positive delta or maximized biological effect is supplied.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Qualify a complete-family paired comparison preserving source summaries and all mouse/area outputs. Repeated CV fits and joints do not increase the five-mouse biological sample size. Resolve multiplicity, overlap dependence and meaningful effect before final candidate evaluation.",
+      "independent_unit": "Five imaging mice; M1/S1 sessions are paired, and joints, trials/timepoints and repeated fits are dependent observations.",
+      "rationale": "Original structured support and dependence must be preserved; decision criteria may not be chosen after seeing final candidate outputs.",
+      "evidence_ids": [
+        "paper",
+        "cv",
+        "population",
+        "main",
+        "plot_all"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate original task support, observations/exposure, splits, metric and aggregation without a convenient new endpoint.",
+      "Independently calibrate complete published and strongest relevant source-author reference performance on identical original support.",
+      "Freeze candidate/code, source identities, meaningful complete-family comparison policy and cumulative budgets before final evaluation. Candidate reproduction success is not an improvement prerequisite.",
+      "Execute and independently verify original-input predictions with protected final targets and equal scientific inputs across paper_data and paper_data_author_code.",
+      "No local-control win, probability reconstruction, larger biological effect, smaller P value, new split/metric or favorable subset establishes this improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Comparison targets a named original-paper result; no current frontier comparison or SOTA result is claimed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No final-test feedback under this unqualified proposal. After qualification, iterate using source-matched training and declared validation feedback with cumulative accounting.",
+    "candidate_freeze": "Freeze method/code, source support and preprocessing exposure, original partitions, author baseline, complete-family scientific comparison and cumulative budgets before final evaluation.",
+    "final_evaluation": "Independently execute the frozen candidate on complete original held support and compare source-native output/metric families with qualified published and strongest relevant author references; report both outcomes independently for each information condition.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Compare both qualified published performance and the source-equivalent rerun of the strongest relevant original-author method on identical instantaneous input scope. Main ridge/RADICaL, bagged, lagged and residual branches are not interchangeable; the local phase template is not an author comparator."
+  },
+  "blocking_issues": [
+    "Authenticate all ten original session inputs, RADICaL rates, eligible trial order, date/area joins, ZETA selection and pre-CV PCA exposure.",
+    "Recover original 50-fit trial manifests and shared-RNG/source configuration ordering; seed 240926 alone does not reconstruct publication folds.",
+    "Recover complete published/source-author VE and prediction references and independently qualify original MATLAB/dependency/runtime parity; no numeric author baseline is established.",
+    "Resolve the strongest relevant original-author comparator under the same instantaneous observation scope. Keep main ridge/RADICaL, bagged reconstruction, lagged and partial/residual branches distinct; a local phase template is not the paper method.",
+    "Authenticate granular trajectory/posture/control/scatter provenance and source display selections; reconcile the supplement-3 caption/source left-right ordering discrepancy.",
+    "Justify numerical reproduction tolerance and meaningful complete-family improvement/uncertainty under five paired mice and dependent joints/folds; no arbitrary scalar, any-positive-delta or significance-maximization rule.",
+    "Bind protected source-compatible per-fit execution, common scientific input/exposure and official-code allowlists, independent verification and cumulative budgets. Existing scorer/exporter code is not an admitted end-to-end runtime.",
+    "Existing improvement/v1 admits one scalar candidate/published value. This vector endpoint requires future full-panel comparison/admission support; no global mean or win count is invented. Central versioned-directory adoption remains pending."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The prior broad M1/S1 neural-decoding and two-VGAT-ChR2-mouse M1-fl intervention finding remains preserved at the exact base commit and unchanged canonical scientific contracts. Intervention contact/trajectory evidence is separately retained, not a prerequisite or target to maximize for this selected Figure 5 result. Conditional successful-trial histograms are not unconditional contact probabilities. Held-animal evaluation and local phase-template gains remain extensions/calibration; no decoder gain establishes intervention, whole-paper or current-SOTA superiority."
+  }
+}

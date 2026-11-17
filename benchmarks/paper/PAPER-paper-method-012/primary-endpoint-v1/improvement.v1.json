@@ -1,0 +1,210 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-012",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit versioned selection of the original author-reported performance endpoint. Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction. Source support, native comparator and valid joint comparison remain unqualified; this does not activate an episode.",
+  "source_paper": {
+    "title": "MINT: A toolbox for the analysis of multivariate neural information coding and transmission",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934"
+  },
+  "evidence": [
+    {
+      "id": "mint-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "Design and implementation; Results: Computing the role of interactions between neurons in information encoding; Figure 2C caption; Data availability and S1 Data",
+      "supports": "Identifies direct pair information, information decompositions and separate population-decoder information; CA1 has 11 sessions, 43–104 neurons and 36,158 simultaneous pairs; S1 Data is the empirical source."
+    },
+    {
+      "id": "ca1-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/panzerilab/MINT_figures/a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m",
+      "locator": "Options lines 1–25; pair loop lines 33–64; population decoder lines 66–123",
+      "supports": "Uses Position and R_neuron_binned, fixed labels, response cap 4 and 30 shuffle corrections; the direct MI call is commented out. Population SVM folds are a separate computation, not a truth target for direct MI."
+    },
+    {
+      "id": "mint-mi",
+      "kind": "author_code",
+      "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/src/MI.m",
+      "locator": "MI function and requested outputs",
+      "supports": "Author implementation route for mutual information and bias correction; source availability does not establish true information in empirical CA1 data."
+    },
+    {
+      "id": "local-reference",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-012/docs/initial-evaluator-v1.md",
+      "locator": "Computational contract; Primary source reconciliation; Validation and remaining work",
+      "supports": "Local implementation computes fixed-bin MI, QE and null diagnostics and explicitly disclaims native equivalence, empirical reproduction and inferential calibration."
+    },
+    {
+      "id": "previous-reproduction-fig2c-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "Figure2C caption and correlation-coding section; retained article.txt SHA256 fada1f286c86d701a5d7e4cde012e5414082de28b3330427bb42a04beb655dd0; character ranges23500:35300",
+      "supports": "Direct pair and summed-single information, RSI, PID synergy/redundancy and information breakdown; linear/RBF real/conditional-shuffle population information; mean and SEM over36158 pairs or11 sessions/five folds; paired t-test annotations. The caption has C/D dataset-label and spatial-bin discrepancies retained as unresolved."
+    },
+    {
+      "id": "previous-reproduction-ca1-appendix",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article/file?type=supplementary&id=10.1371/journal.pcbi.1012934.s001",
+      "locator": "SM7.2, printed pages23-24; retained appendix.txt lines1138-1161, SHA256 027229bbd6b6aa0787cd3a713a44390a828caf0eadb6dbced2a4ab9cb7a4b136",
+      "supports": "11 fields of view from seven animals;12 equi-populated position bins; two equi-populated non-deconvolved calcium bins;36158 simultaneous pairs; five outer folds and two inner optimization folds. Exact payload identity and conflict with other source representations remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-ca1-author-wrapper",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/panzerilab/MINT_figures/a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m",
+      "locator": "Pinned MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e, retained rawLines transcription CA1.m SHA256 840e315f74cc6fd1d935cb3c2662692dffb1ad33111c84ccdffa9523e11c63d3; options7-31, direct/PID48-68, population72-119",
+      "supports": "Position/R_neuron_binned fields; shuffle-subtraction with30 bias shuffles; two conditional-population shuffle realizations declared; two outer and two inner folds; direct MI call commented while later read; shuffled linear/RBF destinations reversed. This is inspected source, not a successful original execution."
+    },
+    {
+      "id": "previous-reproduction-existing-ca1-interface",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/tree/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1",
+      "locator": "prepare_mat.prepare and mint_reference.evaluate; existing partial construction interfaces",
+      "supports": "Explicit-root MAT preparation and fixed-bin pair-MI/QE/null diagnostics exist. They do not authenticate biological/sample identities or reproduce the full selected native decoder/PID panel. Their animal-balanced summaries and IID/circular-shift nulls do not replace the original pair-pooled means or conditional correlation-removal controls."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "PLOS Computational Biology 10.1371/journal.pcbi.1012934, Figure 2C population decoding and Methods; MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m.",
+      "supports": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seven animals, 11 fields-of-view/sessions, 43–104 neurons per session. Retain every original session and eligible population; 36,158 pairs belong to the separate descriptive pair analysis and are not independent decoder cases.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Resolve reported five trial folds versus pinned twofold population-SVM options, separately from optimization folds; recover exact original partitions and nested tuning. No new animal holdout or favorable fold selection.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles. Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid. Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "This endpoint is a complete source-defined performance panel. The scalar improvement schema cannot encode the complete comparator; no aggregate or single-cell threshold is admitted. Original published numeric anchors remain in reproduction and selection. Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+      "evidence_ids": [
+        "mint-paper",
+        "ca1-figure"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified original author execution for this selected endpoint is established. Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Freeze a meaningful gain on the selected complete original metric/support after native reference recovery. No generic margin or stronger biological effect counts.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired source-matched candidate/author comparison across complete selected outputs, preserving original dependence and selection; no confidence threshold is admitted.",
+      "independent_unit": "Seven animals with 11 fields-of-view/sessions; neuron observations, trial folds and shuffle realizations are dependent.",
+      "rationale": "Original mean/SEM, repeated folds and printed significance are not a superiority rule. Source-native reproduction, meaningful effect and complete-panel decision remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "paper_win_requires": [
+      "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction.",
+      "Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+      "Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+      "Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.",
+      "Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.",
+      "Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.",
+      "Qualify source-matched reproduction tolerance, strongest comparator selection, meaningful gain and dependence-aware joint decision; budgets and independent execution remain unqualified.",
+      "Compare both paper_data and paper_data_author_code with identical approved data, permitted inputs, source splits, metric and budgets; official implementation is the only intended information difference.",
+      "A same-paper win is not current SOTA; direct MI inflation, stronger significance, changed latent targets, newly invented splits or missing conditions cannot earn success.",
+      "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim; surpassing this source paper and surpassing later methods are separate source-verified comparisons.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source and baseline qualification. Once admitted, use only original permitted training/validation feedback. Resolve reported five trial folds versus pinned twofold population-SVM options, separately from optimization folds; recover exact original partitions and nested tuning. No new animal holdout or favorable fold selection.",
+    "candidate_freeze": "Freeze complete original cohort, folds, preprocessing/inputs, source comparator policy, candidate, metric vector, source controls and budgets before final scoring. Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+    "final_evaluation": "Compare all selected original conditions and companions using the same authenticated source support and independent output verification. Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered. Published values, future qualified native rerun and local engineering controls remain distinct."
+  },
+  "blocking_issues": [
+    "Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+    "Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.",
+    "Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.",
+    "Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.",
+    "Qualify source-matched reproduction tolerance, strongest comparator selection, meaningful gain and dependence-aware joint decision; budgets and independent execution remain unqualified.",
+    "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Previous contracts at task root are immutable historical/retained-scope definitions. Original complete CA1 direct single/pair information, redundancy-synergy/PID and correlation-breakdown family; separate original known-truth Poisson estimator simulations. No biological correlation-coding improvement follows from decoder gain."
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-036",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Selected original decoder scope is explicit; complete authentic support, reference/replay and justified scientific comparison remain unresolved. Printed scalars are anchors only.",
+  "source_paper": {
+    "title": "Population analyses reveal heterogenous encoding in the medial prefrontal cortex during naturalistic foraging",
+    "url": "https://elifesciences.org/articles/93994"
+  },
+  "evidence": [
+    {
+      "id": "foraging-paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/93994",
+      "locator": "Figure 6A,B and Results: Population activities in the E-zone encode success and failure of avoidance; Methods: Head-withdrawal-type classification",
+      "supports": "Reports avoidance-versus-escape balanced accuracy of 72.71%, shuffled 51.62%, across 40 sessions, using peri-withdrawal neural activity and stratified fivefold evaluation."
+    },
+    {
+      "id": "foraging-classifier",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/PythonCode/EventClassification/HierarchicalEventClassifier.py",
+      "locator": "EventClassifier.fitBNB; X/y loading and clipping; HW label selection; Batch_EventClassifier",
+      "supports": "Defines seed 622 stratified fivefold splits, BernoulliNB uniform priors, pooled out-of-fold probabilities, 0.5 threshold and mean session accuracy. Code uses an unseeded generator for shuffled labels."
+    },
+    {
+      "id": "foraging-features",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/MatlabCode/ML/generateEventClassifierDataset.m",
+      "locator": "Generate Gaussian Kernel; normalization; Divide by EVENT Marker; Separate Avoid and Escape",
+      "supports": "Defines whole-session normalization, per-event smoothing, event labels and class-block row serialization; preprocessing is transductive with respect to later folds."
+    },
+    {
+      "id": "foraging-window",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/MatlabCode/ML/Batch_generateEventClassifierDataset.m",
+      "locator": "Constants and generateEventClassifierDataset invocation",
+      "supports": "Freezes [-1000,+1000] ms, 50 ms bins, kernel-size 1000 and standard deviation 100; this is 40 bins per unit."
+    },
+    {
+      "id": "foraging-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.v9s4mw78c",
+      "locator": "January 14 2026 release; README: EventClassificationData_4C",
+      "supports": "Original classifier archive contains per-session MATLAB X/y matrices; labels 3/4 encode avoidance/escape head withdrawals. Inventory lists the 15.09 MB EventClassificationData_4C.zip."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-window"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad doi:10.5061/dryad.v9s4mw78c January 14 2026 release, EventClassificationData_4C.zip, preserving its processed per-session X/y representation. Complete archive identities and contents still require admission.",
+      "evidence_ids": [
+        "foraging-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The published endpoint contains all 40 recording sessions. An authenticated archive-member roster and complete original rat/session identity mapping have not been read in this audit, so the exact 40-session inclusion remains an execution gate.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Author code specifies within-session StratifiedKFold(5, shuffle=True, random_state=622), each original HW row held out once. Preserve seed 622, source row ordering and the original stratification protocol. Authenticate inputs and record package/version provenance when regenerating folds; a documented source-conformant rerun with paired candidate-author folds and predeclared justified calibration tolerance does not require an archived historical membership file. Animal/episode/time-based holdouts change the task.",
+      "evidence_ids": [
+        "foraging-classifier"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "All released X columns and all label-3/4 rows in every original session; training labels map 3=avoidance and 4=escape. Test labels remain protected during candidate execution. Each neuron contributes all 40 original bins.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-data",
+        "foraging-window"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve source whole-session standardized, Gaussian-smoothed peri-event features and clipping to [-5,5]; BernoulliNB binarizes at zero. Whole-session normalization and symmetric smoothing remain disclosed; training-only preprocessing cannot undo this original transductive representation.",
+      "evidence_ids": [
+        "foraging-features",
+        "foraging-window",
+        "foraging-classifier"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Balanced accuracy per session = 0.5*(avoidance recall + escape recall), after pooling all five out-of-fold predictions and thresholding escape probability at >=0.5. Do not average fold accuracies or substitute probability reconstruction error.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean of complete session balanced accuracies across all 40 original sessions; the author batch routine computes the mean of its per-session HW accuracies. Session weighting and animal-level uncertainty are distinct.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "All 40 source sessions, all label-3/4 HW rows, all units × 40 peri-event bins, all five OOF folds, both class recalls, per-session balanced accuracy, complete probabilities and source-shuffle companions. Historical unseeded shuffle 0.5162 and newly seeded engineering controls remain separately labelled.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-classifier",
+        "foraging-data",
+        "foraging-window"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Only phase-appropriate training labels within the original outer fold; test labels and label-revealing class-block row order/indices are evaluator-only. Source whole-session normalization, symmetric smoothing and post-event information remain disclosed. Private row presentation must preserve original fold identities while removing target-revealing order.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-classifier",
+        "foraging-data",
+        "foraging-window"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "selected_original_decoder_complete_panel",
+      "kind": "indexed_array_family",
+      "description": "Complete original Figure6B real-label per-session balanced-accuracy vector over40sessions, with the reported equal-session mean separately anchored. Complete probabilities, class recalls and original shuffle/control provenance remain mandatory audit artifacts, not numerical author-prediction targets.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "paper-find-036-primary-endpoint-v1",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "real_session_balanced_accuracy",
+            "manifest_key": "real_session_balanced_accuracy",
+            "source_quantity": "Original real-label Figure6B BNB score for each source session.",
+            "membership": "fixed",
+            "shape": [
+              40
+            ],
+            "axes": [
+              {
+                "name": "source_session",
+                "units": "source coordinate",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered source identities require authenticated metadata; no synthetic identities substituted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "balanced accuracy",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Pool all OOF rows per session; threshold p(escape)>=0.5; mean avoidance/escape recalls.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "foraging-paper",
+              "foraging-classifier",
+              "foraging-data",
+              "foraging-window"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "foraging-paper",
+          "foraging-classifier",
+          "foraging-data",
+          "foraging-window"
+        ]
+      },
+      "required_granular_output_ids": [
+        "source_40_session_hw_roster_features_folds",
+        "complete_real_oof_probabilities_models",
+        "source_shuffle_rng_and_complete_outputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare the complete original40session real-label balanced-accuracy vector and reported equal-session mean under justified source-replay numerical tolerances. Independently recompute scores from mandatory complete OOF outputs and authenticate original data/folds/control provenance. Do not require pointwise probability, predicted-label, class-recall or stochastic-shuffle equality to author outputs. Printed mean alone is insufficient.",
+        "independent_unit": "Rat for biological replication; 40 equally weighted sessions are nested repeated observations.",
+        "dependence": "Preserve original animal/session/fold/trial/observation nesting. Repeated bins and shuffled controls are not independent biological units.",
+        "multiplicity": "Retain complete selected endpoint and indispensable controls; source-faithful full-panel reproduction criteria remain pending.",
+        "rationale": "Numerical equivalence covers only declared reported score quantities. Mandatory audit artifacts establish complete source support and truthful permitted computation independently; successful reproduction does not require the same learned predictor or pointwise predictions. Source identities, qualified reference and justified criteria remain unresolved.",
+        "evidence_ids": [
+          "foraging-paper",
+          "foraging-classifier",
+          "foraging-data",
+          "foraging-window"
+        ]
+      },
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-classifier",
+        "foraging-data",
+        "foraging-window"
+      ]
+    },
+    {
+      "id": "published_real_equal_session_mean",
+      "kind": "scalar",
+      "description": "Published real-label BNB0.7271 anchor, not a full vector or evidence that BNB is strongest.",
+      "status": "verified",
+      "expected": 0.7271,
+      "units": "source decoder score",
+      "aggregation": "Equal-session arithmetic mean over all40 source sessions.",
+      "evidence_ids": [
+        "foraging-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published anchor only; complete source outputs and justified replay calibration remain required.",
+        "evidence_ids": [
+          "foraging-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-grounded reproduction comparison remains to be frozen.",
+        "independent_unit": "Rat for biological replication; 40 equally weighted sessions are nested repeated observations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A printed summary or biological p-value is not a method-comparison policy.",
+        "evidence_ids": [
+          "foraging-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate EventClassificationData_4C.zip (15,089,711 bytes), all original 40 session members and rat/session mapping; archive body is not admitted.",
+    "Regenerate source StratifiedKFold(5,shuffle=True,random_state=622) from authenticated source rows and record package environment; lack of archived historical memberships alone is not disqualifying.",
+    "Qualify complete source-author BNB replay and published0.7271 calibration. Audit original SVC explorations and all relevant same-endpoint comparators before deciding which original result is strongest.",
+    "Freeze justified effect/paired uncertainty with equal-session metric and rat dependence; retain complete original shuffle companions and distinguish unseeded historical from seeded engineering controls.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ]
+}

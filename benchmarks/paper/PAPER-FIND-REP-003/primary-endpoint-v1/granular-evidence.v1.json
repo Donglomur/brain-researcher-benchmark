@@ -1,0 +1,130 @@
+{
+  "document_role": "mandatory_granular_derivation_requirements_not_numerical_reference_equivalence",
+  "proposal_version": 1,
+  "task_id": "PAPER-FIND-REP-003",
+  "status": "unresolved",
+  "coverage": "complete_original_selected_result_support",
+  "runtime_binding": null,
+  "source_input_manifest_sha256": null,
+  "verification_program_sha256": null,
+  "requirements": [
+    {
+      "id": "fig5_all_original_observed_joint_trajectories",
+      "role": "operator_private_original_observation",
+      "required": true,
+      "verification": "Authenticate complete original trial/model/session support, 51 timepoints and all 24 ordered joints and verify correct source fitting/derivation. Target data remain private; predicted trajectories must be genuinely generated, not copied from source outputs. No pointwise author-prediction equivalence criterion.",
+      "source_representation": {
+        "id": "observed_joint_trajectories",
+        "source_quantity": "Original trial jointAngles used by Figure5 decoding",
+        "shape": [
+          51,
+          24
+        ],
+        "source_aggregation": "Preserve each original eligible trial; no averaging over source trial identities.",
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "area",
+            "session",
+            "trial"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+            "evidence_ids": [
+              "paper",
+              "load",
+              "main"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper",
+          "load",
+          "main"
+        ]
+      },
+      "axis_identity_requirement": "Preserve 51 original timepoints and all 24 ordered joints exactly as declared by fig5_original_score_panel, with complete original trial/model identities; source coordinate and support identities remain unresolved."
+    },
+    {
+      "id": "fig5_all_original_heldout_joint_predictions",
+      "role": "candidate_generated_heldout_prediction",
+      "required": true,
+      "verification": "Authenticate complete original trial/model/session support, 51 timepoints and all 24 ordered joints and verify correct source fitting/derivation. Target data remain private; predicted trajectories must be genuinely generated, not copied from source outputs. No pointwise author-prediction equivalence criterion.",
+      "source_representation": {
+        "id": "heldout_joint_predictions",
+        "source_quantity": "Original fitted-model held-out joint-angle predictions",
+        "shape": [
+          51,
+          24
+        ],
+        "source_aggregation": "One original held-out prediction trajectory per source model and test trial, with exact train/test provenance; do not echo target observations.",
+        "collection": {
+          "record_key_fields": [
+            "mouse",
+            "area",
+            "session",
+            "model",
+            "trial"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Source record identities, order, eligibility and original-output correspondence require a frozen authentic manifest; semantic key names do not invent their values.",
+            "evidence_ids": [
+              "cv",
+              "decode",
+              "main"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "cv",
+          "decode",
+          "main"
+        ]
+      },
+      "axis_identity_requirement": "Preserve 51 original timepoints and all 24 ordered joints exactly as declared by fig5_original_score_panel, with complete original trial/model identities; source coordinate and support identities remain unresolved."
+    },
+    {
+      "id": "fig5_source_fit_and_metric_derivations",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "coverage": "All 5 mice x 2 areas x 50 original fits x 24 joints and original source median reductions.",
+      "verification": "Bind exact original trial order/folds, source preprocessing and fitted-candidate lineage; recompute variance-based VE and nested source summaries from full prediction/observation bodies. Preserve negative VE and unresolved zero-variance policy. These evidence bodies are not numerically compared with author predictions."
+    },
+    {
+      "id": "fig5_original_display_selection_provenance",
+      "role": "original_display_identity",
+      "required": true,
+      "coverage": "Only original source-selected example trials, source plots and seven displayed posture frames; exact identities unresolved.",
+      "verification": "Authenticate original display selection and support from source rather than selecting convenient candidate examples. Complete original prediction bodies needed to verify selection are provenance, not new scored findings."
+    },
+    {
+      "id": "fig5_source_selected_display_derivations",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "coverage": "Original selected displayed joint trajectories/postures only.",
+      "verification": "Verify original bagging and skeleton derivations for the authenticated selected display support. Any numerical comparison is restricted to the selected display family, with source reference/tolerance unresolved."
+    },
+    {
+      "id": "fig5_source_companion_panels_granular_outputs",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "coverage": "Reviewed original Figure5 companion score quantities. Preserve branch identities and the unresolved supplement3 caption/source L/R ordering conflict; no unrelated whole-paper panels are added.",
+      "verification": "Preserve complete original branch/fold/joint support and source-specific observations, fits and prediction lineage; independently recompute declared source metric/scatter quantities. Full prediction arrays are derivation evidence, not additional pointwise numerical-reference findings."
+    },
+    {
+      "id": "fig5_variance_ve_scatter_granular_outputs",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "coverage": "Original Figure5 supplement2 E/F paired held-out target variance and VE; no correlation scalar is substituted for the source scatter.",
+      "verification": "Preserve complete original branch/fold/joint support and source-specific observations, fits and prediction lineage; independently recompute declared source metric/scatter quantities. Full prediction arrays are derivation evidence, not additional pointwise numerical-reference findings."
+    }
+  ],
+  "comparison_boundary": "These outputs establish source identity, complete coverage and independently recomputed source metrics. Hashes/provenance verify actual computation and lineage, not equality between candidate and author prediction arrays. No participant is given private original held-out outcomes or author reference predictions. Reproduction numerical equivalence applies only to the metric/display families declared in reproduction.v2.json.",
+  "qualification": "No source references, source execution, tolerance, runtime, scientific outcome or paid-model evaluation is added."
+}

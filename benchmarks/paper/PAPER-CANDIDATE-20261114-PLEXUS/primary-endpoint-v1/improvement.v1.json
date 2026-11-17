@@ -1,0 +1,173 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-PLEXUS",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source-code Figure 4 discrimination endpoint is selected as the explicit method primary. Final-publication/version equivalence, authentic complete guide/well score support and a source-grounded full-panel superiority rule are unresolved. Original-fold construction is useful but supplied-score replay and the prospective whole-plate/four-line evaluator do not establish a fitted final-paper baseline.",
+  "source_paper": {
+    "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
+    "url": "https://www.nature.com/articles/s42256-025-01156-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01156-x",
+      "locator": "Public article metadata, Code availability, dataset references",
+      "supports": "Final paper identity and official Plexus repository/archive relationship; full methods were not accessible in this review."
+    },
+    {
+      "id": "figure4-code",
+      "kind": "author_code",
+      "url": "https://github.com/pgrosjean/plexus/blob/69ccecbcc00f8462c8ce2a9d699be09f4c53ed66/figure_scripts/Figure4/figure_4.py",
+      "locator": "compute_auroc_for_guides and main",
+      "supports": "Per-guide binary AUROC, half-well complementary folds, scaler and classifier semantics, WT WTC11/Patient comparison."
+    },
+    {
+      "id": "data-v2",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15809433",
+      "locator": "Version v2; Description; Files",
+      "supports": "Archive provides plate statistics, treatment mappings, checkpoints, embeddings/manual features and processed plate/well/FOV Zarr traces."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/task.json",
+      "locator": "complete_scope, prospective_improvement; implementations/initial-evaluator-v1/plexus_evaluator.py and sources.json",
+      "supports": "Current registration requires 52 genes/four lines, whereas local evaluator explicitly implements prospective whole-plate policy; no authentic reference run."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recreate and improve the original source Figure 4 guide-versus-non-targeting-control discrimination endpoint: complete guide-by-donor-by-fold AUROC outputs for Plexus and manual features in WT WTC11 and WT Patient strata, under the original source well-split and preprocessing protocol. Final-paper/archive equivalence remains unresolved.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Zenodo 15809433 v2 and predecessor 14714574 are source data references; authenticate the selected release and final-paper Figure 4 equivalence before admission. Do not silently substitute one version or a convenient subset. Original plate/well/FOV/treatment/trace and representation artifacts require exact provenance.",
+      "evidence_ids": [
+        "data-v2",
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain all Figure 4 eligible guides/wells in WT WTC11 and WT Patient donor strata, including source-defined skipped/insufficient-support cases with reasons. The complete authentic roster is unresolved; neither all four lines nor all 52 registered genes is assumed to be the Figure 4 cohort.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Pinned Figure 4 source resets legacy NumPy seed 0 for each of four representation-family/donor calls, draws half non-targeting well locations and then half each sorted guide locations. First-fold training is class-balanced by downsampling; its model scores the complete held-out set. Reciprocal training uses the unbalanced held-out set and scores only the balanced first-fold training subset. Discarded training rows do not reappear. Balancing consumes the same RNG stream as later well draws. Preserve >8 first-training observations per class, source one-class reciprocal skip behavior and literal non-targeting self-exclusion. Authentic ordered identities and final-publication equivalence are unresolved.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original processed neuronal traces/spikes/masks and plate/well/FOV/treatment metadata, with the same declared representation and algorithm-bearing-artifact exposure in both conditions. Official embeddings/checkpoints are not raw neural observations; if shared, freeze identical bytes and source/training provenance as explicit common assisted inputs before either candidate. Otherwise neither condition receives them implicitly.",
+      "evidence_ids": [
+        "data-v2",
+        "figure4-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original typical-variation normalization, aggregation and full-input StandardScaler before well splitting, including its transductive exposure. Manual loc_id=well_id+\"_\"+zarr_file; Plexus loc_id uses first two aggregate_by underscore tokens plus well_id. Authenticate representation/checkpoint training exposure, preprocessing receipts, original input ordering and final-paper equivalence. Training-only scaling or corrected folds constitute a separately named extension.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original guide-positive AUROC from sklearn roc_curve and auc over source classifier probabilities, preserving both complementary but asymmetric well-fold evaluations, donor strata and all eligible guides. 0.8 is a plotted display cutoff, not the author performance baseline. Control-only/null diagnostic outputs have fidelity roles, not independent maximize targets.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve the complete original per-guide, donor-stratified, two-fold AUROC vectors for Plexus and manual features with source eligibility/skip states and shared controls. No complete final-publication vector, exact panel contrast or defensible full-screen scalar has yet been authenticated. Do not substitute a new mean, count above 0.8 or significant-gene count.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 4 complete per-guide/donor/fold AUROC performance panel, with source support and skip diagnostics; no replacement scalar aggregate",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Recover complete final-publication Plexus and manual-feature AUROC vectors and exact source panel mapping. No numeric vector/scalar is authenticated; 0.8, guide counts and gene-discovery significance are not author performance baselines.",
+      "evidence_ids": [
+        "figure4-code",
+        "registration"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned Figure4/figure_4.py supplies the original computation route; original-figure4-v1 reconstructs source splits and scores supplied observations but does not fit representations/classifiers or authenticate final-paper equivalence. Full original-data author fit and complete source score vectors remain unrecovered.",
+      "evidence_ids": [
+        "figure4-code",
+        "data-v2"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Unresolved until source reference variability and the complete original performance panel are authenticated. Freeze a scientifically justified effect/uncertainty policy before candidates; no universal numeric margin or new scalar is invented.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Unresolved: paired inference must respect shared control wells and biological plate/batch dependence.",
+      "independent_unit": "Biological plate/batch; wells nested within these; cells and reciprocal folds are not independent replicates.",
+      "rationale": "The original fold results share source data and controls. Biological independence and a predeclared familywise comparison rule must be established.",
+      "evidence_ids": [
+        "figure4-code",
+        "data-v2"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate final-paper/code/data-version equivalence and complete original WT donor guide/well support; preserve original full-input scaling, asymmetric reciprocal folds, eligibility and skip semantics.",
+      "Reproduce the complete source Plexus and manual-feature panel before declaring author calibration. Candidate classifier predictions, eligibility, convergence and skips must be independently produced/verified, not trusted self-reported metadata.",
+      "Freeze one identical source-compatible observation/assistance profile for paper_data and paper_data_author_code. Any official weights/embeddings must be named identical common assisted artifacts with training-overlap provenance, or withheld from both; code condition adds only the pinned official implementation.",
+      "Predeclare complete-panel superiority against the strongest relevant original author representation/method and both published/reproduced reference panels, with meaningful effect and dependence-aware uncertainty. Beating manual features alone or cherry-picked guides is insufficient.",
+      "Preserve all required source controls/diagnostics without optimizing null effects. No win from additional significant genes, p-values, 0.8 cutoff counts, changed four-line/whole-plate evaluation or silently repaired preprocessing.",
+      "Implement pending panel-admission interface without an invented scalar. Paper-relative superiority is separate from a current-SOTA claim."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was source-verified; paper and rerun baselines are separate.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source admission, develop representation/prediction methods within the original source observation and full-input preprocessing boundary. Keep original well protocol, original WT strata, full eligible guide support and common assistance profile; changed whole-plate or corrected-normalization experiments are separate extensions.",
+    "candidate_freeze": "Freeze code, representation/checkpoint exposure, original scaling/aggregation and classifier procedure, source fold ledger/RNG, complete support, panel criterion and effect/uncertainty rules before protected final scoring.",
+    "final_evaluation": "Independently generate and verify complete original-fold guide probabilities, original eligible/skip/convergence records and AUROC vectors on the identical source protocol. Compare with publication and authenticated author reference panels; no selected guides/folds or artificial scalar.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Retain original Plexus and manual-feature results separately, then apply a predeclared strongest-relevant-author full-panel policy. Original source artifacts used by the independent reference operator are disclosed separately from common candidate assistance. Prospective whole-plate scores are not original Figure 4 references."
+  },
+  "blocking_issues": [
+    "Map the immutable Figure 4 code and Zenodo release to the final published Figure 4 endpoint; archive/version correspondence remains unresolved.",
+    "Authenticate ordered WT WTC11/Patient guide/well roster, source-specific preprocessing and asymmetric reciprocal fold identities, complete eligible score support and skip states.",
+    "Recover original representation/classifier producer and independently verified publication-equivalent Plexus/manual-feature reference vectors; a supplied-score split scorer is insufficient.",
+    "Freeze one common observation and checkpoint/embedding assistance profile, with exact artifacts and training/exposure provenance, for both code-access conditions.",
+    "Justify reproduction tolerance, full-panel superiority/effect and dependence-aware uncertainty; bind measured cumulative access/compute budgets.",
+    "Panel improvement admission/interface is pending. Preserve the full source performance vector and mandatory controls; do not invent a scalar mean, favorable subgroup, win count or significance objective. No new AI/model study is required to finish source construction; an AI outcome requires a separate subsequent qualifying execution."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The displaced broad biological primary is preserved at historical/primary-biological-20261117-v1/task.json; old root improvement/outcomes metadata remain historical. implementations/initial-evaluator-v1 is the prospective whole-plate extension. implementations/original-figure4-v1 preserves original-fold construction and supplied-score scoring but does not establish original-data representation/classifier fitting or final-paper performance."
+  }
+}

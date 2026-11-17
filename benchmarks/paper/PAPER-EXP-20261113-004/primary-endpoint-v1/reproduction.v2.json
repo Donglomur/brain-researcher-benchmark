@@ -1,0 +1,594 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-EXP-20261113-004",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Versioned source-reported empirical method endpoint selected as the benchmark primary. Original Figure3b session mean cosine reward-relative-position decoding on all eleven mice, seven switch days and three retrospective cell classes, with all462 train-before condition rows within the retained1155-condition source panel and mandatory Figure3c spatial-generalization companions. This is original retrospective decoding, not prospective chronological adaptation. Complete authentic source/reference/execution and agreement criteria remain unresolved; prior biological reproduction is retained separately. Construction is not execution readiness.",
+  "source_paper": {
+    "title": "A flexible hippocampal population code for experience relative to reward",
+    "url": "https://www.nature.com/articles/s41593-025-01985-4"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01985-4",
+      "locator": "Fig. 3a–c; Methods, Decoding of RR position",
+      "supports": "Original RR decoding target, source cross-validation, occupancy matching and cosine metric; Fig. 3 effect sizes are not raw decoding accuracies."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/main/README.md",
+      "locator": "Data organization; preprocessing and stochasticity notes",
+      "supports": "Author data classes include computed cell classifications and depend on stochastic processing; current main is not a historical publication pin."
+    },
+    {
+      "id": "data-route",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/adf0f9ed3defa22275d92fa0ed996f47008e05b3/docs/data_download.md",
+      "locator": "Data download instructions",
+      "supports": "Distinct preprocessed and postprocessed releases; postprocessed data already contain RR cell identities; switch days 3,5,7,8,10,12,14."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/task.json",
+      "locator": "reproduction; improvement; code; data",
+      "supports": "Historical Fig. 2/3 scope, proposed chronological extension and unresolved author revision."
+    },
+    {
+      "id": "evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "split_session; prepare; score; HOLDS",
+      "supports": "Current executable scorer uses a prospective chronological split and animal-level summaries, not the published Fig. 3 split."
+    },
+    {
+      "id": "paper-fig2",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12229899/",
+      "locator": "Results: Moving reward induced remapping spanning the environment; Fig. 2 caption panels d-g; rendered primary source lines 130-142",
+      "supports": "Published remapping census summaries and circular mean positions with confidence limits for first/last-switch RR distributions. These are expected source values only, not computational execution."
+    },
+    {
+      "id": "fig2-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/notebooks/Fig2_Ext2_identifyRewardRelative.md",
+      "locator": "Cell classification lines 131-201; census 252-440; Fig. 2 histograms, fraction above shuffle and LMM 514-772; reward exclusion and before/after curves 775-1036",
+      "supports": "Complete remapping census and cell masks, circular peak and shuffle distributions, actual scalar fraction/regression summaries, and required exclusion-distance companions. Current source pin is not proof of publication revision."
+    },
+    {
+      "id": "fig3-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/notebooks/Fig3_Decoder.md",
+      "locator": "Population and preparation 80-280; five models and shuffle 344-512; Fig. 3c 571-766; Fig. 3a example 771 onward; Fig. 3b session table and statistics 835-1034",
+      "supports": "Eleven named mice, seven switch days, three cell populations, five model conditions, ten folds, 100 shuffles; original cosine and position-bin z-score derivations and paired session statistics."
+    },
+    {
+      "id": "decoder-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/src/reward_relative/decode.py",
+      "locator": "CircularRegression and train_vs_test_blocks",
+      "supports": "Author projected-normal circular regression, mean cosine score, ten ordered test blocks and stochastic training selection; linear sin/cos least-squares is not this baseline."
+    },
+    {
+      "id": "remapping-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/src/reward_relative/dayData.py",
+      "locator": "_hist_dist_btwn_rel; _frac_hist_above_shuf; plot_rew_rel_hist_across_an; plot_rew_rel_hist_indiv_an; get_cell_class_n",
+      "supports": "Native cell classification, normalized circular histograms, positive histogram excess over the 95th shuffle percentile, original exclusion flags and source-native intermediate arrays."
+    },
+    {
+      "id": "preprocessed-data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.25452/figshare.plus.27098065",
+      "locator": "Version 1; seven switch days 3,5,7,8,10,12,14",
+      "supports": "Registered preprocessed fluorescence and behavior route for recomputation; no admitted individual-file/sample identity manifest or executed result is established here."
+    },
+    {
+      "id": "postprocessed-data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.25452/figshare.plus.27138633",
+      "locator": "Version 1; postprocessed multiDayData",
+      "supports": "Reference/reconstruction route includes retrospective RR identities. It cannot silently become a hidden-prediction input or independently authenticate recalculated identities."
+    },
+    {
+      "id": "score-construction",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-EXP-20261113-004/implementations/fig3-score-v2/README.md",
+      "locator": "Original Fig. 3b score construction, interfaces and limitations",
+      "supports": "Existing JSON adapter and fold arithmetic cover 1155 source conditions and matched-support comparison. Generated controls are software evidence, not authentic reproduction or improvement."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure3b session mean cosine reward-relative-position decoding on all eleven mice, seven switch days and three retrospective cell classes, with all462 train-before condition rows within the retained1155-condition source panel and mandatory Figure3c spatial-generalization companions. This is original retrospective decoding, not prospective chronological adaptation.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original source preprocessed Figshare27098065 and postprocessed27138633 data for the selected Figure3 decoding panel. Final-paper/code/file mapping and registered DANDI route discrepancy remain unresolved; no substituted dataset.",
+      "evidence_ids": [
+        "data-route",
+        "preprocessed-data",
+        "postprocessed-data",
+        "fig3-source"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All eleven original switching mice over seven switch days3,5,7,8,10,12,14:77 source-design sessions, each with rr,track,nonreward_remap cell classes. Retain original exclusions explicitly; authenticate complete ordered identities. There are1155 source condition records across five native models, with462 train0_test0/train0_test1 Figure3b records; other693 are retained controls, not additional published3b endpoints.",
+      "evidence_ids": [
+        "paper",
+        "data-route",
+        "fig3-source"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve source ordered tenfold test partitions made by np.array_split and random without-replacement selection of90% of eligible training pool after excluding the held test fold, with source before/after switch routing, last30 post-switch-trial support, occupancy matching and100 shuffles. Exact historical support and publication equivalence remain unresolved. Qualified stochastic replay may record new state with calibrated source equivalence and paired candidate/author support. Chronological half-session calibration changes the task.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original deconvolved CA1 events and reward-relative circular position training targets under source splits, with original rr,track,nonreward_remap retrospective cell memberships. Source pre/post classification privileges are disclosed and identical across arms, with authenticated neutral masks/common derivation provenance; released masks do not prove classification recomputation. No train-only reclassification, prospective claim, private decoder reference outputs or alternate population.",
+      "evidence_ids": [
+        "paper",
+        "fig2-source",
+        "fig3-source",
+        "postprocessed-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Retain original coordinates/reward alignment, sample exclusions, teleport handling, cell-overlap removal, occupancy matching and stochastic support. Inspected Fig3 code uses45 linspace(-pi,pi) edges and44 intervals. Native loader speed>=2 and lick-validity filtering versus inherited>2 wording requires paper/code reconciliation before qualification; exact masks stay unresolved.",
+      "evidence_ids": [
+        "paper",
+        "fig2-source",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Figure3b: cosine of actual minus predicted circular reward-relative position, higher is better, with source real/shuffle session scores. Figure3c required companion: binwise shuffle-standardized cosine profiles and source animal summaries. Effect size2.7, stronger significance or greater remapping fraction is not cosine performance.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Mean pointwise cosine within each original fold, then equal mean of ten folds within each session, retaining all462 published condition rows and100 shuffles. Preserve other693 computed controls separately. Figure3c real[2,10,44] and fold-averaged shuffle[2,100,44] give zscore[2,44] using source nanmean/nanstd; preserve both cross-switch directions, day/class animal mean/SEM and day3/day14 train0 exports. No pooled-sample weighting or invented headline scalar. Mice are independent; seven sessions, cells, folds, bins and shuffles are repeated measurements.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Figure3b session mean cosine reward-relative-position decoding on all eleven mice, seven switch days and three retrospective cell classes, with all462 train-before condition rows within the retained1155-condition source panel and mandatory Figure3c spatial-generalization companions. This is original retrospective decoding, not prospective chronological adaptation. Required input provenance includes ordered original cell masks/class membership and source sample/fold/shuffle support. Preserve Figure3c both-direction real/shuffle arrays, source missingness, animal summaries and original first/last exported train-before tables; do not infer additional published endpoints from helper counts.",
+      "evidence_ids": [
+        "paper",
+        "fig2-source",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both arms receive the same paper, admitted original observations, neutral input interface, source-defined preprocessing representation, full evaluation support and resource/access ceilings. Paper and published values are permitted observations but cannot prove computation. Paper_data receives no official algorithm implementation, source-derived solution, fitted decoder or private reference output. Paper_data_author_code adds only an immutable official endpoint-code package. Provenance inventories and source links are not participant allowlists. Exact file-level inventories, leakage review, code isolation and cumulative ceilings remain unresolved. Both arms disclose and receive the same authenticated original retrospective cell-class masks and neutral representation when admitted; these are conditioning inputs to this selected decoder task, not proof of Figure2 recomputation or prospective biological knowledge. Official classification/fitting implementation belongs only to the code arm unless an exact neutral common preprocessing component is explicitly inventoried.",
+      "evidence_ids": [
+        "paper",
+        "preprocessed-data",
+        "postprocessed-data",
+        "fig2-source",
+        "fig3-source"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig3b_source_session_cosine",
+      "kind": "indexed_array_family",
+      "description": "Original Figure3b exported df_src real/shuffle session-score comparison across rr, track and nonreward_remap and train0_test0/train0_test1. The462 design condition records have distinct real/shuffle rows; counts do not authenticate coverage.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig3b_source_session_cosine",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "session_score_table",
+            "manifest_key": "fig3b_source_session_cosine/session_score_table",
+            "source_quantity": "Fig3 notebook df_src['score'] with source mouse,switch,day,ct,model,score_type,sess_id columns; model filter train0_test0 or train0_test1",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "mean cosine (dimensionless)",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Real score is nanmean across ten fold scores; shuffle score averages folds within repeat then100 repeats. Preserve both score_type values and source session keys; do not replace with a pooled sample-weighted score.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "sess_id",
+                "ct",
+                "model",
+                "score_type"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source dictionary/table semantic keys are preserved, but authentic ordered records, exclusions, cell/sample joins and publication-equivalent correspondence are unbound. No correspondence or support hash is invented.",
+                "evidence_ids": [
+                  "paper",
+                  "fig3-source",
+                  "decoder-source"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig3-source",
+              "decoder-source"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig3b_exported_session_score_table",
+        "fig3_original_fold_sample_predictions",
+        "fig3_original_retrospective_cell_and_sample_support"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover and independently verify the original source-defined quantity and full ordered support, then justify source-protocol-equivalent numerical agreement including stochastic variation and source missingness. No comparison program/reference or acceptance policy is available.",
+        "independent_unit": "Mouse; original11 switching mice, with all source-defined repeated switch sessions retained. Example traces and deterministic bookkeeping have their own source support, not extra independent mice.",
+        "dependence": "Cells, samples, sessions, folds, position bins and shuffles are nested or shared source observations; pooled and per-animal summaries remain distinct.",
+        "multiplicity": "Complete selected Figure3b panel and mandatory Figure3c companions remain jointly accountable; source contrasts are reproduced, while paired method-superiority multiplicity and criterion remain unresolved.",
+        "rationale": "Missing authentic source reference, correspondence, program and agreement/uncertainty criteria are source gaps. Current schema supports numerical reference equivalence only; no unsupported scientific comparison or successful outcome is asserted.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ]
+    },
+    {
+      "id": "fig3c_position_generalization_profiles",
+      "kind": "indexed_array_family",
+      "description": "Both cross-switch directions' source real/shuffle spatial scores and shuffle-standardized profiles for required original Figure3c spatial generalization. Current pinned code has45 edges/44 intervals; publication equivalence and actual coordinate identities remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig3c_position_generalization_profiles",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "binwise_zscore",
+            "manifest_key": "fig3c_position_generalization_profiles/binwise_zscore",
+            "source_quantity": "binwise_zscore[day][an][ct][tset,position_bin]",
+            "membership": "data_dependent",
+            "shape": [
+              2,
+              44
+            ],
+            "axes": [
+              {
+                "name": "train_trial_set",
+                "units": "source index or identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "reward_relative_position_bin",
+                "units": "radians",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source coordinate identities unresolved; for position bins inspected code uses45 linspace(-pi,pi) edges and44 left-inclusive/right-exclusive intervals, but no historical coordinate manifest is bound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source shuffle-standardized cosine z-score",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "(nanmean real fold score - nanmean shuffle score)/nanstd shuffle score for each original position bin and direction; zero/undefined shuffle variance and source NaNs are not silently repaired.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "day",
+                "mouse",
+                "ct"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source dictionary/table semantic keys are preserved, but authentic ordered records, exclusions, cell/sample joins and publication-equivalent correspondence are unbound. No correspondence or support hash is invented.",
+                "evidence_ids": [
+                  "paper",
+                  "fig3-source",
+                  "decoder-source"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig3-source",
+              "decoder-source"
+            ]
+          },
+          {
+            "id": "animal_mean_profile",
+            "manifest_key": "fig3c_position_generalization_profiles/animal_mean_profile",
+            "source_quantity": "zscore_across_an[day][ct]['set 0 mean'] and ['set 1 mean']",
+            "membership": "data_dependent",
+            "shape": [
+              2,
+              44
+            ],
+            "axes": [
+              {
+                "name": "train_trial_set",
+                "units": "source index or identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "reward_relative_position_bin",
+                "units": "radians",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source coordinate identities unresolved; for position bins inspected code uses45 linspace(-pi,pi) edges and44 left-inclusive/right-exclusive intervals, but no historical coordinate manifest is bound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source shuffle-standardized cosine z-score",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source nanmean across actual included animals for each day, population and direction; distinguish this from session mean cosine.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "day",
+                "ct"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source dictionary/table semantic keys are preserved, but authentic ordered records, exclusions, cell/sample joins and publication-equivalent correspondence are unbound. No correspondence or support hash is invented.",
+                "evidence_ids": [
+                  "paper",
+                  "fig3-source",
+                  "decoder-source"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig3-source",
+              "decoder-source"
+            ]
+          },
+          {
+            "id": "animal_sem_profile",
+            "manifest_key": "fig3c_position_generalization_profiles/animal_sem_profile",
+            "source_quantity": "zscore_across_an[day][ct]['set 0 sem'] and ['set 1 sem']",
+            "membership": "data_dependent",
+            "shape": [
+              2,
+              44
+            ],
+            "axes": [
+              {
+                "name": "train_trial_set",
+                "units": "source index or identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "reward_relative_position_bin",
+                "units": "radians",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source coordinate identities unresolved; for position bins inspected code uses45 linspace(-pi,pi) edges and44 left-inclusive/right-exclusive intervals, but no historical coordinate manifest is bound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source SEM of shuffle-standardized cosine profile",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source ut.sem behavior and original animal support; source error bars do not become a reproduction acceptance interval.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "day",
+                "ct"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source dictionary/table semantic keys are preserved, but authentic ordered records, exclusions, cell/sample joins and publication-equivalent correspondence are unbound. No correspondence or support hash is invented.",
+                "evidence_ids": [
+                  "paper",
+                  "fig3-source",
+                  "decoder-source"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig3-source",
+              "decoder-source"
+            ]
+          },
+          {
+            "id": "first_last_train0_exports",
+            "manifest_key": "fig3c_position_generalization_profiles/first_last_train0_exports",
+            "source_quantity": "df_zscore_first[ct] at day3 and df_zscore_last[ct] at day14, constructed from set0_zscore only",
+            "membership": "data_dependent",
+            "shape": [
+              null,
+              44
+            ],
+            "axes": [
+              {
+                "name": "mouse",
+                "units": "source index or identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original source identity/order and support manifest unresolved."
+                }
+              },
+              {
+                "name": "reward_relative_position_bin",
+                "units": "radians",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source coordinate identities unresolved; for position bins inspected code uses45 linspace(-pi,pi) edges and44 left-inclusive/right-exclusive intervals, but no historical coordinate manifest is bound."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source shuffle-standardized cosine z-score",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original animal rows and reward-relative bin-center columns, with only train0->test1 in these source exports. Both-direction source profiles remain separate required evidence.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "day",
+                "ct"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Source dictionary/table semantic keys are preserved, but authentic ordered records, exclusions, cell/sample joins and publication-equivalent correspondence are unbound. No correspondence or support hash is invented.",
+                "evidence_ids": [
+                  "paper",
+                  "fig3-source",
+                  "decoder-source"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig3-source",
+              "decoder-source"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig3c_real_shuffle_position_profiles",
+        "fig3c_source_animal_mean_sem_and_exports",
+        "fig3_original_retrospective_cell_and_sample_support"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover and independently verify the original source-defined quantity and full ordered support, then justify source-protocol-equivalent numerical agreement including stochastic variation and source missingness. No comparison program/reference or acceptance policy is available.",
+        "independent_unit": "Mouse; original11 switching mice, with all source-defined repeated switch sessions retained. Example traces and deterministic bookkeeping have their own source support, not extra independent mice.",
+        "dependence": "Cells, samples, sessions, folds, position bins and shuffles are nested or shared source observations; pooled and per-animal summaries remain distinct.",
+        "multiplicity": "Complete selected Figure3b panel and mandatory Figure3c companions remain jointly accountable; source contrasts are reproduced, while paired method-superiority multiplicity and criterion remain unresolved.",
+        "rationale": "Missing authentic source reference, correspondence, program and agreement/uncertainty criteria are source gaps. Current schema supports numerical reference equivalence only; no unsupported scientific comparison or successful outcome is asserted.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Bind the publication-equivalent author revision and immutable original Figshare27098065/27138633 files; reconcile registered DANDI route and actual original11-mouse/seven-day/cell/sample membership. Current author commit is source evidence, not proof of the published run.",
+    "Authenticate original retrospective rr/track/nonreward_remap classifications, exclusions, coordinates, cell-overlap handling, ordered sample/fold/occupancy support and code-paper preprocessing mapping. Inspect44 intervals from45 edges; reconcile source loader speed>=2 plus lick-validity filtering with inherited paper>2 wording rather than silently choosing a different subset.",
+    "Deliver and independently qualify the source-native loader and strongest author CircularRegression projected-normal EM fit (alpha1e-4), including source tenfold/test-array split,90%-pool random training choice and100-shuffle protocol. OLS sine/cosine and chronological half-session methods are different comparators.",
+    "Recover authentic full462-row Figure3b real/shuffle score references and required Figure3c arrays, retaining all1155 computed conditions with exact claim mapping. Current fig3-score-v2 cannot compute required Figure3c profiles, authenticate preparation/fitting, or preserve source NaN handling merely by validating SHA fields.",
+    "Calibrate source-protocol stochastic equivalence and independent granular input-use verification; exact historic RNG is not an independent prerequisite when qualified paired replay preserves source rules. Resolve nonfinite and zero-shuffle-variance policy, full reference equivalence, mouse-level superiority/multiplicity and meaningful cosine gain.",
+    "Current improvement/v1 final-result schema is scalar-only; the original per-session/condition vector cannot be silently replaced by a new headline aggregate. Freeze a scientifically justified complete-panel policy and matching runtime before outcome admission.",
+    "Freeze exact common participant allowlists, disclosed retrospective class derivation, official-code-only delta, exposure/private-reference boundary and finite cumulative access/resource budgets. Prior pipeline/control runs and metadata construction do not establish readiness or an AI result."
+  ]
+}

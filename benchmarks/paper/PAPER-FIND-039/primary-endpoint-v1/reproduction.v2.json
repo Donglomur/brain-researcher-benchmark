@@ -1,0 +1,333 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-FIND-039",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Selected original decoder scope is explicit; complete authentic support, reference/replay and justified scientific comparison remain unresolved. Printed scalars are anchors only.",
+  "source_paper": {
+    "title": "Spatial coding dysfunction and network instability in the aging medial entorhinal cortex",
+    "url": "https://doi.org/10.1038/s41467-025-63229-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12494969/",
+      "locator": "Results: Single-cell spatial coding correlates with heterogeneous spatial memory in aging; Figure 2; Methods: Cross-trial correlation matrices and spatial stability, and similarity; Statistical tools and reproducibility",
+      "supports": "The selected output is a comparison of age groups, sessions and context-dependent firing statistics, estimated with nested models, rather than a held-out algorithm score."
+    },
+    {
+      "id": "decoder-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12494969/",
+      "locator": "Figure 5i; Results: Aged spatial coding instability in an invariant VR environment; Methods: Position decoding analysis",
+      "supports": "Original RF position decoding has a mean cosine angular prediction score, ten 90/10 train/test repetitions, 34 young and 27 aged sessions, and reported stratum means 0.6271 and 0.4683."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.5061/dryad.8cz8w9h0d",
+      "locator": "August 18, 2025 deposit; README: Description of the data and file structure; MouseMetadata.csv and SessionMetadata.csv descriptions",
+      "supports": "The release provides synchronized sorted spikes, VR position/trial context, mouse/session metadata and author shuffle scores. Array payloads were not inspected."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Herber2024",
+      "locator": "README instructions 3-5 and Important Notes A; Figure 2 & Supplementary Fig. 3.ipynb",
+      "supports": "Import/filter and classification precede figure reconstruction; random shuffle and clustering procedures can change counts and p-values without changing the descriptive conclusion."
+    },
+    {
+      "id": "kernel",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Herber2024/1a9dd3040c9f77662caf26a34c9452403579087a/pipeline/process_spikes.py",
+      "locator": "tuning_curve_bytrial and cross_trial_correlation",
+      "supports": "Occupancy correction, Gaussian smoothing, per-cell normalization and normalized trial-map dot products underpin the historical calculation."
+    },
+    {
+      "id": "decoder-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Herber2024/1a9dd3040c9f77662caf26a34c9452403579087a/Figure%205.ipynb",
+      "locator": "Compare position decoding accuracy ... (Figure 5I-K); DECODER ANALYSIS/CircularRegression; train_vs_test_blocks; spatial-cell fitting; Load results ... only for k=2 sessions",
+      "supports": "Pinned Figure 5 notebook supplies the circular decoder, ten-way test-index partition/random training selection, spatialcell99 and two-map eligibility, and random-map score averaged across repetitions. Original realized partitions and scores still need binding."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict RF track position from source-selected co-recorded spatial-cell activity under original Figure5i, retaining complete young/aged strata. Broader age/context/remapping findings remain separately preserved biological reproduction scope.",
+      "evidence_ids": [
+        "decoder-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Herber et al. Dryad electrophysiology/VR deposit, DOI 10.5061/dryad.8cz8w9h0d; source Figure 5 notebook consumes its prepared RF session inputs.",
+      "evidence_ids": [
+        "data",
+        "decoder-code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Original Figure 5i includes 34 young and 27 aged RF sessions with more than ten spatial cells and optimal k=2. Exact mouse/session/cell identities and source eligibility realization are not bound; retain both strata without subset selection.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve train_vs_test_blocks: ten array_split test partitions in original downsampled order; random training selection without replacement from the complement, size int(n*0.9). Candidate and author share original real-arm train/test memberships. Source spike-shuffle separately draws training membership from the same eligible complement; preserve its own realization. Original downsampling/RNG/memberships are unrecovered; newly drawn or mouse-held-out splits cannot silently replace them.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-selected spatial-cell spiking/firing activity is the decoder input; synchronized VR track angle is the target. Preserve original RF input window, cell-selection and map eligibility.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve spatialcell99, non-single-map/SilN==2 eligibility, smoothing, map clustering and spike-number/position/speed/count matching/downsampling. Resolve paper5cm versus notebook sigma5bins×2cm smoothing correspondence; no convenient kernel is substituted.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code",
+        "data"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Decoder score is the mean of cos(true track angle minus predicted angle) over original test observations; higher is better, with 1 for perfect prediction.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average the ten decoder scores within each original session, then retain separate young and aged stratum summaries. Source Figure 5i uses the both-map/random-selection score; no pooled scalar is substituted.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "All61 original RF sessions (34young,27aged), eligible cells/maps, original downsampled indices, ten real-arm train/test partitions, original spike-shuffle training memberships, complete candidate/author/shuffle predictions and fold scores, complete age-specific session vectors and separate original summaries. No age-pooled scalar or selected favorable sessions.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code",
+        "data"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Only declared original input activity and phase-appropriate training targets; held-out VR target angles and downstream decoding/shuffle answer files stay evaluator-only. Disclose original target-derived eligibility/preparation while preserving original representation; no cross-fold/cross-condition final-test feedback.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code",
+        "data"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "selected_original_decoder_complete_panel",
+      "kind": "indexed_array_family",
+      "description": "Complete reported Figure5i real-label young and aged session-mean vectors:34young and27aged sessions, each computed by equal reduction of its ten original fold scores. Printed separate age summaries remain anchored. All fold scores, spike-shuffle controls and complete prediction/split support remain mandatory audit artifacts rather than additional reported numerical targets.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "paper-find-039-primary-endpoint-v1",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "young_real_session_scores",
+            "manifest_key": "young_real_session_scores",
+            "source_quantity": "All original young session means with mouse/session identities.",
+            "membership": "fixed",
+            "shape": [
+              34
+            ],
+            "axes": [
+              {
+                "name": "young_source_session",
+                "units": "source coordinate",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered source identities require authenticated metadata; no synthetic identities substituted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "mean cosine angular error",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Equal ten-fold mean; equal-session summary within this age only.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder-paper",
+              "decoder-code",
+              "data"
+            ]
+          },
+          {
+            "id": "aged_real_session_scores",
+            "manifest_key": "aged_real_session_scores",
+            "source_quantity": "All original aged session means with mouse/session identities.",
+            "membership": "fixed",
+            "shape": [
+              27
+            ],
+            "axes": [
+              {
+                "name": "aged_source_session",
+                "units": "source coordinate",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered source identities require authenticated metadata; no synthetic identities substituted."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "mean cosine angular error",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Equal ten-fold mean; equal-session summary within this age only.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder-paper",
+              "decoder-code",
+              "data"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "decoder-paper",
+          "decoder-code",
+          "data"
+        ]
+      },
+      "required_granular_output_ids": [
+        "all_61_rf_session_mouse_cell_map_downsampling_identities",
+        "all_original_real_shuffle_fold_identities",
+        "complete_candidate_author_spike_shuffle_predictions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare only the original real-label source session means and separate reported age-summary anchors under justified numerical reproduction criteria. Every session mean must use the equal arithmetic mean of its ten original mean-cosine fold scores, never observation-weighted pooling. Authenticate all61sessions and original fold membership; audit full real/spike-shuffle fold vectors and predictions without imposing pointwise author equality. No reported shuffled-session target or pooled young/aged scalar is invented.",
+        "independent_unit": "Mouse for biological uncertainty; sessions and within-session repeated test observations remain dependent.",
+        "dependence": "Preserve original animal/session/fold/trial/observation nesting. Repeated bins and shuffled controls are not independent biological units.",
+        "multiplicity": "Retain complete selected endpoint and indispensable controls; source-faithful full-panel reproduction criteria remain pending.",
+        "rationale": "Figure5i reports session means after equal ten-fold reduction. Numerical target membership follows that reported level; intermediate fold vectors and shuffle controls remain indispensable audit evidence for truthful computation and complete original support. Original references, replay and justified criteria remain unresolved.",
+        "evidence_ids": [
+          "decoder-paper",
+          "decoder-code",
+          "data"
+        ]
+      },
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code",
+        "data"
+      ]
+    },
+    {
+      "id": "published_young_mean",
+      "kind": "scalar",
+      "description": "Published young mean 0.6271 ±0.0406 SEM over34 sessions; complete source vectors still required.",
+      "status": "verified",
+      "expected": 0.6271,
+      "units": "source decoder score",
+      "aggregation": "Equal-session mean of original ten-fold session means, young stratum only.",
+      "evidence_ids": [
+        "decoder-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published anchor only; complete source outputs and justified replay calibration remain required.",
+        "evidence_ids": [
+          "decoder-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-grounded reproduction comparison remains to be frozen.",
+        "independent_unit": "Mouse for biological uncertainty; sessions and within-session repeated test observations remain dependent.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A printed summary or biological p-value is not a method-comparison policy.",
+        "evidence_ids": [
+          "decoder-paper"
+        ]
+      }
+    },
+    {
+      "id": "published_aged_mean",
+      "kind": "scalar",
+      "description": "Published aged mean 0.4683 ±0.0416 SEM over27 sessions; complete source vectors still required.",
+      "status": "verified",
+      "expected": 0.4683,
+      "units": "source decoder score",
+      "aggregation": "Equal-session mean of original ten-fold session means, aged stratum only.",
+      "evidence_ids": [
+        "decoder-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published anchor only; complete source outputs and justified replay calibration remain required.",
+        "evidence_ids": [
+          "decoder-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-grounded reproduction comparison remains to be frozen.",
+        "independent_unit": "Mouse for biological uncertainty; sessions and within-session repeated test observations remain dependent.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A printed summary or biological p-value is not a method-comparison policy.",
+        "evidence_ids": [
+          "decoder-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate exact61-session mouse/age/cell roster, >10spatialcell99/non-single-map/SilN==2 selection.",
+    "Recover original downsampling, real and spike-shuffle train/test memberships and RNG provenance; newly drawn folds do not establish historical same-task parity.",
+    "Resolve paper/notebook smoothing and preprocessing correspondence; recover complete original score vectors and qualify strongest original decoder replay.",
+    "Freeze source-native real-label vector comparison across both age strata with justified effect/mouse-dependent uncertainty. Panel-admission/interface construction is pending; no pooled scalar invented.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ]
+}

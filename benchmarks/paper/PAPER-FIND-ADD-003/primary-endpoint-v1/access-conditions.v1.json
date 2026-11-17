@@ -1,0 +1,71 @@
+{
+  "schema_version": "paper-endpoint-access-conditions/v1-proposal",
+  "task_id": "PAPER-FIND-ADD-003",
+  "status": "source_unresolved",
+  "policy_sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "common_policy_conditions_pointer": "/source_assistance_conditions",
+  "common": {
+    "paper": {
+      "title": "Hippocampal sequences represent working memory and implicit timing",
+      "url": "https://doi.org/10.1016/j.celrep.2025.116383"
+    },
+    "original_data": "Original smoothed/floored rawtrialsstand2torev2_n11.mat representation with44sessions, source eligibility,140row masks and seven-bin preprocessing. Both conditions use identical permitted neural inputs/training labels and opaque protected prediction presentation. No source-bin/trial index, absolute timing or query order may reveal withheld true bins. Unsmoothed input is separate sensitivity.",
+    "support": "All11mice/44sessions/full140-row trial rosters, seven-bin whole-trial LOO, original eligibility and source RNG:176real/shuffle correlations plus176 full7×7 native confusion matrices per method. Retain each source day/cue/control, undefined/failed positions and original summaries. Unsmoothed sensitivity and broader biological families remain separate.",
+    "split": "ConortimeSVM leaves one complete trial out across all seven bins per fold within each cue/session; source rng Default and one training-label shuffle per helper are retained for baseline reconstruction.",
+    "preprocessing": "Original smoothed/floored release; ten-frame means over edges97:10:167 give seven bins97:106 through157:166, not stale ten-bin comment. Preserve eligibility and10000-ROI branch. Unsmoothed/unfloored release is separately retained sensitivity, not a replacement or additional primary gate.",
+    "metric": "Pearson correlation corr(allrealbin,allpredbin), not fraction-correct accuracy, measures predicted versus actual bin indices across held-out trials. Higher correlation is the ordered decoder direction.",
+    "aggregation": "Retain all11×4days×2standardcues×2real/shuffle=176 correlations and full native confusion matrices per method, with original separate day/cue summaries. No across-day/cue headline mean, AUC or combined odor score. Undefined constant-prediction correlation retains finite confusion; failed/missing positions cannot shrink support. Published full vectors and source-faithful real-label superiority rule remain unresolved.",
+    "permitted_observations": "Original source neural inputs and permitted training labels only. Whole-trial LOO holds all7bins out together. Source trial/bin indices, real-bin order, absolute timing or query order that reveals targets are evaluator-only. The scorer consumes predictions in actual-bin order only after private inverse mapping; opaque randomized prediction presentation/submission mapping remains a missing protected interface, not a change to scientific split.",
+    "published_scalar_role": "Printed paper anchors may be common; they never substitute for protected complete native references.",
+    "input_manifest_sha256": null,
+    "paper_manifest_sha256": null,
+    "shared_preparation_and_tools_manifest_sha256": null,
+    "evaluation_identity_sha256": null,
+    "exposure_policy_sha256": null,
+    "access_budget": null,
+    "resource_budget": null
+  },
+  "conditions": {
+    "paper_data": {
+      "available": "Common paper, complete selected original data in declared representation, task contract and explicitly common preparation/tools.",
+      "excluded": "Official algorithm-bearing author method implementation or author-derived solutions, except preparation explicitly declared common.",
+      "preparation_boundary": "Original processed inputs are common; exact permitted common preparation manifest is pending. Operator-only preprocessing must not expose withheld method or protected answers."
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same common paper/data/tools plus pinned official endpoint implementation and authenticated dependencies.",
+      "author_code": {
+        "repository": "https://github.com/ccdorian/dDNMS2025",
+        "revision": "5e74479bbf97d47c14133cab5fea40a496ec7d94",
+        "endpoint_files": [
+          "Main Scripts/TimeDecoding.m",
+          "Preprocessing/make_rawtrialsdDNMS.m"
+        ]
+      },
+      "author_code_manifest_sha256": null
+    }
+  },
+  "paired_design": {
+    "author_code_is_intended_only_information_difference": true,
+    "identical_original_support": true,
+    "identical_split_and_metric": true,
+    "resource_accounting": "Same declared accounting and finite budgets, exact values remain unfrozen.",
+    "independent_candidate_freezes": "Separate code per outcome/condition; no final-test feedback transfer.",
+    "outcomes": "Reproduction and improvement independently scored in each condition.",
+    "score_control_roles": "Real-label native endpoint only for superiority; full source-shuffle outputs remain mandatory control/fidelity companions, never rewarded for increasing."
+  },
+  "protected_evaluator_only": [
+    "timedecodeforpanels_onlystandards_binsize10justallcells.mat and other saved decoding/sequence/significant-cell answers",
+    "Source trial/bin indices, actual-bin query order, absolute timing and other solution-bearing metadata",
+    "Private inverse permutation mapping, targets, original roster joins and complete author/reference predictions",
+    "Cross-condition/final-test feedback before freeze"
+  ],
+  "authenticity_holds": [
+    "Authenticate original processed rawtrialsstand2torev2_n11.mat and complete44session/140row trial/ROI joins with recorded-delay masks.",
+    "Authenticate protected timedecodeforpanels_onlystandards_binsize10justallcells.mat and complete original176panel correlations/confusions; saved answers never become candidate input.",
+    "Qualify TimeDecoding.m native author replay, MATLABR2021a fitcecoc defaults, source RNG and once-per-helper training-label shuffle; collect complete7bin whole-trial LOO predictions.",
+    "Implement protected opaque/randomized query/submission mapping: source trial/bin identities, actual-bin order and solution-bearing timing metadata are evaluator-only, while original scientific folds remain unchanged.",
+    "Bind real-label full-panel superiority/reproduction criteria, meaningful effect and mouse-level uncertainty. Vector-admission/interface work remains pending; no invented headline aggregate and no reward for increased shuffle scores.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ],
+  "readiness_claim": false
+}

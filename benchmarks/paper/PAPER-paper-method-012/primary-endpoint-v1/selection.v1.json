@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-original-endpoint-selection-candidate/v1",
+  "task_id": "PAPER-paper-method-012",
+  "scope_version": "primary-endpoint-v1",
+  "decision_kind": "explicit_original_author_performance_endpoint_selection",
+  "adoption_status": "candidate_for_integrator_review_not_canonical",
+  "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "source_policy_sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "previous_scope": "The complete named Figure 2C empirical CA1 correlation-coding family, including direct pair/single-neuron information, redundancy/synergy and information breakdown, together with the original linear/RBF population comparisons using real versus conditionally shuffled responses. Preserve the source-defined animal/field-of-view support, discretization, corrections and nested validation. This is an explicit selection now, not a retroactive historical selection or an all-paper requirement.",
+  "selected_scope": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction.",
+  "source_locator": "PLOS Computational Biology 10.1371/journal.pcbi.1012934, Figure 2C population decoding and Methods; MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m.",
+  "original_data_and_units": "Seven animals, 11 fields-of-view/sessions, 43–104 neurons per session. Retain every original session and eligible population; 36,158 pairs belong to the separate descriptive pair analysis and are not independent decoder cases.",
+  "original_inputs": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+  "original_split": "Resolve reported five trial folds versus pinned twofold population-SVM options, separately from optimization folds; recover exact original partitions and nested tuning. No new animal holdout or favorable fold selection.",
+  "metric_and_complete_support": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid.",
+  "strongest_original_comparator": "Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+  "published_values": null,
+  "retained_broader_reproduction": "Original complete CA1 direct single/pair information, redundancy-synergy/PID and correlation-breakdown family; separate original known-truth Poisson estimator simulations. No biological correlation-coding improvement follows from decoder gain.",
+  "immutable_predecessors": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-012/task.json",
+      "bytes": 44278,
+      "sha256": "ab98fef914e47985d6d4a15d6c94430fe8a77349930c4b7e68f3974a41a30b2d",
+      "commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-012/reproduction.v1.json",
+      "bytes": 67918,
+      "sha256": "ebe31106e5be301f00153194d77c75fbdd85a3fb9c4745aaf9b669bcd3303d8a",
+      "commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-012/improvement.v1.json",
+      "bytes": 12666,
+      "sha256": "881aa6c15f456275a259daf63394edcc3d35c5340d8186bcdfd8835f0ec2a423",
+      "commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-012/outcomes.v1.json",
+      "bytes": 3891,
+      "sha256": "e9a798e3f52f1918b5b8b273ba5a4b29c2c80834c640b924f5df0d169d082c8d",
+      "commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+    }
+  ],
+  "new_contracts": {
+    "reproduction": "reproduction.v2.json",
+    "improvement": "improvement.v1.json",
+    "outcomes": "outcomes.v1.json",
+    "access_conditions": "access-conditions.v1.json"
+  },
+  "unresolved_requirements": [
+    "Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+    "Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.",
+    "Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.",
+    "Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.",
+    "Qualify source-matched reproduction tolerance, strongest comparator selection, meaningful gain and dependence-aware joint decision; budgets and independent execution remain unqualified.",
+    "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+  ],
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "new_scientific_runs": 0,
+    "ai_results": "unknown",
+    "paper_improvement": "unknown",
+    "current_sota": "not_claimed"
+  },
+  "central_integration_required": "Generic selected-endpoint binding/registry integration is integrator-owned; these additive files do not by themselves pass canonical portfolio admission.",
+  "central_selector": "docs/provenance/paper-primary-endpoint-selections.v2.json",
+  "audit_output_obligations": [
+    {
+      "output_id": "heldout_predictions",
+      "component": "observation_level_prediction_and_original_support",
+      "mandatory": true,
+      "role": "audit_and_metric_recomputation",
+      "numerical_reference_equivalence_target": false,
+      "applies_to": [
+        "original_author_reproduction",
+        "candidate_same_task_improvement"
+      ],
+      "source_specification_preserved": {
+        "id": "heldout_predictions",
+        "manifest_key": "ca1_population_decoder_native_family.heldout_predictions",
+        "source_quantity": "Original trial identities, fold membership, spatial truths and held-out predictions for all source decoder conditions.",
+        "membership": "data_dependent",
+        "shape": null,
+        "axes": null,
+        "allowed_dtypes": null,
+        "units": "source spatial labels",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Do not pool away source trial identities or replace fivefold/twofold discrepancy with a guessed recipe.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "animal",
+            "session",
+            "kernel",
+            "condition",
+            "outer_fold",
+            "trial"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "verification_requirement": "Independently authenticate original evaluation identities, labels, masks, class/target ordering and split membership; verify complete submitted prediction coverage and recompute the retained source metrics from each submission. Predicted values are method-specific audit evidence and are not required to equal author predictions element by element.",
+      "observation_boundary": "Original labels and protected reference predictions remain operator-side; this role correction does not expand participant input access."
+    },
+    {
+      "output_id": "confusion_information",
+      "component": "raw_confusion_counts_and_fixed_estimator_derivation",
+      "mandatory": true,
+      "role": "audit_and_metric_recomputation",
+      "numerical_reference_equivalence_target": false,
+      "applies_to": [
+        "original_author_reproduction",
+        "candidate_same_task_improvement"
+      ],
+      "source_specification_preserved": {
+        "id": "confusion_information",
+        "manifest_key": "ca1_population_decoder_native_family.confusion_information",
+        "source_quantity": "Complete source confusion matrices, bias/correction route and per-fold information in bits.",
+        "membership": "data_dependent",
+        "shape": null,
+        "axes": null,
+        "allowed_dtypes": null,
+        "units": "counts and bits",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Preserve source stimulus/prediction ordering, estimator, conditional shuffles and complete session/fold reductions.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "session",
+            "kernel",
+            "condition",
+            "outer_fold"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "verification_requirement": "Require complete confusion counts derived independently from that submission’s heldout_predictions and authentic spatial targets, including original stimulus/prediction ordering, bias/correction route, shuffles and fold/session joins. Counts and prediction values may differ from the author; authenticate support and recompute the fixed original information score in bits. The confusion_information score component remains a numerical reference target; its raw-count component does not.",
+      "observation_boundary": "Raw labels, confusion derivation records and source reference predictions are operator verification evidence, not added candidate predictors."
+    }
+  ],
+  "output_role_revision": {
+    "version": "reported_target_vs_audit_support-20261117-v2",
+    "reason": "Independent cross-case review separated mandatory computation evidence from author-value-equivalence targets.",
+    "previous_reproduction_sha256": "8e99f4b40e320991c57c4b2570deeed03a4b2d78866597b93d51a0961af51331",
+    "previous_selection_sha256": "331231984b6a24fcdcdad807501808370b022264ecd1586c46c3cb7f0e8ac739",
+    "previous_aggregate_manifest_sha256": "258b36631ec49174169e59f4891bb4eced3eb76ef16a67a5cd39fe8014a8f606",
+    "reported_metric_and_full_support_unchanged": true,
+    "required_granular_output_ids_preserved": [
+      "heldout_predictions",
+      "confusion_information",
+      "native_source_reductions"
+    ],
+    "reference_target_member_ids": [
+      "confusion_information",
+      "native_source_reductions"
+    ],
+    "runtime_results_and_admission_promoted": false,
+    "same_task_and_access_conditions": "The existing eight shared same-task anchors, task and access-conditions files remain unchanged; audit evidence is operator-only, not extra candidate information."
+  }
+}

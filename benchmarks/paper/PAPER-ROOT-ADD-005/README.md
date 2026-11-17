@@ -12,33 +12,48 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed source coverage. Retained source scope and coverage: within\_family\_empirical\_prediction\_component: Preserve Figure 2 full-embedding response prediction, source fold-wise signed Pearson maps, original permutation companion and noise-ceiling convention as a meaningful named result and improvement route. Prediction gain alone cannot establish the attribution finding or complete-family success. enrolled\_empirical\_attribution\_result: Preserve the distinct Figure 6 joint, unique-dimension, unique-category and shared residualized-response attribution maps and original ROI summaries. These remain enrolled findings, not optional substitutes for an encoding score. Their normalization and selected-feature definitions differ from full-embedding prediction. source\_companion\_unresolved: Retain the published exploratory shape comparison and source-grounded category/face/body companions with their actual roles. Exact shape descriptors, supplement recipe and applicability of optional code branches remain unresolved; generic descriptors or all available flags cannot replace source authentication. prospective\_extension: New image-family/category holdouts, nested regularization, train-only normalization or altered populations remain explicitly declared candidate/prospective comparisons rather than silently replacing original source reproduction. Reviewed source limits: Authentic participant, repeated-trial, image, row/session, voxel and ROI identities and source masks remain unresolved. Unshuffled twelve-fold row partitions require verified correspondence before being treated as original leave-one-session-out folds. Preserve full 66-dimensional encoding separately from the category-AUC-selected attribution subset. Preserve source global feature standardization, intercept OLS, secondary-object category unions, global feature/response residualization and source clipping/squaring conventions; ordinary same-target predictive commonality is a different estimand. Per-fold signed Pearson and arithmetic fold means, publication noise-ceiling-corrected maps and ROI attribution outputs are not interchangeable. Source numerical maps, Figure 2 conversion, meaningful aggregation and reproduction/improvement criteria remain unqualified; no new across-voxel/participant scalar is selected. The categorical dimension-versus-category claim is a genuine scientific statement but does not compute the required participant maps. A scorer on supplied prediction archives does not verify model fitting, authorized analysis or the complete encoding/attribution result. Schema coverage and actual native/source verification are separate gaps. The shape comparison is identified in Supplementary Figure 6/Methods 2, but exact descriptors and implementation are not authenticated. Optional face/body source flags do not establish universally required published branches. Direct primary-paper evidence inspected here is the retained abstract/opening excerpt, while Figure 2/6 Methods mapping is attributed to the existing reviewed reference report. Pinned author code excerpts were directly inspected. Rendered-evidence hashes are not upstream source-file or complete-paper hashes. No explicit Figure-2-only replacement authority was found in the bounded inspected records. Preserve the enrolled family and named component; selecting Figure 2 as sole primary would be a new scope choice. Keep full-family/component bindings unavailable if their relationship cannot be represented faithfully. Three participants do not establish broad participant generalization; voxels and folds are not independent people. Stronger significance or a favorable participant/voxel subset does not establish same-result improvement.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The original enrolled single-trial empirical family includes full object-dimension encoding and category-versus-dimension variance attribution in three source participants. Preserve complete participant-specific encoding and attribution maps, source ROI summaries and indispensable comparisons. Figure 2 prediction is a valid nested empirical component, not an unrelated proxy. Raw-fMRI preprocessing, the separate time-series/HRF route and automatic every-figure obligations remain outside this scope.
+### Current selected paper endpoint
 
-**Retained improvement contract coverage:** within\_family\_empirical\_prediction\_component: Preserve Figure 2 full-embedding response prediction, source fold-wise signed Pearson maps, original permutation companion and noise-ceiling convention as a meaningful named result and improvement route. Prediction gain alone cannot establish the attribution finding or complete-family success. enrolled\_empirical\_attribution\_result: Preserve the distinct Figure 6 joint, unique-dimension, unique-category and shared residualized-response attribution maps and original ROI summaries. These remain enrolled findings, not optional substitutes for an encoding score. Their normalization and selected-feature definitions differ from full-embedding prediction. source\_companion\_unresolved: Retain the published exploratory shape comparison and source-grounded category/face/body companions with their actual roles. Exact shape descriptors, supplement recipe and applicability of optional code branches remain unresolved; generic descriptors or all available flags cannot replace source authentication. prospective\_extension: New image-family/category holdouts, nested regularization, train-only normalization or altered populations remain explicitly declared candidate/prospective comparisons rather than silently replacing original source reproduction.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary outcome pairing decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate original participant, repeated-trial, image, row/session, voxel and mask identities and complete artifact hashes. The 8740 unique images per participant are not the number of response rows.
+- Prove original unshuffled 12-fold source row blocks equal twelve complete original sessions without sorting or repairing their order. Original folds, repetitions and full masks cannot be replaced by new category or image-family holdouts.
+- Recover the original complete author per-fold prediction and correlation maps, source permutation identities/null outputs and Figure 2 noise-ceiling transformation/mask. Do not substitute pooled correlation, signed SSE/SST R2 or Figure 6 attribution medians.
+- Authenticate the strongest relevant author comparator under the same 66-feature input task. Pinned intercept OLS is the recovered author route; numerical baseline, original run parity and any stronger same-endpoint author branch are not yet qualified.
+- Freeze source-grounded map-level numerical agreement and a meaningful, complete-support improvement comparison with participant/session/stimulus dependence. No across-voxel scalar, universal margin, selective voxel subset or numerical tolerance is invented.
+- Complete source-native production and independent verification of all original folds. The delivered archive scorer does not authenticate training exclusion, source provenance, Figure 2 conversion, permutation generation or submitted fitting.
+- Authenticate common input/exposure manifests, official-code manifest, independently enforced paired execution and existing required resource/access accounting. Pairing protocols remain unresolved; no source/runtime/results are qualified.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained improvement contract
+## Retained predecessor improvement policy
 
-This preserved contract retains the declared coverage described above. Complete primary-outcome pairing remains unavailable, so the contract cannot admit a primary outcome under this marker.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original ordered encoding task and author evaluation route are identifiable, but a comparable numerical source baseline with exact voxel masks, row/session alignment and aggregation has not been recovered. The existing nested image-family ridge evaluator changes the source split and cannot establish a same-task paper win.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +61,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29830 bytes; SHA-256 `891c080a5474ba82f4013bd6bbe1d3a09c48c19a6d5828bf781307312533b10d`.
+- Specification identity: 27596 bytes; SHA-256 `6a7daa8f8a142b48ba45c1947d8f832fa23744158af41d8843f8c044dc967193`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

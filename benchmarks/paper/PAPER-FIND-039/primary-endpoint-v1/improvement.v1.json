@@ -1,0 +1,192 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "objective": "surpass_source_paper_same_task",
+  "task_id": "PAPER-FIND-039",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit primary-endpoint-v1 selection of an exact author-reported decoder. Authentic references, source identities, replay and operational/scientific admission remain unresolved; scope construction is not a result.",
+  "source_paper": {
+    "title": "Spatial coding dysfunction and network instability in the aging medial entorhinal cortex",
+    "url": "https://doi.org/10.1038/s41467-025-63229-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12494969/",
+      "locator": "Results: Single-cell spatial coding correlates with heterogeneous spatial memory in aging; Figure 2; Methods: Cross-trial correlation matrices and spatial stability, and similarity; Statistical tools and reproducibility",
+      "supports": "The selected output is a comparison of age groups, sessions and context-dependent firing statistics, estimated with nested models, rather than a held-out algorithm score."
+    },
+    {
+      "id": "decoder-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12494969/",
+      "locator": "Figure 5i; Results: Aged spatial coding instability in an invariant VR environment; Methods: Position decoding analysis",
+      "supports": "Original RF position decoding has a mean cosine angular prediction score, ten 90/10 train/test repetitions, 34 young and 27 aged sessions, and reported stratum means 0.6271 and 0.4683."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.5061/dryad.8cz8w9h0d",
+      "locator": "August 18, 2025 deposit; README: Description of the data and file structure; MouseMetadata.csv and SessionMetadata.csv descriptions",
+      "supports": "The release provides synchronized sorted spikes, VR position/trial context, mouse/session metadata and author shuffle scores. Array payloads were not inspected."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Herber2024",
+      "locator": "README instructions 3-5 and Important Notes A; Figure 2 & Supplementary Fig. 3.ipynb",
+      "supports": "Import/filter and classification precede figure reconstruction; random shuffle and clustering procedures can change counts and p-values without changing the descriptive conclusion."
+    },
+    {
+      "id": "kernel",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Herber2024/1a9dd3040c9f77662caf26a34c9452403579087a/pipeline/process_spikes.py",
+      "locator": "tuning_curve_bytrial and cross_trial_correlation",
+      "supports": "Occupancy correction, Gaussian smoothing, per-cell normalization and normalized trial-map dot products underpin the historical calculation."
+    },
+    {
+      "id": "decoder-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Herber2024/1a9dd3040c9f77662caf26a34c9452403579087a/Figure%205.ipynb",
+      "locator": "Compare position decoding accuracy ... (Figure 5I-K); DECODER ANALYSIS/CircularRegression; train_vs_test_blocks; spatial-cell fitting; Load results ... only for k=2 sessions",
+      "supports": "Pinned Figure 5 notebook supplies the circular decoder, ten-way test-index partition/random training selection, spatialcell99 and two-map eligibility, and random-map score averaged across repetitions. Original realized partitions and scores still need binding."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict RF track position from source-selected co-recorded spatial-cell activity under original Figure5i, retaining complete young/aged strata. Broader age/context/remapping findings remain separately preserved biological reproduction scope.",
+      "evidence_ids": [
+        "decoder-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Herber et al. Dryad electrophysiology/VR deposit, DOI 10.5061/dryad.8cz8w9h0d; source Figure 5 notebook consumes its prepared RF session inputs.",
+      "evidence_ids": [
+        "data",
+        "decoder-code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Original Figure 5i includes 34 young and 27 aged RF sessions with more than ten spatial cells and optimal k=2. Exact mouse/session/cell identities and source eligibility realization are not bound; retain both strata without subset selection.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve train_vs_test_blocks: ten array_split test partitions in original downsampled order; random training selection without replacement from the complement, size int(n*0.9). Candidate and author share original real-arm train/test memberships. Source spike-shuffle separately draws training membership from the same eligible complement; preserve its own realization. Original downsampling/RNG/memberships are unrecovered; newly drawn or mouse-held-out splits cannot silently replace them.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-selected spatial-cell spiking/firing activity is the decoder input; synchronized VR track angle is the target. Preserve original RF input window, cell-selection and map eligibility.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve spatialcell99, non-single-map/SilN==2 eligibility, smoothing, map clustering and spike-number/position/speed/count matching/downsampling. Resolve paper5cm versus notebook sigma5bins×2cm smoothing correspondence; no convenient kernel is substituted.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code",
+        "data"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Decoder score is the mean of cos(true track angle minus predicted angle) over original test observations; higher is better, with 1 for perfect prediction.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average the ten decoder scores within each original session, then retain separate young and aged stratum summaries. Source Figure 5i uses the both-map/random-selection score; no pooled scalar is substituted.",
+      "evidence_ids": [
+        "decoder-paper",
+        "decoder-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 5i session-averaged cosine position-decoding score, preserving the young/aged comparison vector",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper reports young 0.6271 +/-0.0406 SEM and aged 0.4683 +/-0.0416 SEM, over 34 and 27 sessions. These are two verified published stratum summaries, not one scalar baseline. The original full session/repetition score vector and its exact bindings remain unresolved; value is null rather than an invented pooled score.",
+      "evidence_ids": [
+        "decoder-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source route is Figure 5.ipynb: CircularRegression, train_vs_test_blocks, spatial-cell fitting and the final random-map row averaged over repetitions. No authentic same-fold author rerun or score-vector agreement has been established. Strongest relevant original same-endpoint comparator qualification remains required; no weak replay or invented aggregate qualifies.",
+      "evidence_ids": [
+        "decoder-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful cosine-score improvement and a decision rule preserving both original age strata must be justified before evaluation; no universal margin or conveniently pooled objective is imposed.",
+      "evidence_ids": [
+        "decoder-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired candidate-versus-author score-vector analysis retaining source folds, sessions and age strata, with sessions clustered by mouse. No calibrated superiority rule is established.",
+      "independent_unit": "Mouse for biological uncertainty; repeated sessions, test bins and split repetitions remain dependent.",
+      "rationale": "The published young-versus-aged test concerns biological differences, not candidate-versus-author superiority.",
+      "evidence_ids": [
+        "decoder-paper",
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and bind the exact original Figure 5i 61-session/two-age-stratum cohort, cell/map eligibility, preprocessing, downsampling and evaluation partitions.",
+      "Recover the original per-session score vector and establish a competent author replay; published stratum means and rerun scores must remain distinct.",
+      "Compare candidate and author under the same original inputs, folds, metric and within-session aggregation; retain both age strata and predeclare the full comparison rule without selecting favorable sessions or pooling a convenient scalar.",
+      "Use only declared training/validation feedback, freeze the candidate before final evaluation, and satisfy a justified meaningful-effect and valid uncertainty rule under fixed budgets.",
+      "New split evaluations are labelled extensions. Bigger Figure 2 stability effects, stronger age significance or exact figure reconstruction cannot count as decoder improvement.",
+      "Superiority applies only to original real-label decoding. Full source-shuffle outputs remain mandatory controls/fidelity evidence; higher shuffled performance is not an improvement. A paper-relative win is not current SOTA."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separate current-SOTA decoding comparison is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After original input/reference/replay admission, iterate only on declared training and internal validation within original training partitions. Retain complete source support; no numerical final-test or cross-condition feedback.",
+    "candidate_freeze": "Freeze independent candidate code per outcome/condition, original support/split/input joins, hyperparameter policy, complete output interface, calibrated references, uncertainty/effect criteria and finite budgets before final test exposure.",
+    "final_evaluation": "Evaluate frozen candidate and qualified strongest original author on identical original input/fold support. All61 original RF sessions (34young,27aged), eligible cells/maps, original downsampled indices, ten real-arm train/test partitions, original spike-shuffle training memberships, complete candidate/author/shuffle predictions and fold scores, complete age-specific session vectors and separate original summaries. No age-pooled scalar or selected favorable sessions. Superiority concerns real-label endpoint only; shuffle outputs are compulsory controls.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve published source scores/vectors, source-faithful author replay and candidate outputs separately. Qualify strongest relevant original comparator; reconcile published/replay differences under justified tolerance. Controls/engineering references are separately named, never a weaker surrogate. No current SOTA claim."
+  },
+  "blocking_issues": [
+    "Authenticate exact61-session mouse/age/cell roster, >10spatialcell99/non-single-map/SilN==2 selection.",
+    "Recover original downsampling, real and spike-shuffle train/test memberships and RNG provenance; newly drawn folds do not establish historical same-task parity.",
+    "Resolve paper/notebook smoothing and preprocessing correspondence; recover complete original score vectors and qualify strongest original decoder replay.",
+    "Freeze source-native real-label vector comparison across both age strata with justified effect/mouse-dependent uncertainty. Panel-admission/interface construction is pending; no pooled scalar invented.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Historical biological scope and all old source/contracts remain separately preserved; primary-endpoint-v1 explicitly selects the same-paper source decoder. Preserve initial-evaluator-v1 Figure 2 kernels, generated controls and prospective age summaries as calibration only. The authorized overhaul identifies original Figure 5 position decoding as the source-native improvement route; current source_unresolved status admits no paper-win execution."
+  }
+}

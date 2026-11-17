@@ -12,33 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding. Reviewed source limits: Authenticate the MI/II estimator and source-code/paper correspondence before primary scoring; the existing linear evaluator does not implement the primary information endpoint. Recover exact primary participant/parcel identities, source condition aggregation, reference arrays and justified reproduction tolerances; the supplementary decoder cohort must not replace the primary cohort. The secondary decoder still lacks authenticated fold realization, upstream source aggregation, numerical baseline and native parity; declared prospective repairs remain distinct from exact author reproduction. No ordered same-result primary superiority estimand or decision rule is established. Larger effects, smaller p-values or higher secondary decoding accuracy are insufficient. A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target. Official indexed primary text and pinned regression code were inspected. No newly frozen complete article body or independent cached-article hash authentication is claimed.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The original empirical human MEG finding of consistency-dependent parietal information readout versus encoding and its participant-level association with behavioral evidence weighting, anchored to Figures 4-5 and their indispensable behavioral, Choice/Cue, consistency, sample-position and encoding controls. This is a named result family, not every figure or whole-paper reproduction.
+### Current selected paper endpoint
 
-**Retained secondary policy:** The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate S11 thirty-subject identities, complete parcel/PC/context coverage and source array/trial alignment; the main twenty-nine-subject MI/II cohort is a different support.
+- Recover original gCORR/gSCR producer, exact PC/subsample/parcel/participant aggregation and all published signed stimulus-decoding arrays; no favorable time/region/PC summary may substitute.
+- Reconcile source MATLAB resampling, missing-value behavior and fit-only 1e12 scaling; retain prospective corrected branches separately.
+- Authenticate historical fold/subsample realization or qualify a provenance-complete source-protocol stochastic rerun with published-result calibration and candidate/author pairing; original row-level trial overlap and all-trial PCA remain disclosed.
+- Set a complete-support paired participant comparison, meaningful effect and reproduction criterion plus exact common artifacts, author-code access and finite resource/search budgets before activation.
+- The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 103382 bytes; SHA-256 `023cadea4a627c35f2f787747303970f66d9f85061d60e4a5dab59d5f036eb1e`.
+- Specification identity: 109192 bytes; SHA-256 `35b1b992ec66b3c88feda20c314dc0930830f818c5b95c4067fa4b05b2131e72`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

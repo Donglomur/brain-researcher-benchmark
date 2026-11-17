@@ -17,6 +17,8 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
+pre_endpoint_selection_fixture = runpy.run_path(
+    str(ROOT / "tests/framework/test_catalog.py"))["pre_endpoint_selection_fixture"]
 
 
 def module(name, path):
@@ -35,6 +37,7 @@ scientific = runpy.run_path(str(ROOT / "tests/framework/test_paper_reproduction.
 class SuccessorFixture(unittest.TestCase):
     """Reusable tiny initial-registration fixture for metadata and view tests."""
 
+    @pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="invented-smc-primary-binding-")
         self.addCleanup(temporary.cleanup)

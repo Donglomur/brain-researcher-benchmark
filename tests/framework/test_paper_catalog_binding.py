@@ -28,6 +28,7 @@ builder, engine = binding_fixture.builder, admission_fixture.paper
 
 
 class PaperCatalogBindingTests(unittest.TestCase):
+    @catalog_fixture.pre_endpoint_selection_fixture
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve())
         self.addCleanup(self.temporary.cleanup)

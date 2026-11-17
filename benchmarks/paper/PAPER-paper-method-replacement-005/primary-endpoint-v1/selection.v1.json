@@ -1,0 +1,156 @@
+{
+  "schema_version": "paper-primary-endpoint-selection/v1-proposal",
+  "task_id": "PAPER-paper-method-replacement-005",
+  "scope_version": "original-endpoint-20261117-v1",
+  "action": "explicit_new_original_endpoint_selection",
+  "authority": "Root authorized versioned selection of meaningful original author-reported performance endpoints; reviewed scientific policy SHA256 1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "source": {
+    "title": "Neural Encoding and Decoding at Scale",
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html"
+  },
+  "selected_primary": "Original NEDS Table 1 and Table 10 joint neural encoding and behavioral decoding performance: all five encoding masks (all behavior, choice, block, wheel and whisker) and all four behavioral targets, on all 74 original pretraining sessions and all ten original held-out sessions using the original target-session 70/10/20 protocol. Preserve every one of the nine source endpoints and the applicable original author comparators; no mixed-unit scalar or convenient cohort subset.",
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original NEDS Table 1 and Table 10 joint neural encoding and behavioral decoding performance: all five encoding masks (all behavior, choice, block, wheel and whisker) and all four behavioral targets, on all 74 original pretraining sessions and all ten original held-out sessions using the original target-session 70/10/20 protocol. Preserve every one of the nine source endpoints and the applicable original author comparators; no mixed-unit scalar or convenient cohort subset.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "IBL repeated-site Neuropixels and behavioral recordings. Exact historical ONE object versions/checksums and processed arrays linked to the reported results remain unresolved; substituting a current download is not demonstrated parity.",
+      "evidence_ids": [
+        "paper",
+        "prepare"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Use all 74 pinned pretraining sessions and 10 pinned held-out sessions. The paper describes 73 pretraining animals plus 10 test animals, with two insertions from one training animal; authenticate the EID/probe/animal join before biological inference.",
+      "evidence_ids": [
+        "paper",
+        "train_roster",
+        "test_roster"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original design fine-tunes each of the ten held-out sessions using 70% training trials, selects on 10% validation and scores 20% test. Preserve post-eligibility ordered rows, process-wide seed-42 random permutation history or captured MT19937 states, successful-session invocation order and literal floating-floor boundaries; authentic partitions remain unavailable. No session-wise reseeding, purging of original physical overlaps or new convenient split.",
+      "evidence_ids": [
+        "paper",
+        "prepare"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Encoding reveals only the declared all-behavior or single-behavior variables and hides every spike target; decoding reveals spikes and hides all four behaviors. Reward, target aliases, test-derived null rates and arbitrary auxiliary modalities are not candidate inputs.",
+      "evidence_ids": [
+        "evaluation"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "20-ms spike/behavior bins in stimulus-aligned [-0.5,1.5]-s windows. Paper excludes neurons below 2 Hz, while pinned prepare_data.py retains mean_fr>1/0.2 (>5 Hz). Original eligibility, validity-mask handling, behavior scaling and camera lineage require reconciliation rather than silent repair.",
+      "evidence_ids": [
+        "paper",
+        "prepare",
+        "preprocess"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Encoding: each neuron has [Poisson log likelihood(prediction)-log likelihood(evaluation-mean null)]/(total spikes*ln(2)). Choice/block use ordinary accuracy; wheel/whisker use un-clipped R2 across flattened test trials/time bins. Preserve source zero-rate/undefined-neuron behavior and audit its effects.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Retain all five separate neuron-to-session encoding bits/spike reductions and four separate behavioral scores for each of ten original held-out sessions, then original session means and SEMs after the source animal join. Preserve author-applicable comparator incidence: RRR, NDT2 and POYO+ Table 10 decoding cells do not acquire invented neural-encoding outputs. Never average bits/spike, R2 and accuracy into one score; complete nine-endpoint joint decision remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    }
+  },
+  "full_panel": {
+    "status": "unresolved",
+    "description": "Original NEDS Table 1 and Table 10 joint neural encoding and behavioral decoding performance: all five encoding masks (all behavior, choice, block, wheel and whisker) and all four behavioral targets, on all 74 original pretraining sessions and all ten original held-out sessions using the original target-session 70/10/20 protocol. Preserve every one of the nine source endpoints and the applicable original author comparators; no mixed-unit scalar or convenient cohort subset. Required outputs: All original per-session NEDS encoding and decoding scores, with original masks and trial support.; All actual applicable Table 10 RRR/NDT2/POYO+ decoder scores plus required original encoding comparator cells, retaining actual incidence.; All source Table 1/Table 10 retained means and SEMs, including nine NEDS endpoints and actual source comparator summaries.",
+    "evidence_ids": [
+      "paper",
+      "evaluation"
+    ]
+  },
+  "original_numeric_anchors": {
+    "role": "Source-reported numerical anchors only; not authentic rerun or tolerance.",
+    "encoding_means": {
+      "all_behavior_encoding": 0.27,
+      "choice_encoding": 0.06,
+      "block_encoding": 0.1,
+      "wheel_encoding": 0.12,
+      "whisker_encoding": 0.11
+    },
+    "encoding_SEMs": {
+      "all_behavior_encoding": 0.03,
+      "choice_encoding": 0.02,
+      "block_encoding": 0.02,
+      "wheel_encoding": 0.02,
+      "whisker_encoding": 0.02
+    },
+    "decoding_means": {
+      "choice_decoding": 0.91,
+      "block_decoding": 0.86,
+      "wheel_decoding": 0.64,
+      "whisker_decoding": 0.59
+    },
+    "complete_comparator_and_native_reference_status": "unresolved"
+  },
+  "retained_previous_scope": "Source Figure 2A same-architecture multitask versus unimodal training and Figure 2B multi-session versus single-session comparisons remain separately named biological/methodological reproduction obligations under the previous immutable contracts. The selected Table 1/Table 10 performance task does not establish those contrasts, isolate pretraining at equal model capacity, or reproduce every paper result.",
+  "predecessor": {
+    "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+    "task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/task.json",
+      "sha256": "4cdb445b2d6c862335ad540ab2f5d82598192e53865241cbec6c3c7b941ef895"
+    },
+    "scope": "The retained empirical IBL joint encoding/decoding comparative result: source Figure 2A multitask versus same-architecture unimodal training and source Figure 2B multi-session versus single-session performance, together with the already retained Table 1/Table 10 outcomes and original masks, cohorts, partitions and necessary controls. This does not add brain-region classification, monkey data or every separate masking ablation, and does not claim pretraining is causally isolated at fixed model capacity.",
+    "scope_decision": {
+      "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+      "task_entry_id": "PAPER-paper-method-replacement-005"
+    },
+    "reproduction": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/reproduction.v1.json",
+      "sha256": "4b47bbf83808a6ae5e825094a4ed191c667adcbb51cac00f44c9241f4ce39d4f"
+    },
+    "improvement": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
+      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    },
+    "outcomes": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/outcomes.v1.json",
+      "sha256": "7124c0b757ea743b91c735a2eb518e4d78acf1172875ae8c206d9058bc29e1f4"
+    }
+  },
+  "paper_data_conditions": "access-conditions.v1.json",
+  "reproduction_contract": "reproduction.v2.json",
+  "improvement_contract": "improvement.v1.json",
+  "outcomes": "outcomes.v1.json",
+  "blocking_issues": [
+    "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+    "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+    "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+    "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+    "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+    "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode.",
+    "Recover all original per-session author outputs and complete Table 1/Table 10 applicable comparator/SEM lineage; preserved rounded means do not specify exact reference arrays or reproduction tolerances.",
+    "Predeclare complete nine-endpoint superiority/gain-and-nonregression rule against the strongest applicable author baselines; v1 scalar primary_metric storage does not implement that joint decision.",
+    "Pending full-panel comparison/admission implementation: improvement/v1 scalar fields cannot alone admit this original vector or curve panel. Preserve source-defined metrics and full support; do not invent a pooled scalar. An additive panel comparator is being constructed separately and is not bound here."
+  ],
+  "runtime_status": "unqualified",
+  "result_status": "unknown",
+  "readiness_change": false,
+  "integration_status": "Candidate only; new reviewed generic endpoint selector and central registry integration required."
+}

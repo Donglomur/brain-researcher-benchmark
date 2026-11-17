@@ -12,38 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-Reproduction is a first-class goal, but its source-grounded declaration and matched paired protocols have not been adopted. The unchanged improvement contract remains independently inspectable under its original criteria. All scientific outcomes remain unknown.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Source declaration gap:** The retained evidence supports a source-specific unresolved structured proposal for complete Figure 5A–D, but not a complete exact-member adoption declaration. Original method-by-target/region/session incidence, fitted-prior preparation, dynamic R2 meaning and author-vector provenance remain partly unknown. A rectangular target-by-region-by-session-by-method tensor or a generic Figure 5 wrapper would invent support rather than recover the missing declaration.
+### Current selected paper endpoint
 
-**Remaining source limits:**
+**Disposition:** source\_unresolved.
 
-- Exact source method-by-target/region/session incidence and original trial, temporal, session, animal and region support are not recovered. Ten sessions and twenty target/region families are inventory descriptions, not authenticated axes, complete scalar findings or separate tasks.
-- Choice requires source continuous-prediction AUC and original class orientation; the fitted behavioral prior requires its authentic preparation and Pearson correlation. Argmax accuracy and block probability are not substitutes.
-- Original wheel-speed and whisker-motion-energy R2 reduction is unresolved. Flattened and uniform-output recipes remain separate diagnostics, not two authenticated original endpoints or permission to select one.
-- Complete masks, denominators, native author result vectors and plotted aggregation/uncertainty remain unverified. Combined/state-space conditions must not be invented for dynamic targets, and failed or undefined cases cannot disappear through available-case averaging.
-- The score\_case and summarize\_group component operates on caller-supplied values and a supplied census. It neither authenticates original data, fits source decoders nor independently executes and verifies submitted analysis. Its software hash is not an input, native producer or scientific verifier identity.
-- The authentic full-panel input manifest, submitted-analysis interface/runtime/invocation, source-native derivation verifier, publication-equivalent reference and independently justified scientific comparison remain absent. Paired access and final current-task binding remain unresolved.
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
 
-- [Source declaration gap record](../../../docs/provenance/paper-outcome-source-declaration-gaps.v1.json)
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate original Figure 5A immutable RE objects, ten-session animal/unit/trial identities and every supported author-condition/region incidence; no synthetic rectangular census.
+- Recover complete published author choice-AUC vectors and original class orientation, continuous-score implementation, undefined policy and panel aggregation. Released argmax accuracy is a proven incompatible endpoint.
+- Reconcile original static window, eligibility, scaling, missing-value handling and full scored-trial coverage with example cache/loader/drop\_last behavior.
+- Recover source-permitted choice prior/sequence/model incidence and original stochastic split/training settings; do not use target-session oracle behavior or demand historical RNG identity without a scientific reason.
+- Qualify native original author-model replay and independent prediction-to-AUC verification, calibrated reproduction tolerance and strongest applicable source comparator.
+- Freeze meaningful AUC gain, original animal/session-aware paired inference, region/method multiplicity, complete-panel decision and common assistance/resource budgets before final scoring.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
-| Outcome | Information condition | Paired protocol | Scientific outcome |
-| --- | --- | --- | --- |
-| Reproduction | Paper data | Not established | Unknown |
-| Reproduction | Paper data author code | Not established | Unknown |
-| Improvement | Paper data | Not established | Unknown |
-| Improvement | Paper data author code | Not established | Unknown |
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Current paper-improvement objective
+## Retained predecessor improvement policy
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The selected original task is the complete Figure 5A-D decoding comparison: four behaviors, five brain regions and ten IBL sessions, with every applicable source author-model condition and baseline. This is an ordered performance task, but exact panel cohort identities, preprocessing/metric provenance and numeric published results remain unrecovered. A new cohort or the separate prospective40 condition cannot establish this same-task paper win.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -51,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 37729 bytes; SHA-256 `d74484fb6db56aeafe29c176af793ad0ece6b6fc197a6b41cdbe18e459854ce8`.
+- Specification identity: 30473 bytes; SHA-256 `c1f20d3824e96d36deaacd6a77b3be0209363b2b1fed64adf3f43e0cb3923d33`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

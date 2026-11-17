@@ -1,0 +1,101 @@
+{
+  "document_role": "mandatory_granular_derivation_requirements_not_numerical_reference_equivalence",
+  "proposal_version": 1,
+  "task_id": "PAPER-FIND-REP-009",
+  "status": "unresolved",
+  "coverage": "complete_original_selected_result_support",
+  "runtime_binding": null,
+  "source_input_manifest_sha256": null,
+  "verification_program_sha256": null,
+  "requirements": [
+    {
+      "id": "figure_3c_heldout_probabilities",
+      "role": "candidate_generated_heldout_prediction",
+      "required": true,
+      "verification": "Require every genuinely generated original held-trial Randomised probability for all 17x2 session/condition groups with six-tone support, original trial identities and code/fit provenance. Do not require equality to author probability bodies.",
+      "source_representation": {
+        "id": "heldout_randomised_probability",
+        "manifest_key": "heldout_randomised_probability",
+        "source_quantity": "Figure3C_analysis.R original model_db held-trial Randomised probabilities",
+        "membership": "data_dependent",
+        "shape": [
+          null
+        ],
+        "axes": [
+          {
+            "name": "heldout_trial",
+            "units": "source trial",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "unresolved",
+              "description": "Original held-trial identities/order differ by session/condition and remain unrecovered."
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "probability",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Keep every original held-trial probability and its source identity per session/condition. Independent verification joins operator-private original contexts and recomputes source AUC.",
+        "derivation_policy_sha256": null,
+        "collection": {
+          "record_key_fields": [
+            "source_session",
+            "laser_condition"
+          ],
+          "zero_records_allowed": false,
+          "correspondence": {
+            "status": "unresolved",
+            "policy_sha256": null,
+            "rationale": "Exactly one complete original held-trial vector for each of the 17x2 source pairs, with authenticated private target and support joins; no dropped or fabricated cases.",
+            "evidence_ids": [
+              "paper_fig3_panels",
+              "paper_decoding_methods",
+              "original_scripts",
+              "released_support"
+            ]
+          }
+        },
+        "evidence_ids": [
+          "paper_fig3_panels",
+          "paper_decoding_methods",
+          "original_scripts",
+          "released_support"
+        ]
+      }
+    },
+    {
+      "id": "figure_3c_private_context_and_support",
+      "role": "operator_private_original_observation",
+      "required": true,
+      "verification": "Authenticate private original trial contexts, six-tone support and all original partition/session/laser/animal joins. Complete labels are operator inputs, never participant-visible verification outputs."
+    },
+    {
+      "id": "figure_3c_source_auc_derivations",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "verification": "Derive every original 17x2 AUC from full held-trial probabilities and private contexts under qualified original source pROC levels/orientation. No alternate scalar/metric or pointwise prediction matching."
+    },
+    {
+      "id": "figure_3c_original_shuffle_probabilities",
+      "role": "source_control_generated_heldout_prediction",
+      "required": true,
+      "verification": "Require complete generated shuffle-control probabilities for original sessions/conditions/trials and original permutation support. Unknown original repeat count stays unresolved. Probability bodies support AUC derivation and are not equality targets."
+    },
+    {
+      "id": "figure_3c_original_shuffle_provenance",
+      "role": "original_control_provenance",
+      "required": true,
+      "verification": "Recover original training-label permutation identities, repetition count, fitting/control recipe and exact support without inventing a seed or a convenient new null."
+    },
+    {
+      "id": "figure_3c_original_shuffle_auc_derivations",
+      "role": "independent_operator_derivation",
+      "required": true,
+      "verification": "Independently derive original shuffle AUC companion quantities from complete generated control probabilities and private held outcomes under original source metric/reduction; original output identities and numerical criteria remain unresolved."
+    }
+  ],
+  "comparison_boundary": "These outputs establish source identity, complete coverage and independently recomputed source metrics. Hashes/provenance verify actual computation and lineage, not equality between candidate and author prediction arrays. No participant is given private original held-out outcomes or author reference predictions. Reproduction numerical equivalence applies only to the metric/display families declared in reproduction.v2.json.",
+  "qualification": "No source references, source execution, tolerance, runtime, scientific outcome or paid-model evaluation is added."
+}

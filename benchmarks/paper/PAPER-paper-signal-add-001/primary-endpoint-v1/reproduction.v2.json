@@ -1,0 +1,328 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-signal-add-001",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicit original-performance endpoint selection; exact source references/support and independent scientific reproduction acceptance remain unresolved. Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks.",
+  "source_paper": {
+    "title": "Control of working memory by phase–amplitude coupling of human hippocampal neurons",
+    "url": "https://www.nature.com/articles/s41586-024-07309-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 2d; Methods: Patients, LFP preprocessing, Phase–amplitude coupling, Selection of PAC neurons",
+      "supports": "Original PAC curves, modulation indices and Poisson-model selection characterize load-dependent biology; likelihood-ratio tests select PAC neurons, not an out-of-sample performance benchmark."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "NWB_samplePAC_LFP.m sample_sub=4, sample_ses=1, range=49 and stratTrials loading; NWB_samplePAC_SU.m",
+      "supports": "Author release demonstrates Fig. 2d on sub-4_ses-1_P60CS/channel row 49 with stored balanced clean correct-trial masks. It provides examples, not an independent improvement benchmark."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "DANDI 000673, version 0.240118.2135; author README Installation (Data)",
+      "supports": "The source links NWB electrophysiology data to DANDI 000673; exact figure-level eligibility cannot be inferred from archive participant/session counts alone."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-001/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: HOLDS, epoch_lfp, tort, comodulogram",
+      "supports": "The registered scope is Fig. 2d/example PAC and single-unit models, with a separately labelled patient extension. The independent evaluator has no authentic native qualification and explicitly prospective spike/LFP alignment repair."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 6; Extended Data Fig. 7a; Methods: Noise correlations and population category decoding; Results: PAC neurons do not code for category",
+      "supports": "The original paper evaluates five-category linear-SVM decoding: correct load-1 maintenance trials, 80/20 trial training/testing, category balancing and 500 repetitions for session ensembles. Extended Data Fig. 7a separately tests encoding pseudo-populations and reports category-neuron accuracies of 72.77% in hippocampus and 88.71% in amygdala; these are condition-specific scores, not a universal baseline."
+    },
+    {
+      "id": "previous-reproduction-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Figure2d caption; Methods PAC; Figure4a and Methods Selection of PAC neurons. Reviewed text lines1288-1350,1649-1670,2314-2345,2414-2438.",
+      "supports": "Complete load-wise phase-amplitude curves/raw Tort comodulograms; caption normalized MI16.52/7.92; both necessary full-versus-reduced Poisson comparisons and source null/selection controls."
+    },
+    {
+      "id": "previous-reproduction-lfp_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "sub4/session1/channel49; saved P60cs_RH1_stratTrials; source frequency grid,18bins and load-specific outputs.",
+      "supports": "Exact example route and full rawMI/phase2power calculations; sample helper requests0surrogates while paper normalization uses200."
+    },
+    {
+      "id": "previous-reproduction-cfc_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/cfc_tort_comodulogram.m",
+      "locator": "Trial-local FIR/Hilbert;18phase-bin mean amplitudes, normalized probabilities, entropy MI and trial-shuffle normalization.",
+      "supports": "Original array coordinates, aggregation, edge treatment and raw-versus-normalized MI semantics; undefined source bins cannot be silently replaced."
+    },
+    {
+      "id": "previous-reproduction-su_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m",
+      "locator": "sub26/session1/LFProw33/unitrow20; original correct-load3/artifact mask, spike-bin/LFP extraction and plot_PAC_neuron call.",
+      "supports": "Retained single example route, not a complete population roster; source inclusive LFP versus binary-spike length conflict remains unresolved."
+    },
+    {
+      "id": "previous-reproduction-su_models",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/plot_PAC_neuron.m",
+      "locator": "20theta-by-gamma counts; model1_full,model2_noInt,model3_noGamma; compare(model2_noInt,model1_full) and compare(model3_noGamma,model1_full).",
+      "supports": "Full Poisson model, separate interaction and gamma-main-effect reduced controls; counts/designs/all3fits and both tests must remain computationally verifiable."
+    },
+    {
+      "id": "previous-reproduction-data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "Retained2024example assets: sub4/session1 and sub26/session1. Actual example asset IDs, source-reported hashes and public-mask values are pinned in retained source_contract.json.",
+      "supports": "Original NWB LFP/spike/trial data route. Inventory44files/36participants does not establish PAC eligibility; no authentic arrays read during this conversion."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Nature 10.1038/s41586-024-07309-z, Figure 6 and Methods Noise correlations and population category decoding; decoder-source-recovery-v1.md.",
+      "supports": "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source archive has 36 patients/44 sessions, but decoder support is figure-specific: Figure6d/e 22 hippocampal sessions with at least one PAC neuron and at least two neurons after PAC removal; Figure6g 32 sessions with at least two hippocampal neurons; Figure6c 21 PAC-neuron contributions; Figure6h 19 sessions with at least two neurons remaining. Authenticate complete patient/session/unit joins and exact overlaps; do not invent a Cartesian roster.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Balanced five-category 80% training/20% testing repeated 500 times with original per-panel trial draws; conditional noise removal shuffles trials within category per neuron. Greedy ensemble starts with best neuron and evaluates every addition through all neurons, retaining source peak selection. Preserve 500 matched non-PAC-removal selections. Native selection/testing dependence must be disclosed; new nesting is not silently original.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations. Recover full Figure6 session/patient/neuron eligibility and source PAC/non-PAC condition incidence, original counting windows/z-scoring and all selected ensembles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset. Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks. Source archive has 36 patients/44 sessions, but decoder support is figure-specific: Figure6d/e 22 hippocampal sessions with at least one PAC neuron and at least two neurons after PAC removal; Figure6g 32 sessions with at least two hippocampal neurons; Figure6c 21 PAC-neuron contributions; Figure6h 19 sessions with at least two neurons remaining. Authenticate complete patient/session/unit joins and exact overlaps; do not invent a Cartesian roster. Require independently derived complete observation-level predictions, source condition/fold membership and exact source reductions, not copied published values. Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset. Numerical-reference equivalence applies only to the retained scientific members in findings.representation.members. Raw predictions and source-support records remain mandatory through unchanged required_granular_output_ids and selection.v1.json audit_output_obligations; independently recompute the reported metrics from them without requiring author prediction equality. Authentic original labels, folds, inputs and eligibility remain fixed. Original figure curves, reported score matrices and expressly selected scientific companions remain targets.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Same original empirical neural observations and approved source eligibility, PAC labels and common selection metadata; any author-derived PAC labels/common preprocessing must be disclosed in both conditions. Held-out category labels and source accuracy/selected solutions remain protected evaluation material. Both assistance conditions use identical data, original split and declared common tools. Pinned SBCAT-release-NWB a25e8cc3f61630a428f190381745257d4506f148 is official but supplies a binary simulated geometry example, not recovered empirical fitcecoc/greedy code. Code-assisted pairing remains blocked until the exact empirical author implementation is found; do not substitute locally written decoder or simulation as official code. Exposure manifests, independent execution/verification and resource limits remain unqualified.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure6_empirical_maintenance_decoding",
+      "kind": "indexed_array_family",
+      "description": "Complete original empirical Figure6 maintenance decoding curves and mandatory source ablations; finite roster and exact condition incidence remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure6_empirical_maintenance_decoding",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "greedy_ensemble_accuracy",
+            "manifest_key": "figure6_empirical_maintenance_decoding.greedy_ensemble_accuracy",
+            "source_quantity": "All original greedy ensemble steps from best neuron through every addition, full intact/noise-removed curves and source peak selection.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "accuracy",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Fig6b example plus complete22-session Fig6d/e cohort; exact overlapping panel incidence and source reduction required, not a guessed rectangular grid.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "session",
+                "condition",
+                "repeat",
+                "ensemble_step"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          },
+          {
+            "id": "pac_removal_controls",
+            "manifest_key": "figure6_empirical_maintenance_decoding.pac_removal_controls",
+            "source_quantity": "All-PAC removal and matched-count non-PAC removal conditions with500 original removal selections.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "accuracy",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every Fig6d/e source condition and exact original neuron/selection support.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "session",
+                "removal_condition",
+                "removal_draw",
+                "repeat",
+                "ensemble_step"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          },
+          {
+            "id": "source_contribution_projection_companions",
+            "manifest_key": "figure6_empirical_maintenance_decoding.source_contribution_projection_companions",
+            "source_quantity": "Original21 PAC-neuron contributions,32-session noise comparison selection and19-session PAC-removal projection companions.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source contributions and projection SD",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve Fig6c/g/h source joins and intended quantities; these controls are not separately optimized biological effects.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "panel",
+                "patient",
+                "session",
+                "neuron_or_ensemble"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "required_granular_output_ids": [
+        "five_category_predictions",
+        "greedy_ensemble_accuracy",
+        "pac_removal_controls",
+        "source_contribution_projection_companions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently recompute the selected original source metrics and compare only the scientific score, curve or reported-summary members retained in representation.members with authenticated publication-equivalent references. Required granular prediction/support outputs and selection.audit_output_obligations are mandatory audit evidence for coverage, provenance and metric recomputation; their prediction values, raw confusion counts and intermediate model-selection settings are not numerical-reference-equivalence targets. Original support identities, labels, folds and source-permitted information remain authenticated requirements. Numeric tolerances and uncertainty criteria remain unresolved.",
+        "independent_unit": "Source patients with eligible hippocampal sessions and neurons nested; 500 trial/removal repetitions are not independent patients.",
+        "dependence": "Retain original animal/session/trial nesting and shared folds, model selections, random draws and controls; no independent-unit inflation.",
+        "multiplicity": "All declared source conditions and companions are mandatory. A justified joint agreement policy is unresolved.",
+        "rationale": "Exact native output/coordinate manifests, source equivalence and independent comparison programs remain absent; no hashes or criterion are invented. The separation of reported scientific targets from mandatory computation evidence does not waive original data/support authentication, native analysis verification or any retained source control.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Recover full Figure6 session/patient/neuron eligibility and source PAC/non-PAC condition incidence, original counting windows/z-scoring and all selected ensembles.",
+    "Recover authentic empirical fitcecoc/greedy source entrypoint, dependency versions and exact original random-draw/reproduction policy.",
+    "Recover complete five-category accuracy traces, source peak/selection behavior, matched ablation outputs and strongest original comparator.",
+    "Preserve mandatory Figure6c/g/h contribution/projection companions without optimizing significance or geometry effects.",
+    "Qualify original trial partitions, dependence-aware patient/session uncertainty, tolerances, comparison/budgets and independent full-support execution; source-code assisted condition unavailable until empirical code recovery."
+  ]
+}

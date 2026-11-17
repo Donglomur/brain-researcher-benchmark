@@ -1,0 +1,855 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-010",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicitly selected original Figure4B performance endpoint; this v2 definition preserves complete native arrays while author references, final-source equivalence, numerical agreement, scientific uncertainty and authentic execution remain unresolved. Broader biological findings retain their predecessor contract separately.",
+  "source_paper": {
+    "title": "A geometric shape regularity effect in the human brain",
+    "url": "https://doi.org/10.7554/eLife.106464.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12795501/",
+      "locator": "Experiment 4 (MEG): Participants; Preprocessing of MEG signals; Decoding; RSA in sensor space; Fig. 4",
+      "supports": "Original run-held-out reference-versus-oddball AUROC and descriptive regularity/RSA analyses, including six directional run splits and participant-wise results."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/POGS_MEG_config.py",
+      "locator": "Configuration: channels, Maxwell filter, l_freq, h_freq, resample_sfreq",
+      "supports": "Source configuration uses MEG channels, Maxwell filtering, 0.1\u201340 Hz filtering and 250-Hz resampling."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/README.md",
+      "locator": "Sensor RSA construction component scope and holds",
+      "supports": "Existing implementation covers sensor RSA, not the historical oddball decoder or an authenticated numeric reference."
+    },
+    {
+      "id": "source_decoder",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/mne-bids-pipeline.zip",
+      "locator": "scripts/msm/_04_sliding_estimator_ref_out_decode_per_shapes.py; retained SHA256 f7504b075616926adb2a33c3c8f8d27218ff74ccb71638beeb0f1f504733ed69; source scoring recovery in implementations/oddball-auroc-v1/source-pins.json",
+      "supports": "Original late-epoch support, reference-positive polarity, all-shape training, six directional folds, per-shape AUROC and equal-fold/participant reduction. Cached source authentication does not establish final-paper parity or a scientific run."
+    },
+    {
+      "id": "publisher_caption_excerpt",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/106464.pdf",
+      "locator": "Figure4B/C/D official publisher search-index excerpt recorded in accepted round02 scope entry; frozen final-version PDF bytes were not authenticated.",
+      "supports": "Shared oddball decoding, separate-training companion and central sensor geometry/model comparison belong to the retained empirical sensor family. Source-space4E and fMRI are not added."
+    },
+    {
+      "id": "publisher_methods_excerpt",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/106464v1",
+      "locator": "Decoding and sensor-RSA methods excerpt recorded in accepted scope decision; version1 text does not establish final-paper/code equivalence.",
+      "supports": "Source directional run-fold decoding, shape-specific AUROC/regularity, separate-training and reference-only sensor-RSA methods."
+    },
+    {
+      "id": "declared_dataset",
+      "kind": "author_data",
+      "url": "https://openneuro.org/datasets/ds006012/versions/1.0.1",
+      "locator": "Retained registered POGS MEG input route and source inventory; authentic recording/epoch payloads not inspected in this conversion.",
+      "supports": "Declared original observations and participant/run inventory, not authenticated measured data or publication-version equivalence."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/POGS_MEG_config.py",
+      "locator": "MEG channels, Maxwell/filter/resampling and epoch configuration in retained source record.",
+      "supports": "Pinned code uses 250Hz and -0.1..1.1s epochs; paper/old contract -0.15..1.15s and normalization differences remain unresolved."
+    },
+    {
+      "id": "epoch_metadata",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/add_metadata.py",
+      "locator": "run, trial_number_from_miniblock, is_early and e.selection.",
+      "supports": "Early/late decoder eligibility is assigned before epoch rejection selection."
+    },
+    {
+      "id": "shared_decoder",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/mne-bids-pipeline.zip",
+      "locator": "Retained modified_pipeline/scripts/msm/_04_sliding_estimator_ref_out_decode_per_shapes.py; source-lock/legacy-copy equality, not fresh upstream authentication.",
+      "supports": "Late-only all-shape shared training, reference-positive labels, six directional folds, shape/time AUROC, equal fold mean; active unsmoothed direct magnetometers and training-fold StandardScaler/logistic fit."
+    },
+    {
+      "id": "decoder_plot",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/01_decoding/01_plot_decoding.py",
+      "locator": "conds; all_decod_perf; avg/se; vcorrcoef; cluster test; rs; mus_ts/mus/mumu/sdmu; linregress.",
+      "supports": "Four shared/separate and smoothed/unsmoothed oddball conditions, twenty-by-eleven-by301 loaded curves, regularity trajectories, temporal inference and source cluster-union shape summaries. All_References is an additional source branch, not automatically indispensable."
+    },
+    {
+      "id": "rsa_rdm",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/02_rsa/sensor/01_compute_rdms.py",
+      "locator": "estimate_rdm, reference epochs, virtual magnetometers, raw/Savitzky-Golay25-order2, run crossnobis and ordered shapes.",
+      "supports": "Complete signed55-pair sensor RDM movies for twenty participants and both source branches, with reference selection distinct from decoder late-only filtering."
+    },
+    {
+      "id": "rsa_models",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/02_rsa/sensor/02_model_rdms.py",
+      "locator": "symbolic/IT CSV parse/reindex/zscore; separate corr_cov fitted20x2x301; means/SEM; inclusive0..0.8s positive cluster tests.",
+      "supports": "Separate geometric/symbolic and CORnet-S IT time courses and temporal inference. ModelWeighted is constructed but not fitted; no unique variance or family-superiority inference follows."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 4B shared all-shape-trained reference-versus-oddball MEG decoding, assessed by the complete original participant/fold/shape/time ROC AUROC arrays for both source smoothing branches. Preserve all twenty sensor participants, 158 original runs, eleven shapes and six directional held-run folds. No source-space participant subset, new shape/participant split, favorable temporal subset, regularity magnitude or RSA correlation substitutes for this endpoint.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original POGS human MEG recordings and event metadata from OpenNeuro ds006012 version 1.0.1. Keep the registered exact asset inventory unchanged. Publication-version equivalence, native file identity, retained epochs and final source output provenance remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All twenty original sensor participants sub-01 through sub-20; run01..08 except run08 absent for sub-10 and sub-11, totaling158 runs. The nineteen-person source-space subset cannot replace this sensor cohort. Authentic biological and retained-observation joins remain required.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Six original directional run folds:1357->2468 and reverse;1256->3478 and reverse;1234->5678 and reverse. Train jointly on all eleven shapes, test each shape separately on every eligible late epoch of the held runs. Preserve actual missing run08 for sub-10/sub-11. Source formula is recovered; authentic retained-epoch membership and publication-version parity are unresolved. No new held-shape or held-participant split.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original direct-magnetometer epochs are the decoder features. Original run/trial/shape/rotation/scaling/miniblock metadata serve identity joins, source selection, fold scheduling and shape-specific evaluation only; they are not extra prediction covariates unless exact original source use is separately established. Reference=1 and outlier=0; scores increase toward reference without post-hoc inversion. Exclude first six miniblock trials using early/late metadata assigned before Epochs.selection and retain complete lineage. Held-run reference/outlier conditions, event codes or metadata encoding those labels remain evaluator-only; candidates receive only source-permitted training-fold labels and necessary opaque row/split identities. Source-fold isolation across reused directional folds is required. Exact prepared-input identity and exposure boundaries remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source bad-channel/Maxwell/SSS,0.1-40Hz filtering,250Hz resampling,SSP/autoreject and retained epochs. Cached shared decoder uses direct magnetometers, training-fold StandardScaler and liblinear logistic regression on unsmoothed epochs. Commented uniform_filter1d25 does not authenticate the published smoothed branch. Source -0.1..1.1s conflicts with -0.15..1.15s paper description and fold scaling with stated epoch normalization. Resolve before original-author comparison; do not silently choose a branch or grid.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Shape/time ROC AUROC for reference-positive scores, using average ranks for ties; preserve below-chance values. Undefined single-class cells are not filled with chance. Original decoder fits jointly over shapes and evaluates each shape separately. Full support is20x6x11x301 code-axis cells per branch, with final-paper axis equivalence unresolved. Higher matched-source AUROC is ordered predictive improvement; regularity correlations, p-values and peak timing are separate biological summaries.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Compute AUROC independently per participant/fold/shape/time, arithmetic mean across six folds, then equal mean across twenty participants; never pool overlapping-fold predictions or weight by trial count. Preserve both smoothing branches and all curves/class counts. Source plotting additionally averages over a union of significant positive regularity clusters; its authentic fixed union, numeric baseline and a defensible complete-support improvement decision remain unresolved. One source display SEM uses sqrt(19) despite twenty people; preserve and report rather than silently changing it or using it as independent uncertainty.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Both source smoothing branches, all twenty sensor people,158runs,eleven shapes,six directional folds and full source time curves; include fold-level AUROC/class-count/identity outputs and fold/participant reductions. Native code grid301points is declared rather than final-paper-authenticated. Separate-training Figure4C, regularity and sensor-RSA/model families remain retained biological reproduction, not substituted primary-score gates.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "The two assistance conditions receive identical authenticated original observations and permitted training labels, preprocessing and metadata; official method code is the sole added information in code-assisted condition. Final held-run target labels, saved author predictions and operator references remain evaluator-owned. Public target exposure and folds reused across directions must be disclosed; source-fold isolation and concrete cumulative budgets are not yet authenticated.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure4b_shared_oddball_auroc",
+      "kind": "indexed_array_family",
+      "description": "Complete original Figure4B shared-training AUROC arrays, fold reductions and both smoothing branches; final-paper equivalence unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure4b_shared_oddball_auroc",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "shared_unsmoothed_participant_auroc",
+            "manifest_key": "shared_unsmoothed_participant_auroc",
+            "source_quantity": "Source shared_unsmoothed all_decod_perf per participant/shape/time; pinned-code output grid, final-paper equivalence unresolved.",
+            "membership": "fixed",
+            "shape": [
+              20,
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "participant",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sub-01",
+                    "sub-02",
+                    "sub-03",
+                    "sub-04",
+                    "sub-05",
+                    "sub-06",
+                    "sub-07",
+                    "sub-08",
+                    "sub-09",
+                    "sub-10",
+                    "sub-11",
+                    "sub-12",
+                    "sub-13",
+                    "sub-14",
+                    "sub-15",
+                    "sub-16",
+                    "sub-17",
+                    "sub-18",
+                    "sub-19",
+                    "sub-20"
+                  ]
+                }
+              },
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source scores average six directional folds equally before the plotter loads the participant array. Preserve reference-positive polarity, every shape/time cell, below-chance values and authentic class counts; undefined classes are not replaced by chance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_unsmoothed_group_mean_auroc",
+            "manifest_key": "shared_unsmoothed_group_mean_auroc",
+            "source_quantity": "Source shared_unsmoothed avg = mean(all_decod_perf,axis=0).",
+            "membership": "fixed",
+            "shape": [
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Equal mean over twenty participant curves; no epoch-count weighting or selected source time/shape subset.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_unsmoothed_display_sem_auroc",
+            "manifest_key": "shared_unsmoothed_display_sem_auroc",
+            "source_quantity": "Source shared_unsmoothed displayed se = std(all_decod_perf,axis=0)/sqrt(19).",
+            "membership": "fixed",
+            "shape": [
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source population-std display convention and sqrt19 despite20 loaded participants. This is not a scientific reproduction uncertainty criterion or silently corrected sqrt20.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_smoothed_participant_auroc",
+            "manifest_key": "shared_smoothed_participant_auroc",
+            "source_quantity": "Source shared_smoothed all_decod_perf per participant/shape/time; pinned-code output grid, final-paper equivalence unresolved.",
+            "membership": "fixed",
+            "shape": [
+              20,
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "participant",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sub-01",
+                    "sub-02",
+                    "sub-03",
+                    "sub-04",
+                    "sub-05",
+                    "sub-06",
+                    "sub-07",
+                    "sub-08",
+                    "sub-09",
+                    "sub-10",
+                    "sub-11",
+                    "sub-12",
+                    "sub-13",
+                    "sub-14",
+                    "sub-15",
+                    "sub-16",
+                    "sub-17",
+                    "sub-18",
+                    "sub-19",
+                    "sub-20"
+                  ]
+                }
+              },
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source scores average six directional folds equally before the plotter loads the participant array. Preserve reference-positive polarity, every shape/time cell, below-chance values and authentic class counts; undefined classes are not replaced by chance.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_smoothed_group_mean_auroc",
+            "manifest_key": "shared_smoothed_group_mean_auroc",
+            "source_quantity": "Source shared_smoothed avg = mean(all_decod_perf,axis=0).",
+            "membership": "fixed",
+            "shape": [
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Equal mean over twenty participant curves; no epoch-count weighting or selected source time/shape subset.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_smoothed_display_sem_auroc",
+            "manifest_key": "shared_smoothed_display_sem_auroc",
+            "source_quantity": "Source shared_smoothed displayed se = std(all_decod_perf,axis=0)/sqrt(19).",
+            "membership": "fixed",
+            "shape": [
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain source population-std display convention and sqrt19 despite20 loaded participants. This is not a scientific reproduction uncertainty criterion or silently corrected sqrt20.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_unsmoothed_fold_auroc",
+            "manifest_key": "shared_unsmoothed_fold_auroc",
+            "source_quantity": "Source-equivalent AUROC before six-fold mean, retaining all original fold/shape/time cells; code output support with final-paper parity unresolved.",
+            "membership": "fixed",
+            "shape": [
+              20,
+              6,
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "participant",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sub-01",
+                    "sub-02",
+                    "sub-03",
+                    "sub-04",
+                    "sub-05",
+                    "sub-06",
+                    "sub-07",
+                    "sub-08",
+                    "sub-09",
+                    "sub-10",
+                    "sub-11",
+                    "sub-12",
+                    "sub-13",
+                    "sub-14",
+                    "sub-15",
+                    "sub-16",
+                    "sub-17",
+                    "sub-18",
+                    "sub-19",
+                    "sub-20"
+                  ]
+                }
+              },
+              {
+                "name": "directional_run_fold",
+                "units": "source split",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "1357_to_2468",
+                    "2468_to_1357",
+                    "1256_to_3478",
+                    "3478_to_1256",
+                    "1234_to_5678",
+                    "5678_to_1234"
+                  ]
+                }
+              },
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "AUROC per fold from all eligible late held-run epochs; reference-positive, average-rank ties, missing class undefined. Retain original class counts and stable prediction/epoch identity joins.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          },
+          {
+            "id": "shared_smoothed_fold_auroc",
+            "manifest_key": "shared_smoothed_fold_auroc",
+            "source_quantity": "Source-equivalent AUROC before six-fold mean, retaining all original fold/shape/time cells; code output support with final-paper parity unresolved.",
+            "membership": "fixed",
+            "shape": [
+              20,
+              6,
+              11,
+              301
+            ],
+            "axes": [
+              {
+                "name": "participant",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "sub-01",
+                    "sub-02",
+                    "sub-03",
+                    "sub-04",
+                    "sub-05",
+                    "sub-06",
+                    "sub-07",
+                    "sub-08",
+                    "sub-09",
+                    "sub-10",
+                    "sub-11",
+                    "sub-12",
+                    "sub-13",
+                    "sub-14",
+                    "sub-15",
+                    "sub-16",
+                    "sub-17",
+                    "sub-18",
+                    "sub-19",
+                    "sub-20"
+                  ]
+                }
+              },
+              {
+                "name": "directional_run_fold",
+                "units": "source split",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "1357_to_2468",
+                    "2468_to_1357",
+                    "1256_to_3478",
+                    "3478_to_1256",
+                    "1234_to_5678",
+                    "5678_to_1234"
+                  ]
+                }
+              },
+              {
+                "name": "shape",
+                "units": "source label",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "rectangle",
+                    "square",
+                    "isoTrapezoid",
+                    "parallelogram",
+                    "losange",
+                    "kite",
+                    "rightKite",
+                    "rustedHinge",
+                    "hinge",
+                    "trapezoid",
+                    "random"
+                  ]
+                }
+              },
+              {
+                "name": "time",
+                "units": "seconds relative to stimulus onset; pinned-code grid, final-paper equivalence unresolved",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -0.1,
+                  "step": 0.004,
+                  "count": 301
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "ROC AUROC, dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "AUROC per fold from all eligible late held-run epochs; reference-positive, average-rank ties, missing class undefined. Retain original class counts and stable prediction/epoch identity joins.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "decoder_plot",
+              "shared_decoder"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "publisher_caption_excerpt",
+          "shared_decoder",
+          "decoder_plot"
+        ]
+      },
+      "required_granular_output_ids": [
+        "authenticated_epoch_lineage",
+        "shared_fold_decisions",
+        "fold_auroc_and_plot_inputs"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover authentic complete author references and original final-source equivalence, then justify numerical reproduction tolerances and complete-support comparison; no peak-only, every-cell exact-equality, generic norm or significance-only rule is inferred.",
+        "independent_unit": "Original human sensor participant; twenty nominal source participants, with authentic support still to be bound.",
+        "dependence": "Run folds overlap; observations, shape pairs, times, decoder branches, models and cluster selections are dependent within participant. Null permutation draws and displayed SEM are not independent biological replication.",
+        "multiplicity": "Selected Figure4B complete shared-training support across eleven shapes,times and both smoothing branches; no favorable subsets. Participant-level dependence and multiplicity remain unresolved.",
+        "rationale": "All source numerical targets, authentic reference equivalence, scientific tolerance and uncertainty policies remain absent. A valid shape declaration and a reproduced printed value do not establish source-derived computation or scientific reproduction.",
+        "evidence_ids": [
+          "publisher_caption_excerpt",
+          "shared_decoder",
+          "decoder_plot"
+        ]
+      },
+      "evidence_ids": [
+        "publisher_caption_excerpt",
+        "shared_decoder",
+        "decoder_plot"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate final Version-of-Record Figure 4B/code/data correspondence and the exact retained-epoch identities for all twenty participants and 158 runs; inventory entries do not establish authentic prepared data.",
+    "Resolve source -0.1..1.1 second/301-point code grid versus paper -0.15..1.15 second description, training-fold StandardScaler versus stated per-epoch normalization, and the actual published smoothed producer. Do not crop, interpolate or invent either branch.",
+    "Recover complete original author AUROC/reference-prediction arrays and strongest relevant same-endpoint author configuration. The 428-ms latency and a new local baseline are not accuracy comparators.",
+    "Recover and fix the original descriptive temporal aggregation before candidate comparison; source regularity-selected cluster unions cannot be reselected for a favorable candidate. A meaningful complete-support improvement decision, participant-level dependence/multiplicity policy and numerical reproduction tolerances remain unresolved.",
+    "Authenticate all-shape training, label and preprocessing access, source exclusions and epoch lineage; complete producer/runtime/isolation and independent full-output verification remain unqualified. Matched access/resource budgets are unspecified, not assumed.",
+    "The source endpoint is a complete AUROC array family, not one scalar. Existing improvement/v1 can retain unresolved source declarations but cannot yet express/admit the exact paired full-panel superiority decision. A source-faithful vector comparison/admission policy and meaningful participant-level uncertainty must be implemented and independently justified before any win; do not invent a mean, win-count, selected cell/window or arbitrary tolerance.",
+    "Restrict model covariates to source-authorized MEG features. Metadata for run/trial/shape/rotation/scaling/miniblock joins or scoring is not an extra decoder feature. Authenticate a file/column-level exposure manifest and keep held-run conditions/event-code label proxies evaluator-only, with isolation across reused directional folds."
+  ]
+}

@@ -12,6 +12,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
+pre_endpoint_selection_fixture = runpy.run_path(
+    str(ROOT / "tests/framework/test_catalog.py"))["pre_endpoint_selection_fixture"]
 source = runpy.run_path(str(ROOT / "tests/framework/test_source_integrity.py"))
 scientific = runpy.run_path(str(ROOT / "tests/framework/test_paper_reproduction.py"))
 legacy = runpy.run_path(str(ROOT / "tests/maintenance/test_paper_improvement_bindings.py"))
@@ -21,6 +23,7 @@ binding = checker.outcome_binding_module()
 
 
 class PaperOutcomesIntegrityTests(unittest.TestCase):
+    @pre_endpoint_selection_fixture
     def setUp(self):
         original = source["SourceIntegrityTests"]("test_valid_bundle_is_checked_without_execution")
         original.setUp()

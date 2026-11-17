@@ -12,33 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed source coverage. Retained source scope and coverage: same\_family\_prediction\_component: Preserve the complete Figure 3C region-wise condition-CV DN versus category-scaled DN comparison and its source-faithful replay components. Prediction is not an arbitrary proxy, but it does not discharge all enrolled biological findings. The replay supplies fold/training packets, not fitting, scoring or scientific qualification. scoped\_biological\_and\_method\_source\_evidence: Preserve existing duration, recovery, preferred/nonpreferred, mechanism and supplementary descriptors as source evidence; require a companion only where its necessity for the named retained claim is established. Do not inherit the broad reproduction inventory as an every-figure obligation. prospective\_extension: New patient holdouts, altered stimulus/condition splits or complexity-matched comparison designs remain explicitly labelled proposed extensions or comparison constraints, not silently authenticated original-paper requirements. Reviewed source limits: Exact processed-input release/publication lineage, source electrode/region/category-selection identities and complete named-result references remain unresolved. Original counts alone do not authenticate panels. Source Figure 3C prediction uses held-out response conditions, not a newly authenticated unseen-participant or unseen-category task. Preserve all original conditions and regional summaries, original rounding, and paired candidate/category-scaled author folds. Full-data fits for temporal/category summaries differ from condition-held-out prediction fits. Preserve the cached positional-CV versus named-column full-fit discrepancy, active P versus Figure 3 S configuration, and source invocation uncertainty without silent repair. Historical random allocations or a justified exact source-protocol stochastic rerun, published numerical comparator, source-native fitting, full biological output verification and valid agreement/superiority criteria remain unqualified. The replay component is insufficient. Larger biological effects, stronger significance or higher prediction R2 alone do not establish improved biological explanation. Predictive improvement remains a legitimate separate named-result question; its complete qualified comparison is still missing. Direct inspection in this review covers retained definitions and cached primary author README/Figure 3/fitter code. Detailed paper-panel mappings inherit the pinned prior primary-HTML review; no article body was cached or independently re-acquired, and no raw paper hash is claimed. No explicit authority to discard the other enrolled empirical findings was found in bounded inspected records. A Figure 3C-only primary would require an explicit new selection. Keep incomplete or unequal result-family outcome bindings unavailable.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The retained named empirical family comprises DN/category-scaled model refitting and source-defined adaptation-hierarchy/category-selectivity comparisons. Figure 3C prediction is a legitimate within-family model result supported by the original prediction-improvement proposal. Preserve the appropriate populations and indispensable controls for each named finding. No automatic every-figure requirement or sole-primary Figure 3C replacement is selected.
+### Current selected paper endpoint
 
-**Retained improvement contract coverage:** same\_family\_prediction\_component: Preserve the complete Figure 3C region-wise condition-CV DN versus category-scaled DN comparison and its source-faithful replay components. Prediction is not an arbitrary proxy, but it does not discharge all enrolled biological findings. The replay supplies fold/training packets, not fitting, scoring or scientific qualification. scoped\_biological\_and\_method\_source\_evidence: Preserve existing duration, recovery, preferred/nonpreferred, mechanism and supplementary descriptors as source evidence; require a companion only where its necessity for the named retained claim is established. Do not inherit the broad reproduction inventory as an every-figure obligation. prospective\_extension: New patient holdouts, altered stimulus/condition splits or complexity-matched comparison designs remain explicitly labelled proposed extensions or comparison constraints, not silently authenticated original-paper requirements.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary outcome pairing decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Bind publication-equivalent processed response inputs and the exact 79-electrode/four-participant/area roster, resolving the 17/15 caption reversal without selecting a favorable area assignment.
+- Resolve source positional CV columns2:821 versus named response0..818 and active P/category-selective versus Figure3 none/S/responsive callers against result-producing evidence. Corrected columns are a separate branch until parity is justified.
+- Authenticate historical 12-fold/72-condition assignments or qualify the exact source stochastic recipe with logged folds, paired candidate/author exposure and justified published-result calibration; preserve66 train/six query conditions with one query per category.
+- Recover complete native DN and DN(S) Figure3C reference outputs, original runtime/numerical parity including scalar-SSE least\_squares objective, source rounding and source region reduction. No authentic fits have been run by this construction.
+- Specify full-region superiority and participant/electrode dependence, meaningful effect and reproduction tolerance; freeze common artifacts, exact author-code package, finite episode/search/resource limits and protected final scoring.
+- The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained improvement contract
+## Retained predecessor improvement policy
 
-This preserved contract retains the declared coverage described above. Complete primary-outcome pairing remains unavailable, so the contract cannot admit a primary outcome under this marker.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The paper has an ordered original prediction endpoint: condition-cross-validated broadband-response R² for category-scaled delayed normalization. The numeric Figure3C comparator and exact original fit-input/configuration bindings remain unrecovered. Historical fold identities are missing because the source random.sample calls are unseeded and unsaved. This does not permanently exclude a same-task rerun: documented reproduction of the original stochastic12-fold protocol may qualify after source-protocol parity, justified discrepancy tolerance and paired candidate/author folds are established.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 52772 bytes; SHA-256 `bd97166d0c40b716747c76ec6c869ab07d8f2fa6464392a9fcab73f03d936f21`.
+- Specification identity: 57843 bytes; SHA-256 `ad1d6bd3ab9ade13aae0b97fa1e6270a5410a40422e6a3fc208741b2055a9d5e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

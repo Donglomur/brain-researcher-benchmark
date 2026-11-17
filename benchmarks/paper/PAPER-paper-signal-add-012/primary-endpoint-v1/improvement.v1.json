@@ -1,0 +1,198 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-012",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "Explicit versioned selection of Figure 5b,c Dataset1 awake versus loss-of-responsiveness LOSO prediction. Source random forest:100 trees to pure leaves and five randomly considered features per split. Reported balanced accuracy0.93 and companion AUC0.984 are rounded publication anchors; exact precision, ROC aggregation and calibrated native replay remain unresolved. A weaker rerun cannot lower the paper target. Complete original support and scientific qualification remain unresolved; selecting this endpoint does not promote readiness.",
+  "source_paper": {
+    "title": "Measuring the dynamic balance of integration and segregation underlying consciousness, anesthesia, and sleep in humans",
+    "url": "https://doi.org/10.1038/s41467-024-53299-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11502666/",
+      "locator": "Figure 5b,c,i,j and Results describing predictive power; Methods: Training and evaluation of machine learning models",
+      "supports": "Original consciousness-state prediction uses balanced accuracy/AUC, subject-level validation and cross-dataset tests. Dataset-1 random forest reaches reported balanced accuracy 93% and AUC 0.984."
+    },
+    {
+      "id": "paper_methods",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11502666/fullTextXML",
+      "locator": "Methods: Dataset-1; Dataset-2; fMRI data preprocessing and regional time course extraction; Training and evaluation of machine learning models",
+      "supports": "Primary-article XML establishes original cohorts, paired preprocessing, network features, state exclusions and classifier settings. Dataset-2 training-state names require reconciliation with the stated awake/LOR class sampling."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/26367193",
+      "locator": "Version 1 description and Raw Data.zip metadata, file 47912122; DOI 10.6084/m9.figshare.26367193.v1",
+      "supports": "Five released datasets have paired GSR/noGSR MAT files. Dataset-1 is 19 participants x 8370 TRs x 450 ROIs; Dataset-2 is 26 x 5576 x 450. Metadata does not expose per-participant responsiveness annotations."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/janghw4/multilevel-integration-segregation-balance/fba91ec089cb5d582c183bbdc6599c706a38f437/ISD_calculation.m",
+      "locator": "ISD_calculation.m lines 1-17",
+      "supports": "Integration averages binary-graph efficiency on noGSR correlations over thresholds 0.01 through 1.00; segregation averages clustering on GSR correlations; ISD subtracts the two."
+    },
+    {
+      "id": "code_scope",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/janghw4/multilevel-integration-segregation-balance/fba91ec089cb5d582c183bbdc6599c706a38f437/README.md",
+      "locator": "README, Multi-level efficiency/clustering coefficient",
+      "supports": "The inspected repository documents network-measure, metastability and complexity computation; it does not establish a reproduced Figure 5 classifier."
+    },
+    {
+      "id": "delivered-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/9953b581a9c3a8c1b38b2a961ce6723f10739630/benchmarks/paper/PAPER-paper-signal-add-012/implementations/figure5-scorer-v1/README.md",
+      "locator": "Source basis, complete support and remaining qualification; fixed snapshot 9953b581a9c3a8c1b38b2a961ce6723f10739630",
+      "supports": "Existing supplied-input source component and its exact limitations; no authentic data, native author result or AI outcome is established by source delivery."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict behaviorally assessed awake versus loss-of-responsiveness states for the complete original Figure 5b,c Dataset-1 leave-one-subject-out result. This is an explicitly scoped paper result; transition-only and cross-dataset panels are separate original results and need not all be surpassed to claim this scope.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Use original Dataset-1 paired GSR/noGSR regional BOLD arrays from Figshare 26367193 version 1 for the declared Figure 5b,c result. Dataset-2 is required only for a separately predeclared source panel that uses it; Dataset-3/4/5 static contrasts do not substitute.",
+      "evidence_ids": [
+        "data",
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Retain all 19 original analyzed Dataset-1 subjects for the declared full LOSO panel. No easier subject/state/window subset may be selected after outcomes. A separately declared transfer or Dataset-2 panel must retain its complete original population, including all 26 Dataset-2 subjects where applicable.",
+      "evidence_ids": [
+        "data",
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Preserve original19-fold subject LOSO, stable baseline/deep-LOR excluding first and last five minutes/recovery training support, and20,000 randomly selected training points per class. Authenticate source sample/window identities or a documented source-protocol stochastic rerun with predeclared calibration and paired author/candidate draws. The exact non-overlapping-window semantics require recovery; pooled random-window or new nested splits are different tasks.",
+      "evidence_ids": [
+        "paper",
+        "paper_methods",
+        "data",
+        "code_scope"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original classifier inputs are18 integration/segregation features from whole brain and eight networks. Bind authentic awake/LOR labels and responsiveness times for all19 participants and each source evaluation window. These behavioral labels/times determine targets and training exclusions, not prediction features.",
+      "evidence_ids": [
+        "paper",
+        "paper_methods",
+        "data",
+        "code_scope"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve original 450-ROI extraction, Pearson dynamic connectivity in 4-minute windows stepping by one TR, and paired GSR/noGSR processing. Efficiency uses noGSR and clustering uses GSR, averaged over thresholds 0.01 through 1.00. Transition times and behavioral labels are targets, not predictor features.",
+      "evidence_ids": [
+        "paper_methods",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Balanced accuracy = (sensitivity + specificity)/2, higher is better; ROC AUC remains a separate reported endpoint. Static ISD and state-contrast significance are not classification accuracy.",
+      "evidence_ids": [
+        "paper",
+        "paper_methods"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve source mean balanced accuracy and SEM across all19 participants, with per-participant confusion counts and AUC/ROC companions. Source reports0.984 AUC, but whether the displayed mean ROC-curve AUC equals subject-macro AUC is unresolved; retain both representations separately until authenticated. No pooled-window mean or chosen participant subset may substitute.",
+      "evidence_ids": [
+        "paper",
+        "paper_methods",
+        "data",
+        "code_scope"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Complete Figure 5b,c Dataset1 mean participant balanced accuracy, with original ROC AUC/curve and source controls retained",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.93,
+      "description": "Source random forest:100 trees to pure leaves and five randomly considered features per split. Reported balanced accuracy0.93 and companion AUC0.984 are rounded publication anchors; exact precision, ROC aggregation and calibrated native replay remain unresolved. A weaker rerun cannot lower the paper target.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No source-author classifier replay for the declared complete panel is established. Methods gives 100 trees and five randomly considered features per split. Historical stochastic draws may be recovered or rerun under the original protocol/population with seed/sample provenance, predeclared calibration tolerance and paired candidate-author evaluation; the local ISD kernel is not this baseline.",
+      "evidence_ids": [
+        "paper_methods",
+        "code_scope"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No source-backed practically meaningful balanced-accuracy increment is established. Resolve the rounded reference and variation across subjects before predeclaring an effect requirement; a universal percentage-point margin would be invented.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-minus-author uncertainty across all original subjects in the declared complete panel, respecting within-subject temporal dependence, overlapping LOSO fits and any documented source-conformant stochastic sampling. Source SEM is not itself a candidate-comparison decision rule; unrelated panels are separate scopes.",
+      "independent_unit": "Participant, with all time windows kept together; datasets remain separate",
+      "rationale": "Highly overlapping BOLD windows cannot be treated as independent samples, and LOSO fit overlap requires an explicitly justified comparison procedure.",
+      "evidence_ids": [
+        "paper",
+        "paper_methods"
+      ]
+    },
+    "paper_win_requires": [
+      "Surpass the selected original endpoint itself on its complete original data, information, sampling/fold and metric support; preserve all named source companions. Complete original Figure 5b,c Dataset1 awake versus loss-of-responsiveness prediction under leave-one-subject-out evaluation over all 19 original participants. Reproduce the source random forest on the original18 integration/segregation features and compare candidates on identical source observations, state labels, windows, training selections and evaluation folds, retaining required source controls and companion ROC AUC.",
+      "Authenticate the strongest relevant original author comparator and complete published/reference outputs. Source random forest:100 trees to pure leaves and five randomly considered features per split. Reported balanced accuracy0.93 and companion AUC0.984 are rounded publication anchors; exact precision, ROC aggregation and calibrated native replay remain unresolved. A weaker rerun cannot lower the paper target.",
+      "Calibrate author replay against the actual paper result under a justified predeclared numerical/protocol criterion; a weaker rerun cannot lower the paper target. Keep source-publication, author-replay and candidate values separate.",
+      "Freeze complete-support superiority, meaningful effect, dependence-aware uncertainty, candidate and equal access/resource accounting before final evaluation. Participant, with overlapping BOLD windows nested within participant and overlapping19-fold LOSO training sets; time windows are not independent subjects.",
+      "Report reproduction and improvement separately in paper+data and paper+data+official-code conditions. No biological significance/effect-size maximization, favorable coordinate selection, easier support, new split or different target counts as this same-paper improvement.",
+      "A paper-relative win is not current SOTA; current-SOTA comparisons require separate verified evidence."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA source comparison was performed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery and admission, iterate using only permitted training/development feedback under a declared total search budget. Bind the complete original panel, controls, companion metrics, original stochastic sampling procedure and cumulative access before candidate outcomes; no posthoc panel narrowing.",
+    "candidate_freeze": "Freeze the declared complete source panel, feature extraction, model, hyperparameters, sampling/seed policy, calibration tolerance, code and preprocessing before assessment. Resolve historical public-result exposure and original hyperparameter-selection handling; do not replace LOSO with a new nested or held-animal protocol.",
+    "final_evaluation": "Owner runs the frozen candidate and recovered author classifier on all subjects/folds of the predeclared original panel. Use historical samples or documented source-conformant stochastic draws, paired across candidate and author; report subject-level outcomes, required controls and companion metrics without iterative assessment feedback. Claim only this scoped source result.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source random forest:100 trees to pure leaves and five randomly considered features per split. Reported balanced accuracy0.93 and companion AUC0.984 are rounded publication anchors; exact precision, ROC aggregation and calibrated native replay remain unresolved. A weaker rerun cannot lower the paper target. Source-conformant stochastic reruns require provenance, original-protocol parity, predeclared calibration and paired support; unsaved historical RNG alone is not a requirement to invent a new task."
+  },
+  "blocking_issues": [
+    "Authenticate all19 participant/window identities, behavioral awake/LOR labels and responsiveness times; preserve stable-state/deep-LOR boundary exclusions and complete source evaluation support.",
+    "Bind original paired GSR/noGSR450-ROI inputs and18 feature preparation, 4-minute windows stepping oneTR, network identities and source non-overlapping sampling semantics.",
+    "Recover original20,000-per-class training sampling and random forest recipe or a documented original-protocol rerun with fixed provenance, paired candidate/author draws and justified published-result calibration.",
+    "Recover precision of0.93 balanced accuracy and0.984 AUC plus original ROC-curve aggregation, source controls and native classifier replay. The existing scorer subject-macro AUC does not prove parity with the displayed source curve.",
+    "Predeclare numerical reproduction and same-paper superiority criteria above the actual published target and calibrated reference, with meaningful effect and paired participant uncertainty accounting for overlapping LOSO fits; freeze source assistance and finite resource/search budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Original static integration, segregation and ISD state contrasts in Datasets3–5 remain separately named biological reproduction. Dataset2 transfer and transition-only prediction are separate original endpoints, not easier substitutes and not universal extra prerequisites for the selected complete Dataset1 panel. Prior improvement.v1.json remains immutable as historical source evidence; this proposed primary-endpoint-v1 contract explicitly selects the source result without asserting runtime or outcome qualification."
+  }
+}

@@ -1,6 +1,7 @@
 """Public source navigation tests; no data, receipts or candidate execution."""
 from contextlib import redirect_stdout
 import copy
+import functools
 import hashlib
 import importlib.util
 import io
@@ -8,6 +9,8 @@ import json
 from pathlib import Path
 import re
 import tempfile
+import sys
+import types
 import unittest
 from unittest.mock import patch
 from urllib.parse import unquote
@@ -31,6 +34,181 @@ def write(path, value):
     raw = (json.dumps(value, sort_keys=True) + '\n').encode()
     path.write_bytes(raw)
     return len(raw), hashlib.sha256(raw).hexdigest()
+
+
+def pre_endpoint_selection_fixture(setup):
+    """Keep an intentional generated fixture under the pre-adoption authority.
+
+    Compile independent function globals; never change the cached production
+    module or bypass coverage/context validation. Real repository checks must
+    retain the adopted authority and must not call this helper.
+    """
+    @functools.wraps(setup)
+    def wrapped(test_case, *args, **kwargs):
+        if hasattr(test_case, 'root'):
+            test_case.assertNotEqual(Path(test_case.root).resolve(), ROOT.resolve())
+        path = (ROOT / 'src/neurobench/paper_endpoint_selection.py').resolve()
+        name = '_neurobench_endpoint_selection_' + hashlib.sha256(str(path).encode()).hexdigest()[:16]
+        raw = path.read_bytes()
+        test_case.assertLessEqual(len(raw), 1024 * 1024)
+        clone = types.ModuleType(name)
+        clone.__file__ = str(path)
+        exec(compile(raw, str(path), 'exec'), clone.__dict__)
+        clone.AUTHORITY_PIN = clone.AUTHORITY_CANONICAL = None
+        absent = object()
+        original = sys.modules.get(name, absent)
+        sys.modules[name] = clone
+        active = True
+
+        def restore():
+            nonlocal active
+            if not active:
+                return
+            active = False
+            if original is absent:
+                sys.modules.pop(name, None)
+                test_case.assertNotIn(name, sys.modules)
+            else:
+                sys.modules[name] = original
+                test_case.assertIs(sys.modules.get(name), original)
+
+        test_case.addCleanup(restore)
+        try:
+            result = setup(test_case, *args, **kwargs)
+            test_case.assertNotEqual(Path(test_case.root).resolve(), ROOT.resolve())
+            return result
+        except BaseException:
+            restore()
+            raise
+
+    return wrapped
+
+
+class EndpointFixtureIsolationTests(unittest.TestCase):
+    def test_fixture_clone_restores_exact_cache_and_authority_on_all_exits(self):
+        binding = catalog.companion_module('paper_outcomes_binding')
+        path = (ROOT / 'src/neurobench/paper_endpoint_selection.py').resolve()
+        key = '_neurobench_endpoint_selection_' + hashlib.sha256(str(path).encode()).hexdigest()[:16]
+        sentinel_key = key + '_fixture_isolation_sentinel'
+        absent = object()
+        prior_cache = sys.modules.get(key, absent)
+        prior_sentinel = sys.modules.get(sentinel_key, absent)
+        sentinel = types.ModuleType(sentinel_key)
+        production = binding.endpoint_selection_module()
+        original_pin = copy.deepcopy(production.AUTHORITY_PIN)
+        original_canonical = production.AUTHORITY_CANONICAL
+        original_function = production.authenticate_authority
+        self.assertIsNotNone(original_pin)
+        self.assertIsNotNone(original_canonical)
+        generated = ROOT / '_generated_fixture_isolation_only'
+
+        def no_reads(*args):
+            self.fail('No metadata read expected')
+
+        def unchanged():
+            self.assertIs(sys.modules[key], production)
+            self.assertEqual(production.AUTHORITY_PIN, original_pin)
+            self.assertEqual(production.AUTHORITY_CANONICAL, original_canonical)
+            self.assertIs(production.authenticate_authority, original_function)
+            self.assertIs(original_function.__globals__, production.__dict__)
+            with self.assertRaisesRegex(ValueError, 'Adopted endpoint authority'):
+                binding.coverage({'tasks': []}, no_reads)
+
+        try:
+            unchanged()
+            for mode in ('success', 'refusal'):
+                owner = unittest.TestCase()
+                owner.root = generated
+
+                def setup(case, token=None):
+                    self.assertEqual(token, 'forwarded')
+                    sys.modules[sentinel_key] = sentinel
+                    return binding.endpoint_selection_module()
+
+                wrapped = pre_endpoint_selection_fixture(setup)
+                self.assertIs(wrapped.__wrapped__, setup)
+                try:
+                    clone = wrapped(owner, token='forwarded')
+                    self.assertIsNot(clone, production)
+                    self.assertIs(binding.endpoint_selection_module(), clone)
+                    self.assertIs(clone.authenticate_authority.__globals__, clone.__dict__)
+                    self.assertIsNot(clone.authenticate_authority.__globals__, production.__dict__)
+                    self.assertIsNone(clone.AUTHORITY_PIN)
+                    self.assertIsNone(clone.AUTHORITY_CANONICAL)
+                    self.assertIsNone(binding.coverage({'tasks': []}, no_reads))
+                    if mode == 'refusal':
+                        with self.assertRaisesRegex(ValueError, 'Adopted endpoint selections cannot omit'):
+                            clone.authenticate_authority(None, {},
+                                [{'paper_outcomes': {'endpoint_selection': {}}}], no_reads)
+                        with self.assertRaisesRegex(ValueError, 'Endpoint authority is not adopted'):
+                            clone.authenticate_authority(original_pin, {}, [], no_reads)
+                    self.assertEqual(production.AUTHORITY_PIN, original_pin)
+                    self.assertEqual(production.AUTHORITY_CANONICAL, original_canonical)
+                    self.assertIs(production.authenticate_authority, original_function)
+                    self.assertIs(original_function.__globals__, production.__dict__)
+                finally:
+                    self.assertTrue(owner.doCleanups())
+                unchanged()
+                self.assertIs(sys.modules[sentinel_key], sentinel)
+
+            for fail_setup in (False, True):
+                parent, child = unittest.TestCase(), unittest.TestCase()
+                parent.root = child.root = generated
+                observations = {}
+
+                @pre_endpoint_selection_fixture
+                def child_setup(case):
+                    observations['child'] = binding.endpoint_selection_module()
+                    sys.modules[sentinel_key] = sentinel
+                    if fail_setup:
+                        raise RuntimeError('injected nested setup failure')
+
+                @pre_endpoint_selection_fixture
+                def parent_setup(case):
+                    observations['parent'] = binding.endpoint_selection_module()
+                    try:
+                        child_setup(child)
+                    except RuntimeError:
+                        self.assertIs(sys.modules[key], observations['parent'])
+                        raise
+                    case.addCleanup(child.doCleanups)
+
+                try:
+                    if fail_setup:
+                        with self.assertRaisesRegex(RuntimeError, 'injected nested setup failure'):
+                            parent_setup(parent)
+                        # Child cleanup was never registered by its caller.
+                        unchanged()
+                    else:
+                        parent_setup(parent)
+                        self.assertIs(sys.modules[key], observations['child'])
+                        self.assertTrue(child.doCleanups())
+                        self.assertIs(sys.modules[key], observations['parent'])
+                    self.assertIsNot(observations['child'], observations['parent'])
+                    self.assertIs(sys.modules[sentinel_key], sentinel)
+                finally:
+                    self.assertTrue(child.doCleanups())
+                    self.assertTrue(parent.doCleanups())
+                unchanged()
+                self.assertIs(sys.modules[sentinel_key], sentinel)
+
+            del sys.modules[key]
+            owner = unittest.TestCase()
+            owner.root = generated
+            try:
+                pre_endpoint_selection_fixture(lambda case: None)(owner)
+            finally:
+                self.assertTrue(owner.doCleanups())
+            self.assertNotIn(key, sys.modules)
+            self.assertIs(sys.modules[sentinel_key], sentinel)
+            sys.modules[key] = production
+            unchanged()
+        finally:
+            for name, original in ((key, prior_cache), (sentinel_key, prior_sentinel)):
+                if original is absent:
+                    sys.modules.pop(name, None)
+                else:
+                    sys.modules[name] = original
 
 
 def fixture(root):
@@ -136,6 +314,7 @@ def fixture(root):
 
 
 class PublicCatalogTests(unittest.TestCase):
+    @pre_endpoint_selection_fixture
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
@@ -628,6 +807,48 @@ class PublishedInventoryTests(unittest.TestCase):
         smc = next(row for row in result['tasks'] if row['id'] == 'PAPER-SMC-RNN-2024')
         self.assertIsNone(smc['paper_improvement']['historical_specification'])
         self.assertEqual(smc['paper_improvement']['disposition'], 'design_ready')
+
+
+class CatalogReaderBudgetTests(unittest.TestCase):
+    def test_cumulative_exact_limit_plus_one_and_independent_member_limit(self):
+        from types import SimpleNamespace
+
+        with tempfile.TemporaryDirectory(prefix="catalog-reader-boundary-") as temporary:
+            root = Path(temporary).resolve()
+            two, one = root / "two.json", root / "one.json"
+            two.write_bytes(b"{}")
+            one.write_bytes(b"0")
+            with patch.object(catalog, "READ_LIMIT", 1):
+                low = catalog.Reader(root)
+                with patch.object(Path, "open", side_effect=AssertionError("Over-budget read opened a file")):
+                    with self.assertRaisesRegex(ValueError, "read limit exceeded"):
+                        low.read(two)
+                self.assertEqual(low.bytes, 2)
+
+            reader = catalog.Reader(root)
+            reader.bytes = catalog.READ_LIMIT - 2
+            self.assertEqual(reader.read(two)[0], {})
+            self.assertEqual(reader.bytes, catalog.READ_LIMIT)
+            with patch.object(Path, "open", side_effect=AssertionError("Limit-plus-one read opened a file")):
+                with self.assertRaisesRegex(ValueError, "read limit exceeded"):
+                    reader.read(one)
+            self.assertEqual(reader.bytes, catalog.READ_LIMIT + 1)
+
+            # Simulate only an oversized ordinary-file stat, avoiding a 4MiB
+            # fixture. The independent member guard must refuse before open
+            # and before charging any cumulative bytes, even with ample budget.
+            original_stat = Path.stat
+            def oversized_stat(path, *args, **kwargs):
+                info = original_stat(path, *args, **kwargs)
+                return (SimpleNamespace(st_mode=info.st_mode, st_size=4 * 1024 * 1024 + 1)
+                        if path == two else info)
+            bounded = catalog.Reader(root)
+            self.assertGreater(catalog.READ_LIMIT, 4 * 1024 * 1024 + 1)
+            with patch.object(Path, "stat", oversized_stat), \
+                 patch.object(Path, "open", side_effect=AssertionError("Oversized member was opened")):
+                with self.assertRaisesRegex(ValueError, "bounded ordinary public metadata"):
+                    bounded.read(two)
+            self.assertEqual(bounded.bytes, 0)
 
 
 if __name__ == '__main__':

@@ -6,10 +6,13 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import runpy
 import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
+pre_endpoint_selection_fixture = runpy.run_path(
+    str(ROOT / "tests/framework/test_catalog.py"))["pre_endpoint_selection_fixture"]
 spec = importlib.util.spec_from_file_location("repository_checks_under_test", ROOT / "src/neurobench/repository_checks.py")
 checks = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(checks)
@@ -79,6 +82,7 @@ def fixture(root):
 
 
 class RepositoryChecksTests(unittest.TestCase):
+    @pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

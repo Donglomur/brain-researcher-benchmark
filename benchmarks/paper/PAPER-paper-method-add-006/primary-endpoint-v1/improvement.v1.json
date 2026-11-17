@@ -1,0 +1,251 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-006",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit versioned selection of the original author-reported performance endpoint. Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction. Source support, native comparator and valid joint comparison remain unqualified; this does not activate an episode.",
+  "source_paper": {
+    "title": "Neural population geometry and optimal coding of tasks with shared latent structure",
+    "url": "https://www.nature.com/articles/s41593-025-02183-y"
+  },
+  "evidence": [
+    {
+      "id": "geometry-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Methods: Spatial representations in rat PFC and CA1 / Rat data processing, Generalized linear model analysis, Readout analysis; Fig. 7",
+      "supports": "Defines the rat spike-count prediction, reported regional cross-validated D2, preprocessing and distinct descriptive coding-geometry analyses."
+    },
+    {
+      "id": "geometry-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/fit-GLMs-rat.py",
+      "locator": "dt/vmin/n_rat/n_sesh; get_test_scores; param_grid/cv; lines 74-126",
+      "supports": "Eight rats and eight sessions; ten-fold PoissonRegressor grid search, session-wide covariate standardization, firing-rate exclusion and saved fold scores."
+    },
+    {
+      "id": "geometry-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/README.md",
+      "locator": "reproducing the results; Pre-processed results; references [2]",
+      "supports": "Identifies DANDI 000978 version 0.240511.0307 and the author rat-processing, GLM and geometry route; saved results require LFS and were not read here."
+    },
+    {
+      "id": "geometry-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+      "locator": "paper_source_discrepancies; qualification; source_population",
+      "supports": "Records incomplete native verification, first-eight-session mapping and paper/code CA1-subset and null-boundary disagreements in the historical component."
+    },
+    {
+      "id": "previous-reproduction-geometry-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Methods: Spatial representations in rat PFC and CA1 / Rat data processing, Generalized linear model analysis, Readout analysis; Fig. 7",
+      "supports": "Defines the empirical learning-dependent CA1/PFC geometry and navigation readout, raw versus GLM-expected activity, source covariance/normalization and trend analyses. GLM D2 is supporting fit evidence."
+    },
+    {
+      "id": "previous-reproduction-geometry-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/code/fit-GLMs-rat.py",
+      "locator": "dt/vmin/n_rat/n_sesh; get_test_scores; param_grid/cv; lines 74-126",
+      "supports": "Eight rats and eight sessions; ten-fold PoissonRegressor grid search, session-wide covariate standardization, firing-rate exclusion and saved fold scores."
+    },
+    {
+      "id": "previous-reproduction-geometry-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/awakhloo/population_geometry_optimal_coding/9674a6cb0c39926d70746024ce17de35f87df8f9/README.md",
+      "locator": "reproducing the results; Pre-processed results; references [2]",
+      "supports": "Identifies DANDI 000978 version 0.240511.0307 and the author rat-processing, GLM and geometry route; saved results require LFS and were not read here."
+    },
+    {
+      "id": "previous-reproduction-geometry-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-006/implementations/initial-evaluator-v1/source-contract.json",
+      "locator": "paper_source_discrepancies; qualification; source_population",
+      "supports": "Records incomplete native verification, first-eight-session mapping and paper/code CA1-subset and null-boundary disagreements in the historical component."
+    },
+    {
+      "id": "previous-reproduction-geometry-rat-utils",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/rat_utils.py",
+      "locator": "get_all_lat; process_dat; format_glm_results; get_pr; Gaussian covariate construction",
+      "supports": "Source-native masks, separately processed GLM and raw-geometry observations, source null-unit handling and raw/fitted participation-ratio outputs. Paper/code boundary differences and native outputs remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-geometry-equations",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/utils.py",
+      "locator": "get_geometry; theory_part",
+      "supports": "Covariance geometry quantities and a direct theoretical readout-error expression. Matching a closed-form software identity does not reproduce measured neural geometry or empirical readout performance."
+    },
+    {
+      "id": "previous-reproduction-geometry-rat-analysis",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/code/run-pfc-hp-analysis-rats.py",
+      "locator": "Rat PFC/hippocampal session analysis, region-specific processed responses, neuronal subsets and readouts",
+      "supports": "Original rat geometry/readout companion route. Source-native output identities, random draws and the paper CA1-24 versus pinned-code-19 unit discrepancy remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-geometry-figure-analysis",
+      "kind": "author_code",
+      "url": "https://github.com/awakhloo/population_geometry_optimal_coding/blob/9674a6cb0c39926d70746024ce17de35f87df8f9/figures/Fig-readout-with-learning-hp-pfc.ipynb",
+      "locator": "Frozen GLM figure basis, raw/fitted dimensionality and session-learning comparisons",
+      "supports": "Figure route for joint predictive and geometry findings; the preceding basis search and exact curve/trend targets must be reconstructed instead of selecting one favorable output."
+    },
+    {
+      "id": "previous-reproduction-geometry-accepted-components",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-006/implementations/oof-prediction-replay-v2/README.md",
+      "locator": "initial-evaluator-v1/evaluator.py: source_glm_fit, run_source_glm_panel, covariance_geometry, glm_geometry_summary; oof-prediction-replay-v2/replay.py: prepare_reference, score_session, replay_panel",
+      "supports": "Independently reviewed partial software interfaces: full 64-session paired OOF replay with retained identities/folds and geometric components. Generated controls are not authentic source preparation, author replay, AI reproduction or AI improvement."
+    },
+    {
+      "id": "previous-reproduction-geometry-primary-rat-findings",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12971491/",
+      "locator": "Fig.7 and Results cached lines64-70; GLM Methods lines112-119; Readout analysis lines120-122; primary cache SHA256 de4d22f91a8d9e66c2715df7d0301feb19ddc64d79b2858af336ccae434baec3",
+      "supports": "Original eight-rat learning geometry and navigation readout: regional curves mean/SEM over eight rats, raw versus conditional-expected-activity participation ratio, empirical versus equation(1) readout, behavioral association, mixed-intercept quadratic and follow-up linear trends. Known protocol uses 19 PFC/24 CA1 units, 500 analysis observations, p=300 training observations and 500-subset averages. CA1 behavioral/readout R2 is 0.48 in main text versus 0.49 in caption; PFC 0.51 agrees. No numerical reproduction tolerance follows from printed values or significance bounds."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02183-y",
+      "locator": "Nature Neuroscience 10.1038/s41593-025-02183-y, Methods GLM analysis and Figure 7 support; original fit-GLMs-rat.py.",
+      "supports": "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Eight rats with eight learning sessions per rat, both PFC and CA1, all original eligible units and movement periods. Exact native NWB-to-session/anatomical/unit mappings and ZT2 identity remain unauthenticated.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original per-unit tenfold CV over ten L2 strengths plus shared basis-hyperparameter selection. Recover native row order/folds, source library behavior and relationship between selection and reported scoring. Preserve source full-session covariate standardization and resolve rate >0.1 Hz/boundaries; a new rat/session holdout is a separate task.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Single Day W-Track Learning DANDI 000978 version 0.240511.0307. Inputs x/y position, x/y velocity and inbound/outbound trajectory type; targets original 500-ms spike counts. Preserve Gaussian Nadaraya-Watson interpolation, movement near 4 cm/s, unit-rate threshold near 0.1 Hz, adaptive Gaussian bases and trajectory-specific spatial terms. Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27. Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "This endpoint is a complete source-defined performance panel. The scalar improvement schema cannot encode the complete comparator; no aggregate or single-cell threshold is admitted. Original published numeric anchors remain in reproduction and selection. Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission. The paper reports PFC D2 = 0.29 and CA1 D2 = 0.25. The scalar value stores the PFC component only; CA1 remains mandatory and 0.27 is not a published combined score. Rat-level SDs of session-averaged D2 are 0.022 and 0.1, respectively.",
+      "evidence_ids": [
+        "geometry-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified original author execution for this selected endpoint is established. Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Freeze a meaningful gain on the selected complete original metric/support after native reference recovery. No generic margin or stronger biological effect counts.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired source-matched candidate/author comparison across complete selected outputs, preserving original dependence and selection; no confidence threshold is admitted.",
+      "independent_unit": "Eight rats with eight learning sessions per rat; source neurons, 500-ms bins and CV folds are nested.",
+      "rationale": "Original mean/SEM, repeated folds and printed significance are not a superiority rule. Source-native reproduction, meaningful effect and complete-panel decision remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "paper_win_requires": [
+      "Original rat PFC and CA1 500-ms spike-count prediction from navigation covariates, retaining both source regional tenfold Poisson-GLM comparisons across all eight rats and eight learning sessions per rat. Reproduce the author cross-validated deviance-explained results and compare candidate predictions on the identical original data, covariates, folds and regional reductions. Geometry, optimal coding and behavioural readout findings remain separately named reproduction.",
+      "Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission.",
+      "Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+      "Recover native tenfold membership, full grid/libraries and selection/reporting behavior without substituting new held-out splits.",
+      "Recover exact fold/unit/session/rat reductions and original null/replaced-unit convention.",
+      "Qualify complete native source-grid predictions and both original regional means/SDs; independent local ridge/GLM components are not author references.",
+      "Freeze paired biological uncertainty across both regions, meaningful gain, reproduction tolerance, access/resource limits and complete independent execution evidence.",
+      "Compare both paper_data and paper_data_author_code with identical approved data, permitted inputs, source splits, metric and budgets; official implementation is the only intended information difference.",
+      "A same-paper win is not current SOTA; direct MI inflation, stronger significance, changed latent targets, newly invented splits or missing conditions cannot earn success.",
+      "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "This contract compares only with the identified source paper. No current-SOTA search or superiority claim is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source and baseline qualification. Once admitted, use only original permitted training/validation feedback. Original per-unit tenfold CV over ten L2 strengths plus shared basis-hyperparameter selection. Recover native row order/folds, source library behavior and relationship between selection and reported scoring. Preserve source full-session covariate standardization and resolve rate >0.1 Hz/boundaries; a new rat/session holdout is a separate task.",
+    "candidate_freeze": "Freeze complete original cohort, folds, preprocessing/inputs, source comparator policy, candidate, metric vector, source controls and budgets before final scoring. Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission.",
+    "final_evaluation": "Compare all selected original conditions and companions using the same authenticated source support and independent output verification. Poisson D²=1−D(y,mu)/D(y,mean(y)), source null/zero-count convention; higher separately for PFC and CA1. Preserve exact fold/unit/session/rat weighting, invalid-fold/null-unit policy and regional rat SD companions. No invented pooled 0.27.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original source adaptive-basis Poisson GLM with the complete original regularization and shared basis grid. Compare against stronger of qualified published and matched author rerun regional outcomes; source fitting selection optimism must be disclosed and addressed before superiority admission. Published values, future qualified native rerun and local engineering controls remain distinct."
+  },
+  "blocking_issues": [
+    "Authenticate all eight-rat/eight-session-per-rat original data, units, anatomy, ZT2 mapping, movement/rate masks and original bin boundaries.",
+    "Recover native tenfold membership, full grid/libraries and selection/reporting behavior without substituting new held-out splits.",
+    "Recover exact fold/unit/session/rat reductions and original null/replaced-unit convention.",
+    "Qualify complete native source-grid predictions and both original regional means/SDs; independent local ridge/GLM components are not author references.",
+    "Freeze paired biological uncertainty across both regions, meaningful gain, reproduction tolerance, access/resource limits and complete independent execution evidence.",
+    "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Previous contracts at task root are immutable historical/retained-scope definitions. Original learning-dependent CA1/PFC geometry, expected-activity covariance, optimal coding, quadratic/linear trends and behavioural readout. Preserve paper/code CA1 24-versus-19-unit geometry discrepancy and CA1 readout R² 0.48-versus-0.49 separately, without requiring these unrelated quantities as the encoding performance primary."
+  }
+}

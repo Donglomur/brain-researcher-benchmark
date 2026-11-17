@@ -1,0 +1,218 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-CANDIDATE-20261114-NPVC",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Full source fit, authentic support, reference vectors and independent comparison remain unresolved; existing FDE equations only evaluate supplied operands. NPvC candidate normalizer/density admissibility is a pending scientific-policy decision, not an implicit universal denominator.",
+  "source_paper": {
+    "title": "Specialized structure of neural population codes in parietal cortex outputs",
+    "url": "https://www.nature.com/articles/s41593-025-02095-x"
+  },
+  "evidence": [
+    {
+      "id": "npvc-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Results: Vine copula models to analyze encoding in multivariate neural and behavioral data; Fig. 2b,c; Extended Data Fig. 1g",
+      "supports": "Frame-by-frame neural response prediction is an ordered endpoint; FDE is displayed as a distribution. The paper reports ten mice and 59 sessions."
+    },
+    {
+      "id": "npvc-methods",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Methods: NPvC models of single-neuron activity, Eq. 6 and following two paragraphs; calcium-imaging preprocessing",
+      "supports": "Defines conditional inputs, OASIS deconvolution, fivefold fitting, five task epochs, eight trial types, minimum trial support and model-specific deviance normalization."
+    },
+    {
+      "id": "npvc-code",
+      "kind": "author_code",
+      "url": "https://github.com/houman1359/Triplets/tree/68d9f18993f7a33c5c1df21b5fe392f857aed4fa",
+      "locator": "README.md; NPvC/ and SIMULATIONS/ directories",
+      "supports": "Author repository supplies NPvC, glmnet and simulation comparisons. Its README does not establish a complete real-data Figure 2 evaluation or historical fold ledger."
+    },
+    {
+      "id": "npvc-data",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12672379/",
+      "locator": "Data availability",
+      "supports": "Names Harvard Dataverse DOI 10.7910/DVN/NL1CAQ as the original data source; this does not authenticate the release-to-session mapping."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recreate and improve the original Figure 2b,c held-out conditional prediction of deconvolved PPC activity using NPvC and GLM comparisons, retaining the complete source neuronwise FDE distribution and source-defined companion outputs across the original five epochs and eight trial types.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Harvard Dataverse DOI 10.7910/DVN/NL1CAQ, recorded release 1.0 (2025-08-15). The inherited registration records 70 files: 64 session archives and six support files. This inventory is not the authenticated Figure 2 release-to-session/neuron eligibility manifest; pin that mapping before admission. No substitute dataset.",
+      "evidence_ids": [
+        "npvc-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain the original Figure 2 eligible projection-defined and unlabeled PPC neuron population from the reported ten mice and 59 sessions; the paper reports 2860 analyzed cells but panel-specific inclusion is not authenticated. Preserve source behavioral performance >70% and at least five trials of every one of eight trial types, all eligible epochs, exclusions and animal/session/neuron/projection joins. Do not treat archive count as eligible session count.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Use the original fivefold cross-validation and bandwidth-fitting protocol. The precise frame/time-point versus whole-trial assignment unit remains unresolved. Recover that protocol, then authenticate historical memberships or a documented source-conformant stochastic rerun with recorded seeds, shared candidate-author folds and predeclared justified publication calibration. Do not replace it with whole-mouse holdout.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Time; virtual heading; lateral/forward running velocities and accelerations; trial type defined by sample cue, test cue and correct/incorrect outcome, in all five original event epochs. These are original conditional inputs, including outcome information; this is not a causal forecasting or native raw-signal claim.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Retain source OASIS AR1 cell-specific deconvolution, source activity scales and -0.5 to +2 second sample/delay/test/turn/reward epochs. Release-field mapping, alignment, full real-data fit caller and observed-density interpolation remain unresolved. No rounding deconvolved activity, clipping FDE or silently changing transforms.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Eq. 6 neuronwise held-out FDE=(L_model-L_null)/(L_sat-L_null), summing log-likelihood differences over held-out observations before the ratio. Preserve distinct original model-specific normalizers: NPvC conditional peak over the source 200-point activity grid and marginal null; GLM Poisson saturated mean equal to observed activity and fitted null mean, including lgamma(y+1) for noninteger deconvolved activity. Preserve source grid coordinates spaced (max-min)/199 and integration step (max-min)/200. Preserve signed/out-of-range FDE and explicit undefined zero-denominator states with full row support. No shared replacement denominator.",
+      "evidence_ids": [
+        "npvc-methods"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original Figure 2 neuronwise FDE cumulative distributions and their complete per-neuron/per-epoch source records. Authentic panel membership, native summary/contrast and source-reference mapping remain unresolved. Do not collapse to a newly selected mean, a favorable projection subgroup, neuron count or larger denominator gain.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete original Figure 2 eligible neuron/session/projection/epoch population, all original five epoch and eight trial-type support where source rules require them, both NPvC and GLM source outputs, explicit exclusions and undefined states, and every indispensable Figure 2 numerical companion/control. Exact source roster and companion mapping are unresolved; publication-wide Figures 4–6 biology is separately retained.",
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original conditional neural/behavioral inputs and source evaluation protocol, including trial correctness. Same data representation and manifests, development/final exposure and budgets in paper_data and paper_data_author_code; the latter alone adds pinned author implementation. Fitted final predictions, hidden reference scores and evaluator-held outputs are not development inputs. Any author-derived fitted artifacts require a separately frozen common assistance profile.",
+      "evidence_ids": [
+        "npvc-methods",
+        "npvc-code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "npvc-original-method-panel",
+      "kind": "indexed_array_family",
+      "description": "Numerical reproduction of only the complete original source-reported Figure 2 neuronwise/epoch NPvC and GLM FDE performance panels. Complete source support and mandatory audit/recompute artifacts remain required, but intermediate fitted quantities are not numerical reference targets.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "npvc-original-method-panel-v1",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "npvc-fde-panel",
+            "manifest_key": "npvc-fde-panel",
+            "source_quantity": "Complete source neuronwise/epoch NPvC and GLM FDE values and explicit undefined states.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "Source-native; exact numeric/string representation and units manifest unresolved.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Sum held-out log-likelihood differences before FDE ratio; preserve distinct source null/saturation and full original distributions. No invented mean/selected-subgroup aggregate.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "mouse_id",
+                "session_id",
+                "neuron_id",
+                "projection",
+                "epoch",
+                "author_method"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Authenticate complete ordered source identities and explicit exclusions against the original release before freezing this collection. Semantic key names do not prove observed membership.",
+                "evidence_ids": [
+                  "npvc-paper",
+                  "npvc-methods"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "npvc-paper",
+              "npvc-methods"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "npvc-paper",
+          "npvc-methods"
+        ]
+      },
+      "required_granular_output_ids": [
+        "npvc-source-support",
+        "npvc-joint-grid",
+        "npvc-heldout-operands",
+        "npvc-fde-panel",
+        "npvc-companion-controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover the authentic complete source-reported performance reference panel and original protocol, then justify numerical/uncertainty comparison of that panel only. Audit/recompute artifacts retained in selection.audit_output_obligations must establish source identities, protocol compliance, genuine computation and correct derivation; they are not separately required to equal the author fitted intermediate values. Matching an aggregate or copying publication values is insufficient.",
+        "independent_unit": "Mouse for biological replication; original neuronwise corpus metric retained separately.",
+        "dependence": "Triplets, cells, folds and time points cannot become independent mice. Exact animal/session mapping is needed before selecting an uncertainty rule.",
+        "multiplicity": "Freeze the complete source-reported numerical performance panel and justified family-level reproduction decision before final comparison; no selective successful members. Mandatory audit/control artifacts separately establish fidelity/full support and are neither maximize objectives nor numerical-equivalence targets.",
+        "rationale": "Authentic source identities, complete reported reference panels, original computation policy and justified comparison bindings remain unresolved. required_granular_output_ids retains every mandatory audit/recompute output; selection.audit_output_obligations preserves its complete typed specification for later computation.required_outputs binding. Source-specific intermediate predictions/densities may differ while the reported endpoint is reproduced; missing audit verification is not waived.",
+        "evidence_ids": [
+          "npvc-paper",
+          "npvc-methods"
+        ]
+      },
+      "evidence_ids": [
+        "npvc-paper",
+        "npvc-methods"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate original release-to-animal/session/neuron/epoch eligibility and all required observations; the 70-file metadata inventory is not complete source support.",
+    "Recover the original fivefold split unit/protocol, real-data fit construction, interpolation and executable preprocessing/fit route; preserve original scales and conditional information.",
+    "Recover full publication/reference NPvC and GLM FDE vectors, model-specific likelihood/normalization operands and publication-equivalent author calibration.",
+    "Resolve the source-grounded candidate density/normalization admissibility and full-panel superiority rule before admission. Neither shared-denominator substitution nor density scaling is an accepted policy.",
+    "Freeze matching access conditions, meaningful effect, dependence-aware uncertainty, justified reproduction tolerance and measured episode budgets.",
+    "Panel improvement admission/interface is pending. Preserve the full source performance vector and mandatory controls; do not invent a scalar mean, favorable subgroup, win count or significance objective. No new AI/model study is required to finish source construction; an AI outcome requires a separate subsequent qualifying execution.",
+    "Bind every retained audit/recompute output to an authentic computation.required_outputs and independent source-protocol/derivation verifier. These outputs remain mandatory but are not numerical-reference targets. Any additional exact source-reported numerical companion must first be identified and source-bound; unresolved diagnostic groups do not imply author-intermediate equality."
+  ]
+}

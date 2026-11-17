@@ -1,0 +1,230 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit versioned selection of the original author-reported performance endpoint. Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks. Source support, native comparator and valid joint comparison remain unqualified; this does not activate an episode.",
+  "source_paper": {
+    "title": "Control of working memory by phase–amplitude coupling of human hippocampal neurons",
+    "url": "https://www.nature.com/articles/s41586-024-07309-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 2d; Methods: Patients, LFP preprocessing, Phase–amplitude coupling, Selection of PAC neurons",
+      "supports": "Original PAC curves, modulation indices and Poisson-model selection characterize load-dependent biology; likelihood-ratio tests select PAC neurons, not an out-of-sample performance benchmark."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "NWB_samplePAC_LFP.m sample_sub=4, sample_ses=1, range=49 and stratTrials loading; NWB_samplePAC_SU.m",
+      "supports": "Author release demonstrates Fig. 2d on sub-4_ses-1_P60CS/channel row 49 with stored balanced clean correct-trial masks. It provides examples, not an independent improvement benchmark."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "DANDI 000673, version 0.240118.2135; author README Installation (Data)",
+      "supports": "The source links NWB electrophysiology data to DANDI 000673; exact figure-level eligibility cannot be inferred from archive participant/session counts alone."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-001/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: HOLDS, epoch_lfp, tort, comodulogram",
+      "supports": "The registered scope is Fig. 2d/example PAC and single-unit models, with a separately labelled patient extension. The independent evaluator has no authentic native qualification and explicitly prospective spike/LFP alignment repair."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Fig. 6; Extended Data Fig. 7a; Methods: Noise correlations and population category decoding; Results: PAC neurons do not code for category",
+      "supports": "The original paper evaluates five-category linear-SVM decoding: correct load-1 maintenance trials, 80/20 trial training/testing, category balancing and 500 repetitions for session ensembles. Extended Data Fig. 7a separately tests encoding pseudo-populations and reports category-neuron accuracies of 72.77% in hippocampus and 88.71% in amygdala; these are condition-specific scores, not a universal baseline."
+    },
+    {
+      "id": "previous-reproduction-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Figure2d caption; Methods PAC; Figure4a and Methods Selection of PAC neurons. Reviewed text lines1288-1350,1649-1670,2314-2345,2414-2438.",
+      "supports": "Complete load-wise phase-amplitude curves/raw Tort comodulograms; caption normalized MI16.52/7.92; both necessary full-versus-reduced Poisson comparisons and source null/selection controls."
+    },
+    {
+      "id": "previous-reproduction-lfp_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "sub4/session1/channel49; saved P60cs_RH1_stratTrials; source frequency grid,18bins and load-specific outputs.",
+      "supports": "Exact example route and full rawMI/phase2power calculations; sample helper requests0surrogates while paper normalization uses200."
+    },
+    {
+      "id": "previous-reproduction-cfc_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/cfc_tort_comodulogram.m",
+      "locator": "Trial-local FIR/Hilbert;18phase-bin mean amplitudes, normalized probabilities, entropy MI and trial-shuffle normalization.",
+      "supports": "Original array coordinates, aggregation, edge treatment and raw-versus-normalized MI semantics; undefined source bins cannot be silently replaced."
+    },
+    {
+      "id": "previous-reproduction-su_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m",
+      "locator": "sub26/session1/LFProw33/unitrow20; original correct-load3/artifact mask, spike-bin/LFP extraction and plot_PAC_neuron call.",
+      "supports": "Retained single example route, not a complete population roster; source inclusive LFP versus binary-spike length conflict remains unresolved."
+    },
+    {
+      "id": "previous-reproduction-su_models",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/plot_PAC_neuron.m",
+      "locator": "20theta-by-gamma counts; model1_full,model2_noInt,model3_noGamma; compare(model2_noInt,model1_full) and compare(model3_noGamma,model1_full).",
+      "supports": "Full Poisson model, separate interaction and gamma-main-effect reduced controls; counts/designs/all3fits and both tests must remain computationally verifiable."
+    },
+    {
+      "id": "previous-reproduction-data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "Retained2024example assets: sub4/session1 and sub26/session1. Actual example asset IDs, source-reported hashes and public-mask values are pinned in retained source_contract.json.",
+      "supports": "Original NWB LFP/spike/trial data route. Inventory44files/36participants does not establish PAC eligibility; no authentic arrays read during this conversion."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Nature 10.1038/s41586-024-07309-z, Figure 6 and Methods Noise correlations and population category decoding; decoder-source-recovery-v1.md.",
+      "supports": "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source archive has 36 patients/44 sessions, but decoder support is figure-specific: Figure6d/e 22 hippocampal sessions with at least one PAC neuron and at least two neurons after PAC removal; Figure6g 32 sessions with at least two hippocampal neurons; Figure6c 21 PAC-neuron contributions; Figure6h 19 sessions with at least two neurons remaining. Authenticate complete patient/session/unit joins and exact overlaps; do not invent a Cartesian roster.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Balanced five-category 80% training/20% testing repeated 500 times with original per-panel trial draws; conditional noise removal shuffles trials within category per neuron. Greedy ensemble starts with best neuron and evaluates every addition through all neurons, retaining source peak selection. Preserve 500 matched non-PAC-removal selections. Native selection/testing dependence must be disclosed; new nesting is not silently original.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "DANDI 000673 version 0.240118.2135 and source a25e8cc3f61630a428f190381745257d4506f148. Original correct load-1 maintenance spike rates, five category training labels and source eligibility/selection metadata. Preserve original counting windows/z-scoring and concurrent session ensembles, not LFP-only inputs or encoding pseudo-populations. Recover full Figure6 session/patient/neuron eligibility and source PAC/non-PAC condition incidence, original counting windows/z-scoring and all selected ensembles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset. Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "This endpoint is a complete source-defined performance panel. The scalar improvement schema cannot encode the complete comparator; no aggregate or single-cell threshold is admitted. Original published numeric anchors remain in reproduction and selection. Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified original author execution for this selected endpoint is established. Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Freeze a meaningful gain on the selected complete original metric/support after native reference recovery. No generic margin or stronger biological effect counts.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired source-matched candidate/author comparison across complete selected outputs, preserving original dependence and selection; no confidence threshold is admitted.",
+      "independent_unit": "Source patients with eligible hippocampal sessions and neurons nested; 500 trial/removal repetitions are not independent patients.",
+      "rationale": "Original mean/SEM, repeated folds and printed significance are not a superiority rule. Source-native reproduction, meaningful effect and complete-panel decision remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "paper_win_requires": [
+      "Original Figure 6 empirical maintenance-period session-ensemble five-category decoding, using correct load-1 trials, balanced 80/20 splits, 500 repetitions and the complete greedy ensemble-size sequence. Retain intact and category-preserving per-neuron shuffled conditions, all source eligible hippocampal sessions and matched PAC/non-PAC removal controls. Reproduce source one-versus-one linear SVM accuracy curves before candidate comparison; the released binary fivefold geometry simulation and Extended Data Figure 7a encoding pseudo-populations are separate tasks.",
+      "Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+      "Recover full Figure6 session/patient/neuron eligibility and source PAC/non-PAC condition incidence, original counting windows/z-scoring and all selected ensembles.",
+      "Recover authentic empirical fitcecoc/greedy source entrypoint, dependency versions and exact original random-draw/reproduction policy.",
+      "Recover complete five-category accuracy traces, source peak/selection behavior, matched ablation outputs and strongest original comparator.",
+      "Preserve mandatory Figure6c/g/h contribution/projection companions without optimizing significance or geometry effects.",
+      "Qualify original trial partitions, dependence-aware patient/session uncertainty, tolerances, comparison/budgets and independent full-support execution; source-code assisted condition unavailable until empirical code recovery.",
+      "Compare both paper_data and paper_data_author_code with identical approved data, permitted inputs, source splits, metric and budgets; official implementation is the only intended information difference.",
+      "A same-paper win is not current SOTA; direct MI inflation, stronger significance, changed latent targets, newly invented splits or missing conditions cannot earn success.",
+      "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed; any later SOTA assessment requires its own primary-source verification.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source and baseline qualification. Once admitted, use only original permitted training/validation feedback. Balanced five-category 80% training/20% testing repeated 500 times with original per-panel trial draws; conditional noise removal shuffles trials within category per neuron. Greedy ensemble starts with best neuron and evaluates every addition through all neurons, retaining source peak selection. Preserve 500 matched non-PAC-removal selections. Native selection/testing dependence must be disclosed; new nesting is not silently original.",
+    "candidate_freeze": "Freeze complete original cohort, folds, preprocessing/inputs, source comparator policy, candidate, metric vector, source controls and budgets before final scoring. Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines.",
+    "final_evaluation": "Compare all selected original conditions and companions using the same authenticated source support and independent output verification. Original five-category held-out accuracy curves per source session, condition and complete greedy ensemble size, with source aggregation and mandatory ablation companions. Higher is better on identical support. Source selected ensemble/peak and noise-condition comparison rules remain mandatory; no all-neuron-only scalar or convenient subset.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original one-versus-one linear fitcecoc decoder and complete source greedy selection, intact/removed noise conditions and matched removals. Empirical author implementation and numeric accuracy curves remain missing. 72.77% hippocampal and 88.71% amygdala encoding scores are not maintenance baselines. Published values, future qualified native rerun and local engineering controls remain distinct."
+  },
+  "blocking_issues": [
+    "Recover full Figure6 session/patient/neuron eligibility and source PAC/non-PAC condition incidence, original counting windows/z-scoring and all selected ensembles.",
+    "Recover authentic empirical fitcecoc/greedy source entrypoint, dependency versions and exact original random-draw/reproduction policy.",
+    "Recover complete five-category accuracy traces, source peak/selection behavior, matched ablation outputs and strongest original comparator.",
+    "Preserve mandatory Figure6c/g/h contribution/projection companions without optimizing significance or geometry effects.",
+    "Qualify original trial partitions, dependence-aware patient/session uncertainty, tolerances, comparison/budgets and independent full-support execution; source-code assisted condition unavailable until empirical code recovery.",
+    "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Previous contracts at task root are immutable historical/retained-scope definitions. Prior Figure2d LFP PAC curves/comodulograms and single-unit GLM controls, Figure6 geometry/projection explanations, and Extended Data Figure7a encoding pseudo-populations remain separately named reproduction evidence. Increased PAC/significance is never decoder improvement."
+  }
+}

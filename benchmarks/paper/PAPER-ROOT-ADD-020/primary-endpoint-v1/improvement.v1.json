@@ -1,0 +1,193 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-020",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit versioned selection of Figure 2d; supplementary methods, Face feature decoding and reconstruction. Original Figure 2d linear-regression decoder is the relevant author comparator. Its complete numerical curves and original panel reduction remain unrecovered; no geometry RMSE or other decoder panel supplies this baseline. Complete original support and scientific qualification remain unresolved; selecting this endpoint does not promote readiness.",
+  "source_paper": {
+    "title": "Temporal multiplexing of perception and memory codes in IT cortex",
+    "url": "https://www.nature.com/articles/s41586-024-07349-5"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11111405/",
+      "locator": "An axis code for unfamiliar faces; Figure 2b,c and caption; coding-axis methods",
+      "supports": "The registered result is time-dependent familiar/unfamiliar face-axis geometry in AM, PR and TP. Figure 2d,e contains separate face decoding, which is not the registered axis-geometry endpoint."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/10460607",
+      "locator": "Version 1; data and code archive description",
+      "supports": "Author release contains responses to screening images and 1,000 monkey faces, feature coordinates and MATLAB coding-axis analysis. The 116.3-MB archive was not downloaded in this review."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-020/task.json",
+      "locator": "primary_outputs; implementations/registered-runtime/instructions.md and public_design.json",
+      "supports": "Current six-curve reconstruction uses full-feature RMS scaling, 50-unit archive windows, a new fixed NumPy PCG64 sample realization and a TP-specific matched comparison; it explicitly disclaims biological improvement."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07349-5",
+      "locator": "Fig. 2d,e and caption; Fig. 3c and caption; Extended Data Fig. 10k and caption; Supplementary Methods linked by the captions",
+      "supports": "The original paper evaluates facial-feature linear decoding/reconstruction, familiarity-decoding accuracy and face-identity classification. Extended Data Fig. 10k explicitly uses 30 feature-matched faces, 50-ms windows with 10-ms steps, and half the trials for training and the remaining half for testing. These are original ordered tasks distinct from coding-axis geometry; exact active endpoint and numeric baseline remain unrecovered."
+    },
+    {
+      "id": "decoder_methods",
+      "kind": "paper",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-024-07349-5/MediaObjects/41586_2024_7349_MOESM1_ESM.pdf",
+      "locator": "Supplementary Methods: Face feature decoding and reconstruction; Familiarity decoding; Face identity decoding; Additional figure legends",
+      "supports": "Original feature decoding uses repeat-averaged rates, linear regression trained on 999 unfamiliar faces and tested on the omitted face plus familiar faces. Familiarity uses linear-SVM leave-one-out evaluation with 36-unfamiliar balancing and ten repetitions. Identity uses random half-trial train/test averages and multiclass linear SVMs with twenty repetitions. Panel-specific numeric baseline, source split realizations and implementation still require recovery."
+    },
+    {
+      "id": "delivered-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/9953b581a9c3a8c1b38b2a961ce6723f10739630/benchmarks/paper/PAPER-ROOT-ADD-020/implementations/feature-decoding-v1/README.md",
+      "locator": "Source basis, complete support and remaining qualification; fixed snapshot 9953b581a9c3a8c1b38b2a961ce6723f10739630",
+      "supports": "Existing supplied-input source component and its exact limitations; no authentic data, native author result or AI outcome is established by source delivery."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict original facial-feature vectors from the original repeat-averaged neural responses, separately for unfamiliar and familiar face queries under Figure 2d. The selected output is feature-vector correlation, not familiarity/identity classification, geometry separation or reconstruction MSE.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original response and face-feature arrays released in Zenodo 10460607 version 1. Exact Figure 2d archive member/face/neuron/time identities and publication equivalence remain unresolved; merely having the axis-geometry archive does not authenticate the decoding inputs.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All original AM, PR and TP Figure 2d neural populations, source animals/sessions, 1,000 unfamiliar faces and 36 familiar faces. Recover exact neurons and stimulus-set/repetition joins; AM134/PR72/TP197 geometry counts and PR76 in another panel cannot be silently adopted as the decoder roster.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Use all 1,000 source leave-one-unfamiliar-face-out folds: 999 unfamiliar training faces, one omitted unfamiliar query and 36 familiar queries in every fold. Preserve all ten identity-shuffled control repetitions and their mapping. No 964/36/36 geometry sampling, half-trial identity split or newly selected face/animal holdout is substituted. Exact original control draws are unresolved.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Use repeat-averaged original responses at each source population/time window and training-face feature coordinates, with exact coordinate identities/order. Familiar feature targets remain operator scoring inputs; unfamiliar targets are exposed across the original LOOCV folds. Exact source features and response-to-face joins are unresolved.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Original decoder uses repeat-averaged firing rates, 50-ms sliding windows stepped 10 ms and source feature standard-deviation scaling. Recover the scaling population, temporal boundaries and neuron/repetition selections; the geometry component full-matrix RMS normalization is not decoder parity.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson correlation across actual versus decoded feature coordinates for each face-vector pair, higher is better. Preserve 1,000 unfamiliar values and 1,000 by 36 familiar values at every population/time/control coordinate; do not replace with face-level MSE or absolute correlation.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover original Figure 2d reduction over familiar query folds, faces, cells/populations, time and ten shuffle repetitions and its uncertainty. Retain all per-face/per-fold correlations and all source curves; no new pooled scalar or favorable region/time subset. The 36,000 familiar predictions are not independent faces or animals.",
+      "evidence_ids": [
+        "decoder_methods",
+        "ordered_candidates"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 2d original time-resolved face-vector Pearson correlation, retaining familiar/unfamiliar curves and all ten identity-shuffled controls",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Original Figure 2d linear-regression decoder is the relevant author comparator. Its complete numerical curves and original panel reduction remain unrecovered; no geometry RMSE or other decoder panel supplies this baseline.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No reproduced author score for the original decoding candidate is established. The existing descriptive/reference-reconstruction implementation remains calibration only and cannot supply this baseline.",
+      "evidence_ids": [
+        "registration",
+        "ordered_candidates"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect cannot be justified until one original decoding endpoint, its metric scale, source baseline and original sampling design are bound. No generic margin is assigned.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the original evaluation units and dependence structure, then predeclare paired uncertainty for the bound original decoder comparison; no confidence threshold is invented.",
+      "independent_unit": "Depends on the selected original decoding task: animal/session sampling with trials, faces, windows and repeated splits nested; exact hierarchy unresolved.",
+      "rationale": "Repeated folds, random subsamples, overlapping windows or decoder repetitions are not independent biological replicates. Exact original protocol and eligible units must be recovered before admission.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "paper_win_requires": [
+      "Surpass the selected original endpoint itself on its complete original data, information, sampling/fold and metric support; preserve all named source companions. Complete original Figure 2d facial-feature decoding from AM, PR and TP responses across all source time windows: 1,000 unfamiliar-face leave-one-out folds, each using the other 999 unfamiliar faces for training and querying the omitted unfamiliar face plus all 36 familiar faces; retain all source populations and ten stimulus-identity-shuffled controls.",
+      "Authenticate the strongest relevant original author comparator and complete published/reference outputs. Original Figure 2d linear-regression decoder is the relevant author comparator. Its complete numerical curves and original panel reduction remain unrecovered; no geometry RMSE or other decoder panel supplies this baseline.",
+      "Calibrate author replay against the actual paper result under a justified predeclared numerical/protocol criterion; a weaker rerun cannot lower the paper target. Keep source-publication, author-replay and candidate values separate.",
+      "Freeze complete-support superiority, meaningful effect, dependence-aware uncertainty, candidate and equal access/resource accounting before final evaluation. Animals/sessions, with neurons, faces, LOOCV folds, familiar query repeats, overlapping windows and shuffle repetitions nested; exact hierarchy must be authenticated.",
+      "Report reproduction and improvement separately in paper+data and paper+data+official-code conditions. No biological significance/effect-size maximization, favorable coordinate selection, easier support, new split or different target counts as this same-paper improvement.",
+      "A paper-relative win is not current SOTA; current-SOTA comparisons require separate verified evidence."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed; any later SOTA assessment requires its own primary-source verification.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending recovery and binding of an ordered decoding endpoint actually evaluated in this source paper. Once admitted, iterate only with the original permitted training/validation access.",
+    "candidate_freeze": "Freeze the selected original endpoint, full cohort, source split, preprocessing, baseline route, candidate method and resource/access budgets before final scoring.",
+    "final_evaluation": "Compare on the same original source-paper task and evaluation protocol only after baseline recovery; no local descriptive reconstruction score or newly invented split can earn a paper win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original Figure 2d linear-regression decoder is the relevant author comparator. Its complete numerical curves and original panel reduction remain unrecovered; no geometry RMSE or other decoder panel supplies this baseline. Source-conformant stochastic reruns require provenance, original-protocol parity, predeclared calibration and paired support; unsaved historical RNG alone is not a requirement to invent a new task."
+  },
+  "blocking_issues": [
+    "Authenticate the complete Figure 2d neuron/animal/session/face roster, source archive members, feature coordinate order and repetition joins; do not reuse geometry counts as decoder identity.",
+    "Recover source feature standard-deviation normalization population, 50-ms/10-ms window boundary/grid, native linear decoder and all ten stimulus-identity-shuffle mappings.",
+    "Recover complete original published/reference curves and panel aggregation, including familiar-query dependence; establish calibrated author replay and a justified numerical reproduction criterion.",
+    "Predeclare complete-curve improvement, companion-control requirements, meaningful effect and dependence-aware paired inference; no selected region, latency or new aggregate is admissible.",
+    "Freeze common source representations, exact author-code package, exposure and cumulative resource/search budgets before activating either assistance condition.",
+    "The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Original Figure 2b,c familiar/unfamiliar encoding-axis geometry and its controls remain a separately named biological reproduction scope. Figure 2e reconstruction, Figure 3c familiarity and Extended Data 10k identity classification are separate source results, not substitute score choices for Figure 2d. Prior improvement.v1.json remains immutable as historical source evidence; this proposed primary-endpoint-v1 contract explicitly selects the source result without asserting runtime or outcome qualification."
+  }
+}

@@ -1,0 +1,573 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-012",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicit original-performance endpoint selection; exact source references/support and independent scientific reproduction acceptance remain unresolved. Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction.",
+  "source_paper": {
+    "title": "MINT: A toolbox for the analysis of multivariate neural information coding and transmission",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934"
+  },
+  "evidence": [
+    {
+      "id": "mint-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "Design and implementation; Results: Computing the role of interactions between neurons in information encoding; Figure 2C caption; Data availability and S1 Data",
+      "supports": "Identifies direct pair information, information decompositions and separate population-decoder information; CA1 has 11 sessions, 43–104 neurons and 36,158 simultaneous pairs; S1 Data is the empirical source."
+    },
+    {
+      "id": "ca1-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/panzerilab/MINT_figures/a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m",
+      "locator": "Options lines 1–25; pair loop lines 33–64; population decoder lines 66–123",
+      "supports": "Uses Position and R_neuron_binned, fixed labels, response cap 4 and 30 shuffle corrections; the direct MI call is commented out. Population SVM folds are a separate computation, not a truth target for direct MI."
+    },
+    {
+      "id": "mint-mi",
+      "kind": "author_code",
+      "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/src/MI.m",
+      "locator": "MI function and requested outputs",
+      "supports": "Author implementation route for mutual information and bias correction; source availability does not establish true information in empirical CA1 data."
+    },
+    {
+      "id": "local-reference",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-012/docs/initial-evaluator-v1.md",
+      "locator": "Computational contract; Primary source reconciliation; Validation and remaining work",
+      "supports": "Local implementation computes fixed-bin MI, QE and null diagnostics and explicitly disclaims native equivalence, empirical reproduction and inferential calibration."
+    },
+    {
+      "id": "previous-reproduction-fig2c-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "Figure2C caption and correlation-coding section; retained article.txt SHA256 fada1f286c86d701a5d7e4cde012e5414082de28b3330427bb42a04beb655dd0; character ranges23500:35300",
+      "supports": "Direct pair and summed-single information, RSI, PID synergy/redundancy and information breakdown; linear/RBF real/conditional-shuffle population information; mean and SEM over36158 pairs or11 sessions/five folds; paired t-test annotations. The caption has C/D dataset-label and spatial-bin discrepancies retained as unresolved."
+    },
+    {
+      "id": "previous-reproduction-ca1-appendix",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article/file?type=supplementary&id=10.1371/journal.pcbi.1012934.s001",
+      "locator": "SM7.2, printed pages23-24; retained appendix.txt lines1138-1161, SHA256 027229bbd6b6aa0787cd3a713a44390a828caf0eadb6dbced2a4ab9cb7a4b136",
+      "supports": "11 fields of view from seven animals;12 equi-populated position bins; two equi-populated non-deconvolved calcium bins;36158 simultaneous pairs; five outer folds and two inner optimization folds. Exact payload identity and conflict with other source representations remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-ca1-author-wrapper",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/panzerilab/MINT_figures/a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m",
+      "locator": "Pinned MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e, retained rawLines transcription CA1.m SHA256 840e315f74cc6fd1d935cb3c2662692dffb1ad33111c84ccdffa9523e11c63d3; options7-31, direct/PID48-68, population72-119",
+      "supports": "Position/R_neuron_binned fields; shuffle-subtraction with30 bias shuffles; two conditional-population shuffle realizations declared; two outer and two inner folds; direct MI call commented while later read; shuffled linear/RBF destinations reversed. This is inspected source, not a successful original execution."
+    },
+    {
+      "id": "previous-reproduction-existing-ca1-interface",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/tree/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1",
+      "locator": "prepare_mat.prepare and mint_reference.evaluate; existing partial construction interfaces",
+      "supports": "Explicit-root MAT preparation and fixed-bin pair-MI/QE/null diagnostics exist. They do not authenticate biological/sample identities or reproduce the full selected native decoder/PID panel. Their animal-balanced summaries and IID/circular-shift nulls do not replace the original pair-pooled means or conditional correlation-removal controls."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+      "locator": "PLOS Computational Biology 10.1371/journal.pcbi.1012934, Figure 2C population decoding and Methods; MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e/Figure2/CA1.m.",
+      "supports": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seven animals, 11 fields-of-view/sessions, 43–104 neurons per session. Retain every original session and eligible population; 36,158 pairs belong to the separate descriptive pair analysis and are not independent decoder cases.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Resolve reported five trial folds versus pinned twofold population-SVM options, separately from optimization folds; recover exact original partitions and nested tuning. No new animal holdout or favorable fold selection.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles. Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid. Both source linear and RBF SVM profiles; compare against the strongest relevant source real-response decoder on identical original partitions, retaining conditional-shuffle controls. Exact numeric session/fold vectors, source selection rule and mean/SEM values are unrecovered.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Figure 2C empirical CA1 population decoding: source linear and RBF SVMs applied to real and conditionally shuffled neural responses across all 11 sessions. Reproduce the original held-out confusion-matrix information and its source mean/SEM reductions; compare candidate spatial decoding with the strongest relevant original real-response decoder while retaining both kernels and the source shuffle controls. Direct pairwise information, redundancy/synergy and information-breakdown findings remain separately named biological reproduction. Seven animals, 11 fields-of-view/sessions, 43–104 neurons per session. Retain every original session and eligible population; 36,158 pairs belong to the separate descriptive pair analysis and are not independent decoder cases. Require independently derived complete observation-level predictions, source condition/fold membership and exact source reductions, not copied published values. Held-out confusion-matrix information I(S;predicted S), bits, higher is better for the same fixed target/estimator. Preserve linear/RBF × real/conditionally-shuffled information, native confusion counts and all session/fold reductions. Direct pair MI is not this metric; larger information from changed bins or estimator bias is invalid. Numerical-reference equivalence applies only to the retained scientific members in findings.representation.members. Raw predictions and source-support records remain mandatory through unchanged required_granular_output_ids and selection.v1.json audit_output_obligations; independently recompute the reported metrics from them without requiring author prediction equality. Authentic original labels, folds, inputs and eligibility remain fixed. Original figure curves, reported score matrices and expressly selected scientific companions remain targets.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Authenticated original CA1 observations and approved exact stimulus/response representation only; disclose any common prepared arrays and correction implementation. No fitted decoders, answer-bearing fold outputs or algorithm-bearing author solution in paper_data. Both assistance conditions use identical data, original split and declared common tools. MINT_figures a90eb535205c2df668e4e59c8f8d748c37fa815e and MINT f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb; curate exact Figure2/CA1.m decoder and necessary library source after native discrepancy resolution. Exposure manifests, independent execution/verification and resource limits remain unqualified.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "population_linear_real_mean",
+      "kind": "scalar",
+      "description": "Original caption-defined mean of linear population decoded information on real observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits",
+      "aggregation": "Original Figure2C mean for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_linear_real_sem",
+      "kind": "scalar",
+      "description": "Original caption-defined SEM of linear population decoded information on real observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits (standard error)",
+      "aggregation": "Original Figure2C SEM for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_linear_conditionally_shuffled_mean",
+      "kind": "scalar",
+      "description": "Original caption-defined mean of linear population decoded information on conditionally_shuffled observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits",
+      "aggregation": "Original Figure2C mean for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_linear_conditionally_shuffled_sem",
+      "kind": "scalar",
+      "description": "Original caption-defined SEM of linear population decoded information on conditionally_shuffled observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits (standard error)",
+      "aggregation": "Original Figure2C SEM for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_RBF_real_mean",
+      "kind": "scalar",
+      "description": "Original caption-defined mean of RBF population decoded information on real observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits",
+      "aggregation": "Original Figure2C mean for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_RBF_real_sem",
+      "kind": "scalar",
+      "description": "Original caption-defined SEM of RBF population decoded information on real observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits (standard error)",
+      "aggregation": "Original Figure2C SEM for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_RBF_conditionally_shuffled_mean",
+      "kind": "scalar",
+      "description": "Original caption-defined mean of RBF population decoded information on conditionally_shuffled observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits",
+      "aggregation": "Original Figure2C mean for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "population_RBF_conditionally_shuffled_sem",
+      "kind": "scalar",
+      "description": "Original caption-defined SEM of RBF population decoded information on conditionally_shuffled observations. Require complete independently computed native outputs and source reduction provenance, not a printed scalar or synthetic reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "bits (standard error)",
+      "aggregation": "Original Figure2C SEM for this kernel/condition over11 source recording sessions and five source outer trial folds. Exact original fold/session order, SEM recipe and conditional-realization reduction remain unresolved; do not assume55 independent observations, flatten shuffle repeats or select the wrapper two-fold branch.",
+      "evidence_ids": [
+        "previous-reproduction-fig2c-paper",
+        "previous-reproduction-ca1-appendix",
+        "previous-reproduction-ca1-author-wrapper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified computational reproduction tolerance is available. Caption SEM, significance stars, approximate narrative percentages and numerical consistency epsilons are not equivalence tolerances.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original paired comparisons, SEM calculation and dependence-aware reproduction criterion; source caption uses two-tailed paired t-test annotations, not a new success threshold.",
+        "independent_unit": "Seven animals containing11 FOV/sessions; neurons, simultaneous pairs, folds and shuffle realizations are dependent within that hierarchy. Original descriptive support is preserved separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original statistical annotations describe the source result. Their complete comparison roster, numerical outputs and justified reproduction acceptance rule remain unresolved. More significance, larger biological information or lower variance is not automatically improvement.",
+        "evidence_ids": [
+          "previous-reproduction-fig2c-paper",
+          "previous-reproduction-ca1-appendix"
+        ]
+      }
+    },
+    {
+      "id": "ca1_population_decoder_native_family",
+      "kind": "indexed_array_family",
+      "description": "Complete native Figure2C population decoder support; all 11 sessions, both linear/RBF kernels, real and conditional-shuffle responses. Eight printed source summaries are required but insufficient.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "ca1_population_decoder_native_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "confusion_information",
+            "manifest_key": "ca1_population_decoder_native_family.confusion_information",
+            "source_quantity": "Original per-fold held-out confusion-matrix information I(S;predicted S), in bits, with complete original session, kernel and real/shuffled condition support. Raw confusion counts are mandatory derivation evidence, not author-value-equivalence targets.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "bits",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recompute information from each submission’s audited confusion counts using the fixed original stimulus/prediction ordering, estimator, correction, conditional shuffles and source fold/session reduction. Compare the resulting information quantities, not raw confusion entries, with authenticated source score references.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "session",
+                "kernel",
+                "condition",
+                "outer_fold"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          },
+          {
+            "id": "native_source_reductions",
+            "manifest_key": "ca1_population_decoder_native_family.native_source_reductions",
+            "source_quantity": "All original session and mean/SEM values for real/shuffled linear/RBF decoding.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "bits",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover exact original reduction/SEM rules; no direct-pair MI or significance objective.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "kernel",
+                "condition",
+                "summary"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Recover authentic original support and exact source coordinate correspondence; no guessed identities or reshaping.",
+                "evidence_ids": [
+                  "selected-original-performance-endpoint"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "selected-original-performance-endpoint"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "required_granular_output_ids": [
+        "heldout_predictions",
+        "confusion_information",
+        "native_source_reductions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently recompute the selected original source metrics and compare only the scientific score, curve or reported-summary members retained in representation.members with authenticated publication-equivalent references. Required granular prediction/support outputs and selection.audit_output_obligations are mandatory audit evidence for coverage, provenance and metric recomputation; their prediction values, raw confusion counts and intermediate model-selection settings are not numerical-reference-equivalence targets. Original support identities, labels, folds and source-permitted information remain authenticated requirements. Numeric tolerances and uncertainty criteria remain unresolved.",
+        "independent_unit": "Seven animals with 11 fields-of-view/sessions; neuron observations, trial folds and shuffle realizations are dependent.",
+        "dependence": "Retain original animal/session/trial nesting and shared folds, model selections, random draws and controls; no independent-unit inflation.",
+        "multiplicity": "All declared source conditions and companions are mandatory. A justified joint agreement policy is unresolved.",
+        "rationale": "Exact native output/coordinate manifests, source equivalence and independent comparison programs remain absent; no hashes or criterion are invented. The separation of reported scientific targets from mandatory computation evidence does not waive original data/support authentication, native analysis verification or any retained source control.",
+        "evidence_ids": [
+          "selected-original-performance-endpoint"
+        ]
+      },
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+    "Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.",
+    "Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.",
+    "Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.",
+    "Qualify source-matched reproduction tolerance, strongest comparator selection, meaningful gain and dependence-aware joint decision; budgets and independent execution remain unqualified."
+  ]
+}
