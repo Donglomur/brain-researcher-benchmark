@@ -24,7 +24,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   c-source-identities:
+    needs: source-preflight
     name: C / source identities
     runs-on: ubuntu-24.04
     timeout-minutes: 3
@@ -81,7 +84,7 @@ jobs:
                   "sha256": "182f635771f838c0ab69bf934b22571fa26b3101b30a3ab54fda58df23ed80bd"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-016/task.json",
+                  "path": "benchmarks/neural/NEURAL-016/historical/task.pre-understanding.v1.json",
                   "bytes": 28911,
                   "sha256": "ab8710a3ec322e86df18814b376f34c6b11910517dd4487fce807dcd767a5ac5"
               },
@@ -111,7 +114,7 @@ jobs:
                   "sha256": "81a90154801fbaafcaa32fda99f451b30cecf04953fa66d819681aaf3c2ba0b4"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-040/task.json",
+                  "path": "benchmarks/neural/NEURAL-040/historical/task.pre-understanding.v1.json",
                   "bytes": 16626,
                   "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
               },
@@ -141,7 +144,7 @@ jobs:
                   "bytes": 12447
               },
               {
-                  "path": "benchmarks/neural/NEURAL-072/task.json",
+                  "path": "benchmarks/neural/NEURAL-072/historical/task.pre-understanding.v1.json",
                   "bytes": 13411,
                   "sha256": "26b292bd06b0b3a11c7e9b96e44e4a7a1cd0a14ac559b579a3cb70db684630ae"
               },
@@ -171,7 +174,7 @@ jobs:
                   "sha256": "f4a6cd341d439a392c1beddfab49c442a49bc4a1065a10473fa43fdabb50a2b5"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/task.json",
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/historical/task.pre-understanding.v1.json",
                   "bytes": 28166,
                   "sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
               },
@@ -757,7 +760,7 @@ jobs:
                   "sha256": "182f635771f838c0ab69bf934b22571fa26b3101b30a3ab54fda58df23ed80bd"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-016/task.json",
+                  "path": "benchmarks/neural/NEURAL-016/historical/task.pre-understanding.v1.json",
                   "bytes": 28911,
                   "sha256": "ab8710a3ec322e86df18814b376f34c6b11910517dd4487fce807dcd767a5ac5"
               }
@@ -920,7 +923,7 @@ jobs:
                   "sha256": "81a90154801fbaafcaa32fda99f451b30cecf04953fa66d819681aaf3c2ba0b4"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-040/task.json",
+                  "path": "benchmarks/neural/NEURAL-040/historical/task.pre-understanding.v1.json",
                   "bytes": 16626,
                   "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
               }
@@ -1083,7 +1086,7 @@ jobs:
                   "bytes": 12447
               },
               {
-                  "path": "benchmarks/neural/NEURAL-072/task.json",
+                  "path": "benchmarks/neural/NEURAL-072/historical/task.pre-understanding.v1.json",
                   "bytes": 13411,
                   "sha256": "26b292bd06b0b3a11c7e9b96e44e4a7a1cd0a14ac559b579a3cb70db684630ae"
               }
@@ -1246,7 +1249,7 @@ jobs:
                   "sha256": "f4a6cd341d439a392c1beddfab49c442a49bc4a1065a10473fa43fdabb50a2b5"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/task.json",
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/historical/task.pre-understanding.v1.json",
                   "bytes": 28166,
                   "sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
               }

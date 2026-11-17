@@ -4,7 +4,7 @@
   "title": "Continuous self-motion reconstruction from simultaneous vestibular spike trains",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Can spikes from a genuinely simultaneous vestibular recording recover measured angular head velocity in held-out complete stimulus repeats, beyond stimulus-class and phase priors?",
+  "scientific_question": "Do genuine simultaneously recorded vestibular spike pairs reduce held-repeat angular-velocity error beyond the admissible training-only stimulus/phase prior, in each recorded animal and motion condition?",
   "participant_inputs": "Exact spikes and permitted training calibration for each genuine simultaneously recorded pair, observation start/timebase and label-independent recording-quality masks. Query inputs exclude head-velocity samples, stimulus waveform ID, absolute repeat index, fitted tuning from held trials, and simulated neural data.",
   "known_answer": "Experimentally measured angular head velocity time series aligned with the recording; units/sign/sampling and stimulus repeat identities must be established from authentic schema before task freeze.",
   "complete_scope": "All49 neurons and35 simultaneous pair relationships, all3 animals and naturalistic plus artificial conditions in the published acquisition, subject to reconciled payload membership. A cell can occur in multiple recorded pairs: it remains one cell and animal and is never independent replication. No fabricated49-neuron pseudo-population; non-simultaneously recorded traces cannot be concatenated as same-time input.",
@@ -176,5 +176,131 @@
     "submission_ready": false,
     "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
     "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Measured angular head velocity at every valid native target sample of a complete held stimulus repeat. Reconstructing this measured trajectory is a neural decoding target; reproducing the paper’s encoding/correlation figures is not the answer."
+  ],
+  "biological_unit": "Three macaques; repeat, recording group, neuron and pair dependencies remain nested and shared-neuron links are retained.",
+  "case_definition": "One complete held stimulus repeat within an authenticated animal/session/recording group and motion condition.",
+  "allowed_inputs": {
+    "inputs": [
+      "Exact spike timestamps for each genuine observed pair or fixed training-selected spike-count bins, native query duration/timebase, and input-derived quality/core masks.",
+      "Training repeats and only explicitly allowed calibration; retain complete naturalistic and eight sinusoidal-frequency conditions with real availability accounting."
+    ],
+    "forbidden_inputs": [
+      "Held velocity values, original waveform identity or absolute repeat phase when not in the declared information condition.",
+      "Tuning/filter/normalization fitted on held repeats; LIF simulations substituted for biological spikes."
+    ],
+    "case_identity": "The scorer requires case id, group_id, condition, repeat_id and exact integer sample_ticks; groups retain animal_id, session_id, recording_id, neuron_ids and pair_id. Authentic values and opaque participant mappings are not supplied. A structurally valid asserted pair does not prove simultaneity.",
+    "split": "Current component validates a supplied held-repeat reference and training_only prior declaration; it does not construct or authenticate splits. Freeze whole-repeat train/held groups and temporal buffers covering all model lags before producing artifacts. Secondary animal transfer requires a separate calibrated protocol.",
+    "coverage": "Census shape is 3 animals, 49 neurons, 35 pair relationships and nine required conditions. Every animal-condition-stratum cell is represented, including unavailable cells with reasons. Groups are actual recordings, not necessarily 35 groups; single neurons are separate diagnostics. The authentic full repeat roster remains unresolved."
+  },
+  "split": {
+    "policy": "Current component validates a supplied held-repeat reference and training_only prior declaration; it does not construct or authenticate splits. Freeze whole-repeat train/held groups and temporal buffers covering all model lags before producing artifacts. Secondary animal transfer requires a separate calibrated protocol.",
+    "coverage": "Census shape is 3 animals, 49 neurons, 35 pair relationships and nine required conditions. Every animal-condition-stratum cell is represented, including unavailable cells with reasons. Groups are actual recordings, not necessarily 35 groups; single neurons are separate diagnostics. The authentic full repeat roster remains unresolved."
+  },
+  "controls": [
+    "Whole-repeat reassignment and within-pair temporal shifts preserving autocorrelation; identical replayed waveforms can make reassignment powerless and must be reported.",
+    "Phase/stimulus-only and spike-count-only predictions on identical frozen support.",
+    "Authenticate simultaneity, animal/session/cell identity and units/sign; keep the figure-specific 41-neuron subset distinct from the full 49-neuron census."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed fixed numeric spike-raster/count observations over complete repeat cores, with timebase and declared history.",
+      "boundary": "No numerical/model tools; preserve all samples via fixed tiling and score each core once. Derived rate displays would be separately identified substrates.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Complete authentic direct packet and response transport; feasibility of full-duration numeric output not established."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed raster/time-axis display of the same spike observations.",
+      "boundary": "Restricted render/zoom/pan actions may reveal only declared input support, never velocity, waveform identity or hidden phase.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer, image transport or full-coverage response collector exists for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical per-case decoder investigation on identical spike packets and calibration.",
+      "boundary": "Equal input/checkpoint/tool/compute budget, no target feedback; reset case state as declared. The scorer accepts a case_investigation artifact label only.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No authenticated input or case-adaptive participant runner; label does not prove execution."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted spike-to-velocity programme and train-only fit/adaptation recipe.",
+      "boundary": "Freeze code, preprocessing, lags and calibration before held-repeat access; scorer accepts completed arrays but never runs the producer.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "Complete programme training/inference harness, budgets and authentic comparator production."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-by-condition vector of prior MSE minus candidate MSE",
+      "direction": "higher",
+      "aggregation": "Mean squared error on each fixed valid repeat core; equal repeat means within each genuine simultaneous recording group; equal group means within each animal-condition cell. Report every cell without a cross-animal primary scalar.",
+      "rationale": "Requires signal-derived reconstruction to improve on the legitimate repeat-phase alternative while preserving the actual biological and condition coverage."
+    },
+    "secondary": [
+      "Raw candidate and prior MSE per repeat/group/cell.",
+      "R², Pearson correlation, signed bias, scale/intercept and sign agreement; constant targets keep MSE and have explicitly undefined variance-based statistics.",
+      "Sample-duration-weighted MSE and all singleton strata are named secondary outputs."
+    ],
+    "comparators": [
+      {
+        "name": "Training-only motion/phase prior",
+        "inputs": "Only phase/stimulus information legitimately available in the selected access condition and training-repeat velocity.",
+        "procedure": "Externally choose and freeze the strongest admissible prior using training/development only; scorer consumes one prior array and does not verify selection competence."
+      },
+      {
+        "name": "Wiener/ridge neural decoder",
+        "inputs": "Same permitted pair spike bins, timing/history and calibration as candidate.",
+        "procedure": "Proposed competent linear decoder; choose lags and ridge penalty on training-only grouped validation. No authentic fit is delivered."
+      },
+      {
+        "name": "Static firing-rate readout",
+        "inputs": "Same observed pair, reduced to fixed rate features.",
+        "procedure": "Proposed train-only rate/tuning baseline to distinguish temporal coding gain from overall spike count."
+      }
+    ],
+    "nuisance_controls": [
+      "Whole-repeat reassignment and within-pair temporal shifts preserving autocorrelation; identical replayed waveforms can make reassignment powerless and must be reported.",
+      "Phase/stimulus-only and spike-count-only predictions on identical frozen support.",
+      "Authenticate simultaneity, animal/session/cell identity and units/sign; keep the figure-specific 41-neuron subset distinct from the full 49-neuron census."
+    ],
+    "uncertainty": "Report all three animal estimates and recording/shared-neuron dependence. The scorer computes no population confidence interval or significance threshold; bins, pairs and repeats are not independent animals.",
+    "failure_policy": "Missing/extra/duplicate cases, shifted clocks, participant masks, nonfinite or incomplete predictions refuse the entire primary result. Predetermined unavailable cells remain explicit; never average successful cases only.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "76c397352370e0c3f9202c0633479027727cb4f803808e11f93c53003bf09cb0",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "beb13f4cff4fea48f88e5fbd0cf92e877ef3ae9df810311b0c26de0d5b72a682"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

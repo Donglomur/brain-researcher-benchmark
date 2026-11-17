@@ -2,11 +2,11 @@
 
 [All benchmarks](../README.md) · [Other track](../neural/README.md)
 
-Success requires surpassing the source paper on the same original scientific task. Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. Compare paper + data with paper + data + official code under fixed matched budgets; historical reproduction is calibration only.
+Paper reproduction and paper improvement are separate first-class outcomes on the same scientific task. Reproduction assesses faithful recovery of the source result; improvement assesses superior performance. Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. Compare paper + data with paper + data + official code under fixed matched budgets; existing historical attempts retain their recorded scope and are not automatically qualified for either outcome.
 
-Paper improvement audit: **116/116 covered**; **0 improvement-ready**, **20 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.
+Current paper-improvement contract audit: **117/117 covered**; **0 improvement-ready**, **21 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Paper reproduction is a separate first-class outcome; these counts describe the existing improvement contracts, not reproduction qualification. Numerical fidelity remains a necessary comparison check. A new split is an extension, never a same-task paper victory.
 
-**116 registered task drafts: 100 original specifications + 16 expansion drafts.** Scientific and submission readiness remain **unknown**.
+**117 registered task drafts: 100 original specifications + 17 expansion drafts.** Scientific and submission readiness remain **unknown**.
 
 Each task folder contains its authoritative `task.json` and explicitly assigned source artifacts or links to shared families. Implementation scope notes distinguish complete definitions from narrower or alternative source. A folder and its source do not establish a qualified runnable benchmark. Conditions, aliases and implementation artifacts do not add independent benchmarks.
 
@@ -64,14 +64,14 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-ROOT-ADD-026](PAPER-ROOT-ADD-026/README.md) | Temporal dynamics of short-term neural adaptation across human visual cortex | source_unresolved | 1 | [manifest](PAPER-ROOT-ADD-026/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-001](PAPER-paper-method-001/README.md) | Estimating Dimensionality of Neural Representations from Finite Samples | source_unresolved | 2 | [manifest](PAPER-paper-method-001/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-002](PAPER-paper-method-002/README.md) | Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics | design_ready | 2 | [manifest](PAPER-paper-method-002/implementations/registered-runtime/manifest.json) |
-| [PAPER-paper-method-003](PAPER-paper-method-003/README.md) | REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects | design_ready | 1 | not linked |
+| [PAPER-paper-method-003](PAPER-paper-method-003/README.md) | REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects | design_ready | 2 | not linked |
 | [PAPER-paper-method-006](PAPER-paper-method-006/README.md) | Spike sorting with Kilosort4 | source_unresolved | 1 | [manifest](PAPER-paper-method-006/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-007](PAPER-paper-method-007/README.md) | Tracking neurons across days with high-density probes | design_ready | 2 | [manifest](PAPER-paper-method-007/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-009](PAPER-paper-method-009/README.md) | A doubly stochastic renewal framework for partitioning spiking variability | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-010](PAPER-paper-method-010/README.md) | Rastermap: a discovery method for neural population recordings | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-011](PAPER-paper-method-011/README.md) | An emerging view of neural geometry in motor cortex supports high-performance decoding | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-012](PAPER-paper-method-012/README.md) | MINT: A toolbox for the analysis of multivariate neural information coding and transmission | source_unresolved | 1 | not linked |
-| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | design_ready | 1 | not linked |
+| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | design_ready | 2 | not linked |
 | [PAPER-paper-method-018](PAPER-paper-method-018/README.md) | Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-020](PAPER-paper-method-020/README.md) | Neuro-Symbolic Decoding of Neural Activity | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-023](PAPER-paper-method-023/README.md) | EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals | source_unresolved | 1 | not linked |
@@ -114,7 +114,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-signal-add-019](PAPER-paper-signal-add-019/README.md) | Decision-making components and times revealed by the single-trial electroencephalogram | source_unresolved | 1 | not linked |
 | [PAPER-paper-signal-add-020](PAPER-paper-signal-add-020/README.md) | Separable neural signals for reward and emotion prediction errors | ineligible | 1 | [manifest](PAPER-paper-signal-add-020/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-signal-add-021](PAPER-paper-signal-add-021/README.md) | Perturbing human V1 degrades the fidelity of visual working memory | ineligible | 6 | [manifest](PAPER-paper-signal-add-021/implementations/registered-runtime/manifest.json) |
-## Expansion drafts (16)
+## Expansion drafts (17)
 
 | Task | Scientific question / title | Improvement disposition | Implementation artifacts | Legacy runtime declaration |
 | --- | --- | --- | --- | --- |
@@ -133,6 +133,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | source_unresolved | 6 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | 1 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | 1 | not linked |
+| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: same-task improvement on the complete MC\_Maze 20-ms panel | design_ready | 1 | not linked |
 | [paper-pcca-fa-bilateral-pfc-arousal-2026](paper-pcca-fa-bilateral-pfc-arousal-2026/README.md) | Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction | source_unresolved | 1 | not linked |
 
 Generated with `python3 scripts/catalog.py` from the repository root. Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.

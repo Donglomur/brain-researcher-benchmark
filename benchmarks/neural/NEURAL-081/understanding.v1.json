@@ -1,0 +1,254 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-081",
+  "title": "Imagined melody identification",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The delivered source is a complete closed-set instructed-excerpt comparison, narrower than subjective imagined-melody identification. Preparation/constructor source works toward delivery but does not establish authentic inference or a direct observation arm.",
+  "scientific_target": {
+    "question": "Can a model infer the instructed excerpt class from a fixed no-concurrent-audio EEG window of an excluded participant, with performance beyond a matched zero-waveform control?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The instructed excerpt identifier in canonical class order[1,2,3,4,11,12,13,14,21,22,23,24]; it is not a verified report of the participant’s subjective melody content.",
+    "answer_origin": "Source condition 4 event/annotation identities, privately joined to admitted physical EEG windows and complete support. Authentic physical-boundary validation remains external.",
+    "case_unit": "Exactly one current EEG window [64,512], float32 volts at 128 Hz, representing four seconds beginning 0.5 s after source onset.",
+    "independent_unit": "Ten biological participants; multiple excerpt/repetition trials are nested and LOPO training folds overlap.",
+    "inference_scope": "Closed-set cross-person instruction decoding under the source’s fixed imagery protocol, with every class in training. The paired EEG/ZERO contrast tests dependence on waveforms without separating neural activity from ocular/motor/cue carryover.",
+    "exclusions": [
+      "No unseen-excerpt generalization or verified introspective-content decoding.",
+      "No pure melody/imagery causal inference; lyrics/nonlyrics variants are separate classes, not 12 unique melodies.",
+      "No direct/native reasoning gain inferred from computational programme or interactive tool results."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete64-channel source-ordered windows after within-sample average reference and fixed four-sample averaging 512 Hz→128 Hz; no outside-window padding or fitted session preprocessing is added.",
+      "All permitted labeled training windows from other nine participants, opaque group aliases and four sealed reference states for the current fold/view. ZERO replaces all training/query waveforms with positive float32 zeros while retaining support and labels."
+    ],
+    "forbidden_inputs": [
+      "Held-person labeled calibration, other query windows or query batches, prior conversations, cross-query state, target correctness and grading feedback.",
+      "Source event timestamps/names, excerpt-coded cues, actual concurrent audio, unrestricted retrieval and model updates shared across episodes."
+    ],
+    "case_identity": "Canonical IDs privately bind source-event index/onset and participant; candidates receive opaque 32 hex row/group aliases and the exact 12 nonconsecutive class IDs. The complete trial census N is source-dependent and not fabricated here.",
+    "split": "Leave one participant out; train on the other nine. Every admitted condition 4 trial and all 12 classes per participant are required; current-query unlabeled transduction is allowed for candidates but fixed references remain inductive.",
+    "coverage": "Complete10-person support, two waveform views and three replications; all 12 N candidate closures and 240 complete assessment panels are required. Source preparation maps 105 exact prerequisites; N and authentic eligibility are not established by constructor success."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant-macro 12-class balanced accuracy",
+      "direction": "higher",
+      "aggregation": "Compute12 class recalls within each of 10 people, average equally across classes and people; report paired I-minus-F and EEG-minus-ZERO separately.",
+      "rationale": "Weights people and classes equally while preserving the true instruction-label target and mandatory no-waveform comparator."
+    },
+    "secondary": [
+      "Participant-macro NLL with declared 1e-12 log floor; retain probability validation without renormalization.",
+      "Complete per-class confusion/recall, paired mode/view contrasts, reference comparisons and three-replication range/sample SD.",
+      "Leave-one-person aggregation sensitivity, not retraining or population confidence intervals."
+    ],
+    "comparators": [
+      {
+        "name": "BP_LDA, TM_LDA and RBF_KRR",
+        "inputs": "The same complete permitted training windows and group structure for each view.",
+        "procedure": "Existing source completes all training-person-held inner settings and temperature selection; strongest family chosen solely from training."
+      },
+      {
+        "name": "Historical BP_LDA plus uniform and Laplace priors",
+        "inputs": "Historical declared training recipe or training class counts only.",
+        "procedure": "Existing source preserves historical algorithm as a distinct comparator without claiming numerical parity; analytic priors expose class-frequency shortcuts."
+      },
+      {
+        "name": "ZERO waveform view",
+        "inputs": "Identical labels/group/protocol/budgets but all-zero waveforms in both train and query.",
+        "procedure": "Independent reference fitting and both candidate modes run on full unchanged support; no EEG-fitted state transfers to ZERO."
+      }
+    ],
+    "nuisance_controls": [
+      "Fixed equal-duration crop removes excerpt-length leakage; authenticate imagery cue/audio boundaries rather than trusting synthetic feedback pseudo-times.",
+      "Exclude event markers/filename/order and held-person calibration; enforce fresh single-query state.",
+      "Retain all source channels/trials including original bad-channel flags; report flag prevalence after closure.",
+      "Disclose candidate current-query transduction versus inductive reference access and cue/perception/ocular/motor alternatives."
+    ],
+    "uncertainty": "Ten fixed people and overlapping LOPO folds support descriptive paired biological effects. Report omission sensitivity and algorithm-replication variation; do not use iid-trial significance or interpret repetitions as people.",
+    "failure_policy": "Require exactly 12 finite[0,1]probabilities summing within 1e-6; no renormalization. Every class/person/view/replication and all 240 panels must close before targets open; incomplete support or unknown closure refuses complete assessment."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/README.md",
+      "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/release/CANDIDATE_PROTOCOL.txt",
+      "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/source-resolution/README.md",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/metrics.py",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/grading.py",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/episodes.py",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/candidate_runner.py",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/controller.py",
+      "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/transport/provider.py"
+    ],
+    "scorer_target": "The scorer evaluates held instruction labels from real EEG windows, not source-paper table reproduction. It computes balanced accuracy/log loss and matched waveform/mode contrasts; it cannot verify what music was actually imagined.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Portable constructor, exact source-map preparer, candidate protocol and full protected scorer are public. This is a source instance construction path, with authentic input and independent runtime/physical qualification outstanding.",
+    "missing": [
+      "Validate source FIF/events/physical imagery windows and complete 10-person class support.",
+      "Qualify exact numerical dependencies and complete fixed-reference fits.",
+      "Provision enforced per-query isolation and actual provider/native transport before any mode comparison."
+    ],
+    "execution_evidence": "Current-checkout source-preparation and construction controls are documented; they use source and invented metadata profiles, not authentic neural inference or solver trials."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A fixed 64 channel four-second waveform can support a no-tools numerical/visual observation condition with the same 12-label answer.",
+      "boundary": "Any direct arm must receive a bounded declared observation and its own matched demonstrations, without numerical/model calls or held labels; programme evidence cannot stand in.",
+      "evidence_ids": [
+        "candidate-protocol"
+      ],
+      "missing": [
+        "No no-tools packet/renderer and direct-model transport or trial evidence."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed time/channel waveform inspection preserving the fixed four-second observation and label schema.",
+      "boundary": "A viewer must restrict rendering/actions and never return raw arrays, private event identities or other queries.",
+      "evidence_ids": [
+        "candidate-protocol"
+      ],
+      "missing": [
+        "No task-specific typed viewer or audited image transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "episodes.investigate implements the provider/python/predict action loop, candidate_runner.execute runs each numerical action, and the study controller collects the complete case result; these are source capabilities without authentic/runtime qualification.",
+      "boundary": "At most declared native actions within matched episode resources; current-query transduction permitted, all state reset and no feedback.",
+      "evidence_ids": [
+        "participant-episodes",
+        "participant-runner",
+        "participant-controller",
+        "participant-provider",
+        "candidate-protocol"
+      ],
+      "missing": [
+        "Authentic full input and enforced provider/native isolation qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "episodes.author seals predict(context) before authentic exposure; episodes.fixed and candidate_runner.execute implement one no-provider native invocation per query with the same permitted observations and numerical toolkit.",
+      "boundary": "One native invocation per current query under declared matched budgets; precommitted algorithm may use permitted single-query transduction.",
+      "evidence_ids": [
+        "participant-episodes",
+        "participant-runner",
+        "participant-controller",
+        "candidate-protocol"
+      ],
+      "missing": [
+        "Complete reference fits and independently qualified physical execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-registration",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-081/historical/task.pre-understanding.v1.json",
+      "sha256": "b01afeb4ce8f61f399a2966e15b5d5fa9df8c7790c1b4ebb4e69bb061994cb5d",
+      "supports": "Original scientific scope and recorded source-audit findings; preserved verbatim by the revision."
+    },
+    {
+      "id": "candidate-protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/release/CANDIDATE_PROTOCOL.txt",
+      "sha256": "7647dff74593dd2e13a753f21df27b9f7884fe3732c21cf363ee4a165282627d",
+      "supports": "Fixed four-second 64x512 volt windows,12 instruction classes, EEG/ZERO views and single-query-transductive candidate access."
+    },
+    {
+      "id": "numerical-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/metrics.py",
+      "sha256": "927272a26c5fef6f02d62eb407337eccda93029030cece3eb5f01d4a7face74b",
+      "supports": "Exact12-class probabilities, participant-macro balanced accuracy and clipped NLL."
+    },
+    {
+      "id": "protected-assessment",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/grading.py",
+      "sha256": "e940d6bb5454e41fb6fb81f77ad9571edf2d764082de6e2d72d5a5d595c3965d",
+      "supports": "Complete240-panel target-last scoring, paired mode/view contrasts and descriptive uncertainty."
+    },
+    {
+      "id": "source-construction",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/source-resolution/README.md",
+      "sha256": "a5c39ad5e5400e5e9800af10c49cd4431bce6ca28f3afba0065d708f5d6ca616",
+      "supports": "105 exact prerequisites and current-checkout preparer; constructor success is not authentic scientific execution."
+    },
+    {
+      "id": "portable-scope",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-081/implementations/neural-081/portable-v1/README.md",
+      "sha256": "bb46180eff4d150c879c4f8248ccbb8c866cdffb7855cb9ff9a2f50c4bd2b210",
+      "supports": "Complete source release and remaining external authentic/runtime qualification."
+    },
+    {
+      "id": "openmiir-author-code",
+      "kind": "primary_source",
+      "url": "https://github.com/sstober/openmiir",
+      "locator": "Official README",
+      "supports": "Ten subjects,12 short excerpts with tempo/meter/lyrics variation; instructions do not independently verify internal imagined content."
+    },
+    {
+      "id": "openmiir-project",
+      "kind": "primary_source",
+      "url": "https://openmiir.github.io/",
+      "locator": "OpenMIIR1 dataset description",
+      "supports": "Source dataset concerns perception and imagination of 12 music stimuli."
+    },
+    {
+      "id": "participant-episodes",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/episodes.py",
+      "sha256": "21f402bd46ef2a80f847fae19d6a43c7aeddb42f3f4192588eaf505ba24a8c39",
+      "supports": "investigate supplies the concrete provider/python/predict action loop; fixed invokes sealed predict(context) once with no query-time provider."
+    },
+    {
+      "id": "participant-runner",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/candidate_runner.py",
+      "sha256": "1e804c9bf3f4d0e7d25afe646617194e3fc323e813808bfb9c3bcce9b83dbb8a",
+      "supports": "execute implements actual dynamic Python analysis and frozen predict(context) entrypoints on authenticated generic-path observations."
+    },
+    {
+      "id": "participant-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/controller.py",
+      "sha256": "2038ba8c5adf12bea39bc117f5af63f152e4787ee1aba16b1ac9635ea5dbb81d",
+      "supports": "Complete study controller selects investigation/frozen episodes and constructs all case/panel closures before target-last grading."
+    },
+    {
+      "id": "participant-provider",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-081/implementations/programme-source/implementation-v1/installation-v1/acyclic-parent-v1/program/transport/provider.py",
+      "sha256": "384c5fc38b79a674822225606df80ff223bf700c140247caad82927987dc1cdd",
+      "supports": "ChatCompletionTransport.complete sends the selected bounded provider request and records actual response closure; no provider call is made by this revision."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "This revision inspects source and existing public construction evidence only. The four historical neural programme attempts concern EEG077/sleep 007, not this task. No direct-observation, viewer, human or model result is established here.",
+    "excluded_claims": [
+      "No unseen-excerpt generalization or verified introspective-content decoding.",
+      "No pure melody/imagery causal inference; lyrics/nonlyrics variants are separate classes, not 12 unique melodies.",
+      "No direct/native reasoning gain inferred from computational programme or interactive tool results."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace mental-content ground truth with actual instruction labels and explicit cue/lyrics limitations.",
+      "Adopt implemented fixed-duration voltage representation, nonconsecutive class IDs and completeLOPO support.",
+      "Expose EEG/ZERO and single-query-transductive access differences; keep direct/viewer absent."
+    ],
+    "source_review": "Inspected original registration and actual public scorer/protocol/constructor source; checked official EMD/OpenMIIR primary source metadata on 2026-11-16. No recording payload, target array or model was opened."
+  }
+}

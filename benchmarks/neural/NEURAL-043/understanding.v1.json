@@ -1,0 +1,277 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-043",
+  "title": "Tongue-reach direction decoding from ALM",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The preserved ALM package implements a prospective mouse-level direction scorer, source mapping reader and matched-arm packet construction. Its public entry is status-only: authentic per-recording mappings, eligible-case roster, isolated provider and executed references remain absent. Activate those inputs before treating this source as a runnable decoding benchmark.",
+  "scientific_target": {
+    "question": "Can retrospective premovement ALM calcium observations distinguish the instructed tongue-reaching direction across whole held target blocks, and separately across anatomically aligned held mice, beyond previous direction/reward, movement history and session time?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The source trial direction in the complete ordered 4×4 or 5×5 target layout, expressed as a probability vector over all16 or all25 native directions. Current query labels are evaluator-only.",
+    "answer_origin": "Mapped source trial direction and physical grid metadata; the authenticated per-file mapping and eligible trial inventory have not been issued. A decoder prediction is compared to this behavioral target, not to a paper table.",
+    "case_unit": "One held repeated-target block within a session, or one held mouse in one physical layout; scored trials are nested observations.",
+    "independent_unit": "Mouse; sessions, target blocks, trials and cells within mouse are dependent.",
+    "inference_scope": "Retrospective decoding from tracking-onset-aligned calcium. The source enforces [-0.5,-0.1]seconds and full exposure/preprocessing support; it does not predict an unknown future movement onset online. Held-block and held-mouse claims remain separate.",
+    "exclusions": [
+      "No merging16-class and25-class outcomes into one label space.",
+      "No claim that the source release census equals a qualified number of eligible mice/trials.",
+      "No causal ALM mechanism or direct-model understanding inference from programme accuracy."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Prospective source-derived dF/F window means from segmentation-QC ROIs, with complete frame exposure and preprocessing support inside the fixed premovement interval.",
+      "Training labels only; query features use session ROI axes for held blocks or externally established anatomical bins for held-mouse transfer.",
+      "Separate declared feature families: neural, prior-direction/reward/history-speed/session-time nuisance, and their combination. Nuisance history must end before the neural window."
+    ],
+    "forbidden_inputs": [
+      "Current direction-coded events, query labels, source identities and answer-bearing trial metadata.",
+      "Current/future movement, contact/reward outcomes, support outside the allowed interval, or test-mouse tuning used to align axes.",
+      "Whole-session or query-fitted scaling and outcome-dependent cell selection."
+    ],
+    "case_identity": "Source trial identity is(mouse,session,trial_id); public case and trial IDs are keyed HMAC digests. Fold source IDs are block:mouse:session:block or mouse:layout:mouse. No genuine emitted ID roster exists yet.",
+    "split": "Implemented design: whole target blocks with their immediately adjacent blocks embargoed; separate leave-one-mouse-out by physical layout with independent anatomical alignment. The training fold must contain every direction; deficient folds receive non-estimable dispositions.",
+    "coverage": "Loader requires dispositions for the reported61 behavior/imaging files and15 mice, including the52-session/13-mouse stimulation subset shared with NEURAL-044. Actual eligible counts and emitted cases remain unknown. Both layouts, split claims and access arms are conditions of this one registration."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Mouse-macro balanced accuracy by physical layout and split claim",
+      "direction": "higher",
+      "aggregation": "Pool all held-out trial predictions within each mouse before class recall; average mouse scores equally. Report observed test classes and never pool16/25-class spaces or held-block/held-mouse results.",
+      "rationale": "Measures recovery of the measured behavioral target while avoiding trial-count weighting and block-average recall artifacts."
+    },
+    "secondary": [
+      "Mouse-macro log loss with probability clipping at1e-15.",
+      "Paired neural-minus-history/time and combined-minus-history/time differences on identical held trials; competence is not implied by chance-level accuracy.",
+      "Per-mouse class support, full trial/fold dispositions, and whole-block label-rotation diagnostic."
+    ],
+    "comparators": [
+      {
+        "name": "Training class prior",
+        "inputs": "Training direction counts only",
+        "procedure": "Implemented Laplace-smoothed frequency vector repeated for every query."
+      },
+      {
+        "name": "History/time logistic reference",
+        "inputs": "Prior direction, previous reward, prior movement speed and session time",
+        "procedure": "Implemented train-only StandardScaler plus balanced logistic regression, fixed C=1; match query IDs and all limits."
+      },
+      {
+        "name": "Neural and neural-plus-history logistic references",
+        "inputs": "Allowed dF/F features alone or concatenated with nuisance features",
+        "procedure": "Implemented fixed C=1 reference; scaling on training only, convergence required, no outcome-selected hyperparameters."
+      }
+    ],
+    "nuisance_controls": [
+      "Embargo adjacent repeated-target blocks; isolate all sessions of a held mouse.",
+      "Keep the full16/25-direction spaces and disclose unsupported classes instead of binary recoding.",
+      "Tracking-defined onset and exposure/support checks exclude post-onset leakage; ROI QC may use segmentation only.",
+      "Deterministic whole-block label rotation is a diagnostic, not a randomization p-value."
+    ],
+    "uncertainty": "Implemented approximate95% t intervals across mice when at least two are scoreable; one mouse has no population interval. Cross-validation training overlap and small mouse count limit interpretation; report paired mouse effects and no cell/trial pseudoreplication.",
+    "failure_policy": "Require exact case/trial IDs, class order, full probability count and finite simplex rows. Preserve all source/trial/fold exclusions and missing classes. Do not silently average only successful blocks or delete failed actors."
+  },
+  "implementation": {
+    "scorer_target": "grading.score_prediction_cohort pools held-out predictions within mouse and scores true source direction labels as balanced accuracy/log loss; this is a genuine behavioral decoding target. Internal operator calls it after both arm submissions are committed.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete prospective scientific modules and packet/scorer source are preserved, including distinct held-block and held-mouse claims. No genuine native mapping provider or public run/score route is delivered.",
+    "missing": [
+      "Authenticated61-file source roster, per-recording native field/clock/onset/ROI mappings, and eligible trial census.",
+      "Independent anatomical alignment for new-mouse claim and measured full-workload resource bounds.",
+      "Isolated participant transport, authentic reference/scorer checks, and model interpretation trials."
+    ],
+    "execution_evidence": "Package manifest states verification not_run; all22 qualification gates remain open. This revision inspects source only and performs no native scientific or model execution.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-043/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/central_entry.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/NWB_MAPPING_CONTRACT.md",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/SCIENCE_AND_SCOPE.md",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/nwb.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/grading.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/operator.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/features.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/splits.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/packets.py",
+      "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/prediction.py"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed bounded numeric calcium feature packet or faithful visual observation of the same allowed interval; full high-dimensional programme arrays are not already a no-tools episode.",
+      "boundary": "Freeze representation and training demonstrations; expose no query labels or direction-coded events; score all original trials.",
+      "evidence_ids": [
+        "implementation-6"
+      ],
+      "missing": [
+        "No case presentation/response collection path for a direct observer; validate representation fidelity and coverage before comparison."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A calcium-viewing interface could expose the permitted premovement signals with typed actions; none is implemented for this task.",
+      "boundary": "No raw-array export, future frames or query label access; fixed action budget and same underlying observations.",
+      "evidence_ids": [
+        "implementation-2"
+      ],
+      "missing": [
+        "Task-specific typed renderer, action policy, complete answer capture and isolation evidence."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Internal source constructs per-case numeric training/query features and equal-arm specifications with Python/numpy/scipy/sklearn/supplied-reference tools.",
+      "boundary": "Case-local reset, no target feedback or test-batch adaptation; match packet digest, tools and declared resource limits with frozen programme.",
+      "evidence_ids": [
+        "implementation-7",
+        "implementation-10"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "Actual model process/provider, target isolation and authentic complete programme execution remain absent."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Internal source defines a precommitted executable/fit recipe operating on the same numeric packet as the case-adaptive arm.",
+      "boundary": "Freeze recipe before query access; use only training labels and no query-batch fitting.",
+      "evidence_ids": [
+        "implementation-7",
+        "implementation-10"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "Public entry remains status-only; source construction is not programme performance or direct understanding."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/historical/task.pre-understanding.v1.json",
+      "sha256": "002a098589027f2c6b82a9302d11f93713112ed8db233e0fde9514f6419cca98",
+      "supports": "Exact original registered scientific contract inspected before revision; binding preserves these bytes."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/manifest.json",
+      "sha256": "39f0bed3e5f4d6c0ff3872f2771d6a014f59acad31ad45f0084cb16a5c3a4005",
+      "supports": "Inactive source status; required release census; no genuine native input provider or executed qualification."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/central_entry.py",
+      "sha256": "52a39946f239ec0a06893ef89f1c142012773ee7783d0084573e007de615b14f",
+      "supports": "Only status is exposed; central run or score is deliberately unavailable."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/NWB_MAPPING_CONTRACT.md",
+      "sha256": "0fea80bba414ec77e46d9020e1f49986243b6ea8263fc194826cce825ad9b84f",
+      "supports": "Explicit NWB mapping, physical units, clock and cross-epoch cell identity requirements; missing original field producers remain material."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/SCIENCE_AND_SCOPE.md",
+      "sha256": "90dcf215773ac57225745015d20e524a04c47c4bde55f536295aa8dab23b48a5",
+      "supports": "Prior primary-source inspection, prospective protocol choices, exact cohort scope and limits of causal claims."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/nwb.py",
+      "sha256": "655237492b25d8492ba55c4c9127fb69aedefde4599d3df2475f4d569bfa2499",
+      "supports": "Checks source hashes, native object IDs, ROI region order, clocks, dff conversion, exposure/support and genuine movement columns."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/grading.py",
+      "sha256": "e7e4631ed1e5bb375893125755550e7180f9d600a14ef711e84b2bafd51dbf16",
+      "supports": "Direction probability scoring, mouse aggregation, held-response MSE, and separate numerical-investigation reproduction are distinct endpoints."
+    },
+    {
+      "id": "implementation-7",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/operator.py",
+      "sha256": "1f32dda2e3a9b9b24bed29f58de5f25a98784cc2c506a21d7e523746685dea78",
+      "supports": "Internal full-cohort preparation and target-last capture/score composition exists; provider and model execution are not issued."
+    },
+    {
+      "id": "implementation-8",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/features.py",
+      "sha256": "fbcec11a59d79e6e2e0a1ed3cbdf78398aae4f37ca810c2ae4fefe8edc5c9ebb",
+      "supports": "Defines fully supported premovement dff means and segmentation-only ROI/anatomical representations."
+    },
+    {
+      "id": "implementation-9",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/splits.py",
+      "sha256": "0ed8a4cdb96b278e830f3505d9130988b5668a1936fc3ebf95c9fb069cc885f8",
+      "supports": "Defines whole-block adjacent embargo and separately held-mouse anatomical folds."
+    },
+    {
+      "id": "implementation-10",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/packets.py",
+      "sha256": "22e907ccda941622525e8f79cbefda6eeccf37c41612ec829d9aa87fb158f70e",
+      "supports": "Opaque IDs, training/query separation and equal tool/resource arms."
+    },
+    {
+      "id": "implementation-11",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-043/implementations/registered-runtime/source/alm/prediction.py",
+      "sha256": "2c5ebeedf1d9aa34d1e903f5cadb249250baea5d490686eda607ca01568ac74e",
+      "supports": "Fixed train-only class prior and logistic neural/nuisance references."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/001612/0.250927.1801",
+      "locator": "Versioned DANDI release, retained metadata audit",
+      "supports": "Release identifies mouse calcium imaging and targeted photostimulation; metadata census is not an authenticated eligible-case roster."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025/tree/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d",
+      "locator": "Pinned author analysis repository; current repository listing rechecked 2026-11-16",
+      "supports": "Author MATLAB figure scripts and DataJoint dependencies are provenance; prospective Python methods are not a reproduced author pipeline."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://www.nature.com/articles/s41586-025-09758-6",
+      "locator": "Connectivity underlying motor cortex activity during goal-directed behavior; existing SCIENCE_AND_SCOPE audit of reporting summary and peer-review passages",
+      "supports": "Supports shared biological acquisition and perturbation context. Full main methods were not recovered in the prior audit; current publisher fetch was blocked, so no new method verification is claimed."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established by the inspected task source. The repository historical neural pilot concerned NEURAL-007 and NEURAL-077 programmes, not this task.",
+    "excluded_claims": [
+      "No human baseline, native observer result, model accuracy or scientific qualification.",
+      "No online onset prediction, causal mechanism, or pooled16/25-class success."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Made retrospective onset alignment and separate16/25-class, held-block/held-mouse estimands authoritative.",
+      "Replaced stale specification-only implication with inspected numerical scorer capability while retaining missing authentic provider.",
+      "Defined direct/viewer delivery gaps separately from source-available tools/programmes and required nuisance-matched biological-unit comparisons.",
+      "Separated preparation/reference/scoring source from participant access: frozen programme and adaptive tool execution are not delivered."
+    ],
+    "source_review": "Inspected the original task and actual mapping/features/split/packet/reference/grading/operator code. Reused detailed retained primary-source audit and rechecked the author repository; no authentic inputs were read."
+  }
+}

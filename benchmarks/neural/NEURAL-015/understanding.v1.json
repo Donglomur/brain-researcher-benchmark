@@ -1,0 +1,201 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-015",
+  "title": "Word-boundary localization from intracranial activity",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A complete26-record fixed-grid word-start evaluator is delivered; its query exporter carries only grid metadata, not neural payloads. Authentic waveform alignment, competent acoustic/visual references and protected participant execution are still absent.",
+  "scientific_target": {
+    "question": "Can intracranial observations localize word starts in held people and movies beyond independently timed acoustic/visual cues, on a label-independent continuous grid?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Whether each fixed grid sample lies within the frozen inclusive tolerance of any manually annotated word start; offsets and sentence-only onsets are different targets.",
+    "answer_origin": "Brain Treebank manually annotated movie word onsets aligned to recording samples through source triggers; exact native alignment and complete word extraction remain operator responsibilities.",
+    "case_unit": "One fixed-grid sample within a complete movie recording; predictions are collected for all grid samples in each recording.",
+    "independent_unit": "10 clinical participants;26 recording presentations and21 movie identities with repeated movies across people.",
+    "inference_scope": "Prospective fixed-grid word-start decoding on public development data; not the paper balanced sentence-onset versus nonspeech ROC-AUC experiment.",
+    "exclusions": [
+      "Paper experiment reproduction or sentence-boundary F1",
+      "Unseen-person/movie transfer from random word splits",
+      "Native understanding inferred from target-free grid metadata alone"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Source intracranial signals with declared 2048 Hz alignment and nonpositive neural feature lags; native channel calibration/selection requires verification.",
+      "Continuous audiovisual windows for a separate fixed comparator, timed independently of target word annotations."
+    ],
+    "forbidden_inputs": [
+      "Word timestamps, transcript rows, onsets/labels or answer-bearing movie identities in query metadata",
+      "Word-aligned loudness/motion rows as supposedly independent nuisance inputs",
+      "Future neural/context features and query-derived feature/anatomy selection"
+    ],
+    "case_identity": "catalog.json enumerates all26 IDs such as sub_1_trial000. Public export binds recording/fold IDs and label-independent grid start/stop/step/count; public source IDs still permit external label lookup unless transport restricts it.",
+    "split": "Every recording is tested exactly once; fold train/test share neither person nor movie. Minimal joint person/movie components are {1,5},{2},{3,4,6,7,10},{8},{9}; all corresponding records remain grouped.",
+    "coverage": "All26 recording presentations and all eligible uniform-grid bins; grid depends on duration/guard, not word labels. Actual HDF5 and transcript extraction are not delivered by the exporter."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "participant_macro_word_start_average_precision",
+      "direction": "higher",
+      "aggregation": "Pool eligible bins within each participant, compute tie-grouped noninterpolated AP at natural prevalence, then equal-person mean across10 people.",
+      "rationale": "Measures withheld word-start information without label-selected query bins; AP is not trapezoidal PR area."
+    },
+    "secondary": [
+      "Paired acoustic_visual_log_loss_minus_neural_log_loss with frozen clipping",
+      "Per-person prevalence, bin counts and class-balanced diagnostic separately from primary",
+      "No-wrap latency-shift diagnostic on an explicitly identical interior subset",
+      "Full recording/fold coverage and null AP if a person has no positive bins"
+    ],
+    "comparators": [
+      {
+        "name": "Acoustic/visual continuous-window decoder",
+        "inputs": "Independently timed continuous loudness, spectral and motion features, no word-aligned timestamps",
+        "procedure": "Operator-owned frozen probabilities under identical folds; scorer interface exists, native competent fit not delivered."
+      },
+      {
+        "name": "Constant prevalence",
+        "inputs": "Training-fold prevalence with no neural signal",
+        "procedure": "Valid weak predictor; constant AP equals test prevalence as a diagnostic."
+      },
+      {
+        "name": "Latency-shifted neural probabilities",
+        "inputs": "Same candidate outputs shifted beyond tolerance and feature support",
+        "procedure": "Implemented no-wrap diagnostic; not a universal null under arbitrary autocorrelation."
+      }
+    ],
+    "nuisance_controls": [
+      "Use whole person/movie connected components to block repeated stimulus leakage.",
+      "Define a uniform query grid before labels; balancing weights may be diagnostic but cannot label-select query timestamps.",
+      "Prevent source transcript feature row dropping from silently changing word population.",
+      "Fix word-start tolerance, sampling, lags and clipping before outcome inspection."
+    ],
+    "uncertainty": "Implemented paired participant percentile bootstrap is descriptive for10 selected clinical participants. It does not capture repeated-movie clusters or shared-fit dependence; those limits accompany any inferential claim.",
+    "failure_policy": "Reject missing/extra/duplicate IDs, mismatched folds, wrong vector lengths and invalid probabilities. No-positive participant AP makes macro AP null, not an omitted participant; constants remain valid."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/catalog.json",
+      "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/provenance.json",
+      "benchmarks/neural/NEURAL-015/docs/initial-evaluator-v1.md"
+    ],
+    "scorer_target": "evaluator.evaluate compares complete probabilities to private tolerance-expanded word-start labels, yielding participant AP and incremental log loss. align_onsets mirrors source-informed nearest-trigger conversion; actual source equality is not authenticated.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Executable standard-library evaluator and generated engineering controls covering full cohort; no neural model, native recordings/transcripts/media or competent baseline.",
+    "missing": [
+      "Authenticate HDF5/trigger/transcript joins and native sample calibration across the full cohort.",
+      "Freeze scientifically defensible grid/tolerance and complete word inclusion.",
+      "Train and freeze independent continuous-media nuisance and signal references.",
+      "Provide neural-payload delivery and protected participant execution."
+    ],
+    "execution_evidence": "Recorded generated numerical/alignment/split controls only; no authentic neural or model execution in this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Direct numeric or plotted intracranial windows could elicit word-start probabilities under a fixed contextual view, but no observation packets are supplied.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Typed signal viewing is scientifically possible for the same fixed-grid target; no image transport or viewer-qualified response collection is delivered.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The evaluator/clock converter are operator tools; a participant investigator with actual neural arrays and fixed resource budget is not delivered.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A frozen decoder can target the strict output schema, but the package is scoring/preparation source without a fit/predict runner or authentic signal reference.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "366dff43d2624a1cbdf7651a7f0ef00f0dad6cae01480e75d600a7c969096f2a",
+      "supports": "evaluator.evaluate compares complete probabilities to private tolerance-expanded word-start labels, yielding participant AP and incremental log loss. align_onsets mirrors source-informed nearest-trigger conversion; actual source equality is not authenticated."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/catalog.json",
+      "sha256": "31aab0168d2f6dcf2c230a6649320d03f53f415b726991eb8f12c02d3a800942",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/provenance.json",
+      "sha256": "6e25589feaccf3c8cd39080ef188390cffde4d6ad52f427210a7991337987943",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-015/docs/initial-evaluator-v1.md",
+      "sha256": "5c68f483c6a2c1b5ff035a5b0696b8674449cb845ff499164af8e98c6f466f49",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://braintreebank.dev/",
+      "locator": "Primary dataset page, inspected 2026-11-16",
+      "supports": "10 intracranial participants and manually annotated word starts."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Appendix A.9 as documented in source review",
+      "supports": "Original balanced sentence-onset experiment differs from this prospective word-start grid."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/data/trial_data_reader.py",
+      "locator": "Pinned author clock reader, prior reviewed source",
+      "supports": "Nearest-trigger and2048 Hz sample alignment informs but does not authenticate native preparation."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Paper experiment reproduction or sentence-boundary F1",
+      "Unseen-person/movie transfer from random word splits",
+      "Native understanding inferred from target-free grid metadata alone"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Specify word starts, natural-prevalence AP and joint person/movie folds rather than generic boundary classification.",
+      "Separate label-independent grid export from actual neural observation delivery."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

@@ -23,7 +23,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   construction-source-identities:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -53,13 +56,13 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
-                  "bytes": 2690,
-                  "sha256": "2444a0508c36cce063ccaf7ce125185bfee075a40ada3c9bc194bd75dca4dd2f"
+                  "bytes": 3651,
+                  "sha256": "0f8cd2b2cd79483c9aec52f0c135eac2fd23781b15d50178d5159c60ddad64ef"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-fus-delivery/SOURCE.json",
-                  "bytes": 3371,
-                  "sha256": "30ed0193892732b8ebe2ac90c15a4370bc28f6ad7b784cf094a4da302525537f"
+                  "bytes": 4356,
+                  "sha256": "61c170ee063513d17147715ef49038bfde1c6221df453ba85b092d0f2fa72879"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-isttc-endpoints/SOURCE_PINS.json",
@@ -68,8 +71,8 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-seizure-events/SOURCE_PINS.json",
-                  "bytes": 4085,
-                  "sha256": "49677cdaf1480755d6581891a2cfb8d4accc882b8a91e72424c2c34fa5658c1a"
+                  "bytes": 4970,
+                  "sha256": "29021594c5f086f9eb83cd86b3848d85dc26ee77e8735354580c5b539b92d102"
               },
               {
                   "path": "benchmarks/neural/NEURAL-009/docs/seizure-events-v1.md",
@@ -127,7 +130,7 @@ jobs:
                   "sha256": "0cb3b685c2d7add8d0cb2376d2021ace6d551591a2a31bfbd44a0281efe187c7"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-009/task.json",
+                  "path": "benchmarks/neural/NEURAL-009/historical/task.pre-understanding.v1.json",
                   "bytes": 13457,
                   "sha256": "8bd8201341b714bcbe4c3a11caf68a9cc375eb73a5b11886d24e5a79ff1d7b7f"
               },
@@ -167,7 +170,7 @@ jobs:
                   "sha256": "6956a375c850a21abab2febc99cb3579900e74606cf3dd199ac2661ab0270dc7"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/task.json",
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/historical/task.pre-understanding.v1.json",
                   "bytes": 40630,
                   "sha256": "115934ec062e5760e2fabc5f46faa6adc789076dad77fab99a3e79c36ef7fe6d"
               },
@@ -207,7 +210,7 @@ jobs:
                   "sha256": "39c7dd0080244a35bbb9ca157dabe7827fc9a0977abc9353b8f334baff45934d"
               },
               {
-                  "path": "benchmarks/neural/clinical-dosei-responsiveness/task.json",
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/historical/task.pre-understanding.v1.json",
                   "bytes": 19691,
                   "sha256": "745b4798914bfbdd763c0e4cf81bac1d894fc4448c99fa422e50b96921a6f1e8"
               },
@@ -375,7 +378,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 866855 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 869686 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -418,7 +421,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 866855,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 869686,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -437,8 +440,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/construction-calcium-pipeline/SOURCE.json",
-                  "bytes": 2414,
-                  "sha256": "10f6ddcafddcf2c5df36cb21df776bc1dc118c90e2ab504798348ed78cb04965"
+                  "bytes": 3299,
+                  "sha256": "5390905e7e4ff770ee1f87953c97345ef4e231640fe83f947508dcdd453d3aa5"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-meg-nested/SOURCE_BINDINGS.json",
@@ -481,7 +484,7 @@ jobs:
                   "sha256": "2b70eb5d7fda84aeb375efd06af70cedd8d9161f91926fb999b7cc14b52436eb"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-025/task.json",
+                  "path": "benchmarks/neural/NEURAL-025/historical/task.pre-understanding.v1.json",
                   "bytes": 25265,
                   "sha256": "4791d12573c04b19cac2f29b849771b363cc0b5463172d6c88af16e747471b33"
               },
@@ -597,7 +600,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1"
           ]
           assert len(rows) == 31 > 0
-          assert sum(row['bytes'] for row in rows) == 669999 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 670884 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -640,7 +643,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 669999,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 670884,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -900,6 +903,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > "${RUNNER_TEMP}/construction-meg-controls-requirements.txt" <<'REQUIREMENTS'
+          h5py==3.16.0 --hash=sha256:fb1720028d99040792bb2fb31facb8da44a6f29df7697e0b84f0d79aff2e9bd3
           numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
           scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
           scikit-learn==1.9.1 --hash=sha256:52a0703bbc07ad27f560fa63fa68e4c54dd735bfbbf65b4dd3c225dc7547b6df
@@ -911,7 +915,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
           import importlib.metadata
           import json
-          expected = {'numpy': '2.4.6', 'scipy': '1.17.1', 'scikit-learn': '1.9.1', 'joblib': '1.5.3', 'narwhals': '2.23.0', 'threadpoolctl': '3.6.0'}
+          expected = {'h5py': '3.16.0', 'numpy': '2.4.6', 'scipy': '1.17.1', 'scikit-learn': '1.9.1', 'joblib': '1.5.3', 'narwhals': '2.23.0', 'threadpoolctl': '3.6.0'}
           actual = {name: importlib.metadata.version(name) for name in expected}
           assert actual == expected, actual
           print(json.dumps({'verified_dependency_versions': actual}))
@@ -935,6 +939,50 @@ jobs:
           print(json.dumps({'test_file': 'tests/construction/test_meg_nested.py', 'tests_run': result.testsRun,
                             'skipped': actual_skips, 'generated_controls_only': True,
                             'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+      - name: Generated SMC controls with the authenticated original evaluator
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1', pattern='test_*.py')
+          def test_ids(node):
+              if isinstance(node, unittest.TestSuite):
+                  return {name for child in node for name in test_ids(child)}
+              return {node.id()}
+          required = 'test_scorer.ScorerTests.test_original_scorer_generated_numerical_control'
+          assert required in test_ids(suite), 'Authenticated original evaluator control is mandatory'
+          assert suite.countTestCases() == 44, 'All 44 generated SMC controls must load'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 44, 'All 44 generated SMC controls must execute'
+          assert not result.skipped and not result.expectedFailures, 'Complete unskipped controls required'
+          print(json.dumps({'tests_run': result.testsRun, 'skipped': len(result.skipped),
+                            'original_evaluator_control_required': True,
+                            'generated_dependency_compatibility_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+      - name: Generated NEURAL099 source anatomy and clock controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 60s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1', pattern='test_inspect_metadata.py')
+          assert suite.countTestCases() == 14, 'All 14 NEURAL099 controls must load'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, 'All 14 NEURAL099 controls must execute'
+          assert not result.skipped and not result.expectedFailures, 'Complete unskipped controls required'
+          print(json.dumps({'tests_run': result.testsRun, 'skipped': len(result.skipped),
+                            'generated_metadata_only': True, 'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
 
@@ -969,7 +1017,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 30s python -I -S -B 'benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/verify_source.py' --expected-sha256 '10f6ddcafddcf2c5df36cb21df776bc1dc118c90e2ab504798348ed78cb04965'
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B 'benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/verify_source.py' --expected-sha256 '5390905e7e4ff770ee1f87953c97345ef4e231640fe83f947508dcdd453d3aa5'
       - name: Generated controls (test_calcium_pipeline.py)
         shell: bash
         run: |

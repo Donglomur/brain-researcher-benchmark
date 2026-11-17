@@ -1,19 +1,37 @@
-# Causal held-session prediction of human information-sampling and stopping decisions
+# Causal held-session next-action inference from human information-sampling state
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
 - **Task ID:** `NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** REGISTERED CONSTRUCTION DRAFT
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+One recorded action in classes 1,2,3,4 per eligible decision; classes 3 and 4 are terminal actions. The target is the action, not reproduction of the historical reference loss table.
+
+**Source delivery:** delivered\_named\_scope. The scorer grades real recorded next actions on the complete accepted processed behavioral cohort. The no-refit frozen-candidate successor is source-delivered, with general candidate training and complete protected replay still unqualified; this task contains no neural recordings.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential no-tools numeric inference from one 12-field current observation and permitted previous observations. Commit four probabilities before the next observation; original state history is preserved and later trial length withheld. | No direct-model prompt/response transport or matched complete cohort trial established. |
+| Typed viewer | not\_suitable | This scoped assay exposes compact processed behavioral state, not neural images or raw sensory scenes. A graph or screenshot would be an optional representation ablation; it must preserve the same scalar/state-history information and cannot stand in for neural interpretation. | No typed viewer is needed to express the current numeric target; no viewer capability or result is claimed. |
+| Tool assisted | not\_delivered | Per-trial scientific investigator with bounded tools and identical causal observations/model-artifact access. Fresh trial state; no target feedback; tool calls and artifact access matched to the frozen comparison. | Candidate source is an executable endpoint, not a delivered per-case LLM investigation harness. |
+| Frozen program | source\_available | Hash-frozen external four-file Python candidate plus corresponding unchanged TRAIN-selected model artifact. All 4,884 trials/163,135 commitments; no new trusted model fits; candidate-internal computation not certified training-free. | Complete protected execution and candidate runtime/read qualification remain unestablished. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18795 bytes; SHA-256 `af5cce92dda44b37ea1b81621c7344a10a49b902fc9e04ab4f9b8bc59e990816`.
+- Specification identity: 26731 bytes; SHA-256 `01107f49fcefddf9bfb9ee91392baa3f9bfef29a059cb727ef1a8346a19f7997`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v12/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

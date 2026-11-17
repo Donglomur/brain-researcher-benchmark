@@ -1,0 +1,184 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-027",
+  "title": "Visual stimulus decoding across learning phases",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "evidence": [
+    {
+      "id": "original-contract",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-027/historical/task.pre-understanding.v1.json",
+      "sha256": "9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9",
+      "supports": "Original registered objective, verified source audit and unresolved acquisition/qualification boundaries; exact original bytes preserved by revision binder."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-027/docs/initial-evaluator-v1.md",
+      "sha256": "9296c91466fb4107fcd1549c859d924e0309c52d184e318a5adb703df2cd8483",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/README.md",
+      "sha256": "26430cb514ee80ca2c5362da0d28a03ad9f10ab19a5f90b0793fdd15552ba529",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "77b4d047e176e52e2212ad5eb8dc814683226f83a25ac53e70c0f17a0f929b21",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "primary-source",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41586-025-09180-y",
+      "locator": "Zhong et al.; MouseLand/zhong-et-al-2025 ba64ac697f5d9914926baac79399e80707a5f3a6; Figshare v2 source audit",
+      "supports": "Cortex-wide calcium during reward-free/rewarded exposure, source wall-to-stimulus mapping and frame-aligned behavior; figure coding-direction analysis differs from prospective decoder."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Existing generated construction controls retain their original engineering scope. No authentic-data model result for this task was established by this inspection; the historical EEG077/sleep007 programme pilot is a separate scope.",
+    "excluded_claims": [
+      "Native/source decoder reproduction, causal learning effects, independent source cohort or direct/viewer performance."
+    ]
+  },
+  "disposition": "partial_delivery",
+  "disposition_reason": "A genuine stimulus-probability scorer and source-frame-to-position-packet construction path exist on safe decoded arrays. Original NPY intake/export identity, native cohort/phase completeness, units and anatomical pooling validity remain unverified; participant-facing direct/viewer delivery and protected runs are absent.",
+  "scientific_target": {
+    "question": "Can a decoder trained only on prereward animals and phases identify the predeclared visual stimulus classes from calcium-derived regional activity in held-out animals after reward-free or rewarded exposure, beyond movement and position?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Canonical visual stimulus category0–6 mapped explicitly from source UniqWalls/stim_id and held privately for each complete trial/position packet; the plan freezes a subset before outcomes.",
+    "answer_origin": "Recorded experimental WallID and the source one-to-one wall/category mapping, not reward delivery, behavioral choice or a label inferred from filename.",
+    "case_unit": "One fixed-position bin inside a complete eligible moving-corridor trial; trial bins and sessions are nested within animal and phase.",
+    "independent_unit": "Source mname mouse identity; every datexp/blk remains grouped and repeated phases are dependent.",
+    "inference_scope": "Cross-animal stimulus decoding after declared regional-mean calibration. It is not individual-cell transfer, author coding-direction reproduction or a causal estimate of unsupervised learning.",
+    "exclusions": [
+      "No assumption that source spks are electrode spikes.",
+      "No unsupervised-versus-supervised causal effect from cross-phase score differences alone.",
+      "No independent second cohort relative to PAPER-FIND-REP-007."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Public item_id plus four calcium regional means (V1 area8; mHV0/1/2/9; lHV5/6; aHV3/4), and matched mean movement/normalized position context.",
+      "Source decoded spks and behavior are prepared operator-side; trial-local moving-corridor frames are averaged into every frozen normalized-position bin without extrapolation or neighboring-trial borrowing.",
+      "Labels from training animals/phases only; training mouse/class weights equalized."
+    ],
+    "forbidden_inputs": [
+      "Query WallID, stim_id, phase, animal/date/block, reward/licking, target labels or target-bearing source filenames.",
+      "Query-fitted normalization, feature selection or interpolation across trial boundaries."
+    ],
+    "case_identity": "Implemented opaque item_id is SHA256 of session_id, original trial_id and bin index; complete plan enumerates session/mname/datexp/blk. No authentic selected cohort or final ID roster has been prepared.",
+    "split": "Plan requires train/evaluation animals and phase labels disjoint, with operator-verified prereward training semantics. Whole trials must cover every position bin and every retained mouse/phase must support every frozen class.",
+    "coverage": "Completeness is relative to supplied frozen manifest; exact native animal/session inventory and safe-export equality remain unverified. Class/position subsets are declared construction choices, not extra benchmarks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Mouse-macro stimulus log loss by exposure phase",
+      "direction": "lower",
+      "aggregation": "Packet log loss averaged within mouse/phase then equal mice; no scalar averaging across unlike phases. Equal bins per complete trial retain equal trial weight.",
+      "rationale": "Proper probability scoring against recorded stimulus identity captures calibrated decoding; source figure reproduction is irrelevant to correctness."
+    },
+    "secondary": [
+      "Mouse-macro class-balanced accuracy by phase; class-support counts and constant/zero-probability diagnostics.",
+      "Paired neural-minus-movement/position log loss and accuracy, with same expected IDs/labels/class ordering."
+    ],
+    "comparators": [
+      {
+        "name": "Frozen diagonal-Gaussian neural classifier",
+        "inputs": "Four regional means and training targets only.",
+        "procedure": "Implemented train-only scaling, uniform class priors, mouse/class-balanced centroids and within-class diagonal variance floor0.1."
+      },
+      {
+        "name": "Matched movement-position classifier",
+        "inputs": "Only mean framewise movement and mean normalized position.",
+        "procedure": "Identical diagonal-Gaussian fitting and probability output; isolates observed behavioral-context shortcuts."
+      },
+      {
+        "name": "Uniform probabilities",
+        "inputs": "Frozen class set only.",
+        "procedure": "Prospective explicit chance/calibration reference; constant output remains valid and is flagged."
+      }
+    ],
+    "nuisance_controls": [
+      "Never equate raw WallID values with canonical category numbers; preserve string/integer wall identity mapping.",
+      "Require within-trial ft_Pos/Corridor_Length units and four-region anatomical support; regional pooling is a declared cross-animal calibration, not cell registration.",
+      "Record every trial exclusion and behavior-tail truncation; freeze eligibility and class support before outcomes."
+    ],
+    "uncertainty": "Paired2000 seeded mouse-cluster bootstrap within phase; apply identical resamples to both arms. One mouse is descriptive without population interval. Sessions/bins are not independent animals.",
+    "failure_policy": "Reject missing/duplicate/extra IDs, class-shape mismatch, nonfinite or invalid simplex outputs; true-class log probabilities clip at1e-15 with zero counts reported. Reject incomplete class support and malformed alignment rather than shrinking class set."
+  },
+  "implementation": {
+    "scorer_target": "evaluator.score grades actual held stimulus labels with strict probabilities and phase/mouse aggregation; construct_session creates opaque trial-position inputs and Reference implements a train-only numerical comparator.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Safe-array operator preparation, numerical reference, strict scorer and allowlisted query JSON. The CLI emits private reports separately but is not an OS confidentiality boundary.",
+    "missing": [
+      "Authenticate original pickled-NPY to safe-NPZ export, source cohort/phase mapping and position units.",
+      "Freeze complete native population and protected participant transport; demonstrate anatomical calibration and reference competence."
+    ],
+    "execution_evidence": "Generated engineering controls for source mapping, leakage, coverage and numerical scoring are documented; no authentic native benchmark/model result established by this revision.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-027/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-027/docs/initial-evaluator-v1.md",
+      "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/README.md",
+      "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/evaluator.py"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Compact four-value neural plus two-value context records are suitable for a prospective no-tools probability condition; no fixed contexts/demos/collector exist.",
+      "boundary": "Only allowlisted numeric query and declared training demonstrations, no source labels/identities.",
+      "evidence_ids": [],
+      "missing": [
+        "Frozen direct prompts, demonstrations and full response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A rendering of the same regional values could support visual interpretation, but no typed viewer exists.",
+      "boundary": "Render only permitted regional/context observations; do not imply raw-cell spatial or temporal structure absent from packet.",
+      "evidence_ids": [],
+      "missing": [
+        "Renderer and a defensible matched-observation visual condition."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical construction/reference APIs exist, but no bounded per-case investigator transport is supplied.",
+      "boundary": "Same training/query observations and model-tool exposure as comparator; no report/label access.",
+      "evidence_ids": [],
+      "missing": [
+        "Tool transport, per-case reset and matched budget enforcement."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Operator-only numerical source is present: Frozen train-only numerical classifier and complete probability scorer on normalized source arrays. This does not deliver a participant-facing frozen program mode.",
+      "boundary": "Training only before reward/evaluation access; no query fitted normalization or label feedback.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Authentic full inputs, participant programme runner and protected execution."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind task truth to recorded stimulus mapping and actual four-regional-value query, separating wall codes from canonical categories.",
+      "Declare prospective regional calibration and animal/phase-disjoint fitting instead of implying tracked-cell or author-decoder transfer.",
+      "Expose actual safe-array/source-intake and participant-access gaps while retaining genuine measured-label scoring.",
+      "Keep operator analysis/reference APIs separate from participant-facing access: no delivered mode without its actual participant interface."
+    ],
+    "source_review": "Reviewed complete implementation protocol, construct_session, Reference, query, score and compare code; reused pinned primary source audit."
+  }
+}

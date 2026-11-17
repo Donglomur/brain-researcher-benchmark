@@ -698,26 +698,52 @@
       "uniqueItems": true
     },
     "legacy": {
-      "type": "object",
-      "properties": {
-        "role": {
-          "const": "calibration_only"
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "role": {
+              "const": "calibration_only"
+            },
+            "original_task": {
+              "const": "historical/task.pre-improvement.v1.json"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "required": [
+            "role",
+            "original_task",
+            "notes"
+          ],
+          "additionalProperties": false
         },
-        "original_task": {
-          "const": "historical/task.pre-improvement.v1.json"
-        },
-        "notes": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "\\S"
+        {
+          "type": "object",
+          "properties": {
+            "role": {
+              "const": "no_predecessor"
+            },
+            "original_task": {
+              "type": "null"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "required": [
+            "role",
+            "original_task",
+            "notes"
+          ],
+          "additionalProperties": false
         }
-      },
-      "required": [
-        "role",
-        "original_task",
-        "notes"
-      ],
-      "additionalProperties": false
+      ]
     },
     "admission_policy": {
       "type": "object",

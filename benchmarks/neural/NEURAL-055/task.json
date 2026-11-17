@@ -16,11 +16,11 @@
     ],
     "task_family": "visual_identification"
   },
-  "scientific_question": "Can released EEG identify one of 200 candidate images for a held-out person without labeled target-person calibration?",
+  "scientific_question": "Can released80-repeat EEG means identify all200 test images of a held person without labeled target-person calibration, and how much do neural alignment and bounded investigator decisions contribute?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Independent 200-candidate scores and a balanced-panel one-to-one assignment per participant."
+    "A private bijection between200 opaque EEG query IDs and200 candidate-image IDs within each held-person panel."
   ],
   "input_assets": {
     "routes": [
@@ -76,19 +76,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "preprocessed_eeg_training.npy/test arrays with preprocessed_eeg_data,ch_names,times keys in official loader",
-    "allowed_context": "Image identity/category supplied by image_metadata.npy and training/test image archives; training arrays ordered by image and repetition",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "times vector carries epoch time; preserve sensor/time axes and repetitions; exact array dimensions require bounded payload verification",
-    "source_contract_evidence": "OSF actual recording ZIPs + image metadata hashes; pinned loader and encoding entrypoint"
+    "inputs": [
+      "Per held-person query:80-repeat means over17 channels ×100 times; training four-repeat means on16,540 images from the other nine people.",
+      "200 candidate images through the fixed4096-dimensional feature representation plus authorized same-cell tools.",
+      "FULL,IMAGE_ONLY,ALIGN_SHUFFLE,PRE_ONLY,POST_ONLY matched arms in the full source study."
+    ],
+    "forbidden_inputs": [
+      "Labeled outer-person calibration, any original test EEG during fitting, query image mapping and original ordering.",
+      "Cross-fold state or new inference-time fitting/normalization/calibration on query data."
+    ],
+    "case_identity": "Exact opaque case/query/candidate IDs are in the future prepared ten-case panel; original subject identity and source mappings remain operator-side.",
+    "split": "Ten isolated leave-one-person-out folds with all nine inner people and concept exclusions. Source-released session MVNN already mixes train/test covariance and must be disclosed even though supervised fitting excludes the outer person.",
+    "coverage": "Ten panels ×200 queries. Current complete study specifies960 cells,96 panels,1,920 logical phases and150 reference banks; these are mandatory condition/workload counts, not additional tasks or executed cases."
   },
-  "biological_unit": "sub01–10 manifest entries; reference supports within- and leave-one-subject-out encoding",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Ten people;200 shared images,80 repetitions,conditions/seeds and960 cells are not independent people.",
+  "case_definition": "A complete200-query held-person batch; the one-to-one assignment couples query decisions.",
   "split": {
-    "policy": "Original test concepts excluded from supervised fitting; outer leave-one-person-out using only other people training arrays; concept-grouped development; released MVNN exposure declared.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Ten isolated leave-one-person-out folds with all nine inner people and concept exclusions. Source-released session MVNN already mixes train/test covariance and must be disclosed even though supervised fitting excludes the outer person.",
+    "coverage": "Ten panels ×200 queries. Current complete study specifies960 cells,96 panels,1,920 logical phases and150 reference banks; these are mandatory condition/workload counts, not additional tasks or executed cases."
   },
   "reference": {
     "source_code_url": "https://github.com/gifale95/eeg_encoding",
@@ -104,51 +109,100 @@
     "data_url": "https://osf.io/3jk45/"
   },
   "controls": [
-    "80-repeat means",
-    "equal batch prior",
-    "opaque IDs",
-    "candidate-only and alignment-shuffle references",
-    "matched encoder tools."
+    "Keep source image identity opaque and enforce concept-grouped training exclusions.",
+    "Report whitening/public source exposure and repeated-response aggregation; whitened coordinates are not raw microvolts.",
+    "Do not treat F/I equal allowances as equal consumption or unrestricted investigator semantics."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No-tools reading of compact EEG traces or candidate displays is not a current condition.",
+      "boundary": "Current batch arrays and training/image models are tool/programme observations.",
+      "evidence_ids": [],
+      "missing": [
+        "Define faithful no-tools information view and independent response collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed EEG/candidate-image viewer is supplied.",
+      "boundary": "A viewer must preserve80-repeat representation and fixed candidate priors while hiding query associations.",
+      "evidence_ids": [],
+      "missing": [
+        "Audited viewer transport and complete-panel answer collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I: bounded online investigator decisions over authorized full-batch data/tools.",
+      "boundary": "Fresh same-cell context; only sealed action set; no new query fitting; full costs/failed operations retained.",
+      "evidence_ids": [
+        "e2",
+        "e5",
+        "e9"
+      ],
+      "missing": [
+        "Actual semantic/native/resource qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F: one precommitted numerical learning/search policy and sealed state.",
+      "boundary": "No investigator decisions or generated analysis policy in F; fixed scientific predictor calls permitted only in their declared role.",
+      "evidence_ids": [
+        "e3",
+        "e5",
+        "e8"
+      ],
+      "missing": [
+        "Full authentic execution and reference qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro assignment Top-1; independent-query Top-1 separately reported.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Participant-macro one-to-one assignment Top-1",
+      "direction": "higher",
+      "aggregation": "Count correct bijective matches out of200 per person, then equal-weight ten people; report each frozen/investigator/tool condition separately.",
+      "rationale": "Matches the delivered complete-batch task while making the extra one-to-one prior explicit."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Independent-query Top-1, rank/log-loss metrics from the original scorer, and exact tie policy.",
+      "Paired FULL versus IMAGE_ONLY and ALIGN_SHUFFLE; PRE/POST comparisons; F/I and T0/T1 contrasts.",
+      "Coverage/failure bounds for incomplete panels remain diagnostics, not valid primary scores."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Independent R0/R1/R2/R3 banks",
+        "inputs": "Frozen same-cell training support and candidate features",
+        "procedure": "Implemented full-study reference bank generation; actual competence and source parity remain gates."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Candidate-only and alignment-shuffle controls",
+        "inputs": "Same candidate roster with neural information absent or training alignment permuted",
+        "procedure": "Implemented mandatory matched arms isolate batch/image priors and association use."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Independent-query decision",
+        "inputs": "Same200×200 score/probability matrix",
+        "procedure": "Score each row without assignment coupling and compare descriptively against exact maximum assignment."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep source image identity opaque and enforce concept-grouped training exclusions.",
+      "Report whitening/public source exposure and repeated-response aggregation; whitened coordinates are not raw microvolts.",
+      "Do not treat F/I equal allowances as equal consumption or unrestricted investigator semantics."
+    ],
+    "uncertainty": "Retain all ten paired-person effects and shared-image pairing; source report uncertainty remains conditional on validated pairing/resampling and the fixed shared stimulus panel.",
+    "failure_policy": "Validate every submitted panel against exact public IDs before private targets. Missing cells retain costs/failures; incomplete-panel bounds cannot replace full-panel Top-1. No silent retries or denominator shrinkage.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "bd2b453cdd20e38230affb3577b293909b1b3b49cd7b42b448fd7a222b0072c5",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "4f0956ffa8be24e64f0060a785b5189bb145c1d3d36a3980cc64729fde901298"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -229,6 +283,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -16,11 +16,11 @@
     ],
     "task_family": "sensorimotor_readout"
   },
-  "scientific_question": "Can M1/S1 calcium predict joint angles and velocities on held-out complete reach trials?",
+  "scientific_question": "How accurately can session-local M1 or S1 calcium-derived activity predict measured joint angles or velocities on complete held-out lift-conditioned reach windows beyond phase and reach-target references?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Multijoint trajectories using a fixed cell/window budget."
+    "The 24 ordered measured jointAngles trajectories in degrees OR the 24 jointVelocities trajectories in degrees/second, scored in separate requests; they are not a single 48-channel endpoint."
   ],
   "input_assets": {
     "routes": [
@@ -380,19 +380,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Trial R structs contain events and hasNeuralData; eventLockData returns time × ROI data. Raw/denoised calcium and RADICaL-derived variants are distinct allowed-input choices, not interchangeable raw spikes.",
-    "allowed_context": "R/M sources yield 3D marker positions and 24 joint angles/velocities, LR reach target and event intervals. Optogenetic trial labels are available for a separate behavioral intervention task.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Pinned eventLockData subtracts syncTime from event timestamps, aligns frameTimes using cycleDurMs and corrects ROILags. tPts and cycleDurMs use milliseconds; resampling to 10 ms does not create 100 Hz independent observations.",
-    "source_contract_evidence": "Published 13-file inventory; pinned loadData, eventLockData, loadLock4Decode, decode and SUMMARY inspected. Data schema comes from author source, not loaded MAT structures."
+    "inputs": [
+      "Primary delivered recipe: 100 training-variance-selected session-local ROI features from smoothed deconvolved events (source neurons.data, 35 ms smoothing SD), 51 samples at 10 ms spacing, no added predictor lags.",
+      "Public lift-time grid and left/right reach target are shared with comparators; all fits, cell ranking, centering and 90-component PCA use declared training trials only.",
+      "RADICaL is a separately declared feature track with upstream temporal support at least [-200,+900] ms; it is not silently exchanged with primary features."
+    ],
+    "forbidden_inputs": [
+      "Held-out kinematic trajectories, evaluation-derived cell selection/PCA/normalization, full-session ZETA selection, answer-bearing filenames and private scorer compound request.",
+      "Any undeclared extra upstream observation window or cross-session ROI correspondence."
+    ],
+    "case_identity": "Exact normalized session IDs are the ten identities enumerated in SCHEMA.md; original trial IDs must match neural_trial_id and target_trial_id. Native admitted trial census is not yet available.",
+    "split": "Implemented prospective within-session split is whole-trial target-stratified SHA256 ranking with seed 240926, 90/10 train/evaluation and upward-rounded evaluation counts; no timepoint split. Five separately declared local-calibration outer cases are optional and are not parameter transfer.",
+    "coverage": "All five mice, both named areas/sessions, every selected trial, all 51 time points and all 24 joints required. Exact native eligibility/exclusion counts remain unverified; selected windows do not imply complete reaching behavior ends by +400 ms."
   },
-  "biological_unit": "Imaging mice cfa17,cfa19,cfa20,cfa22,cfa24; two dated sessions per mouse, M1 and S1 per docs. R(1).animalID and timestamped filenames provide grouping. Separate optogenetic files cfaVG1/cfaVG4.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Five mice cfa17,cfa19,cfa20,cfa22,cfa24; two M1/S1 sessions each are dependent observations.",
+  "case_definition": "One original reach trial with all 51 samples from -100 to +400 ms relative to liftTimeDLC, nested within a named imaging session.",
   "split": {
-    "policy": "Group both M1/S1 sessions by mouse; whole reach trials; separate within-mouse and calibrated new-mouse conditions; PCA/neuron selection training only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Implemented prospective within-session split is whole-trial target-stratified SHA256 ranking with seed 240926, 90/10 train/evaluation and upward-rounded evaluation counts; no timepoint split. Five separately declared local-calibration outer cases are optional and are not parameter transfer.",
+    "coverage": "All five mice, both named areas/sessions, every selected trial, all 51 time points and all 24 joints required. Exact native eligibility/exclusion counts remain unverified; selected windows do not imply complete reaching behavior ends by +400 ms."
   },
   "reference": {
     "source_code_url": "https://github.com/kaufmanlab/GSK26-public",
@@ -411,50 +416,93 @@
     "data_url": "https://figshare.com/articles/dataset/Data_from_Mouse_sensorimotor_cortex_reflects_complex_kinematic_details_during_reaching_and_grasping_eLife_2025/28326998"
   },
   "controls": [
-    "Trial-phase and target-only references",
-    "equal cell counts",
-    "all PCA inside training folds",
-    "trial-shift null."
+    "Train-only cell selection/PCA; original trial-identity equality instead of positional neural/kinematic pairing.",
+    "Fixed same cell and window budgets in M1/S1; source eligibility and upstream exposure must be frozen and disclosed.",
+    "Session-local feature spaces; never infer matched neurons or cross-animal transfer from equal array widths."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed numeric calcium matrices and fixed lift grid could support direct complete-trajectory answers; no no-tools context/collector is supplied.",
+      "boundary": "Only public calibration labels and query neural/context values; hold all evaluation kinematics private.",
+      "evidence_ids": [],
+      "missing": [
+        "Complete no-tools observation and response protocol."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A source-faithful trace/raster viewer could expose 100-ROI calcium windows; none is supplied.",
+      "boundary": "Typed trace selection/rendering must preserve fixed observations without returning target trajectories.",
+      "evidence_ids": [],
+      "missing": [
+        "Renderer, restricted action schema and matched numerical observation budget."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical fit/score functions are operator APIs; a case-adaptive investigator transport is not supplied.",
+      "boundary": "Proposed equal data, tool/checkpoint and compute access with no private compound scoring request.",
+      "evidence_ids": [],
+      "missing": [
+        "Per-case tool transport and independently protected scorer."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Operator-only numerical source is present: Training-only numerical decoder and complete external-prediction scoring API. This does not deliver a participant-facing frozen program mode.",
+      "boundary": "Freeze recipe, eligibility and observation support before evaluation; candidate receives training labels and query neural values only.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Candidate runner and authentic-input/protected-execution qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro normalized RMSE with R-squared per joint as secondary.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Mouse-macro training-SD-normalized RMSE",
+      "direction": "lower",
+      "aggregation": "RMSE per session/joint over equally weighted complete trials/time points divided by that joint training population SD; equal 24 joints, equal two sessions within mouse, equal five mice.",
+      "rationale": "Scores measured kinematics directly while retaining biological weighting and training-only normalization; fixed-source prediction agreement is not the target."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Within-session/joint SSE/SST R² then equal sessions/mice; constant target variance remains undefined.",
+      "Per-area and per-joint errors, phase/target comparator differences and trial-shift diagnostic; angles and velocities remain separate."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Frozen session-local neural ridge",
+        "inputs": "Identical training calcium and kinematics; query neural features only.",
+        "procedure": "Implemented training variance ranking, 100 ROIs, 90 PCA components, unpenalized target mean and ridge alpha 1 in sum-SSE units."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Phase-by-direction mean",
+        "inputs": "Training kinematics plus public lift grid and reach target.",
+        "procedure": "Implemented training-only average trajectory for each reach direction; separate phase-only and direction-only means retained."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Whole-training-trial neural rotation",
+        "inputs": "Same complete training neural trajectories within each direction.",
+        "procedure": "Implemented cyclic rotation by original trial order followed by identical fit; diagnostic, not a permutation significance test."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Train-only cell selection/PCA; original trial-identity equality instead of positional neural/kinematic pairing.",
+      "Fixed same cell and window budgets in M1/S1; source eligibility and upstream exposure must be frozen and disclosed.",
+      "Session-local feature spaces; never infer matched neurons or cross-animal transfer from equal array widths."
+    ],
+    "uncertainty": "Retain five mouse differences and descriptive paired enumeration of all 5^5 ordered mouse bootstrap resamples; five animals do not establish population coverage or a significance threshold.",
+    "failure_policy": "Missing/extra trials, sessions, ROI identities, time points or joints and nonfinite values reject. Zero training SD or evaluation variance propagates undefined scores without dropping affected joints/mice.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "28293739902cc28de887f092dd2b259ba28e63c79bab4674111d0404f81553a8",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "4791d12573c04b19cac2f29b849771b363cc0b5463172d6c88af16e747471b33"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -538,6 +586,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

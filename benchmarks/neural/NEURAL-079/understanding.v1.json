@@ -1,0 +1,237 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-079",
+  "title": "Natural-video EEG response encoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A full encoding-source programme and grader exist, but deployment and authentic numerical execution remain unqualified. Its delivered target is held EEG prediction, not native interpretation of observed EEG; preserve the scoped distinction.",
+  "scientific_target": {
+    "question": "Can permitted training responses and fixed video features predict the complete EEG response to held video identities in the same six participants, beyond matched or absent neural-training controls?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Held video EEG response arrays, independently joined to each participant, channel and time coordinate; the answer is measured EEG rather than the source paper narrative.",
+    "answer_origin": "EEG Moments released recordings/derivatives and evaluator-owned held response means; authentic target conversion is not qualified by this source revision.",
+    "case_unit": "One video query predicts the response of all six known people, [6,127,1800].",
+    "independent_unit": "Participant, with repeated videos shared across people and trials nested within sessions.",
+    "inference_scope": "Offline stimulus-to-neural encoding for a fixed public cohort and 102 exposed source-test videos. It can test prediction dependence on training neural information; it does not measure unaided reading of a query EEG trace.",
+    "exclusions": [
+      "No direct neural-signal interpretation result from video-to-EEG programme scores.",
+      "No causal or uniquely visual mechanism: videos contain sound and whole-clip features use future frames for early EEG positions.",
+      "No unseen-person generalization, fresh holdout, SOTA or scientific-reasoning score from the report rubric."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "All17 fixed visual feature outputs and permitted EEG responses for video IDs1..1000, with person/channel/time order and fit-only transforms.",
+      "At query time the current video features and sealed training state; measured, mismatched and absent training-neural views remain separate conditions."
+    ],
+    "forbidden_inputs": [
+      "EEG responses for query videos 1001..1102, query-derived normalization/noise-ceiling selection, prior query transcripts and protected reference results.",
+      "Answer-bearing targets or native whole-session transforms imported into the prospective condition."
+    ],
+    "case_identity": "Source protocol uses video IDs1..1000 for training and 1001..1102 for query, six person positions and complete 127-by 1800 output coordinates; runtime bundle aliases do not replace the canonical join.",
+    "split": "Same-six-person new-video split. Group every repetition of a video; preserve literal native whole-session normalization solely as a separately labeled retrospective reproduction branch.",
+    "coverage": "One registration; source scope contains 36 paired-seed bundles,3672 query contexts and 22032 person-video predictions. These are planned full-support condition counts, not completed runs or independent datasets. Authentic input and deployment qualification remain absent."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant-macro mean coordinate-wise Pearson correlation over held videos",
+      "direction": "higher",
+      "aggregation": "Correlate predicted and measured responses across 102 videos separately at every 127x1800 coordinate, average all coordinates within each person, then average six people. Undefined coordinates propagate according to the scorer, not selective deletion.",
+      "rationale": "Assesses held neural-response structure over the full frozen target basis; calibration error is reported separately because correlation alone ignores scale and bias."
+    },
+    "secondary": [
+      "Full-support MSE and training-variance-normalized MSE.",
+      "Prespecified posterior-channel/time masks as secondary views only.",
+      "Paired measured-versus-mismatch/absent neural-information contrasts, investigative-minus-frozen and helper effects; retain all signed outcomes.",
+      "Native reproduction status and evidence-backed protocol-report credit remain separate non-neural-accuracy endpoints."
+    ],
+    "comparators": [
+      {
+        "name": "Training-selected R1/R2/R3 champion",
+        "inputs": "The same permitted training EEG, all required feature coordinates and fixed training folds.",
+        "procedure": "Existing source selects each participant’s reference family/settings using the complete training-only inner grid, then grades its held predictions; no query-based champion selection."
+      },
+      {
+        "name": "Training mean and zero predictions",
+        "inputs": "Permitted training response means or no neural information.",
+        "procedure": "Existing fixed simple baselines expose scale/correlation pathologies and no-signal performance."
+      },
+      {
+        "name": "Mismatched and absent neural-training views",
+        "inputs": "Declared mismatch or absent labels under the same permitted stimulus feature support.",
+        "procedure": "Existing matched condition axis tests dependence on aligned neural training; it does not isolate causal neural mechanisms."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep all repeats of each video together; disclose shared stimuli with BOLD Moments and unknown checkpoint exposure.",
+      "Freeze fit-only target scaling and masks; do not select channels/times by test-derived reliability.",
+      "Report audiovisual/ocular/task covariates and whole-clip future information; encoding accuracy cannot remove them."
+    ],
+    "uncertainty": "Six-person and shared-video resampling in the source is conditional on fixed fits and the observed cohort/videos; no refitting uncertainty, population confidence or confirmatory winner follows.",
+    "failure_policy": "Require every held video and 127x1800 coordinate for all six people and prescribed condition panels. Preserve incomplete, failed, constant or undefined outcomes; no best-success subset and no rewarding unsupported report claims."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/README.md",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/SCOPE.json",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_protocol.py",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/protected-grading-v1/grading.py",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_controller.py",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_provider.py",
+      "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_jobs.py"
+    ],
+    "scorer_target": "Protected grader compares submitted full response arrays with EEG targets using coordinate-wise Pearson/MSE; separately checks 24 paired contrasts and fixed reference dominance. It does not grade biological understanding from prose.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete scientific source for a named same-person, exposed-video encoding scope is public, including full-grid target-last grading. Archive is unconfigured and does not contain authentic data, model weights, private seeds or performance.",
+    "missing": [
+      "Prepare authenticated EEG/stimulus assets and qualified fit-only target conversion.",
+      "Bind source maps and runtime gates; independently qualify numerical and resource/isolation behavior.",
+      "Run competent fixed references before any candidate comparison; no new run is undertaken here."
+    ],
+    "execution_evidence": "The release documents source inspection/construction only; no authentic numerical reference or candidate execution is claimed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The query observation is a video feature tensor and the requested answer is held EEG; showing the target EEG would reverse the task.",
+      "boundary": "A direct neural-waveform interpretation assay would require a separately specified endpoint and must not inherit encoding scores.",
+      "evidence_ids": [
+        "encoding-protocol"
+      ],
+      "missing": [
+        "No direct neural-observation condition for this encoding target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "A viewer of held EEG would expose the prediction target; viewing stimulus material does not become neural-signal interpretation.",
+      "boundary": "Any future stimulus viewer must preserve the encoding target and be assessed separately.",
+      "evidence_ids": [
+        "encoding-protocol"
+      ],
+      "missing": [
+        "No typed neural-viewer endpoint is delivered."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Controller.investigate supplies an actual provider action loop with run_python, optional fit_helper and finish actions over the permitted current context; source is unconfigured and not executed here.",
+      "boundary": "Fresh query state, same permitted information within each paired tool condition, no query labels or grading feedback; provider/runtime qualification remains external.",
+      "evidence_ids": [
+        "participant-controller",
+        "participant-provider",
+        "participant-process",
+        "encoding-protocol"
+      ],
+      "missing": [
+        "Unconfigured native/provider transport and authentic full-input execution."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Controller.preseal freezes run(request) source before numeric exposure and run_candidates executes it for training, each current video and report; provider transport rejects F calls after exposure.",
+      "boundary": "Commit global policy before numeric exposure; no source revision or provider call during frozen execution; native reproduction is separate.",
+      "evidence_ids": [
+        "participant-controller",
+        "participant-process",
+        "participant-provider",
+        "encoding-protocol"
+      ],
+      "missing": [
+        "Authenticated training/query installation and independent execution qualification."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-registration",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-079/historical/task.pre-understanding.v1.json",
+      "sha256": "5f8c0544b874469226900a696f8976bb9b701306fb8f1b38e47cd66b6f316ec6",
+      "supports": "Original scientific scope and recorded source-audit findings; preserved verbatim by the revision."
+    },
+    {
+      "id": "encoding-protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_protocol.py",
+      "sha256": "d201ef6d94f56fbbead346cf6751a0209f1bb403d36877767aa0c4e2c69f1ad1",
+      "supports": "Complete stimulus-to-EEG outputs, fit-only normalization, twelve policy cells and report semantics."
+    },
+    {
+      "id": "encoding-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/protected-grading-v1/grading.py",
+      "sha256": "96fceb2bf34a2aaef2db8fc3ac0388b75402c6c0ade45cfcf9ae53c4d22c14a2",
+      "supports": "Full127-by 1800 coordinate Pearson/MSE scoring, undefined outcomes, reference champion and conditional intervals."
+    },
+    {
+      "id": "delivery-scope",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/README.md",
+      "sha256": "01701ae2d7c6b5c8cdbaf5ccde8f3026122029d2d3c31a52b11e5fa3fdd16907",
+      "supports": "Unconfigured source archive; no authentic inputs or numerical scientific run included."
+    },
+    {
+      "id": "encoding-roster",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/SCOPE.json",
+      "sha256": "55e54ce6aaf9c3e6a505c9b398aac80ef148d7d4dd03581b3017fc8e5f20a88c",
+      "supports": "Six people,1000 training102 query videos; conditions and repeats do not increase task count."
+    },
+    {
+      "id": "emd-paper",
+      "kind": "primary_source",
+      "url": "https://arxiv.org/abs/2608.28768v2",
+      "locator": "Dataset description and abstract",
+      "supports": "Six participants viewed 1102 audiovisual clips with EEG and eye tracking; establishes dataset modality, not benchmark performance."
+    },
+    {
+      "id": "emd-author-code",
+      "kind": "primary_source",
+      "url": "https://github.com/gifale95/EMD",
+      "locator": "Official repository README and preprocessing/encoding organization",
+      "supports": "Author source provides EEG Moments preprocessing and reproduction routes; raw 128 channel acquisition is distinct from the selected 127 channel target basis."
+    },
+    {
+      "id": "participant-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_controller.py",
+      "sha256": "7d7a966d231eb6680ce2abd60e8f88b86349fc5b463ed1d460221af02f486f10",
+      "supports": "Controller.preseal and run_candidates execute frozen source; Controller.investigate executes provider run_python/fit_helper/finish actions in fresh current-context jobs."
+    },
+    {
+      "id": "participant-provider",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_provider.py",
+      "sha256": "f615b54ed3c1572aa937062e8841337d9d19155ae588ca957d4e7d8c31e72ef6",
+      "supports": "Concrete bounded provider transport gates all post-exposure calls to I mode and forbids them for F."
+    },
+    {
+      "id": "participant-process",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-079/implementations/neural-079/full-natural-video-encoding-v1/source/authoring/delivery-20261105/common/remaining-builds-wave31/neural079-complete-design/implementation-v1/runtime/n079_jobs.py",
+      "sha256": "684bde060881ff600569ed90f4adfdae786cff2276581f87f0a189c1f4990611",
+      "supports": "JobSupervisor stages pinned source/permitted views, launches the declared command and requires observed process/stream closure."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "This revision inspects source and existing public construction evidence only. The four historical neural programme attempts concern EEG077/sleep 007, not this task. No direct-observation, viewer, human or model result is established here.",
+    "excluded_claims": [
+      "No direct neural-signal interpretation result from video-to-EEG programme scores.",
+      "No causal or uniquely visual mechanism: videos contain sound and whole-clip features use future frames for early EEG positions.",
+      "No unseen-person generalization, fresh holdout, SOTA or scientific-reasoning score from the report rubric."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make the true video-to-EEG direction and same-person exposed-video split authoritative.",
+      "Use the implemented full-coordinate primary and independent calibration companions.",
+      "Separate protocol-report fidelity and native reconstruction from neural prediction quality."
+    ],
+    "source_review": "Inspected original registration and actual public scorer/protocol/constructor source; checked official EMD/OpenMIIR primary source metadata on 2026-11-16. No recording payload, target array or model was opened."
+  }
+}

@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Two measured nominal velocity components in m/s per query, at the declared retrospective 120 msmovement-onset target.
+
+**Source delivery:** partial\_delivery. Current source supports arbitrary complete 92-row velocity artifacts and a passive 40 query primary loss. It preserves a fixed active-versus-passive-reference diagnostic, but does not enforce matched kinematics, candidate active-only fitting or the broader causal-coding investigation.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed per-trial numerical counts or fixed raster with one finite 2 component velocity prediction; no no-tools participant transport is supplied. Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access. | Freeze a feasible complete per-case observation and response representation without silently changing the target.; Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim. |
+| Typed viewer | not\_delivered | Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration. Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible. | Implement task-specific renderer, restricted actions and complete responses.; Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation. |
+| Tool assisted | not\_delivered | Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop. Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback. | Deliver a bounded per-case participant loop with authenticated observation and answer lineage. |
+| Frozen program | not\_delivered | The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle. Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external. | Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16600 bytes; SHA-256 `6dd49995163d6b272d9d708b78dc84e7a300985957caa1bcc4504d2c5f2e68a1`.
+- Specification identity: 19649 bytes; SHA-256 `18404f98363a0766f0224928093fa6d439377d7e87fbebfa61710c68da65c295`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -137,8 +137,15 @@ CONTRACT_SCHEMA = {
         "episode": _obj({"improvement_loop": TEXT, "candidate_freeze": TEXT, "final_evaluation": TEXT,
                          "access_budget": NULL_TEXT, "resource_budget": NULL_TEXT, "baseline_policy": TEXT}),
         "blocking_issues": _array(TEXT, unique=True),
-        "legacy": _obj({"role": {"const": "calibration_only"},
-                        "original_task": {"const": "historical/task.pre-improvement.v1.json"}, "notes": TEXT}),
+        # The registry distinguishes a revision from an initial registration.
+        # A new task has no invented historical reconstruction definition.
+        # This schema cannot authenticate that lineage; registry checks bind it.
+        "legacy": {"anyOf": [
+            _obj({"role": {"const": "calibration_only"},
+                  "original_task": {"const": "historical/task.pre-improvement.v1.json"}, "notes": TEXT}),
+            _obj({"role": {"const": "no_predecessor"},
+                  "original_task": {"type": "null"}, "notes": TEXT}),
+        ]},
         "admission_policy": POLICY_SCHEMA,
     }, optional=("admission_policy",)),
     "$defs": {"admission_result": RESULT_SCHEMA},

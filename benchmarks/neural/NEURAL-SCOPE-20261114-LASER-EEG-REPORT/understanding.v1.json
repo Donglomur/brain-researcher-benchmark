@@ -1,0 +1,218 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-SCOPE-20261114-LASER-EEG-REPORT",
+  "title": "Calibrated cross-experiment reported-pain inference from complete laser-evoked EEG epochs",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Complete nominal-cohort scoring and common numerical condition packets are delivered despite stale original no-scorer wording. The normalized ledger/epoch producer, physical energy and marker joins, unique-person linkage, competent references and actual model context/transport remain unqualified.",
+  "scientific_target": {
+    "question": "After two chronological calibration trials, can EEG improve prediction of a new person’s subsequent recorded intensity reports beyond delivered energy and context when the complete experiment is held out?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Recorded subjective pain-intensity rating on[0,10], retaining zero and decimal values; predicted median minimizes the registered absolute error.",
+    "answer_origin": "Original trial report field joined to authentic EEG and chronology. Unpleasantness and calibrated intensity-category names are distinct fields.",
+    "case_unit": "One eligible post-calibration trial with a complete 3-second EEG epoch,8 training support trials and 2 person calibration trials.",
+    "independent_unit": "Participant within experiment until cross-experiment identity aliases are reconciled; nine experiments are heterogeneous transfer units.",
+    "inference_scope": "Offline processed-epoch prediction with small explicit calibration. Incremental EEG information requires a paired energy/context comparator.",
+    "exclusions": [
+      "Objective pain, clinical diagnosis or nociceptive mechanism.",
+      "Pre-report neural specificity until epoch end/report onset and marker shifts are authenticated.",
+      "Independent-person or contamination-resistant generalization from unresolved reuse/public datasets."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete source-defined[-1,+2]second epoch for query/support/calibration, every EEG channel with units/labels/coordinates and missing masks.",
+      "Prospective common 30 Hz-bandlimited 100 Hz representation at 0.01 µV integer quantization; current packets consume normalized epochs, not raw preprocessing.",
+      "Actual delivered energy if available, side, device/reference and rating protocol, identical across modes and energy comparator."
+    ],
+    "forbidden_inputs": [
+      "Query intensity/unpleasantness, answer-bearing EEG.event/epoch fields, rating/power-sorted ERP averages and source filenames.",
+      "Mean held-person outcomes, future reports, other held queries, target-derived QC or source lookup.",
+      "Calibrated label 7/10 treated as measured Joules or present-trial answer."
+    ],
+    "case_identity": "Packet constructor derives opaque HMAC trial keys from frozen canonical IDs and handles alias-group purging. It requires 678 nominal people with exact experiment counts 26,29,39,30,65,95,142,223,29; historical completeness and biological linkage remain external.",
+    "split": "Nine leave-one-experiment-out folds; 8 training supports selected by salted hash, exactly first 2 eligible chronological trials/person calibrate, every later eligible trial queried with fresh state. Repeated people/aliases must be purged across fold boundaries.",
+    "coverage": "Scorer/packet source validates entire declared 678-person/nineexperiment ledger and all ledger trials. Actual eligible trial census, real epochs and complete model-context fit are not authenticated."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Experiment-macro reported-intensity mean absolute error",
+      "direction": "lower",
+      "aggregation": "Trial mean per person, person mean per experiment, equal mean over all 9 experiments. Report 678 nominal-person-weighted alternative separately.",
+      "rationale": "Measures the subjective known answer without allowing large experiments or successful-output subsets to dominate."
+    },
+    "secondary": [
+      "Paired energy/context-reference MAE reduction at person, experiment and overall levels.",
+      "Within-person Spearman correlation with constant/invalid cases explicitly undefined.",
+      "Optional 80 percent interval coverage/width with supplied and required counts, never selective coverage as whole-assay calibration.",
+      "Device strata and all 9 experiment results."
+    ],
+    "comparators": [
+      {
+        "name": "Support/calibration medians",
+        "inputs": "Same 10 labeled examples; report target-person 2-trial median separately.",
+        "procedure": "Fixed median predictors with no EEG."
+      },
+      {
+        "name": "Energy/context ridge",
+        "inputs": "Same 10 examples and actual energy/side/protocol fields.",
+        "procedure": "Prospective fixed lambda=1 ridge with train/support-only centering and missing indicators; complete trusted comparator must be valid for every query."
+      },
+      {
+        "name": "Waveform nearest-support and physiology ridge",
+        "inputs": "Same 10 complete EEG epochs.",
+        "procedure": "Freeze channel/mask distance or signed all-channel 150–350 ms/250–600 ms means plus baseline variance and lambda=1 ridge. These design comparators are not implemented by the packet/scorer source."
+      }
+    ],
+    "nuisance_controls": [
+      "Same-support context-only, EEG-only and joint comparisons; missing actual energy blocks claims beyond physical intensity.",
+      "Baseline-only and event-shift controls, montage permutation and physical-unit scale checks.",
+      "Reconcile both 100 ms marker corrections, whole-session ICA/QC lineage and report-onset motor contamination.",
+      "Retain full source channels and epoch; no peak-only replacement or context-cap truncation."
+    ],
+    "uncertainty": "Paired participant-cluster resampling within experiments after reuse grouping, all 9 experiment effects reported; conditional convenience-cohort inference. Current scorer does not implement bootstrap.",
+    "failure_policy": "Each missing/duplicate/malformed/nonfinite/out-of-range required prediction receives loss 10; invalid optional quantiles invalidate that record. Unknown extra IDs fail output validity without erasing valid required cases. Defective trusted target/comparator refuses; no candidate penalty inflates comparator gains."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/full-assay-scorer/scorer.py",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/full-assay-scorer/README.md",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/condition-packets/packets.py",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/condition-packets/README.md"
+    ],
+    "scorer_target": "Recorded intensity prediction, not copying rating-sorted source ERPs. Actual loss 10 and complete experiment-macro MAE logic are implemented; packet builder enforces support/calibration construction on supplied normalized operands.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Standard-library full-assay scorer and common numeric packet constructor with alias purge, target redaction and tokenizer callback. No source EEG epoch extractor/filter or model runner.",
+    "missing": [
+      "Authenticate nine-cohort trial/participant lineage, EEG/target chronology, actual delivered energy and complete epoch preparation.",
+      "Freeze/validate actual 30 Hz/100 Hz transform and all-channel masks, two marker shifts and representation residuals.",
+      "Fit matched competent references, verify largest full packet using selected real tokenizer, and enforce fresh query execution."
+    ],
+    "execution_evidence": "Existing generated controls exercise complete nominal population, zero/decimal labels, failure penalties, aliases and byte equality. Capacity tests using fake counters are not real model tokenization; no authentic score or model trial is claimed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Common complete numeric EEG packet of 10 labeled examples plus query, with optional identical waveform rendering only if qualified.",
+      "boundary": "No tools or extra source bank; unqualified authentic epoch producer and real-context capacity prevent an executed claim.",
+      "evidence_ids": [
+        "implementation-3",
+        "implementation-4"
+      ],
+      "missing": [
+        "Authentic epochs, real tokenizer capacity and model delivery.",
+        "Participant execution controller for this mode. The condition-packets owner-side common numeric packet constructor prepares shared evidence but does not run this condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A restricted full-channel waveform viewer could expose the same complete packet.",
+      "boundary": "Optional fixed rendering is not a typed viewer; no metadata query may reveal current rating or other held trials.",
+      "evidence_ids": [
+        "registration",
+        "implementation-3"
+      ],
+      "missing": [
+        "Typed action protocol, restricted renderer and answer collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical investigation of exactly the common 10 support/calibration-plus-query packet.",
+      "boundary": "No external pretrained decoder or extra training corpus in primary comparison; no persistent query state.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Enforced tool/runtime limits, authentic packets and model transport.",
+        "Participant execution controller for this mode. The condition-packets owner-side common numeric packet constructor prepares shared evidence but does not run this condition."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Same packet and median/quantile submission ABI for a frozen per-fold predictor.",
+      "boundary": "Freeze before held-experiment query; case-time fit uses only 10 supplied labeled examples.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-3"
+      ],
+      "missing": [
+        "Programme executor, source/representation qualification and fitted references.",
+        "Participant execution controller for this mode. The condition-packets owner-side common numeric packet constructor prepares shared evidence but does not run this condition."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "registration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/historical/task.pre-understanding.v1.json",
+      "sha256": "6bbfc392294eee7faa551f1db548b482e9adff2e182242047924744617335b70",
+      "supports": "Preserved source-backed registration, prospective scientific design and original exposure limitations; current implementation changes are described separately."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/full-assay-scorer/scorer.py",
+      "sha256": "c886d3de54818dd01d8c2d632a58e7fe50f437a4bcc4c52ca6ae3bb34d6f883c",
+      "supports": "grade parses candidate before trusted targets, retains all query denominators and penalty 10, then computes person/experiment macroMAE."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/full-assay-scorer/README.md",
+      "sha256": "8c46ea077869fe89914171411c1f7734fe26c693b1ebf8318050ac4350b75e49",
+      "supports": "Actual 678 nominal-person/nine-experiment support, decimal intensity target, no authentic EEG extractor or causal claim."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/condition-packets/packets.py",
+      "sha256": "f119fb643a179917116c5203325137aa34c11792fcc0bda8a4ab94a8509f36e7",
+      "supports": "PreparedAssay validates complete ledger, purges identities/aliases, selects support without label-based ranking and emits common numeric packets."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/condition-packets/README.md",
+      "sha256": "eeebf10163ebfa7ced7750d905a68a3630db52ef231179aa7e0c8dc83a4a0015",
+      "supports": "Packets preserve all channel/time operands under explicit representation, actual-tokenizer capacity remains required and model execution absent."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://www.nature.com/articles/s41597-025-05900-1",
+      "locator": "Collection paper and per-study metadata as retained in original source audit",
+      "supports": "Nineexperiments,678 nominal participant records, reported pain intensity, devices and no-intervention restriction."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://github.com/XiangyueZhao/Supplement-Data/tree/daf9f0b83df047c506cc4714d39551b99980d537",
+      "locator": "Pinned official technical-validation code audited in registration",
+      "supports": "Rating/power-sorted epoch averages are retrospective validation outputs, not a held-out prediction reference."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "The inspected source carries construction and generated software-control evidence. No neural programme pilot among the four historical EEG/sleep attempts is attributed to this registration, and no model or human outcome is added here.",
+    "excluded_claims": [
+      "Objective pain, clinical diagnosis or nociceptive mechanism.",
+      "Pre-report neural specificity until epoch end/report onset and marker shifts are authenticated.",
+      "Independent-person or contamination-resistant generalization from unresolved reuse/public datasets.",
+      "Author rating-sorted ERP scripts as competent prediction baseline."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Correct original stale no-scorer/no-runner conflation: numerical scoring and identical packet construction exist, authentic epoch preparation and execution do not.",
+      "Preserve subjective decimal intensity target and exact nine-experiment macro denominator/failure policy.",
+      "Separate actual physical energy from calibrated rating labels and direct numeric packets from absent typed viewer.",
+      "A shared complete packet constructor is preparation source, not a direct-answer, tool-investigator or frozen-program controller; all three modes remain not delivered despite implemented identical evidence bytes."
+    ],
+    "source_review": "Reused the preserved registration primary-source audit and inspected the listed actual implementation paths. No authentic numerical payload or protected label was opened; no model was run."
+  }
+}

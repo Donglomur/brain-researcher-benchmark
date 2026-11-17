@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-003",
   "track": "neural",
-  "title": "Reaction-time prediction from pre-response EEG",
+  "title": "Fixed-deadline reaction-time inference from causal EEG",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "decision_dynamics"
   },
-  "scientific_question": "Does EEG available before a fixed cutoff improve reaction-time prediction beyond contrast and instruction?",
+  "scientific_question": "Among trials still at risk at a fixed100ms deadline, does EEG available by that deadline improve observed first-response-time prediction beyond contrast and instruction?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Reaction-time estimate per trial from a window whose length does not depend on the response."
+    "Finite observed first-response reaction time in seconds after the stimulus, for every admitted at-risk trial; later missing or censored responses have no silently imputed answer."
   ],
   "input_assets": {
     "routes": [
@@ -72,19 +72,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "26 cleaned participant MNE epoch FIF files at 512 Hz; actual manifest sizes/hashes and matching writer/reader verified.",
-    "allowed_context": "Writer saves event_name,rt,condition,side,stimulus,response. These are supported by source and are not yet verified by parsing every FIF payload.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Source uses photodiode-corrected stimulus onset and preserves trial metadata; baseline scope starts from cleaned epochs.",
-    "source_contract_evidence": "Public OSF manifest plus official data/preprocessing.py and HMP/ERP notebook loading contract."
+    "inputs": [
+      "Original authenticated native1024Hz32-channel EEG with instantaneous common-average reference and forward one-pole smoother alpha1/8, started at acquisition start.",
+      "Fixed307 samples at offsets-204 through+102; three fixed channel-bin means give96reference features. Contrast and speed/accuracy instruction are allowed."
+    ],
+    "forbidden_inputs": [
+      "Response-locked windows, response timing/side/correctness markers, post-deadline samples, query-fitted transformations and outcome-dependent artifact rejection.",
+      "Released512Hz cleaned epochs, zero-phase filtering, retrospective ICA, interpolation or unsupported resampling as substitutes for causal raw input."
+    ],
+    "case_identity": "Partition/source schema requires original person/session/block/trial joins and prediction schema requires exact opaque per-arm query IDs. Original raw-to-anonymized permutation and clock joins remain missing.",
+    "split": "All26 held-person folds; each outer training pool contains25people with complete person/session/block groups. Inner validation holds out each of those25people. Both arms use identical at-risk cases.",
+    "coverage": "Planned52person-by-arm output sets over all admitted trials; authentic count and complete finite response roster remain unresolved. Early responses by100ms are counted privately and excluded by the declared at-risk rule, never by variable window length."
   },
-  "biological_unit": "26 participant files numbered 0 through25; person is the independent unit.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "26 original participants; sessions, original blocks and repeated trials are nested and remain grouped.",
+  "case_definition": "One held-person episode with matched EEG+contrast/instruction and contrast/instruction-only output vectors over identical trial IDs.",
   "split": {
-    "policy": "Outer held-out participants; within training people group complete trials by block and instruction; no response-dependent query cutoff.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "All26 held-person folds; each outer training pool contains25people with complete person/session/block groups. Inner validation holds out each of those25people. Both arms use identical at-risk cases.",
+    "coverage": "Planned52person-by-arm output sets over all admitted trials; authentic count and complete finite response roster remain unresolved. Early responses by100ms are counted privately and excluded by the declared at-risk rule, never by variable window length."
   },
   "reference": {
     "source_code_url": "https://github.com/GWeindel/decision-times",
@@ -102,49 +106,99 @@
     "data_url": "https://osf.io/j6xuv/"
   },
   "controls": [
-    "No response-locked windows or response event markers",
-    "equal observation duration",
-    "side and condition baseline."
+    "Use a fixed deadline and equal sample support, never response-locked or response-length windows.",
+    "Authenticate original blocks and clock join; ordinal partitioning cannot manufacture original block identity.",
+    "Handle early responses privately with predeclared at-risk eligibility; require a justified nonresponse/censoring estimand before complete target construction.",
+    "Keep side/correctness and original chronology out of primary comparator and EEG inputs."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A future fixed-window32-channel numeric or visual observation with contrast/instruction could be answered without tools.",
+      "boundary": "Any view must use only authenticated causal samples through100ms and omit response metadata; no target-informed cropping.",
+      "evidence_ids": [],
+      "missing": [
+        "Native causal producer and direct response protocol absent."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential causal EEG-window renderer with identical channel/time support.",
+      "boundary": "Typed actions must not reveal future signal, raw acquisition paths or behavioral metadata.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed viewer or authenticated causal input route."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The numerical reference modules can analyze admitted training features, but no participant per-case investigator transport is supplied.",
+      "boundary": "Future investigator must share exact inputs/compute and avoid held labels/cross-fold state.",
+      "evidence_ids": [
+        "scope",
+        "reference"
+      ],
+      "missing": [
+        "No investigator executor, native data producer or isolation."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Train-only ridge components specify a possible frozen programme; no complete executable episode exists.",
+      "boundary": "Freeze full procedure before query; admit raw input and targets independently; reset folds/arms.",
+      "evidence_ids": [
+        "scope",
+        "reference"
+      ],
+      "missing": [
+        "No runtime launcher, complete source preparation or protected target producer."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro MAE and paired improvement over contrast/instruction baseline.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "participant-macro mean absolute error in observed first-response seconds",
+      "direction": "lower",
+      "aggregation": "Mean absolute error over all admitted trials/person, then equal mean over26people; report paired contrast_instruction MAE minus EEG MAE.",
+      "rationale": "Measures a real behavioral target with common time units and matched observation support. Positive EEG gain is not required."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "All26 paired person gains and arm losses; admitted/early-response/missing-response counts by person.",
+      "Reference fitting validity and sensitivity to allowed acquisition timing uncertainty before any scientific interpretation."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "contrast_instruction_ridge",
+        "inputs": "Contrast fraction, instruction and their interaction; no EEG, source order or response-side covariates.",
+        "procedure": "Existing equal-person ridge with alphas0.1,1,10 chosen using all25 inner-person folds; training-only means/scales."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "matched_EEG_ridge",
+        "inputs": "The same covariates plus96fixed causal EEG-bin features.",
+        "procedure": "Same reference-selection/fitting rule and support; fixed predictions projected only to values strictly greater than0.1seconds."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "constant_training_RT",
+        "inputs": "Permitted training-person reaction times only.",
+        "procedure": "Proposed fixed training-only constant predictor as a sanity comparator; no held-target fitting."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Use a fixed deadline and equal sample support, never response-locked or response-length windows.",
+      "Authenticate original blocks and clock join; ordinal partitioning cannot manufacture original block identity.",
+      "Handle early responses privately with predeclared at-risk eligibility; require a justified nonresponse/censoring estimand before complete target construction.",
+      "Keep side/correctness and original chronology out of primary comparator and EEG inputs."
+    ],
+    "uncertainty": "Retain26 paired person gains and complete nested support. Overlapping LOPO training prevents a naive trial-level CI or simple independent-person claim; any inferential resampling requires a predeclared full fitting policy.",
+    "failure_policy": "Admit complete matching52output sets before opening sealed targets. Invalid/missing target RT is an operator fault with no score; never fill with3s. Constant predictions are valid. Missing/duplicate/nonfinite candidate outputs fail complete coverage.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "68a75c57706d68d4b818852a95ed04924ee1129fa6b42fcbf525d64e9a955cc1",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "49e6a48f5c0f099e4a054fc9882674a745c05b28b0e9c1c69f6c7798f329c05e"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -229,6 +283,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

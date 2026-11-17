@@ -1,0 +1,908 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-013",
+  "track": "neural",
+  "title": "Attempted-speech phoneme-sequence decoding",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N052"
+    ],
+    "titles": [
+      "T15 attempted-speech intracortical recordings: author Dryad v5"
+    ],
+    "overlap_groups": [
+      "t15-speech-neuroprosthesis"
+    ],
+    "task_family": "intracortical_speech"
+  },
+  "scientific_question": "Can intracortical neural features recover attempted phoneme sequences on later recording days under a fixed calibration budget?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Phoneme token sequence per trial; transcript decoding only as a separately specified LM postprocessor."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://doi.org/10.5061/dryad.dncjsxm85",
+      "https://doi.org/10.1056/NEJMoa2314132",
+      "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text",
+      "https://datadryad.org/api/v2/versions/374060/files",
+      "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.dncjsxm85",
+      "https://raw.githubusercontent.com/Neuroprosthetics-Lab/nejm-brain-to-text/980a5b7e96392210edf976d76bdb5d15d2e0e62b/model_training/evaluate_model_helpers.py",
+      "https://raw.githubusercontent.com/Neuroprosthetics-Lab/nejm-brain-to-text/980a5b7e96392210edf976d76bdb5d15d2e0e62b/model_training/dataset.py",
+      "https://raw.githubusercontent.com/Neuroprosthetics-Lab/nejm-brain-to-text/980a5b7e96392210edf976d76bdb5d15d2e0e62b/data/t15_copyTaskData_description.csv",
+      "https://huggingface.co/api/datasets/yw784/brain-to-text-25-competition"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N052",
+        "ledger": "readiness/signals_extension_b.json",
+        "record_sha256": "5b77ed63e2c774ca0af4964109a7cad30a6fce5a51d1f26844c1e6e4f25e6446",
+        "data_manifest": {
+          "version": "Dryad version5, API version374060, published2025-07-03",
+          "manifest_url": "https://datadryad.org/api/v2/versions/374060/files",
+          "number_of_files": 5,
+          "files": [
+            {
+              "name": "README.md",
+              "bytes": 3183,
+              "sha256": "3516e6c4c20cfc8c66e5b73fe70474208093ce807034f32f1500087622908e70",
+              "download_url": "https://datadryad.org/api/v2/files/4150353/download"
+            },
+            {
+              "name": "t15_copyTask_neuralData.zip",
+              "bytes": 11051034483,
+              "sha256": "fb828fa7ef937aca405d6912addc876f6747f75a8a1711f6d2052aacf34ec5b5",
+              "download_url": "https://datadryad.org/api/v2/files/4150350/download"
+            },
+            {
+              "name": "t15_copyTask.pkl",
+              "bytes": 57786348,
+              "sha256": "7313b9a1102794cfd31455a85d3d16a1aca962aa730a7134d9346fb8f5e165e3",
+              "download_url": "https://datadryad.org/api/v2/files/4150348/download"
+            },
+            {
+              "name": "t15_personalUse.pkl",
+              "bytes": 1132664,
+              "sha256": "1d18d59e6ee4bf7426f075ee3b5f25a130b7576a9356043db470e13bfc57fcac",
+              "download_url": "https://datadryad.org/api/v2/files/4150347/download"
+            },
+            {
+              "name": "t15_pretrained_rnn_baseline.zip",
+              "bytes": 484944889,
+              "sha256": "04ab2275eeb48abad9b4011dde6f7c9e5dd9f643b8a677c1ba5e06dc53bb4111",
+              "download_url": "https://datadryad.org/api/v2/files/4150349/download"
+            }
+          ],
+          "number_of_subjects": 1,
+          "neural_archive_members": [
+            {
+              "name": "hdf5_data_final/t15.2023.11.03/data_test.hdf5",
+              "size": 72713867,
+              "compressed_size": 62113889
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.03/data_train.hdf5",
+              "size": 197202282,
+              "compressed_size": 168446784
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.03/data_val.hdf5",
+              "size": 70917013,
+              "compressed_size": 60446797
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.04/data_test.hdf5",
+              "size": 19322936,
+              "compressed_size": 16543273
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.04/data_train.hdf5",
+              "size": 90280191,
+              "compressed_size": 76949809
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.04/data_val.hdf5",
+              "size": 16686326,
+              "compressed_size": 14238423
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.01/data_test.hdf5",
+              "size": 48518664,
+              "compressed_size": 41262180
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.01/data_train.hdf5",
+              "size": 325750968,
+              "compressed_size": 275837493
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.01/data_val.hdf5",
+              "size": 49166878,
+              "compressed_size": 41621387
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.14/data_test.hdf5",
+              "size": 27025280,
+              "compressed_size": 23468737
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.14/data_train.hdf5",
+              "size": 70531289,
+              "compressed_size": 60850378
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.14/data_val.hdf5",
+              "size": 21856994,
+              "compressed_size": 18850207
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.05.10/data_test.hdf5",
+              "size": 27337266,
+              "compressed_size": 23629302
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.05.10/data_train.hdf5",
+              "size": 142436158,
+              "compressed_size": 122737282
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.05.10/data_val.hdf5",
+              "size": 27471340,
+              "compressed_size": 23650718
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.04.28/data_train.hdf5",
+              "size": 148631726,
+              "compressed_size": 128417026
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.08/data_test.hdf5",
+              "size": 23925882,
+              "compressed_size": 20624539
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.08/data_train.hdf5",
+              "size": 203015119,
+              "compressed_size": 174433331
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.08/data_val.hdf5",
+              "size": 28014094,
+              "compressed_size": 24045187
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.15/data_test.hdf5",
+              "size": 60500469,
+              "compressed_size": 52340030
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.15/data_train.hdf5",
+              "size": 359756078,
+              "compressed_size": 310249702
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.15/data_val.hdf5",
+              "size": 60796654,
+              "compressed_size": 52462368
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.10/data_test.hdf5",
+              "size": 23606196,
+              "compressed_size": 20457973
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.10/data_train.hdf5",
+              "size": 124684449,
+              "compressed_size": 107070640
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.10/data_val.hdf5",
+              "size": 23160241,
+              "compressed_size": 19975283
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.20/data_test.hdf5",
+              "size": 12704320,
+              "compressed_size": 10879578
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.20/data_train.hdf5",
+              "size": 94816898,
+              "compressed_size": 80581563
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.20/data_val.hdf5",
+              "size": 13614402,
+              "compressed_size": 11612256
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.13/data_test.hdf5",
+              "size": 31898265,
+              "compressed_size": 27146064
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.13/data_train.hdf5",
+              "size": 356641005,
+              "compressed_size": 302422674
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.13/data_val.hdf5",
+              "size": 34955074,
+              "compressed_size": 29596958
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.25/data_test.hdf5",
+              "size": 25086572,
+              "compressed_size": 21348351
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.25/data_train.hdf5",
+              "size": 96301476,
+              "compressed_size": 81585063
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.25/data_val.hdf5",
+              "size": 26223356,
+              "compressed_size": 22196327
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.30/data_test.hdf5",
+              "size": 43874386,
+              "compressed_size": 37889275
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.30/data_train.hdf5",
+              "size": 187136676,
+              "compressed_size": 160905952
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.30/data_val.hdf5",
+              "size": 36704879,
+              "compressed_size": 31565728
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.02.25/data_test.hdf5",
+              "size": 31234260,
+              "compressed_size": 27017305
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.02.25/data_train.hdf5",
+              "size": 205389219,
+              "compressed_size": 176329238
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.02.25/data_val.hdf5",
+              "size": 29598857,
+              "compressed_size": 25493025
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.17/data_test.hdf5",
+              "size": 35861650,
+              "compressed_size": 30823237
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.17/data_train.hdf5",
+              "size": 149901537,
+              "compressed_size": 128199623
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.17/data_val.hdf5",
+              "size": 38314365,
+              "compressed_size": 32833006
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.24/data_test.hdf5",
+              "size": 39487856,
+              "compressed_size": 33613946
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.24/data_train.hdf5",
+              "size": 307825095,
+              "compressed_size": 261115310
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.24/data_val.hdf5",
+              "size": 37360249,
+              "compressed_size": 31658069
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.08/data_test.hdf5",
+              "size": 61429080,
+              "compressed_size": 52695511
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.08/data_train.hdf5",
+              "size": 268048445,
+              "compressed_size": 229329723
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.08/data_val.hdf5",
+              "size": 68629552,
+              "compressed_size": 58638151
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.26/data_test.hdf5",
+              "size": 60644218,
+              "compressed_size": 52431758
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.26/data_train.hdf5",
+              "size": 261525750,
+              "compressed_size": 224949467
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.26/data_val.hdf5",
+              "size": 62612250,
+              "compressed_size": 53904008
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.19/data_test.hdf5",
+              "size": 22448030,
+              "compressed_size": 19310922
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.19/data_train.hdf5",
+              "size": 62687533,
+              "compressed_size": 53665955
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.11.19/data_val.hdf5",
+              "size": 24321119,
+              "compressed_size": 20838107
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.06.14/data_test.hdf5",
+              "size": 27643520,
+              "compressed_size": 23930010
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.06.14/data_train.hdf5",
+              "size": 112359536,
+              "compressed_size": 96569414
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.06.14/data_val.hdf5",
+              "size": 29125155,
+              "compressed_size": 25102971
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.29/data_test.hdf5",
+              "size": 56662488,
+              "compressed_size": 48631693
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.29/data_train.hdf5",
+              "size": 267967915,
+              "compressed_size": 228728551
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.29/data_val.hdf5",
+              "size": 59807502,
+              "compressed_size": 51069642
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.16/data_test.hdf5",
+              "size": 38955564,
+              "compressed_size": 33888085
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.16/data_train.hdf5",
+              "size": 110285272,
+              "compressed_size": 95067772
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.03.16/data_val.hdf5",
+              "size": 38435264,
+              "compressed_size": 33335424
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.17/data_test.hdf5",
+              "size": 36649967,
+              "compressed_size": 31632692
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.17/data_train.hdf5",
+              "size": 183598314,
+              "compressed_size": 157410517
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.17/data_val.hdf5",
+              "size": 37708244,
+              "compressed_size": 32411234
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.03/data_test.hdf5",
+              "size": 34386056,
+              "compressed_size": 29319427
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.03/data_train.hdf5",
+              "size": 350342794,
+              "compressed_size": 296887007
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.03/data_val.hdf5",
+              "size": 32590361,
+              "compressed_size": 27633094
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.10/data_test.hdf5",
+              "size": 39853304,
+              "compressed_size": 34265952
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.10/data_train.hdf5",
+              "size": 180923288,
+              "compressed_size": 154987821
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.10/data_val.hdf5",
+              "size": 38209471,
+              "compressed_size": 32717685
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.08/data_test.hdf5",
+              "size": 24818602,
+              "compressed_size": 21233848
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.08/data_train.hdf5",
+              "size": 305710341,
+              "compressed_size": 260020365
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.08/data_val.hdf5",
+              "size": 24424601,
+              "compressed_size": 20811993
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.04.25/data_train.hdf5",
+              "size": 384997862,
+              "compressed_size": 332726333
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.01/data_test.hdf5",
+              "size": 50899493,
+              "compressed_size": 43348745
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.01/data_train.hdf5",
+              "size": 216351110,
+              "compressed_size": 183800307
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.01/data_val.hdf5",
+              "size": 52656495,
+              "compressed_size": 44667591
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.06/data_test.hdf5",
+              "size": 41721367,
+              "compressed_size": 35580355
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.06/data_train.hdf5",
+              "size": 198052357,
+              "compressed_size": 168261036
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.06/data_val.hdf5",
+              "size": 41326535,
+              "compressed_size": 35131255
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.03/data_train.hdf5",
+              "size": 152593205,
+              "compressed_size": 131084230
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.18/data_test.hdf5",
+              "size": 53532995,
+              "compressed_size": 45495386
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.18/data_train.hdf5",
+              "size": 238103769,
+              "compressed_size": 201476013
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.18/data_val.hdf5",
+              "size": 47673248,
+              "compressed_size": 40322031
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.13/data_test.hdf5",
+              "size": 55796849,
+              "compressed_size": 47712674
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.13/data_train.hdf5",
+              "size": 161063450,
+              "compressed_size": 136883299
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.13/data_val.hdf5",
+              "size": 53330437,
+              "compressed_size": 45403753
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.27/data_test.hdf5",
+              "size": 26943784,
+              "compressed_size": 22952442
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.27/data_train.hdf5",
+              "size": 173241180,
+              "compressed_size": 146942819
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.27/data_val.hdf5",
+              "size": 22343065,
+              "compressed_size": 18926710
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.19/data_test.hdf5",
+              "size": 52374278,
+              "compressed_size": 45191005
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.19/data_train.hdf5",
+              "size": 172701066,
+              "compressed_size": 148234027
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.19/data_val.hdf5",
+              "size": 47766223,
+              "compressed_size": 41058961
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.21/data_test.hdf5",
+              "size": 66704604,
+              "compressed_size": 57502882
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.21/data_train.hdf5",
+              "size": 238066167,
+              "compressed_size": 203974752
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.21/data_val.hdf5",
+              "size": 68329554,
+              "compressed_size": 58744599
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.20/data_test.hdf5",
+              "size": 47926324,
+              "compressed_size": 40817566
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.20/data_train.hdf5",
+              "size": 301434646,
+              "compressed_size": 255490351
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.20/data_val.hdf5",
+              "size": 47633572,
+              "compressed_size": 40354945
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.22/data_test.hdf5",
+              "size": 45177735,
+              "compressed_size": 38641842
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.22/data_train.hdf5",
+              "size": 189536706,
+              "compressed_size": 162240092
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.22/data_val.hdf5",
+              "size": 39380956,
+              "compressed_size": 33571556
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.28/data_test.hdf5",
+              "size": 75616169,
+              "compressed_size": 65237110
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.28/data_train.hdf5",
+              "size": 218403649,
+              "compressed_size": 187592784
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.07.28/data_val.hdf5",
+              "size": 66213514,
+              "compressed_size": 56934515
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.08.11/data_train.hdf5",
+              "size": 215183394,
+              "compressed_size": 182478142
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.12/data_test.hdf5",
+              "size": 64096192,
+              "compressed_size": 55641099
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.12/data_train.hdf5",
+              "size": 208195411,
+              "compressed_size": 179894999
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.01.12/data_val.hdf5",
+              "size": 67265061,
+              "compressed_size": 58215109
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.15/data_test.hdf5",
+              "size": 53291055,
+              "compressed_size": 45556902
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.15/data_train.hdf5",
+              "size": 273927632,
+              "compressed_size": 233334645
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.10.15/data_val.hdf5",
+              "size": 65262114,
+              "compressed_size": 55546627
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.17/data_test.hdf5",
+              "size": 57645084,
+              "compressed_size": 49999486
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.17/data_train.hdf5",
+              "size": 342068481,
+              "compressed_size": 295101660
+            },
+            {
+              "name": "hdf5_data_final/t15.2024.03.17/data_val.hdf5",
+              "size": 57843303,
+              "compressed_size": 49944317
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.03/data_test.hdf5",
+              "size": 36958733,
+              "compressed_size": 31859623
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.03/data_train.hdf5",
+              "size": 319955609,
+              "compressed_size": 274389243
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.12.03/data_val.hdf5",
+              "size": 40939829,
+              "compressed_size": 35145796
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.29/data_test.hdf5",
+              "size": 70656306,
+              "compressed_size": 60317052
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.29/data_train.hdf5",
+              "size": 162584217,
+              "compressed_size": 138303308
+            },
+            {
+              "name": "hdf5_data_final/t15.2023.09.29/data_val.hdf5",
+              "size": 68534739,
+              "compressed_size": 58308277
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.04.13/data_test.hdf5",
+              "size": 33401157,
+              "compressed_size": 28980573
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.04.13/data_train.hdf5",
+              "size": 79291966,
+              "compressed_size": 68114819
+            },
+            {
+              "name": "hdf5_data_final/t15.2025.04.13/data_val.hdf5",
+              "size": 30828378,
+              "compressed_size": 26605293
+            }
+          ],
+          "neural_archive_member_count": 127,
+          "mirror": {
+            "url": "https://huggingface.co/datasets/yw784/brain-to-text-25-competition",
+            "revision": "2f2fabacbc9af637da3bac483bf14e1231fb4e8a",
+            "author_operation_verified": false,
+            "neural_archive_sha256_matches_dryad": true,
+            "role": "Accessible secondary copy; provenance comes from the original author Dryad deposit.",
+            "schema_viewer_status": "HF dataset viewer fails on nested ZIP HDF5; this is not proof that source files are unavailable."
+          }
+        },
+        "recording_contract": {
+          "neural": "Author loader opens each trial group/input_features: time by512 features, comprising two features on each of256 electrodes across four64-channel speech-motor arrays. The raw electrode voltage is outside this scope.",
+          "labels": "Training/validation trial groups expose seq_class_ids, transcription, and sentence_label; attrs include n_time_steps, seq_len, session, block_num and trial_num. Test targets are omitted. Corpus is joined from the author Date/Block-number CSV.",
+          "time_alignment": "Features binned at20ms per author README; sequence labels are phoneme/text targets, not observed phoneme-onset timestamps. Score sequence decoding without inventing per-phoneme timing truth.",
+          "biological_ids": "One participant T15;45date-coded recording sessions, blocks and trials. Sessions are repeated measures of the same person.",
+          "evidence": "Pinned author loader read and actual ZIP directory inspected:127session/split HDF5 files. HDF5 trial values/dimensions were not unpacked;512-feature schema is author-source documented, not independently observed from a trial payload."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Author loader opens each trial group/input_features: time by512 features, comprising two features on each of256 electrodes across four64-channel speech-motor arrays. The raw electrode voltage is outside this scope.",
+    "allowed_context": "Training/validation trial groups expose seq_class_ids, transcription, and sentence_label; attrs include n_time_steps, seq_len, session, block_num and trial_num. Test targets are omitted. Corpus is joined from the author Date/Block-number CSV.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Features binned at20ms per author README; sequence labels are phoneme/text targets, not observed phoneme-onset timestamps. Score sequence decoding without inventing per-phoneme timing truth.",
+    "source_contract_evidence": "Pinned author loader read and actual ZIP directory inspected:127session/split HDF5 files. HDF5 trial values/dimensions were not unpacked;512-feature schema is author-source documented, not independently observed from a trial payload."
+  },
+  "biological_unit": "One participant T15;45date-coded recording sessions, blocks and trials. Sessions are repeated measures of the same person.",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "One person T15; chronological days/blocks with sentence identity grouped; adaptation uses only a declared prefix or calibration partition.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text",
+    "commit_or_archive_version": "980a5b7e96392210edf976d76bdb5d15d2e0e62b",
+    "entrypoints": [
+      "model_training/train_model.py",
+      "model_training/rnn_trainer.py",
+      "model_training/evaluate_model.py",
+      "model_training/evaluate_model_helpers.py",
+      "model_training/dataset.py",
+      "data/t15_copyTaskData_description.csv"
+    ],
+    "role": "Original speech-neuroprosthesis author repository, with an updated PyTorch competition baseline. The updated baseline is not claimed identical to the2024 online deployed decoder.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1056/NEJMoa2314132",
+    "data_url": "https://doi.org/10.5061/dryad.dncjsxm85"
+  },
+  "controls": [
+    "Neural-shuffled and language-only references",
+    "chronological day split",
+    "held-out text sequences",
+    "no transcript fields in queries."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Session-macro phoneme error rate, with WER reported separately under a fixed LM.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "data": "11.051GB compressed neural archive;484.945MB pretrained baseline; optional3gram/5gram language models are separate large dependencies.",
+      "author_report": "Training/evaluation tested on Ubuntu22.04 with two RTX4090 GPUs and512GB RAM. Author states3gram requires~60GB RAM,5gram~300GB, and OPT6.7B~12.4GB VRAM. These are not minimum requirements or measurements by this audit.",
+      "task_choice": "A phoneme-error baseline can avoid the large optional language-model path; decoder training still requires qualification."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Reconcile trial counts, channel indexing and exclusions; verify HDF5 schema and compatible checkpoint."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Author README reports10,948sentences, while summing the inspected265block-description rows yields11,162. Reconcile exclusions and actual HDF5 trial counts before freezing data; neither number is an independently validated final sample count."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Model-training README explicitly describes modifications from the paper; select and name the current competition baseline or reconstruct the paper-era baseline before scoring."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Top-level code reuse license and exact channel ordering/index conventions require resolution; the README range notation is ambiguous, so do not infer an inclusive indexing map from prose alone."
+    },
+    {
+      "id": "source_4",
+      "requirement": "No trial payload, neural feature distribution, checkpoint compatibility or baseline output was validated. Public test labels remain withheld; new local development splits require their own clean reference qualification."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Reconcile trial counts, channel indexing and exclusions; verify HDF5 schema and compatible checkpoint."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "fa594344566a01be8ad1951c2cbd522ac2fc10fc5da40433772b43cdcbd504d6",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_b.json",
+        "bytes": 138169,
+        "sha256": "f811d51966f5717bf0a042bd37ac22a1a6e4430265fd78633d1dbe49be49543d"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

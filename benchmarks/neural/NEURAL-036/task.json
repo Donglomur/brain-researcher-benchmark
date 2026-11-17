@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-036",
   "track": "neural",
-  "title": "Glial activity and subsequent freezing",
+  "title": "Retrospective prediction of released glial-behavior state proxy",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "glial_memory"
   },
-  "scientific_question": "Do preceding astrocytic sequence features predict subsequent freezing beyond recent movement and freezing history?",
+  "scientific_question": "Within the selected processed sessions, do preceding glial features improve prediction of the released behavior-state proxy over matched recent-state history, and do reverse/shift controls remove that gain?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Predicted freezing fraction for a fixed future interval, bounded in [0,1]."
+    "A bounded future-window fraction of the released freeze_vec proxy under the original finite-task window definition. Until polarity and clock mapping are verified, this is not asserted to equal the animal’s physical freezing fraction."
   ],
   "input_assets": {
     "routes": [
@@ -167,19 +167,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Per-animal collection objects contain accepted_traces and Timestamps; the release also includes accepted-trace CSVs and original Cell_Traces CSVs. These are astrocytic/glial calcium measurements, not neuronal spikes.",
-    "allowed_context": "Habituation, fear conditioning, context A and context B sessions; per-mouse event_times_cxta/cxtb, freezing vectors and Anymaze behavior. Context is an experimental label; event definitions must be fixed before scientific scoring.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Figure3 reads Timestamps[:traces.shape[0]] and per-animal event times, with event-aligned odd/even analyses. Context and behavior exports provide matching animal/session filenames. Units/monotonicity and trace-event range checks remain execution gates.",
-    "source_contract_evidence": "Four real-input ZIP directories, published checksums, author upstream-loading README and Figure3 source inspected. Exact collection, trace and event filenames are present; no data objects or traces loaded."
+    "inputs": [
+      "Past glial features and permitted preceding proxy-state history from the source-defined window; session-local cell axes remain separate.",
+      "Matched joint/history/reverse/shift information arms; only training-session targets supplied to the participant."
+    ],
+    "forbidden_inputs": [
+      "Future proxy-state values, query target fractions and full-trace lookahead.",
+      "Raw behavior filenames or context/mouse identity fields that encode outcomes.",
+      "Other task packets exposing the same future trace interval or target labels."
+    ],
+    "case_identity": "Historical manifest specifies28 contexts=7 held-mouse pairs×4 arms; each has12 training sessions,2 held sessions,60 training targets and10 queries, yielding280 predictions over70 unique query IDs. Actual IDs, window lengths and horizons are not distributed.",
+    "split": "Declared held-mouse setup excludes both of a mouse’s sessions from its12-session training set. Exact time windows/horizon require original executable recovery; inherited whole-session preprocessing means retrospective, not strict online causal evaluation.",
+    "coverage": "Complete selected seven mice and14 sessions across four arms; does not cover the whole original release. The current checkout contains the registered declaration only."
   },
-  "biological_unit": "archive README names astroF*/astroM* animals and hab/fc/cxta/cxtb sessions. Inspected Figure3 explicitly selects astroF3,F5,F6,F7,F9,F10,M3,M4,M5,M9,M10 (11 mice) for a particular analysis; this is not claimed to be the full archive cohort.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Seven mice, two selected sessions per mouse; query intervals and four arms are nested repeated measurements.",
+  "case_definition": "One fixed query interval within a held session; historical declaration has70 unique query IDs repeated across four information/control arms.",
   "split": {
-    "policy": "Group all habituation/conditioning/recall sessions by mouse; whole autocorrelation-separated episodes; event selection on development only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Declared held-mouse setup excludes both of a mouse’s sessions from its12-session training set. Exact time windows/horizon require original executable recovery; inherited whole-session preprocessing means retrospective, not strict online causal evaluation.",
+    "coverage": "Complete selected seven mice and14 sessions across four arms; does not cover the whole original release. The current checkout contains the registered declaration only."
   },
   "reference": {
     "source_code_url": "https://github.com/rsenne/dCA1_Paper",
@@ -196,49 +201,102 @@
     "data_url": "https://zenodo.org/records/21780255"
   },
   "controls": [
-    "Causal neural window",
-    "behavior-only/history baseline",
-    "reverse-time and shifted-neural controls."
+    "Verify timestamp units, interpolation, horizon and behavior polarity before using the word freezing as ground truth.",
+    "Keep both sessions of a mouse together and preserve session-local cell axes.",
+    "Use only causal feature windows for the prediction contract, while retaining whole-session preprocessing as a documented violation of strict online causality.",
+    "Compare all four arms on identical eligibility/support with matched compute and no query feedback."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro MAE of future freezing fraction versus behavior-history baseline; horizon and window fixed before fitting.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "equal_mouse_history_mae_minus_joint_mae_on_released_proxy",
+      "direction": "higher",
+      "aggregation": "MAE within each session and mouse, then equal mean over seven mice; compare same70 query IDs in history and joint arms.",
+      "rationale": "Tests incremental signal about a measured deposited target while explicitly refusing to rename an unresolved proxy as physical freezing."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Report absolute proxy MAE for joint/history/reverse/shift arms and all per-mouse differences.",
+      "Validity/calibration for predicted fractions in[0,1], support per session and target-window prevalence.",
+      "Expose whether reverse/shift controls retain apparent gains, which would weaken temporal neural interpretation."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Recent proxy history",
+        "inputs": "Only permitted pre-query freeze_vec history.",
+        "procedure": "Fixed training-fold-only mean/persistence or regularized history model; exact original procedure must be recovered and kept matched."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Joint past glial and history",
+        "inputs": "Same history plus pre-query glial features.",
+        "procedure": "Same split, learner budget and target coverage as history-only."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Reverse and shifted glial",
+        "inputs": "Same history plus source-defined time-reversed or shifted neural features.",
+        "procedure": "Retain both historical control arms; recover shift/edge conventions before interpreting their null behavior."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Verify timestamp units, interpolation, horizon and behavior polarity before using the word freezing as ground truth.",
+      "Keep both sessions of a mouse together and preserve session-local cell axes.",
+      "Use only causal feature windows for the prediction contract, while retaining whole-session preprocessing as a documented violation of strict online causality.",
+      "Compare all four arms on identical eligibility/support with matched compute and no query feedback."
+    ],
+    "uncertainty": "Seven paired mouse differences, with all70 identities retained. Do not count four arms or280 outputs as independent evidence; no population inference from missing/undefined units.",
+    "failure_policy": "Require all declared query×arm IDs and finite predictions in[0,1] before targets. Missing windows, invalid proxy alignment and unverified horizon block target interpretation; retain failure rather than silently replacing the proxy or scoring a subset.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "8f34f5d7653810deee97ea1b62ecb6ab11ef3d7ef8677a1cdcf6842b8727d3a7",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "3c84620ee6f2c2c3294d7f9d1c87396c4a8df80363befa2fb1dcf0e34eb0327b"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -326,6 +384,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -16,11 +16,11 @@
     ],
     "task_family": "naturalistic_encoding"
   },
-  "scientific_question": "Which feature families add predictive neural information in a different film after lag and redundancy controls?",
+  "scientific_question": "How much held-film BOLD prediction does each frozen audio,visual or language feature family add conditional on the other two, using equal readout rank/regularization and common lag,coverage and source observations?",
   "task_type": "investigation",
   "neural_role": "target",
   "primary_outputs": [
-    "Matched encoder ablations, parcel-level deltas and person summaries."
+    "Measured held-film BOLD arrays determine each arm correlation and the numerical full-minus-family-ablated Pearson delta. The correct reported delta may be positive,negative or near zero; no preferred modality story is a target."
   ],
   "input_assets": {
     "routes": [
@@ -132,19 +132,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Organizer README specifies per-subject HDF5, with per-segment arrays (samples, 1000 parcels); pinned TRIBE loader reads HDF5 keys and transposes into parcel-by-time. Neural array payload not inspected.",
-    "allowed_context": "Stimulus movie/episode/chunk IDs, timestamped transcript rows and video/audio streams; neural responses are targets for encoding. Test sample counts are not test response values.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Organizer documentation and pinned loader specify TR=1.49 seconds; transcript rows cover 1.49-second windows. Hemodynamic lag and temporal buffering must be fixed.",
-    "source_contract_evidence": "Public dataset git tree/README and one actual annex-pointer text inspected; four relevant TRIBE loader/configuration files inspected as text. Not a data payload or reference run."
+    "inputs": [
+      "Precomputed source-aligned audio,visual,language feature matrices at the declared1.49s TR, bound to unique participant/film/run/segment IDs.",
+      "Training target arrays only,with1000 ordered native parcels for each of sub-01,sub-02,sub-03,sub-05.",
+      "Fixed nonnegative integer lags,left/right feature context,guards,PCA rank and common ridge alpha declared in protocol."
+    ],
+    "forbidden_inputs": [
+      "Private evaluation neural targets or target-derived feature selection/scaling/hyperparameters.",
+      "Any repeated segment/run of an evaluation film in training across any person.",
+      "Feature lookahead beyond the allowed lag/context or different eligible time points across arms."
+    ],
+    "case_identity": "Implementation accepts unique segment IDs plus participant,film and run fields in a frozen protocol; exact source-authenticated segment roster is not bundled. Prediction keys must be exactly arm__segment_id for every evaluation segment and arm.",
+    "split": "Implemented global whole-film identity split across people and repeated viewings,with train and evaluation coverage for every person. Explicit edge guards cover lag and feature context; preprocessing and PCA fit on training only.",
+    "coverage": "All four source participants,1000 ordered parcels each,and full/no_audio/no_visual/no_language arms are required. The number and identities of authentic films/segments await a frozen source protocol. Existing tests use generated matrices only."
   },
-  "biological_unit": "Four people: sub-01, sub-02, sub-03, sub-05. Repeated movie runs and segments are nested within these people.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Person; four recorded people with repeated films/segments/parcels.",
+  "case_definition": "Complete guarded segments grouped into a held film for one of the four people, with all1000 native parcels and all four matched ablation arms.",
   "split": {
-    "policy": "Whole episodes/films with hemodynamic/context guard bands; participant-specific native parcels; four people are the population units.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Implemented global whole-film identity split across people and repeated viewings,with train and evaluation coverage for every person. Explicit edge guards cover lag and feature context; preprocessing and PCA fit on training only.",
+    "coverage": "All four source participants,1000 ordered parcels each,and full/no_audio/no_visual/no_language arms are required. The number and identities of authentic films/segments await a frozen source protocol. Existing tests use generated matrices only."
   },
   "reference": {
     "source_code_url": "https://github.com/courtois-neuromod/algonauts_2025.competitors",
@@ -161,50 +167,109 @@
     "data_url": "https://github.com/courtois-neuromod/algonauts_2025.competitors"
   },
   "controls": [
-    "Equal feature/readout capacity",
-    "whole-film split",
-    "autocorrelation-preserving null",
-    "fixed language model."
+    "Whole-film split includes repeat viewings and prevents stimulus identity crossing arms/splits.",
+    "Enforce exact ordered parcel universe,TR,context/lag support and common segment selection.",
+    "Match fixed PCA rank/ridge,but disclose that this does not match upstream extractor capacity or data exposure.",
+    "Circular shifts are paired across all arms and synchronized across matching film/run/length across people.",
+    "Three modality claims and any parcel exploration require explicit multiplicity policy before significance claims."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools observer would need a separately frozen presentation of permitted stimuli/calibration and complete response predictions; source arrays alone are not a direct episode.",
+      "boundary": "No held BOLD targets or ready-made ablation answers exposed.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Direct case presentation and complete answer collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed multimodal/brain-response viewer is implemented. Selected effect plots cannot substitute for complete withheld-target predictions.",
+      "boundary": "Limit actions to permitted stimuli and training observations; prohibit answer arrays.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Renderer,transport and endpoint-preserving response protocol."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical encoder and independent analysis/scoring components can support per-case tool investigation of allowed data.",
+      "boundary": "Agent tools must operate on exactly the matched permitted observations; target scorer remains separate with no feedback.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "An isolated adaptive participant lifecycle and authenticated full source instance are not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Executable fixed-rank encoder source supports frozen preprocessing/fit/predict on declared training and query features.",
+      "boundary": "Freeze method/features/protocol before held-target access; no target-derived changes.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-2"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "Participant execution isolation and authentic reference competence remain unqualified."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out correlation difference plus numerical-claim verification.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Full-minus-without-family held-film mean Pearson delta,reported separately for audio,visual and language",
+      "direction": "two_sided",
+      "aggregation": "Within each film,concatenate its guarded segments and compute Pearson per parcel/arm; equal means across films,parcels and then four people. No Fisher-z or sample-weighted person pooling is substituted.",
+      "rationale": "The signed conditional effect is a descriptive estimand whose faithful recovery may be positive,negative or null; maximizing it would reward weakened ablations. Absolute arm prediction correlations and independently verified fixed-fit lineage are required companions. The current scorer does not assign an understanding reward."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Absolute held-film correlation for every full/ablated arm,not only their difference; do not reward degrading the ablated reference.",
+      "Per-film/per-parcel correlations and per-person full-minus-ablation deltas.",
+      "Exact numerical group-claim validation at absolute tolerance1e-8.",
+      "Descriptive four-person bootstrap intervals and synchronized paired circular-shift diagnostics.",
+      "Nuisance/time-only comparison remains a required prospective companion beyond the currently implemented ablations."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Matched no-audio,no-visual,no-language encoders",
+        "inputs": "Identical cases and remaining two feature families for each arm",
+        "procedure": "Implemented train-only standardization and PCA whitening,same fixed positive rank and ridge alpha,unpenalized intercept; insufficient rank fails."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Full multimodal encoder",
+        "inputs": "All three permitted frozen feature families",
+        "procedure": "Implemented same fitted-readout constraints as ablations; baseline uses measured training neural responses and frozen evaluation protocol."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Nuisance/time-only encoder",
+        "inputs": "Frozen timing and nonsemantic nuisance covariates without requested feature-family signal",
+        "procedure": "Prospective companion to distinguish predictive modality effects from nuisance structure; not currently an implemented fifth arm."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Whole-film split includes repeat viewings and prevents stimulus identity crossing arms/splits.",
+      "Enforce exact ordered parcel universe,TR,context/lag support and common segment selection.",
+      "Match fixed PCA rank/ridge,but disclose that this does not match upstream extractor capacity or data exposure.",
+      "Circular shifts are paired across all arms and synchronized across matching film/run/length across people.",
+      "Three modality claims and any parcel exploration require explicit multiplicity policy before significance claims."
+    ],
+    "uncertainty": "All256 four-person bootstrap resamples provide descriptive percentile intervals. Circular-shift tail fractions are descriptive; exchangeability,multiplicity and general-population validity are not qualified. Report all four person values.",
+    "failure_policy": "Require exact four-arm×evaluation-segment prediction keys,metadata/protocol digests and1000 parcel order. Reject constant/nonfinite target or prediction parcels and insufficient training rank. Current claims are optional and may cover a unique subset; malformed/unknown/duplicate claims reject,while incorrect numbers return verified=false. Complete three-family claim coverage and independent fixed-fit prediction lineage are required prospective checks,not implemented refusal.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "f053c5014ab7ff2de528f162b4c4bd76969228729b86da7c1fe8b5835b9d4c14",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -289,6 +354,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

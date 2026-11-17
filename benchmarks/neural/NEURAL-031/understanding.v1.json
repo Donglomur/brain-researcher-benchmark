@@ -1,0 +1,183 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-031",
+  "title": "Spine structural-change prediction beyond baseline morphology",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The original source audit supports longitudinal spine measurements and the historical declaration describes a 20-mouse prediction task. This checkout contains the declaration but neither its named scorer nor producer. Recover the exact target transform and executable dependencies before treating the declared finite scope as usable.",
+  "scientific_target": {
+    "question": "Do pre-followup activity and coactivity measurements reduce held-mouse error in longitudinal spine structural change beyond initial volume and dendritic compartment?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "An eligible spine’s longitudinal structural change derived from baseline spine_volumes and followup_volumes, with the author eligibility/volume transform frozen. The historical declaration names next-day spine size; its missing scorer prevents verifying whether that endpoint exactly matches the original volume-change target.",
+    "answer_origin": "Measured longitudinal per-spine morphology in author archive15047046; followup flags define eligibility separately from the predictor set. Exact target units and normalization must be recovered from the original scorer, not guessed from its title.",
+    "case_unit": "An eligible longitudinal spine pair within mouse/FOV/dendrite; query records are nested within one held-mouse fold.",
+    "independent_unit": "Mouse; repeated compartments, FOVs, dendrites and spines remain clustered within mouse.",
+    "inference_scope": "Retrospective prediction from published processed measurements. Prediction of morphological change is a measured neural target, but a positive gain does not establish a causal coactivity mechanism.",
+    "exclusions": [
+      "No claim of direct visual identification of plasticity from raw microscopy.",
+      "No prospective next-day horizon until actual visit timing is verified.",
+      "No independent replication from apical and basal observations of the same mouse."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Baseline spine volume, pre-followup movement/nonmovement activity and local/coincident coactivity; compartment and source-declared quality covariates.",
+      "Same permitted training examples for baseline and neural views, with transformations learned inside each training fold."
+    ],
+    "forbidden_inputs": [
+      "Followup volume, followup activity, neighboring followup outcomes and labels derived from structural change.",
+      "Source filenames or IDs encoding held-mouse answer values; other folds whose training outcomes reveal this fold."
+    ],
+    "case_identity": "Historical manifest declares40 contexts (20 mice × baseline/neural),774 query requests and731 scored rows from1143 original rows. Exact public query IDs and row eligibility roster are not distributed here; request count is not the scored-row count.",
+    "split": "Proposed and historically declared held-mouse comparison groups every compartment of a mouse; full40 successor is marked not_run. Exact fold roster and the43 declared requested-but-unscored rows require recovery before scoring.",
+    "coverage": "20-mouse,731-scored-row declaration is a selected finite task, not all archived spine observations. Actual local source coverage is one runtime manifest only."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_mouse_baseline_minus_neural_mae",
+      "direction": "higher",
+      "aggregation": "MAE across eligible spines within each held mouse; average20 mouse differences equally.",
+      "rationale": "Compare measured-target prediction under matched baseline and neural information. Historical manifest names this metric, but units/target transform remain unresolved."
+    },
+    "secondary": [
+      "Report equal_mouse_baseline_mae and equal_mouse_neural_mae separately, plus every mouse and compartment result.",
+      "Report original/requested/scored support and every eligibility exclusion; never silently normalize over successful requests."
+    ],
+    "comparators": [
+      {
+        "name": "Initial morphology and compartment",
+        "inputs": "Baseline volume and compartment only.",
+        "procedure": "Freeze a training-fold-only regularized regression and tuning rule; historical baseline-view structure exists but executable method is absent."
+      },
+      {
+        "name": "Activity/coactivity added",
+        "inputs": "Same baseline information plus pre-followup neural features.",
+        "procedure": "Use the identical learner/tuning budget and held-mouse folds; this is an information comparison, not forced imitation of author coefficients."
+      },
+      {
+        "name": "Measurement-noise and shuffled neural control",
+        "inputs": "Baseline features plus mouse/dendrite-block-shuffled neural features.",
+        "procedure": "Prospective negative control preserves group dependence and missingness; do not shuffle individual spines across mice."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep baseline-volume and compartment distribution matched between views.",
+      "Freeze volume normalization, spine survival/quality exclusion and followup matching without inspecting candidate outcomes.",
+      "Restrict all spatial neighbor features to baseline observations; use mouse clustering for dendrite dependence."
+    ],
+    "uncertainty": "Report20 paired mouse differences and a mouse-cluster interval if the recovered roster confirms20 distinct animals. Measurement error and within-mouse dependence prohibit treating731 spines as731 replicates.",
+    "failure_policy": "Require complete public query identity before private grading; keep invalid/failed attempts. Recover the explicit eligibility map for774 requests versus731 scored rows and never treat omitted predictions as exclusion decisions."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-031/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-031/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No executable scorer is delivered for this ID. The retained manifest declares baseline-minus-neural MAE and separate absolute MAEs, and refers to a historical scorer at an absent source path.",
+    "target_fidelity": "unresolved",
+    "delivered_scope": "Manifest-only historical finite-task declaration. It reports prior ordinary software controls and scoring, while the preferred full40 programme successor explicitly remains unrun/unqualified.",
+    "missing": [
+      "Original target definition, eligibility map, exact public roster and scorer source.",
+      "Executable full40 producer and its dependency closure.",
+      "Authentic public input preparation and external protected targets with current runtime qualification."
+    ],
+    "execution_evidence": "Historical manifest reports ordinary direct-program controls and common-CLI scoring, but their receipts and executable source are not in this package. This revision inspects metadata only and does not inherit that qualification."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "source_audit",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-031/historical/task.pre-understanding.v1.json",
+      "sha256": "5abc62e1fe2aa7a292d58df998176341067af9e46b4da141f4990651e06c1af6",
+      "supports": "Preserved original source audit: source measurements, provenance, units, biological identities, caveats and reference entrypoints. Reused as verified source evidence; not proof of current execution."
+    },
+    {
+      "id": "declaration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-031/implementations/registered-runtime/manifest.json",
+      "sha256": "3d711ed7da8a58330ec8f276b94dbb1762446a761738483501d9400b02549d37",
+      "supports": "Historical declared scope, score/run status and actual external-source prerequisites; current tree inspection confirms which executable paths are absent."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1126/science.ads4706",
+      "locator": "Source paper and original task’s retained source audit",
+      "supports": "Scientific measurement and paradigm provenance. The source paper is not treated as a correctness answer or proof of task execution."
+    },
+    {
+      "id": "source_data",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.5281/zenodo.15047046",
+      "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
+      "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical manifest reports ordinary direct-program controls and common-CLI scoring, but their receipts and executable source are not in this package. This revision inspects metadata only and does not inherit that qualification.",
+    "excluded_claims": [
+      "No claim of direct visual identification of plasticity from raw microscopy.",
+      "No prospective next-day horizon until actual visit timing is verified.",
+      "No independent replication from apical and basal observations of the same mouse.",
+      "Programme performance is not evidence of direct-observation or typed-viewer understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separate the731 scored longitudinal spine pairs from774 requests and1143 source rows.",
+      "Make initial morphology and compartment the matched information baseline.",
+      "Expose the unresolved next-day-size versus volume-change target and missing executable source."
+    ],
+    "source_review": "Read original definition/source audit, assigned README and exact current registry-owned implementation inventory; inspected actual scorer/loader where delivered and searched task/shared source for missing declared paths. Rechecked primary author-data metadata only; no biological payload or model run."
+  }
+}

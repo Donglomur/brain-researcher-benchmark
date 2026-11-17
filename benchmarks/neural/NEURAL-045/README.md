@@ -1,4 +1,4 @@
-# Dopamine trajectories across reward spacing
+# Released fluorescence trajectory prediction across reward spacing
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The stored, processed photometry fluorescence samples at the exact observed native timestamps for each eligible held-out event trajectory. These measurements, not the paper narrative or a fitted baseline curve, define the target.
+
+**Source delivery:** partial\_delivery. Historical native-time references cover 2691 trajectories from 13 source IDs; the newer shared programme provides full-scope preparation/scoring and generated execution source but refuses authentic runs. Complete source identity, original exporter/runtime qualification and all required reference families must be established before a full reward-spacing comparison.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A proposed no-tools observation condition would need a fixed permitted event/history and training-example presentation plus a complete native-trajectory response interface. The supplied P-tier closed-report interpretation is a separate diagnostic. Do not show held-query fluorescence plots as prediction input or count precomputed score interpretation as native neural prediction. | No no-tools participant transport or complete authentic case presentation. |
+| Typed viewer | not\_delivered | No typed neural-viewer implementation is delivered for native-grid response prediction. Rendering the unknown response would expose the answer; any training/history viewer needs a separately frozen representation. Query target arrays and rendered target traces remain evaluator-owned. | Typed actions, response collection and modality-preserving complete case coverage. |
+| Tool assisted | source\_available | I/X and I/XM source defines adaptive numerical investigation with permitted signals and optional qualified task models. Match F/I inputs, tools and cumulative resource policy; freeze/report all output artifacts before target access. P-tier interpretation remains separate. | Authentic execution, model-tool qualification and protected fold isolation are not delivered by the current generated controller. |
+| Frozen program | source\_available | F/X and F/XM programme source supports precommitted numerical producers and fixed terminal report programs; historical native reference is preserved. Freeze executable and fitting/adaptation recipe before query bank release; close producers and seal predictions before opening targets. | Authentic full-programme execution and all required fitted references. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 12067 bytes; SHA-256 `2847a66a66a127ae103f2985b1a5c1f77d6e5fcde178d1e6bbbee4d620a68395`.
+- Specification identity: 19537 bytes; SHA-256 `4c878669aae0fda721229e4245fffa172f6232114eec6c09870b9edbfa104bd8`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Held-person author-processed FRN\_N2\_offer and P3b\_offer amplitudes in the original exported units, paired on source rows where both targets and predictors are present. Free prose and favored coefficient signs are not known answers.
+
+**Source delivery:** partial\_delivery. A concrete processed-ERP prediction/investigation source exists for 33 exposed people with an optional frozen-33/test-eight protocol. Its actual loss target differs from the original coefficient-reconstruction emphasis; current definition adopts the observed ERP prediction endpoint and keeps author coefficient reproduction separate.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Proposed no-tools numeric behavior-to-ERP prediction with explicitly bounded training examples. Query ERP amplitudes remain hidden; an ERP waveform cannot be shown without revealing this target. | No direct-response collector or fixed finite training-presentation condition. |
+| Typed viewer | not\_suitable | This endpoint predicts neural amplitude targets from behavioral covariates; exposing the query ERP waveform through a neural viewer would reveal the answer. A future viewer may visualize permitted behavioral covariates, but that is a different observation representation, not direct interpretation of hidden ERP targets. | No valid neural-input viewer condition for the present encoding direction. |
+| Tool assisted | source\_available | Per-person adaptive investigation with training\_summary, reference\_prediction and predictive\_coefficients; numerical Python/R analysis allowed. Matched input projection, tool catalogue/call caps and process limits; no held-target feedback; fresh per-person state. | Qualified actual-root execution and candidate semantic feature-use review. |
+| Frozen program | source\_available | Precommitted prediction/investigation program; reserved protocol trains one immutable artifact on33 before any of eight query people. Same tool opportunities as adaptive comparator; no target-batch fitting, reserve adaptation or cross-person mutable state. | Actual source/runtime qualification and complete finite execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16260 bytes; SHA-256 `1b0e3151c6d471d8d5ff5f6ae27cec7e1f7459e947caeb9b6c809fc7e95af8a3`.
+- Specification identity: 20711 bytes; SHA-256 `4d6a0670aa61ed0418693321f097a2ceb92aa0d37f3fd708614c39b884f0a25d`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

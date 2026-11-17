@@ -1,0 +1,204 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "clinical-ccep-stimulation-attribution",
+  "title": "Anatomical stimulation-site attribution from complete VTC evoked responses",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/clinical-ccep-stimulation-attribution/historical/task.pre-understanding.v1.json",
+      "sha256": "9e7eb5527c1e3f26a68d9af43e3e54f2fd39082298a56ad348e14aae5176c28e",
+      "supports": "Preserved original source registration, source citations and proposed complete scientific endpoint; later implementation corrections are distinguished below."
+    },
+    {
+      "id": "ccep-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-artifact-grading/score.py",
+      "sha256": "2426ddc5585a113fb839e3b3dd78bf2c684d3f0d5fef2dac0b9af4ab1ebd6f32",
+      "supports": "Complete-five-patient artifact admission, compartment labels, clipped log loss and coverage refusal."
+    },
+    {
+      "id": "ccep-metadata",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-native-metadata/README.md",
+      "sha256": "04aa759a901513023b851d6f03c28528bbccefb1b6f4daa44eb8b9049f058537",
+      "supports": "Owner-only metadata source; no waveform/target production."
+    },
+    {
+      "id": "ccep-pairing",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-pairing/README.md",
+      "sha256": "e907ca5530493d1435ae5edcfe8052dad8064f78c47a9b6c11dc0cbda5707c1e",
+      "supports": "Complete-block control component and remaining authentic-input requirements."
+    },
+    {
+      "id": "ccep-paper",
+      "kind": "primary_source",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10278681/",
+      "locator": "Methods:SPES, VTC response interval and BPC analyses",
+      "supports": "Five-patient evoked-response source and distinction between anatomical site and fitted response patterns."
+    },
+    {
+      "id": "ccep-data",
+      "kind": "primary_source",
+      "url": "https://openneuro.org/datasets/ds004457/versions/1.0.2",
+      "locator": "Fixed dataset release",
+      "supports": "Original stimulation/contact metadata and waveform source."
+    },
+    {
+      "id": "additional-scope-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-artifact-grading/README.md",
+      "sha256": "233073501b7c88f29cdf4b52e902ee5fd1e86307b0b312b2aea560fc43afad8e",
+      "supports": "Inspected source-scope documentation distinguishing delivered software from authentic task execution."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human trial for this task is established by this source revision. Generated software checks are not participant performance.",
+    "excluded_claims": [
+      "BPC category is anatomy truth",
+      "Artifact grader means complete clinical benchmark",
+      "Anatomical attribution proves a new causal connection"
+    ]
+  },
+  "disposition": "partial_delivery",
+  "disposition_reason": "Five-patient primary prediction-artifact scorer and complete-block pairing/metadata components exist; authentic waveform-to-anatomy joins, full participant packets, fitted references and protected runner remain missing.",
+  "scientific_target": {
+    "question": "Can complete ventral-temporal evoked-response blocks identify the documented anatomical compartment of the stimulated pair in an unseen patient?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Authenticated stimulation-pair anatomy in the frozen four-compartment order hippocampus, amygdala, lateral_temporal_cortex, other_mixed.",
+    "answer_origin": "Original contact localization and stimulation metadata from OpenNeuro ds004457 v1.0.2; not fitted BPC template labels. Authentic compartment/mixed-pair mapping is still required.",
+    "case_unit": "One stimulation-site by VTC recording-contact block containing every pulse repetition and all 11–500 ms samples.",
+    "independent_unit": "Patient (five total); contact blocks and repetitions remain nested.",
+    "inference_scope": "Anatomical attribution from evoked response under patient transfer; no new causal-connection discovery or disease inference.",
+    "exclusions": [
+      "A fitted BPC category is not independent anatomical ground truth.",
+      "Repeated pulses cannot increase the independent sample size above five patients.",
+      "Residual stimulation artifact or amplitude-only classification is not evidence of network-specific representation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete baseline-corrected all-repetition VTC waveform matrix over 11–500 ms, native relative grid, verified units, artifact/missingness masks and target-free recording-location descriptors."
+    ],
+    "forbidden_inputs": [
+      "Stimulating-contact ID/anatomy, site-revealing event codes, patient-identifying filenames, test-fitted BPC consensus curves and owner target maps."
+    ],
+    "case_identity": "Scorer requires unique opaque case_id and patient/session/site_block/VTC_contact joins plus packet digest for every declared block; authentic full census is not supplied.",
+    "split": "Declared leave-one-patient-out over all five people; all repetitions/sessions/contacts remain grouped. Policy checks training roster but cannot authenticate actual training access.",
+    "coverage": "All five patients, every released VTC contact, stimulation site and repetition must enter owner census. Current scorer verifies complete declared roster but not physical source completeness; any unresolved coverage blocks primary loss."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Patient-macro multiclass log loss",
+      "direction": "lower",
+      "aggregation": "Mean negative log true-compartment probability across blocks within patient, then equal mean across all five patients; probability floor frozen by owner policy.",
+      "rationale": "The declared probability-floor loss penalizes confident wrong compartments while retaining equal patient weight despite unequal block counts. Flooring the true-class log argument is an operational finite-loss convention; strict propriety is not claimed for the clipped score."
+    },
+    "secondary": [
+      "Per-patient confusion, class support, observed-class macro recall and fixed 10-bin classwise calibration.",
+      "All-four-class recall is null for missing classes; unsupported training classes remain explicit.",
+      "Paired original-minus-reassigned block performance only on exact shared support; primary full coverage remains separate."
+    ],
+    "comparators": [
+      {
+        "name": "Training-class prevalence",
+        "inputs": "Training patients anatomical labels only",
+        "procedure": "Proposed fixed prior under each LOPO fold."
+      },
+      {
+        "name": "Mean waveform/template correlation",
+        "inputs": "Same full training response blocks and labels",
+        "procedure": "Proposed train-class mean waveforms with train-only normalization and fixed deterministic matching."
+      },
+      {
+        "name": "Regularized temporal classifier",
+        "inputs": "Same full packets; train-only temporal coefficients or BPC extractor",
+        "procedure": "Proposed nested patient tuning; never compute BPC consensus on held patient."
+      }
+    ],
+    "nuisance_controls": [
+      "Pre-stimulus-only and amplitude-only comparators; audit artifact-mask/channel-ID prediction.",
+      "Pairing moves whole repetition matrices among compatible distinct-site blocks within patient/session/contact and acquisition strata; labels/context fixed.",
+      "Freeze finite target-blind derangements and report unsupported strata rather than drawing until anatomical classes mix."
+    ],
+    "uncertainty": "Show all five patient effects and paired support. Five patients limit precision; pulses/blocks are not independent replication. Authentic uncertainty protocol and references remain unfinished.",
+    "failure_policy": "Admit complete predictions before target access; four normalized finite probabilities per exact case. Missing/inconsistent coverage produces no primary score; unsupported classes never justify excluding a patient."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-artifact-grading/score.py",
+      "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-artifact-grading/README.md",
+      "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-native-metadata/README.md",
+      "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-pairing/README.md"
+    ],
+    "scorer_target": "score_files computes compartment log loss from a separately authenticated target document after complete artifact admission. Native metadata prepares owner metadata only; pairing supplies maps/materialization/support-matched losses but no authentic anatomy or waveform release.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Conditional full-five-patient artifact grading and paired-control source, with generated numerical/interface checks. No end-to-end authenticated anatomical inference run.",
+    "missing": [
+      "Original event/contact/anatomy joins and fixed other/mixed mapping, all-pulse/full-contact census and rights.",
+      "Native waveform preparation, complete candidate transport and train-only references.",
+      "Physical pairing execution and small-patient uncertainty."
+    ],
+    "execution_evidence": "Software source documents generated controls only; source/package identities do not establish authentic clinical operands, biological completeness or candidate execution."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed complete all-repetition VTC waveform matrix or lossless plots.",
+      "boundary": "No tools; full packet must fit before declaring direct evidence.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Authenticated input packet and capacity protocol."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential repetition-aware waveform display with typed channel/time/repetition views.",
+      "boundary": "No anatomy/event lookup, target-bearing titles or raw-owner data.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Viewer implementation and rendering/response audit."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed same matrix plus train-only templates/numerical analysis.",
+      "boundary": "Case-fresh tool state and identical training evidence, no test BPC fitting.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Protected tool runner and competent train-only template model."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed precommitted waveform/template classifier.",
+      "boundary": "Freeze fitting policy on training patients; artifact scoring alone is not program execution.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Frozen lifecycle and authentic reference qualification."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Name independent stimulation anatomy as answer and separate it from fitted BPC response labels.",
+      "Make complete artifact grading available scope explicit without claiming waveform preparation or any candidate access mode.",
+      "Preserve all-five-patient coverage and support-limited whole-block pairing controls."
+    ],
+    "source_review": "Reviewed preserved scientific registration and named implementation code/documentation; reused cited primary source evidence already verified in these records. No scientific arrays or evaluator labels were opened in this revision."
+  }
+}

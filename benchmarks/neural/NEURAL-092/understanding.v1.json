@@ -1,0 +1,253 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-092",
+  "title": "Within-session count prediction followed by observed state-association investigation",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The accepted source contains both genuine protected prediction and a later observed association reconstruction. It remains inactive: no authentic full 32 packet/profile, measured reference competence or model results. The reconstruction endpoint is narrower than broad scientific-reasoning grading.",
+  "scientific_target": {
+    "question": "For the full 32-mouse panel, do frozen stimulus/state predictors improve same-unit QUERY count prediction, and can a later investigator recover the specified stimulus-matched state associations without retuning those predictions?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Primary:protected QUERY spike counts in drifting-grating responses. Later distinct answer:source-defined paired RUN-minus-REST and pupil-HIGH-minus-LOW rate contrasts reconstructed from legitimately observed query counts.",
+    "answer_origin": "Selected Allen Neuropixels brain_observatory_1.1 sessions; target counts use[onset+0.05, onset+1.95)seconds. The observed reconstruction is a deterministic estimand of source measurements, not a hidden biological causal truth.",
+    "case_unit": "One full 32-mouse programme; unit/trial predictions nested within each of 32 sessions, followed by complete area/area-pair investigation responses.",
+    "independent_unit": "32 distinct mice, one session each; six fixed areas and 15 pairs are repeated comparisons, not new animals or benchmarks.",
+    "inference_scope": "Same-unit within-session prediction with later descriptive associations. Primary predictive gains and later numerical reconstruction have different evidence meanings and cannot be combined into one understanding score.",
+    "exclusions": [
+      "New-mouse or guaranteed unseen-stimulus transfer",
+      "Causal state effects or genetically identified unit classes",
+      "Observed-data reconstruction as independent discovery",
+      "Full 32 pupil result after silently removing six unsupported mice",
+      "Frozen programme scores as direct or typed-viewer interpretation"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-092/historical/task.pre-understanding.v1.json",
+      "sha256": "ea0daa661d0b3d8964d17a9821e17e406f143689073d5fc10bff49f5d5b73ef0",
+      "supports": "Exact prior registered definition and unresolved source audit boundaries preserved before this revision."
+    },
+    {
+      "id": "programme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/README.md",
+      "sha256": "4e72eee07c95b9f689ee317779fd831a99a34cb20d6c3a34041a19968a53a3ea",
+      "supports": "Inactive full 32 source and delayed observed bridge; no interactive/tool ablation implementation."
+    },
+    {
+      "id": "protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/source/PROTOCOL.json",
+      "sha256": "d35195780510601ddf41da906944d4f2ff8e41aafff09bf7a3cc4eca9f453336",
+      "supports": "Original observed-data estimand,32-mouse roster, missing-pupil and retrospective/QC limitations."
+    },
+    {
+      "id": "prediction",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/scoring.py",
+      "sha256": "2697ce5393abef1711b1f4abddeb6e25b130132e8087b479dcffe739df8df1ce",
+      "supports": "Complete frozen predictions, Poisson deviance gains, all 15 area pairs and full 32 aggregation."
+    },
+    {
+      "id": "constants",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/constants.py",
+      "sha256": "05380c0ac5c84779e0c2ea35d99f0a7f1f698d884771542497c940af630996e7",
+      "supports": "Five fixed model families, nine ridge strengths, source blocks and gain directions."
+    },
+    {
+      "id": "deviance",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/solver.py",
+      "sha256": "4262d49adcf2bf5a1d498f93b2579c6352b6819649ecc9e63eee4b1b5b8c1c45",
+      "supports": "Exact mean Poisson deviance per unit/query row; positive finite predicted counts."
+    },
+    {
+      "id": "observed",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/source/score.py",
+      "sha256": "ad620f975d71b3e13806a764288ad11610c71c8617163bae56282b395e77e167",
+      "supports": "Separate later absolute-error reconstruction of observed running/pupil associations."
+    },
+    {
+      "id": "allen",
+      "kind": "primary_source",
+      "url": "https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html",
+      "locator": "Primary author abstract or official AllenSDK documentation, inspected 2026-11-16; narrower implementation details are supported by local source receipts.",
+      "supports": "Official Neuropixels source provides spikes, visual stimulus and running/pupil data; full-recording quality metrics do not identify cell type or causal state effects."
+    },
+    {
+      "id": "frozen_composition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/programme.py",
+      "sha256": "93e888c49f603ad65f54eade2ce9e094cae349c286d1f1748c44350980e962f2",
+      "supports": "Actual complete-panel composition runs reference phases, captures all candidate predictions, freezes/rereads every prediction and only then opens query targets."
+    },
+    {
+      "id": "frozen_host",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/host092/host.py",
+      "sha256": "5b1ab2f7b9504c2509d9450d9e67f15210e872e0ccbb574815a1ff8154dafa8c",
+      "supports": "Actual Host.capture_complete_candidate_predictions invokes runtime.run on the selected candidate argv and captures all32 outputs after observed worker stop."
+    },
+    {
+      "id": "frozen_supervisor",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/host092/operator.py",
+      "sha256": "4d9c5270e0c4db9901ad28dd77557f0622b0213d5325b096f583b4a132fb06bb",
+      "supports": "Concrete Linux supervisor acquires native runtime/host and calls run_programme with source/image/profile and complete-resource gates."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result for this task is established by the reviewed source. Source construction and generated engineering checks do not establish authentic performance.",
+    "excluded_claims": [
+      "New-mouse or guaranteed unseen-stimulus transfer",
+      "Causal state effects or genetically identified unit classes",
+      "Observed-data reconstruction as independent discovery",
+      "Full 32 pupil result after silently removing six unsupported mice",
+      "Frozen programme scores as direct or typed-viewer interpretation"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separated genuine protected count prediction from later observed-data arithmetic reconstruction.",
+      "Bound metrics to same-unit blocks, complete 32 cohort, six areas and 15 comparisons; retained full-panel pupil unavailability and observational limits.",
+      "Pin inspected executable participant controller/host route for frozen-programme capability; documentation or score source alone does not establish that route."
+    ],
+    "source_review": "Inspected historical registration and actual task-local preparation/scorer/protocol source. Primary dataset identities checked against author abstracts or official AllenSDK documentation. No authentic recordings, held labels, fitting or model campaign in this revision."
+  },
+  "observation_contract": {
+    "inputs": [
+      "Prediction phase:original metadata,12-field FIT-defined stimulus vocabulary, prewindow running/pupil state, and FIT/VALIDATION counts only.",
+      "Running states use absolute speed from[-0.5,0)seconds:REST<=1 cm/s, RUN>=5 cm/s, other/missing explicit; pupil uses positive area and FIT-only terciles with gap/coverage rules.",
+      "Observed phase only after all protected outputs close:original observed response view for computing source-defined matched associations."
+    ],
+    "forbidden_inputs": [
+      "QUERY counts before complete 32 candidate/reference predictions, coefficients, selections and manifest are frozen and reread, including legacy files named public/QUERY.",
+      "Observed investigation results used to retune protected predictions.",
+      "Whole-recording tuning outcomes as prediction features; target-dependent unit matching or silent missing-pupil exclusions."
+    ],
+    "case_identity": "Source-bound 32 distinct session-to-mouse pairs and exact unit/query axes; candidate admission checks session_id, unit_ids, query_ids and float64 means. All six areas VISp, VISl, VISal, VISrl, VISam, VISpm and 15 pairs are retained. Authentic packet issuance remains absent.",
+    "split": "Within each session FIT block 2, VALIDATION block 5, QUERY block 7; count exposure 1.9 s. Stimulus conditions may recur across blocks. This is not NEURAL-091 stimulus-family holdout and not held-mouse transfer.",
+    "coverage": "All 32 required sessions/mice and full original unit/trial axes. Source metadata protocol reports 26 pupil modules present and 6 absent; full 32 pupil endpoint remains unavailable. No scientific arrays are established by metadata census or declared 80,462,809,684 recording bytes."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Frozen QUERY Poisson-deviance gain versus stimulus-plus-state reference",
+      "direction": "higher",
+      "aggregation": "For each unit, mean over all QUERY rows of 2*[y*log(y/mu)-y+mu]; candidate gain=stimulus_plus_state loss minus candidate loss. Average units within area, available fixed areas within session, then all required mice; retain undefined mice.",
+      "rationale": "Genuine held-response comparison against the complete joint predictor is distinct from reconstructing already observed state contrasts."
+    },
+    "secondary": [
+      "All five reference losses and source-defined stimulus_beyond_state, state_beyond_stimulus, running_conditional_sensitivity, pupil_conditional_sensitivity gains.",
+      "All 15 matched and unmatched area-pair contrasts, with FIT/QC-defined matching support.",
+      "After prediction closure only:equal-mouse absolute error for reconstructing source-defined running associations; separate full 32 pupil reconstruction endpoint and missingness.",
+      "No composite of prediction deviance and observed reconstruction error; quantitative reconstruction does not grade broader scientific reasoning."
+    ],
+    "comparators": [
+      {
+        "name": "Five fixed Poisson-ridge reference families",
+        "inputs": "FIT stimulus vocabulary and 16 joint running/pupil states; matching FIT/VALIDATION counts.",
+        "procedure": "state_only, stimulus_only, stimulus_plus_state, stimulus_plus_running, stimulus_plus_pupil; all 9 lambdas 0.0001..10000, 45 grid fits then 5 refits/unit. Select by VALIDATION loss with larger-lambda tie break, refit FIT+VALIDATION. Competence unmeasured."
+      },
+      {
+        "name": "Matched area sensitivity",
+        "inputs": "FIT baseline and published presence/ISI/amplitude QC; no QUERY-dependent selection.",
+        "procedure": "All 15 area pairs use original bins, SHA256+unit-ID ordering and minimum count per stratum; not one universal matched cohort."
+      },
+      {
+        "name": "Observed-data numerical reference",
+        "inputs": "Later legitimately observed QUERY counts and exact stimulus/other-state matched pairs.",
+        "procedure": "Original source reference computes signed effects; scorer compares absolute reconstruction error and requires explicit null for unsupported contrasts. This is calculation verification, not an independent predictive baseline."
+      }
+    ],
+    "nuisance_controls": [
+      "Prediction phase barrier prevents later observed data from influencing forecasts.",
+      "State vocabulary, cuts, unknown FIT conditions and missing pupil support remain explicit.",
+      "Retrospective full-recording QC and filtered-pupil processing do not establish prospective deployment.",
+      "Stimulus matching and coarse state bins leave residual confounding; mouse genotype is not unit genetic cell type."
+    ],
+    "uncertainty": "Current source reports full-panel point estimates, mouse vectors and support without confirmatory significance. Any future inferential comparison must pair at mouse level and preserve 32-mouse denominator; units, areas, pairs and fits are not independent animals.",
+    "failure_policy": "Require every 32-panel prediction axis with strictly positive finite float64 means before any targets. Any fixed-reference fit failure invalidates the complete comparison. Retain undefined mice and unavailable pupil support; no clipping, dropped units or successful-subset average."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-092/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/README.md",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/source/PROTOCOL.json",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/scoring.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/constants.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/solver.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/source/score.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/gain/programme.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/host092/host.py",
+      "benchmarks/neural/NEURAL-092/implementations/registered-runtime/programme/host092/operator.py"
+    ],
+    "scorer_target": "programme/gain scores actual protected count predictions; programme/source/score separately checks reconstructed observed state contrasts. Neither directly scores verbal mechanistic understanding.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Accepted inactive source integrates full 32 phase barriers, five fixed reference families, candidate prediction scoring and later original observed bridge. Authenticated source does not imply authentic neural packet or native qualification.",
+    "missing": [
+      "Complete authentic 32 input/observation coverage, rights and source bytes.",
+      "Selected native Linux profile, resource feasibility and real complete reference/candidate execution.",
+      "Independent scientific validity of covariates, reference competence and interpretation; direct/viewer/adaptive tool comparison."
+    ],
+    "execution_evidence": "Source protocol records actual_neural_arrays_read=false, models_fitted=0 and scientific_scores_computed=0 for construction. Source inspection does not change those historical facts."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "An observed-state table could support direct numerical investigation after prediction closure, but cannot stand in for the full protected prediction programme.",
+      "boundary": "Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded.",
+      "evidence_ids": [
+        "protocol",
+        "observed"
+      ],
+      "missing": [
+        "No bounded direct-response representation, participant transport or complete response collection is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme.",
+      "boundary": "No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata.",
+      "evidence_ids": [
+        "protocol",
+        "observed"
+      ],
+      "missing": [
+        "No typed viewer or viewer-model evaluation for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The later original observed reference/scorer is numerical investigation source; an adaptive investigator with matched tools is not implemented.",
+      "boundary": "Observed inputs become available only after protected prediction closure; case/reset/budget and interpretation review remain to be defined.",
+      "evidence_ids": [
+        "programme",
+        "observed"
+      ],
+      "missing": [
+        "Interactive actor/tool transport and matched tool/model ablations; semantic scientific-claim grading."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Full 32 precommitted candidate and five reference-family prediction programme followed by the original observed bridge.",
+      "boundary": "All grid fits precede selection, all selections precede refits, and all complete predictions/parameters are reread before any QUERY scoring.",
+      "evidence_ids": [
+        "frozen_composition",
+        "frozen_host",
+        "frozen_supervisor"
+      ],
+      "missing": [
+        "Authentic packet/native profile, measured capacity and independent reference execution."
+      ]
+    }
+  }
+}

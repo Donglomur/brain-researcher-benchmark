@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "kind": "paper_source_preparation",
+  "task_id": "PAPER-paper-method-003",
+  "report_date": "2026-11-16",
+  "execution_utc_date": "2026-11-17",
+  "scope": "Complete authentic PhysioNet-MI source preparation under the released direct-200-Hz profile and a fixed-output full-test scorer/comparator software control. This is not trained REVE performance, author-baseline qualification, historical paper reproduction or same-task improvement.",
+  "source_execution": {
+    "commit": "32598f9d55afffd1c4d84ebc8f9f5224f1618714",
+    "binding_status": "recorded_execution_source_revision",
+    "files": [
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+        "bytes": 9095,
+        "sha256": "8379b2a5f27420907343ac9c5064531190de7e2ee2001227422aba685bbab729"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+        "bytes": 10900,
+        "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+        "bytes": 13598,
+        "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+        "bytes": 21262,
+        "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+      }
+    ],
+    "executed_members": [
+      "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+      "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py"
+    ],
+    "identity_basis": "The full-panel receipt records the public source revision; the scorer control separately pins panel.py. Independent reviews pin panel.py, metrics.py and author_adapter.py. Adapter source was present but no model initialization or inference was executed."
+  },
+  "current_source": {
+    "commit": "e8397886d8c7281335c5a43f4816bc8896a0f439",
+    "verified_in_checkout_commit": "c7709275ac5937d064ff58ab14a002d75019eac7",
+    "files": [
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+        "bytes": 10747,
+        "sha256": "4e50a6d8d9b41106e09fe15ddcdd0380094a6452bbcfe8fd989e5392856f1a9b"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/author_adapter.py",
+        "bytes": 10900,
+        "sha256": "0990eac5f5a478dfc6c00a0e8898d115e1ddc6049f58c8085ec69e2e7457aea1"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/metrics.py",
+        "bytes": 13598,
+        "sha256": "cd8ce2a17958516a22528aafb53fe7a294b7eb1d82c2fc46a653d0aefbcc9750"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/panel.py",
+        "bytes": 21262,
+        "sha256": "fc16e8ab38816a41dd92f533531e97174d58f611a8145cbba41e7e4493501738"
+      }
+    ],
+    "relationship_to_execution": "panel.py, metrics.py and author_adapter.py retain the execution-source bytes. README.md changed to document the authentic preparation and software control; its changed hash is explicit. No model execution is inherited from the adapter source."
+  },
+  "scientific_source": {
+    "dataset": "eegmmidb/1.0.0",
+    "author_source_commit": "06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7",
+    "preprocessing_profile": "released-06a7059-direct200",
+    "official_checksum_manifest_sha256": "7f5d16957d8ee7bce86cc7ccba0e5994f63f33781607eb3f838392d49311a208",
+    "source_identity": "8c2c07841e5a7263a4bc62bc7b56113f1598c00bde31b9c6a78aa3e5d389be99",
+    "prepared_panel_identity": "7d67c330bbd111b393c7ab72a5008e0b6fb6b90e891045336f15d3c3437b3ee9"
+  },
+  "coverage": {
+    "edf_files": 654,
+    "participants": 109,
+    "imagery_runs": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "epochs": 9837,
+    "split_epochs": {
+      "train": 6300,
+      "validation": 1734,
+      "test": 1803
+    },
+    "split_participants": {
+      "train": 70,
+      "validation": 19,
+      "test": 20
+    },
+    "raw_sampling_hz_file_counts": {
+      "160": 636,
+      "128": 18
+    },
+    "native_boundary_dropped_annotations": 1
+  },
+  "software_controls": {
+    "kind": "fixed_output_full_original_test_panel",
+    "test_events": 1803,
+    "test_participants": 20,
+    "prediction_policy": "Two separately identified identical constant-class outputs, frozen before derived test targets were opened.",
+    "targets_used_for_control_selection": false,
+    "event_identity_join_exercised": true,
+    "original_metric_path_exercised": true,
+    "paired_comparator_path_exercised": true,
+    "expected_metric_and_paired_difference_checks_passed": true,
+    "scoring_performed": true,
+    "trained_model_execution": false
+  },
+  "runtime": {
+    "versions": {
+      "mne": "1.13.2",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1"
+    },
+    "preparation_wall_seconds": 64.92,
+    "maximum_resident_set_bytes": 495370240,
+    "requested_numerical_threads": 6,
+    "actual_thread_census_measured": false
+  },
+  "preserved_counterexamples": [
+    "The first transfer timed out; only checksum-valid completed files were reused before all 654 EDFs verified.",
+    "The first preparation process selected an interpreter without MNE and failed before reading data; an explicit existing interpreter resolved the failure.",
+    "One final native imagery annotation was too short under the released epoch rule and was recorded as dropped, without padding or participant exclusion."
+  ],
+  "input_exposure": "Operator-only raw public annotations and derived targets; constant-output control frozen before derived targets opened; no candidate or checkpoint selection. The original public source annotations are exposed; operator custody of derived targets does not make them an untouched evaluation population.",
+  "limits": [
+    "The original Table 12 trained downstream classifier checkpoint remains unresolved; an encoder-only checkpoint does not replace it.",
+    "Historical 128 Hz intermediate preprocessing versus the released direct 200 Hz recipe remains unresolved despite the complete epoch-count match.",
+    "Historical seed/run identities, repeat count and standard-deviation denominator remain unresolved.",
+    "No trained author model inference or fitting occurred, and no author baseline, paper reproduction, improvement or current SOTA result is qualified.",
+    "A paired candidate comparison, effect/uncertainty rule and protected untrusted-candidate transport remain unqualified.",
+    "The independent observed review checked authenticated acquisition/preparation metadata and did not independently rehash raw EEG arrays or inspect targets.",
+    "Reported file pins identify execution and reviewed current snapshots; this report does not qualify arbitrary later source changes."
+  ],
+  "retained_evidence": [
+    {
+      "id": "evidence_index",
+      "bytes": 1974,
+      "sha256": "a1084a24ff65e5af968c6ff8e37ddc8b02e52ed9a42e9b8fa22edab8dd2ade88"
+    },
+    {
+      "id": "full_original_panel_receipt",
+      "bytes": 3963,
+      "sha256": "1e1a5c4e890542a321c8a7d100b8cea03f051f495c563d5dffbc7ac6a55c7fb2"
+    },
+    {
+      "id": "preparation_protocol",
+      "bytes": 5140,
+      "sha256": "4b2933a4e1f4477e6f02c863edeb74fe989dbf3b36ebece64102791b94d4d68e"
+    },
+    {
+      "id": "scorer_control_protocol",
+      "bytes": 1801,
+      "sha256": "3977293ca813fe17264092ca7e45398dcacbb07b2938e6d114eb1f65fe22c5ad"
+    },
+    {
+      "id": "scorer_control_summary",
+      "bytes": 819,
+      "sha256": "1d94ef18c5da1a762c04d08bc02a5c538d9014a47820e594a0196a0ece34ad77"
+    },
+    {
+      "id": "independent_observed_review",
+      "bytes": 7021,
+      "sha256": "4e02efae2040deaa4f2ef761ade6b67a972018b784098a9d8fc0d1fa268a6fca"
+    },
+    {
+      "id": "independent_panel_review",
+      "bytes": 4652,
+      "sha256": "05810fb449fab5a1875d57a01e13113d42c882febd7218d392699cd3ec4b4812"
+    },
+    {
+      "id": "independent_adapter_review",
+      "bytes": 717,
+      "sha256": "47dc97850ece9f16411be23415380545144ae202e5f5c728f2f7ea6c08440e9f"
+    },
+    {
+      "id": "independent_contract_review",
+      "bytes": 3597,
+      "sha256": "09d23573a4b86fc55163c91aff4f101cd4af44abe334bcb9d88a7812e1928a98"
+    }
+  ],
+  "evidence_custody": "Original operator protocols, acquisition/preparation metadata, software-control summary and independent reviews remain outside public Git. Only their content identities are published here; no raw recordings, targets or prediction arrays are included.",
+  "model_trials": 0,
+  "solver_attempts": 0,
+  "author_baseline_qualified": false,
+  "scientific_result": false
+}

@@ -1,4 +1,4 @@
-# Neural history beyond worm locomotor state
+# Conditional predictive information in worm neural history
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The independently recomputed equal-worm difference between behavior-only and behavior-plus-neural held-out Bernoulli log losses; null or negative increments are valid answers. Labels are dorsal=1 and ventral=0.
+
+**Source delivery:** partial\_delivery. A causal-history helper and independent matched-probability scorer exist. They do not execute native conversion or model fitting, and scorer receipts cannot establish that supplied predictions used causal features or isolated whole-worm training.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_suitable | The scored target is an across-worm predictive-information contrast requiring matched trained predictions. A no-tools reading of a trace cannot estimate this held-out incremental loss; reading a precomputed loss table would be a different arithmetic task. | A separate direction-decoding direct task would need an explicitly separate condition and endpoint. |
+| Typed viewer | not\_delivered | A future trace viewer may support investigation of history/controls; it does not itself deliver the full predictive contrast. Typed actions must preserve the causal cutoff and hide query targets; all numeric claims still require independent scoring. | No task-specific viewer, matched rendering protocol or participant transport. |
+| Tool assisted | not\_delivered | Causal history and loss/interval routines can support numerical investigation of matched predictions. Operator reference is private; participant model fitting, feature lineage and all case-local tools must be independently bound and audited. | No supplied native fitting/investigator runner or isolation evidence.; Operator analysis/comparator source does not supply a participant episode or candidate programme execution route. |
+| Frozen program | not\_delivered | Intended precommitted decoder/training recipe producing the three complete matched arms. Freeze recipe and budgets before query access; only training-worm labels may fit transforms or select hyperparameters. | Current CLI grades prediction artifacts; it does not execute a candidate or attest its fitting. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 10712 bytes; SHA-256 `2d8821217a1013fd40be7b1ebc9c7ebf99ad3cc0a7f4112bbf595da34fd44bdd`.
+- Specification identity: 15880 bytes; SHA-256 `4b6c95dc1566a712f30087e67eeaccb0e58484ff57fdc6e2a77ad1170e7dc15b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

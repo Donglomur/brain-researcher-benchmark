@@ -12,14 +12,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Current paper-improvement objective
 
-**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
 
 **Disposition:** source\_unresolved. The selected original task is the complete Figure 5A-D decoding comparison: four behaviors, five brain regions and ten IBL sessions, with every applicable source author-model condition and baseline. This is an ordered performance task, but exact panel cohort identities, preprocessing/metric provenance and numeric published results remain unrecovered. A new cohort or the separate prospective40 condition cannot establish this same-task paper win.
 
 - [Source-grounded improvement contract](improvement.v1.json)
-- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+- [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
-Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 

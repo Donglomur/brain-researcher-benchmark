@@ -15,7 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   public-catalog-and-navigation:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -33,7 +36,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/maintenance/bind_paper_improvement.py --check
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/maintenance/refresh_paper_integrity.py --check
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/check_repository.py
-          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/framework -p 'test_*.py' -v
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B -m unittest discover -s tests/framework -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/benchmarks -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/maintenance -p 'test_*.py' -v
           python -I -S -B scripts/check_navigation.py

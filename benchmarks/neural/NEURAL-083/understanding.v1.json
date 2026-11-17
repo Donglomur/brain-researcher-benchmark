@@ -1,0 +1,255 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-083",
+  "title": "Motor-imagery protocol classification with fixed calibration",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Full54-person/two-session preparation, probability scoring, frozen-program and adaptive-investigation sources exist, but authentic108-recording preparation, runtime and reference fits remain unqualified. This is retrospective cued-protocol classification with an explicit software calibration allowance, not cue-independent intention or a20-trial closed-loop BCI.",
+  "scientific_target": {
+    "question": "How accurately can permitted EEG observations classify the recorded right-versus-left cued motor-imagery protocol under the first 20 same-session offline calibration-label allowance, relative to fixed context, permutation and calibration controls?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Source protocol class right=1/left=0 for each of the 10,800 unique online trials, independently joined by the private generation/key mapping.",
+    "answer_origin": "Observed original OpenBMI EEG_MI_train/EEG_MI_test class fields after full source/schema binding; labels are protocol instructions, not independently verified private intentions.",
+    "case_unit": "One target person/session/setting/arm with100 queries; adaptive source uses100fresh per-query actors for each condition.",
+    "independent_unit": "54 people with two sessions each; donors recur across held-person contexts and conditions reuse online trials.",
+    "inference_scope": "Retrospective decoding of cued imagery classes. The class arrow persists and online visual feedback came from the original100-trial calibrated classifier; a new20-label input allowance does not change those historical observations.",
+    "exclusions": [
+      "No cue-independent or motor-specific physiological mechanism from accuracy alone.",
+      "No calibration-time reduction,20-trial closed-loop performance or future session forecast from bidirectional other-session transfer.",
+      "No multiplying 1,296 conditions or129,600investigations into new tasks/cohorts."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "EEG arm: source20selected channels, little-endian float32[N,251,20] at100 Hz, inclusive1..3.5s source helper convention after declared continuous-phase resampling/filtering; preserve native amplitude units.",
+      "Primary target20: first 20chronological same-session offline trials; donors provide100 offline trials from each of106other-person sessions (10,600donor trials).",
+      "Other separately scored settings: transfer0, target100, other_session20. CONTEXT contains session indicators, trial rank, cue interval and first-trial flag; PERMUTED_EEG changes training labels only."
+    ],
+    "forbidden_inputs": [
+      "Online query labels, original person/trial identifiers/source filenames, class cue/trigger/response/EMG channels, additional target-person labels, query-batch covariance fitting, sibling-case state and evaluator feedback.",
+      "Context features do not enter the EEG arm; supplier decoder unavailable in the generic-numerical adaptive comparison."
+    ],
+    "case_identity": "Source HMAC tokens case_/person_/trial_ followed by24 hex digits;108 cases with100 unique sorted queries each; exact generation and case/setting/arm identities bind all 1,296outcomes per panel.",
+    "split": "Hold one person out of donor training, permit only the declared calibration rows, freeze candidate before all cases, reset state between conditions. Group inner donor selection by person. opposite-session2→1 is retrospective transfer, not forecasting.",
+    "coverage": "All54 people, both sessions,100 online trials/case;12 setting×arm combinations produce 1,296 condition outputs and129,600probabilities per candidate/reference panel, reusing 10,800 unique queries.108MAT source bodies total64,847,432,285provider-declared bytes; actual schemas/input bodies remain unqualified."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "target20/EEG person-macro session-macro balanced accuracy",
+      "direction": "higher",
+      "aggregation": "Mean left/right recall for each100-trial session; equal two-session mean per person, then equal mean across54 people. p_right>=0.5 predicts right.",
+      "rationale": "Directly measures the intended recorded protocol-class target under the specific20-label condition without selective participant omission."
+    },
+    "secondary": [
+      "Binary log loss floored at1e-15, all 12 setting/arm outcomes and per-person results.",
+      "Paired EEG-minus-context, EEG-minus-permuted, calibration20-minus-zero,100-minus20 and same-minus-other-session20 balanced-accuracy differences.",
+      "Candidate versus independent probability reference; adaptive generic-tools, decoder-assisted and decoder-alone results require separately executed matched conditions."
+    ],
+    "comparators": [
+      {
+        "name": "Independent prospective CSP/logvariance/shrinkage-LDA/Platt reference",
+        "inputs": "Exactly20or100target calibration examples when available, otherwise10,600donor trials; train-only folds.",
+        "procedure": "Freeze regularized generalized-eigen CSP/four extreme filters, ddof1logvariance, sklearn lsqr shrinkageauto equal-prior LDA, fivefold out-of-fold Platt map then refit. Support failures use (n_right+.5)/(n+1); numerical errors abstain. This source has not been fitted and differs from native MATLAB/BBCI."
+      },
+      {
+        "name": "CONTEXT and PERMUTED_EEG",
+        "inputs": "Same query IDs and calibration policies; context-only features or deterministic within-person/session shuffled training labels.",
+        "procedure": "Run unchanged learner/reference under each declared arm; permutation is a diagnostic, not a population p-value."
+      },
+      {
+        "name": "Supplied decoder alone and adaptive model plus decoder",
+        "inputs": "Same current query and training-derived bank as generic adaptive analysis; immutable fitted decoder added only in named decoder condition.",
+        "procedure": "Freeze exact decoder/model/tool/runtime first; compare within matched input/compute conditions. No executed comparison is claimed."
+      }
+    ],
+    "nuisance_controls": [
+      "Persistent class cue and historical visual feedback remain even after answer-bearing channels are removed.",
+      "Keep every participant including low baseline performers; no BCI-literacy exclusion.",
+      "Prevent cross-case state: the held person appears as donor in other contexts.",
+      "Preserve251inclusive samples rather than silently asserting paper250 sample/MATLAB parity; continuous preprocessing is not online qualification.",
+      "Count every permitted label used for model fitting and probability calibration; no replacement balancing or query fitting."
+    ],
+    "uncertainty": "Person-level SD/sqrt54 in current scorer is descriptive; shared donors and reused trials invalidate treating conditions as independent replication or this SE as a calibrated population interval.",
+    "failure_policy": "Validate every one of 1,296 condition outputs,100ordered probabilities each, before protected target loading. Preserve explicit abstentions; any abstention leaves the whole panel unscored with zero target callbacks. Missing/extra/nonfinite/boolean or reordered responses fail."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/TASK.md",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/protocol.py",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/scorer_core.py",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/REFERENCE.md",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/README.md",
+      "benchmarks/neural/NEURAL-083/implementations/calibrated-classification/README.md",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/actor.py",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/native_tools.py",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/programme.py",
+      "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/program/controller.py"
+    ],
+    "scorer_target": "Actual held-query protocol labels via complete-panel probability scores, not manuscript/table reconstruction. The task is genuinely observational decoding but cannot identify intention independent of persistent cues.",
+    "target_fidelity": "full_target",
+    "delivered_scope": "Full original designated cohort/control composition is encoded in preparation, numerical scorer, fixed probability reference, frozen-program lifecycle and per-query adaptive transport source. Public registration is inactive; provider inventory is not acquired data.",
+    "missing": [
+      "Authentic full108 body/source field/channel/onset/class verification and prepared public/private arrays.",
+      "Actual probability-reference fit competence/calibration, independent chosen model/runtime admission and full-panel execution.",
+      "Direct no-tools and typed image observation conditions are not implemented."
+    ],
+    "execution_evidence": "Read source only. Published packages state no authentic numerical fit, scientific score or complete model study; generated controls and source-integrity checks are not empirical classification results."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential fixed20 channel EEG epoch plus allowed calibration observations; a no-tools representation must be bounded without silently substituting source feature summaries.",
+      "boundary": "One query and the condition-specific training information only; no supplied decoder or numerical tool.",
+      "evidence_ids": [
+        "task-source"
+      ],
+      "missing": [
+        "No direct observation formatter, context-capacity qualification or scalar episode transport."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential multichannel/time-frequency representation preserving the fixed EEG information policy; no viewer is supplied.",
+      "boundary": "Typed display actions only; source cue/feedback confounds remain regardless of image access.",
+      "evidence_ids": [
+        "task-source"
+      ],
+      "missing": [
+        "Render/scale policy, restricted viewer and image versus numeric information comparison."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Per-query adaptive investigation with training-derived bank, transient numerical Python, optional separately named immutable-decoder probability.",
+      "boundary": "Fresh query state, same allowed inputs/accounted compute, no online labels/feedback/other queries; semantic query-fitting prohibition requires review.",
+      "evidence_ids": [
+        "adaptive",
+        "adaptive-actor",
+        "adaptive-tools",
+        "adaptive-controller"
+      ],
+      "missing": [
+        "Admitted actual model/tool/native runtime, prepared inputs, complete 129,600 query execution and protected scoring."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Source-captured fit→sealed-model→fresh-infer programme across all 1,296 conditions plus independent reference.",
+      "boundary": "Freeze programme/recipe before cases; fit sees allowed labels only, no target-batch adaptation/cross-condition state.",
+      "evidence_ids": [
+        "programme",
+        "protocol",
+        "scorer",
+        "frozen-controller"
+      ],
+      "missing": [
+        "Full authentic execution and numerical/reference competence; no unqualified MATLAB parity claim."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/historical/task.pre-understanding.v1.json",
+      "sha256": "2c53be3d09bbaaac7b70684043af78627af0a20b9c4fee199622977da6bcd6d6",
+      "supports": "Preserved original registered scientific question and source provenance; superseded interpretation/delivery claims are identified explicitly in this revision."
+    },
+    {
+      "id": "task-source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/TASK.md",
+      "sha256": "0af897a7459240aff466968f5ca8e407ce017229acd8a910f0f1f97fd05d77e1",
+      "supports": "Complete scientific target, historical cue/feedback limitation, preparation/split and exact probability contract."
+    },
+    {
+      "id": "protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/protocol.py",
+      "sha256": "90898be76b4193e7b26e2765b2ab80b040bb519c91245ac09c252e92e4de7699",
+      "supports": "Exact54×2×4×3panel, calibration selection,251 sample indices and keyed identities."
+    },
+    {
+      "id": "scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/scorer_core.py",
+      "sha256": "31a37f8df65dd0d760cf42cb7575914b97a5ec7207354822e789107e00ca7483",
+      "supports": "Complete-panel validation, abstention before target access, primary and companion metrics."
+    },
+    {
+      "id": "reference",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/scientific-source/REFERENCE.md",
+      "sha256": "1a5f743dd4fc02fc62682c1082258494772158920e4345dc56dac87b11047574",
+      "supports": "Frozen independent reference defaults, fallback, train-only calibration and departures from author MATLAB."
+    },
+    {
+      "id": "adaptive",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/README.md",
+      "sha256": "9b1c934c129a1f315dabcf8f08c77a7db8006ad73064193256947df8f8ef2424",
+      "supports": "Implemented adaptive/frozen/decoder comparison source,108 source inventory and inactive qualification boundary."
+    },
+    {
+      "id": "programme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/calibrated-classification/README.md",
+      "sha256": "e3026a6d425b883882a15e8d2c10368c5028dc76b68bc76cfef179d5eaccc1d9",
+      "supports": "Fit/infer lifecycle and full workload remain unexecuted; no direct observation condition."
+    },
+    {
+      "id": "primary-source",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1093/gigascience/giz002",
+      "locator": "Official source repository and source-method reference; detailed task adaptation is described separately in the pinned local implementation.",
+      "supports": "OpenBMI original multi-paradigm EEG collection and cued motor-imagery source protocol; precise adaptation is pinned in local scientific source."
+    },
+    {
+      "id": "adaptive-actor",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/actor.py",
+      "sha256": "0fef2a692f6e051b5ed72118b6247a7ff5c111d32337c9af7463ba7f950ab862",
+      "supports": "Actual provider-complete loop selects python/decoder/predict/abstain actions and retains fresh per-query transcript; direct source evidence for adaptive participant mode."
+    },
+    {
+      "id": "adaptive-tools",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/native_tools.py",
+      "sha256": "b7b6d4ba4b1fd955ecccc59256ed2db00d7d2a5c1726d61f4c71d6016ddbdec2",
+      "supports": "Actual owned native query dispatch with assembled transient analysis code and per-query resource grant."
+    },
+    {
+      "id": "adaptive-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/programme.py",
+      "sha256": "c87263d7dd9528a0aea52741ff431a75f82e9e1ed497b97e5a806c937a0a634b",
+      "supports": "Actual complete schedule stages one unchanged query row then invokes actor.investigate, retires query state and aggregates129600candidate outcomes."
+    },
+    {
+      "id": "frozen-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-083/implementations/neural-083/adaptive-investigation-v1/package/inherited/program/controller.py",
+      "sha256": "7eb2bcf443d5fe6d05a88bce5b06b4b388e9bce0f92e5c634a3af5b96e63da4d",
+      "supports": "Actual fit/seal/infer lifecycle for every candidate/reference condition, not a mode declaration."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No solver or human result is established by this source review; generated controls remain engineering evidence.",
+    "excluded_claims": [
+      "No new model/human result, ready benchmark or fitted-reference competence.",
+      "No interpretation of retrospective20-label software allowance as20-trial physiological calibration history."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind full54 person/two-session/10,800 unique-query source instead of generic unknown-case definition, separating 1,296 conditions from registrations.",
+      "Define actual calibration allowance and persistent cue/original100-trial feedback limits.",
+      "Expose implemented adaptive numerical/decoder comparisons separately from absent direct/viewer conditions and unexecuted reference."
+    ],
+    "source_review": "Actual local numerical/protocol/producer source was inspected and hashed; original source-method citations are retained. No authentic neural arrays or target values were read for this revision."
+  }
+}

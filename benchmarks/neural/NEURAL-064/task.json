@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-064",
   "track": "neural",
-  "title": "Novelty effects beyond state and outcome",
+  "title": "Predictive novelty contrasts with pre-state matching and explicit support limits",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "learning_plasticity"
   },
-  "scientific_question": "Does image novelty alter cell-type responses after locomotion, pupil, outcome and exposure history are matched?",
+  "scientific_question": "On source-supported new-image pairs in held-out mice, does exposure phase improve calcium-response prediction beyond measured pre-stimulus state and within-session image history, and can the observed FIRST-minus-REPEAT contrast be recovered without imposing its sign?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Cell-type/novelty contrasts nested within mice and held-out predictions."
+    "Protected source-derived matched response values and signed per-mouse FIRST-minus-REPEAT contrasts, together with exact catalogue/support/exclusion counts. The true contrast can be zero, negative, positive or unavailable; a favored novelty narrative is not ground truth."
   ],
   "input_assets": {
     "routes": [
@@ -66,19 +66,26 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "NWB/SDK dff_traces,events,ophys_timestamps,cell_specimen_table with ROI identities",
-    "allowed_context": "stimulus_presentations image_name,omitted,start_time,end_time; trials go/hit/reward_time/response_latency; running_speed,eye_tracking,licks",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "ophys_timestamps for neural traces; stimulus/behavior tables in common seconds; preserve omissions and dropped frames",
-    "source_contract_evidence": "Full public manifest and metadata CSV parsed; one versioned neural NWB HEAD size; pinned notebook explicitly loads all streams"
+    "inputs": [
+      "NUISANCE: cell type, image set/identity, area, depth, change, pre-running value/bin, pre-pupil quartile and within-session prior same-image count/bin. JOINT adds exposure phase only.",
+      "Pre-state windows [-0.5,0) seconds; running in cm/s, blink-masked pupil area, at least 80% finite samples and clock gaps at most 0.1 s. Pupil ranks use target-free full-session eligible rows, explicitly transductive.",
+      "FIT/validation observations and support metadata under declared roles; source metadata can establish support but does not expose query response values. Eight native post-stimulus trial flags are permitted only in the separately named outcome-conditioned sensitivity."
+    ],
+    "forbidden_inputs": [
+      "Query dF/F responses, targets/reference predictions, or target-derived preprocessing.",
+      "Mouse/experiment/session ID, date/order, source paths and native current-session novelty as predictive nuisance fields; they remain joins/support evidence.",
+      "Unknown lifetime counts treated as known or missing-to-missing matching used as support.",
+      "Query category learning, query refitting/model choice and post-stimulus outcomes in the pre-state primary."
+    ],
+    "case_identity": "Source event keys combine experiment/table/native presentation identity; behavioral identities deduplicate simultaneous imaging planes. Matched cases and query bindings require the missing original membership/native producers; no authentic final ID list is supplied.",
+    "split": "Secondary source declares 80 mice, 204 containers and 475 experiments with original 55 FIT/11 validation/14 query mouse roles. These are source declarations, not verified membership. Preserve original assignments rather than inventing a new split; no validation refit and no query selection.",
+    "coverage": "Full catalogue support obligation retains all declared 107 mice/703 sessions/1,936 experiment planes and all source conditions; the secondary matched panel is separately declared. Every retained/excluded source event and reason must reconcile with the complete table census. Missing membership/projection yields null, not a zero or an observed-prefix success."
   },
-  "biological_unit": "Versioned metadata includes mouse_id,ophys_session_id,ophys_experiment_id,ophys_container_id,cell IDs;107unique mouse IDs in inspected1936experiment rows",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Mouse, with all repeated sessions, containers, cells, pairs and both analysis policies retained together.",
+  "case_definition": "Matched mouse/container/image/change/pre-state/history pair across FIRST (Novel 1) and REPEAT (Novel >1); events and registered cells are nested. A complete investigation also returns catalogue and secondary-panel support evidence.",
   "split": {
-    "policy": "Group mouse, container and registered cell lineage; separate familiar/novel sessions and all repeated images; cell selection uses training only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Secondary source declares 80 mice, 204 containers and 475 experiments with original 55 FIT/11 validation/14 query mouse roles. These are source declarations, not verified membership. Preserve original assignments rather than inventing a new split; no validation refit and no query selection.",
+    "coverage": "Full catalogue support obligation retains all declared 107 mice/703 sessions/1,936 experiment planes and all source conditions; the secondary matched panel is separately declared. Every retained/excluded source event and reason must reconcile with the complete table census. Missing membership/projection yields null, not a zero or an observed-prefix success."
   },
   "reference": {
     "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
@@ -94,50 +101,107 @@
     "data_url": "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html"
   },
   "controls": [
-    "Matched behavioral state",
-    "known exposure",
-    "cell-type label audit",
-    "no neuron-level pseudo-replication."
+    "Primary matching uses pre-state and within-session history; all eight post-stimulus outcome flags move to a separately conditioned sensitivity to avoid silently changing the estimand.",
+    "Distinguish exact lifetime, session-order and relaxed within-session support profiles; missing required fields never create overlap.",
+    "Native FIRST image novelty defines new-image subset; G/H familiar images remain controls, not presumed novel.",
+    "Disclose full-session pupil-rank transduction, whole-record QC and registered-cell survival selection; these prevent online or causal interpretation."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The complete target is a multi-mouse matched-support and held-response investigation, not one locally visible waveform label.",
+      "boundary": "A small direct plot/question would change the statistical target and cannot replace the full support/prediction endpoint.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-5"
+      ],
+      "missing": [
+        "A separately justified interpretation condition would need its own known-answer case definition while preserving this investigation as the registered objective."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Possible inspection of measured response/support plots within an investigation; no typed renderer or full statistical backend is supplied.",
+      "boundary": "Visual inspection can support interpretation but cannot prove complete matching, quantify omitted rows or replace protected numerical scoring.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-5"
+      ],
+      "missing": [
+        "Complete statistical/source closure, then define auditable plot tools without exposing held responses."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Partial source composes support analysis, paired prediction products and an explanatory report; no actual live investigator transport/native core exists.",
+      "boundary": "Candidate report is retained, while protected source tables and predictions independently assess claims; access/resource equality and target isolation require missing owners.",
+      "evidence_ids": [
+        "implementation-5",
+        "implementation-8"
+      ],
+      "missing": [
+        "Restore native core/producers and implement actual per-case tool transport with protected quantitative evaluation."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Fixed reference recipes and prospective candidate model outputs exist as source; no complete participant frozen-programme execution route is delivered.",
+      "boundary": "Freeze model family, FIT/validation selection and all preprocessing before query; maximum five FIT attempts per arm is a design declaration, not runtime enforcement.",
+      "evidence_ids": [
+        "implementation-6",
+        "implementation-7"
+      ],
+      "missing": [
+        "Complete native code/ownership closure and enforce fit/selection/candidate budgets before running any programme."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed mouse-level novelty contrast and held-out explanatory gain.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "held-mouse new-image JOINT normalized RMSE",
+      "direction": "lower",
+      "aggregation": "Equal mouse normalized error on the complete intended new-image matched panel using FIT-only weighted response SD. Report the evaluator-owned nuisance error minus JOINT error as a companion higher-is-better gain; no partial denominator.",
+      "rationale": "Tests prediction of measured responses while preventing a candidate from weakening its own nuisance baseline. The predictive endpoint is separate from source-count reconstruction and explanatory wording."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Fixed-nuisance-reference NRMSE minus JOINT NRMSE, with higher positive reduction indicating better prediction; the validation-selected evaluator comparator and identical intended query denominator are mandatory.",
+      "Signed observed/predicted FIRST-minus-REPEAT contrast per mouse and equal-mouse by cell type; absolute contrast error with no preferred biological sign.",
+      "Already-familiar-image control subset, unknown-first-image support dispositions and outcome-conditioned sensitivity, reported separately.",
+      "Exact source-derived catalogue/secondary support, overlap, event partition and exclusion-count agreement; label agreement with scripted interpretation phrases is only a consistency check."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "evaluator-owned hierarchical mean",
+        "inputs": "Same permitted FIT nuisance covariates (and phase only in JOINT); outcome flags only in sensitivity.",
+        "procedure": "Implemented unexecuted weighted categorical hierarchy/fallback. Fit on all supported FIT pairs; primary validation error and scale use the new-image subset."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "evaluator-owned HGB",
+        "inputs": "Same permitted inputs and hierarchical FIT weights, with FIT-only category vocabulary/medians/missingness handling.",
+        "procedure": "Four fixed HGBRegressor settings: leaves 15/31 × l2 0/1; 200 iterations, learning_rate=0.1, min_samples_leaf=20, early_stopping=False, random_state=127. Whole-mouse validation chooses setting, no refit."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "frozen nuisance selection",
+        "inputs": "Validation errors of hierarchy and selected HGB nuisance arms.",
+        "procedure": "Choose smaller validation NRMSE, hierarchy wins ties; evaluator freezes the comparator before query. Candidate NUISANCE outputs remain descriptive and cannot set primary gain."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Primary matching uses pre-state and within-session history; all eight post-stimulus outcome flags move to a separately conditioned sensitivity to avoid silently changing the estimand.",
+      "Distinguish exact lifetime, session-order and relaxed within-session support profiles; missing required fields never create overlap.",
+      "Native FIRST image novelty defines new-image subset; G/H familiar images remain controls, not presumed novel.",
+      "Disclose full-session pupil-rank transduction, whole-record QC and registered-cell survival selection; these prevent online or causal interpretation."
+    ],
+    "uncertainty": "No superiority threshold, confirmatory interval or multiplicity plan is selected. Any future interval must resample whole mice, retain both policies/all nested data, respect cell-type strata and reference selection, and account for multiple support profiles and contrasts. Current descriptive source design cannot establish significance.",
+    "failure_policy": "Every planned supported case must have finite JOINT/NUISANCE outputs with exact IDs/query binding. Unknown catalogue membership, missing source projection, unsupported required mouse/pair, unknown new-image denominator or invalid FIT scale makes primary result null. Retained/excluded identities must be disjoint and exhaustive; failure preserves all missingness rather than scoring a favorable subset.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "3c4ccab1ca1f3e9f7a9a984f556a251960cc180e86d3a6eac833a6faf44357ed",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "28cd94440bd140ac8d4787abaa7eee5b7c26252ff9a94e74357118f816b5d1aa"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -218,6 +282,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

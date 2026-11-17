@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-045",
   "track": "neural",
-  "title": "Dopamine trajectories across reward spacing",
+  "title": "Released fluorescence trajectory prediction across reward spacing",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "reward_learning"
   },
-  "scientific_question": "Can a cue/history model predict trial-aligned dopamine trajectories for a held-out reward-spacing condition?",
+  "scientific_question": "How accurately can permitted cue/reward history predict released fluorescence trajectories on complete held-out reward-spacing conditions, with biological aliases grouped and a separately identified cue-time forecast condition?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Photometry dF/F predictions on the original timestamp grid."
+    "The stored, processed photometry fluorescence samples at the exact observed native timestamps for each eligible held-out event trajectory. These measurements, not the paper narrative or a fitted baseline curve, define the target."
   ],
   "input_assets": {
     "routes": [
@@ -90,25 +90,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": [
-      "processing/photometry/photometry_dff data and timestamps"
+    "inputs": [
+      "Permitted training fluorescence trajectories and native timestamps, plus verified cue/reward history, condition, session/day and declared nuisance variables.",
+      "Retrospective view supplies declared aligned event information; cue-time view freezes only information available at cue and evaluates the frozen state on later timestamps without refitting.",
+      "Historical transfer covers 60-second and 600-second source cohorts; the prospective full programme separates six photometry-designated appetitive conditions from two aversive conditions and excludes behavior-only conditions from neural target creation."
     ],
-    "allowed_context": [
-      "acquisition/eventLog event_code,timestamp,event_flag",
-      "acquisition/task_parameters",
-      "cue code15; reward code10; lick codes5/6 in reference loader"
+    "forbidden_inputs": [
+      "Held-out fluorescence values or normalization derived from them.",
+      "Cross-fold learned state, held-animal aliases in training, answer-bearing source lookups, previous target-derived scores.",
+      "Post-cue outcomes, concurrent licking or future event alignment in the separately declared cue-time forecast arm."
     ],
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Photometry timestamps and event log timestamps; loader truncates events past last photometry sample and aligns per-trial windows.",
-    "source_contract_evidence": "Data archive explicitly contains behavior + dopamine; pinned loader selects actual photometry and defines trial assembly"
+    "case_identity": "Historical manifest binds 2691 selected trajectories, 11973651 native points and 106 clock-truncated exclusions. New programme case IDs join biological animal/session/event and retain a complete eligibility ledger; authentic full IDs are not supplied by this source package.",
+    "split": "Primary design leaves each complete condition out and groups every alias of an animal. Historical two transfer directions are 60s-to-600s and 600s-to-60s, where source identity changes with condition. Inner condition selection requires enough supported training conditions; no silently reduced folds.",
+    "coverage": "The historical 13-source-ID panel is a named development scope. Current source requires all original-condition support statuses and nine reference-family dispositions; generated examples with invented animals do not establish authentic full-panel coverage."
   },
-  "biological_unit": "animal directory + day/session; 126 animals includes behavioral-only groups",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Verified biological animal; the 13 historical source IDs cannot be assumed independent across naming families until aliases are resolved.",
+  "case_definition": "An eligible complete event trajectory nested in session and verified biological animal; historical source-ID scope has 2691 clock-complete trajectories.",
   "split": {
-    "policy": "All photometry sessions by animal; hold out spacing conditions and complete trials; exclude behavior-only groups from neural tasks.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Primary design leaves each complete condition out and groups every alias of an animal. Historical two transfer directions are 60s-to-600s and 600s-to-60s, where source identity changes with condition. Inner condition selection requires enough supported training conditions; no silently reduced folds.",
+    "coverage": "The historical 13-source-ID panel is a named development scope. Current source requires all original-condition support statuses and nine reference-family dispositions; generated examples with invented animals do not establish authentic full-panel coverage."
   },
   "reference": {
     "source_code_url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate",
@@ -123,50 +123,107 @@
     "data_url": "https://dandiarchive.org/dandiset/001632"
   },
   "controls": [
-    "Reward/lick history baselines",
-    "full-trial split",
-    "train-only normalization",
-    "no target-aligned neural samples in input."
+    "Verify photometry-bearing payloads rather than treating a D suffix as neural QC; resolve biological aliases and anatomical exclusions.",
+    "Keep preprocessing, physical units, native gaps and clock-only eligibility fixed before target amplitudes. No interpolation, padding or target-batch normalization to improve coverage.",
+    "Report condition/source-ID confounding, sex, session/day and hardware; do not interpret transfer as a causal effect of interval spacing.",
+    "Separate reward-aligned retrospective information from cue-time information and require complete original reference support."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A proposed no-tools observation condition would need a fixed permitted event/history and training-example presentation plus a complete native-trajectory response interface. The supplied P-tier closed-report interpretation is a separate diagnostic.",
+      "boundary": "Do not show held-query fluorescence plots as prediction input or count precomputed score interpretation as native neural prediction.",
+      "evidence_ids": [
+        "packet",
+        "design"
+      ],
+      "missing": [
+        "No no-tools participant transport or complete authentic case presentation."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed neural-viewer implementation is delivered for native-grid response prediction. Rendering the unknown response would expose the answer; any training/history viewer needs a separately frozen representation.",
+      "boundary": "Query target arrays and rendered target traces remain evaluator-owned.",
+      "evidence_ids": [
+        "design"
+      ],
+      "missing": [
+        "Typed actions, response collection and modality-preserving complete case coverage."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I/X and I/XM source defines adaptive numerical investigation with permitted signals and optional qualified task models.",
+      "boundary": "Match F/I inputs, tools and cumulative resource policy; freeze/report all output artifacts before target access. P-tier interpretation remains separate.",
+      "evidence_ids": [
+        "programme",
+        "dispatcher",
+        "score"
+      ],
+      "missing": [
+        "Authentic execution, model-tool qualification and protected fold isolation are not delivered by the current generated controller."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F/X and F/XM programme source supports precommitted numerical producers and fixed terminal report programs; historical native reference is preserved.",
+      "boundary": "Freeze executable and fitting/adaptation recipe before query bank release; close producers and seal predictions before opening targets.",
+      "evidence_ids": [
+        "programme",
+        "dispatcher",
+        "score"
+      ],
+      "missing": [
+        "Authentic full-programme execution and all required fitted references."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro R-squared relative to cue/time-only predictor.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Equal-animal mean native-time prediction skill relative to current canonical R0, with native MSE retained",
+      "direction": "higher",
+      "aggregation": "Integrate squared error over each observed native span using physical-time quadrature, average trajectories within each verified animal, then compute the unweighted animal mean of 1 minus candidate MSE divided by that animal's independently registered current R0 MSE. Current central comparison source fixes canonical_denominator to R0. Historical 2691-trajectory scores instead divide by original T native MSE and remain a distinct named comparison.",
+      "rationale": "Measures prediction of held-out measured trajectories without allowing dense sampling or prolific source IDs to dominate. This is reference-relative skill, not variance R-squared. Missing current R0 makes the primary required-unscorable even when native MSE is available; any zero R0 denominator makes the primary undefined without clipping or dropping that animal. Historical T and current R0 are different references, so their relative-skill values are not interchangeable."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Native-time MSE, MAE and signed bias in stored fluorescence units, reported per animal and condition.",
+      "Both transfer directions, complete exclusions and endpoint support; equal-session and sex/hardware/outcome/early-trial diagnostics.",
+      "Separate cue-time forecast and aversive units/scopes; never pool unlike signal domains."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Historical T, T_E, T_N, T_E_N diagnostics",
+        "inputs": "Reward-aligned time, with elapsed-history E and delivered-reward-count N as the indicated additions.",
+        "procedure": "Retain fixed native-time reference results only for the exposed 2691-trajectory panel, whose relative-skill denominator is original T native MSE. Do not rename T as current R0, transfer historical scores to the current R0 denominator, or claim SOTA/mechanistic E/N evidence."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Current registered reference families",
+        "inputs": "Each family receives only its permitted training signals and event/history controls.",
+        "procedure": "Source supplies R0/R1/R2/R3 trajectory implementations with training-only selection; all nine required family dispositions remain reported. R0 alone supplies the current canonical denominator. Missing R0 makes the primary required-unscorable, while every other missing/unsupported family remains an explicit required-unscorable comparison obligation. No private target backfill is permitted."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Source-prior and pairing/timing controls",
+        "inputs": "Declared prior-only, opaque identity, training-pairing destruction and physical-time controls.",
+        "procedure": "Compare within matched F/I access and resource conditions; these engineering routes require authentic qualification before scientific use."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Verify photometry-bearing payloads rather than treating a D suffix as neural QC; resolve biological aliases and anatomical exclusions.",
+      "Keep preprocessing, physical units, native gaps and clock-only eligibility fixed before target amplitudes. No interpolation, padding or target-batch normalization to improve coverage.",
+      "Report condition/source-ID confounding, sex, session/day and hardware; do not interpret transfer as a causal effect of interval spacing.",
+      "Separate reward-aligned retrospective information from cue-time information and require complete original reference support."
+    ],
+    "uncertainty": "Animal-level paired descriptive contrasts, with condition strata and overlapping-training dependence disclosed. Source-ID aliases must be verified before population inference; samples and trajectories are not independent animals. Full refitted uncertainty remains unqualified.",
+    "failure_policy": "Reject missing/duplicate/extra IDs, wrong native vector lengths, nonfinite predictions, clock joins or premature target access. Keep every required support/exclusion and failed reference disposition. Missing current R0 makes the primary required-unscorable even if native losses exist; any zero R0 denominator leaves primary skill undefined while retaining native losses and all animals. Historical T-denominator scores remain separate; no favorable-subset primary score.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "7154ab412ccb7b06831e063bf4d8cf8b8dc36e9f4e1d3b4c88634cd2b6961052",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "2847a66a66a127ae103f2985b1a5c1f77d6e5fcde178d1e6bbbee4d620a68395"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -247,6 +304,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

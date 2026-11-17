@@ -1,0 +1,200 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-009",
+  "title": "Pediatric continuous seizure-event detection",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The complete 686-record/23-person normalized event evaluator is delivered. Authentic EEG preparation and a competent signal reference are not qualified; the implemented tolerant event score cannot establish prompt onset detection.",
+  "scientific_target": {
+    "question": "From causal EEG alone, can a fixed detector recover annotated seizure-event presence across complete held-person monitoring, while limiting false alarms and predicted-positive occupancy?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Recording-relative annotated seizure intervals, with separate raw annotations and processed intervals under the frozen timescoring merge/split/tolerance policy.",
+    "answer_origin": "CHB-MIT 1.0.0 recording summaries and companion seizure annotation files; evaluator accepts normalized private intervals only after operator provenance review.",
+    "case_unit": "A complete EDF recording on an explicit 10 Hz prediction grid, nested within one held biological person.",
+    "independent_unit": "23 biological people; chb01 and chb21 are one person, not independent folds.",
+    "inference_scope": "Public-development event-presence detection under a prospective causal observation policy; observed recording hours exclude inter-file gaps.",
+    "exclusions": [
+      "Clinical utility or prospective seizure prediction",
+      "Timely onset detection inferred from a 30 s/60 s tolerant event score",
+      "Treating processed merge/split event counts as original clinical seizures"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Selected genuine bipolar EEG channels with native calibration in microvolts and native sample-count/rate declarations; the checked representative source header is 256 Hz, but every file needs verification.",
+      "Complete causal samples through each 10 Hz bin endpoint; montage metadata required to interpret channels, not to recover labels."
+    ],
+    "forbidden_inputs": [
+      "Summary seizure times, annotation channels and companion annotation files in participant inputs",
+      "Future samples, target-person labels, label-derived selection of monitoring windows",
+      "Source filename lookup or recording hashes used to retrieve public labels"
+    ],
+    "case_identity": "Evaluator requires all 686 pinned RECORDS paths, exact person aliases and fold identities. A future participant projection must use opaque identities while retaining an operator join.",
+    "split": "Implemented policy specifies 23 leave-one-biological-person-out folds, with chb01/chb21 held together; preprocessing and inner selection are confined to the other 22 people. Physical fit compliance is not enforced by score validation.",
+    "coverage": "All 686 recordings, including seizure-free background and every observed tick; no cross-record merge or invented time in acquisition gaps. Authentic normalized arrays remain unbound."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "patient_macro_event_f1",
+      "direction": "higher",
+      "aggregation": "Sum processed event counts within each of the 23 people, compute person F1, then equal-person mean; undefined person F1 makes the primary null.",
+      "rationale": "Measures complete-monitoring event coverage; compulsory false alarms and occupancy expose long positive predictions that tolerance can reward."
+    },
+    "secondary": [
+      "Person-level and pooled event sensitivity, precision and false alarms per 24 observed hours",
+      "Unmerged sample F1, sensitivity, precision and predicted-positive time fraction",
+      "Prospective additional onset-latency/miss and early/late-only-credit diagnostics before timeliness claims"
+    ],
+    "comparators": [
+      {
+        "name": "All-negative and all-positive controls",
+        "inputs": "Same complete output support",
+        "procedure": "Implemented constant controls; valid weak detectors, never silently rejected."
+      },
+      {
+        "name": "Causal EEG line-length detector",
+        "inputs": "Only selected EEG and outer-training annotations",
+        "procedure": "Proposed fixed reference requiring native qualification and training-only threshold; not supplied as competent by this package."
+      },
+      {
+        "name": "Timing/montage-only detector",
+        "inputs": "Elapsed time and admissible montage descriptors, no EEG",
+        "procedure": "Proposed matched nuisance baseline with identical training folds and threshold selection."
+      }
+    ],
+    "nuisance_controls": [
+      "Group chb01/chb21 at the biological identity level.",
+      "Freeze channel-role and duplicate-label resolution per file; remove marker/annotation channels.",
+      "Keep all seizure-free background and record-boundary resets.",
+      "Compare occupancy and unextended sample metrics because one long prediction may cover several tolerant reference events."
+    ],
+    "uncertainty": "Report all 23 paired person contrasts to fixed references; a frozen patient-resampling scheme must acknowledge overlapping LOPO training sets. Current complete evaluator does not implement that paired uncertainty protocol.",
+    "failure_policy": "Reject missing/duplicate recordings, wrong aliases/folds, score gaps/overlaps, nonfinite probabilities and threshold-inconsistent intervals. Preserve undefined person endpoints as null; never delete them from the macro."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/README.md",
+      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
+      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/recommended_policy.json",
+      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_provenance.json"
+    ],
+    "scorer_target": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including actual event and sample metrics. It does not load/authenticate EDF signals or train a detector.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete-support event-scoring source and generated full-roster engineering controls; no authentic signal-reference or participant run.",
+    "missing": [
+      "Authenticate all selected EDF/header/annotation joins and normalize causal waveforms.",
+      "Execute fixed EEG and timing/montage comparators on complete held-person monitoring.",
+      "Implement and freeze paired uncertainty and onset diagnostics where claimed.",
+      "Provision a participant transport with no label access."
+    ],
+    "execution_evidence": "Reviewed source and its recorded generated full-686/23-person tests only; no new execution or model outcome."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Rendered continuous EEG windows with fixed scales and declared surrounding causal context could support event annotation, but a complete-record no-tools response protocol is absent.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A multichannel EEG viewer with bounded navigation is scientifically suitable for annotation; no typed viewer is delivered for this task.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "An investigator could analyze allowed EEG and submit complete probabilities, but this package delivers the evaluator rather than a case-investigation participant loop.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A detector recipe can be frozen before outer fold access; the evaluator checks recipe declarations but supplies no protected fit/predict runner.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/README.md",
+      "sha256": "8c98015c07dc2fc5a1afb29040c8953162bc6e031273826d87bac539c432809e",
+      "supports": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including actual event and sample metrics. It does not load/authenticate EDF signals or train a detector."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
+      "sha256": "5b92def65bbfb75368986dff72f66b8a511b077a9f6343b4c5732ab80805b834",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/recommended_policy.json",
+      "sha256": "b05ea7b363f4969fd5f1d1230686e6dea391393637028701f9f9f7785469588e",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_provenance.json",
+      "sha256": "9c97527fc435f0470c91f888b01c3098e01db0bb4a6f1467e3d0c67c0074589e",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://physionet.org/content/chbmit/1.0.0/",
+      "locator": "Dataset description and annotation format",
+      "supports": "Pediatric EEG collection; aliases, background and source annotations require source-aware handling."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+      "locator": "Versioned recording roster",
+      "supports": "Complete file roster; local source manifest records 686 entries."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+      "locator": "Pinned event scoring implementation",
+      "supports": "Tolerant processed-event semantics, distinct from one-to-one onset matching."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Clinical utility or prospective seizure prediction",
+      "Timely onset detection inferred from a 30 s/60 s tolerant event score",
+      "Treating processed merge/split event counts as original clinical seizures"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace generic not-implemented status with the actual complete normalized evaluator scope.",
+      "Make event-presence versus onset-timeliness distinction explicit, retaining raw/processed counts and mandatory occupancy diagnostics."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

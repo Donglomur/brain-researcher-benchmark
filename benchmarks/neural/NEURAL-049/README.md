@@ -1,4 +1,4 @@
-# Natural wrist movement from ECoG
+# Event-cued retrospective reach-parameter decoding from ECoG
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Primary: the released intervals/reaches Reach\_angle\_degrees folded vertical angle, in degrees within \[-90,90\], not circular heading. Complete secondary targets are Reach\_magnitude\_px and Onset\_speed\_px\_per\_sec from the same row.
+
+**Source delivery:** partial\_delivery. The current definition explicitly adopts the supplied retrospective event-cued reach-angle scope with complete magnitude and onset-speed companions. Its ±5-second observations and within-patient day split differ from the preserved original causal continuous wrist-velocity target, which remains unmet history. Native census and execution are unqualified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential numeric or rendered single-event ECoG view would need an explicit finite response protocol on the same retrospective target. No direct result can be inferred from programmes operating on 5000×channel arrays and learned case-local state. | No no-tools observation transport, rendering/quantization policy or demonstration protocol. |
+| Typed viewer | not\_delivered | Potential bounded event waveform/spectrum viewer, preserving complete permitted channels/time support. Only typed actions over released neural observation projection; no pose/target/raw NWB access. | No typed-viewer source or response collection for this task. |
+| Tool assisted | source\_available | I source authors/edits analyses within a fresh held-day context; optional T1 supplies the exact case-local decoder. Same data, full label-free query batch and budgets as F; no held targets, cross-fold state or arbitrary original NWB reads. | Physical isolation, authentic complete data and reference/model custody remain unqualified. |
+| Frozen program | source\_available | F source seals arbitrary prediction code and fitting/batch-adaptation recipe before study-value exposure. Training within an isolated held-day context is allowed; post-exposure unrestricted code generation is I, not F. | Native source-route qualification, full reference graph feasibility and complete observed execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 10743 bytes; SHA-256 `61b6541401327db0b2601f0bb222090ab7732b07552efdcd9dd3a3f8ecff41c3`.
+- Specification identity: 16630 bytes; SHA-256 `808819f6161dbeb151ed52edb73fe28b5a535bb31b380f6f1e9a4503d775e1b2`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

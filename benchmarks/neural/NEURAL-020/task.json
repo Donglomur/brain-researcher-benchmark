@@ -16,11 +16,11 @@
     ],
     "task_family": "population_dynamics"
   },
-  "scientific_question": "Can visible somatosensory neurons predict masked neurons during active and perturbed movement?",
+  "scientific_question": "How well do visible somatosensory neurons predict withheld spikes during active and perturbed reaches, evaluated separately under the same frozen preparation and split?",
   "task_type": "prediction",
   "neural_role": "both",
   "primary_outputs": [
-    "Held-out-unit rate predictions with trial-condition provenance private to scorer."
+    "Observed held-out-unit spike counts on fixed 600 msmovement-onset windows for the declared evaluation rows."
   ],
   "input_assets": {
     "routes": [
@@ -126,24 +126,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Actual NWB header confirms units/spike_times with ragged spike_times_index, heldout-unit flags and observation intervals;65units in the inspected training file. Unit labels are not persistent identities across other sessions.",
-    "allowed_context": "Actual training NWB contains826trial-table rows and columns bump_dir, bump_time, cond_dir, ctr_hold, ctr_hold_bump, go_cue_time, id, move_onset_time, result, split, start_time, stop_time, target_dir, target_on_time. Hand position/velocity are timestamped behavioral arrays. Additional labels must be masked when they are prediction targets.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Sorted spike timestamps and trial/event times are aligned in the NWB time base. Official NWBDataset bins spikes on a1ms grid and resamples for5ms/20ms benchmarks; MC_Maze behavior uses timestamps, Area2 uses starting_time/rate. Rate values and unit conversion still need acquisition qualification.",
-    "source_contract_evidence": "Direct published asset URL inspected with bounded HTTP ranges; HDF5 names/shapes and identity metadata only, not neural/behavior values."
+    "inputs": [
+      "Preparation requires all 826 source trial rows and 65 units, including explicit exclusions; fixed 600 mswindow[-100,500)ms at 5 or 20 msbins.",
+      "Public training exposes visible and withheld counts; public query exposes visible counts, opaque IDs, explicit unit axes, relative grid,spikes_per_bin units and packet digest."
+    ],
+    "forbidden_inputs": [
+      "Query withheld counts, source trial IDs, absolute times, ctr_hold_bump and movement/condition labels in public projections.",
+      "Candidate-selected exclusions, masks or unit ordering."
+    ],
+    "case_identity": "Generated opaque IDs are bound to complete source metadata/count bytes; query IDs and heldout-unit IDs must match in order. Native source IDs and actual masks are not yet authenticated by this component.",
+    "split": "Operator must freeze native-split-to-train/eval/excluded roles. Every continuous block has one role and train/eval windows cannot overlap. Both active and perturbed evaluation rows required; no automatic leave-condition-out split is claimed.",
+    "coverage": "All 826 rows/65 units of the named training asset are retained in preparation; all declared included query rows and fixed withheld units are scored. Separate test NWB is outside this component; public test-target release prevents untouched-holdout claims."
   },
-  "biological_unit": {
-    "session_start_time": "2017-12-07T17:06:09.727000-05:00",
-    "general/subject/subject_id": "Han",
-    "general/subject/species": "Macaca mulatta",
-    "session_description": "Data from monkey Han performing center-out active-passive task. This file contains several continuous segments of the full session on 2017-12-07 that can be used for training models for the Neural Latents Benchmark."
-  },
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One Han macaque in one recording session;65 units and 826 source trials are nested observations.",
+  "case_definition": "Whole movement-onset-aligned reach or perturbation trial; train/eval membership held by continuous block.",
   "split": {
-    "policy": "One Han session; whole trial/continuous block split; active/passive conditions held out as specified; no between-animal generalization.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Operator must freeze native-split-to-train/eval/excluded roles. Every continuous block has one role and train/eval windows cannot overlap. Both active and perturbed evaluation rows required; no automatic leave-condition-out split is claimed.",
+    "coverage": "All 826 rows/65 units of the named training asset are retained in preparation; all declared included query rows and fixed withheld units are scored. Separate test NWB is outside this component; public test-target release prevents untouched-holdout claims."
   },
   "reference": {
     "source_code_url": "https://github.com/neurallatents/nlb_tools",
@@ -161,50 +160,88 @@
     "data_url": "https://dandiarchive.org/dandiset/000127/0.220113.0359"
   },
   "controls": [
-    "Fixed unit masks",
-    "no movement labels in query",
-    "rate/smoothing references",
-    "trial separation."
+    "Use exact source heldout mask and ctr_hold_bump 0 active/1 perturbed mapping; authentication remains required.",
+    "Separate continuous train/eval blocks and nonoverlapping windows.",
+    "Preserve missingness/exclusions independent of predictions and all heldout-unit coverage per condition."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all required time×withheld-unit expected counts; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Official Poisson bits per spike, reported by active/perturbed condition.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "active_and_perturbed_Poisson_co_bps",
+      "direction": "higher",
+      "aggregation": "Two condition-specific pooled likelihood scores; recompute the per-unit evaluation-mean null separately within each condition. Keep both endpoints, do not collapse to a favorable condition.",
+      "rationale": "Measures prediction in both source conditions without conflating unequal spike totals or a pooled null with condition-wise performance."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Pooled official-equation co-bps as a separate diagnostic, not average of subgroup scores.",
+      "Signed differences versus training-mean and source-derived smoothing/Poisson controls; condition trial/unit support."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "training_mean",
+        "inputs": "Training target counts only.",
+        "procedure": "Implemented training per-unit mean predictor; distinct from evaluation-derived metric null."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "nlb_smoothing_poisson",
+        "inputs": "Training visible/withheld counts and query visible counts only.",
+        "procedure": "Implemented source-derived 30 ms Gaussian/log-count features and PoissonRegressor(alpha 0.01) per withheld unit with native integer-bin recipe; failed convergence/missing input is explicit."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Use exact source heldout mask and ctr_hold_bump 0 active/1 perturbed mapping; authentication remains required.",
+      "Separate continuous train/eval blocks and nonoverlapping windows.",
+      "Preserve missingness/exclusions independent of predictions and all heldout-unit coverage per condition."
+    ],
+    "uncertainty": "Descriptive complete-trial/block comparisons in one session; cannot obtain independent animal replication by resampling units or bins.",
+    "failure_policy": "Reject extra fields, wrong masks/IDs/units, malformed outputs or uncovered condition units. Finite nonnegative rates required; exact zeros become 1e-9 as in pinned official metric, unlike 017/018 strict positivity. All-zero target totals are explicitly undefined.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "bc1c378e6fd011abf2bcf02e2c5c0f9a5f0f7814a578bcab6eba8e2b9bf57602",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "8b922ac0214da6a1cb1ca5c0320cab90aaf6dab0e51f8ce44a552b0ecfcc718a"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -292,6 +329,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

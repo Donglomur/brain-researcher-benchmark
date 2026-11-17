@@ -23,7 +23,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   expansion-b-source-identities:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -77,7 +80,7 @@ jobs:
                   "sha256": "eb7b6cc594c9890b20311da576dfd7299ce1fe86775677a873024555f2ccd169"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-015/task.json",
+                  "path": "benchmarks/neural/NEURAL-015/historical/task.pre-understanding.v1.json",
                   "bytes": 28703,
                   "sha256": "0defdcc095905ddb5186f2b0de0861ba2d527bb25a449bffa777b622e69f204c"
               },
@@ -107,7 +110,7 @@ jobs:
                   "sha256": "dbb3a546b9b68e38ca9afa67dd68d968717d9f30737bc8a85ae2b1af07e0b6a7"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-028/task.json",
+                  "path": "benchmarks/neural/NEURAL-028/historical/task.pre-understanding.v1.json",
                   "bytes": 16180,
                   "sha256": "d3c7673c371b01421467ac792f66dc14e0e345e7c6b8ce5496377d80cd576bb9"
               },
@@ -137,7 +140,7 @@ jobs:
                   "sha256": "b52e7aed42d602999a0c095337fa33e9cdf0bb46259c0d3f5323adcdaa4e147f"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-065/task.json",
+                  "path": "benchmarks/neural/NEURAL-065/historical/task.pre-understanding.v1.json",
                   "bytes": 11607,
                   "sha256": "1888547c763c67793b92ae4d1602c51917aa9d898755291e421ed545a54f7c47"
               },
@@ -167,7 +170,7 @@ jobs:
                   "sha256": "f79d97685afd42f90ba3867e9d72b65264e794e85d307fb1cd158de35ce9849e"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/task.json",
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/historical/task.pre-understanding.v1.json",
                   "bytes": 16041,
                   "sha256": "0ee94e7c532697065e3fe1797c512cf10a8ed08f27f2b63bec8a87150e6b80ba"
               },

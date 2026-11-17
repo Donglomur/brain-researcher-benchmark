@@ -1,0 +1,200 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-091",
+  "title": "Stimulus-family response prediction for calibrated Neuropixels units",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "An exposure-aware adapter, train-only controls and genuine held-out spike scorer exist. Complete authenticated native export, permitted stimulus content, competent stimulus-transfer reference and participant execution remain missing, so the old not_implemented wording is superseded only for this construction component.",
+  "scientific_target": {
+    "question": "Can a response model calibrated on allowed stimulus families predict spike counts for withheld families in the same recorded units beyond train-rate and past-state controls?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Protected integer spike count over each eligible presentation after invalid neural intervals are removed; exposure is the remaining valid duration.",
+    "answer_origin": "Selected Allen Visual Coding Neuropixels spike times and complete stimulus table; native NWB identity and export correctness remain unverified by the JSON adapter.",
+    "case_unit": "Exact session/unit/presentation keyed observation with positive valid exposure.",
+    "independent_unit": "Mouse; units, presentations and repeated stimuli are nested dependent observations.",
+    "inference_scope": "Same-unit, within-mouse stimulus-family transfer. Predicting a held-out measured neural response is a legitimate neural target, although a programme score does not establish direct visual interpretation.",
+    "exclusions": [
+      "New-mouse prediction without unit alignment/calibration",
+      "Optical-calcium and spike metric pooling",
+      "Causal arousal effects",
+      "Native NWB authenticity established by matching declared hashes"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-091/historical/task.pre-understanding.v1.json",
+      "sha256": "b42c6803c1aede42efe4f65e422494247b355b2dd2799e5817ef61d759cc2445",
+      "supports": "Exact prior registered definition and unresolved source audit boundaries preserved before this revision."
+    },
+    {
+      "id": "evaluator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-091/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "16606e98d575cce41cf18c0b8b20b3f6b313bccf1ec94bcfd52286c7d56153d4",
+      "supports": "Pinned-export preparation, exposure-aware counts, train-only controls, exact-key admission and mouse-macro bits/spike."
+    },
+    {
+      "id": "interface",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-091/docs/initial-evaluator-v1.md",
+      "sha256": "c768fb37728a3b95ed59c24f25c21c4d0388d9a9a70cb2adb85880b880ddfcab",
+      "supports": "Explicit native-export/authenticity limitations and half-open window/invalid-interval policies."
+    },
+    {
+      "id": "mapping",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-091/implementations/initial-evaluator-v1/COMPONENT_SOURCE.json",
+      "sha256": "373fe3ce2be7d625eec36fadc9f9d9a20e65ef64a682b93111961689173c4fc9",
+      "supports": "Existing immutable AllenSDK source mappings and distinction between source inspection and installed native compatibility."
+    },
+    {
+      "id": "allen",
+      "kind": "primary_source",
+      "url": "https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html",
+      "locator": "Primary author abstract or official AllenSDK documentation, inspected 2026-11-16; narrower implementation details are supported by local source receipts.",
+      "supports": "Official source describes Neuropixels spike-sorted NWB, stimulus and state metadata, quality limitations and incompatible old NWB versions; optical measurements are a separate modality."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result for this task is established by the reviewed source. Source construction and generated engineering checks do not establish authentic performance.",
+    "excluded_claims": [
+      "New-mouse prediction without unit alignment/calibration",
+      "Optical-calcium and spike metric pooling",
+      "Causal arousal effects",
+      "Native NWB authenticity established by matching declared hashes"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Recognized working construction scorer rather than stale not_implemented label.",
+      "Made valid exposure, undefined outcomes and same-unit family transfer explicit; identified absent stimulus content and competent reference."
+    ],
+    "source_review": "Inspected historical registration and actual task-local preparation/scorer/protocol source. Primary dataset identities checked against author abstracts or official AllenSDK documentation. No authentic recordings, held labels, fitting or model campaign in this revision."
+  },
+  "observation_contract": {
+    "inputs": [
+      "Training rows with integer counts and valid exposure; query rows omit counts and include session/unit/presentation key, mouse, family, condition ID and time.",
+      "Allowed numeric/null stimulus attributes:orientation, contrast, spatial_frequency, temporal_frequency, phase, frame, color; no image/movie pixels are delivered.",
+      "Pre-onset running and pupil summaries plus coverage; no future-state interpolation."
+    ],
+    "forbidden_inputs": [
+      "Query spike counts, raw source bundle, whole-session firing rates and precomputed tuning/state tables.",
+      "Future pupil or incomplete running intervals extending beyond onset.",
+      "Target-dependent unit/presentation exclusion or omitted held-family repeats."
+    ],
+    "case_identity": "Every public/prediction row has exact[session_id, unit_id, presentation_id]. A frozen protocol supplies complete mouse/session/unit/presentation roster and table digest; no authentic current case roster is established.",
+    "split": "All presentations of each frozen heldout family are query within each calibrated unit; other-family calibration rows within the symmetric temporal guard are purged. Conditions cannot cross families or splits. Same units must retain training exposure and every held family.",
+    "coverage": "Complete selected export roster is required. Zero-exposure presentations are audited; selected units lacking calibration or held-family support cause failure. Actual complete native roster/presentation coverage is not proved by self-declared JSON."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Mouse-macro held-out Poisson bits per spike relative to train-rate control",
+      "direction": "higher",
+      "aggregation": "Sum y*(log(r)-log(r0))-exposure*(r-r0) and target spikes within each mouse; divide by spikes*log(2), then weight mice equally.",
+      "rationale": "Scores rates against genuine held-out count data with correct exposure and avoids neuron/trial pseudoreplication."
+    },
+    "secondary": [
+      "Same metric separately for each held stimulus family.",
+      "Comparison with train-only running/pupil shrinkage-cell control.",
+      "Complete exclusion, missing-state, zero-rate and zero-spike dispositions; proposed calibration diagnostics would be additional metrics."
+    ],
+    "comparators": [
+      {
+        "name": "Train-only mean rate",
+        "inputs": "Training counts and valid exposure for each session/unit.",
+        "procedure": "Implemented rate=total calibration spikes/total calibration exposure; whole-session SDK firing_rate is forbidden."
+      },
+      {
+        "name": "Train-only running/pupil control",
+        "inputs": "Training state summaries and counts, query pre-onset state.",
+        "procedure": "Implemented train median low/high/missing state cells; cell rate shrunk toward train mean by frozen positive prior seconds; unseen cells fall back to mean."
+      },
+      {
+        "name": "Stimulus-transfer reference",
+        "inputs": "Same permitted training families, query stimulus representation and state.",
+        "procedure": "A competent signal-derived response model must be selected and frozen on permitted development data. No qualified such reference is delivered; nuisance controls alone cannot establish stimulus-transfer competence."
+      }
+    ],
+    "nuisance_controls": [
+      "Union-subtract invalid neural intervals from both spikes and exposure with half-open counts; invalid-stimulus closed-overlap invalidates whole presentation.",
+      "Freeze full repeat/condition roster and stimulus-family guards before outcomes.",
+      "Explicit past-state coverage and missing eye data without dropping affected observations.",
+      "Audit retrospective sorting/QC and complete native stimulus representation; no calcium substitution."
+    ],
+    "uncertainty": "Implemented 95% percentile bootstrap resamples complete mouse scores only when at least 2 mice and a finite estimand exist; 1000 draws and recorded seed by default. It does not make the selected mice representative or certify transfer.",
+    "failure_policy": "Require every exact query key once with finite nonnegative rate. Zero held-out spikes or zero train rate with positive target leave the full macro endpoint undefined; zero candidate rate with positive target yields explicit negative_infinity. No epsilon or silent mouse dropping."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-091/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-091/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-091/docs/initial-evaluator-v1.md",
+      "benchmarks/neural/NEURAL-091/implementations/initial-evaluator-v1/COMPONENT_SOURCE.json"
+    ],
+    "scorer_target": "Genuine protected neural count prediction, not source-paper table reconstruction. A separate trusted native adapter must establish those counts are authentic.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Standard-library JSON-export preparation, controls and scorer with generated engineering controls. It neither reads NWB nor authenticates declared recording bytes.",
+    "missing": [
+      "Exact native cohort/clock/QC/invalid-interval/pupil mapping and complete source byte verification.",
+      "Stimulus content sufficient for the selected family transfer and a competent frozen reference.",
+      "Protected candidate execution and genuine complete-cohort controls."
+    ],
+    "execution_evidence": "Documented generated checks exercise exposure, keys, guards, missing state and CLI; no authentic cohort/reference execution is established."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Direct quantitative prediction could use calibration counts and allowed stimulus/state tables; a screenshot of spikes would reveal the target and changes the encoding task.",
+      "boundary": "Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No bounded direct-response representation, participant transport or complete response collection is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme.",
+      "boundary": "No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer or viewer-model evaluation for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical analysis could fit/calibrate on public training rows and predict query rates.",
+      "boundary": "Public/private files are an interface, not a sandbox; query counts/source bundle must remain unavailable and any model tools must be matched.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No protected adaptive participant transport or per-case episode budget."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The scorer accepts predictions and supplies fixed controls; a general frozen candidate fit/inference lifecycle is not delivered.",
+      "boundary": "Freeze candidate and fit recipe before query; preserve the complete keyed cohort and pre-outcome eligibility.",
+      "evidence_ids": [
+        "evaluator",
+        "interface"
+      ],
+      "missing": [
+        "Candidate lifecycle and authenticated native input/operator execution."
+      ]
+    }
+  }
+}

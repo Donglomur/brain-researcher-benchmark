@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Every measured registered-cell calcium trajectory in every two-second target-condition trial at61 movement-end times0:0.05:3 s.
+
+**Source delivery:** partial\_delivery. The projection, measured-calcium scorer, analytic comparisons and frozen-program executor source cover a declared complete registration domain. Both source MAT parts and authenticated full pair/cell/clock census remain absent. Prediction of true held-out responses is legitimate; this is not source-figure reconstruction or direct interpretation evidence.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential direct reading of source calibration trajectories and complete target prediction grids; no no-tools context or collector exists. Target condition supplies planned context/identities only, never measured query traces. | Bounded direct representation and complete numerical response protocol. |
+| Typed viewer | not\_delivered | A typed viewer could render permitted one-second calibration traces, not hidden two-second responses; none is implemented. Rendering cannot change observation budget or reveal private target-condition signals. | Renderer, action audit and same target-response collector. |
+| Tool assisted | not\_delivered | Current accepted executor is a globally frozen programme, not a case-adaptive investigator. Any future per-case mode must preserve same source-only calibration, complete cohort and no target feedback. | Explicit case-adaptive protocol and matched compute/tool transport. |
+| Frozen program | source\_available | Portable frozen programme executor plus measured-calcium scorer over complete supplied cohort. Freeze source/environment before target query; candidate only public source NPZ/manifest, producer closure before target load. | Authentic input, native sandbox/image/resources and independent observer qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 21521 bytes; SHA-256 `38cf1d0fa45b98a6dd0a886e52ab5ef3de53af56e0becc2f697c3ab8f4ff170a`.
+- Specification identity: 22883 bytes; SHA-256 `c6a5a538d045e79da1bf4854b7b29c53e49f9d5b061af94ec27a1a81874d1ff2`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

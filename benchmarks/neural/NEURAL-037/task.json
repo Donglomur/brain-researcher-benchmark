@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-037",
   "track": "neural",
-  "title": "Visual-opto sequence response generalization",
+  "title": "Acquisition-local held-condition calcium response prediction",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "circuit_perturbation"
   },
-  "scientific_question": "Can a response model predict held-out stimulation order and visual/opto combinations from training conditions?",
+  "scientific_question": "Within each of six source acquisitions, can the permitted eleven conditions predict the withheld ABC/CBA condition response profile better than additive/order-agnostic models?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Cell-level response trajectories for withheld trial conditions."
+    "Measured held-condition calcium response values on each acquisition’s native frame grid, aggregated only by the original declared target rule. The exact mean/trajectory reduction must be recovered from its absent scorer; test-condition means cannot be supplied as predictors."
   ],
   "input_assets": {
     "routes": [
@@ -75,19 +75,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "figure2_data.npz includes panelBC_F_abc and F_cba documented as 257 cells × 50 trials × 200 frames, plus six-experiment traces for other panels. Figure3 includes full traces and also cell × time condition summaries; those summaries are not independent trials.",
-    "allowed_context": "Stimulated/nonstimulated indices, spatial patterns, trial-order keys and ABC/CBA order. Figure3 sources distinguish visual-only, opto-only and matched/unmatched visual-plus-opto conditions.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Known frame indices and analysis windows in source; exact per-experiment frame-time/stimulation-onset contract has not been verified. Do not convert arbitrary frame indices into milliseconds or infer cross-experiment synchronization.",
-    "source_contract_evidence": "7.37 GB archive central directory (14 entries), full README, Figure2/3 notebook source and helper inspected by small ranges. Input arrays were not downloaded."
+    "inputs": [
+      "Training measurements from the eleven permitted conditions in the same acquisition, with condition/order/stimulation metadata allowed by the source task.",
+      "Acquisition-local ROI axes and native frame grids; permitted stimulus identity/history and optical power/timing descriptors."
+    ],
+    "forbidden_inputs": [
+      "Any withheld-condition response, trial average or summary computed from query observations.",
+      "Pooling different acquisition ROI indices as if they were the same cells.",
+      "Answer-bearing source-condition filenames outside the sanitized public mapping."
+    ],
+    "case_identity": "Historical declaration: six acquisitions,12 contexts,1132 original ROI rows,2264 query-ROI occurrences, native frame lengths240/240/240/240/200/200 and seven source-empty rows per order. Concrete query IDs and complete missing-row map are not distributed.",
+    "split": "Hold out the complete declared order/condition response within each acquisition; all duplicated panels from the same acquisition stay grouped. Biological train/test split awaits experiment→mouse/session map and cannot be inferred from expt1…6.",
+    "coverage": "Complete selected acquisition-local condition-means declaration only; broader single-trial visual/opto-combination and animal-transfer objective remains unimplemented. Two order conditions do not create two new cohorts."
   },
-  "biological_unit": "Archive keys expose experiment IDs, including expt1–6, but inspected manifest/README/source did not establish a complete experiment→mouse→session map or whether panel examples repeat an acquisition. Neuron/cell and panel counts are not animal counts.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Acquisition for descriptive finite results; independent animal/session mapping is unresolved, so six acquisitions cannot be asserted to be six mice.",
+  "case_definition": "One held condition for one acquisition, with ROI rows and native frames nested inside;12 contexts represent six acquisitions×two order conditions.",
   "split": {
-    "policy": "No valid biological split until experiment-to-mouse/session mapping closes; then group all panels from the same acquisition and hold out full conditions/trials.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Hold out the complete declared order/condition response within each acquisition; all duplicated panels from the same acquisition stay grouped. Biological train/test split awaits experiment→mouse/session map and cannot be inferred from expt1…6.",
+    "coverage": "Complete selected acquisition-local condition-means declaration only; broader single-trial visual/opto-combination and animal-transfer objective remains unimplemented. Two order conditions do not create two new cohorts."
   },
   "reference": {
     "source_code_url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
@@ -104,49 +109,102 @@
     "data_url": "https://zenodo.org/records/18726362"
   },
   "controls": [
-    "Additive stimulus/history baseline",
-    "equal optical power/timing",
-    "no averaged test response as input."
+    "Keep optical power, timing and stimulated/nonstimulated support matched.",
+    "Freeze exact target mean/trajectory reduction and handling of seven empty rows per order.",
+    "Prevent leakage through averaged test responses or repeated panels of the same acquisition.",
+    "Separate source-summary prediction from trial variability and physical evoked-response claims."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Normalized response RMSE, grouped by verified acquisition and animal.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "acquisition_macro_normalized_response_rmse",
+      "direction": "lower",
+      "aggregation": "Compute response RMSE on the frozen measured target support within each acquisition, normalize using training-only scale, and average acquisitions equally; retain ROI/frame support and native units.",
+      "rationale": "Measures held-condition neural prediction. Normalizer, target reduction and empty-row handling must be frozen from recovered source before use; do not reward copied published panel summaries."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Unnormalized native-unit RMSE and all per-acquisition/order errors.",
+      "Additive/order-agnostic versus sequence-aware matched model errors on identical support.",
+      "Post-onset versus baseline/artifact sensitivity only after physical timing is verified, not by relabeling arbitrary frame indices."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Training-condition mean",
+        "inputs": "Permitted same-acquisition training responses only.",
+        "procedure": "Fixed mean predictor establishes condition-independent response baseline; never average withheld condition."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Additive stimulus/history model",
+        "inputs": "Allowed stimulus components, order/history and optical-dose metadata plus training responses.",
+        "procedure": "Training-only fitted additive model with fixed regularization; same inputs/budget as richer candidate."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Sequence interaction model",
+        "inputs": "Same allowed inputs with declared sequence/order terms.",
+        "procedure": "Predict withheld order using training data only; evaluate all acquisition/order cells rather than favorable subsets."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep optical power, timing and stimulated/nonstimulated support matched.",
+      "Freeze exact target mean/trajectory reduction and handling of seven empty rows per order.",
+      "Prevent leakage through averaged test responses or repeated panels of the same acquisition.",
+      "Separate source-summary prediction from trial variability and physical evoked-response claims."
+    ],
+    "uncertainty": "Descriptive acquisition-level differences only until mouse/session independence is established.1132 ROI rows and2264 occurrences are not biological replicate counts; unknown reused acquisitions prohibit pooled animal intervals.",
+    "failure_policy": "Require complete12-context identity and defined support before private grading; preserve empty source rows as declared invalid/undefined rather than silently dropping them. Reject shape/unit/frame mismatches and nonfinite outputs. No score from the unscored producer manifest alone.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "b3a6d8944b543c1963543bf91ca68508a54254f320ca5c14b80f2095090225a8",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "22089e2d6622883a5cef93ea12fd21ea2038243211d846a259e074db73046588"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -234,6 +292,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

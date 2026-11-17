@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-091",
   "track": "neural",
-  "title": "Visual tuning prediction in Neuropixels recordings",
+  "title": "Stimulus-family response prediction for calibrated Neuropixels units",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "sensory_encoding"
   },
-  "scientific_question": "Can a response model calibrated on allowed stimuli for a mouse's recorded neurons transfer to a withheld stimulus family while accounting for state?",
+  "scientific_question": "Can a response model calibrated on allowed stimulus families predict spike counts for withheld families in the same recorded units beyond train-rate and past-state controls?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Nonnegative firing-rate predictions for held-out visual-stimulus trials in the selected Neuropixels cohort."
+    "Protected integer spike count over each eligible presentation after invalid neural intervals are removed; exposure is the remaining valid duration."
   ],
   "input_assets": {
     "routes": [
@@ -44,17 +44,25 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected input: selected Allen Visual Coding Neuropixels spikes, stimulus presentation tables and state covariates; stimuli/history are supplied to the encoder and assessment spikes stay private.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Training rows with integer counts and valid exposure; query rows omit counts and include session/unit/presentation key, mouse, family, condition ID and time.",
+      "Allowed numeric/null stimulus attributes:orientation, contrast, spatial_frequency, temporal_frequency, phase, frame, color; no image/movie pixels are delivered.",
+      "Pre-onset running and pupil summaries plus coverage; no future-state interpolation."
+    ],
+    "forbidden_inputs": [
+      "Query spike counts, raw source bundle, whole-session firing rates and precomputed tuning/state tables.",
+      "Future pupil or incomplete running intervals extending beyond onset.",
+      "Target-dependent unit/presentation exclusion or omitted held-family repeats."
+    ],
+    "case_identity": "Every public/prediction row has exact[session_id, unit_id, presentation_id]. A frozen protocol supplies complete mouse/session/unit/presentation roster and table digest; no authentic current case roster is established.",
+    "split": "All presentations of each frozen heldout family are query within each calibrated unit; other-family calibration rows within the symmetric temporal guard are purged. Conditions cannot cross families or splits. Same units must retain training exposure and every held family.",
+    "coverage": "Complete selected export roster is required. Zero-exposure presentations are audited; selected units lacking calibration or held-family support cause failure. Actual complete native roster/presentation coverage is not proved by self-declared JSON."
   },
-  "biological_unit": "mouse; sessions and repeated stimuli grouped",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Mouse; units, presentations and repeated stimuli are nested dependent observations.",
+  "case_definition": "Exact session/unit/presentation keyed observation with positive valid exposure.",
   "split": {
-    "policy": "Initial contract: within-mouse/neuron stimulus-family holdout with repeated-stimulus and temporal guards, followed by mouse-macro aggregation. New-mouse prediction needs a separate unit-feature/alignment or allowed-calibration contract; neurons have no automatic correspondence across mice.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "All presentations of each frozen heldout family are query within each calibrated unit; other-family calibration rows within the symmetric temporal guard are purged. Conditions cannot cross families or splits. Same units must retain training exposure and every held family.",
+    "coverage": "Complete selected export roster is required. Zero-exposure presentations are audited; selected units lacking calibration or held-family support cause failure. Actual complete native roster/presentation coverage is not proved by self-declared JSON."
   },
   "reference": {
     "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
@@ -66,38 +74,106 @@
     "data_url": "https://brain-map.org/our-research/circuits-behavior/visual-coding"
   },
   "controls": [
-    "Running/pupil and mean-rate baselines",
-    "repeat grouping",
-    "fixed stimulus-family holdout",
-    "no modality pooling of unlike metrics."
+    "Union-subtract invalid neural intervals from both spikes and exposure with half-open counts; invalid-stimulus closed-overlap invalidates whole presentation.",
+    "Freeze full repeat/condition roster and stimulus-family guards before outcomes.",
+    "Explicit past-state coverage and missing eye data without dropping affected observations.",
+    "Audit retrospective sorting/QC and complete native stimulus representation; no calcium substitution."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Direct quantitative prediction could use calibration counts and allowed stimulus/state tables; a screenshot of spikes would reveal the target and changes the encoding task.",
+      "boundary": "Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No bounded direct-response representation, participant transport or complete response collection is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme.",
+      "boundary": "No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer or viewer-model evaluation for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical analysis could fit/calibrate on public training rows and predict query rates.",
+      "boundary": "Public/private files are an interface, not a sandbox; query counts/source bundle must remain unavailable and any model tools must be matched.",
+      "evidence_ids": [
+        "interface",
+        "evaluator"
+      ],
+      "missing": [
+        "No protected adaptive participant transport or per-case episode budget."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The scorer accepts predictions and supplies fixed controls; a general frozen candidate fit/inference lifecycle is not delivered.",
+      "boundary": "Freeze candidate and fit recipe before query; preserve the complete keyed cohort and pre-outcome eligibility.",
+      "evidence_ids": [
+        "evaluator",
+        "interface"
+      ],
+      "missing": [
+        "Candidate lifecycle and authenticated native input/operator execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro held-out Poisson bits per spike relative to training-rate baseline; report stimulus-family breakdown.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Mouse-macro held-out Poisson bits per spike relative to train-rate control",
+      "direction": "higher",
+      "aggregation": "Sum y*(log(r)-log(r0))-exposure*(r-r0) and target spikes within each mouse; divide by spikes*log(2), then weight mice equally.",
+      "rationale": "Scores rates against genuine held-out count data with correct exposure and avoids neuron/trial pseudoreplication."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Same metric separately for each held stimulus family.",
+      "Comparison with train-only running/pupil shrinkage-cell control.",
+      "Complete exclusion, missing-state, zero-rate and zero-spike dispositions; proposed calibration diagnostics would be additional metrics."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Train-only mean rate",
+        "inputs": "Training counts and valid exposure for each session/unit.",
+        "procedure": "Implemented rate=total calibration spikes/total calibration exposure; whole-session SDK firing_rate is forbidden."
+      },
+      {
+        "name": "Train-only running/pupil control",
+        "inputs": "Training state summaries and counts, query pre-onset state.",
+        "procedure": "Implemented train median low/high/missing state cells; cell rate shrunk toward train mean by frozen positive prior seconds; unseen cells fall back to mean."
+      },
+      {
+        "name": "Stimulus-transfer reference",
+        "inputs": "Same permitted training families, query stimulus representation and state.",
+        "procedure": "A competent signal-derived response model must be selected and frozen on permitted development data. No qualified such reference is delivered; nuisance controls alone cannot establish stimulus-transfer competence."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Union-subtract invalid neural intervals from both spikes and exposure with half-open counts; invalid-stimulus closed-overlap invalidates whole presentation.",
+      "Freeze full repeat/condition roster and stimulus-family guards before outcomes.",
+      "Explicit past-state coverage and missing eye data without dropping affected observations.",
+      "Audit retrospective sorting/QC and complete native stimulus representation; no calcium substitution."
+    ],
+    "uncertainty": "Implemented 95% percentile bootstrap resamples complete mouse scores only when at least 2 mice and a finite estimand exist; 1000 draws and recorded seed by default. It does not make the selected mice representative or certify transfer.",
+    "failure_policy": "Require every exact query key once with finite nonnegative rate. Zero held-out spikes or zero train rate with positive target leave the full macro endpoint undefined; zero candidate rate with positive target yields explicit negative_infinity. No epsilon or silent mouse dropping.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "2f82cf77d0244934dfcfb72471aa05b25d75955471b94779218267658f276bc2",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "b42c6803c1aede42efe4f65e422494247b355b2dd2799e5817ef61d759cc2445"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -231,6 +307,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

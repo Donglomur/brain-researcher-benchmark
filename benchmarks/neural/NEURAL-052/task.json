@@ -16,11 +16,11 @@
     ],
     "task_family": "visual_representations"
   },
-  "scientific_question": "Do animacy and size relationships differ across ROIs after image features and response reliability are controlled?",
+  "scientific_question": "On the declared public three-person panel, what cross-validated incremental relationship do animacy/size norms have with independently selected visual-ROI responses beyond fixed image-feature controls?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "ROI-specific representational/encoding contrasts with held-out images."
+    "Recomputed participant/ROI cross-validated variance contrasts from the permitted measurements and fixed model/fold definitions, including null or negative effects."
   ],
   "input_assets": {
     "routes": [
@@ -89,19 +89,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Single-trial voxel response tables: rows voxels, columns trials; raw BOLD NIfTI alternative",
-    "allowed_context": "Actual BIDS event table inspected: onset,duration,trial_type,category_nr,exemplar_nr,test_image_nr,things_category_nr,things_exemplar_nr,response_time,file_path. Response table stimulus metadata include concept,image filename,trial type,run,session.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "BIDS events onset in seconds; single-trial estimates aligned to stimulus metadata by trial index, which must be asserted when preparing packet.",
-    "source_contract_evidence": "Actual source manifest, first event-table rows, derivative sidecar, and pinned usage notebook. Figshare names match notebook; OpenNeuro derivative filenames differ."
+    "inputs": [
+      "Declared 1,200 response/property rows per person, all three people, selected ROI response matrices, image features and property norms.",
+      "Public split definitions for 15 folds per person and all four fixed comparison models, once recovered."
+    ],
+    "forbidden_inputs": [
+      "No future hidden evaluation packet may be inferred from this public-input design.",
+      "Answer-key effect tables or scorer-produced contrast values cannot substitute for independently computed participant artifacts."
+    ],
+    "case_identity": "The manifest identifies people 01,02,03 and 1,200 rows/person; exact row, concept and ROI identifiers are not present in the delivered manifest.",
+    "split": "Declared 15 folds/person must be recovered and checked for concept/repetition grouping. Since all outcomes are intentionally public, distinguish cross-validation inside the submitted analysis from a genuinely held-out evaluation of the analyst.",
+    "coverage": "Declared 3,600 rows, four fixed models and 1,000 shared concept draws across three people; no complete numerical source or authentic execution accompanies these counts."
   },
-  "biological_unit": "3 participant IDs,12 sessions each per archive; within-person native voxel spaces",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Three people; shared concepts and within-person ROIs are crossed/dependent support.",
+  "case_definition": "A complete per-person public-response investigation with all ROI/contrast outputs.",
   "split": {
-    "policy": "Group image identity/exemplars and repeated presentations; whole runs/sessions; participant-specific native voxel models with three-person descriptive aggregation.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Declared 15 folds/person must be recovered and checked for concept/repetition grouping. Since all outcomes are intentionally public, distinguish cross-validation inside the submitted analysis from a genuinely held-out evaluation of the analyst.",
+    "coverage": "Declared 3,600 rows, four fixed models and 1,000 shared concept draws across three people; no complete numerical source or authentic execution accompanies these counts."
   },
   "reference": {
     "source_code_url": "https://github.com/ViCCo-Group/THINGS-data",
@@ -116,50 +120,91 @@
     "data_url": "https://openneuro.org/datasets/ds004192"
   },
   "controls": [
-    "Low-level image features",
-    "reliability matching",
-    "independent ROI selection",
-    "concept-grouped resampling."
+    "Independent ROI definition and training-only reliability matching.",
+    "Freeze property transformations and low-level image representation before reading effects.",
+    "Preserve all folds and null/negative results; prohibit selective ROI/concept deletion."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed supplied ROI effect/response displays with numerical questions",
+      "boundary": "All-public scientific investigation; exact numerical evidence must remain distinguishable from source text copying.",
+      "evidence_ids": [],
+      "missing": [
+        "Define direct question answers independently of the original paper conclusion."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed ROI/image/response visual inspection",
+      "boundary": "All-public scientific investigation; exact numerical evidence must remain distinguishable from source text copying.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement audited plot provenance and restricted typed actions."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Full-public analysis is suitable for numerical investigation",
+      "boundary": "All-public scientific investigation; exact numerical evidence must remain distinguishable from source text copying.",
+      "evidence_ids": [],
+      "missing": [
+        "Publish actual numerical data interface and recomputation scorer."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest specifies one frozen source and two reports",
+      "boundary": "All-public scientific investigation; exact numerical evidence must remain distinguishable from source text copying.",
+      "evidence_ids": [],
+      "missing": [
+        "Publish its named source and grade numerical values, not only support metadata."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out incremental variance and participant-level contrast agreement.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "Absolute error in independently recomputed held-out incremental variance contrasts",
+      "direction": "lower",
+      "aggregation": "Report each ROI/property contrast for every person, then equal-person average within each prespecified contrast; retain signed biological effect separately.",
+      "rationale": "For an all-public investigation, correctness is faithful recomputation, not rewarding a desired biological conclusion or overstating predictive generalization."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Signed property-minus-image-control variance gain and all fold denominators.",
+      "Independent review of uncertainty, nuisance adequacy and limitations; do not combine with arithmetic score until a reasoning rubric is qualified."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Fixed image-feature-only model",
+        "inputs": "Prespecified image features and training-fold responses",
+        "procedure": "Proposed independent nuisance fit using the recovered four-model protocol."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Image plus property model",
+        "inputs": "Identical folds/responses plus animacy/size norms",
+        "procedure": "Proposed independent augmented fit with training-only scaling/regularization."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Concept-label permutation",
+        "inputs": "Whole concept groups, preserving within-concept rows",
+        "procedure": "Proposed negative control refit under identical fold and ROI selection rules."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Independent ROI definition and training-only reliability matching.",
+      "Freeze property transformations and low-level image representation before reading effects.",
+      "Preserve all folds and null/negative results; prohibit selective ROI/concept deletion."
+    ],
+    "uncertainty": "Preserve paired-person effects and jointly resample shared concepts across people; three-person uncertainty is descriptive and not broad population evidence.",
+    "failure_policy": "Require all prescribed numerical/model outputs and methods; public schema admission alone does not grade their values. Missing or contradictory contrast support makes that complete investigation unscorable.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a9a1e6cd8445aa7f59246ee0fb0a69d7442940296e5e0bce6fe8c013d64e585b",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "e5b3fa37d1e7aff949f8154023c693de4e3700319bc0eb4f71473d4adc918db2"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -240,6 +285,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

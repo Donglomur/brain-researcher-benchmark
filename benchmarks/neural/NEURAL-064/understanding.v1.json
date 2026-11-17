@@ -1,0 +1,241 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-064",
+  "title": "Predictive novelty contrasts with pre-state matching and explicit support limits",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The snapshot contains support/matching and reference-composition code, but its native source reader, response/statistical core and execution owners are omitted; operational routes explicitly refuse. The defensible target is held-mouse FIRST-versus-REPEAT response prediction under measured pre-state/history matching, with outcomes as a separate sensitivity. Exact lifetime exposure and causal novelty are not identified by the supplied variables.",
+  "scientific_target": {
+    "question": "On source-supported new-image pairs in held-out mice, does exposure phase improve calcium-response prediction beyond measured pre-stimulus state and within-session image history, and can the observed FIRST-minus-REPEAT contrast be recovered without imposing its sign?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Protected source-derived matched response values and signed per-mouse FIRST-minus-REPEAT contrasts, together with exact catalogue/support/exclusion counts. The true contrast can be zero, negative, positive or unavailable; a favored novelty narrative is not ground truth.",
+    "answer_origin": "Versioned Allen Visual Behavior NWB dF/F plus source event/registration metadata. Full native response/statistical producers are omitted from the public snapshot, so actual target values/support remain unresolved.",
+    "case_unit": "Matched mouse/container/image/change/pre-state/history pair across FIRST (Novel 1) and REPEAT (Novel >1); events and registered cells are nested. A complete investigation also returns catalogue and secondary-panel support evidence.",
+    "independent_unit": "Mouse, with all repeated sessions, containers, cells, pairs and both analysis policies retained together.",
+    "inference_scope": "Observational held-mouse prediction and matched descriptive contrasts conditional on observed support. Familiar versus Novel is not equivalent to FIRST versus REPEAT; within-session presentation count is not exact lifetime image exposure.",
+    "exclusions": [
+      "A causal novelty effect from matching, temporal order or predictive gain alone.",
+      "Matching on post-stimulus outcomes as the primary total novelty estimand.",
+      "Zero support inferred from missing catalogue/projection, or exact exposure inferred from session-level image-set exposure."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "NUISANCE: cell type, image set/identity, area, depth, change, pre-running value/bin, pre-pupil quartile and within-session prior same-image count/bin. JOINT adds exposure phase only.",
+      "Pre-state windows [-0.5,0) seconds; running in cm/s, blink-masked pupil area, at least 80% finite samples and clock gaps at most 0.1 s. Pupil ranks use target-free full-session eligible rows, explicitly transductive.",
+      "FIT/validation observations and support metadata under declared roles; source metadata can establish support but does not expose query response values. Eight native post-stimulus trial flags are permitted only in the separately named outcome-conditioned sensitivity."
+    ],
+    "forbidden_inputs": [
+      "Query dF/F responses, targets/reference predictions, or target-derived preprocessing.",
+      "Mouse/experiment/session ID, date/order, source paths and native current-session novelty as predictive nuisance fields; they remain joins/support evidence.",
+      "Unknown lifetime counts treated as known or missing-to-missing matching used as support.",
+      "Query category learning, query refitting/model choice and post-stimulus outcomes in the pre-state primary."
+    ],
+    "case_identity": "Source event keys combine experiment/table/native presentation identity; behavioral identities deduplicate simultaneous imaging planes. Matched cases and query bindings require the missing original membership/native producers; no authentic final ID list is supplied.",
+    "split": "Secondary source declares 80 mice, 204 containers and 475 experiments with original 55 FIT/11 validation/14 query mouse roles. These are source declarations, not verified membership. Preserve original assignments rather than inventing a new split; no validation refit and no query selection.",
+    "coverage": "Full catalogue support obligation retains all declared 107 mice/703 sessions/1,936 experiment planes and all source conditions; the secondary matched panel is separately declared. Every retained/excluded source event and reason must reconcile with the complete table census. Missing membership/projection yields null, not a zero or an observed-prefix success."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "held-mouse new-image JOINT normalized RMSE",
+      "direction": "lower",
+      "aggregation": "Equal mouse normalized error on the complete intended new-image matched panel using FIT-only weighted response SD. Report the evaluator-owned nuisance error minus JOINT error as a companion higher-is-better gain; no partial denominator.",
+      "rationale": "Tests prediction of measured responses while preventing a candidate from weakening its own nuisance baseline. The predictive endpoint is separate from source-count reconstruction and explanatory wording."
+    },
+    "secondary": [
+      "Fixed-nuisance-reference NRMSE minus JOINT NRMSE, with higher positive reduction indicating better prediction; the validation-selected evaluator comparator and identical intended query denominator are mandatory.",
+      "Signed observed/predicted FIRST-minus-REPEAT contrast per mouse and equal-mouse by cell type; absolute contrast error with no preferred biological sign.",
+      "Already-familiar-image control subset, unknown-first-image support dispositions and outcome-conditioned sensitivity, reported separately.",
+      "Exact source-derived catalogue/secondary support, overlap, event partition and exclusion-count agreement; label agreement with scripted interpretation phrases is only a consistency check."
+    ],
+    "comparators": [
+      {
+        "name": "evaluator-owned hierarchical mean",
+        "inputs": "Same permitted FIT nuisance covariates (and phase only in JOINT); outcome flags only in sensitivity.",
+        "procedure": "Implemented unexecuted weighted categorical hierarchy/fallback. Fit on all supported FIT pairs; primary validation error and scale use the new-image subset."
+      },
+      {
+        "name": "evaluator-owned HGB",
+        "inputs": "Same permitted inputs and hierarchical FIT weights, with FIT-only category vocabulary/medians/missingness handling.",
+        "procedure": "Four fixed HGBRegressor settings: leaves 15/31 × l2 0/1; 200 iterations, learning_rate=0.1, min_samples_leaf=20, early_stopping=False, random_state=127. Whole-mouse validation chooses setting, no refit."
+      },
+      {
+        "name": "frozen nuisance selection",
+        "inputs": "Validation errors of hierarchy and selected HGB nuisance arms.",
+        "procedure": "Choose smaller validation NRMSE, hierarchy wins ties; evaluator freezes the comparator before query. Candidate NUISANCE outputs remain descriptive and cannot set primary gain."
+      }
+    ],
+    "nuisance_controls": [
+      "Primary matching uses pre-state and within-session history; all eight post-stimulus outcome flags move to a separately conditioned sensitivity to avoid silently changing the estimand.",
+      "Distinguish exact lifetime, session-order and relaxed within-session support profiles; missing required fields never create overlap.",
+      "Native FIRST image novelty defines new-image subset; G/H familiar images remain controls, not presumed novel.",
+      "Disclose full-session pupil-rank transduction, whole-record QC and registered-cell survival selection; these prevent online or causal interpretation."
+    ],
+    "uncertainty": "No superiority threshold, confirmatory interval or multiplicity plan is selected. Any future interval must resample whole mice, retain both policies/all nested data, respect cell-type strata and reference selection, and account for multiple support profiles and contrasts. Current descriptive source design cannot establish significance.",
+    "failure_policy": "Every planned supported case must have finite JOINT/NUISANCE outputs with exact IDs/query binding. Unknown catalogue membership, missing source projection, unsupported required mouse/pair, unknown new-image denominator or invalid FIT scale makes primary result null. Retained/excluded identities must be disjoint and exhaustive; failure preserves all missingness rather than scoring a favorable subset."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-064/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/README.md",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/public/PROTOCOL.md",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/design.py",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/native_projection.py",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/evidence.py",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/native_references.py",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/lifecycle.py",
+      "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/investigation_driver.py"
+    ],
+    "scorer_target": "The included consumer compares submitted support tables to protected source-derived tables and predicts held neural response values/contrasts through an external statistical core. Its scripted interpretation-string checks are not sufficient scientific evidence. The public package lacks that core and cannot compute a complete native score.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Inactive partial snapshot: 15 local programme modules and three interface documents. Twenty-one inherited files, including original NWB reader/statistical core, are omitted pending provenance review. Operational methods require missing native producers.",
+    "missing": [
+      "Recover and authenticate original membership, native reader/response/statistical core and redistribution provenance.",
+      "Project complete event/support populations and separately identify exact-lifetime exposure availability without inventing counts.",
+      "Fit/validate fixed references and establish intended support/denominators before query inference.",
+      "Supply isolated participant/target owners and a measured full resource budget; define a confirmatory uncertainty plan only before outcomes."
+    ],
+    "execution_evidence": "Source constructors and consumers are explicitly unexecuted on scientific data; lifecycle.require_native_producers unconditionally raises. No native data, fitted references, protected labels or scientific results were accessed by this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The complete target is a multi-mouse matched-support and held-response investigation, not one locally visible waveform label.",
+      "boundary": "A small direct plot/question would change the statistical target and cannot replace the full support/prediction endpoint.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-5"
+      ],
+      "missing": [
+        "A separately justified interpretation condition would need its own known-answer case definition while preserving this investigation as the registered objective."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Possible inspection of measured response/support plots within an investigation; no typed renderer or full statistical backend is supplied.",
+      "boundary": "Visual inspection can support interpretation but cannot prove complete matching, quantify omitted rows or replace protected numerical scoring.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-5"
+      ],
+      "missing": [
+        "Complete statistical/source closure, then define auditable plot tools without exposing held responses."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Partial source composes support analysis, paired prediction products and an explanatory report; no actual live investigator transport/native core exists.",
+      "boundary": "Candidate report is retained, while protected source tables and predictions independently assess claims; access/resource equality and target isolation require missing owners.",
+      "evidence_ids": [
+        "implementation-5",
+        "implementation-8"
+      ],
+      "missing": [
+        "Restore native core/producers and implement actual per-case tool transport with protected quantitative evaluation."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Fixed reference recipes and prospective candidate model outputs exist as source; no complete participant frozen-programme execution route is delivered.",
+      "boundary": "Freeze model family, FIT/validation selection and all preprocessing before query; maximum five FIT attempts per arm is a design declaration, not runtime enforcement.",
+      "evidence_ids": [
+        "implementation-6",
+        "implementation-7"
+      ],
+      "missing": [
+        "Complete native code/ownership closure and enforce fit/selection/candidate budgets before running any programme."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/historical/task.pre-understanding.v1.json",
+      "sha256": "28cd94440bd140ac8d4787abaa7eee5b7c26252ff9a94e74357118f816b5d1aa",
+      "supports": "Preserved registered scientific question and source provenance before this revision."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/README.md",
+      "sha256": "ddfe51268f1d4796871f57c7037036f2be47e37078f9cc794e3074717d1604cb",
+      "supports": "Inactive partial source, omitted statistical/NWB core and missing native runtime."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/public/PROTOCOL.md",
+      "sha256": "f0275b96ca542fb9719b46f6bb96d4447fb8acebc98b4df09c12248de9a69532",
+      "supports": "Pre-state primary versus outcome-conditioned sensitivity, matching, support, fixed references and causal limitations."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/design.py",
+      "sha256": "865221827d41434d90c34fffd971f40e921867e5732281d354c7d03d1f065401",
+      "supports": "Declared complete catalogue and secondary-panel/split counts; exact nuisance fields and HGB grid."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/native_projection.py",
+      "sha256": "129482530e7e199828eed825820deefe05dca19771683fceae4baac1637fe181",
+      "supports": "Original-cell join, units, pre-state windows, exact-history availability and full-session pupil rank transduction."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/evidence.py",
+      "sha256": "54880d79639fa9b99222dfcb44b569f7fca63ba9683d7c1737e8d9aa9ee2e33e",
+      "supports": "Quantitative support agreement and paired prediction consumers; no preferred contrast sign or confirmatory inference."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/native_references.py",
+      "sha256": "e05e4fdac203137f75c2c6b2e19b8ad14b8a982b89fead237edb71855e1ce6ed",
+      "supports": "Validation-selected evaluator-owned hierarchy/HGB comparator and FIT-only encoding."
+    },
+    {
+      "id": "implementation-7",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/lifecycle.py",
+      "sha256": "678b35955d52508ca5b6e635f88746285e4a71d5a57da0388c38808d6487e9fb",
+      "supports": "Operational entry points unconditionally refuse while native producers are absent."
+    },
+    {
+      "id": "implementation-8",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-064/implementations/neural-064/programme/investigation_driver.py",
+      "sha256": "50e2e8a0e4027b32ff935ef732c77750bceba13667a9ccb19605f39bee71f02e",
+      "supports": "Composition retains report but requires protected quantitative targets and missing statistical core."
+    },
+    {
+      "id": "allen-source",
+      "kind": "primary_source",
+      "url": "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html",
+      "locator": "Visual Behavior Optical Physiology datasets, 2-photon imaging during behavior, and v1.1.0 changelog; checked 2026-11-16",
+      "supports": "Official source defines repeated mouse imaging, image changes and omissions, NWB dF/F, and aligned behavior. Published imaging planes and repeated cells are nested observations, not independent mice."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "These source archives do not report a neural solver pilot for this task. The four historical neural programme attempts concern NEURAL-007/077; they do not qualify this task or any direct/viewer condition.",
+    "excluded_claims": [
+      "Causal novelty identification, positive novelty effect or significant gain from source design.",
+      "Complete runtime or direct neural interpretation from the partial metadata/matching snapshot."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace the broad causal-sounding novelty question with measurable held-mouse prediction and unsigned-evidence contrast recovery.",
+      "Keep outcomes out of the primary pre-state estimand and explicitly separate lifetime-exposure unavailability from within-session matching.",
+      "Treat support-table reconstruction and scripted interpretation labels as supporting checks, not substitutes for held neural-response performance."
+    ],
+    "source_review": "Inspected the preserved task and the named current implementation, preparation and scoring source. Checked the official AllenSDK dataset documentation; did not open authentic neural/behavioral payloads or run scientific stages."
+  }
+}

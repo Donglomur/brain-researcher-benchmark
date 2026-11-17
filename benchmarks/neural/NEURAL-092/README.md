@@ -1,19 +1,37 @@
-# Within-session neural prediction and behavioral-state investigation across visual areas
+# Within-session count prediction followed by observed state-association investigation
 
 [Neural-data understanding](../README.md) · [All benchmarks](../../README.md)
 
 - **Task ID:** `NEURAL-092`
 - **Track:** Neural-data understanding
 - **Registration:** Original canonical specification
-- **Declared specification status:** Source only inactive
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Primary:protected QUERY spike counts in drifting-grating responses. Later distinct answer:source-defined paired RUN-minus-REST and pupil-HIGH-minus-LOW rate contrasts reconstructed from legitimately observed query counts.
+
+**Source delivery:** partial\_delivery. The accepted source contains both genuine protected prediction and a later observed association reconstruction. It remains inactive: no authentic full 32 packet/profile, measured reference competence or model results. The reconstruction endpoint is narrower than broad scientific-reasoning grading.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | An observed-state table could support direct numerical investigation after prediction closure, but cannot stand in for the full protected prediction programme. Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded. | No bounded direct-response representation, participant transport or complete response collection is delivered. |
+| Typed viewer | not\_delivered | A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme. No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata. | No typed viewer or viewer-model evaluation for this task. |
+| Tool assisted | not\_delivered | The later original observed reference/scorer is numerical investigation source; an adaptive investigator with matched tools is not implemented. Observed inputs become available only after protected prediction closure; case/reset/budget and interpretation review remain to be defined. | Interactive actor/tool transport and matched tool/model ablations; semantic scientific-claim grading. |
+| Frozen program | source\_available | Full 32 precommitted candidate and five reference-family prediction programme followed by the original observed bridge. All grid fits precede selection, all selections precede refits, and all complete predictions/parameters are reread before any QUERY scoring. | Authentic packet/native profile, measured capacity and independent reference execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28642 bytes; SHA-256 `ea0daa661d0b3d8964d17a9821e17e406f143689073d5fc10bff49f5d5b73ef0`.
+- Specification identity: 33414 bytes; SHA-256 `50fd3ba87dd4cf91d2ab20f025884af6aad0b73c6c6bbad5de43990a52c33df2`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

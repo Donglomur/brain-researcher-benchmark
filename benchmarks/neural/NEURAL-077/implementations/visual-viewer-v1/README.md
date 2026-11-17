@@ -131,6 +131,13 @@ retry requests or choose a favorable answer.
 
 ## Trusted operator usage and transport boundary
 
+The additive [restricted transport](../visual-transport-v1/README.md) now
+provides raw PNG framing, complete wire capture, explicit episode limits,
+fresh participant processes, an exercised local macOS client sandbox, and
+complete400 collection through this viewer. Its local scripted controls do
+not qualify any remote model/provider or establish model performance. The
+standalone viewer CLI below still requires an operator-supplied transport.
+
 Python 3.11+ is sufficient for rendering and generated controls. The authentic
 source loader and NPZ collection also require NumPy because the reused public
 validator imports it. Under `-I`, NumPy must be installed in that interpreter or virtual environment, not only its user-site directory. Use an existing environment; no install or download is

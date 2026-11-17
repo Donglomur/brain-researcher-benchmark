@@ -1,0 +1,197 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-011",
+  "title": "Adult clinical seizure-event detection",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A within-Siena event evaluator, causal line-length and timing references are delivered as construction source. Selected complete-patient support is checked, but source authentication and full-cohort qualification are not established; CHB-to-Siena transfer belongs to NEURAL-012.",
+  "scientific_target": {
+    "question": "Can a causal EEG detector identify annotated ictal events across complete held Siena patient recordings at an acceptable observed-time false-alarm burden?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Siena recording-relative seizure intervals after explicit reconciliation of source clock annotations and native EDF start clocks.",
+    "answer_origin": "Siena 1.0.0 seizure-list files, EDF headers and patient metadata. Clock mismatches require adjudication, not silently choosing whichever origin improves scores.",
+    "case_unit": "A complete selected Siena recording with scores on its frozen output grid.",
+    "independent_unit": "PN patient identity; 41 source recordings belong to 14 people, with all files from a patient grouped.",
+    "inference_scope": "Within-Siena public-development monitoring; event scoring is a tolerant retrospective metric even if predictor context is declared causal.",
+    "exclusions": [
+      "CHB-trained cross-cohort robustness from within-Siena evaluation",
+      "Clinical utility or preictal forecasting",
+      "Clinical onset timing inferred from tolerant event coverage"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Causally computed selected genuine EEG channels in microvolts; the representative acquisition is 512 Hz with heterogeneous EEG and auxiliary channel names.",
+      "Frozen ordered EEG channel map, recording duration and elapsed time needed for the separate timing comparator."
+    ],
+    "forbidden_inputs": [
+      "EKG, SPO2, HR, marker/annotation and other auxiliary channels in neural-only arms",
+      "Held-patient labels, seizure-list clocks or future EEG",
+      "Target-dependent crop selection or threshold tuning"
+    ],
+    "case_identity": "The source inventory enumerates 41 recordings/14 PN identities; the evaluator consumes operator manifests for complete selected-patient recordings and rejects patient overlap and missing vectors.",
+    "split": "Within-Siena train/evaluation patient sets are disjoint. The current package does not automatically execute a complete 14-fold outer study; a frozen full-cohort run protocol must ensure every patient is evaluated.",
+    "coverage": "All selected patient recordings including nonseizure time are mandatory; selected-set completeness is not a claim that all 14 patients have been executed."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "patient_macro_event_f1",
+      "direction": "higher",
+      "aggregation": "Current score_manifest uses _mean_defined: equal mean over only patients whose metric is nonnull, with defined/undefined ID lists. This differs from an all-selected-person denominator. Full14 inference requires the operator to verify complete annotation support and defined endpoints for all14; otherwise report the selected defined-only result and mark the full-cohort comparison incomplete.",
+      "rationale": "Requires event coverage across complete monitoring while compulsory false-alarm and sensitivity metrics expose threshold tradeoffs."
+    },
+    "secondary": [
+      "Patient-macro event sensitivity and false alarms per 24 observed hours",
+      "Per-patient event counts, observed duration and paired difference from fixed line-length/timing references",
+      "Clock-profile sensitivity for unresolved source/header origins before one source interpretation is selected",
+      "Mandatory f1_defined_patients, f1_undefined_patients, sensitivity_undefined_patients and paired-bootstrap excluded identities alongside every denominator.",
+      "Proposed predicted-positive time fraction companion to expose long-tolerance constant/extended-event credit; current source does not emit this occupancy metric."
+    ],
+    "comparators": [
+      {
+        "name": "Causal line-length v1",
+        "inputs": "Training-only EEG and seizure annotations; test EEG without labels",
+        "procedure": "Implemented feature/threshold fit and predict source; competence awaits authentic complete patient evaluation."
+      },
+      {
+        "name": "Timing-only v1",
+        "inputs": "Elapsed monitoring time and training annotations, no EEG",
+        "procedure": "Implemented training-only nuisance comparator under the same patient split."
+      },
+      {
+        "name": "Constant detector",
+        "inputs": "Complete support with fixed probability",
+        "procedure": "Proposed degenerate detector control on complete support. Current scorer reports constant_scores and event metrics; predicted-positive occupancy is a required companion diagnostic still to implement, not a delivered output."
+      }
+    ],
+    "nuisance_controls": [
+      "Exclude all non-EEG channel roles using original header provenance.",
+      "Preserve entire observed background and record boundaries.",
+      "Resolve midnight wrapping and inconsistent clock origins explicitly; do not score unreviewed ambiguous annotations as certain.",
+      "Fit normalization and thresholds exclusively on training patients."
+    ],
+    "uncertainty": "Current paired_bootstrap includes only people with defined F1 in both arms and explicitly reports excluded IDs; fewer than two supported people yields insufficient_independent_patients. This is descriptive selected-support uncertainty. Full14 inference additionally requires independently verified complete annotations and defined paired endpoints for all14; current code does not enforce that complete-cohort criterion. Shared training and clinical selection further limit generalization.",
+    "failure_policy": "Reject patient overlap, missing recordings, nonfinite/incomplete scores and prohibited channels. Clock/source ambiguity blocks the affected scientific evaluation rather than silently dropping the file."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/siena_evaluator.py",
+      "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/reference.py",
+      "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/README.md",
+      "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/source_inventory.json"
+    ],
+    "scorer_target": "Computes event metrics from private normalized annotations and candidate score arrays. _mean_defined averages only nonnull patient metrics, reports support, and paired_bootstrap drops people with undefined F1 in either arm while listing exclusions. It checks complete selected recording vectors, not annotation completeness or an all14-person scientific denominator.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Generated engineering controls plus small source-metadata inspection; no authentic EEG/header equality or detector performance claim.",
+    "missing": [
+      "Authenticate EDF calibration/channel roles and adjudicate clock ambiguities.",
+      "Freeze complete patient folds and execute competent signal/timing references.",
+      "Provision protected participant execution and verify actual training provenance.",
+      "Independently verify complete annotations and defined paired endpoints for all14 before a full-cohort claim; expose current defined-only aggregation and bootstrap exclusions.",
+      "Implement predicted-positive occupancy and constant-detector comparisons as named prospective controls; current score_manifest emits event metrics, duration and constant_scores without occupancy."
+    ],
+    "execution_evidence": "Package documentation records generated engineering checks and small metadata inspection; no new scientific execution."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Complete continuous EEG could be interpreted directly with calibrated displays, but no no-tools full-record protocol is delivered.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Typed multichannel viewing would be suitable for interval annotation; no Siena image transport is delivered.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The evaluator and fit/predict commands are analysis tools; an interactive case-level investigator protocol and target-withholding broker are not delivered.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "reference.py supplies preselected fit/predict implementations for line-length and timing arms; a protected arbitrary-candidate runner and authentic source packet are absent.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "The inspected source supports reconstruction or fixed-reference computation; a participant condition for the revised withheld scientific target is not delivered."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/siena_evaluator.py",
+      "sha256": "de9f34b9d9399ae34210e55d39047c6ab1f4371d345c68ba15846c839d05aa16",
+      "supports": "Computes actual patient event metrics from private normalized annotations and candidate score arrays, and optionally paired comparison uncertainty; source clock parsing and causal reference code are present."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/reference.py",
+      "sha256": "15549e34fb72d1ee4976060730af3cfeeb2be6285acc72a4e661c375e3ae1340",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/README.md",
+      "sha256": "ceb6c19498583a357dc40ee7ef922dce162080bd2df199b8c28d08198b77b60e",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-011/implementations/initial-evaluator-v1/source_inventory.json",
+      "sha256": "4d4ae5ae132d851bea2a2388965dbc0b528e533b4f9cbea97e5822ab660203ea",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://physionet.org/content/siena-scalp-eeg/1.0.0/",
+      "locator": "Dataset release",
+      "supports": "Adult clinical source, patient grouping and heterogeneous channels."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.3390/pr8070846",
+      "locator": "Original data study",
+      "supports": "Original study is distinct from this prospective event-detection benchmark."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "CHB-trained cross-cohort robustness from within-Siena evaluation",
+      "Clinical utility or preictal forecasting",
+      "Clinical onset timing inferred from tolerant event coverage"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separate implemented within-cohort evaluator from unimplemented full-cohort execution and cross-cohort transfer.",
+      "Treat native clock/channel reconciliation as scientific eligibility, retaining the false-alarm denominator.",
+      "Disclose current defined-only patient aggregation and pairwise exclusions; full14 scientific support is an additional unmet qualification condition, not an enforced source property."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

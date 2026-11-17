@@ -43,6 +43,20 @@
       "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
       "locator": "RECORDINGS, FRAME_LABELS, match_iou, _aggregate and evaluate holds",
       "supports": "Current evaluator scores assembled masks/traces, emits macro-recording F1 and retains native assembly, authentic references and source-equivalence holds."
+    },
+    {
+      "id": "allen-cohort",
+      "kind": "author_code",
+      "url": "https://api.brain-map.org/api/v2/data/query.json?criteria=model::OphysExperiment,rma::criteria,[id$in501271265,501704220,524691284,531006860,603516552,604145810,607040613,669233895,671162628,679353932],rma::include,specimen(donor),targeted_structure",
+      "locator": "OphysExperiment specimen.donor.id, imaging_depth and targeted_structure for exact ten IDs",
+      "supports": "Official metadata identifies eight unique donors across ten videos; two pairs share donors and four videos are outside VISp. Preserve the original ten-video endpoint but account for donor clustering."
+    },
+    {
+      "id": "checkpoint-inspection",
+      "kind": "author_code",
+      "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Demo%20(full-version)/Pretrained%20Model/DeepCaImX_model.h5",
+      "locator": "Git blob93ae42338f0e0922621a2ac833f6fa5f4df8582d; HDF5 model_config; SHA256608bc595d52bc135748fac1226973eb85fd09f93e414762e212eef01a02ccc5c",
+      "supports": "Actual 7,316,832-byte released full checkpoint has Keras 2.9.0 graph with 400×64×64 input, 8 output neurons and valid temporal kernels 3,3,1 implying 396 trace samples under the released demo temporal convention; native output shapes were not verified. Its source identity is authenticated; equivalence to paper N=15/P=9 is unresolved."
     }
   ],
   "same_task": {
@@ -64,10 +78,11 @@
     },
     "cohort": {
       "status": "verified",
-      "description": "All ten original GCaMP6f recordings from ten mice at depths 175, 275, 375, 550 and 625 micrometres: 501271265, 501704220, 524691284, 531006860, 603516552, 604145810, 607040613, 669233895, 671162628 and 679353932. Preserve every recording, depth and annotated frame interval.",
+      "description": "All ten original GCaMP6f recordings at depths 175, 275, 375, 550 and 625 micrometres: 501271265, 501704220, 524691284, 531006860, 603516552, 604145810, 607040613, 669233895, 671162628 and 679353932. Official Allen metadata maps them to eight distinct donors: 603516552/604145810 share 593402240 and 669233895/671162628 share 657195961. Four videos are outside VISp, conflicting with the paper ten-mice/primary-visual wording. Preserve every original recording, depth and annotated frame label; do not invent replacement mice or regions.",
       "evidence_ids": [
         "paper",
-        "tree"
+        "tree",
+        "allen-cohort"
       ]
     },
     "split": {
@@ -90,11 +105,12 @@
     },
     "preprocessing": {
       "status": "unresolved",
-      "description": "Source normalizes inputs to [0,1], tiles into 64×64×400 clips with 11-pixel spatial overlap, and assembles using spatial trace-correlation and temporal footprint-IoU rules. Exact historical source checkpoint, native padding/frame conventions and reference transformations still need qualification.",
+      "description": "Source normalizes inputs to [0,1] and paper tiles 64×64×400 with 11-pixel spatial overlap. Physical movies are 512×512; original 488×488 crop origin and raw frame-label index base remain unresolved. Released full checkpoint uses 8 output neurons and 396 trace samples versus paper N=15/P=9; its actual bytes are authenticated but native/paper equivalence is not. Released trace preprocessing subtracts spatial Gaussian then bilateral filters, whereas paper describes bilateral filtering, temporal lowpass subtraction and overlap correction.",
       "evidence_ids": [
         "paper",
         "readme",
-        "legacy"
+        "legacy",
+        "checkpoint-inspection"
       ]
     },
     "metric": {
@@ -128,11 +144,12 @@
     "reproduced_author_baseline": {
       "status": "unresolved",
       "value": null,
-      "description": "Pinned full-version model and experimental preprocessing provide the author route. No authentic movie-to-mask/trace baseline replay or agreement with the original ten-video scores is established; post-assembly evaluator correctness alone is insufficient.",
+      "description": "Released full checkpoint bytes and all ten manual ROI MAT files are authenticated to author commit 305a482; source-panel-v1 converts and scores the complete segmentation reference panel. Actual checkpoint 8-neuron/396-trace graph differs from paper N=15/P=9 conventions; original physical crop/frame mapping and assembly remain unresolved. No movie-to-mask author baseline replay or reproduction of 0.847 has occurred.",
       "evidence_ids": [
         "readme",
         "tree",
-        "legacy"
+        "legacy",
+        "checkpoint-inspection"
       ]
     },
     "minimum_effect": {
@@ -145,12 +162,13 @@
     },
     "uncertainty": {
       "status": "unresolved",
-      "method": "Preregister a paired ten-video candidate-minus-author analysis preserving the depth strata and source mouse identities; choose a justified interval/test and effect threshold before final outputs are inspected.",
-      "independent_unit": "Original mouse/video; frames, tiles and ROIs are nested and must not inflate the effective sample size.",
-      "rationale": "The experimental comparison has ten videos from ten mice, with correlated structures within each. The source mean±SD is descriptive and does not by itself define a valid improvement test.",
+      "method": "Preregister a paired candidate-minus-author analysis of the fixed ten-video macro-F1 endpoint with clustering by the eight verified Allen donor IDs, preserving repeated videos per donor and depth strata; choose a justified interval/test and effect threshold before final outputs are inspected.",
+      "independent_unit": "Eight verified Allen donors support ten original videos. Two donors contribute two videos each; videos, frames, tiles and ROIs must not inflate biological replication.",
+      "rationale": "The paper states ten mice but official source IDs map to eight donors. Keep the original ten-video arithmetic mean as the estimand while using donor-aware uncertainty; descriptive video SD is not an inferential standard error.",
       "evidence_ids": [
         "paper",
-        "tree"
+        "tree",
+        "allen-cohort"
       ]
     },
     "paper_win_requires": [
@@ -175,10 +193,10 @@
     "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
   },
   "blocking_issues": [
-    "Authentic original movie/frame identity, native tiling/merge/reference transformations and exact full checkpoint not yet replay-qualified.",
+    "Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence.",
     "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
     "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
-    "Manual-reference exposure, meaningful effect, paired uncertainty, concrete access/resource budgets and full native resource cost remain unresolved."
+    "Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved."
   ],
   "legacy": {
     "role": "calibration_only",

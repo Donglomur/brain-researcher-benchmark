@@ -10,7 +10,10 @@ permissions:
   contents: read
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   invented-retina-controls:
+    needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:

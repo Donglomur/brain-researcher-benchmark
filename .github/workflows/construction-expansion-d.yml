@@ -25,7 +25,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   expansion-d-source-identities:
+    needs: source-preflight
     name: Expansion D source identities
     runs-on: ubuntu-24.04
     timeout-minutes: 3
@@ -85,7 +88,7 @@ jobs:
                   "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-020/task.json",
+                  "path": "benchmarks/neural/NEURAL-020/historical/task.pre-understanding.v1.json",
                   "bytes": 16329,
                   "sha256": "8b922ac0214da6a1cb1ca5c0320cab90aaf6dab0e51f8ce44a552b0ecfcc718a"
               },
@@ -115,7 +118,7 @@ jobs:
                   "sha256": "77ec777e0c2954240aee269e1f5e00ee70995e83c7923a44c2ae28188683cf82"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-048/task.json",
+                  "path": "benchmarks/neural/NEURAL-048/historical/task.pre-understanding.v1.json",
                   "bytes": 10712,
                   "sha256": "2d8821217a1013fd40be7b1ebc9c7ebf99ad3cc0a7f4112bbf595da34fd44bdd"
               },
@@ -150,7 +153,7 @@ jobs:
                   "sha256": "18f360dd0473a2351671731b469b032fce522d90c5edb2b032d5c0d811daa20e"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-091/task.json",
+                  "path": "benchmarks/neural/NEURAL-091/historical/task.pre-understanding.v1.json",
                   "bytes": 11330,
                   "sha256": "b42c6803c1aede42efe4f65e422494247b355b2dd2799e5817ef61d759cc2445"
               },

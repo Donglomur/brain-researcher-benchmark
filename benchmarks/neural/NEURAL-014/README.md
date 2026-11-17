@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Source phoneme sequences for every retained later-session suffix query and the paired seven-arm session PER contrasts, with reference minus candidate full-adapt PER separate from within-candidate ablations.
+
+**Source delivery:** partial\_delivery. The delivered seven-arm frozen programme and token scorer measure a genuine neural sequence target. Source-only full45 composition and generated grading controls do not establish authentic data execution, decoder competence, biological drift or direct interpretation.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | No no-tools phoneme interpretation condition is supplied. A new direct condition must declare how calibration observations fit the context and use the same withheld token target. Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity. | No delivered participant condition establishes this mode for the same scientific target. |
+| Typed viewer | not\_delivered | No typed viewer is supplied; inspecting feature plots is not equivalent to the implemented full-array GRU/CTC observation condition. Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant. | No delivered participant condition establishes this mode for the same scientific target. |
+| Tool assisted | not\_delivered | Exploratory case-adaptive agent orchestration lies outside the delivered frozen programme; tools/checkpoints and calibration access need a separate matched condition. Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query. | No delivered participant condition establishes this mode for the same scientific target. |
+| Frozen program | source\_available | Delivered fit/adapt/infer/prior ABI, one immutable candidate source and independent reference with fresh query processes; source design is not observed isolation qualification. Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases. |  |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 37914 bytes; SHA-256 `e5bfe6c3cd23f788baf1391c520bf9e1a83456359444f24d3be33be00ec96ffe`.
+- Specification identity: 42292 bytes; SHA-256 `af581b4e4c09f6b3e47f8989b21d650d7ce3dbc012a9f861fefbb8eb37c8c0f6`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

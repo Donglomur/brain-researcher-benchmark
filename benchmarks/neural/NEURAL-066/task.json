@@ -16,11 +16,11 @@
     ],
     "task_family": "typing_decode"
   },
-  "scientific_question": "Which character-decoding gains remain after sentence-template, language-prior and movement-artifact controls?",
+  "scientific_question": "How much observed-key decoding performance remains under matched timing, ocular, pre/post-window, neural-shuffle and language controls on held-person/template support, and how does case-local assistance change it?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Paired neural-only/model-tool contrasts and prespecified latency evidence."
+    "Mapped observed positive-duration keypress classes and paired per-person CER contrasts. Null or unfavorable contrasts are valid outcomes; prose agreement with a favored mechanism is not a label."
   ],
   "input_assets": {
     "routes": [
@@ -78,19 +78,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Raw MEG.FIF and BrainVision EEG .eeg/.vhdr/.vmrk",
-    "allowed_context": "MAT logs with key/RSVP events,Time,Keycode,Pressed,stim,trial_id; derived Keystroke,Word,Sentence events",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Loader aligns recording triggers to behavioral logs, including dynamic time warping of ambiguous MEG inter-event intervals; exclusions and missing matches must be recorded.",
-    "source_contract_evidence": "Parent-fetched HF API metadata/tree inspected locally; pinned loader text independently inspected; license fetched directly"
+    "inputs": [
+      "Each key has 25 nonoverlapping 20-sample means from its declared 500-ms 1000-Hz source window: NEURAL [-0.2,0.3), PRE [-0.7,-0.2), POST [0.3,0.8) seconds.",
+      "Separate EOG, training-shuffle and timing-only views; timing uses key duration, preceding onset interval and first-key indicator.",
+      "Case-scoped opaque training groups and labels, sentence/key count and ordering, declared physical channel metadata; no target-person calibration."
+    ],
+    "forbidden_inputs": [
+      "Query labels, intended sentence text, raw target hashes and source subject/template/session IDs.",
+      "Other case/arm/mode results, reference outputs, external corpora/LM APIs or evaluator feedback.",
+      "Query-fitted normalization, feature masks, weights or caches after the fresh final-fit reset."
+    ],
+    "case_identity": "78 symbolic held-person/template cases (38 MEG,40 EEG), with private operator bijection to authentic membership still required.",
+    "split": "Each query is one held alias-resolved person and template fold; training uses other same-modality people and opposite fold. Every selected sentence from both folds contributes once. Template similarity independence beyond specified grouping is not established.",
+    "coverage": "Declared full scope: 78 cases × six arms × two modes = 936 candidate episodes, 1,794 scoring contexts and 164 descriptive contrasts. Metadata declares 143 timelines/329 assets; these counts are not validated native ingestion."
   },
-  "biological_unit": "Explicit warning: different MEG subject numbers can be same person; official correction logic/spreadsheet needed before splitting. EEG test fixture20subjects is not proof of final included cohort.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Person within modality; 19 MEG and 20 EEG slots are declared source metadata, not 39 proven independent participants.",
+  "case_definition": "One modality-local held-person × template-fold case; six information arms and two access modes are nested conditions.",
   "split": {
-    "policy": "Resolve participant aliases first; then group person, sentence template and complete sessions; equal target-person calibration and no query transcripts.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Each query is one held alias-resolved person and template fold; training uses other same-modality people and opposite fold. Every selected sentence from both folds contributes once. Template similarity independence beyond specified grouping is not established.",
+    "coverage": "Declared full scope: 78 cases × six arms × two modes = 936 candidate episodes, 1,794 scoring contexts and 164 descriptive contrasts. Metadata declares 143 timelines/329 assets; these counts are not validated native ingestion."
   },
   "reference": {
     "source_code_url": "https://github.com/facebookresearch/brain2qwerty",
@@ -106,50 +112,102 @@
     "data_url": "https://huggingface.co/datasets/bcbl190626/SpanishBCBL"
   },
   "controls": [
-    "Same corpus access",
-    "neural shuffle",
-    "motor/ocular channel ablation",
-    "template grouping."
+    "Known press alignment, sentence boundary and key-count assistance must be disclosed.",
+    "MEG EOG schema unresolved; zero-padding or substituted channels cannot satisfy the intended control.",
+    "No pooled cross-modal sample size; shared templates/training constrain inferential independence.",
+    "No physiological timing claim from retrospective window comparisons."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A fixed neural observation packet with channel/time/coordinate units and the same declared calibration support, answered without execution.",
+      "boundary": "No evaluator targets, source-label lookup, other-case memory or model/numerical tools; a direct response is evaluated separately from programme results.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Authentic complete observation presentation and no-tools response collection have not been delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed navigation over the permitted neural observation, with units and calibration examples.",
+      "boundary": "Only rendered allowed observations; no raw target arrays or unrestricted filesystem/code access. A plot alone does not establish viewer execution.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Task-specific renderer/action API, complete case collection and restrictive transport are absent."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Case-local numerical/model-assisted investigation under a fixed observation and compute entitlement.",
+      "boundary": "Current query inspection may inform an allowed proposal; fit/selection remains training-only and evaluator outcomes are inaccessible. Fresh case state is required.",
+      "evidence_ids": [
+        "participant-controller"
+      ],
+      "missing": [
+        "Authentic inputs, bounded participant execution and reference competence remain unqualified."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted source, fitting/adaptation recipe and complete prediction output contract.",
+      "boundary": "Freeze before query access; equal declared calibration and no post-query selection from evaluator feedback. Programme success does not measure unaided interpretation.",
+      "evidence_ids": [
+        "participant-controller"
+      ],
+      "missing": [
+        "Exact environment, source/data joins and complete execution qualification are outstanding."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed person-level CER difference and numerical-claim verification.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "NEURAL person-macro sentence CER, separately by modality and access mode",
+      "direction": "lower",
+      "aggregation": "Pool all sentence CERs across both folds within each person, then equal persons separately for MEG and EEG. No single pooled primary scalar.",
+      "rationale": "Retains direct behavioral prediction quality; an agent cannot increase its reward by degrading its own timing or ocular comparator."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "All 164 signed paired descriptive contrasts and modality-specific reference comparisons.",
+      "Raw argmax and separately fixed LM0.5 sequence outputs; no prose-quality numerical score.",
+      "Full failure, fit and resource census; complete all-person support is required."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Fixed source-adapted neural references R0/R2",
+        "inputs": "Same case/arm training and query geometry, with training-only fitting.",
+        "procedure": "Evaluator-owned reference sources and separate fitting/inference lineage; competence remains unqualified."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Language-only R1 and fixed LM0.5",
+        "inputs": "Training-only class transition counts with Laplace smoothing; no query targets.",
+        "procedure": "Independent scoring uses deterministic argmax or fixed transition/emission decoding; no external LM access."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Timing/EOG/window/shuffle controls",
+        "inputs": "Exact six views from identical selected observations.",
+        "procedure": "Complete paired comparisons at same modality/person support; controls are mandatory and negative results retained."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Known press alignment, sentence boundary and key-count assistance must be disclosed.",
+      "MEG EOG schema unresolved; zero-padding or substituted channels cannot satisfy the intended control.",
+      "No pooled cross-modal sample size; shared templates/training constrain inferential independence.",
+      "No physiological timing claim from retrospective window comparisons."
+    ],
+    "uncertainty": "Only descriptive person SE and paired difference SE are delivered. Shared training/templates and unresolved cross-modal pairing preclude treating those as calibrated confidence intervals or p-values.",
+    "failure_policy": "Exact n_keys × 29 finite simplex outputs per sentence; missing/duplicate/extra rows, incomplete people/folds or failed independent scoring make the affected/full comparison unavailable, never available-case averaging.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "bb67064bb9e353aa71abcbfdd873dff3214e77a146e812fd9ff455951c3c455c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "cd668b1dd1fc8210918499c2994b8607ae3b3c3cd5d9f05c6d3c2bac2c76e3b4"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -230,6 +288,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

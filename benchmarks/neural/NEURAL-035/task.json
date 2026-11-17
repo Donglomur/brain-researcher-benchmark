@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-035",
   "track": "neural",
-  "title": "Astrocytic sequence reproducibility",
+  "title": "Chronological astrocytic peak-order prediction within sessions",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "glial_memory"
   },
-  "scientific_question": "Does event-order reproducibility differ between recall contexts beyond slow autocorrelation and event selection?",
+  "scientific_question": "How well does earlier processed astrocytic activity predict relative first-maximum order in later30-second blocks, and how do errors differ by recall context and phase-shift controls?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Per-mouse rank-order reproducibility contrasts and matched-surrogate distributions."
+    "For each nonconstant query cell, the sample of its first exact fluorescence maximum within the later300-sample block, reranked among that query’s target-active cells. Exact-constant cells have no ordering target; all-tied active peak times remain valid but unresolved order."
   ],
   "input_assets": {
     "routes": [
@@ -167,19 +167,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Per-animal collection objects contain accepted_traces and Timestamps; the release also includes accepted-trace CSVs and original Cell_Traces CSVs. These are astrocytic/glial calcium measurements, not neuronal spikes.",
-    "allowed_context": "Habituation, fear conditioning, context A and context B sessions; per-mouse event_times_cxta/cxtb, freezing vectors and Anymaze behavior. Context is an experimental label; event definitions must be fixed before scientific scoring.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Figure3 reads Timestamps[:traces.shape[0]] and per-animal event times, with event-aligned odd/even analyses. Context and behavior exports provide matching animal/session filenames. Units/monotonicity and trace-event range checks remain execution gates.",
-    "source_contract_evidence": "Four real-input ZIP directories, published checksums, author upstream-loading README and Figure3 source inspected. Exact collection, trace and event filenames are present; no data objects or traces loaded."
+    "inputs": [
+      "All14 opaque sessions and1012 accepted session-local cells. Four calibration blocks0–30,30–60,60–90,90–120 seconds; one validation block150–180 seconds. Each block has300 samples on the10Hz grid.",
+      "Calibration supports method development, validation selection; a frozen final method may refit all five public blocks. No amplitude-based cell subset is introduced."
+    ],
+    "forbidden_inputs": [
+      "Query traces for210–240 and270–300 seconds, peak indices, query-flat masks, surrogate targets and mouse/context mapping.",
+      "Original whole traces, NEURAL-034 fold packets and related-paper inputs that expose query outcomes.",
+      "Private feedback or source revisions between the candidate and fixed-operator comparison."
+    ],
+    "case_identity": "Source public loader requires14 unique opaque session IDs and28 unique query IDs, with every public cell in listed order. The concrete public manifest/NPZ input bodies remain external; source geometry is exact but IDs are not invented here.",
+    "split": "Within each session, calibration and validation precede queries with30-second gaps; two query blocks are separated by30 seconds. There is no held-mouse transfer split. Both complete28-query role outputs must close before protected target access.",
+    "coverage": "All selected14 sessions, seven paired mice and1012 session-local cells; two query blocks per session and99 fixed phase shifts per block. Roles and shifts are conditions, not new benchmark tasks."
   },
-  "biological_unit": "archive README names astroF*/astroM* animals and hab/fc/cxta/cxtb sessions. Inspected Figure3 explicitly selects astroF3,F5,F6,F7,F9,F10,M3,M4,M5,M9,M10 (11 mice) for a particular analysis; this is not claimed to be the full archive cohort.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Seven mice, each with two recall contexts;1012 session-local cells are nested measurements with no cross-context identity claim.",
+  "case_definition": "One later30-second query block containing all accepted session-local cells;28 blocks in14 sessions.",
   "split": {
-    "policy": "Group all habituation/conditioning/recall sessions by mouse; whole autocorrelation-separated episodes; event selection on development only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Within each session, calibration and validation precede queries with30-second gaps; two query blocks are separated by30 seconds. There is no held-mouse transfer split. Both complete28-query role outputs must close before protected target access.",
+    "coverage": "All selected14 sessions, seven paired mice and1012 session-local cells; two query blocks per session and99 fixed phase shifts per block. Roles and shifts are conditions, not new benchmark tasks."
   },
   "reference": {
     "source_code_url": "https://github.com/rsenne/dCA1_Paper",
@@ -196,50 +201,106 @@
     "data_url": "https://zenodo.org/records/21780255"
   },
   "controls": [
-    "Circular/block shifts preserving event rates",
-    "independent event selection",
-    "equal windows",
-    "animal grouping."
+    "No source activity-selected anchors: the original event pool was insufficient for the required train/query event split.",
+    "Keep all accepted cells and preserve session-local axes; do not pretend identical cell indices across contexts are registered neurons.",
+    "Prevent related-task whole-trace exposure and retain inherited whole-session preprocessing as a retrospective limitation.",
+    "Undefined blocks propagate to the complete primary; never renormalize over easier defined blocks."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "One frozen Python programme over all14 sessions from calibration/validation traces, paired with a separately sealed fixed-rank operator.",
+      "boundary": "Commit source and allowed fitting recipe before query access; no target feedback or source updates; require complete case coverage before protected grading.",
+      "evidence_ids": [
+        "participant_contract",
+        "grader",
+        "programme"
+      ],
+      "missing": [
+        "Authentic external inputs and current runtime qualification remain required.",
+        "Three original delivery/binding records absent; native grading unavailable."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed context difference and autocorrelation-preserving null calibration.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "mean_absolute_normalized_rank_error",
+      "direction": "lower",
+      "aggregation": "Rerank predicted scores and target peak indices on the identical private active-cell subset with average ties/(n_active−1); mean cells→two blocks→two contexts per mouse→seven equal mice.",
+      "rationale": "Grades held-window relative neural timing rather than paper-table reproduction. Active-subset reranking prevents a flat cell from changing another cell’s scored rank."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Fixed public-rank baseline error and signed candidate-minus-baseline error at every block/session/mouse.",
+      "Paired context-A-minus-B error for every mouse and equal-mouse mean.",
+      "99 fixed independent per-cell circular shifts (PCG64 seed35035), preserving each cyclic autocorrelation/value distribution; surrogate-mean minus observed error is descriptive.",
+      "Active/flat cell counts and distinct peak-time counts, including all-tied active targets."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Five-block mean peak-rank predictor",
+        "inputs": "Only the same four calibration blocks and one validation block.",
+        "procedure": "Existing baseline averages each cell’s normalized first-maximum rank over all five public blocks; calibration-flat/undefined blocks contribute0.5."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "All-tied ordering",
+        "inputs": "No neural ordering information.",
+        "procedure": "Valid constant0.5 scores expose the no-order baseline under the same active-subset ranking; useful construction control, not a biological claim."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Independent cell circular shifts",
+        "inputs": "Private measured query traces in the trusted grader only.",
+        "procedure": "Existing99 fixed shifts preserve per-cell cyclic autocorrelation while disrupting relative phase; never return surrogate/target bodies to participant."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "No source activity-selected anchors: the original event pool was insufficient for the required train/query event split.",
+      "Keep all accepted cells and preserve session-local axes; do not pretend identical cell indices across contexts are registered neurons.",
+      "Prevent related-task whole-trace exposure and retain inherited whole-session preprocessing as a retrospective limitation.",
+      "Undefined blocks propagate to the complete primary; never renormalize over easier defined blocks."
+    ],
+    "uncertainty": "Seven paired mouse values support descriptive between-mouse variation; cells/windows/99 surrogates are not biological replication. The delivered scorer computes no p-value; any inferential extension must freeze a mouse-level rule and dependence assumptions separately.",
+    "failure_policy": "Require every28 query ID once and one finite nonboolean score in[0,1] per listed cell, ≤2MB, no duplicate fields/extra fields. Fewer than two active target cells makes the block and complete primary undefined; do not silently drop it. Complete candidate/operator closure precedes target loading.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "ca4fed2e013cbc78922547f15dedc93158067f8cc425aa2bb81980916f3fd104",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "31e1c48c7da9407e83ebdddc5668615db5c7351fd13d6eb9ec95f69887b74056"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -327,6 +388,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

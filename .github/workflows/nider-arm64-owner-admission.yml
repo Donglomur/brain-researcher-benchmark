@@ -13,7 +13,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   nider-arm64-environment-observation:
+    needs: source-preflight
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:

@@ -12,14 +12,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Current paper-improvement objective
 
-**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
 
 **Disposition:** source\_unresolved. Source-native rebinding can use the original ordered SOM reconstruction endpoint in Extended Data Figure2c,d: lower quantization error means better representation of the original unit feature vectors. Exact published region-wise errors, source map capacity/topology and complete source-to-unit joins remain unrecovered. Figure4 enrichment and hierarchy findings remain descriptive calibration; the local held-animal energy-score task is a different task.
 
 - [Source-grounded improvement contract](improvement.v1.json)
-- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+- [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
-Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 

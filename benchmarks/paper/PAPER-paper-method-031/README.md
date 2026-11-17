@@ -12,14 +12,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Current paper-improvement objective
 
-**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
 
 **Disposition:** source\_unresolved. FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality.
 
 - [Source-grounded improvement contract](improvement.v1.json)
-- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+- [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
-Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 

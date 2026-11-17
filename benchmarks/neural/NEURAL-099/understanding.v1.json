@@ -1,0 +1,211 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-099",
+  "title": "Auditory-evoked spike or declared CSD response prediction",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established for this task by this source review. Existing programme source and version-specific engineering evidence remain separate from scientific outcomes.",
+    "excluded_claims": [
+      "Equating nominal event rates with physiological spike rates without observation/exposure verification.",
+      "Treating anatomy-only archives or seven archives as independent cohorts.",
+      "Claiming CSD or continuous LFP coverage from an uninspected NWB field or a manifest.",
+      "Inferring direct neural understanding from a frozen programme score."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separates canonical physiological region/depth prediction from the manifest’s unauthenticated nominal-event-rate scope.",
+      "Corrects source route from anatomy-only001344 to recording-bearing archive family.",
+      "Defines rate denominator, whole-animal split, anatomy/calibration leakage and response-observation requirements before any programme or direct-understanding score.",
+      "Preserves the manifest-declared animal-macro MSE primary and MAE companion while marking both unexecuted and biologically unauthenticated.",
+      "Adds the authenticated complete MGN metadata census: source-declared spike events, literal contact anatomy and clock declarations are now supported; observation coverage and the current physiological prediction endpoint remain unqualified without imposing one mandatory proof format."
+    ],
+    "source_review": "The original revision inspected public source only. This additive correction authenticates complete26-file MGN recording bytes and reads allowlisted identity/anatomy/clock metadata, without neural response arrays, private targets, solver outputs or model execution."
+  },
+  "evidence": [
+    {
+      "id": "historical_definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-099/historical/task.pre-understanding.v1.json",
+      "sha256": "96c5439446c1ed583f59d42f683ac8e6d8d2d40b823e81bdc83bf9d560e198d0",
+      "supports": "Preserved registered scientific target, source audits and unresolved scientific qualifications."
+    },
+    {
+      "id": "runtime_manifest",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/registered-runtime/manifest.json",
+      "sha256": "4090bd73c190ca6497752f8891a9f777efd5239cdd37ad2a8fca9d1e4b7c9668",
+      "supports": "Retained runtime declaration for an all-cluster nominal-rate target and26-animal scope; it does not authenticate current physiological target delivery."
+    },
+    {
+      "id": "author_source",
+      "kind": "primary_source",
+      "url": "https://github.com/KatoLabUNC/Garcia_et_al_2025",
+      "locator": "Official README, auditory-cortex layer assignment; consulted2026-11-16.",
+      "supports": "Author source uses spike distributions, CSD responses and channel correlation for layer assignment, requiring explicit response-derived-anatomy handling; scripts are not a complete NWB prediction evaluator."
+    },
+    {
+      "id": "source_metadata_inspector",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/inspect_metadata.py",
+      "sha256": "504ffbc84934f29a40e7c664265f896c2d6fa643f1b58c169e860180b610573f",
+      "supports": "Executable bounded complete-source metadata inspection; no response values or physical-rate calculation."
+    },
+    {
+      "id": "mgn_source_identities",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/SOURCES.json",
+      "sha256": "320eb843e01353ce59936393df37dd9eda1d12150f9fc9fc66f48aa968dc9966",
+      "supports": "Exact26-file versioned MGN source identities; no protected case mapping."
+    },
+    {
+      "id": "mgn_source_findings",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/SOURCE_FINDINGS.json",
+      "sha256": "d22c9ce6bc801ce1ba4682ad1e7d7d5af6d28bf02a756185331e75808a89122f",
+      "supports": "Actual complete metadata census, original schema/method interpretation, independent reviews and remaining observation/anatomy/alias gaps."
+    },
+    {
+      "id": "neural099-source-census-readme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/README.md",
+      "sha256": "05d0a60526529e7c5b2e8ac1c290ac6869b201ca4c9b3186f7e1e3462b1db7eb",
+      "supports": "Source metadata census use, literal anatomy/clock findings and limits on observation coverage."
+    }
+  ],
+  "disposition": "target_mismatch",
+  "disposition_reason": "The complete MGN source metadata now authenticates deposited spike-event identity,26 source files,2,053 clusters and literal contact anatomy. The retained runtime still declares a different all-cluster nominal-rate target. Physically justified observation exposure, anatomical denominator, exact prediction cases and executable current-target scoring remain unqualified; no target substitution or readiness promotion.",
+  "scientific_target": {
+    "question": "Can a frozen method predict auditory-evoked population spike-rate trajectories in held-out animals on verified shared anatomical regions/depth bins, using stimulus/timing alone or the same inputs plus permitted prior neural history?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Independently measured held-out response counts divided by the actual bin exposure and eligible recorded-unit denominator, in spikes/s/source-unit on a frozen region/depth schema. A CSD trajectory is a separately declared outcome with separate units, never pooled with spike-rate error.",
+    "answer_origin": "Official recording-bearing Garcia archives001419/001420/001421 and original NWB2.7.0 spike timestamps. Complete001421 metadata verifies26 files and2,053 declared source clusters, with666 anatomically unassigned; source methods and schema support deposited spike-event identity. Actual observation coverage and eligible regional denominators remain unresolved. Anatomy-only001344 does not supply the response target.",
+    "case_unit": "One complete held-animal stimulus trial with fixed response-bin and anatomical support masks; no per-unit correspondence between animals is presumed.",
+    "independent_unit": "Animal, grouping all sessions and cross-archive aliases; channels/units/trials are nested measurements.",
+    "inference_scope": "Cross-animal response prediction only after anatomy and observed exposure are verified. The present runtime manifest alone does not establish that inference; public source exposure also prevents an unseen-data claim by default.",
+    "exclusions": [
+      "Treating deposited spike-event counts as a physiologically qualified rate without justified observation exposure and eligible source-cluster denominator; the spike-event identity itself is supported by source methods and exact NWB2.7.0 semantics.",
+      "Treating anatomy-only archives or seven archives as independent cohorts.",
+      "Claiming CSD or continuous LFP coverage from an uninspected NWB field or a manifest.",
+      "Inferring direct neural understanding from a frozen programme score."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Stimulus identity and onset/timing information on whole trials, with anatomy established independently of scored responses.",
+      "An explicitly paired history condition may add only neural bins preceding the prediction boundary; use the same animals, trials, target support and resource budget as timing-only.",
+      "Training/validation response trajectories and eligible-unit/time-exposure denominators; all normalization fitted without query responses."
+    ],
+    "forbidden_inputs": [
+      "Scored response bins, future-neural leakage through filtering, query responses used to define depth/layer alignment or select responsive units.",
+      "Hidden animal aliases, source answer-bearing filenames or independent evaluator targets.",
+      "Continuous LFP, corresponding units across animals or CSD targets unless the selected release actually verifies them."
+    ],
+    "case_identity": "The historical manifest declares26 source animals,16train/5validation/5query and3222/1006/1010trials. Complete MGN file identities and unit-to-contact metadata are now authenticated by the source census, but that is not a bound current-target case roster or reconstructed private query membership. Exact physiological response cases, support and splits remain undelivered.",
+    "split": "Group every recording and verified alias of a biological animal. The primary paper confirms some sequential A1/MGN recording in the same mice, and source inventories shareHK210212 between001419/001421. Group that exact source identity if combining archives; unresolved other aliases prohibit treating archive-local counts as independent cohorts. Historical16/5/5 membership is not current-target qualification.",
+    "coverage": "One registered task with distinct timing/history access conditions. The additive source census authenticates complete26-file MGN metadata without reading response arrays; the retained runtime is a manifest. No current physiological-rate packet, exact eligible observation masks, complete scorer or candidate/reference execution is delivered."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-macro mean squared population spike-rate trajectory error (prospective physiological target; manifest-only declared metric)",
+      "direction": "lower",
+      "aggregation": "Within each held animal, average squared error over predeclared eligible trial×region/depth×time bins using fixed support; then equal animals. If spike rates are authenticated, units are (spikes/s/eligible source-unit)^2.",
+      "rationale": "Preserves the delivered manifest’s animal_macro_mse primary and animal_macro_mae companion without implying a delivered numerical scorer. The prospective physiological response definition adds required units/exposure/anatomical authentication; CSD needs a separately frozen scale and scorer."
+    },
+    "secondary": [
+      "Animal-macro mean absolute error, preserving the manifest’s animal_macro_mae companion; physiological units require the same target authentication.",
+      "Per-animal and per-region/depth error and support/coverage; retain absent anatomical bins explicitly.",
+      "Paired timing-only versus history-augmented error on the identical query universe.",
+      "Separately reported CSD error only after verified units, corresponding depth and complete exposure."
+    ],
+    "comparators": [
+      {
+        "name": "Training population mean trajectory",
+        "inputs": "Training animals only, same stimulus and frozen shared anatomical schema.",
+        "procedure": "Proposed fixed stimulus-conditioned mean response; support masks and fallback for unseen stimulus/region fixed before query."
+      },
+      {
+        "name": "Timing-only versus history regression",
+        "inputs": "Identical stimulus/timing metadata, with prior neural history added only in the declared second arm.",
+        "procedure": "Proposed fixed ridge baseline: training-only feature scaling, alpha grid [0.01,0.1,1,10,100] selected by animal-grouped validation MSE, with nonnegative output clipping fixed before query. Timing-only and history-augmented variants use identical targets and splits; this comparator must be implemented and qualified before evaluation."
+      }
+    ],
+    "nuisance_controls": [
+      "Establish complete observation windows through unit observation intervals or another authenticated continuous-recording duration, clock and unit-support bridge. An absent optional obs_intervals field alone is not disqualifying; absent events, click-pulse stops, image clocks or first/last spikes cannot substitute for coverage evidence.",
+      "Preserve the authenticated NWB2.7.0 seconds/reference-time semantics for deposited spike events. Justify acquisition-stimulus clock alignment through source-bound common-clock evidence, validated conversion or another defensible acquisition bridge; exact original converter byte parity is not mandatory. Physical observation exposure remains a separate requirement.",
+      "Use actual source unit-to-contact anatomical labels. Preserve666 blank assignments and distinguishMGv/MGd/MGm/MZMG/BIC/SG; a broadMGN probe label is insufficient. Literal contact coordinates lack a verified origin/frame and must not be automatically scaled into anatomical depth. Define eligibility without selecting on evaluation responses.",
+      "Keep trial boundaries and full filter/lag support outside scored future bins; compare recording density and missing-depth patterns across animals."
+    ],
+    "uncertainty": "Bootstrap or summarize paired errors by biological animal after cross-archive identity reconciliation; five declared query animals would limit inference even if authenticated. Do not treat1010trials or20bins as independent animal replication.",
+    "failure_policy": "Do not score until authentic case IDs, units, time exposure and target masks are bound. Require one finite trajectory per exact case/support bin; reject duplicates, omissions, extra cases and undefined normalization. Missing anatomy is declared support, not silently dropped favorable cases."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-099/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/inspect_metadata.py",
+      "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/SOURCES.json",
+      "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/SOURCE_FINDINGS.json",
+      "benchmarks/neural/NEURAL-099/implementations/source-anatomy-census-v1/README.md"
+    ],
+    "scorer_target": "No numerical scorer body is delivered. The manifest declares animal_macro_mse primary and animal_macro_mae secondary with equal weight for five query animals and every query trial/bin required. Its nominal released-event-rate title does not verify physiological rate units or the canonical region/depth trajectory target.",
+    "target_fidelity": "different_target",
+    "delivered_scope": "Historical programme registration manifest plus a complete-source metadata inspector and26-file identity pins. The inspector verifies anatomy, cluster labels and clock declarations without loading response arrays; it is not a prediction adapter, rate scorer or participant runner.",
+    "missing": [
+      "An executable physiological response preparation/scoring path with justified binwise observation exposure and eligible source-cluster denominators on fixed named anatomical support.",
+      "Defensible source-bound acquisition/stimulus clock alignment and, if physical depth is used, a verified coordinate origin/frame/transform. Original converter parity is one possible bridge, not a mandatory artifact. Unit obs_intervals are similarly one possible observation proof.",
+      "Exact current-target prediction case IDs/splits and complete paired timing/history packets; source file metadata does not instantiate query targets.",
+      "Cross-archive biological alias reconciliation beyond exact sharedHK210212 if archives are combined; IC13files/12sourceIDs versus paper13mice remains unresolved."
+    ],
+    "execution_evidence": "The complete26-file metadata-only census verifies455,615,424 existing source bytes and2,053 cluster contact assignments, without response-array reads or new recording acquisition. Fourteen generated controls pass after fixing a metadata hard-link alias. No current-target grading, model run, rate-exposure qualification or scientific promotion follows."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential numeric or plotted trial/history interpretation under a separately frozen response contract.",
+      "boundary": "No-tools condition must use the same permitted measured history and withhold target trajectory.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential region/depth/time response-history viewer; no delivered renderer.",
+      "boundary": "Typed views may show only input history and fixed anatomy, never query response arrays.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case numerical/model investigation is proposed, not supplied by the manifest.",
+      "boundary": "Keep tool/checkpoint exposure and calibration matched to the frozen-program comparison.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest describes timing/history programme conditions but refers to absent source packages.",
+      "boundary": "Declared per-view timing/history entrypoints reference absent source files; their argv and registration metadata do not supply an authenticated method freeze or complete scorer.",
+      "evidence_ids": [
+        "runtime_manifest"
+      ],
+      "missing": [
+        "No executable observation/scoring path or authenticated case packet in this checkout."
+      ]
+    }
+  }
+}

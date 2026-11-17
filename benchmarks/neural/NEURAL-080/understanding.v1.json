@@ -1,0 +1,243 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-080",
+  "title": "Video dynamics versus eye movements in EEG",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The actual source advances beyond the historical specification with a genuine controlled held-person/family target, but remains an inactive, empirically unqualified checkpoint. Preserve the older diagnostic as a distinct scope.",
+  "scientific_target": {
+    "question": "Can permitted stimulus and eye observations predict held EEG responses for excluded participant and video-family combinations, and what does the separate fixed reference panel show about incremental dynamic-video information?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Complete held original-unit EEG response arrays for each person/video case. The participant submits predicted responses; their risk and improvement over the fixed FULL decoder depend on those predictions. The nuisance_eye-minus-full contrast is an operator-computed reference diagnostic, not a participant answer or score.",
+    "answer_origin": "Evaluator-owned original-unit EEG video means requiring a complete validated EEG/eye trial join; exact source units and reference must be bound to captured metadata, not guessed.",
+    "case_unit": "One outer held participant/provenance-family-fold case;30 outer cases cover six people by five folds.",
+    "independent_unit": "Six biological participants crossed with genuine shared-source/duplicate video components; trials/channels/bins are repeated measurements.",
+    "inference_scope": "Descriptive conditional predictive contribution under a fixed exposed-development cohort and nested person/family split. Acoustic and ocular adjustment improves the comparison but does not identify a purely visual causal mechanism.",
+    "exclusions": [
+      "No pure visual, causal, clinical, SOTA or freshly sealed improvement claim.",
+      "Do not relabel the older 900 FIT/100 validation/102 query within-person diagnostic as the new person/family study.",
+      "Decoder-only aliases, four access/tool cells and reference captures are conditions, not new tasks or independent observations.",
+      "A fixed reference contrast cannot grade participant success because it is unchanged by the participant submission."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Permitted training EEG and paired static, motion, acoustic, timing, silence, eye and learned-video features; the complete target basis is 127 channels by 150 bins spanning 0..3 s in 20 ms bins.",
+      "At prediction time the held case feature rows; no held-person calibration. Full original-unit response arrays are returned."
+    ],
+    "forbidden_inputs": [
+      "Held query EEG, query-fitted target scaling/PCA, query labels for selection, noise-ceiling-guided target masks and cross-case learned state.",
+      "Semantic category labels substituted for provenance/duplicate components."
+    ],
+    "case_identity": "Source uses sub-01..sub-06 and video IDs1..1102; components/folds derive from evidence-backed donor and duplicate graph. Exact instantiated family identities remain an input-preparation obligation.",
+    "split": "Cross leave-one-person-out with five whole provenance-component folds. Each outer case contains all 20 nested person/family validation cells; transforms and 13-alpha selection use innerFIT only.",
+    "coverage": "Planned full scope is 96 recording roles,45144 retained EEG/eye-joined trials,6612 person-video pairs,30 cases and 330 captured prediction arrays plus 60 mean/sigma arrays. Source code enforces counts; this review did not verify authentic payloads."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Candidate full-response improvement over the fixed FULL decoder, reported separately for every access/tool cell",
+      "direction": "higher",
+      "aggregation": "For candidate and fixed FULL separately, compute ((Y_original - prediction_original) / sigma_outerTRAIN)^2, dividing the residual by sigma before squaring. Average equally across 127 channels and 150 bins, videos within genuine components, components, then people. The participant score is fixed FULL risk minus candidate risk.",
+      "rationale": "Depends on the submitted held response predictions and measures performance against the same frozen competent decoder. Report absolute candidate risk alongside the signed improvement. The fixed nuisance_eye-minus-full scientific contrast is a separate reference diagnostic and cannot reward a participant."
+    },
+    "secondary": [
+      "Fixed-reference scientific dynamic gain: nuisance_eye risk minus full risk; report as an operator diagnostic independent of candidate output, never as participant success.",
+      "Per-person gains, dynamic gain without eye, ocular gains, eye-adjustment attenuation and full-model query-reversal loss increase.",
+      "Four separate candidate full-versus-fixed-full improvements; no best-cell selection.",
+      "Fixed leave-one-person reductions, prespecified sub-03 sensitivity, full channel/time risk maps and conditional two-way stability."
+    ],
+    "comparators": [
+      {
+        "name": "Fixed seven-arm panel",
+        "inputs": "Training mean; eye-only; nuisance(static/motion/acoustic/timing/silence); nuisance+eye; nuisance+dynamic; full; full with query dynamic order reversed.",
+        "procedure": "Existing source uses matched weighted multioutput ridge and all 13 alphas over 20 inner cells for each distinct ridge arm; reversal reuses the full fit."
+      },
+      {
+        "name": "Fixed FULL decoder bank",
+        "inputs": "The same outer training data and complete full-feature query support.",
+        "procedure": "Its30 predictions are the shared decoder-only comparator; duplicated display rows are aliases. Candidates may vary method within allowed data/resources but cannot redefine the fixed scientific contrast."
+      }
+    ],
+    "nuisance_controls": [
+      "Join by subject/session/run/trial after independent EEG/eye rejection and retain complete disposition; do not join only by stimulus.",
+      "Use actual video source/duplicate components, matched feature blocks and acoustic controls; compare sub-03 separately for eye calibration caveat.",
+      "Fit only training target scales and feature transforms, preserve whole-record preprocessing exposure disclosure."
+    ],
+    "uncertainty": "The source’s10000 paired person/component resamples condition on captured fixed predictions. They omit refitting uncertainty and do not provide population confidence; retain six-person estimates and signed/null effects.",
+    "failure_policy": "Any missing fit, incomplete target coordinate, zero outerTRAIN variance, nonfinite loss or malformed/missing capture makes the complete comparison unavailable. Do not drop failed sensors, trials or arms."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/README.md",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/METHOD_PROPOSAL.json",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/scoring.py",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/splits.py",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/artifacts.py",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/private/scorer_core.py",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/campaign.py",
+      "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/runner.py"
+    ],
+    "scorer_target": "The new scorer grades complete submitted EEG response predictions by their standardized risk and candidate-versus-fixedFULL gains. It separately computes a fixed-reference nuisance_eye-minus-full scientific diagnostic, which is invariant to candidate predictions. The older scorer is a separate 102-video within-person diagnostic; neither measures scientific reasoning from prose.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete source implements the selected person/family extension and fixed comparisons; original diagnostic source remains separate. No authentic input/header/model/benchmark run is established by the release.",
+    "missing": [
+      "Authenticate recording/unit/clock joins and actual provenance-family graph.",
+      "Qualify exact full reference numerical implementation and selected streamed path before comparing methods.",
+      "Provision and verify identical candidate/decoder resource limits and physical isolation.",
+      "Deliver an actual adaptive participant actor: current case_adaptive condition passes a mode flag to an arbitrary candidate executable, not an interactive investigation loop."
+    ],
+    "execution_evidence": "Source inspection and fresh-process routing evidence exist; the README explicitly leaves authentic scientific execution and reference competence open."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The endpoint requires predicted hidden EEG and a controlled multi-arm risk contrast over cohort/stimulus support.",
+      "boundary": "Showing query EEG would reveal the answer; a small waveform inspection would change the estimand.",
+      "evidence_ids": [
+        "generalization-scorer"
+      ],
+      "missing": [
+        "No direct observation assay for this controlled encoding contrast."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "A neural-target viewer cannot remain an input to hidden-response prediction.",
+      "boundary": "Any future exploratory plot is separate evidence and cannot replace the fixed complete-array comparator.",
+      "evidence_ids": [
+        "generalization-scorer"
+      ],
+      "missing": [
+        "No typed viewer condition delivered for this endpoint."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The campaign declares per-case adaptive/tool-regime conditions but only launches a preselected arbitrary candidate_entry with a mode argument. It supplies no participant provider/action/tool loop to implement interactive investigation.",
+      "boundary": "A case_adaptive label and shared process limits do not establish a delivered adaptive participant. Any future actor must preserve the same allowed outerTRAIN/innerVALIDATION support, budgets, no query targets/transforms and fresh case state.",
+      "evidence_ids": [
+        "programme-campaign",
+        "programme-process",
+        "generalization-method"
+      ],
+      "missing": [
+        "Concrete participant adaptive actor and tool/action controller bound to the complete case contract.",
+        "Authentic input, native transport and enforced isolation qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "campaign.execute and runner.run_case provide concrete source for invoking an externally supplied preselected programme on every pinned case and capturing its complete response array; the solver programme itself is an input.",
+      "boundary": "Freeze before outer query access and grade all complete response arrays; source declarations do not qualify runtime.",
+      "evidence_ids": [
+        "programme-campaign",
+        "programme-process",
+        "generalization-method"
+      ],
+      "missing": [
+        "Complete native reference/candidate execution and independent qualification."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-registration",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-080/historical/task.pre-understanding.v1.json",
+      "sha256": "827dca0333c34d840cc43c66a6b22134aa8a1c183c7ef598f5661bb507d32744",
+      "supports": "Original scientific scope and recorded source-audit findings; preserved verbatim by the revision."
+    },
+    {
+      "id": "generalization-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/scoring.py",
+      "sha256": "048da23d75cbd4bf46ec4182c7773e85aa3e31a779f325c6935e847bf3807c0d",
+      "supports": "Target-last original-unit loss, exact outerTRAIN scaling, equal-family/person aggregation and signed scientific/candidate contrasts."
+    },
+    {
+      "id": "generalization-splits",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/splits.py",
+      "sha256": "35de4e5e26bf6bdf7d23e8b0f522f68eab3c7b8d75fdb0b7b93ef7a49e984154",
+      "supports": "Thirty crossed person/provenance-family cases, no category surrogate for families."
+    },
+    {
+      "id": "generalization-method",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/METHOD_PROPOSAL.json",
+      "sha256": "5496ce0c2cc44c17e32ece2bf638f53a0f648392398484f924069aa7412e07ea",
+      "supports": "Seven fixed nuisance/dynamic/eye reference arms and shared nested ridge selection."
+    },
+    {
+      "id": "prediction-admission",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/artifacts.py",
+      "sha256": "ca495446596c910c0b2a4cf0f2b7d1df23ce897c45e5077b813e0ef32de151ba",
+      "supports": "Complete330 prediction and 60 scale captures, fixed 127x150 target basis."
+    },
+    {
+      "id": "legacy-diagnostic",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/private/scorer_core.py",
+      "sha256": "46a660ba1c3dd766d388b4a3734cd2eabe03fea971b0087a5ad3d8c571164699",
+      "supports": "Earlier102 video within-person diagnostic is a separate scoped scoring path."
+    },
+    {
+      "id": "delivery-scope",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/README.md",
+      "sha256": "7c0a89abf99e6e7b63bfa1ae911ee781d727ae8e91f8058c1bb8d845e74d3117",
+      "supports": "Inactive source checkpoint, planned full support and no authentic numerical qualification."
+    },
+    {
+      "id": "emd-paper",
+      "kind": "primary_source",
+      "url": "https://arxiv.org/abs/2608.28768v2",
+      "locator": "Dataset description",
+      "supports": "EEG and eye measurements during audiovisual naturalistic clips establish why ocular and acoustic alternatives matter."
+    },
+    {
+      "id": "emd-code",
+      "kind": "primary_source",
+      "url": "https://github.com/gifale95/EMD",
+      "locator": "Official author repository",
+      "supports": "Six people,1102 shared audiovisual stimuli, eight sessions each; original 128 channel acquisition differs from the selected 127 channel basis."
+    },
+    {
+      "id": "programme-campaign",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/campaign.py",
+      "sha256": "2e894d1c26ad01fdc61cdb38b30e3c2a9fe1f59cc8c592d63f3bb6e3b2d950ff",
+      "supports": "execute binds a preselected candidate entrypoint and executes every case/condition; case_adaptive is forwarded as an argument, without a supplied adaptive actor/tool loop."
+    },
+    {
+      "id": "programme-process",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-080/implementations/neural-080/full-generalization/source/generalization/runner.py",
+      "sha256": "c367bd550301208e82f7dde26667a4c825398f7fe9e8e467a4b5c772622230ab",
+      "supports": "run_case authenticates pinned inputs, launches an isolated selected executable and captures full prediction output; host qualification remains external."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "This revision inspects source and existing public construction evidence only. The four historical neural programme attempts concern EEG077/sleep 007, not this task. No direct-observation, viewer, human or model result is established here.",
+    "excluded_claims": [
+      "No pure visual, causal, clinical, SOTA or freshly sealed improvement claim.",
+      "Do not relabel the older 900 FIT/100 validation/102 query within-person diagnostic as the new person/family study.",
+      "Decoder-only aliases, four access/tool cells and reference captures are conditions, not new tasks or independent observations.",
+      "A fixed reference contrast cannot grade participant success because it is unchanged by the participant submission."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Use candidate response risk/improvement as the solver-dependent endpoint; preserve fixed nuisance_eye-minus-full as a separate operator scientific diagnostic.",
+      "Distinguish original diagnostic from complete person/family extension and retain biological weighting.",
+      "Separate source-declared full counts from verified authentic execution.",
+      "Downgrade tool-assisted access to not_delivered after tracing the launcher: mode metadata has no delivered adaptive actor. Preserve the concrete frozen executable runner capability separately."
+    ],
+    "source_review": "Inspected original registration and actual public scorer/protocol/constructor source; checked official EMD/OpenMIIR primary source metadata on 2026-11-16. No recording payload, target array or model was opened."
+  }
+}

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-047",
   "track": "neural",
-  "title": "Post-reversal turn decoding in worms",
+  "title": "Post-reversal turn probabilities from SAAV history in held-out worms",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "sensorimotor_readout"
   },
-  "scientific_question": "Can identified-neuron calcium predict dorsal versus ventral turns after reversal in new worms?",
+  "scientific_question": "At a fixed landmark while a worm is still reversing, how well does its preceding SAAV calcium history predict dorsal versus ventral post-reversal curvature in an entirely held-out worm?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Turn-direction probabilities from a fixed preturn neural interval."
+    "Binary direction: dorsal=1 if the mean dorsal-positive head curvature in the first two native frames after reversal end is positive, ventral=0 if negative; zero direction is an explicit source exclusion. This is a measured behavior target, not agreement with the paper narrative."
   ],
   "input_assets": {
     "routes": [
@@ -67,23 +67,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": [
-      "Dryad per-animal calcium H5 files and aggregate MAT data"
+    "inputs": [
+      "Every contiguous native sample in the trailing 4.8 seconds ending at the landmark, with relative physical-time offsets.",
+      "N: SAAV calcium history; B: velocity and dorsal-positive curvature history; NB: the same behavior plus SAAV history. All views receive matched event support.",
+      "Training examples and labels from all other verified worms within each isolated outer fold; train-only inner animal folds for reference selection."
     ],
-    "allowed_context": [
-      "head curvature, velocity, neuron identities and odor-gradient crossings described by archive"
+    "forbidden_inputs": [
+      "Query turn labels, post-landmark behavior, reversal end/duration, odor observations, source identities/filenames and cross-fold fitted state.",
+      "Nominal frame rate substituted for verified physical time; phase-warped future-curvature alignment presented as causal."
     ],
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Archive describes aligned behavior; exact conversion to decoder input unverified",
-    "source_contract_evidence": "Pinned loader expects SAAV_dorsal.csv,HC_dorsal.csv,SAAV_ventral.csv,HC_ventral.csv at lab-local /store1/prj_rim/Decoding_Data/FlossieAligned"
+    "case_identity": "Prepared opaque case_<32 hex> event keys, group_<24 hex> animal aliases and fold_%03d names; HMAC-derived event IDs bind original recording/event identities privately. No authentic complete case census has been admitted.",
+    "split": "Leave every eligible whole worm out once, minimum three independent eligible worms. Each training set must support both classes; all required folds and N/B/NB arms stay in the panel. Inner model selection uses only outer-training worms.",
+    "coverage": "All selected WT aggregate source rows, maximal reversals and every eligible landmark event are required. Explicit no-SAAV recordings and prescribed censoring/missing-history/zero-direction exclusions are retained; an empty animal prevents complete-panel qualification. Actual eligible counts remain unknown."
   },
-  "biological_unit": "one animal per dated H5; aggregate MAT duplicates same recordings",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Verified biological worm; all episodes and duplicate H5/MAT representations of that worm share the same outer fold.",
+  "case_definition": "One eligible maximal reversal episode, queried at the first native timestamp at least 2.4 seconds after reversal onset while still reversing.",
   "split": {
-    "policy": "Hold out entire worms and complete odor/reversal episodes; no future behavior in aligned feature windows.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Leave every eligible whole worm out once, minimum three independent eligible worms. Each training set must support both classes; all required folds and N/B/NB arms stay in the panel. Inner model selection uses only outer-training worms.",
+    "coverage": "All selected WT aggregate source rows, maximal reversals and every eligible landmark event are required. Explicit no-SAAV recordings and prescribed censoring/missing-history/zero-direction exclusions are retained; an empty animal prevents complete-panel qualification. Actual eligible counts remain unknown."
   },
   "reference": {
     "source_code_url": "https://github.com/flavell-lab/SAAV_Decoding",
@@ -99,50 +100,98 @@
     "data_url": "https://datadryad.org/dataset/doi:10.5061/dryad.8sf7m0cz2"
   },
   "controls": [
-    "No future head curvature",
-    "recent motion baseline",
-    "equal windows",
-    "direction-balanced trial sampling."
+    "Use whole-worm grouping and matched behavioral windows to avoid event-level identity leakage.",
+    "Keep physical rather than phase-warped windows; retain whole-recording preprocessing exposure.",
+    "No future curvature, reversal-end timing or class-dependent sampling; direction support is reported for every worm."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Possible future no-tools case view of numeric or rendered matched SAAV/behavior histories.",
+      "boundary": "Freeze display, demonstration labels and query histories; require all query probabilities without tools or held labels.",
+      "evidence_ids": [],
+      "missing": [
+        "No direct-response packet/transport or direct model trial."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Possible waveform/history viewer with typed time/channel actions.",
+      "boundary": "Only permitted past history; no raw source lookup, future curvature or evaluator output.",
+      "evidence_ids": [],
+      "missing": [
+        "No task-specific typed viewer or rendering equivalence proof."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "I source permits fresh per-outer-fold/arm investigation and programme creation from the same training/query histories as F.",
+      "boundary": "Seal agent policy before study exposure; no cross-fold/arm state or private feedback; account tools and compute.",
+      "evidence_ids": [
+        "programme_contract",
+        "programme_packets",
+        "context_execution",
+        "programme_runner"
+      ],
+      "missing": [
+        "Deployment and physical case isolation are unqualified."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F source applies one precommitted method and fit/adaptation recipe to all N/B/NB animal folds.",
+      "boundary": "Freeze programme before any outer context; only current training-worm labels may support fitting and inner selection.",
+      "evidence_ids": [
+        "programme_protocol",
+        "programme_packets",
+        "scorer",
+        "context_execution",
+        "programme_runner"
+      ],
+      "missing": [
+        "Authentic prepared input, references and full execution remain unqualified."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Worm-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "N animal-macro balanced accuracy at probability threshold 0.5",
+      "direction": "higher",
+      "aggregation": "Mean of the two direction recalls within each worm, then equal mean over all eligible worms; one single-class worm makes complete-panel balanced accuracy undefined.",
+      "rationale": "Measures held-worm direction information without rewarding dominant direction or event-rich animals."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Co-primary N equal-animal binary log loss in nats with probability floor 1e-15.",
+      "All N/B/NB per-worm and macro log losses, balanced accuracies, class counts and paired arm contrasts; pooled-event loss is secondary only.",
+      "Complete support, exclusions, failures and reference-family outcomes; no favorable surviving-worm mean."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Behavior-only history",
+        "inputs": "Same event windows, velocity and dorsal-positive curvature; no SAAV.",
+        "procedure": "Same candidate family, fitting access and compute rules as N/NB; compare paired complete-worm outcomes."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Fixed and train-selected summary decoders",
+        "inputs": "Last, mean, population SD, min, max and physical-time slope for each permitted channel.",
+        "procedure": "Source fixes logistic C=1, inner-animal-selected logistic C in {0.01,0.1,1,10,100}, and a fixed HistGradientBoosting grid. Scaling and selection use training rows only; authentic reference competence is unqualified."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Use whole-worm grouping and matched behavioral windows to avoid event-level identity leakage.",
+      "Keep physical rather than phase-warped windows; retain whole-recording preprocessing exposure.",
+      "No future curvature, reversal-end timing or class-dependent sampling; direction support is reported for every worm."
+    ],
+    "uncertainty": "Source supplies 10,000 whole-worm bootstrap draws (seed 47047). Intervals are descriptive under overlapping training folds and exposed data; they do not estimate model-author or provider variation.",
+    "failure_policy": "Require complete unique case joins for every fold/arm and finite probabilities in [0,1]. Explicit abstention in any required fold/arm leaves the panel unscored and avoids private-target access. Missing classes leave balanced accuracy undefined while complete log loss remains reported.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "f4edd57d5e7f17b382b0baf4a4ddc19521c61562abfeac06df8b1878e9892d85",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -219,6 +268,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

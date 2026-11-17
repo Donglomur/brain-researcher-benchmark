@@ -1,0 +1,215 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-056",
+  "title": "Image-to-EEG visual-response encoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A documented shared source dependency contains a complete ten-person image-to-EEG programme/scorer, but it is not a new primary runtime registration. This encoding endpoint intentionally differs from the source paper random-half endpoint and has no authentic execution or checkpoint qualification.",
+  "scientific_target": {
+    "question": "Can an image-based model predict every released EEG response coordinate for200 unseen concepts in each held person using only the other nine people’s training EEG?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "The measured full80-repeat test-image EEG mean, with17 released noise-normalized coordinates ×100 source time samples per image.",
+    "answer_origin": "THINGS-EEG2 test recording repetitions, used solely by the protected operator scorer after all predicted blocks are admitted.",
+    "case_unit": "One held-person/control block [200,17,100].",
+    "independent_unit": "Ten people conditional on200 shared test images;1,700 response coordinates and80 repeats are not independent people.",
+    "inference_scope": "Cross-person image-to-response prediction on released transductively preprocessed EEG. Neural response reconstruction is the genuine held-target task; it does not by itself test direct interpretation of an observed neural signal.",
+    "exclusions": [
+      "No paper reproduction claim: full80-repeat mean differs from author random40-repeat-half endpoint.",
+      "No native neural-observation comprehension, causal electrode physiology, raw inductive preprocessing or SOTA."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Allowed test images or fixed image features; canonical representation AlexNet ReLU7/4096, low-level bilinear RGB16×16/768.",
+      "Training EEG from other nine people only, averaged over all four repeats per16,540 training images.",
+      "Inner development has nine held-person folds and disjoint1,324 fitting/330 development concepts."
+    ],
+    "forbidden_inputs": [
+      "Outer person training/query EEG, any test response/reliability value and target-derived feature/channel selection.",
+      "Query-batch fitting, cross-context state and hidden source identity lookup."
+    ],
+    "case_identity": "Future exact opaque image/concept aliases plus source-coordinate order; each of ten subjects supplies200 query rows, with representation/low_level/response_permuted arms.",
+    "split": "Outer held person and200 held concepts; inner held-person/concept split selects a fixed configuration, final refit uses nine-person aggregate over all1,654 training concepts. Training statistics reused unchanged at query.",
+    "coverage": "Each F/I/fixed-reference/tuned-reference role requires30 participant×control blocks;120 study blocks total. No authentic complete arrays or executed full panel are established by the source."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-person mean Pearson correlation over all EEG coordinate/time cells",
+      "direction": "higher",
+      "aggregation": "Correlate predictions with full80-repeat targets across all200 images for each of1,700 cells; mean equally across cells then ten people.",
+      "rationale": "Scores the complete measured neural response with fixed support instead of selecting favorable channels/times or conflating repeat reliability with performance."
+    },
+    "secondary": [
+      "Per-coordinate correlation arrays, constant prediction/target counts and paired representation-minus-control effects.",
+      "Odd/even40-repeat split-half correlations as descriptive reliability only, with no score correction.",
+      "F/I and tuned/fixed-reference comparisons on identical full output support and recorded costs."
+    ],
+    "comparators": [
+      {
+        "name": "Fixed centered ridge alpha1",
+        "inputs": "Training-only standardized image features and nine-person EEG aggregate",
+        "procedure": "Implemented prospective benchmark reference with unpenalized intercept; not the original OLS/KernelPCA recipe."
+      },
+      {
+        "name": "Tuned ridge reference",
+        "inputs": "Same inputs and all nine inner-person/development-concept folds",
+        "procedure": "Implemented grid[0.0001,0.01,1,100,10000], chosen by complete representation validation and same alpha across controls."
+      },
+      {
+        "name": "Low-level and response-permuted controls",
+        "inputs": "RGB768 or4096 features with whole ten-exemplar concept response groups rotated",
+        "procedure": "Implemented full-refit controls; preserve response coordinate vectors and do not assume guaranteed null."
+      }
+    ],
+    "nuisance_controls": [
+      "Bind exact checkpoint and source feature preprocessing; a model name is not model identity.",
+      "MVNN combines training/test covariance and mixes spatial coordinates; response units are noise-normalized, not microvolts.",
+      "Rapid200ms image spacing and unavailable sequence/session IDs permit neighboring-image effects; no causal temporal interpretation."
+    ],
+    "uncertainty": "Show all ten person scores and paired control differences conditional on the shared200 images; no population interval or binary threshold is supplied by this source.",
+    "failure_policy": "Admit all120 expected blocks before protected full-study scoring. Constant prediction gets scoring0/raw undefined; any constant target makes cell/person/full primary undefined, never dropped. Reject missing/nonfinite/wrong-shaped outputs."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/TASK.md",
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/legacy/operator/scorer.py",
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/legacy/public/TASK.md",
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/worker.py",
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/n056/actors.py",
+      "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/n056/investigation.py"
+    ],
+    "scorer_target": "Actual held-out measured EEG waveform coordinates. Prediction/reconstruction is a valid neural target, but the scorer cannot demonstrate direct comprehension of a supplied neural observation.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Full source inside shared four-programmes distribution, including original scorer and F/I modelling; current registration is a dependency, not an independently qualified runtime.",
+    "missing": [
+      "Authenticate all-ten coordinates and complete source EEG/image mapping.",
+      "Bind checkpoint/features and actual numerical/container/provider environments.",
+      "Qualify complete native study and fixed/tuned reference competence."
+    ],
+    "execution_evidence": "Source declares no authentic arrays, feature inference, fits, provider calls or scientific scores during construction. This revision inspected source only."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "The task gives images and withholds neural responses; revealing neural traces would change/leak its encoding target.",
+      "boundary": "Image-only prediction could be a separate direct-model condition but is not interpretation of observed neural data.",
+      "evidence_ids": [],
+      "missing": [
+        "A separate measured-neural-input target is needed for direct neural interpretation."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "Viewing held neural target waveforms is incompatible with this encoding endpoint.",
+      "boundary": "A stimulus-image viewer would preserve image encoding but cannot be reported as neural-observation interpretation.",
+      "evidence_ids": [],
+      "missing": [
+        "Define a separate neural-input assay if that ability is desired."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "No per-query tool-assisted investigation is delivered. I inspects its own training X/Y through bounded Python tools before sealing train/query source.",
+      "boundary": "Fresh context per inner/final training context and arm; no query inputs/held responses during investigation; only aggregate development selection crosses contexts.",
+      "evidence_ids": [
+        "e2",
+        "e5"
+      ],
+      "missing": [
+        "Provider/tool boundaries and full input/execution qualification.",
+        "Implement a participant-facing held-query investigation condition if this capability is required; do not relabel training-only investigation as query interpretation."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F commits complete train/query code and configuration roster before neural views.",
+      "boundary": "Independent training and query processes; frozen model and train-only statistics; all arms complete.",
+      "evidence_ids": [
+        "e2",
+        "e3",
+        "e7"
+      ],
+      "missing": [
+        "Actual native execution and complete checkpoint/source qualification."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "e1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-056/historical/task.pre-understanding.v1.json",
+      "sha256": "14a26973e5f16978c205b6cb7358dbb07f47d4d167be2c793751963c60dd8f2b",
+      "supports": "Original registered scientific objective, source identity and limitations"
+    },
+    {
+      "id": "e2",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/TASK.md",
+      "sha256": "3ec15045cd7724d8b7a1d0d86e92b6203602be806921080eae3bac52de39464f",
+      "supports": "Complete prospective image-to-EEG endpoint, information boundaries and explicit difference from author historical endpoint."
+    },
+    {
+      "id": "e3",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/legacy/operator/scorer.py",
+      "sha256": "b296c73ff2e1e0334244e64cfe6a5dbbc0636960693bad95fe469be5f046d8df",
+      "supports": "All1700 cell correlations over200 images, ten-person aggregation, constant-target handling and separate reliability."
+    },
+    {
+      "id": "e4",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/legacy/public/TASK.md",
+      "sha256": "ccab5267fd2e91ccd986ad53820fe8da7fe9caabb9fca823a020e24913e758fa",
+      "supports": "Original complete source data/coordinate/exposure limitations and preserved endpoint."
+    },
+    {
+      "id": "e5",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/worker.py",
+      "sha256": "8f04fc5633315c4b39ce1c68950205684dfe463dbe5fd8aece1f83c70b252503",
+      "supports": "Separate actor train/query execution and programme lifecycle source."
+    },
+    {
+      "id": "e6",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1016/j.neuroimage.2022.119754",
+      "locator": "Original source paper identified and pinned in the preserved registration",
+      "supports": "Source recording family and experimental measurement; prospective benchmark comparisons are specified separately."
+    },
+    {
+      "id": "e7",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/n056/actors.py",
+      "sha256": "85c157c94a16b5bd9fe418d8e8a951b4ece0937200051e70a9c8c13ff896b69d",
+      "supports": "Concrete pre-neural-view F programme authoring and generated-program admission."
+    },
+    {
+      "id": "e8",
+      "kind": "local_source",
+      "path": "benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package/n056/investigation.py",
+      "sha256": "ac2c725e8ef09240d66f570f435fe07de48c0b58499292a7d8c04c3495f01d16",
+      "supports": "Concrete bounded I inspection exists only for training context; query inputs/held responses unavailable."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome for this task is established by this source review. The separate four historical EEG/sleep programme attempts are not evidence for this task or its direct/viewer modes.",
+    "excluded_claims": [
+      "No paper reproduction claim: full80-repeat mean differs from author random40-repeat-half endpoint.",
+      "No native neural-observation comprehension, causal electrode physiology, raw inductive preprocessing or SOTA."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "State that neural response prediction is legitimate but does not test neural-input direct understanding.",
+      "Preserve prospective80-repeat endpoint instead of falsely inheriting source-paper score comparability.",
+      "Expose shared-dependency status, full120-block support, and strict constant-target handling.",
+      "Count existing training-only investigation as a programme condition, not delivered per-query tool-assisted interpretation."
+    ],
+    "source_review": "Read original task, task README and the exact implementation/contract files listed below. Source declarations are distinguished from observed execution; primary citations reuse the preserved source audit unless the receipt explicitly records a fresh check."
+  }
+}

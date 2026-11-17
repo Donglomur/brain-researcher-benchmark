@@ -1,0 +1,115 @@
+{
+  "id": "NEURAL-DISC-20261114-VOLTRON-SPIKES",
+  "track": "neural",
+  "title": "Optical voltage trace to independently recorded spike timing across complete cell recordings",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Can a general model recover electrophysiologically verified spike events from a fixed optical voltage trace in a neuron and animal excluded from fitting?",
+  "participant_inputs": "Per-cell fluorescence trace extracted from all frames using a fixed label-independent ROI/motion/background recipe, optical timestamps and acquisition-quality masks; include known indicator polarity and frame exposure, never patch voltage, spike annotations, cell-specific optimum threshold, or answer-tuned ROI.",
+  "known_answer": "All electrophysiologically measured spike events aligned to camera exposure. Independent evaluator fixes spike detection/quality exclusions from patch records before predictions; ambiguous or saturated patch intervals remain explicitly unscorable with coverage.",
+  "complete_scope": "All12 deposited cells and every recording/movie within each cell, not the three examples from the VolPy method comparison. Optical mask/extraction quality must be audited independently of spike prediction. Include low-SNR and failed-extraction records as failures/coverage, not silently remove them.",
+  "protected_split": "After authentic mouse→cell→movie mapping, grouped leave-one-animal-out development folds; all movies/cells of a mouse stay together. A secondary leave-cell-out result may be reported separately and never called animal generalization. Six title tokens are not independently authenticated animals.",
+  "input_representation": "A new derived-trace task, not video segmentation: retain the complete optical time series at original400/1000Hz, including missingness. Deterministic nonoverlapping one-second scored cores may carry two-sided one-second context halos; every frame/event is scored once with boundary ownership fixed by timestamp. The same complete tile roster goes to all arms. Halo is retrospective context, not a causal online claim. No subthreshold samples, hard movies or low-activity periods may be discarded to fit context.",
+  "scoring": {
+    "primary": "One-to-one spike-event F1 at fixed5ms tolerance in physical time; aggregate counts over all tiles of a movie before cell and authenticated-animal summaries. Max-cardinality matching prevents double credit.",
+    "secondary": "Precision, recall, event latency, false events/minute, full duration and electrode/optical validity coverage; report400Hz and1kHz strata.",
+    "edge_cases": "No-spike cases have explicit false-alarm burden; no empty/empty perfect-F1 inflation. Output duplicates, out-of-range timestamps and missing cases are failures under a frozen policy."
+  },
+  "comparators": "Training-only optical median/MAD threshold plus refractory control, a fixed matched-filter threshold, and a separately pinned VolPy trace/spike pipeline. Full-video VolPy receives richer inputs and must be labelled an auxiliary richer-input reference, unless its trace-only mode can genuinely be matched.",
+  "negative_controls": [
+    "Within-movie optical-to-patch block reassignment with nuisance/duration preserved.",
+    "Polarity/camera/exposure metadata-only prior, fixed output-rate baseline.",
+    "Event matching boundary and duplicate controls before any scientific score."
+  ],
+  "leakage_controls": [
+    "Patch channel, spike-triggered ROI/denoising/template selection, or labels in cell filenames may reveal answers.",
+    "Repeated movies of the same cell and shared mice can leak across folds.",
+    "Threshold tuning on held patch traces or evaluator use of held spikes to trim optical intervals invalidates equal-input evaluation.",
+    "Pretrained VolPy/CaImAn denoising/model versions may have seen this public collection."
+  ],
+  "provenance": {
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 9307,
+      "sha256": "674c49c277fb0c4723e2d9d62dd3a7d69acf8f6e49801db6b3dd8ede40ffecd7"
+    },
+    "sources": [
+      {
+        "role": "primary acquisition paper",
+        "url": "https://doi.org/10.1016/j.celrep.2021.108954",
+        "title": "High-fidelity estimates of spikes and subthreshold waveforms from1-photon voltage imaging in vivo",
+        "year": 2021,
+        "status": "DOI is linked by collection metadata; full paper not read in this phase"
+      },
+      {
+        "role": "fixed collection",
+        "url": "https://doi.org/10.25378/janelia.c.5325254.v1"
+      },
+      {
+        "role": "author loader",
+        "url": "https://doi.org/10.25378/janelia.14141609.v1",
+        "filename": "using_ground_truth_data.ipynb",
+        "bytes": 254915,
+        "md5": "3e4c326649e73533af11e6fe70629e76",
+        "status": "metadata verified, source body uninspected"
+      },
+      {
+        "role": "method baseline",
+        "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008806",
+        "code_url": "https://github.com/flatironinstitute/CaImAn",
+        "status": "VolPy paper establishes real optical/electrical benchmark role; no code copied, commit/runtime not frozen"
+      }
+    ],
+    "verified_source_facts": "The version1 collection describes12 cells and13 articles, including a usage notebook, with optical sampling400Hz or1kHz. Its methods describe7 mice, while the twelve cell-article titles contain six distinct animal-name tokens; biological reconciliation is required. One inspected cell archive alone is5,444,944,707 bytes. The guide and that cell declare CC BY4.0; remaining11 cell licenses and file lists are uninspected.",
+    "rights_access_version": "Collection DOI v1 and each article v1 provide stable source identities. Guide and one cell CC BY4.0 verified; remaining cells, code reuse, archive identity/size totals and notebook dependencies still require review. Acquire originals externally; no repackaging authorized by this dossier."
+  },
+  "source_family_ids": [
+    "voltron-janelia-5325254"
+  ],
+  "resources": "Metadata-proven lower bound is5.44GB for one of12 cells; full imagery total is unknown and must be summed before intake. Complete extracted traces are much smaller than movies but require authentic provenance. Prospective streamed optical extraction: workstation,16–32GB RAM, CPU hours to days depending totalframes; optional GPU VolPy training not required by direct comparison and not selected. Trace threshold scoring should be CPU-scale; all costs unmeasured.",
+  "remaining_gates": [
+    "Root duplicate/source-family adjudication across both tracks and held reserves.",
+    "Exact full scientific membership and immutable file identities before acquisition.",
+    "Rights and permitted assessment/redistribution checked for every selected release component.",
+    "Authentic schema/clock/unit/label QC, reference qualification, independent grader review and all controls.",
+    "Model exposure audit and defensible outer assessment; public historical labels are development material."
+  ],
+  "paired_access_conditions": {
+    "direct": "No-tools inference on the complete canonical signal packet and target-free permitted context.",
+    "numerical": "Numerical tools on the identical packet. Frozen-program versus per-case adaptive tool use is separately logged within this task.",
+    "specialist": "Audited fixed feature extractor or train-only physiological model on identical information; trained model access is an assistance condition, not evidence of unaided understanding.",
+    "parity": "Same case IDs, inputs, units, masks, training/calibration exposure, protected answers, and transform support. Raw versus lossy derived signals are separately labelled input substrates; no equivalence assumed. Richer-input specialists are auxiliary.",
+    "interpretation": "Association, tool use, public exposure and physiological understanding remain separate. No model campaign is selected."
+  },
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "machine_output": {
+    "predictions": "Sorted predicted spike timestamps per complete movie/cell in the authenticated native clock; confidence optional, with threshold selected only on TRAIN/DEV.",
+    "score_rows": "One-to-one matched TP/FP/FN at5ms; aggregate counts within complete movie/cell and authenticated animal. No extra reward for empty/empty windows. Timing errors and false alarms remain.",
+    "coverage": "All12 cells/all movies at400Hz or1kHz; seven-paper-mouse versus six title-token map unresolved. Patch-derived truth, ROIs and preprocessing choices remain evaluator-protected."
+  },
+  "distinctness": "Electrically verified spike timing from label-independent optical voltage traces. Existing CellMincer asks paired-image denoising/fidelity on PairedBeRST; this different declared signal-to-target task is independently interpretable even if upstream acquisition reuse is later found.",
+  "stronger_claim_hold": "A derived-trace task does not demonstrate raw-video understanding. Full-video VolPy/CaImAn assistance is auxiliary unless information parity is established.",
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 9637,
+    "source_definition_sha256": "4902f72e32dcfee9df46329f7cf51d92ab35d4131fd4dfd76262ae51a9db0016",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-014",
+  "title": "Speech decoder neural dependence under drift",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The delivered seven-arm frozen programme and token scorer measure a genuine neural sequence target. Source-only full45 composition and generated grading controls do not establish authentic data execution, decoder competence, biological drift or direct interpretation.",
+  "scientific_target": {
+    "question": "Within T15 later sessions, how do fixed permitted calibration and declared feature/time corruptions change held-query phoneme error, relative to an independently frozen neural reference and no-neural prior?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Source phoneme sequences for every retained later-session suffix query and the paired seven-arm session PER contrasts, with reference minus candidate full-adapt PER separate from within-candidate ablations.",
+    "answer_origin": "The 86 public labeled train/validation HDF5 members across 45 T15 sessions; private gold after complete source projection and global repeated-sentence grouping.",
+    "case_unit": "One full 512-feature trial time series per isolated neural inference; a session/arm context collects every suffix trial.",
+    "independent_unit": "One person T15, with nine later-session paired summaries; arms and trials are repeated observations.",
+    "inference_scope": "Public retrospective calibration benefit and corruption sensitivity in one participant. Feature/time corruption demonstrates input dependence, not isolated physiological channel loss or causal biological drift.",
+    "exclusions": [
+      "Paper WER/CER or official-test/SOTA claims from local no-LM token PER",
+      "Population generalization or clinical performance",
+      "Feature-column zeroing identified as physical electrode loss without electrode mapping",
+      "Programme performance as direct no-tools or viewer interpretation"
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete source-defined 512-feature, 20 ms-step trial arrays in frozen order.",
+      "27 training and nine development sessions; at most the first 20 chronologically available later-session labeled trials before sentence grouping form calibration candidates.",
+      "Infer receives one opaque query and a sealed allowed model; prior receives training/current calibration token sequences only."
+    ],
+    "forbidden_inputs": [
+      "Suffix-query tokens, query-time fitting of normalization or hyperparameters",
+      "Query IDs/features during adaptation, private arm names or permutation indices in participant inputs",
+      "Mutable query state carried between fresh inference processes",
+      "Replacing excluded calibration prefix trials to refill a 20-example budget"
+    ],
+    "case_identity": "Source private identity is session/block_num/trial_num; opaque identities are HMAC-derived. Every later session has seven complete arm contexts; authentic retained Q remains unresolved.",
+    "split": "Full chronological45 roster:27 train/9 development/9 later. Global sentence priority is query then calibration then development then training; all suffix queries survive and excluded prefix trials are not replaced. Every required session/partition must retain support.",
+    "coverage": "86 labeled members, 63 session/arm contexts per panel and two independent panels; 38 sealed models and 56+12Q phases. The generated Q=9 fixture is not an authentic trial census."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "adapted_full_session_macro_PER",
+      "direction": "lower",
+      "aggregation": "Sum token edit distances/reference tokens within each of nine later sessions, then equal-session average; literal | remains in edits and denominator and ratios are not clipped.",
+      "rationale": "Retains actual withheld sequence accuracy; independent reference-minus-candidate PER is an additional comparison, not a claim of author-baseline parity."
+    },
+    "secondary": [
+      "All seven absolute arm PERs and paired adaptation/corruption contrasts",
+      "Independent_reference_minus_candidate_full_adapt_PER",
+      "Per-session edits/denominators and exact complete query coverage",
+      "Phase cost, label exposure and model lineage; optimizer-step count may be unobserved rather than fabricated zero"
+    ],
+    "comparators": [
+      {
+        "name": "Independent compact GRU/CTC reference",
+        "inputs": "Same training/development/calibration/full query observations",
+        "procedure": "Delivered fixed seed14014 compact two-layer128-unit GRU source, ten training epochs and input-layer-only 100-step calibration; not the author deployed or competition checkpoint, competence unqualified."
+      },
+      {
+        "name": "Frozen base versus adapted model",
+        "inputs": "Same queries, same base initialization, declared calibration prefix",
+        "procedure": "Delivered full-feature and fixed-feature-loss paired arms; fixed arms never access calibration labels."
+      },
+      {
+        "name": "Shuffle/zero and no-neural prior",
+        "inputs": "Same sealed full-adapt model; duration preserved for corruption, only allowed tokens for prior",
+        "procedure": "Delivered row-shuffle/raw-zero and unconditional sequence-mode prior; these do not eliminate duration information from neural arms."
+      }
+    ],
+    "nuisance_controls": [
+      "Global sentence grouping prevents repeated-text memorization across labeled and query partitions.",
+      "Reuse exactly the same adapted artifact for full/shuffle/zero so refitting noise cannot masquerade as content dependence.",
+      "Time shuffle preserves multivariate rows/duration; raw zeros before model normalization can retain an identifiable treatment.",
+      "Physical electrode map and author preprocessing exposure remain unresolved; feature loss is a declared computational corruption."
+    ],
+    "uncertainty": "Source reports descriptive nine-session contrasts and no p-values/confidence intervals. Sessions are repeated measures in one person; any later uncertainty protocol must preserve this scope and serial dependence.",
+    "failure_policy": "Require every retained suffix query across all nine sessions and seven arms in both panels before private scoring. Empty token predictions are valid; invalid IDs/vocabulary or unsupported complexity remain failed/null results, never a clipped favorable PER."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-014/implementations/speech-programme/README.md",
+      "benchmarks/neural/NEURAL-014/implementations/speech-programme/PROGRAM_ABI.md",
+      "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/science.py",
+      "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/scoring.py",
+      "benchmarks/neural/NEURAL-014/implementations/completed-collection-grading/README.md",
+      "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/controller.py"
+    ],
+    "scorer_target": "science.score computes genuine reference-token edit rates, all seven arm means and descriptive contrasts. completed-collection-grading joins a complete producer collection to that protected score; generated fixtures only exercise composition.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Frozen-program source, sealed-model/phase design, an independent compact reference, and a guarded completed-collection grader; no authentic fit, array execution or model outcome.",
+    "missing": [
+      "Authenticate full45/86-member data, exact source permutations, sentence grouping and retained Q.",
+      "Reconcile published trial totals and feature/electrode provenance.",
+      "Qualify complete runtime resource envelope and observed source/model closure.",
+      "Execute and assess fixed reference competence before interpreting candidate advantage."
+    ],
+    "execution_evidence": "Documentation records generated composition and relocation checks, explicitly no authentic array, target, model, Docker or new solver run."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No no-tools phoneme interpretation condition is supplied. A new direct condition must declare how calibration observations fit the context and use the same withheld token target.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed viewer is supplied; inspecting feature plots is not equivalent to the implemented full-array GRU/CTC observation condition.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Exploratory case-adaptive agent orchestration lies outside the delivered frozen programme; tools/checkpoints and calibration access need a separate matched condition.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Delivered fit/adapt/infer/prior ABI, one immutable candidate source and independent reference with fresh query processes; source design is not observed isolation qualification.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-3",
+        "implementation-4",
+        "implementation-6"
+      ],
+      "missing": []
+    }
+  },
+  "evidence": [
+    {
+      "id": "implementation-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-014/implementations/speech-programme/README.md",
+      "sha256": "16044f3ac7ecdb5486aba15fc8cdf341c3f22a443dabea428f3b49489b2d34c7",
+      "supports": "science.score computes genuine reference-token edit rates, all seven arm means and descriptive contrasts. completed-collection-grading joins a complete producer collection to that protected score; generated fixtures only exercise composition."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-014/implementations/speech-programme/PROGRAM_ABI.md",
+      "sha256": "ca3c78df5f171092349bcf56b2906b6be19b2f49d741545e639c4ebe4e90be50",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/science.py",
+      "sha256": "dffe6ab9d86f8babba9dbd182a4260eefd36795fd7d2c31edaa5857af0f71ae4",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/scoring.py",
+      "sha256": "c0d0437f0c443667e68e056866cce68b7934a98dc71f360247fca7182848307a",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-014/implementations/completed-collection-grading/README.md",
+      "sha256": "acf19204be1290f8bf681fbea556036b43cbdce888347c35d4ac7619f52a0d81",
+      "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-014/implementations/speech-programme/program/controller.py",
+      "sha256": "d1c7228e542078e9105c81ffc47d6d99fa0b3a46623ec76e60201bdc94577d3d",
+      "supports": "Frozen complete programme controller materializes all phases and admits captured outputs; source presence does not establish native isolation or authentic execution."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.5061/dryad.dncjsxm85",
+      "locator": "Dryad v5 T15 source",
+      "supports": "Source labeled neural feature and token records."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text/blob/980a5b7e96392210edf976d76bdb5d15d2e0e62b/README.md",
+      "locator": "Pinned official source revision",
+      "supports": "Author-source provenance differs from the delivered compact reference."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1056/NEJMoa2314132",
+      "locator": "Original report",
+      "supports": "One-participant acquisition; local prospective programme is not paper deployed-decoder reproduction."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome is established by these source artifacts. The repository historical four neural programme attempts concern NEURAL-007/077, not this task; no new direct/viewer evidence is claimed.",
+    "excluded_claims": [
+      "Paper WER/CER or official-test/SOTA claims from local no-LM token PER",
+      "Population generalization or clinical performance",
+      "Feature-column zeroing identified as physical electrode loss without electrode mapping",
+      "Programme performance as direct no-tools or viewer interpretation"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Keep genuine token prediction primary while separating compact-reference comparison from author/PER-WER claims.",
+      "Clarify corruption, calibration-prefix and one-person uncertainty limits without reducing complete45-session support."
+    ],
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+  }
+}

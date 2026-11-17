@@ -24,7 +24,10 @@ env:
 # Source identity checks retain original PAPER task bytes as historical calibration evidence.
 # Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
   construction-a-neural-011:
+    needs: source-preflight
     name: construction-a-neural-011
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -89,7 +92,7 @@ jobs:
                   "sha256": "89bce9f6189214e2c2011699271aabca8fdf4dc2985b7944b16f8be6fe03103a"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-011/task.json",
+                  "path": "benchmarks/neural/NEURAL-011/historical/task.pre-understanding.v1.json",
                   "bytes": 13904,
                   "sha256": "044340155db14895d22a711e2a892261d0377603714125502e911dd7181fd0ea"
               }
@@ -196,6 +199,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-neural-027:
+    needs: source-preflight
     name: construction-a-neural-027
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -245,7 +249,7 @@ jobs:
                   "sha256": "f1696df127a6a5acc308d3cb134be7202bb1e111583bea2ab8b6cf2fb862b94e"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-027/task.json",
+                  "path": "benchmarks/neural/NEURAL-027/historical/task.pre-understanding.v1.json",
                   "bytes": 15976,
                   "sha256": "9ce2efe878eb9bebd03cf54aebf383cf2d2a032db7f5c552decb9cacda1304a9"
               }
@@ -352,6 +356,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-neural-050:
+    needs: source-preflight
     name: construction-a-neural-050
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -401,7 +406,7 @@ jobs:
                   "sha256": "520938a2db9096da1b951ead25fb4647ca648233af3b8779a27bcead3873172a"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-050/task.json",
+                  "path": "benchmarks/neural/NEURAL-050/historical/task.pre-understanding.v1.json",
                   "bytes": 10994,
                   "sha256": "a313ed58e5be0dc8a647a5ee34d053adb5f5edcaacf4a5650b994837cc9457bb"
               }
@@ -530,6 +535,7 @@ jobs:
                             'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
           PY
   construction-a-neural-disc-20261114-worm-propagation:
+    needs: source-preflight
     name: construction-a-neural-disc-20261114-worm-propagation
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -584,7 +590,7 @@ jobs:
                   "sha256": "01bf6d01c9bd6a36fda0e39b990e3c82a472246c57b6e603f5cbc923fb9a7cfb"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/task.json",
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/historical/task.pre-understanding.v1.json",
                   "bytes": 10863,
                   "sha256": "cdb143e840819271f52a1ab97f78ca1a04a522576518a6ada60e97bb4e47a8dc"
               }
@@ -691,6 +697,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-candidate-20261114-dpad:
+    needs: source-preflight
     name: construction-a-paper-candidate-20261114-dpad
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -830,6 +837,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-005:
+    needs: source-preflight
     name: construction-a-paper-find-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1002,6 +1010,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-add-005:
+    needs: source-preflight
     name: construction-a-paper-find-add-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1158,6 +1167,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-find-rep-007:
+    needs: source-preflight
     name: construction-a-paper-find-rep-007
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1319,6 +1329,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-root-add-006:
+    needs: source-preflight
     name: construction-a-paper-root-add-006
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1481,6 +1492,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-root-add-025:
+    needs: source-preflight
     name: construction-a-paper-root-add-025
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1642,6 +1654,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-012:
+    needs: source-preflight
     name: construction-a-paper-method-012
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -1842,6 +1855,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-029:
+    needs: source-preflight
     name: construction-a-paper-method-029
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2003,6 +2017,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-033:
+    needs: source-preflight
     name: construction-a-paper-method-033
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2164,6 +2179,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-add-003:
+    needs: source-preflight
     name: construction-a-paper-method-add-003
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2326,6 +2342,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-method-replacement-005:
+    needs: source-preflight
     name: construction-a-paper-method-replacement-005
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2492,6 +2509,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
   construction-a-paper-signal-add-001:
+    needs: source-preflight
     name: construction-a-paper-signal-add-001
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -2671,7 +2689,14 @@ jobs:
                             'passed': sum(phase == 'call' and outcome == 'passed' for (_, phase), outcome in gate.phases.items()),
                             'skipped': 0, 'generated_controls_only': True, 'scientific_qualification': False}))
           PY
+      - name: DeepCaImX source panel generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B -m unittest discover -s 'benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/tests' -p 'test_*.py' -v
+
   construction-a-paper-signal-add-017:
+    needs: source-preflight
     name: construction-a-paper-signal-add-017
     runs-on: ubuntu-24.04
     timeout-minutes: 6

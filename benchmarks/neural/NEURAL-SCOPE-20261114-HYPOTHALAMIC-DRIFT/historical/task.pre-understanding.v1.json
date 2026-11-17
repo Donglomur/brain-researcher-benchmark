@@ -1,0 +1,145 @@
+{
+  "schema": "public_neuroscience_sleep_construction_draft_v1",
+  "frozen_on": "2026-11-14",
+  "status": "registered_construction_draft",
+  "finished_benchmark_count": 0,
+  "scientific_runs": 0,
+  "biological_data_downloads": 0,
+  "evaluation_status": "Prospective protocol. No native data census, baseline run, scorer validation, contamination qualification or successful reproduction claimed.",
+  "evaluation_modes": [
+    "Interactive tool-using investigator with fixed compute/tool budget",
+    "Program authored before protected evaluation and then executed without adaptation",
+    "Optional matched information-budget direct-input arm only when whole scientifically sufficient cases can be represented; never counted as a new task"
+  ],
+  "paper_code_conditions": "Paper + permitted data versus paper + identical data + audited official source are access conditions of this family, not separate benchmark counts. Protected labels and executable-result caches are excluded in both.",
+  "qualification_rule": "No promotion until complete input/cohort inventory, rights, deterministic reference, leakage probes, competent baselines, protected scoring and independent scientific review pass. A null or reversed biological conclusion is a valid scientific outcome.",
+  "candidate_id": "HOLD-NEURAL-FRONTIER-HYPODRIFT-20261114",
+  "family": "longitudinal-identified-hypothalamic-cell-state-coding",
+  "title": "Predicting longitudinal state-selective calcium activity across identified neurons",
+  "paper": {
+    "title": "Temporal drift of sleep-wake representations in hypothalamic neuronal ensembles",
+    "venue": "Nature Communications",
+    "published": "2026-07-28",
+    "doi": "10.1038/s41467-026-75792-1",
+    "url": "https://www.nature.com/articles/s41467-026-75792-1",
+    "pmcid": "PMC13519010",
+    "evidence": [
+      "https://www.nature.com/articles/s41467-026-75792-1"
+    ]
+  },
+  "scientific_question": "How predictable are future state-conditioned calcium activity profiles of the same identified neurons, relative to stable population composition and each cell's own baseline, across seven days and sleep deprivation?",
+  "estimand": {
+    "primary": "From the single held-mouse origin after session 9, predict log1p(calcium events per minute) for sessions 10–21. For each neuron/state, average squared errors equally over eligible future sessions; average eligible states within neuron, neurons within mouse, mice within each of five groups, then groups equally. Improvement is paired loss reduction against the strongest validated competent reference among stationary, context and slow-drift models, selected without held targets.",
+    "reference": "A frozen evaluator event pipeline produces events/minute over valid stable-state duration. A state is observable only when at least 20 valid seconds remain in qualifying stable bouts of at least 20 seconds. Missing/underexposed states are masked, never encoded as zero activity. Report every session/state exposure duration and eligible count before any aggregation; source-threshold qualification including MCH remains required.",
+    "supporting_inference": [
+      "Historical all-21-session preference-label survival, shifts and continuous profiles remain separate from protected prediction. Compare observed label sequences with within-neuron permutations preserving that neuron's preferred-neural-label frequencies; this occupancy is not behavioral sleep-state duration.",
+      "Report behavior-state exposure, missingness, actual session/Zeitgeber context and finite-duration noise separately. Full-trajectory permutations are evaluator-only post hoc diagnostics, never forecast features. A temporal-order advantage over occupancy-preserving shuffles is not presumed.",
+      "Published active/quiet-wake validation in Supplementary Fig.8 covers LH-Vgat only. Extending it to other groups requires authentic EMG/masks and new validated analysis. Preserve the 31-mouse uncertainty unit despite 1,661 cells."
+    ],
+    "claim_limit": "Calcium events are not direct spikes, and state association is not proof that these neurons cause sleep. The fixed within-animal protocol does not identify a randomized causal effect of sleep deprivation. No diazepam mechanism or complete pharmacology replication is claimed.",
+    "missingness_and_weighting": "Eligible future sessions receive equal weight within each neuron/state, independent of frame count or exposure duration once eligible. A missing neuron/state has no fabricated rate; record the exact denominator at session/state/neuron/mouse/group levels and use identical masks for all models. All five groups must have eligible data to report the declared equal-group primary score. Missing/nonfinite predictions fail the output contract rather than change eligibility. First-nine-session results are calibration diagnostics, never a protected baseline-period test."
+  },
+  "whole_input_inventory": {
+    "required_cohort": "All five longitudinal groups: LH-Vgat 509 neurons/6 mice; LH-Vglut2 257/6; LH-Hcrt/OX 425/6; LH-MCH 28/7; POA-Vgat 442/6. Total 1,661 neurons/31 mice, nominal 21 sessions each (651 mouse-sessions). Preserve the full 9 baseline, 3 acute recovery and 9 chronic-recovery sessions. Cohort numbers are from main figures and supplement; archive presence remains unverified. Anatomy mentions 7 POA implants while longitudinal analysis uses 6: reconcile exclusions explicitly.",
+    "objects": [
+      {
+        "record": "10.6084/m9.figshare.31441240.v1",
+        "file": "For event detection (raw Hypnogram and dFFnornalized).zip",
+        "file_id": 62313805,
+        "bytes": 5982710014,
+        "md5": "7623cedaa133b6820c76b99ba3aa76c7",
+        "required": true,
+        "contents_required": "Every included mouse/session normalized dFF trace matrix, stable neuron identity map, hypnogram/timestamps, exact region/genotype/day/Zeitgeber/protocol metadata, and artifact/active-wake masks or their EMG derivation inputs."
+      }
+    ],
+    "required_published_transfer_bytes": 5982710014,
+    "data_access": "https://doi.org/10.6084/m9.figshare.31441240.v1",
+    "metadata_evidence": "https://doi.org/10.6084/m9.figshare.31441240.v1",
+    "scientific_sufficiency": "The paper explicitly links processed longitudinal data to Figshare. Metadata describes 21 sessions and dFF/hypnograms, with ambiguous raw EEG/EMG inclusion. It does not itself prove all 651 mouse-sessions or all five groups. The two-MCH-mouse GitHub demo is explicitly insufficient and is not substituted.",
+    "expanded_and_peak_memory_bytes": "Unknown until ZIP/native array census. Plan per-mouse/session streaming; published demo recommends 64 GB RAM, so do not assert laptop readiness or force a two-mouse pilot.",
+    "conditionally_required": "Verify authentic artifact masks or sufficient EMG for the complete event pipeline and all five groups. Published S8 active-wake analysis is LH-Vgat only; any extension requires valid group-specific EMG/masks and cannot be claimed as already validated. If required controls or neuron correspondence are absent, hold the full family rather than replace it by the two-MCH-mouse demo or silently narrow the scientific claim.",
+    "raw_data_scope": "Raw miniscope movies and extensive EEG/EMG are available by academic request according to the paper. They are not prerequisites for a conditional official-trace task, but are needed for independent raw registration, direct artifact reconstruction when masks are absent, or a causal online pipeline. Full-paper pharmacology has additional cohorts and bytes not inventoried here."
+  },
+  "derivation_and_exposure": {
+    "documented": "10 Hz calcium imaging, concurrent EEG/EMG at 512 Hz, one-second hypnogram. Common manually selected ROIs across sessions; whole-session exponential bleach correction, Gaussian-mixture F0 and envelope normalization. Event detection uses spline interpolation and peak shape criteria.",
+    "historical_reference": "Freeze exact group-specific event thresholds, trace/time units, peak criteria and valid-state rules. Main Methods give amplitude cutoffs for Hcrt/OX, Vglut2 and Vgat but omit MCH; do not guess or borrow a cutoff. Obtain authentic full event-pipeline source/parameters before qualification. Transitions require valid observed labels at both adjacent sessions; missing values do not become changes through diff(...) != 0. Missingness in survival analyses is explicitly censored/unknown rather than evidence of instability.",
+    "future_boundary": "Held-mouse sessions1–9 are the sole neural calibration history for every sessions10–21 prediction. Future dFF/events/labels and all-trajectory summary values are evaluator-only. The conditional acquisition-time metadata described in forecast_origin_contract is identical across methods; no target is revealed to refresh a baseline.",
+    "normalization": "Paper triangular visualization normalizes each cell by its maximum across all sessions/states; that operation leaks future magnitudes for forecasting. It belongs only in historical replay. Learn any predictor scaling from training/calibration data. Official input dFF itself uses offline whole-session preprocessing, so all forecasts are conditional on that derivative.",
+    "identity_and_noise": "The common manual ROI inventory was established by reviewing all seven days, so this forecast conditions on retrospectively established longitudinal cell identities and cannot establish prospective cell discovery or unbiased survival of all cells. Matching/CaliAli validations cover subsets and do not certify every identity. Preserve registration uncertainty and neuron-ID mismatch sensitivity; do not imply a past-only ROI path until independently qualified. Calcium sensitivity/noise can itself generate apparent preference changes."
+  },
+  "protected_split": {
+    "unit": "Mouse, with all cells and days from one mouse kept together in an outer fold. Matched cells may have their own early-session calibration, exactly as declared.",
+    "proposal": "Leave one mouse out within its biological group. Use only other mice to train/select methods. The held mouse's sessions1–9 calibrate the model once; score all available sessions10–21 from that fixed origin. Internal validation uses the same nine-session origin on other mice. No random session shuffle and no updating from revealed held targets. All31 mice retain an outer evaluation with explicit missingness.",
+    "heterogeneity": "Report held acute recovery and chronic recovery separately, preserving real chronology and acquisition-time metadata. Baseline sessions1–9 are calibration only. First post-SD time is triggered by a long NREM episode rather than a guaranteed ZT2 clock time; report uncertainty or missing timing and every vigilance-state exposure.",
+    "uncertainty": "Paired mouse bootstrap or hierarchical resampling preserving cell trajectories; report 6–7 animals per group, not 1,661 independent biological replicates.",
+    "contamination": "Public paper/data may already be known to a model. Remove data-bearing demo files from the source-access arm, block network retrieval of protected files at evaluation and audit known source caches. Historical public-data reproduction is not evidence of blind frontier generalization."
+  },
+  "competent_baselines": [
+    {
+      "name": "Stationary per-cell baseline",
+      "definition": "Estimate state rates from held-cell sessions1–9 using exposure weighting and train-only shrinkage; keep those estimates fixed for sessions10–21."
+    },
+    {
+      "name": "Group/context baseline",
+      "definition": "Hierarchical state-rate model using region/genetic group and permitted actual acquisition-time/condition metadata, learned on other mice plus allowed early calibration; future behavioral-state exposure remains scorer-only."
+    },
+    {
+      "name": "Competent slow-drift baseline",
+      "definition": "Regularized state-space or random-walk rate model chosen using other mice's fixed-origin validation and propagated open-loop from held session9. Last-session and running-mean comparators likewise cannot see later targets. The strongest validated model across this full baseline set is the improvement reference."
+    },
+    {
+      "name": "Scientific nulls",
+      "definition": "Evaluator-only within-cell session permutations preserving preferred-neural-label frequencies, contrasted with the weak uniform-label null; separately handle behavioral state durations, missing states and context. Within-session split-half noise floor, validated motion/active-wake sensitivity and neuron-ID mismatch are diagnostics, not training features."
+    }
+  ],
+  "official_code": {
+    "url": "https://github.com/ZENLabCode/CalciumImaging",
+    "commit": "50030a73adad21a951c535b6df4ec13becb02622",
+    "tree": "09923b0fbf26c3b1dda9b372dd4d9cd2700541eb",
+    "version_archive": "https://doi.org/10.5281/zenodo.20747988",
+    "archive_version": "CalciumImaging_V1.15.2",
+    "archive_bytes": 36735529,
+    "archive_md5": "e6ffed0f8ac45dcc7096196423cfd896",
+    "archive_downloaded": false,
+    "reason": "Archive includes data demo and was not fetched under the no-biological-data scope. Repository metadata and six plaintext source/docs were retained; full runtime source/dependency graph is unreviewed.",
+    "rights": "Zenodo software record declares CC BY 4.0; GitHub API license is null and tree has no LICENSE. Verify archive-to-commit correspondence and bundled dependencies before distribution. No blanket dependency relicensing inferred.",
+    "reference_gaps": [
+      "The exposed stable-cell/transition helpers do not contain the complete event GUI/session analysis; exact source/parameters remain unqualified.",
+      "MCH event-amplitude cutoff is unspecified in main Methods and must be resolved from authentic complete source or author clarification.",
+      "Helpers compare adjacent labels or diff values without explicit missing-label validity masks. A qualified reference must distinguish absent states/sessions from genuine preference transitions and specify survival censoring.",
+      "Archived software licensing does not blanket-license MATLAB/toolboxes, bundled dependencies or request-only raw data."
+    ]
+  },
+  "rights": {
+    "data": "Figshare v1 CC BY 4.0; file MD5/size fixed. Request-only raw files retain their distinct academic-access restrictions.",
+    "source": "Zenodo software archive CC BY 4.0; GitHub source/package and MATLAB/toolbox dependency licensing need a concrete audit.",
+    "evidence": [
+      "https://doi.org/10.6084/m9.figshare.31441240.v1",
+      "https://github.com/ZENLabCode/CalciumImaging/tree/50030a73adad21a951c535b6df4ec13becb02622"
+    ]
+  },
+  "supplement_review": "The complete 18-page official supplement was examined, covering neuron matching, continuous profiles, preference-label occupancy-preserving permutation, LH-Vgat active wake and complete five-group cohorts. Source-only inspection does not establish authentic input or executable-reference qualification.",
+  "historical_numbers": "Main paper reports very few cells retain their original state label over all sessions, while group proportions remain stable. Source values are only historical reference; no scientific reproduction, measured gain or SOTA is claimed.",
+  "construction_gates": [
+    "Verify complete five-group/31-mouse/1,661-cell inventory, actual acquisition timestamps, matched cell identities and all21-session histories; do not substitute the demo.",
+    "Qualify authentic event-detection source, MCH cutoff, time units, missing-label/survival rules and complete artifact-control inputs.",
+    "Keep manual all-days ROI selection and offline whole-session transforms as explicit retrospective side-information limits; validate any claimed past-only variant separately.",
+    "Freeze fixed sessions1–9 origin, no test updates, equally weighted eligible-session hierarchy, identical masks and conditional context for every comparator.",
+    "Require a competent slow-drift reference in the validation-selected baseline set, occupancy-preserving preferred-label null, finite state-exposure sensitivity and mouse-level paired uncertainty before any improvement claim."
+  ],
+  "dedup": "No selected paper/accession/repository identity match. SleepEDF NEURAL-007/008 concern sleep staging/EOG; REM brainstem concerns another circuit/endpoint. Current NEURAL-024 asks whether macaque spike-history models retain neural forecasting gain across days without movement labels. This family instead predicts state-conditioned longitudinal calcium activity of retrospectively matched hypothalamic cells and compares it with stable population composition; it is not merely another alignment or sensor version.",
+  "forecast_origin_contract": {
+    "origin": "One fixed held-mouse origin after sessions 1–9. Generate every session 10–21 prediction before revealing any of those sessions' neural targets. No target-session updates, teacher forcing or online recalibration.",
+    "calibration": "Sessions 1–9 calibrate per-cell parameters and stationary summaries; they are not protected evaluation cases. All hyperparameters and update rules are selected on other mice using matched fixed-origin validation.",
+    "comparators": "Last-session means session9 for every future target. Running-mean uses only sessions1–9 for every target. Slow-drift/state-space models may propagate their fitted latent state open-loop from that origin but never condition on a session10–21 observation. A prequential variant would require a separately labeled, matched access condition and is outside this contract.",
+    "context": "All comparators receive identical declared future condition and actual acquisition-time/Zeitgeber metadata as a conditional-context evaluation, without future calcium/event/state-preference values. First post-deprivation recording follows the first long NREM bout rather than necessarily baseline ZT2; do not substitute the baseline schedule. If actual timestamps are unavailable, record the context gap and qualify a common unknown-context mask before implementation.",
+    "claim_limit": "Fixed neural-data origin does not claim an operational forecast before future acquisition-time metadata or retrospectively established cell identities exist. Those conditional side-information assumptions are explicit."
+  },
+  "registered_id": "NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT",
+  "runnable": false,
+  "reference_results_available": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "scientific_design_review": "The complete source-backed scientific construction contract has undergone independent review. Authentic native inputs, executable references, protected evaluation and scientific qualification remain separate unresolved stages.",
+  "publication_note": "Public design document, not a candidate input packet or a runnable benchmark. Publisher statements, historical results and proposed evaluation choices are distinguished. No code bodies, data, weights, private labels, actual model comparison or SOTA result are included. Data-record license statements do not settle code, dependency, stimulus or third-party rights."
+}

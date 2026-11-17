@@ -4,7 +4,7 @@
   "title": "Observed bedside responsiveness from causal pre-assessment EEG",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Estimate the observed bedside responsiveness category at each documented MOAA/S assessment from the immediately preceding EEG.",
+  "scientific_question": "How accurately can immediately preceding EEG estimate the recorded bedside responsiveness category at each authentic assessment?",
   "participant_inputs": "Complete two-channel125Hz waveform for30seconds (7,500 values when fully sampled), units, time offsets and artifact/missingness masks. No MOAA/S/SoC columns, dose, clinical event codes, procedure-progress features or patient-identifying metadata in the neural-only main arm.",
   "known_answer": "The recorded MOAA/S response category under its authentic released scale and assessment protocol. This is behavioral responsiveness, not direct proof of consciousness or an anesthetic dose recommendation.",
   "complete_scope": {
@@ -154,5 +154,134 @@
     "submission_ready": false,
     "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
     "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Released ordered MOAAS categories 1,2,3,4,5, with source-reported merging of original 0/1 and 5/6; missing/ambiguous ratings stay null."
+  ],
+  "biological_unit": "Biological person across repeated recordings/procedures;171 recordings are not 171 proven people.",
+  "case_definition": "Every original assessment slot, using complete 30 seconds of EEG ending before assessment begins; evaluable status is precommitted.",
+  "allowed_inputs": {
+    "inputs": [
+      "Complete two-channel 125 Hz EEG for the 30 second causal pre-assessment interval:7,500 values at full sampling, units and artifact/missingness masks.",
+      "A 40-pEEG table is an optional distinct representation only after its complete filter/lookback causality is verified."
+    ],
+    "forbidden_inputs": [
+      "MOAAS/SoC labels, drug dose, clinical event codes, procedure progress, identifying metadata and future EEG/centered pEEG features."
+    ],
+    "case_identity": "Scorer binds every assessment_id to recording_id, authentic person_id, outer fold and precommitted eligibility; no authentic full mapping or signal packet is published.",
+    "split": "Outer folds group authentic people across repeated procedures; overlapping windows and every person’s recordings remain together. All choices and clinical-QC decisions use training evidence only.",
+    "coverage": "Logical policy requires 171 recordings,7,328 assessment slots and 1,129 separate SoC transitions; these source-reported counts are not an independently authenticated native census. Every slot remains in coverage, including missing/history/artifact cases."
+  },
+  "split": {
+    "policy": "Outer folds group authentic people across repeated procedures; overlapping windows and every person’s recordings remain together. All choices and clinical-QC decisions use training evidence only.",
+    "coverage": "Logical policy requires 171 recordings,7,328 assessment slots and 1,129 separate SoC transitions; these source-reported counts are not an independently authenticated native census. Every slot remains in coverage, including missing/history/artifact cases."
+  },
+  "controls": [
+    "Dose/procedure-time-only auxiliary comparator measures schedule shortcuts without entering neural-only input.",
+    "Audit every feature/filter for future samples and embedded clinical/label columns.",
+    "Retain event-driven assessment density and artifact strata; transformed control maps require target-free physical provenance, same masks and within-person support."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Complete 7,500 value causal two-channel EEG or an explicitly matched waveform rendering.",
+      "boundary": "No execution; exact full observation and mask/capacity policy required.",
+      "evidence_ids": [
+        "dosei-primary",
+        "dosei-secondary"
+      ],
+      "missing": [
+        "Complete authentic packet and no-tools transport."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential calibrated two-channel 30 second waveform display with typed time/scale actions.",
+      "boundary": "No clinical timestamps/labels or dose overlays; cannot silently crop to salient segments.",
+      "evidence_ids": [
+        "dosei-primary",
+        "dosei-secondary"
+      ],
+      "missing": [
+        "Restricted viewer and response-capture implementation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Same pre-assessment waveform plus causal spectral/entropy tools.",
+      "boundary": "No centered/future-aware features; train-only fitted tools and fixed case budget.",
+      "evidence_ids": [
+        "dosei-primary",
+        "dosei-secondary"
+      ],
+      "missing": [
+        "Audited physiological tools and protected input path."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted ordinal predictor with fixed train-only fitting recipe.",
+      "boundary": "Group all recordings per person; scorer schema does not enforce fit custody.",
+      "evidence_ids": [
+        "dosei-primary",
+        "dosei-secondary"
+      ],
+      "missing": [
+        "Frozen execution lifecycle and authentic baseline."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Normalized ranked probability score, participant macro",
+      "direction": "lower",
+      "aggregation": "For five-category probabilities sum four squared cumulative errors and divide by 4; average evaluable assessments within each biological person then equally across people. If any person has no evaluable assessment the full-person primary is undefined.",
+      "rationale": "Uses order and probabilistic uncertainty while preventing dense clinical assessment schedules from dominating."
+    },
+    "secondary": [
+      "Participant-macro ordinal MAE using prospectively fixed lower probability median; category recall uses the same decision.",
+      "Fixed-bin classwise reliability/ECE with equal-person weighting, support counts and no claim that ECE certifies calibration.",
+      "Paired original-arm RPS/MAE differences and separately support-matched transformed-packet diagnostics."
+    ],
+    "comparators": [
+      {
+        "name": "Participant-weighted ordinal prior",
+        "inputs": "Outer-training released category labels only",
+        "procedure": "Freeze each fold prior before held assessments; preserve five categories."
+      },
+      {
+        "name": "Causal spectral/entropy ordinal model",
+        "inputs": "Exactly the same 30 second EEG and training labels",
+        "procedure": "Proposed train-only causal feature/normalization recipe and nested person-group tuning."
+      },
+      {
+        "name": "Train-only random forest",
+        "inputs": "Same audited causal packet/features and label budget",
+        "procedure": "Proposed competent nonlinear comparator; published binarySoC performance is not the ordinal baseline."
+      }
+    ],
+    "nuisance_controls": [
+      "Dose/procedure-time-only auxiliary comparator measures schedule shortcuts without entering neural-only input.",
+      "Audit every feature/filter for future samples and embedded clinical/label columns.",
+      "Retain event-driven assessment density and artifact strata; transformed control maps require target-free physical provenance, same masks and within-person support."
+    ],
+    "uncertainty": "Secondary implementation offers fixed-prediction biological-person paired bootstrap. It is conditional descriptive uncertainty with shared cross-fit training dependence, not validated new-patient/refitting confidence. Native person identity is a prerequisite.",
+    "failure_policy": "All 7,328 slots required; evaluable cases need exact normalized five-category decimal probabilities, nonevaluable cases explicit null. Any missing failed evaluable prediction refuses aggregate; no target access before complete arm admission.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "62332fb6bcdb6a7327ac838d1479ac5873ffe0bd6b0fadd1d0f9e4c5efce2330",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "745b4798914bfbdd763c0e4cf81bac1d894fc4448c99fa422e50b96921a6f1e8"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

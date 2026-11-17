@@ -1,0 +1,246 @@
+{
+  "schema": "neuroscience_central_behavioral_task_proposal_v3",
+  "candidate_id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
+  "track": "neural",
+  "title": "Causal held-session prediction of human information-sampling and stopping decisions",
+  "status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "registered": true,
+  "registration_count_delta": 1,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "task_kind": "Neural-data/behavior understanding: causal processed-state prediction and reference reconstruction. This is human behavior from a neuroscience study, not neural-signal decoding or published ANN/symbolic/imaging reproduction.",
+  "paper": {
+    "title": "Interpretable abstractions of artificial neural networks predict behavior and neural activity during human information gathering",
+    "journal": "Nature Neuroscience",
+    "year": 2026,
+    "doi": "10.1038/s41593-026-02342-9",
+    "url": "https://www.nature.com/articles/s41593-026-02342-9"
+  },
+  "scientific_question": "Across all 20 released participants and all four sessions each, can a program predict each next sampling or stopping action from causally available processed state? Can it reconstruct the complete training-only reference comparison and establish a participant-level held-session loss improvement without selecting on held outcomes?",
+  "why_substantial": "This preserves the complete main behavioral assay, four-action outcome, within-trial causal sequence, initial-information manipulation through the released processed variables, all people and sessions, and genuine out-of-session prediction. It tests both numerically verified prediction and interpretation of dependent uncertainty. Rare stopping actions remain explicit instead of hiding behind accuracy. It does not substitute a tiny subset, simulated observations or an answer lookup for human behavior.",
+  "scope_relation": {
+    "full_paper_candidate_id": "paper-hybrid-information-gathering-2026",
+    "full_paper_contract": {
+      "role": "whole_paper_contract",
+      "path": null,
+      "bytes": 26848,
+      "sha256": "16fc27d4a869cf3d6fe29d3f34baf6365415f69bbb632db08e6f7a4c522928ee"
+    },
+    "preserved_unchanged": true,
+    "difference": "This is a new explicit behavioral-data-understanding assignment in the neural track, which includes the user-selected behavioral tasks. It neither replaces the separate held paper-reproduction project nor asserts completion of its ANN/symbolic/lesion/transfer/neural obligations.",
+    "counting": "If admitted, one behavioral-data task in this source family; references, folds, modes, trials and replay episodes add no tasks. The separate full-paper proposal remains unregistered. Any later admission must disclose the shared paper/cohort and not claim another independent source family."
+  },
+  "sources": {
+    "code": {
+      "repository": "https://github.com/simonedambrogio/HybridModellingProject",
+      "tag": "v1.0.0",
+      "commit": "3d343beb6dc7f1b7c6c7521ebec61f7dcef35b12",
+      "tree": "e489c136230fb619b1e4e9bd8ac569e0a2f6e3f8",
+      "release_record": "https://zenodo.org/records/19685085",
+      "source_license": "MIT root license verified in existing source evidence; preserves source-specific exceptions."
+    },
+    "data": {
+      "repository_path": "Data/list/data.rds",
+      "immutable_url": "https://raw.githubusercontent.com/simonedambrogio/HybridModellingProject/3d343beb6dc7f1b7c6c7521ebec61f7dcef35b12/Data/list/data.rds",
+      "bytes": 3619191,
+      "git_blob": "13e9b7709b267ed5ee7f7a0f70a43e57dd2592fb",
+      "role": "Canonical analysis-ready main-cohort event records; earlier accepted native-R construction establishes the processed case map.",
+      "inventory_evidence": {
+        "path": null,
+        "bytes": 28382,
+        "sha256": "5bcaf3f420c4ec97220e25ef4fdc2b04fee0bf12cbced9bfdb3a4e6e874bfb71"
+      },
+      "current_stage": "Authentic main-cohort construction already completed; the historical inventory downloaded:false field is not current state."
+    },
+    "source_family_ids": [
+      "doi:10.1038/s41593-026-02342-9",
+      "github:simonedambrogio/HybridModellingProject:main-information-sampling-cohort"
+    ],
+    "rights": "The article identifies CC BY4.0 and the root code MIT. No additional consent/raw-log/data redistribution grant is invented. The local processed-state endpoint is private; any public data bundle requires source-specific terms clearance. External Gershman data are not used in this central assignment."
+  },
+  "cohort": {
+    "participants": 20,
+    "sessions": 80,
+    "sessions_per_participant": 4,
+    "complete_selected_trials": 4884,
+    "paired_source_rows": 182671,
+    "eligible_decisions": 163135,
+    "source_defined_excluded_rows": 19536,
+    "codings": 2,
+    "columns_per_coding": 31,
+    "unit": "Participant; sessions and trials nested within participant. Decisions are not independent participants.",
+    "eligibility": "The entire released eligible two-option processed assay is used under the accepted source exclusions. Original warm-up/three-option/timeout/fewer-than-three-sample filtering and canonical participant mapping remain disclosed; missing raw acquisition logs prevent independent reconstruction of every original exclusion.",
+    "full_population_rule": "Every required participant/session/trial/decision must be accounted for. An incomplete or invalid submission fails the complete evaluation; never score only successful trials."
+  },
+  "inputs": {
+    "current_query_fields": [
+      "nL",
+      "nR",
+      "nB",
+      "rL",
+      "rR",
+      "muL",
+      "muR",
+      "gL",
+      "gR",
+      "first_visit",
+      "after_first_visit",
+      "t"
+    ],
+    "wire": "Opaque HMAC token, first-query marker and one target-free current observation. One valid probability commitment precedes the next observation; an end frame is sent only after the last commitment.",
+    "permitted_history": "Previously revealed observations and own previous actions/messages within the same trial, under the existing endpoint; no state survives to another trial in isolated candidate evaluation.",
+    "prohibited": "Held labels, source-row/person/session/trial identifiers, future trajectory/length, current unknown target, per-case score feedback, fitted author VoI/checkpoints, reference predictions and target-derived selection traces.",
+    "source_limits": "Processed count/cue conventions and within-trial chronology are validated; initial_visit generator/consumer discrepancy, raw JavaScript timing/initial-cue history and source-exclusion provenance remain limitations. No lossless raw sensory-history claim."
+  },
+  "split": {
+    "outer": "For each person, hold each of four sessions out; train on that same person’s other three sessions. All80 folds.",
+    "inner": "Hold each of the three training sessions out; select family and ridge penalty using equally weighted inner-session NLL.",
+    "ridge_grid": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "training_only": "Normalization, parameters, family/penalty/restart selection and candidate development cannot use the outer held outcomes.",
+    "interpretation": "Within-person cross-session interpolation with causality protected within trials; not future-session forecasting or unseen-person generalization.",
+    "candidate_training_delivery": "The accepted fixed-reference workflow constructs training-only views and anonymous artifacts. A general candidate training/export/provenance binding has not been certified by this proposal and remains an explicit additional delivery requirement."
+  },
+  "conditions": {
+    "paper_data": "Paper/supplement, causal task specification and legally usable training/development data; no author implementation or fitted answer artifacts.",
+    "paper_data_code": "Same evidence, splits, budget and evaluator plus the pinned official implementation, excluding fitted outcomes/checkpoints/answer files.",
+    "evaluation_modes": "A frozen prediction program and a case-adaptive scientific agent can be compared only with matched causal observations, permitted history, tools and budgets. Each mode must commit before revelation. These are experimental conditions, not extra benchmarks.",
+    "not_executed": "No matched LLM, code-access or mode-comparison study has been run. This proposal does not claim a code-assistance effect or post-training result.",
+    "budget_status": "Exact agent/model compute and executable training bindings must be fixed for a future study before test access; current accepted construction runtime is evidence for reference feasibility, not a selected agent budget."
+  },
+  "outputs": {
+    "prediction": "Exactly one vector in class order[1,2,3,4] for every eligible decision. Each value is an int/float (notbool), finite and strictly between0and1; math.fsum must differ from1 by no more than1e-9, after which the accepted scorer normalizes only this roundoff discrepancy. Classes3and4 are terminal actions; the accepted scorer remains unchanged.",
+    "reference_reconstruction": "Complete per-fold/per-session/per-person losses for all four named references; paired participant uncertainty and secondary stopping metrics; provenance and numerical discrepancy report.",
+    "improvement": "A frozen new method and complete protected predictions, compared against the prespecified reference set with development-only choices. A null or inconclusive result is valid; no tuning on test outcomes."
+  },
+  "scoring": {
+    "primary": "Mean decision negative log probability within held session, equal four sessions within person, equal20persons.",
+    "secondary": [
+      "Decision-weighted NLL",
+      "Trial-balanced NLL",
+      "Accuracy",
+      "Four action recalls, explicitly both stopping actions",
+      "Stop Brier score"
+    ],
+    "uncertainty": {
+      "unit": "20 paired participants",
+      "accepted_method": "Paired participant percentile bootstrap,10000 draws, seed20261114; preserve full paired participant summaries.",
+      "no_pseudoreplication": "Do not use decisions, trials or80sessions as independent biological units."
+    },
+    "failure": "Missing/duplicate/out-of-order/malformed commitments, wrong population or incomplete containment are full-evaluation failures; failures remain in reported denominators.",
+    "improvement_standard": "The prespecified candidate-minus-family_train_selected primary NLL contrast must be reported over all20 paired participants with dependence-aware uncertainty. No outer-test selection of models, comparator, restarts or reporting subsets. Before a new confirmatory study, fix the meaningful effect threshold and interval/test procedure; a stronger scientific-reasoning/frontier claim additionally requires a history-sensitive competent comparator or explicitly matched-information ablation. Other named-reference contrasts follow the separate descriptive/multiplicity policy.",
+    "contamination": "Public data and published results may be in pretraining. Curator-held evaluation labels and network/filesystem isolation do not prove unseen training content; describe this as controlled public-data replay unless genuinely new evaluation data are supplied.",
+    "primary_comparator": "For a future candidate improvement study, compare its primary participant/session-balanced NLL with the frozen family_train_selected reference. This comparator is fixed by the task, and its per-fold family/penalty choice uses only inner training sessions. Do not select the comparator from outer held scores.",
+    "secondary_comparison_policy": "Uniform, context_counts and ridge_train_selected remain complete required reference reports. Their candidate contrasts are descriptive by default; any confirmatory secondary family requires a prospectively specified multiplicity procedure. Existing historical reference comparisons remain descriptive and are not relabelled confirmatory."
+  },
+  "accepted_references": {
+    "families": [
+      "uniform",
+      "context_counts",
+      "ridge_train_selected",
+      "family_train_selected"
+    ],
+    "relationship": "Four scored reference conditions, not four independent model families; train-selected family reuses the chosen context/ridge model.",
+    "authentic_fit_population": {
+      "inner_ridge_fits": 720,
+      "final_ridge_fits": 80,
+      "outer_folds": 80
+    },
+    "nll": {
+      "uniform": 1.3862943611198906,
+      "context_counts": 0.2625284078433802,
+      "ridge_train_selected": 0.2623171593139009,
+      "family_train_selected": 0.25968506147814224
+    },
+    "family_minus_context": {
+      "nll": -0.002843346365237978,
+      "participant_percentile95": [
+        -0.008779509935507437,
+        0.0016937085293696255
+      ]
+    },
+    "family_stopping_recalls": [
+      0.015637530072173216,
+      0.013389121338912133
+    ],
+    "interpretation": "The difference is inconclusive under the reported interval; low stopping recalls remain material. No SOTA/improvement/LLM effect is established."
+  },
+  "implementation_evidence": {
+    "complete_local_reference_construction": "Accepted complete actual and source handoff; no rerun required.",
+    "controls": "22 integrated controls including17 real isolated invented episodes, plus earlier31 causal-consumer controls accepted separately; cases are not new benchmarks.",
+    "authentic_independent_review": "All652540 reference probability vectors, grouped scores and paired bootstrap arithmetic recomputed; all80 final objectives/gradients checked without refits.",
+    "protected_interface": "Current-query/commit transport and isolation have complete production-path invented-control evidence. Authentic reference inference was trusted-host and independently matched to frozen scalar artifact inference.",
+    "general_candidate_limits": "The supported profile is a flat1MiB program and64KiB anonymous artifact. General external-candidate training and provenance are not automatically established by container isolation.",
+    "optional_full_authentic_replay": "The implemented run_complete_participant requires all4884 fresh trial containers and163135 commitments. That separate complete candidate route has not run and is not a new prerequisite to the already accepted construction/reference tier.",
+    "no_refit_repetition": "Do not run the convenience prepare-repeat merely to acknowledge or register this profile; it repeats accepted controls and800 reference fits.",
+    "evidence": [
+      {
+        "role": "central_behavior_scientific_contract",
+        "path": null,
+        "bytes": 6440,
+        "sha256": "edd5c8a3abad899f0de5994def4a7377d2a3b49fb100ea7fa9ba3c8faacfce76"
+      },
+      {
+        "role": "complete_actual_peer",
+        "path": null,
+        "bytes": 4028,
+        "sha256": "aba81970e7bce4729b347048f7c8d6e724418284aecbe483f88b8b93269509dc"
+      },
+      {
+        "role": "complete_actual_classification",
+        "path": null,
+        "bytes": 2582,
+        "sha256": "2e8080288977104d53e492359f3e308a01583fef04c7a07f2bec021e4886f6c8"
+      },
+      {
+        "role": "private_local_use",
+        "path": null,
+        "bytes": 9574,
+        "sha256": "762c64a82bd0e45d8e3844eeb0f0993cff7ec58388a1d306183beb1611b5930a"
+      },
+      {
+        "role": "private_local_handoff_peer",
+        "path": null,
+        "bytes": 3473,
+        "sha256": "363752a6f3d2cd454a0e0c279ae6d6f6ab26cfe0d52d33727ffbec963d270981"
+      }
+    ]
+  },
+  "remaining_claim_specific_requirements": [
+    "Root registration and readiness adjudication after independent scientific review of this explicitly scoped proposal.",
+    "General candidate training/export and artifact-provenance binding if that evaluation mode is selected.",
+    "Complete authentic isolated candidate execution before claiming that stronger route demonstrated.",
+    "History-sensitive comparator or matched-information ablation before stronger scientific-reasoning/frontier attribution.",
+    "Source-specific public data redistribution clearance.",
+    "All separate original-paper ANN/symbolic/recovery/lesion/external-transfer/neural obligations remain held under the unchanged whole-paper contract."
+  ],
+  "resource_evidence": {
+    "accepted_construction_elapsed_seconds": 148.786,
+    "accepted_receipt_inclusive_output_bytes": 72445649,
+    "accepted_host_profile": "Python3.11.6 and existing NumPy2.2.6 environment; participant Linux/ARM64 Python3.12.8 immutable image. No installation selected here.",
+    "local_map_bytes": 200756614,
+    "current_new_source_work": "Only source/metadata review and this proposal; no authentic payload, runtime body, model fit or container execution.",
+    "optional_replay_worst_case": "Existing4884episode admission is22161470228 output bytes and586080 seconds from120s/trial alone before ownership overhead. These are conservative caps, not measured or expected use, not a reason to reduce the cohort, and not selected."
+  },
+  "admission_note": "Proposed registration is a new neural-track behavioral-data-understanding draft. Local construction/reference usability is already supported by whole reviews. The bounded fixed-reference API is not general train-any-model delivery. Full new-contract qualification, public submission readiness and benchmark counts remain root decisions; this proposal changes none of them.",
+  "supersedes": {
+    "path": "CENTRAL_BEHAVIOR_CONTRACT_V2.json",
+    "bytes": 18697,
+    "sha256": "817a1433254daee70dc616e6d3ceb7c36c9ac08a7766fd359e01374c0a37080b",
+    "scope": "Root-requested neural-track behavioral-data classification and corresponding candidate identity; makes existing class/probability protocol explicit. All cohort, numerical results, fixed primary contrast, protected inputs, stronger-claim holds and old fullpaper contract are unchanged."
+  },
+  "modality": "Human information-sampling behavior; no neural measurements are included in this scoped task.",
+  "publication_context": {
+    "registered_task_id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
+    "current_registration": "One newly admitted neural-track human-behavior draft; programme and public chain now 234 (116 paper / 118 neural).",
+    "scientific_qualification": false,
+    "submission_ready": false,
+    "authentic_public_runner_supplied": false,
+    "private_local_profile": "Accepted trusted-host reference construction plus invented isolated episodes; full authentic arbitrary-candidate route unrun.",
+    "privacy": "Private local evidence paths replaced by null; byte/hash references are provenance pointers, not redistributed evidence.",
+    "historical_source_wording": "Proposal/admission language and older registered:false references elsewhere describe source history; this context and registry state current membership. All scientific scope, results, rights and limitations are unchanged."
+  }
+}

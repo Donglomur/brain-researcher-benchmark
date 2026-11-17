@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-047",
+  "track": "neural",
+  "title": "Post-reversal turn decoding in worms",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-P008"
+    ],
+    "titles": [
+      "C. elegans whole-brain calcium and behavior during directed olfactory turns"
+    ],
+    "overlap_groups": [
+      "kramer-flavell-directed-turning"
+    ],
+    "task_family": "sensorimotor_readout"
+  },
+  "scientific_question": "Can identified-neuron calcium predict dorsal versus ventral turns after reversal in new worms?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Turn-direction probabilities from a fixed preturn neural interval."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://datadryad.org/dataset/doi:10.5061/dryad.8sf7m0cz2",
+      "https://www.nature.com/articles/s41593-026-02257-5",
+      "https://github.com/flavell-lab/SAAV_Decoding",
+      "https://datadryad.org/terms",
+      "https://raw.githubusercontent.com/flavell-lab/SAAV_Decoding/c7e7e18a84cde5dc02df9d63492293b38402eb2c/load_data.py",
+      "https://raw.githubusercontent.com/flavell-lab/SAAV_Decoding/c7e7e18a84cde5dc02df9d63492293b38402eb2c/DecodingMain.ipynb",
+      "https://raw.githubusercontent.com/flavell-lab/SAAV_Decoding/c7e7e18a84cde5dc02df9d63492293b38402eb2c/kfold.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-P008",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "ea81496583d3b6e4f5d545285551ebb37b429903e7c23582d9db62d3aa431c60",
+        "data_manifest": {
+          "version": "Dryad release 2026-03-26",
+          "number_of_files": null,
+          "number_of_subjects": null,
+          "total_bytes": null,
+          "example_asset": {
+            "observed_collection_size": "1.46 GB per Dryad landing page; exact selected input-file manifest not yet frozen"
+          }
+        },
+        "recording_contract": {
+          "neural": [
+            "Dryad per-animal calcium H5 files and aggregate MAT data"
+          ],
+          "labels": [
+            "head curvature, velocity, neuron identities and odor-gradient crossings described by archive"
+          ],
+          "time_alignment": "Archive describes aligned behavior; exact conversion to decoder input unverified",
+          "biological_ids": "one animal per dated H5; aggregate MAT duplicates same recordings",
+          "evidence": "Pinned loader expects SAAV_dorsal.csv,HC_dorsal.csv,SAAV_ventral.csv,HC_ventral.csv at lab-local /store1/prj_rim/Decoding_Data/FlossieAligned"
+        },
+        "status": "needs_adapter"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": [
+      "Dryad per-animal calcium H5 files and aggregate MAT data"
+    ],
+    "allowed_context": [
+      "head curvature, velocity, neuron identities and odor-gradient crossings described by archive"
+    ],
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Archive describes aligned behavior; exact conversion to decoder input unverified",
+    "source_contract_evidence": "Pinned loader expects SAAV_dorsal.csv,HC_dorsal.csv,SAAV_ventral.csv,HC_ventral.csv at lab-local /store1/prj_rim/Decoding_Data/FlossieAligned"
+  },
+  "biological_unit": "one animal per dated H5; aggregate MAT duplicates same recordings",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Hold out entire worms and complete odor/reversal episodes; no future behavior in aligned feature windows.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/flavell-lab/SAAV_Decoding",
+    "commit_or_archive_version": "c7e7e18a84cde5dc02df9d63492293b38402eb2c",
+    "entrypoints": [
+      "load_data.py",
+      "DecodingMain.ipynb",
+      "kfold.py"
+    ],
+    "role": "Author decoding implementation consumes aligned CSV derivatives; the bridge from public neural files is unresolved.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41593-026-02257-5",
+    "data_url": "https://datadryad.org/dataset/doi:10.5061/dryad.8sf7m0cz2"
+  },
+  "controls": [
+    "No future head curvature",
+    "recent motion baseline",
+    "equal windows",
+    "direction-balanced trial sampling."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Worm-macro balanced accuracy and log loss.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": null
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Close public H5/MAT-to-SAAV/HC CSV adapter and retain individual worm IDs."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Public H5/MAT-to-four-aligned-CSV conversion not located; decoder needs additional mapping."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Exact per-animal identities retained in exported CV arrays must be checked."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Close public H5/MAT-to-SAAV/HC CSV adapter and retain individual worm IDs."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "ad3db566393dee767348b3a184ea953ea894475c4a5a42457ff17edb55fadfdf",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

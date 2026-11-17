@@ -13,7 +13,7 @@
     "zenodo:15619099",
     "zenodo:15626375"
   ],
-  "scientific_question": "Can a general agent infer expert-annotated auditory-response thresholds from averaged voltage waveforms in a previously unseen acquisition laboratory, and demonstrate that waveform evidence improves on stimulus-level/frequency priors under matched calibration information?",
+  "scientific_question": "Can complete averaged ABR voltage-versus-time stacks predict expert-annotated hearing-response thresholds for the 104-mouse held laboratory beyond sound-level and frequency priors?",
   "counting": {
     "proposed_families": 1,
     "target_source_family_id": "zenodo:15619099",
@@ -231,5 +231,129 @@
     "Verify full native numerical serialization, common representation fidelity and matched evidence budget before interpreting tool/no-tool differences.",
     "Run competent reference and nuisance controls before any native-understanding, improvement, runnable or qualified claim.",
     "Authenticate and freeze the byte-identical common documentation packet and enforce the all-case finite-prediction/abstention rule; an incomplete or invalid submission receives no aggregate primary score. Audit source aggregation boundary cases separately from literal historical reproduction."
-  ]
+  ],
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Expert threshold in dB SPL for each animal×stimulus series, or an explicitly documented censored interval; it is an annotation of averaged physiology."
+  ],
+  "biological_unit": "Animal; ear/session/frequency/level/trace are nested. The one held laboratory is not a replicated laboratory sample.",
+  "case_definition": "One complete target animal×stimulus-frequency/click stack over all recorded levels.",
+  "allowed_inputs": {
+    "inputs": [
+      "Every measured averaged voltage trace in each complete level stack, physical time grid, stimulus level in dB SPL and tone frequency or explicit click category.",
+      "Source-supported 244-sample/10-ms common representation only after native timing and units are verified; preserve normalization range/offset.",
+      "Strict matched direct/program/tool design supplies the same four source calibration stacks; full-support fitted methods are a separate information condition."
+    ],
+    "forbidden_inputs": [
+      "Held-animal thresholds, peak annotations, rater decisions, annotation-derived filenames, genotype/identity lookup proxies.",
+      "ABRA pretrained weights unless training provenance excludes every target mouse; published mixed-lab weights may contain target exposure."
+    ],
+    "case_identity": "Scorer accepts unique opaque case_id tied to an animal roster and stimulus descriptor. Authentic case IDs and duplicate-ear/session joins are not delivered; do not manufacture 104×9 observed cases.",
+    "split": "Prospective: all 104 Marcotti animals held out; complete Manor/Liberman data provide support with animal-grouped validation. No native split manifest is delivered.",
+    "coverage": "Required target 104 animals,54/50 genetic-background roster, all recorded levels and eight tones plus click. Native case count remains unresolved; source metadata is not waveform coverage."
+  },
+  "split": {
+    "policy": "Prospective: all 104 Marcotti animals held out; complete Manor/Liberman data provide support with animal-grouped validation. No native split manifest is delivered.",
+    "coverage": "Required target 104 animals,54/50 genetic-background roster, all recorded levels and eight tones plus click. Native case count remains unresolved; source metadata is not waveform coverage."
+  },
+  "controls": [
+    "Treat click source code 100 as a category, never a 100 Hz tone.",
+    "Verify sample duration; app truncation to 244 native samples cannot establish 10 ms.",
+    "Audit early stimulus-artifact and phase/time perturbation controls, with unchanged level/frequency metadata.",
+    "Reconcile paired ears and repeated recordings; preserve weak/no-response series."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Complete numeric or fixed waveform stack plus four labeled source stacks is scientifically meaningful.",
+      "boundary": "No tools, source lookup or target labels; all levels and samples must fit the frozen context.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Authentic serializer, complete packet capacity and transport not delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A typed waveform-stack viewer could expose time/level panels without raw export.",
+      "boundary": "Actions must retain full stack access and hide annotations; no viewer currently exists for this registration.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Typed action protocol and observation-only renderer."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case numerical investigation of the same complete stack and identical calibration support.",
+      "boundary": "No target feedback; models fitted on extra support form a separately named information condition.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Candidate investigation interface, fixed tools and isolated episode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Freeze waveform predictor and fitting recipe before held-lab cases.",
+      "boundary": "Identical four-stack evidence in matched mode; full-support source-only programme reported separately.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Only scoring exists; no waveform predictor/executor or qualified authentic input route."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Animal-macro absolute threshold error in dB SPL",
+      "direction": "lower",
+      "aggregation": "Mean distance to exact/censored annotation interval over each animal’s complete stimulus cases, then equal animal mean.",
+      "rationale": "Preserves animal replication and documented censoring instead of scoring each correlated level trace as an independent threshold."
+    },
+    "secondary": [
+      "Within 5/10 dB fractions and signed error on exact labels.",
+      "Full prediction coverage, abstention rate, interval width and coverage stratified by declared nominal coverage.",
+      "Waveform-minus-level/frequency-only paired error; background/frequency strata remain descriptive."
+    ],
+    "comparators": [
+      {
+        "name": "Frequency/level-only prior",
+        "inputs": "Identical permitted source support and physical stimulus metadata; no voltage.",
+        "procedure": "Freeze source-only conditional median threshold before target access; fit on only four calibration stacks in matched mode, complete support in separately labeled full-support mode."
+      },
+      {
+        "name": "Source-only waveform threshold model",
+        "inputs": "Same waveform representation and declared training-information arm.",
+        "procedure": "Implement and qualify a waveform classifier/threshold aggregator fitted without target mice; audit historical ABRA aggregation separately. Existing scorer accepts comparison predictions but supplies no competent fit."
+      }
+    ],
+    "nuisance_controls": [
+      "Treat click source code 100 as a category, never a 100 Hz tone.",
+      "Verify sample duration; app truncation to 244 native samples cannot establish 10 ms.",
+      "Audit early stimulus-artifact and phase/time perturbation controls, with unchanged level/frequency metadata.",
+      "Reconcile paired ears and repeated recordings; preserve weak/no-response series."
+    ],
+    "uncertainty": "Paired bootstrap over complete target animals, conditional on fixed source fits and one held laboratory; no independent-laboratory population interval.",
+    "failure_policy": "Missing/duplicate/nonfinite/invalid required predictions withhold aggregate score and retain complete ledger. Finite abstained predictions remain in primary loss. Current code also withholds aggregate for unverified authentic references.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "feb7909a03d006bd1917f4869e02575bc4203903f5cca23b00cf0425640eb7a7",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

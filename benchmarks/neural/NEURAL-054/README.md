@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The27 binary concept-category memberships per source image; numerical evidence is out-of-fold probability loss and its prespecified contrasts, not a required positive semantic conclusion.
+
+**Source delivery:** partial\_delivery. Scientific source implements full-core and compressed direct numerical conditions but central campaign engines and authentic source/deployment qualification are missing. Primary E01 is an independent nuisance-reference comparison; direct PCA8 E06 must not enter the full-core ranking.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | source\_available | D: direct serialized train-only PCA8 numerical summaries, not raw waveform/images. Same serialized summaries for participant and DG/DC controls; separate E06 condition and whole selected-support seal. | Actual no-tools model transport, full authentic preparation and qualification. |
+| Typed viewer | not\_delivered | No typed rendered-MEG/image viewer is implemented. Future viewer must define whether it receives full-core or compressed information before comparison. | Audited renderer/action/answer path. |
+| Tool assisted | source\_available | I: row-local numerical/model-tool investigation under the full-core profile. Exact same support and prospective resources as P; no query updates or cross-case state; full prequery policy frozen. | Central engine/provider isolation and authentic workload qualification. |
+| Frozen program | source\_available | P: precommitted full-core learning/inference policy. Freeze source, fitting and training state before isolated row queries; every required bank and mode complete. | Complete native execution/reference qualification. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11323 bytes; SHA-256 `2950960350ad842f2f669ea5e85405e4e4654cb198343fc313d6a5fce2e47098`.
+- Specification identity: 15149 bytes; SHA-256 `b1bd4ce53179f2ac2f9c7f7007ccf4b60487233596424be055291111375589fa`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

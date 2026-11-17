@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-031",
   "track": "neural",
-  "title": "Spine structural-change prediction",
+  "title": "Spine structural-change prediction beyond baseline morphology",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "subcellular_plasticity"
   },
-  "scientific_question": "Which pre-learning activity/coactivity measurements predict later spine-volume change?",
+  "scientific_question": "Do pre-followup activity and coactivity measurements reduce held-mouse error in longitudinal spine structural change beyond initial volume and dendritic compartment?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Predicted continuous volume change per eligible spine, with mouse/FOV provenance private."
+    "An eligible spine’s longitudinal structural change derived from baseline spine_volumes and followup_volumes, with the author eligibility/volume transform frozen. The historical declaration names next-day spine size; its missing scorer prevents verifying whether that endpoint exactly matches the original volume-change target."
   ],
   "input_assets": {
     "routes": [
@@ -76,19 +76,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Per-mouse/FOV/session dictionaries include spine event rates, movement/nonmovement measures, local/coincident coactivity and event-aligned spine/dendrite traces. Selected Kir dictionaries additionally include time × cell dFoF; the primary scoped task uses measured spine-level features.",
-    "allowed_context": "spine_volumes/followup_volumes, spine_flags/followup_flags, dendrite_ids, branch_order, positions and session define longitudinal plasticity labels; author structural_plasticity recomputes volume-change classes rather than only plotting aggregate values.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Early/Middle/Late session and followup pairs provide the feature-task temporal contract; parameters include SamplingRate/ActivityWindow for available traces. Exact seconds between every longitudinal visit and raw continuous traces are not verified, so no general forecasting-timescale claim.",
-    "source_contract_evidence": "430 archive directory entries; ReadME, Main_Pipeline, utilities and structural_plasticity inspected by bounded ZIP ranges. Per-measurement dictionaries are inputs; no pickle deserialization or numerical analysis occurred."
+    "inputs": [
+      "Baseline spine volume, pre-followup movement/nonmovement activity and local/coincident coactivity; compartment and source-declared quality covariates.",
+      "Same permitted training examples for baseline and neural views, with transformations learned inside each training fold."
+    ],
+    "forbidden_inputs": [
+      "Followup volume, followup activity, neighboring followup outcomes and labels derived from structural change.",
+      "Source filenames or IDs encoding held-mouse answer values; other folds whose training outcomes reveal this fold."
+    ],
+    "case_identity": "Historical manifest declares40 contexts (20 mice × baseline/neural),774 query requests and731 scored rows from1143 original rows. Exact public query IDs and row eligibility roster are not distributed here; request count is not the scored-row count.",
+    "split": "Proposed and historically declared held-mouse comparison groups every compartment of a mouse; full40 successor is marked not_run. Exact fold roster and the43 declared requested-but-unscored rows require recovery before scoring.",
+    "coverage": "20-mouse,731-scored-row declaration is a selected finite task, not all archived spine observations. Actual local source coverage is one runtime manifest only."
   },
-  "biological_unit": "mouse_id,FOV,session and dendrite_ids are documented fields. Main_Pipeline explicitly lists control apical/basal and Kir cohorts; some mouse IDs occur in both compartments. Group by mouse first, then FOV/dendrite/spine, preserving repeated measures.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Mouse; repeated compartments, FOVs, dendrites and spines remain clustered within mouse.",
+  "case_definition": "An eligible longitudinal spine pair within mouse/FOV/dendrite; query records are nested within one held-mouse fold.",
   "split": {
-    "policy": "Group mouse first, then FOV/dendrite/spine; preserve longitudinal pairs and hold out followup outcomes; all repeated compartments of one mouse together.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Proposed and historically declared held-mouse comparison groups every compartment of a mouse; full40 successor is marked not_run. Exact fold roster and the43 declared requested-but-unscored rows require recovery before scoring.",
+    "coverage": "20-mouse,731-scored-row declaration is a selected finite task, not all archived spine observations. Actual local source coverage is one runtime manifest only."
   },
   "reference": {
     "source_code_url": "https://zenodo.org/api/records/15047046/files/Repo_data_code.zip/content",
@@ -106,49 +110,99 @@
     "data_url": "https://doi.org/10.5281/zenodo.15047046"
   },
   "controls": [
-    "No followup activity or neighbor outcomes in features",
-    "group mouse/FOV/dendrite",
-    "measurement-noise baseline."
+    "Keep baseline-volume and compartment distribution matched between views.",
+    "Freeze volume normalization, spine survival/quality exclusion and followup matching without inspecting candidate outcomes.",
+    "Restrict all spatial neighbor features to baseline observations; use mouse clustering for dendrite dependence."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Mouse-macro MAE and improvement over baseline-size-only predictor.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "equal_mouse_baseline_minus_neural_mae",
+      "direction": "higher",
+      "aggregation": "MAE across eligible spines within each held mouse; average20 mouse differences equally.",
+      "rationale": "Compare measured-target prediction under matched baseline and neural information. Historical manifest names this metric, but units/target transform remain unresolved."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Report equal_mouse_baseline_mae and equal_mouse_neural_mae separately, plus every mouse and compartment result.",
+      "Report original/requested/scored support and every eligibility exclusion; never silently normalize over successful requests."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Initial morphology and compartment",
+        "inputs": "Baseline volume and compartment only.",
+        "procedure": "Freeze a training-fold-only regularized regression and tuning rule; historical baseline-view structure exists but executable method is absent."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Activity/coactivity added",
+        "inputs": "Same baseline information plus pre-followup neural features.",
+        "procedure": "Use the identical learner/tuning budget and held-mouse folds; this is an information comparison, not forced imitation of author coefficients."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Measurement-noise and shuffled neural control",
+        "inputs": "Baseline features plus mouse/dendrite-block-shuffled neural features.",
+        "procedure": "Prospective negative control preserves group dependence and missingness; do not shuffle individual spines across mice."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep baseline-volume and compartment distribution matched between views.",
+      "Freeze volume normalization, spine survival/quality exclusion and followup matching without inspecting candidate outcomes.",
+      "Restrict all spatial neighbor features to baseline observations; use mouse clustering for dendrite dependence."
+    ],
+    "uncertainty": "Report20 paired mouse differences and a mouse-cluster interval if the recovered roster confirms20 distinct animals. Measurement error and within-mouse dependence prohibit treating731 spines as731 replicates.",
+    "failure_policy": "Require complete public query identity before private grading; keep invalid/failed attempts. Recover the explicit eligibility map for774 requests versus731 scored rows and never treat omitted predictions as exclusion decisions.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "8d332387bca3cb2017ed2d1e6480dea04703401c79c9607611b50afe8eb22420",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "5abc62e1fe2aa7a292d58df998176341067af9e46b4da141f4990651e06c1af6"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -236,6 +290,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

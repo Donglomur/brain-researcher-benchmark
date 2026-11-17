@@ -1,0 +1,208 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "marmoset-retinal-contrast-generalization",
+  "title": "Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/historical/task.pre-understanding.v1.json",
+      "sha256": "da0741900318cd5a95af5baf4adcbe78893a9ee8c26f856bc909f0da23d101e8",
+      "supports": "Preserved original source registration, source citations and proposed complete scientific endpoint; later implementation corrections are distinguished below."
+    },
+    {
+      "id": "retina-adapter",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/train_only.py",
+      "sha256": "ddae29d684b1c808156529538dd9f1153697023c82f4fc523b1af0edc06521ce",
+      "supports": "Condition-permitted training-only exact-count projection; no test/STA opens or response scorer."
+    },
+    {
+      "id": "retina-spec",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/SPECIFICATION.md",
+      "sha256": "0ac03844c5990e86d6a8d02a3e00aa4e9b18b19a460e41fd636c528419cd9ace",
+      "supports": "170 cell/two-preparation/six-condition scope, source loader hazard and native-census limitations."
+    },
+    {
+      "id": "retina-paper",
+      "kind": "primary_source",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1014157",
+      "locator": "Methods:response encoding, reliability-selected cohort and stimulus contrasts",
+      "supports": "Original encoding target and test-dependent selection limitations."
+    },
+    {
+      "id": "retina-data",
+      "kind": "primary_source",
+      "url": "https://doi.gin.g-node.org/10.12751/g-node.t43ph1/",
+      "locator": "Original two-preparation release",
+      "supports": "Authoritative source instead of automatically substituting expanded processed library."
+    },
+    {
+      "id": "retina-code",
+      "kind": "primary_source",
+      "url": "https://github.com/gollischlab/SpatiotemporalSCModel/tree/76b733421cc16131c2229e66a7714d8892de39d7",
+      "locator": "dataio/dataio.py as inspected in accepted adapter specification",
+      "supports": "Original permissive response/STA loading and calibration distinction."
+    },
+    {
+      "id": "additional-scope-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/README.md",
+      "sha256": "c8f36f0390b1f6d95db5c1d0577fc0447c7e34fe86dc82a3331718e7445ae8ae",
+      "supports": "Inspected source-scope documentation distinguishing delivered software from authentic task execution."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human trial for this task is established by this source revision. Generated software checks are not participant performance.",
+    "excluded_claims": [
+      "Encoding score establishes native neural understanding",
+      "Training adapter is complete benchmark",
+      "Strict new fitting makes historically selected cohort target-unexposed",
+      "170 cells establish 170 biological replicates"
+    ]
+  },
+  "disposition": "partial_delivery",
+  "disposition_reason": "Condition-permitted 170-cell training-count loading is implemented, closing the unsafe test-response-open branch. Stimulus preparation, RF fitting, complete protected scoring and matched interpretation packets remain missing.",
+  "scientific_target": {
+    "question": "Can a condition-matched model predict held-out retinal ganglion-cell spike counts from white-noise/natural-movie stimuli, and does spatial contrast improve predictions over mean-intensity encoding?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Protected per-cell spike counts at each 85 Hzprojector update and repeat-averaged responses, with physical event/grid alignment authenticated.",
+    "answer_origin": "Original t43ph1 two-preparation recordings; observed held-out spikes are target measurements, not paper table values.170 classified cells were historically selected using test reliability.",
+    "case_unit": "Full stimulus sequence/timebase and frozen cell identity; scoring at every protected update/repeat for all 170 selected cells.",
+    "independent_unit": "Two retinal preparations; mapping to animals and biological independence unresolved. Cells, bins and repeated stimuli are nested.",
+    "inference_scope": "Stimulus-to-response prediction and conditional cross-stimulus transfer in the historically selected cohort; encoding accuracy alone is not direct native neural interpretation.",
+    "exclusions": [
+      "The expanded four-retina processed library is not automatically the original two-preparation task.",
+      "Strict source-only new fitting does not erase historical test-dependent cell selection.",
+      "LargeOFF is a pooled class, not one established cell type."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Training/calibration spike counts only from condition-permittedWN/NMstreams, explicit immutable count dtype/units, selected cell/trial/frame identity and independently prepared matching stimuli/timebase.",
+      "Protected cases expose stimulus/timebase and opaque cell IDs only; no held-out response traces or derived summaries."
+    ],
+    "forbidden_inputs": [
+      "Protected test counts/rasters/repeat means and all response-derived target statistics.",
+      "Original WN STA and target-domain calibration in strict transfer; original get_data(responses=False) is unsafe because it opens test responses first."
+    ],
+    "case_identity": "Adapter requires two named original preparations and 170 opaque 32 hex cell IDs with authenticated external joins;51 off_midget, 69 off_parasol, 35 on_parasol, 15 large_off_pooled. Actual per-preparation roster/seed memberships remain external.",
+    "split": "Preserve original nonrepeating training versus frozen test stimulus split. Group original source frames with all jitter/flips/repeats and guard full temporal context. Strict source-only fitting and explicitlyWN-assisted conditions remain separate.",
+    "coverage": "Training adapter projects all 170 selected cells and every declared permitted training trial/frame/seed in both preparations across six information conditions. A policy can omit a native seed unnoticed without an authenticated census; six conditions remain one registration."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Per-cell held-out repeat-average Pearson correlation, equal-preparation descriptive summary",
+      "direction": "higher",
+      "aggregation": "Correlation over all eligible protected updates per cell; median within preparation/stimulus and equal-preparation descriptive summary. Report paired difference against a frozen condition-matched spatial-contrast baseline.",
+      "rationale": "Matches source response encoding while retaining both preparations and condition-specific calibration access; does not create independent-animal inference."
+    },
+    "secondary": [
+      "Mean Poisson negative log likelihood on individual held-out repeats in count units with predeclared positive rate floor.",
+      "In-domain versus cross-domain change, all-cell/preparation support and class-conditional paired descriptive effects.",
+      "Undefined constant-target/prediction correlations retained explicitly; primary decision requires a frozen coverage policy."
+    ],
+    "comparators": [
+      {
+        "name": "Constant rate",
+        "inputs": "Condition-permitted source training counts",
+        "procedure": "Proposed per-cell mean count baseline."
+      },
+      {
+        "name": "Regularized LN",
+        "inputs": "Identical condition-permitted stimuli/counts and source-onlyRF/STA calibration",
+        "procedure": "Train-only temporal/spatial filters and softplusPoisson fitting; paperNM route usingWN STA belongs to mixed calibration, not strictNM-only."
+      },
+      {
+        "name": "Spatial-contrast and competent CNN",
+        "inputs": "Same frozen cells/split/stimuli and identical permitted calibration evidence",
+        "procedure": "Proposed contrast versusLN and tunedCNN comparisons with fixed development-only selection; no authentic reference run is supplied."
+      }
+    ],
+    "nuisance_controls": [
+      "Historical 170 cell test-reliability ascertainment must accompany every score; no new quality filtering using protected targets.",
+      "NMmean light/contrast differ fromWN; transfer failure alone is not adaptation.",
+      "Verify stimulus/STA orientation, seed-specific repeat sequences and smoothing selection; no averaging nonmatching test repeats.",
+      "Choose predictive smoothing on permitted development only; historical test-selected optimum remains retrospective."
+    ],
+    "uncertainty": "Report each preparation and within-preparation distributions. Repeat-noise summaries condition on fixed preparations/models; do not bootstrap 170 cells as independent animals or claim two independent biological clusters before animal mapping.",
+    "failure_policy": "Training loader requires all declared permitted streams/cells/trials/frames and rejects missing or malformed counts without returning earlier partial success. Future complete scorer must refuse missing predictions and retain undefined-correlation coverage rather than silently remove cells."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/train_only.py",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/README.md",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/SPECIFICATION.md"
+    ],
+    "scorer_target": "No scorer delivered. prepare_training authenticates only permitted training NPY leaves and projects typed count buffers; it never loads test responses or originalSTA, fits a model or supplies stimuli.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "Exact count-preserving response adapter for full declared 170 cell scope and six calibration conditions. Original source census, stimulus pipeline, complete protected packet and metric remain unqualified.",
+    "missing": [
+      "Authentic 170/180 cell original census, seed/trial/frame clocks, source-to-cell mapping and animal relationship.",
+      "Target-independent stimulus reconstruction and validatedNM-only RF/STA estimation.",
+      "Competent condition-matched baselines, undefined-coverage scoring, protected prediction lifecycle and interpretation study."
+    ],
+    "execution_evidence": "Generated count/layout/dtype/protected-open controls establish software behavior only. No original neural arrays or new native fitting/scoring operation were executed in this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "Pure protected encoding cases contain stimuli rather than observed query neural activity; visible calibration traces would support a separately specified matched interpretation diagnostic.",
+      "boundary": "Exposing protected spikes to make a neural picture would disclose the scored target; current programme scores cannot establish direct understanding.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Define a nonleaking calibration-based or masked-observation interpretation estimand before enabling this mode."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "No target-preserving viewer interpretation task is currently defined for stimulus-to-protected-response encoding.",
+      "boundary": "A calibration-only viewer could be a future matched condition, but protected target rasters/means must never be rendered.",
+      "evidence_ids": [
+        "historical-definition",
+        "retina-adapter"
+      ],
+      "missing": [
+        "Separate observation/target mask and complete view policy, not a renamed programme score."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed train-only numerical/model investigation using prepared stimuli and permitted calibration counts.",
+      "boundary": "Source-only versusWN-assisted domains enforced at access; calibration_only labels alone do not enforce downstream fitting.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Complete stimuli/case packets, constrained fit tools and protected scorer."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed frozen response predictor over every protected stimulus update.",
+      "boundary": "Freeze cell roster, fit/normalization/smoothing and calibration route before queries; current loader is only one preparation component.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Complete prediction/scoring lifecycle and competent reference qualification."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separate stimulus-to-response encoding from direct interpretation instead of forcing a viewer onto protected target arrays.",
+      "Recognize implemented safe training-response loading while retaining absent stimulus/scoring andNM-onlycalibration gates.",
+      "Preserve original two-preparation 170 selected-cell estimand and historical target-based selection beside every transfer condition."
+    ],
+    "source_review": "Reviewed preserved scientific registration and named implementation code/documentation; reused cited primary source evidence already verified in these records. No scientific arrays or evaluator labels were opened in this revision."
+  }
+}

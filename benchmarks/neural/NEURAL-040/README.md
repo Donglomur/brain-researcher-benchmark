@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Measured held-film BOLD arrays determine each arm correlation and the numerical full-minus-family-ablated Pearson delta. The correct reported delta may be positive,negative or near zero; no preferred modality story is a target.
+
+**Source delivery:** delivered\_named\_scope. An executable prospective matched-rank multimodal encoder and independent ablation scorer are delivered for precomputed features and separately packaged targets. Only generated engineering controls have run; authentic four-person payload/feature exposure, protected participant delivery and native organizer parity remain unqualified.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A no-tools observer would need a separately frozen presentation of permitted stimuli/calibration and complete response predictions; source arrays alone are not a direct episode. No held BOLD targets or ready-made ablation answers exposed. | Direct case presentation and complete answer collection. |
+| Typed viewer | not\_delivered | No typed multimodal/brain-response viewer is implemented. Selected effect plots cannot substitute for complete withheld-target predictions. Limit actions to permitted stimuli and training observations; prohibit answer arrays. | Renderer,transport and endpoint-preserving response protocol. |
+| Tool assisted | not\_delivered | Numerical encoder and independent analysis/scoring components can support per-case tool investigation of allowed data. Agent tools must operate on exactly the matched permitted observations; target scorer remains separate with no feedback. | No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.; An isolated adaptive participant lifecycle and authenticated full source instance are not delivered. |
+| Frozen program | not\_delivered | Executable fixed-rank encoder source supports frozen preprocessing/fit/predict on declared training and query features. Freeze method/features/protocol before held-target access; no target-derived changes. | No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.; Participant execution isolation and authentic reference competence remain unqualified. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16626 bytes; SHA-256 `0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309`.
+- Specification identity: 22153 bytes; SHA-256 `a6abe218b9e028b7c8964a5bc68e6f1e543e8ae99312bf6099f795fecbdbc38d`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

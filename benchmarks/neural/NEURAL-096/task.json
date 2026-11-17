@@ -16,11 +16,11 @@
     ],
     "task_family": "timing_computation"
   },
-  "scientific_question": "Over verified common sampled-interval support, do prior contexts differ in a prespecified retrospective neural-trajectory contrast after response-modality/direction controls?",
+  "scientific_question": "Over verified common sampled-interval support, do short and long prior contexts differ in a prespecified retrospective Set–Go neural-trajectory contrast after response-modality/direction and temporal-block controls, and what within-session uncertainty supports that conclusion?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Matched-prior trajectory contrasts with within-session/block uncertainty. Direct prospective interval prediction uses the independent prefix contract of095; full Set–Go trajectory alignment is explicitly response-conditioned."
+    "An independently recomputed matched-prior difference in measured response-conditioned neural trajectories on complete prespecified interval/modality/direction/block support, with its support and within-session uncertainty. Null, reversed and unsupported contrasts are valid; the empirical value is not supplied by the paper narrative. Authentic raw Set–Go observations are prepared for the declared204-row/54-unit scope; the scientific trajectory basis, matched-support estimand, independent reference and uncertainty remain unqualified."
   ],
   "input_assets": {
     "routes": [
@@ -48,17 +48,26 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: DMFC spikes plus ready/set/go, produced-interval and prior-context trial fields; exact NWB columns not yet checked here.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Accepted operator-prepared full-target source observations: all204 nominal800ms source train/validation trials, all54released source-training units(40NLBheld-in+14NLBheld-out), full native [set_time,go_time) spike timestamps and identities, native Ready/Set/Go events, prior-context/effector/direction metadata and six recording observation segments. Prior labels are exposed analysis factors; the14NLBheld-out units are observed here, not prediction targets.",
+      "The closed eight-array packet provides uint32 counts[204,54,20], phase_edges_seconds[204,21], positive exposure_seconds[204,20], all81311native timestamps and ragged offsets, trial_ids,unit_ids and original NLB flags. Counts are spikes per unit/bin; rates require division by actual seconds exposure. The20phase bins change speed representation, so native timestamps, edges and durations remain available. No smoothing, latent fitting, feature selection or scientific contrast was performed.",
+      "Any inferential trajectory basis, nuisance adjustment or additional normalization must be prespecified using permitted training data and applied unchanged to held observations. The prepared phase representation does not choose or qualify that scientific estimand.",
+      "Separate historical calibration only: uint32 counts[177,40,15] in15half-open50ms pre-Set bins over[Set-.75s,Set), with129training+48validation rows and its own restricted cue metadata. This remains a different input/answer contract."
+    ],
+    "forbidden_inputs": [
+      "Protected full-target reference contrasts/uncertainty, prior candidate answers, evaluation feedback and validation-fitted trajectory/alignment or nuisance choices.",
+      "Undeclared outcome-dependent exclusions, favorable-sign or favorable-window selection, and arbitrary original-source lookup outside the frozen packet.",
+      "The calibration interface specifically forbids full NWB, produced intervals, Go times, outcome flags and held-out-unit spikes. Those calibration restrictions do not imply it supplies the response-conditioned observations required by the current target."
+    ],
+    "case_identity": "The source-preparation roster is now fixed and authenticated: the exact source training asset has1160parent rows(748train,258validation,154none); all204rows satisfying source split train/val and nominal ts==800 are retained in ascending native Set-time order,150train+54validation. No selected trial is excluded for behavior, outlier status, neural activity or prior clock-range overlap. Prepared metadata binds all54unit IDs and flags. Independent readback matched the204cue roster and40held-in IDs to earlier metadata; the14additional unit IDs were checked against prepared metadata only.",
+    "split": "Preserve the source150train/54validation labels in the complete prepared packet; these are not a newly qualified held-block or hidden evaluation design. Six common recording observation segments are not verified assignment blocks, and three segment×effector×direction×prior support cells are empty. Freeze any full-trajectory basis, controls, scientific comparison and justified uncertainty using permitted training data before scoring. The historical129/48pre-Set split still supports only its separate fixed calculation.",
+    "coverage": "Complete declared source-observation coverage is204trials×54units×20phase bins(220320count cells), with81311retained native spikes and all six segment support tables including three zero cells. No selected row/unit or empty support cell was silently removed. This does not establish matched inferential support, a full contrast/reference/uncertainty score, participant delivery or another benchmark registration. The177trial/40unit/15pre-Set-bin/four-strata/11-array calibration remains separately scoped."
   },
-  "biological_unit": "one monkey/session in released subset; trials nested",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "One already exposed monkey/session. The54units,204trials,20phase bins and six recording observation segments are not independent animals or verified randomized assignment blocks. Within-session uncertainty requires an independently justified dependence/schedule model; no cross-animal replication is supplied.",
+  "case_definition": "One complete declared Haydn20161211 source-session packet: all204 nominal800ms source train/validation trials,150train+54validation,54released source-training units and six observed recording segments. Exact trial/unit identities are bound in the prepared packet. A scientific matched-support case/aggregation must still account for three empty prior×effector×direction cells; the177-row pre-Set calibration roster is not substituted.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Preserve the source150train/54validation labels in the complete prepared packet; these are not a newly qualified held-block or hidden evaluation design. Six common recording observation segments are not verified assignment blocks, and three segment×effector×direction×prior support cells are empty. Freeze any full-trajectory basis, controls, scientific comparison and justified uncertainty using permitted training data before scoring. The historical129/48pre-Set split still supports only its separate fixed calculation.",
+    "coverage": "Complete declared source-observation coverage is204trials×54units×20phase bins(220320count cells), with81311retained native spikes and all six segment support tables including three zero cells. No selected row/unit or empty support cell was silently removed. This does not establish matched inferential support, a full contrast/reference/uncertainty score, participant delivery or another benchmark registration. The177trial/40unit/15pre-Set-bin/four-strata/11-array calibration remains separately scoped."
   },
   "reference": {
     "source_code_url": "https://github.com/neurallatents/nlb_tools",
@@ -70,38 +79,117 @@
     "data_url": "https://dandiarchive.org/dandiset/000130"
   },
   "controls": [
-    "Equal sampled intervals",
-    "matched movement/response state",
-    "trial-block nulls",
-    "trajectory alignment on training only."
+    "The accepted preparation verifies all204nominal800ms source rows and complete native Set–Go observation support. Nominal ts800 is not a claim that every actual Ready–Set duration is exactly800ms. Qualify common inferential support across prior, effector, direction and actual assignment/time structure; retain the three empty observed-segment support cells explicitly.",
+    "Keep Set–Go response conditioning explicit; fit latent/alignment transforms on training only and do not interpret response-aligned geometry as prospective prediction.",
+    "Match/control response modality and direction and audit recording-time/block confounding; freeze exclusions before inspecting neural effects.",
+    "Retain all support/null/sign outcomes. Do not use a positive prior effect or source-paper agreement as a pass criterion.",
+    "For the separate selected-count calibration, preserve its training-only ddof=0 scales, full-rank/condition-number gate, prior/intercept retention and short-minus-long orientation; these do not qualify the broader target."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Authentic full Set–Go observations are operator-prepared, but no participant-ready bounded numerical summary/question/answer interface for the scientific contrast is delivered.",
+      "boundary": "Expose only declared measured summaries and required grouping context, withhold reference answers and feedback; source reconstruction scores are not direct interpretation evidence.",
+      "evidence_ids": [
+        "dmfc096-0",
+        "full-set-go-prepare-py",
+        "full-set-go-AUTHENTIC-PREPARATION-json"
+      ],
+      "missing": [
+        "Prespecified scientific summaries and independent known answers, complete support/uncertainty interpretation responses and bounded no-tools participant transport."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Full native timestamps/counts/exposure are prepared for possible faithful rendering; no full-target typed renderer, action protocol or scored interpretation response condition exists.",
+      "boundary": "Rendering must preserve the prespecified whole support and response-conditioning semantics without exposing reference answers or silently replacing the full target with selected pre-Set counts.",
+      "evidence_ids": [
+        "dmfc096-0",
+        "full-set-go-prepare-py",
+        "full-set-go-AUTHENTIC-PREPARATION-json"
+      ],
+      "missing": [
+        "Prespecified full-support trajectory panels, typed renderer/actions, independent scientific answers and participant transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The new component is an operator source preparer, not a participant per-case investigation controller. No callable full Set–Go scientific route is delivered; historical177pre-Set declarations remain separate calibration.",
+      "boundary": "No private references or target feedback; capture code/method and changed-input response, not merely final stored numbers.",
+      "evidence_ids": [
+        "dmfc096-0",
+        "dmfc096-1",
+        "full-set-go-prepare-py",
+        "full-set-go-AUTHENTIC-PREPARATION-json"
+      ],
+      "missing": [
+        "Full-target contrast/reference/uncertainty scorer and an actual participant investigation controller.",
+        "A recovered legacy pre-Set scorer would still require calibration and would not satisfy the current trajectory endpoint."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The new component is an operator source preparer, not a participant frozen candidate executor. No callable full Set–Go scientific route is delivered; historical177pre-Set declarations remain separate calibration.",
+      "boundary": "Freeze code before observation and remove producer before reference scoring; exposed originals alone do not test memorization.",
+      "evidence_ids": [
+        "dmfc096-2",
+        "dmfc096-3",
+        "full-set-go-prepare-py",
+        "full-set-go-AUTHENTIC-PREPARATION-json"
+      ],
+      "missing": [
+        "Full-target contrast/reference/uncertainty scorer and an actual participant candidate execution lifecycle.",
+        "A recovered legacy pre-Set scorer would still require calibration and would not satisfy the current trajectory endpoint."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out interval-loss difference and within-session contrast uncertainty.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    "primary": {
+      "name": "Absolute error in independently recomputed held-block matched-prior Set–Go trajectory contrasts (declared current endpoint; scorer not implemented)",
+      "direction": "lower",
+      "aggregation": "Use complete prespecified matched-prior contrasts in a training-defined time/trajectory basis, with prespecified equal response-modality/direction weighting and explicit interval/block support. The204-row/54-unit observation roster is prepared, but the inferential eligibility/weighting, trajectory basis, units and reference must still be frozen and justified; three empty support cells cannot disappear from the analysis. No full-target numerical score is claimed.",
+      "rationale": "Directly targets the original conditional neural-representation question instead of scoring a different pre-Set calculation. Correct support and uncertainty are required alongside contrast error; favorable effect direction is never rewarded."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Independently verified within-session/block uncertainty, complete matched-support counts and signed prior contrasts; support failure/null or reversed conclusions remain valid.",
+      "Fixed train-only nuisance-controlled versus unadjusted contrast and appropriate temporal/block null checks, after source schedule/exchangeability verification.",
+      "Delivered calibration score, separately labeled: absolute errors of two selected-count raw/adjusted scalars, all 11 oriented-block RMSE/max-absolute/signed-mean errors and public arithmetic consistency. It cannot substitute for the current primary.",
+      "Calibration changed-input/stale-answer controls assess computation dependence only; they do not establish full-trajectory interpretation or unseen population inference."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Independent matched-prior full-trajectory reference (not delivered)",
+        "inputs": "The same complete source-qualified Set–Go observations, common sampled intervals, response modality/direction and temporal blocks.",
+        "procedure": "Use the accepted full Set–Go observation packet, freeze the scientific trajectory basis/alignment, matched-support policy and nuisance controls using permitted training data, then independently recompute contrasts and justified uncertainty. Source observations are prepared; this reference contrast has not been estimated or qualified. Do not substitute a published effect sign or the177pre-Set reference."
+      },
+      {
+        "name": "Matched nuisance and temporal-block controls (prospective)",
+        "inputs": "Identical full-target trials with sampled interval, modality/direction and source-verified timing/block variables.",
+        "procedure": "Compare prespecified unadjusted and nuisance-controlled prior contrasts; use only schedule-compatible blocked nulls. Exact controls/uncertainty require actual source support and cannot be selected after effects."
+      },
+      {
+        "name": "Existing selected-count numerical reference (calibration only)",
+        "inputs": "The exposed 177×40×15 pre-Set counts and permitted cue metadata.",
+        "procedure": "Preserve sqrt(counts), equal-stratum/bin train-difference×validation-difference products, short-minus-long orientation and training OLS[1,is_short,z_clock,z_clock²,z_duration]. Score all 11 blocks, including double-reversal/wrong-coefficient counterexamples; this is not the current full-trajectory endpoint."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "The accepted preparation verifies all204nominal800ms source rows and complete native Set–Go observation support. Nominal ts800 is not a claim that every actual Ready–Set duration is exactly800ms. Qualify common inferential support across prior, effector, direction and actual assignment/time structure; retain the three empty observed-segment support cells explicitly.",
+      "Keep Set–Go response conditioning explicit; fit latent/alignment transforms on training only and do not interpret response-aligned geometry as prospective prediction.",
+      "Match/control response modality and direction and audit recording-time/block confounding; freeze exclusions before inspecting neural effects.",
+      "Retain all support/null/sign outcomes. Do not use a positive prior effect or source-paper agreement as a pass criterion.",
+      "For the separate selected-count calibration, preserve its training-only ddof=0 scales, full-rank/condition-number gate, prior/intercept retention and short-minus-long orientation; these do not qualify the broader target."
+    ],
+    "uncertainty": "No full-target uncertainty estimator has been implemented or qualified. Six source observation segments are recording support, not verified randomized assignment blocks; deleting segments supplies sensitivity only and cannot by itself provide calibrated confidence or randomization. Three empty cells and the one exposed monkey/session remain explicit constraints. Calibration tolerances and the saved-packet recount are arithmetic checks, not statistical uncertainty.",
+    "failure_policy": "The source preparer refuses any selected row with invalid native event ordering or incomplete whole-interval observation support and retains the complete selection census; the accepted preparation found no unsupported selected rows. Full-target scoring must still refuse an unqualified estimand/basis/reference/uncertainty binding and retain unsupported comparison cells rather than selecting a favorable subset. The old calibration retains its own exact complete-output policy and explicit calibration gate; a source-preparation success cannot be submitted as its full-target scientific result.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a0c80a3b91b7752e76d89335da9e2549a7582be6e23ec024302a747c0b522ad1",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "17fa124837743a439f2270151072edc4f9441677a3d97e7d15aac2ce3edee169"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -276,6 +364,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

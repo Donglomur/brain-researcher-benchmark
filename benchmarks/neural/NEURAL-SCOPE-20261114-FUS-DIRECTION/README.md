@@ -5,15 +5,33 @@
 - **Task ID:** `NEURAL-SCOPE-20261114-FUS-DIRECTION`
 - **Track:** Neural-data understanding
 - **Registration:** Expansion draft
-- **Declared specification status:** Registered construction draft
+- **Declared specification status:** Specification only
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+One of eight target directions 0,45,…315 degrees, derived privately from source behavior.targetPos with verified x-right/y-up convention.
+
+**Source delivery:** partial\_delivery. A real grouped direction scorer, complete-field preparation algorithm and identical nine-map packet constructor are delivered. They consume a prospective normalized input ABI; native acquisition intervals, geometry, Run99 lineage and actual image transport remain unqualified, so generated full-roster tests are not a usable authentic direction benchmark.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Static nine-map PNG packet with eight labels and query, native full-field pixels and documented quantization. No execution tools or trained-decoder output; packet source exists but no model transport is qualified. | Authentic native bridge, model image resizing/tokenization audit and complete-context delivery.; Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition. |
+| Typed viewer | not\_delivered | A restricted full-field map viewer could inspect the same packet. Static packet construction is not a typed action/viewer implementation; no raw floating arrays or hidden frames. | Typed actions, restrictive renderer and action/answer logs. |
+| Tool assisted | not\_delivered | Same nine-map packet admits numerical image investigation. Extra trained model tools must be a separately labeled augmented condition; no cross-query state or evaluator feedback. | Candidate tool transport, enforced episode budget and competent references.; Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition. |
+| Frozen program | not\_delivered | Same packet plus existing probability submission/scorer ABI. Freeze programme before held-session exposure; fit only eight supplied maps in strict mode; embedded weights are added information. | Actual frozen executor, source-trained comparison controls and protected authentic inputs.; Participant execution controller for this mode. The fullfield-delivery-v1 owner-side static nine-map PNG packet constructor prepares shared evidence but does not run this condition. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 40630 bytes; SHA-256 `115934ec062e5760e2fabc5f46faa6adc789076dad77fab99a3e79c36ef7fe6d`.
+- Specification identity: 49571 bytes; SHA-256 `16b40452d054b1925a8ce5895ec0cf5918245a7f1f5cf967aa993e28c165cbc1`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

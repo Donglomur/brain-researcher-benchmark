@@ -1,0 +1,209 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-040",
+  "title": "Audio, visual and language contributions to fMRI",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "An executable prospective matched-rank multimodal encoder and independent ablation scorer are delivered for precomputed features and separately packaged targets. Only generated engineering controls have run; authentic four-person payload/feature exposure, protected participant delivery and native organizer parity remain unqualified.",
+  "scientific_target": {
+    "question": "How much held-film BOLD prediction does each frozen audio,visual or language feature family add conditional on the other two, using equal readout rank/regularization and common lag,coverage and source observations?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Measured held-film BOLD arrays determine each arm correlation and the numerical full-minus-family-ablated Pearson delta. The correct reported delta may be positive,negative or near zero; no preferred modality story is a target.",
+    "answer_origin": "Independent scorer computes correlations from private source neural targets, not from a source-paper table or author interpretation. Authentic targets have not yet been bound to an executed instance.",
+    "case_unit": "Complete guarded segments grouped into a held film for one of the four people, with all1000 native parcels and all four matched ablation arms.",
+    "independent_unit": "Person; four recorded people with repeated films/segments/parcels.",
+    "inference_scope": "Incremental predictive information conditional on the selected feature extractors,training data,readout and nuisance policy. Equal bottleneck rank does not equalize pretrained extractor capacity or exposure, and correlated modalities do not yield uniquely causal contributions.",
+    "exclusions": [
+      "No causal audio/visual/language contribution to brain activity.",
+      "No source-exact organizer reproduction: fixed-rank/PCA/ridge and prospective guards differ from native per-target RidgeCV/ID scoring.",
+      "No additional datasets/tasks for the three ablation contrasts or four arms."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Precomputed source-aligned audio,visual,language feature matrices at the declared1.49s TR, bound to unique participant/film/run/segment IDs.",
+      "Training target arrays only,with1000 ordered native parcels for each of sub-01,sub-02,sub-03,sub-05.",
+      "Fixed nonnegative integer lags,left/right feature context,guards,PCA rank and common ridge alpha declared in protocol."
+    ],
+    "forbidden_inputs": [
+      "Private evaluation neural targets or target-derived feature selection/scaling/hyperparameters.",
+      "Any repeated segment/run of an evaluation film in training across any person.",
+      "Feature lookahead beyond the allowed lag/context or different eligible time points across arms."
+    ],
+    "case_identity": "Implementation accepts unique segment IDs plus participant,film and run fields in a frozen protocol; exact source-authenticated segment roster is not bundled. Prediction keys must be exactly arm__segment_id for every evaluation segment and arm.",
+    "split": "Implemented global whole-film identity split across people and repeated viewings,with train and evaluation coverage for every person. Explicit edge guards cover lag and feature context; preprocessing and PCA fit on training only.",
+    "coverage": "All four source participants,1000 ordered parcels each,and full/no_audio/no_visual/no_language arms are required. The number and identities of authentic films/segments await a frozen source protocol. Existing tests use generated matrices only."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Full-minus-without-family held-film mean Pearson delta,reported separately for audio,visual and language",
+      "direction": "two_sided",
+      "aggregation": "Within each film,concatenate its guarded segments and compute Pearson per parcel/arm; equal means across films,parcels and then four people. No Fisher-z or sample-weighted person pooling is substituted.",
+      "rationale": "The signed conditional effect is a descriptive estimand whose faithful recovery may be positive,negative or null; maximizing it would reward weakened ablations. Absolute arm prediction correlations and independently verified fixed-fit lineage are required companions. The current scorer does not assign an understanding reward."
+    },
+    "secondary": [
+      "Absolute held-film correlation for every full/ablated arm,not only their difference; do not reward degrading the ablated reference.",
+      "Per-film/per-parcel correlations and per-person full-minus-ablation deltas.",
+      "Exact numerical group-claim validation at absolute tolerance1e-8.",
+      "Descriptive four-person bootstrap intervals and synchronized paired circular-shift diagnostics.",
+      "Nuisance/time-only comparison remains a required prospective companion beyond the currently implemented ablations."
+    ],
+    "comparators": [
+      {
+        "name": "Matched no-audio,no-visual,no-language encoders",
+        "inputs": "Identical cases and remaining two feature families for each arm",
+        "procedure": "Implemented train-only standardization and PCA whitening,same fixed positive rank and ridge alpha,unpenalized intercept; insufficient rank fails."
+      },
+      {
+        "name": "Full multimodal encoder",
+        "inputs": "All three permitted frozen feature families",
+        "procedure": "Implemented same fitted-readout constraints as ablations; baseline uses measured training neural responses and frozen evaluation protocol."
+      },
+      {
+        "name": "Nuisance/time-only encoder",
+        "inputs": "Frozen timing and nonsemantic nuisance covariates without requested feature-family signal",
+        "procedure": "Prospective companion to distinguish predictive modality effects from nuisance structure; not currently an implemented fifth arm."
+      }
+    ],
+    "nuisance_controls": [
+      "Whole-film split includes repeat viewings and prevents stimulus identity crossing arms/splits.",
+      "Enforce exact ordered parcel universe,TR,context/lag support and common segment selection.",
+      "Match fixed PCA rank/ridge,but disclose that this does not match upstream extractor capacity or data exposure.",
+      "Circular shifts are paired across all arms and synchronized across matching film/run/length across people.",
+      "Three modality claims and any parcel exploration require explicit multiplicity policy before significance claims."
+    ],
+    "uncertainty": "All256 four-person bootstrap resamples provide descriptive percentile intervals. Circular-shift tail fractions are descriptive; exchangeability,multiplicity and general-population validity are not qualified. Report all four person values.",
+    "failure_policy": "Require exact four-arm×evaluation-segment prediction keys,metadata/protocol digests and1000 parcel order. Reject constant/nonfinite target or prediction parcels and insufficient training rank. Current claims are optional and may cover a unique subset; malformed/unknown/duplicate claims reject,while incorrect numbers return verified=false. Complete three-family claim coverage and independent fixed-fit prediction lineage are required prospective checks,not implemented refusal."
+  },
+  "implementation": {
+    "scorer_target": "evaluator.score compares predicted arrays to private neural targets and reports three signed full-minus-ablated Pearson contrasts plus optional numerical-claim verification. It validates supplied prediction metadata but does not independently establish the lineage of arbitrary externally supplied arm predictions. Signed delta is not a success reward or paper-story answer.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Callable encode and score CLI over precomputed feature/target packets,with prospective fixed-rank fitting and OOD-style scoring. No complete authenticated source-data instance or model participant lifecycle has been run.",
+    "missing": [
+      "Enforce complete three-family claims and independently recompute/bind the fixed encoder fit before rewarding interpretation correctness; current scorer accepts absent/subset claims and metadata does not prove prediction lineage.",
+      "Authentic film/segment/parcel and source feature-target payload binding; complete alignment verification.",
+      "Nuisance/time-only companion,competent authentic reference runs and protected participant transport.",
+      "Feature/model/media exposure and rights audit plus inferential policy for four people/three contrasts."
+    ],
+    "execution_evidence": "Implementation source and provenance document generated engineering controls only,zero authentic scientific runs and zero model runs. No new execution is performed in this revision.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-040/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools observer would need a separately frozen presentation of permitted stimuli/calibration and complete response predictions; source arrays alone are not a direct episode.",
+      "boundary": "No held BOLD targets or ready-made ablation answers exposed.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Direct case presentation and complete answer collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed multimodal/brain-response viewer is implemented. Selected effect plots cannot substitute for complete withheld-target predictions.",
+      "boundary": "Limit actions to permitted stimuli and training observations; prohibit answer arrays.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Renderer,transport and endpoint-preserving response protocol."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Numerical encoder and independent analysis/scoring components can support per-case tool investigation of allowed data.",
+      "boundary": "Agent tools must operate on exactly the matched permitted observations; target scorer remains separate with no feedback.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "An isolated adaptive participant lifecycle and authenticated full source instance are not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Executable fixed-rank encoder source supports frozen preprocessing/fit/predict on declared training and query features.",
+      "boundary": "Freeze method/features/protocol before held-target access; no target-derived changes.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-2"
+      ],
+      "missing": [
+        "No participant callback/runner or adaptive transport is delivered; available operator preparation/reference/scoring functions do not execute this participant access mode.",
+        "Participant execution isolation and authentic reference competence remain unqualified."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-040/historical/task.pre-understanding.v1.json",
+      "sha256": "0e129a486d04a02e6ab10b53f2985ea2baf22051fae90da3d65a61090e4e7309",
+      "supports": "Exact original registered scientific contract inspected before revision; binding preserves these bytes."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "19d1f793b0c59200420dcfd0570be911202c402698f488a3b75ae5a128f6db98",
+      "supports": "Actual protocol validation,train-only matched-rank encoder,held-film scorer,claim checker and descriptive diagnostics."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json",
+      "sha256": "7a5dfaed0579cae7b34a35ae5ba2923e8309464ba6ba10ef5c9f988c6463a712",
+      "supports": "Primary source-to-implementation mapping and prospective deviations; records generated-only validation and zero authentic/model runs."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/README.md",
+      "locator": "Pinned organizer README; verified source mapping retained in NEURAL-040 source-provenance.json",
+      "supports": "Four participants,1000 parcels,1.49s TR and repeated movie segments; public repository pointers are not loaded neural targets."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://algonautsproject.com/2025/challenge.html",
+      "locator": "Official ID/OOD evaluation documentation; retained verified source mapping",
+      "supports": "Native ID Friends estimator concatenates episodes, while OOD computes within-film correlations and equal film/parcel/person means. These estimators are not interchangeable."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.48550/arXiv.2501.00504",
+      "locator": "Gifford et al., Algonauts2025 challenge paper; source identity retained in existing audit",
+      "supports": "Defines multimodal natural-movie neural encoding and out-of-distribution generalization; not a direct observer or causal modality attribution result."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established by the inspected task source. The repository historical neural pilot concerned NEURAL-007 and NEURAL-077 programmes, not this task.",
+    "excluded_claims": [
+      "No native understanding,model/human score or causal modality attribution.",
+      "No organizer numerical reproduction or authentic full-data performance from generated controls."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Made the actual executable encoding-ablation target authoritative despite stale not_implemented wording in the original task.",
+      "Restricted claims to conditional feature-family prediction and retained the three contrasts with equal film/parcel/person aggregation.",
+      "Separated generated engineering validation,tool/programme source and absent direct/viewer delivery; preserved missing nuisance and exposure controls.",
+      "Separated preparation/reference/scoring source from participant access: frozen programme and adaptive tool execution are not delivered.",
+      "Changed delta direction to two-sided descriptive inference and recorded optional claims/externally supplied prediction lineage limitations; no larger-effect reward is defined."
+    ],
+    "source_review": "Inspected evaluator source,implementation documentation and exact primary-source mapping; independent code review checked protocol/fit/score/claim/null semantics. No authentic payload or new model run."
+  }
+}

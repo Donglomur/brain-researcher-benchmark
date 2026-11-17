@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-004",
   "track": "neural",
-  "title": "Sensory versus decision-stage contrast effects",
+  "title": "Conditional contrast inference and HMP evidence investigation",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "decision_dynamics"
   },
-  "scientific_question": "Are contrast effects on inferred sensory and decision intervals distinguishable from motor timing effects?",
+  "scientific_question": "Can retrospective EEG or a training-fitted HMP tool improve held-person logged-contrast prediction beyond RT/instruction, and which HMP stage interpretations remain supported after alternative timing explanations are examined?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Stage-duration contrasts, held-out HMP likelihood and an evidence table for competing interval models."
+    "Primary: source logged contrast y=float(stimulus)/100 with0.025<y<1. Secondary numerical audits: independently recomputable HMP report cells and ordinary-versus-zero-gain model evidence. HMP event modes and stage names are not observed physiological answers."
   ],
   "input_assets": {
     "routes": [
@@ -72,19 +72,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "26 cleaned participant MNE epoch FIF files at 512 Hz; actual manifest sizes/hashes and matching writer/reader verified.",
-    "allowed_context": "Writer saves event_name,rt,condition,side,stimulus,response. These are supported by source and are not yet verified by parsing every FIF payload.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Source uses photodiode-corrected stimulus onset and preserves trial metadata; baseline scope starts from cleaned epochs.",
-    "source_contract_evidence": "Public OSF manifest plus official data/preprocessing.py and HMP/ERP notebook loading contract."
+    "inputs": [
+      "B: logged RT in seconds, instruction and sample count; E adds all32original512Hz EEG channels on complete retained intervals.",
+      "H adds the exact outer-training-fitted HMP states/marginals/log-masses for4/5/6event counts; EH combines E and H. All training views include lawful training contrast labels.",
+      "Original source cleaning, filtering, response offset and eligibility remain retrospective; no downsampling/subsample substitution."
+    ],
+    "forbidden_inputs": [
+      "Held stimulus/contrast, event_name/event_id/trigger, source path/epoch order, side/correctness fields, authenticated target digests or unrestricted FIF metadata.",
+      "Any reconstruction packet, notes, scores or fitted state crossing into protected prediction contexts; no cross-fold target transfer."
+    ],
+    "case_identity": "Source-owned per-context opaque person/trial aliases with private bijective maps; identical retained trials must appear in every matched view. Authentic original roster and alias checks remain unexecuted.",
+    "split": "All26 outer held-person folds, training on other25people; independent references use25 inner held-person losses. Supplied HMP fits see all outer-training EEG, so supervised inner readout diagnostics on those states are disclosed training-pool transductive analyses.",
+    "coverage": "Complete26person support and all original retained trials;2modes×4views×26people=208prediction contexts. Separate reconstruction has2964report cells. Planned78HMP fits and312ordinary/zero evaluations are workload counts, not completed work or new tasks."
   },
-  "biological_unit": "26 participant files numbered 0 through25; person is the independent unit.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "26 participants, also used by NEURAL-003; trials, event counts and208prediction contexts are nested conditions, not additional cohorts.",
+  "case_definition": "Complete held-person retrospective trial panel for each matchedB/E/H/EH information view and frozen-program/investigator mode.",
   "split": {
-    "policy": "Outer held-out participants; within training people group complete trials by block and instruction; no response-dependent query cutoff.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "All26 outer held-person folds, training on other25people; independent references use25 inner held-person losses. Supplied HMP fits see all outer-training EEG, so supervised inner readout diagnostics on those states are disclosed training-pool transductive analyses.",
+    "coverage": "Complete26person support and all original retained trials;2modes×4views×26people=208prediction contexts. Separate reconstruction has2964report cells. Planned78HMP fits and312ordinary/zero evaluations are workload counts, not completed work or new tasks."
   },
   "reference": {
     "source_code_url": "https://github.com/GWeindel/decision-times",
@@ -102,50 +107,109 @@
     "data_url": "https://osf.io/j6xuv/"
   },
   "controls": [
-    "Response-locked alternative",
-    "motor-side nuisance model",
-    "shuffled contrast within valid groups",
-    "HMP assumptions recorded."
+    "Exclude every contrast-bearing alias and privately randomize source order before prediction.",
+    "RT/sample count are explicitly available in all views; do not claim their absence or hidden recovery.",
+    "Keep reconstruction and prediction physically/history-isolated; seal all predictions before any answer/report release.",
+    "Original choices use two fingers of the same right hand; response-choice topographies are not a between-hand manipulation.",
+    "Preserve4/5/6event sensitivity without transferring five-event biological labels to other event counts."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential no-tools logged-contrast estimate from a fixed complete32-channel retrospective trial observation.",
+      "boundary": "Must define lawful calibration/context and keep contrast aliases private; unaided visual stage naming cannot be scored against inferred HMP labels.",
+      "evidence_ids": [],
+      "missing": [
+        "No matched direct-observation delivery or response collection; complete-target suitability needs explicit design."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential EEG or HMP visualization with typed navigation and equal fixed information support.",
+      "boundary": "A viewer of HMP states is model-assisted information, not raw-waveform-only understanding; arrays/targets must not leak through tool output.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed image participant transport for these conditions."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Case-adaptive investigator on complete held-person B/E/H/EH views; H/EH have uniform read-only HMP state/marginal/mass tools.",
+      "boundary": "Equal frozen resource/tool profiles; no held labels; fresh histories per view/fold; adaptation is retrospective/transductive and logged.",
+      "evidence_ids": [
+        "controller",
+        "hmp_interface",
+        "design"
+      ],
+      "missing": [
+        "Authentic inputs and admitted physical/provider/resource environment; no model trial."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Committed procedure after training-only investigation, sealed before held-person view.",
+      "boundary": "Declared deterministic whole-batch processing permitted; no new authoring after held exposure; same lawful inputs and budgets as investigator.",
+      "evidence_ids": [
+        "controller",
+        "design"
+      ],
+      "missing": [
+        "Complete qualified execution and reference/source admission."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Independent recomputation of stage contrasts and held-out model log-likelihood difference.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "participant-macro logged-contrast mean squared error",
+      "direction": "lower",
+      "aggregation": "Mean squared fractional-contrast error within each held person, then equal mean over26people for each separate mode/view; paired difference against frozen behavior reference.",
+      "rationale": "Grades an observed experimental target in common units and matches the concrete successor scorer, while avoiding a manufactured physiological-stage answer key."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "All26 paired person losses;100×sqrt(macroMSE) as percentage-point RMSE for display only.",
+      "Separate ordinary-minus-zero HMP per-trial log mass, marginals and count sensitivity with identical support/normalization.",
+      "Separate2964cell reconstruction agreement with source units/support/undefined patterns; no combined reconstruction/prediction leaderboard.",
+      "Evidence-linked scientific reasoning rubric only after all prediction seals; proposed blinded experts have no results yet."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "behavior_reference_B",
+        "inputs": "RT, instruction and deterministic sample count only.",
+        "procedure": "Existing training-only nested-person selection among instruction-mean and nonlinear RT reference families; never select on outer labels."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "neural_reference_N",
+        "inputs": "The same behavior inputs plus full EEG feature families.",
+        "procedure": "Existing matched selection includes B candidates so a behavioral fallback is valid; competence still requires actual complete reference execution."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+        "name": "HMP_zero_gain_diagnostic",
+        "inputs": "Same EEG-trained HMP duration parameters, support, group maximum duration and normalization as ordinary evaluation, with current-trial neural gain removed.",
+        "procedure": "A within-model diagnostic, not an independently trained non-neural reference; retain negative differences and failures."
       },
       {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "matched_mode_and_view_contrasts",
+        "inputs": "Same data/tool/budget profile under P/I and B/E/H/EH conditions.",
+        "procedure": "Report each contrast separately; supplying a fitted HMP tool tests tool availability, not unaided waveform interpretation."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Exclude every contrast-bearing alias and privately randomize source order before prediction.",
+      "RT/sample count are explicitly available in all views; do not claim their absence or hidden recovery.",
+      "Keep reconstruction and prediction physically/history-isolated; seal all predictions before any answer/report release.",
+      "Original choices use two fingers of the same right hand; response-choice topographies are not a between-hand manipulation.",
+      "Preserve4/5/6event sensitivity without transferring five-event biological labels to other event counts."
+    ],
+    "uncertainty": "All26 paired losses plus median/range and fixed-vector delete-one-person sensitivity are descriptive. Overlapping LOPO fits do not justify SD/sqrt26 as a population interval. HMP marginal uncertainty is conditional on model/parameters; population inference needs an independently fixed resampling/refitting protocol.",
+    "failure_policy": "Complete sealed per-person forecasts are joined after verified context closure and private target release. Any failed person leaves the panel incomplete with no macroMSE; do not drop failures. Source target alias/domain conflicts stop admission. Reconstruction preserves undefined/support patterns rather than inventing finite replacements.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "20afea5d18018241a05f15471c28268449eee0afee07d41f5322166afd3c9716",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "5b129ca30f31d1e392a84cd01e2def51d7428bd2f78a2c6cd71fb9f78bb078a8"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -230,6 +294,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

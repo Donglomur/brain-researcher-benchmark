@@ -16,11 +16,11 @@
     ],
     "task_family": "music_imagery"
   },
-  "scientific_question": "Among a verified set of tempo/meter/duration-matched excerpts, does imagery EEG improve identity prediction beyond rhythm, cue and timing predictors?",
+  "scientific_question": "Within a verified tempo-,meter- and duration-matched OpenMIIR excerpt set, does imagery EEG reduce held-out identity loss beyond rhythm,cue and timing predictors?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "A held-out identity-loss contrast restricted to a prespecified matched excerpt set; if no adequate matched set exists, defer the rhythm-versus-melody claim and retain only ordinary excerpt identification."
+    "No numerical neural answer is instantiated for the intended matched-melody contrast. The exact source metadata establishes empty full-duration match support and only same-composition tempo/meter pairs; that is a design finding, not a measured neural target or an EEG failure."
   ],
   "input_assets": {
     "routes": [
@@ -44,17 +44,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: EEG from music perception/imagery trials with excerpt/condition/timing labels; no actual audio or excerpt ID in imagery query.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "For the original question: verified no-concurrent-audio imagery EEG, fixed equal-length windows, train-only excerpt labels and declared tempo/meter/duration/cue covariates.",
+      "Any original matched contrast must have real source overlap. Both original versions have no different-composition tempo/meter alternatives; exact recorded full-duration matching has zero pairs. Fixed-length windows cannot restore different-melody tempo support."
+    ],
+    "forbidden_inputs": [
+      "Query excerpt identity, audio/cue metadata that uniquely identifies the excerpt, duration-coded windows, held labels and post-hoc matched-set selection.",
+      "Unvalidated score-guided 21-person programme outputs substituted for original OpenMIIR observations."
+    ],
+    "case_identity": "No instantiated original OpenMIIR case manifest or scorer is delivered. The retained unrelated-scope manifest declares 21 participants,3 pairs,132 queries/fold and 2772 queries; those are declaration fields, not this contract’s validated cases.",
+    "split": "Original required split groups participant and repetition with matched excerpt support fixed before evaluation. The alternate declaration describes complete 21 train/seal/infer collection with 2640 train and 132 query per fold, but cannot bind the original target.",
+    "coverage": "The new executable source-metadata audit authenticates both original twelve-stimulus versions and their ten-person source roster; it does not supply EEG case packets. The preserved alternate runtime remains complete_unscored, metrics_computed=false, and scientifically mismatched."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "OpenMIIR participant, with excerpts/repetitions nested and dependence across matched stimuli disclosed.",
+  "case_definition": "Proposed participant/repetition-held matched-excerpt comparison, not the 21-person score-guided bar case in the runtime declaration.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Original required split groups participant and repetition with matched excerpt support fixed before evaluation. The alternate declaration describes complete 21 train/seal/infer collection with 2640 train and 132 query per fold, but cannot bind the original target.",
+    "coverage": "The new executable source-metadata audit authenticates both original twelve-stimulus versions and their ten-person source roster; it does not supply EEG case packets. The preserved alternate runtime remains complete_unscored, metrics_computed=false, and scientifically mismatched."
   },
   "reference": {
     "source_code_url": "https://github.com/sstober/openmiir",
@@ -66,38 +72,97 @@
     "data_url": "https://openmiir.github.io/"
   },
   "controls": [
-    "Tempo/meter/duration matching",
-    "cue-period exclusion",
-    "auditory-perception comparator",
-    "equal windows."
+    "Verify version-consistent excerpt and beat annotations before matching.",
+    "Use equal-duration windows and exclude perception/cue carryover under a declared physical timing rule.",
+    "Keep score viewing, motor/gaze availability and data-cohort identity explicit if the alternate music/score endpoint is ever separately bound."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential imagery waveform observation with a fixed matched-excerpt answer set; no actual case packet exists.",
+      "boundary": "Do not expose excerpt-coded cues or use alternate score-guided data under the original target.",
+      "evidence_ids": [
+        "original-registration",
+        "registered-runtime"
+      ],
+      "missing": [
+        "The intended matched-melody support is unavailable in the authenticated original stimulus design. A metadata audit does not instantiate this neural access mode."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential controlled EEG waveform viewer for a verified matched task.",
+      "boundary": "Viewing scores or target-defining metadata would change the observation contract; no implementation exists.",
+      "evidence_ids": [
+        "registered-runtime"
+      ],
+      "missing": [
+        "The intended matched-melody support is unavailable in the authenticated original stimulus design. A metadata audit does not instantiate this neural access mode."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed matched-set investigation of EEG information beyond rhythm/cue/time.",
+      "boundary": "A per-case analysis cannot obtain original ground truth from the unrelated programme manifest or source-paper conclusion.",
+      "evidence_ids": [
+        "original-registration",
+        "registered-runtime"
+      ],
+      "missing": [
+        "The intended matched-melody support is unavailable in the authenticated original stimulus design. A metadata audit does not instantiate this neural access mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Only an unscored alternate 21-person programme is declared; original OpenMIIR executable/scorer closure is absent.",
+      "boundary": "Source/fit/seal declaration does not make the different music/score target equivalent or runtime-qualified.",
+      "evidence_ids": [
+        "registered-runtime"
+      ],
+      "missing": [
+        "The intended matched-melody support is unavailable in the authenticated original stimulus design. A metadata audit does not instantiate this neural access mode."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out identity-loss gain above rhythm/timing baseline.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    "primary": {
+      "name": "Held-out identity-log-loss reduction above fixed rhythm/cue/timing baseline",
+      "direction": "higher",
+      "aggregation": "Proposed signed baseline loss minus EEG-augmented loss, equally weighted by participant and prespecified matched excerpt pairs; exact case support must be frozen before grading.",
+      "rationale": "The intended incremental-information endpoint cannot be graded on the verified original matched-melody support. The source audit is not a replacement neural metric. General excerpt identity or vocal/instrumental rendition questions require explicitly separate targets."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Matched-set eligibility/coverage and class-specific support.",
+      "Participant paired losses and calibrated probability diagnostics.",
+      "Separate listening comparator under equal support; it is not evidence of pure imagery."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Fixed rhythm/cue/timing-only reference",
+        "inputs": "Verified tempo,meter,duration and permitted timing/cue variables only.",
+        "procedure": "Proposed training-only fitted calibrated classifier and prespecified matched set; no original comparator execution exists."
+      },
+      {
+        "name": "EEG-augmented matched reference",
+        "inputs": "Same permitted nuisances and fixed imagery EEG windows.",
+        "procedure": "Proposed equal-capacity/training-split comparison with full held probability output; null or negative incremental gain is retained."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Verify version-consistent excerpt and beat annotations before matching.",
+      "Use equal-duration windows and exclude perception/cue carryover under a declared physical timing rule.",
+      "Keep score viewing, motor/gaze availability and data-cohort identity explicit if the alternate music/score endpoint is ever separately bound."
+    ],
+    "uncertainty": "No current uncertainty estimate exists. A future analysis must use participant-level paired contrasts and account for repeated excerpts; successful trials cannot replace failed people.",
+    "failure_policy": "Do not calculate the original melody-specific scientific endpoint: verified source metadata does not supply its required matched alternatives. Keep every neural access mode undelivered. Preserve the unrelated21-person runtime history and refuse its substitution. If the complete visual song/lyric cue identity is admitted, target identity is deterministic by design; a positive conditional EEG-information claim cannot follow. This is not an observed classifier result.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "fc68b05857a4736a7b27a58b4907f8f719b384260f1ed4b92ba3cdbce9c87663",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "3927b7688ca59ddb77c202200a0b658af5b4c8b7a28a33b0a4366b3516923629"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -225,6 +290,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

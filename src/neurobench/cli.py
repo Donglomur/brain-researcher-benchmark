@@ -56,8 +56,12 @@ def public_summary(catalog):
             'submission_ready': None, 'scientific_readiness': 'unknown',
             'submission_readiness': 'unknown',
             'paper_improvement': catalog['paper_improvement_counts'],
+            'neural_understanding': catalog['neural_understanding_counts'],
+            'recorded_evidence': {key: catalog['recorded_evidence'][key]
+                                  for key in ('counts', 'reports', 'scope')},
             'count_basis': 'Current benchmark registry and its pinned task definitions. '
-                           'Runtime receipts, candidate code, data and private construction ledgers are not inspected.',
+                           'Selected public reports are indexed separately with their scopes. '
+                           'Raw runtime receipts, candidate code, data and private construction ledgers are not inspected.',
             'counting_note': catalog['counting_note']}
 
 
@@ -78,7 +82,11 @@ def public_implementations(catalog, task):
     return {**{key: task[key] for key in ('id', 'title', 'track', 'task_directory',
                                          'scientific_readiness', 'submission_readiness')},
             'paper_improvement': task.get('paper_improvement'),
-            'evaluation_role': 'calibration_only' if task['track'] == 'paper' else 'declared_source',
+            'neural_understanding': task.get('neural_understanding'),
+            'recorded_evidence': task.get('recorded_evidence', []),
+            'evaluation_role': ('same_task_improvement_construction'
+                                if task.get('paper_improvement', {}).get('initial_registration')
+                                else 'calibration_only' if task['track'] == 'paper' else 'declared_source'),
             'implementations': sources(task['implementation_ids']),
             'related_sources': sources(task['related_implementation_ids']),
             'documentation': task.get('documentation', []),
@@ -101,7 +109,9 @@ def public_metadata_command(action, root, *, track=None, task_id=None):
                   'implementation_ids', 'related_implementation_ids',
                   'scientific_readiness', 'submission_readiness',
                   'local_scoring_adapter_verified', 'local_program_runner_verified')},
-                 'paper_improvement': row.get('paper_improvement')}
+                 'paper_improvement': row.get('paper_improvement'),
+                 'neural_understanding': row.get('neural_understanding'),
+                 'recorded_evidence': row.get('recorded_evidence', [])}
                 for row in catalog['tasks'] if track is None or row['track'] == track]
     row = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
     if row is None:
@@ -170,7 +180,8 @@ def _current_registry(root):
 
 def specifications(root=ROOT, complete=False):
     registry = _current_registry(root)
-    if registry.get('paper_improvement', {}).get('coverage_required'):
+    if (registry.get('paper_improvement', {}).get('coverage_required')
+            or registry.get('neural_understanding', {}).get('coverage_required')):
         public_catalog_module().load(root)
     docs, expected = {}, {}
     for row in registry['tasks']:
@@ -405,6 +416,33 @@ def paper_contract(task_id, root=ROOT):
     return builder.improvement_module().loads_contract(raw.decode('utf-8'))
 
 
+def neural_contract(task_id, root=ROOT):
+    """Return the current registered neural objective and separate access conditions."""
+    builder = public_catalog_module()
+    catalog = builder.load(root)
+    task = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
+    if task is None or task['track'] != 'neural':
+        raise ValueError('Expected a registered neural task')
+    understanding = task.get('neural_understanding')
+    if not understanding:
+        raise ValueError('No current neural understanding contract is bound for ' + task_id)
+    pin = understanding['contract']
+    raw = _program_pin(root, pin['path'], pin['sha256'], pin['bytes'], return_bytes=True)
+    return json.loads(raw)
+
+
+def recorded_evidence(task_id=None, root=ROOT):
+    builder = public_catalog_module()
+    catalog = builder.load(root)
+    evidence = catalog['recorded_evidence']
+    if task_id is None:
+        return evidence
+    if task_id not in {row['id'] for row in catalog['tasks']}:
+        raise ValueError('Expected a registered task ID')
+    return {'task_id': task_id, 'records': evidence['records'].get(task_id, []),
+            'scope': evidence['scope']}
+
+
 def compare_paper(task_id, result_path, root=ROOT):
     contract = paper_contract(task_id, root)
     # Result evidence is public aggregate metadata, not prediction or target data.
@@ -441,11 +479,29 @@ def require_paper_role(row, calibration):
                          'or paper-contract and compare-paper for the current objective.')
 
 
+def require_neural_role(row, calibration, root=ROOT):
+    """A passing old adapter cannot redefine a revised neural scientific target."""
+    if (row['track'] != 'neural'
+            or row.get('specification_revision', {}).get('version') != 'neural-understanding/v1'):
+        return
+    # Authenticate the current contract; the registry's display summary is not
+    # an authority for target fidelity. This precedes runtime verification and
+    # candidate/target I/O; the catalog only reads public declaration metadata.
+    contract = neural_contract(row['id'], root)
+    fidelity = contract['implementation']['target_fidelity']
+    if fidelity in {'different_target', 'no_target_evaluator', 'unresolved'} and not calibration:
+        raise ValueError('The current neural target has ' + fidelity + ' source fidelity. '
+                         'A verified historical adapter cannot establish that target. '
+                         'Use --calibration explicitly for its historical scope, or inspect '
+                         'neural-contract ' + row['id'] + ' for the current observations and target.')
+
+
 def score_command(task_id, submission, output, root=ROOT, *, review=None, other_reserve_bytes=None, calibration=False):
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
     require_paper_role(canonical[task_id], calibration)
+    require_neural_role(canonical[task_id], calibration, root)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local scoring adapter is registered for this command and task: ' + task_id
@@ -503,6 +559,7 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
     require_paper_role(canonical[task_id], calibration)
+    require_neural_role(canonical[task_id], calibration, root)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is registered for this command and task: ' + task_id
@@ -543,6 +600,9 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
 def main(argv=None, root=None):
     dispatch_options = {} if root is None else {'root': Path(root)}
     root = ROOT if root is None else Path(root)
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == 'operator':
+        return public_catalog_module().companion_module('operator_routes').main(argv[1:], root=root)
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest='action', required=True)
     subs.add_parser('status')
@@ -553,19 +613,29 @@ def main(argv=None, root=None):
     p.add_argument('id')
     p = subs.add_parser('paper-contract', help='Inspect the current source-grounded improvement contract')
     p.add_argument('id')
+    p = subs.add_parser('neural-contract', help='Inspect the current target and separate neural access conditions')
+    p.add_argument('id')
+    p = subs.add_parser('evidence', help='Read scoped public execution reports without promoting qualification')
+    p.add_argument('id', nargs='?')
+    p = subs.add_parser('operator', help='Inspect authentic inputs, prepare supported routes or grade existing submissions')
+    p.add_argument('arguments', nargs=argparse.REMAINDER)
     p = subs.add_parser('compare-paper', help='Check aggregate comparison evidence against the frozen same-task contract')
     p.add_argument('id'); p.add_argument('--result', required=True)
     p = subs.add_parser('score'); p.add_argument('id'); p.add_argument('--submission', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
-    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration adapter; cannot establish paper success')
+    p.add_argument('--calibration', action='store_true', help='Explicitly use historical calibration scope; cannot establish current paper or neural success')
     p = subs.add_parser('run'); p.add_argument('id'); p.add_argument('--program', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
-    p.add_argument('--calibration', action='store_true', help='Explicitly run a historical calibration program; cannot establish paper success')
+    p.add_argument('--calibration', action='store_true', help='Explicitly use historical calibration scope; cannot establish current paper or neural success')
     args = parser.parse_args(argv)
     if args.action == 'paper-contract':
         result = paper_contract(args.id, root)
+    elif args.action == 'neural-contract':
+        result = neural_contract(args.id, root)
+    elif args.action == 'evidence':
+        result = recorded_evidence(args.id, root)
     elif args.action == 'compare-paper':
         result = compare_paper(args.id, args.result, root)
     elif args.action in ('status', 'check', 'list', 'show', 'implementations') and public_metadata_mode(root):
@@ -582,11 +652,12 @@ def main(argv=None, root=None):
                                          review=args.review, other_reserve_bytes=args.other_reserve_bytes)
         if not args.dry_run:
             if args.calibration:
-                print(json.dumps({'evaluation_role': 'calibration_only', 'paper_win': False}), file=sys.stderr)
+                print(json.dumps({'evaluation_role': 'calibration_only', 'paper_win': False,
+                                  'current_task_success': False}), file=sys.stderr)
             return subprocess.run(command, cwd=cwd, check=False).returncode
         result = {'argv': command, 'working_directory': str(cwd), 'executed': False}
         if args.calibration:
-            result.update(evaluation_role='calibration_only', paper_win=False)
+            result.update(evaluation_role='calibration_only', paper_win=False, current_task_success=False)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if args.action == 'compare-paper' and result.get('comparison_admitted') is not True:
         return 2

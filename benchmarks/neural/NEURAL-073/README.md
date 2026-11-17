@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+The source-adjudicated25-protocol catalogue label for each map, not a uniquely identified mental process.
+
+**Source delivery:** partial\_delivery. Complete9532-map source and original-map conversion exist, superseding the narrower312-map historical declaration for coverage descriptions. The deployment is unconfigured and authentic conversion, taxonomy and reference qualification remain open.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | A sanitized map plus fixed label ontology could support a bounded no-tools observation condition. Require a frozen representation preserving equivalent visible support and no metadata shortcuts. | No current no-tools case transport or complete response collection |
+| Typed viewer | not\_delivered | Typed slice/overlay queries could expose map values without raw files. No source filenames/header labels/raw-array returns; rendering may change information relative to programme views. | Typed viewer, matched view budget and transport qualification |
+| Tool assisted | source\_available | I arm can investigate full permitted neural/nuisance views with numerical/model tools. Complete held-person support, matched resources and no hidden target/reference feedback. | Configured authentic operator deployment |
+| Frozen program | source\_available | F arm snapshot precedes query access; same full catalogue and views. Single precommitted programme per context with actual source/runtime/custody receipts. | Configured authentic operator deployment |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11755 bytes; SHA-256 `194e910a9c12dcfaf1eff314796f40dfb71253c904a6f131c9f4b7a3ae450893`.
+- Specification identity: 16493 bytes; SHA-256 `ae1b5943fbc6c9a88b52a8552a4bab724ff3e2a4851efd4c1cf3c04471b16ec6`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

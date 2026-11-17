@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-001",
   "track": "neural",
-  "title": "Audiobook-to-sentence envelope reconstruction",
+  "title": "Audiobook-calibrated sentence-envelope inference from MEG",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "auditory_tracking"
   },
-  "scientific_question": "Can an audiobook-trained neural decoder reconstruct the acoustic envelope of a different spoken sentence?",
+  "scientific_question": "For each person, how accurately can that person’s labeled audiobook MEG calibration support sample-aligned acoustic-envelope inference from separate OLSA sentence MEG?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Sample-aligned predicted envelope for every permitted sentence interval."
+    "The source processed acoustic-envelope time series over each complete OLSA interval; this measured stimulus target is separate from the source paper’s published aggregate result."
   ],
   "input_assets": {
     "routes": [
@@ -72,19 +72,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Raw and MaxFilter-preprocessed FIF streams; actual representative raw/derivative files and event tables were inspected.",
-    "allowed_context": "Sentence events contain onset,duration,value,sample,trial_type,SNR,intelligibility,stim_file,sentence; processed OLSA acoustic envelopes are available.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Author pipeline trains at 1000-to-64 Hz downsampled neural/acoustic resolution, applies documented 3 ms alignment correction, and supplies sentence-event timing. Alignment must be rechecked before trials are packaged.",
-    "source_contract_evidence": "Prior source audit inspected OpenNeuro manifest, exact event/participant text and speech decoding loaders."
+    "inputs": [
+      "Per-person labeled audiobook MEG/envelope calibration from all source-declared retained whole runs, using training-only model selection and normalization.",
+      "Query306-channel MEG in original channel order,64Hz after declared MaxFilter/FieldTrip0.5–4Hz processing and+3 raw1000Hz samples latency adjustment; complete sentence intervals and boundaries."
+    ],
+    "forbidden_inputs": [
+      "Held sentence envelopes or audio/MISC channels; sentence/text/playlist identity, intelligibility, SNR, event-onset tables and original source filenames.",
+      "Other participants’ calibration, held-label feedback, query-fitted normalization and cross-query fitted state outside the frozen protocol."
+    ],
+    "case_identity": "Current source emits sub-XX:sentence-NNN in source order; private target-independent aliases/order are required before participant delivery, preserving120 exact interval boundaries per person.",
+    "split": "Train/tune within each person on complete audiobook-run groups, then evaluate all separate OLSA intervals. All70 OLSA identities stay out of labeled calibration. All24 people are reported equally; this is not an outer held-person model-training split.",
+    "coverage": "Specified24 people ×120 intervals=2880 nested scored observations,94 source runs in corrected design; authenticated complete packets are not delivered. Eleven comparison panels are conditions within this single task."
   },
-  "biological_unit": "24 participants in actual participants.tsv; each participant has audiobook/chirp/sentence tasks and multiple runs, not separate cohorts.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "24 participants; repeated presentations of70 shared sentence identities and nested runs remain dependent.",
+  "case_definition": "One participant episode with120 scored sentence intervals; every sample in each retained interval is scored.",
   "split": {
-    "policy": "Group whole audiobook/sentence runs and repeated sentence identities; fit on training runs, evaluate different sentences; outer group person. Any target-person calibration has a fixed labeled budget.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Train/tune within each person on complete audiobook-run groups, then evaluate all separate OLSA intervals. All70 OLSA identities stay out of labeled calibration. All24 people are reported equally; this is not an outer held-person model-training split.",
+    "coverage": "Specified24 people ×120 intervals=2880 nested scored observations,94 source runs in corrected design; authenticated complete packets are not delivered. Eleven comparison panels are conditions within this single task."
   },
   "reference": {
     "source_code_url": "https://github.com/tillhabersetzer/MEG-SCANS",
@@ -102,49 +106,98 @@
     "data_url": "https://openneuro.org/datasets/ds006468/versions/1.1.1"
   },
   "controls": [
-    "Same SNR distribution",
-    "audio-prior-only and shifted-neural references",
-    "no target envelope in query."
+    "Preserve sentence duration and true sample boundaries; never pad artificial zero tails into scoring.",
+    "Fit normalization and model selection on complete audiobook runs only; no source-global normalization across query data.",
+    "Treat repeated/shared sentences as dependency groups and strip their identities from the participant view.",
+    "Authenticate3ms alignment and source snapshot equivalence before target packaging."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A numerical or plotted complete sentence MEG observation could support a separate no-tools response condition.",
+      "boundary": "Must retain identical interval support/calibration information while preventing code, fitted decoder calls and source identity access.",
+      "evidence_ids": [],
+      "missing": [
+        "No direct response renderer/collection protocol or model trial for this task."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential channel/time rendering of complete306-channel sentence MEG with typed navigation.",
+      "boundary": "Typed image-only actions would need fixed content/precision and complete response collection; current numerical tools are not this viewer.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed renderer or participant transport supplied."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Fresh per-case investigation loop with bounded numerical Python tools and a submitted inference program.",
+      "boundary": "Same admitted inputs/tools/compute as comparator; engine must enforce target and other-query exclusion; returned text tools are not direct observation.",
+      "evidence_ids": [
+        "investigator"
+      ],
+      "missing": [
+        "Actual engine/provider/isolation qualifications and authenticated operands."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted method with training-only calibration and declared inference procedure.",
+      "boundary": "Freeze source/fit rules before held observations; fresh per-person state, no query fitting or target feedback.",
+      "evidence_ids": [
+        "task_protocol",
+        "entry"
+      ],
+      "missing": [
+        "Runnable admission profile and complete authenticated packets; CLI currently refuses."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Person-macro Fisher-z correlation on whole held-out sentences; report raw correlations too.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "person_macro_mean_sentence_fisher_z_spearman",
+      "direction": "higher",
+      "aggregation": "Compute signed Spearman per complete interval with average ties; finite Fisher transform; equal mean over120 interval trials/person, then equal mean over24 people.",
+      "rationale": "Matches the actual scorer and weights people equally while retaining every sentence trial; source paper padding/pooled reproduction and unique-stimulus averaging are distinct estimators."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Raw signed Spearman and Pearson per interval/person; coverage and constant-prediction counts.",
+      "Matched neural-versus-no-neural contrasts; disclose all panel outcomes and the permitted method/tool access."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "training_only_neural_decoder",
+        "inputs": "Same person’s permitted audiobook neural/envelope calibration and query MEG.",
+        "procedure": "Predeclare a train-only mTRF/ridge family with whole-run validation; source reference machinery exists but empirical competence is unqualified."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "no_neural_audiobook_prior",
+        "inputs": "Same audiobook targets and permitted interval support, without query MEG.",
+        "procedure": "Freeze a target-time prior under matched calibration/budgets; quantify how much score can follow acoustic regularity or interval duration alone."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "disclosed_half_shift_diagnostic",
+        "inputs": "The same query MEG after the public within-interval half-shift.",
+        "procedure": "Retain as robustness condition only: an actor may invert the disclosed transform, so success is not evidence against neural dependence."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Preserve sentence duration and true sample boundaries; never pad artificial zero tails into scoring.",
+      "Fit normalization and model selection on complete audiobook runs only; no source-global normalization across query data.",
+      "Treat repeated/shared sentences as dependency groups and strip their identities from the participant view.",
+      "Authenticate3ms alignment and source snapshot equivalence before target packaging."
+    ],
+    "uncertainty": "Report participant paired effects and repeated-stimulus dependence. The scorer supplies no population CI; a future inference procedure must account for shared sentence identity and full episode fitting.",
+    "failure_policy": "Require all24 files and exact120 IDs/boundaries each before private target access; missing/duplicate/nonfinite rows invalidate complete coverage. Constant predictions are valid and score0 correlation; constant targets invalidate the operator packet.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "f2a010bd73ccb3c7fa08e97dd78b273f1978c69163c3d5669ee6bf27ba5adf8c",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "36c54db48a6e7f026c3f5b59faae18454f735a82f145c1e5a3f15970888cca77"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -237,6 +290,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

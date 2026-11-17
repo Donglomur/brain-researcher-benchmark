@@ -10,10 +10,28 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current neural-understanding objective
+
+Expert hypnogram stage labels for both observation arms and the deterministic paired differences from their independently committed prediction panels. The sign of the EOG contribution is unknown before evaluation and may be zero or negative.
+
+**Source delivery:** partial\_delivery. Historical two-person paired scoring is documented, but the shipped score.py bridge points to an absent historical dependency. The current portable contribution helpers operate on an already admitted full153 grade; they do not deliver paired training or a raw-signal investigation. Restore the scorer/runner binding before advertising a runnable task.
+
+- [Current target, controls and access conditions](understanding.v1.json)
+- [Preserved historical task definition](historical/task.pre-understanding.v1.json)
+
+| Condition | Source availability | Representation and boundary | Missing |
+| --- | --- | --- | --- |
+| Direct observation | not\_delivered | Potential direct matched EEG versus EEG+EOG waveform interpretation using identical epochs, scales and context. Separate model contexts for each arm; no pretrained probabilities or feedback, and no opportunity to see EOG before the EEG-only response. | No delivered direct paired response collector, authentic waveform packet or model trial. |
+| Typed viewer | not\_delivered | Potential typed multichannel waveform viewer with EOG disabled in EEG-only arm. The observation policy must be enforced by the viewer transport and paired response commitment, not a written instruction. | No task-specific typed-viewer or paired transport implementation. |
+| Tool assisted | not\_delivered | Shared full153 investigation/report helper source, including matched signal contrasts and evidence-linked numerical claims. Requires separately admitted complete programme grade; helper arithmetic is not a standalone candidate episode. | The supplied contribution helper computes report arithmetic, not a per-case investigator episode; current complete delivery and authenticated grade producer are absent. |
+| Frozen program | not\_delivered | Historical declared same-source programme executed independently in physically separated feature views. Both prediction panels must be committed before labels; existing manifests are lineage only. | Historical paired runner/scorer dependencies absent from this public closure; restore before claiming source-delivered execution. |
+
+Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 13570 bytes; SHA-256 `fcb3621f14111bef9cab4ad6fb4565a4d5b7d334b5e71a8bbea74a7ff76580cc`.
+- Specification identity: 17978 bytes; SHA-256 `c6210c2c158e520cd087151c9c39f662e6b3091c794dc278c16086682a5e7b00`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -12,14 +12,14 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Current paper-improvement objective
 
-**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
 
 **Disposition:** source\_unresolved. The source supports ordered classification for the complete Figure2h and 5e family, but exact original accuracy arrays, Monte Carlo partitions and executable figure baseline are not recovered. The110-second result is a significance-onset summary, not a numeric accuracy baseline. The registered prospective held-mouse causal/Brier protocol changes inputs, preprocessing, split and metric and is an extension only.
 
 - [Source-grounded improvement contract](improvement.v1.json)
-- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+- [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
-Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 

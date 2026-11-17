@@ -1,0 +1,227 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-084",
+  "title": "Overt-gaze steady-state visual target decoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The delivered source defines full54-person overt-gaze SSVEP inputs, CCA/constant/permuted references and a fit/infer programme producer. The task-owned package does not include the protected scorer/preparation body needed to substantiate the documented all 54-label grading path; authentic inputs and runtime are unqualified. It is a prospective400 sample representation, not native401 sample MATLAB parity.",
+  "scientific_target": {
+    "question": "Can a frozen method identify the instructed overt-gaze flicker target from a four-second EEG epoch for an entirely held-out person, beyond constant and frequency-mapping controls?",
+    "target_kind": "observation_decoding",
+    "known_answer": "One of four source labels ordered1up,2left,3right,4down; corresponding nominal reference frequencies60/[5,7,9,11]Hz.",
+    "answer_origin": "Original OpenBMI SSVEP target instruction joined privately to each query; gaze, cue position and frequency are experimentally coupled and photodiode-verified per-trial frequency is not established.",
+    "case_unit": "One float32[10,400] EEG epoch;400 queries per held-person fold across both sessions/acquisition phases.",
+    "independent_unit": "54 human participants with trials nested in session×phase; training people overlap heavily across folds.",
+    "inference_scope": "Retrospective instructed overt-gaze target decoding from declared source-derived observations; eye position and visual cue responses can contribute.",
+    "exclusions": [
+      "No covert-attention, cue-independent intention, clinical efficacy or phase-specific longitudinal adaptation claim.",
+      "No original MATLAB preprocessing parity or source-paper accuracy qualification from this new400half-open-block representation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Ten channels P7,P3,Pz,P4,P8,PO9,PO10,O1,Oz,O2 from source1-based indices23..32; native amplitude/nasion reference.",
+      "Exactly[0,4)seconds,4,000 source samples at1,000 Hz reduced by nonoverlapping10 sample means to400 samples/100 Hz; centers0.0045+0.01kseconds. No added filter/rereference/fitted transform.",
+      "Public candidate frequency/target order60/[5,7,9,11]Hz; no absolute stimulus phase. Donor training contains 21,200 labeled rows from53other people in each fold."
+    ],
+    "forbidden_inputs": [
+      "All held-person labels/calibration, query session/phase/source order/metadata, original cue/trigger/time labels, EMG/unselected channels, other fold state and NEURAL-083 sibling-task exposure.",
+      "Query-batch adaptation or policy fitting; deterministic per-epoch CCA centering/subspace calculation remains permitted."
+    ],
+    "case_identity": "fold001..fold054, each400opaque secret-derived ID-sorted queries; exact generation/fold/order binds four finite raw scores per row. No authentic roster-to-target key has been qualified here.",
+    "split": "Leave one entire person out, including both sessions and train/test acquisition phases; fit on all 53others, retire training view, then infer on400 queries with sealed model. Reset writable state between folds because every held person is training data elsewhere.",
+    "coverage": "54 people×2 sessions×2phases×100 trials=21,600 unique candidates,25per target per cell.108 recording roster is declared59,597,469,294bytes; only a128 byte MAT container header was checked in source construction, not source numerical schema/body."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Declared equal-person/session/acquisition-phase/class mean recall",
+      "direction": "higher",
+      "aggregation": "Argmax four raw scores in fixed source class order, ties earliest class; retain216 phase confusion matrices/supports, average classes→phases→sessions→54 people equally. Protected scorer body is not delivered under this task.",
+      "rationale": "Measures complete held-person protocol-label accuracy without treating phase/trial replication as independent humans; raw CCA scores are not calibrated probabilities."
+    },
+    "secondary": [
+      "Per-frequency confusion/support, all 54 person scores and source acquisition-phase/session breakdown.",
+      "Candidate-minus-CCA, candidate-minus-constant and frequency-column-permutation diagnostic reported with identical full IDs.",
+      "Any probability log loss is a separate future calibrated-output condition and must not be silently applied to current raw score vectors."
+    ],
+    "comparators": [
+      {
+        "name": "Unfitted two-harmonic CCA",
+        "inputs": "Same ten-channel400 sample epoch and nominal frequencies60/[5,7,9,11]Hz; no training labels.",
+        "procedure": "Pinned reference centers/scales and computes rank-aware orthonormal spans, then maximal canonical correlation to sine/cosine first/second harmonic columns. Constant/rank-zero epochs yield zero scores. Implemented but not run on authentic EEG."
+      },
+      {
+        "name": "Constant-score context baseline",
+        "inputs": "No per-trial labels/cue/timing; four zero scores.",
+        "procedure": "Use reference --mode constant; earliest-class ties retained. The public representation exposes no useful trial timing metadata."
+      },
+      {
+        "name": "Frequency-column permutation diagnostic",
+        "inputs": "Unchanged CCA epoch scores.",
+        "procedure": "Rotate four CCA score columns left by one; keep original labels/IDs. A diagnostic for frequency mapping, not a neural-mechanism or randomization p-value."
+      }
+    ],
+    "nuisance_controls": [
+      "Equal four-second windows and fixed channel/representation policy; do not introduce401stboundary sample/feedback.",
+      "Frequency, gaze direction and cue location remain coupled; ocular activity/visual responsiveness are alternative explanations.",
+      "Group all within-person sessions/phases and keep source subject26 despite historical.mat6display-name typo.",
+      "Freeze all training-only normalization, hyperparameters and permitted harmonics; no query-specific policy revision or source lookup."
+    ],
+    "uncertainty": "Use54 person scores/descriptive paired differences. Shared donor data and nested trials require explicitly modeled dependence for any future confidence interval; source code supplies no empirical population inference.",
+    "failure_policy": "Declared contract requires all 54submissions with400ordered IDs and four finite nonboolean raw scores before any private labels. Missing/extra/reordered/nonfinite output cannot yield partial score. Programme-source failure preserves incomplete lifecycle and blocks completion; actual protected scorer must be bound and tested."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/TASK.md",
+      "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/protocol.py",
+      "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/reference_cca.py",
+      "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/PROGRAM_ABI.md",
+      "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/SEMANTIC_COMPARISON.json",
+      "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/controller.py",
+      "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/native.py"
+    ],
+    "scorer_target": "The declared target is genuine held-person experimental-label decoding; task-owned delivered files contain protocol, candidate producer and CCA references, but no protected numerical scorer implementation to inspect. A source description of private grading is not a verified grader.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "54 fold fit/infer producer, query-only reference computations, strict raw-score interface and prospective scientific protocol. Separate authentic preparation/protected scoring remain external; no acquired source arrays or empirical accuracy.",
+    "missing": [
+      "Recover/bind actual full-source preparation and private-target scorer with complete ID/class joins and tests.",
+      "Acquire/authenticate all 108 recordings and observe actual schema,1000 Hz channel/onset/class bindings without dropping unsupported cases.",
+      "Execute full54 fold programme/CCA controls under an admitted runtime; direct/viewer/adaptive conditions are not supplied."
+    ],
+    "execution_evidence": "Source inspection only; declared original checks establish a MAT container header and generated signal/software behavior, not authentic prepared EEG, fitted models or scientific evaluation."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential ten-channel four-second numeric or fixed spectral observation for one query; no direct formatter/episode is delivered.",
+      "boundary": "Same signal/nominal frequency information only, no query labels, cue order, external source or numerical tools.",
+      "evidence_ids": [
+        "task-source"
+      ],
+      "missing": [
+        "Bounded faithful representation and exact direct-response condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed time/frequency inspection of a fixed ten-channel epoch; no viewer is supplied.",
+      "boundary": "Display operations/transform definitions must be frozen and cannot expose target cues or raw arrays; visual versus numeric observations are distinct conditions.",
+      "evidence_ids": [
+        "protocol"
+      ],
+      "missing": [
+        "Viewer and renderer, action budget, response collector and information-equivalence accounting."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A prospective per-query investigator could inspect EEG/spectra or request the fixed CCA decoder.",
+      "boundary": "Fresh query context, identical permitted epoch/frequency data and total compute; no held-person adaptation or evaluator feedback.",
+      "evidence_ids": [
+        "reference",
+        "semantics"
+      ],
+      "missing": [
+        "Adaptive-agent source/transport and separate decoder-alone comparison not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "One frozen programme with train-only fit and query-only infer over54 folds; three independent query-only CCA/control processes.",
+      "boundary": "Seal per-fold model, retire training/query views, reset state and retain all 400responses/fold; fit cannot see held-person query features.",
+      "evidence_ids": [
+        "programme",
+        "semantics",
+        "frozen-controller",
+        "native-process"
+      ],
+      "missing": [
+        "Actual authentic preparation, protected scorer and native full-workload qualification."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/historical/task.pre-understanding.v1.json",
+      "sha256": "6089a6386c9b94e4140e10048b68710e7e53f73963de4902535e42a25596f750",
+      "supports": "Preserved original registered scientific question and source provenance; superseded interpretation/delivery claims are identified explicitly in this revision."
+    },
+    {
+      "id": "task-source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/TASK.md",
+      "sha256": "8b3c60d2eede71df7dc727ba9b90dcf086579f5a0824ba38c299b584945786ed",
+      "supports": "Exact prospective signal representation, original source limitations, complete LOPO target, score semantics and not-acquired boundary."
+    },
+    {
+      "id": "protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/protocol.py",
+      "sha256": "20d59ca8be134175b5b9c2da81c261231a63b38da12ea1a5b3c8b64e855fa926",
+      "supports": "Fixed54 people/two sessions/two phases, four classes, frequencies and400 sample representation."
+    },
+    {
+      "id": "reference",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/delivery-source/public/reference_cca.py",
+      "sha256": "0a270749949aaf8143b840666c1244af6e8970f2171f507981dd7d63865aa95a",
+      "supports": "Actual unfitted CCA, constant and column-permuted references emit finite raw scores, not probabilities."
+    },
+    {
+      "id": "programme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/PROGRAM_ABI.md",
+      "sha256": "b39fa8acc9357494d37e9387afb467833f6cb84d116c3664107dcfde22a3a022",
+      "supports": "Actual frozen fit/infer programme interface and all 54 fold/fourmode producer closure; producer does not grade."
+    },
+    {
+      "id": "semantics",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/SEMANTIC_COMPARISON.json",
+      "sha256": "6cef7288716a7e44b82a5efecfcc64f171ef3fc81db548db896c81f7937eac10",
+      "supports": "Source coverage, shared-context restrictions, external authentic input/scorer/runtime obligations and no adaptive-agent condition."
+    },
+    {
+      "id": "primary-source",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1093/gigascience/giz002",
+      "locator": "Official source repository and source-method reference; detailed task adaptation is described separately in the pinned local implementation.",
+      "supports": "OpenBMI original SSVEP source collection; actual source paradigm uses instructed overt gaze, while this prospective representation/split is a benchmark adaptation."
+    },
+    {
+      "id": "frozen-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/controller.py",
+      "sha256": "b97e546ac4e4662b411f244af8e9773a632b626d73f024b2af75ef898ab049c2",
+      "supports": "Actual54fold fit/seal/infer loop, three reference invocations, retirement and protected-grade handoff; producer does not grade."
+    },
+    {
+      "id": "native-process",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-084/implementations/sequential-programme/sequential-view-v2/program/native.py",
+      "sha256": "7dc6aa684cfb6d9fe49cbfcb2f720ec51880ddfd0d8c4cf3de415fc7f0f664aa",
+      "supports": "Actual owned Docker process orchestration and bounded capture for fit/infer/reference phases; deployment unqualified."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No solver or human result is established by this source review; generated controls remain engineering evidence.",
+    "excluded_claims": [
+      "No authentic SSVEP accuracy, human benchmark, covert-attention or clinical claim.",
+      "No public source-package completeness claim for the protected scorer body."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Specify raw-score overt-gaze inference and exact60/refresh frequencies rather than unqualified calibrated probability/attention language.",
+      "Keep400half-open block-mean representation distinct from401 sample native helper and preserve complete54 person coverage.",
+      "Identify missing task-owned private scorer/preparer rather than promoting a programme producer or source prose to complete evaluation."
+    ],
+    "source_review": "Actual local numerical/protocol/producer source was inspected and hashed; original source-method citations are retained. No authentic neural arrays or target values were read for this revision."
+  }
+}

@@ -16,11 +16,11 @@
     ],
     "task_family": "seizure_detection"
   },
-  "scientific_question": "Can a neural detector find annotated seizures while maintaining low false alarms across full held-out-patient recordings?",
+  "scientific_question": "From causal EEG alone, can a fixed detector recover annotated seizure-event presence across complete held-person monitoring, while limiting false alarms and predicted-positive occupancy?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Sample scores and merged predicted seizure intervals, with fixed threshold and context policy."
+    "Recording-relative annotated seizure intervals, with separate raw annotations and processed intervals under the frozen timescoring merge/split/tolerance policy."
   ],
   "input_assets": {
     "routes": [
@@ -79,19 +79,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Actual representative EDF header has 23 bipolar EEG channels at 256 Hz, microvolt units, and 3,600 one-second records. Montage and duplicate labels vary across files; never infer all channels are distinct electrodes.",
-    "allowed_context": "Per-case summary files give seizure starts/ends in recording-relative seconds; companion .edf.seizures files also exist. Actual chb01_03 event is 2996–3036 s.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Summary onset/offset is relative to the EDF recording. Gaps between files must not be treated as observed background. Pinned parser matches the exact EDF filename and reads its event interval.",
-    "source_contract_evidence": "686-path manifest, SUBJECT-INFO, actual summary, 6,144-byte EDF header, source alias mapping and label parser inspected; no signal samples downloaded."
+    "inputs": [
+      "Selected genuine bipolar EEG channels with native calibration in microvolts and native sample-count/rate declarations; the checked representative source header is 256 Hz, but every file needs verification.",
+      "Complete causal samples through each 10 Hz bin endpoint; montage metadata required to interpret channels, not to recover labels."
+    ],
+    "forbidden_inputs": [
+      "Summary seizure times, annotation channels and companion annotation files in participant inputs",
+      "Future samples, target-person labels, label-derived selection of monitoring windows",
+      "Source filename lookup or recording hashes used to retrieve public labels"
+    ],
+    "case_identity": "Evaluator requires all 686 pinned RECORDS paths, exact person aliases and fold identities. A future participant projection must use opaque identities while retaining an operator join.",
+    "split": "Implemented policy specifies 23 leave-one-biological-person-out folds, with chb01/chb21 held together; preprocessing and inner selection are confined to the other 22 people. Physical fit compliance is not enforced by score validation.",
+    "coverage": "All 686 recordings, including seizure-free background and every observed tick; no cross-record merge or invented time in acquisition gaps. Authentic normalized arrays remain unbound."
   },
-  "biological_unit": "chb01 and chb21 are the same biological person approximately 1.5 years apart; official converter maps chb21 to subject01/session02. Split 23 people, not 24 folder names. chb24 age/sex missing in SUBJECT-INFO.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "23 biological people; chb01 and chb21 are one person, not independent folds.",
+  "case_definition": "A complete EDF recording on an explicit 10 Hz prediction grid, nested within one held biological person.",
   "split": {
-    "policy": "Group by biological patient, explicitly chb01=chb21; split complete recordings; keep complete eligible background and file gaps.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Implemented policy specifies 23 leave-one-biological-person-out folds, with chb01/chb21 held together; preprocessing and inner selection are confined to the other 22 people. Physical fit compliance is not enforced by score validation.",
+    "coverage": "All 686 recordings, including seizure-free background and every observed tick; no cross-record merge or invented time in acquisition gaps. Authentic normalized arrays remain unbound."
   },
   "reference": {
     "source_code_url": "https://github.com/esl-epfl/epilepsy2bids",
@@ -106,50 +111,94 @@
     "data_url": "https://physionet.org/content/chbmit/1.0.0/"
   },
   "controls": [
-    "Merge chb01/chb21 identity",
-    "keep nonseizure background",
-    "timing/montage-only baseline",
-    "remove annotation channels."
+    "Group chb01/chb21 at the biological identity level.",
+    "Freeze channel-role and duplicate-label resolution per file; remove marker/annotation channels.",
+    "Keep all seizure-free background and record-boundary resets.",
+    "Compare occupancy and unextended sample metrics because one long prediction may cover several tolerant reference events."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Rendered continuous EEG windows with fixed scales and declared surrounding causal context could support event annotation, but a complete-record no-tools response protocol is absent.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A multichannel EEG viewer with bounded navigation is scientifically suitable for annotation; no typed viewer is delivered for this task.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "An investigator could analyze allowed EEG and submit complete probabilities, but this package delivers the evaluator rather than a case-investigation participant loop.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A detector recipe can be frozen before outer fold access; the evaluator checks recipe declarations but supplies no protected fit/predict runner.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Patient-macro event F1; mandatory event sensitivity and false alarms per 24 observed hours.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "patient_macro_event_f1",
+      "direction": "higher",
+      "aggregation": "Sum processed event counts within each of the 23 people, compute person F1, then equal-person mean; undefined person F1 makes the primary null.",
+      "rationale": "Measures complete-monitoring event coverage; compulsory false alarms and occupancy expose long positive predictions that tolerance can reward."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Person-level and pooled event sensitivity, precision and false alarms per 24 observed hours",
+      "Unmerged sample F1, sensitivity, precision and predicted-positive time fraction",
+      "Prospective additional onset-latency/miss and early/late-only-credit diagnostics before timeliness claims"
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "All-negative and all-positive controls",
+        "inputs": "Same complete output support",
+        "procedure": "Implemented constant controls; valid weak detectors, never silently rejected."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Causal EEG line-length detector",
+        "inputs": "Only selected EEG and outer-training annotations",
+        "procedure": "Proposed fixed reference requiring native qualification and training-only threshold; not supplied as competent by this package."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Timing/montage-only detector",
+        "inputs": "Elapsed time and admissible montage descriptors, no EEG",
+        "procedure": "Proposed matched nuisance baseline with identical training folds and threshold selection."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Group chb01/chb21 at the biological identity level.",
+      "Freeze channel-role and duplicate-label resolution per file; remove marker/annotation channels.",
+      "Keep all seizure-free background and record-boundary resets.",
+      "Compare occupancy and unextended sample metrics because one long prediction may cover several tolerant reference events."
+    ],
+    "uncertainty": "Report all 23 paired person contrasts to fixed references; a frozen patient-resampling scheme must acknowledge overlapping LOPO training sets. Current complete evaluator does not implement that paired uncertainty protocol.",
+    "failure_policy": "Reject missing/duplicate recordings, wrong aliases/folds, score gaps/overlaps, nonfinite probabilities and threshold-inconsistent intervals. Preserve undefined person endpoints as null; never delete them from the macro.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a32e657e57a63f5617f33801286c296a7dd1dfd115376fc6b2cd0eb58f2a1f3f",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "8bd8201341b714bcbe4c3a11caf68a9cc375eb73a5b11886d24e5a79ff1d7b7f"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -235,6 +284,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -1,0 +1,205 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-003",
+  "title": "Fixed-deadline reaction-time inference from causal EEG",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The source implements meaningful causal-window, reference and target-last scoring components, but no authenticated native acquisition/event join, complete target producer or runtime exists. Cropping released acausally cleaned512Hz epochs cannot satisfy the revised causal input contract.",
+  "scientific_target": {
+    "question": "Among trials still at risk at a fixed100ms deadline, does EEG available by that deadline improve observed first-response-time prediction beyond contrast and instruction?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Finite observed first-response reaction time in seconds after the stimulus, for every admitted at-risk trial; later missing or censored responses have no silently imputed answer.",
+    "answer_origin": "A separately sealed behavioral/EEG clock join and complete first-response target roster are required; their authentic producer is absent.",
+    "case_unit": "One held-person episode with matched EEG+contrast/instruction and contrast/instruction-only output vectors over identical trial IDs.",
+    "independent_unit": "26 original participants; sessions, original blocks and repeated trials are nested and remain grouped.",
+    "inference_scope": "Prospective fixed-deadline inference is the intended estimand; current code only specifies downstream causal dependence. EEG predictive gain is not evidence of a causal neural mechanism.",
+    "exclusions": [
+      "Released retrospective cleaned epochs are not causal observations merely because they are cropped.",
+      "No capped3s, survival, or retrospectively selected complete-case endpoint is silently substituted for total observed first-response RT.",
+      "No full source acquisition/runtime or scientific model performance has been established."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Original authenticated native1024Hz32-channel EEG with instantaneous common-average reference and forward one-pole smoother alpha1/8, started at acquisition start.",
+      "Fixed307 samples at offsets-204 through+102; three fixed channel-bin means give96reference features. Contrast and speed/accuracy instruction are allowed."
+    ],
+    "forbidden_inputs": [
+      "Response-locked windows, response timing/side/correctness markers, post-deadline samples, query-fitted transformations and outcome-dependent artifact rejection.",
+      "Released512Hz cleaned epochs, zero-phase filtering, retrospective ICA, interpolation or unsupported resampling as substitutes for causal raw input."
+    ],
+    "case_identity": "Partition/source schema requires original person/session/block/trial joins and prediction schema requires exact opaque per-arm query IDs. Original raw-to-anonymized permutation and clock joins remain missing.",
+    "split": "All26 held-person folds; each outer training pool contains25people with complete person/session/block groups. Inner validation holds out each of those25people. Both arms use identical at-risk cases.",
+    "coverage": "Planned52person-by-arm output sets over all admitted trials; authentic count and complete finite response roster remain unresolved. Early responses by100ms are counted privately and excluded by the declared at-risk rule, never by variable window length."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "participant-macro mean absolute error in observed first-response seconds",
+      "direction": "lower",
+      "aggregation": "Mean absolute error over all admitted trials/person, then equal mean over26people; report paired contrast_instruction MAE minus EEG MAE.",
+      "rationale": "Measures a real behavioral target with common time units and matched observation support. Positive EEG gain is not required."
+    },
+    "secondary": [
+      "All26 paired person gains and arm losses; admitted/early-response/missing-response counts by person.",
+      "Reference fitting validity and sensitivity to allowed acquisition timing uncertainty before any scientific interpretation."
+    ],
+    "comparators": [
+      {
+        "name": "contrast_instruction_ridge",
+        "inputs": "Contrast fraction, instruction and their interaction; no EEG, source order or response-side covariates.",
+        "procedure": "Existing equal-person ridge with alphas0.1,1,10 chosen using all25 inner-person folds; training-only means/scales."
+      },
+      {
+        "name": "matched_EEG_ridge",
+        "inputs": "The same covariates plus96fixed causal EEG-bin features.",
+        "procedure": "Same reference-selection/fitting rule and support; fixed predictions projected only to values strictly greater than0.1seconds."
+      },
+      {
+        "name": "constant_training_RT",
+        "inputs": "Permitted training-person reaction times only.",
+        "procedure": "Proposed fixed training-only constant predictor as a sanity comparator; no held-target fitting."
+      }
+    ],
+    "nuisance_controls": [
+      "Use a fixed deadline and equal sample support, never response-locked or response-length windows.",
+      "Authenticate original blocks and clock join; ordinal partitioning cannot manufacture original block identity.",
+      "Handle early responses privately with predeclared at-risk eligibility; require a justified nonresponse/censoring estimand before complete target construction.",
+      "Keep side/correctness and original chronology out of primary comparator and EEG inputs."
+    ],
+    "uncertainty": "Retain26 paired person gains and complete nested support. Overlapping LOPO training prevents a naive trial-level CI or simple independent-person claim; any inferential resampling requires a predeclared full fitting policy.",
+    "failure_policy": "Admit complete matching52output sets before opening sealed targets. Invalid/missing target RT is an operator fault with no score; never fill with3s. Constant predictions are valid. Missing/duplicate/nonfinite candidate outputs fail complete coverage."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/CONSTRUCTION_DECISION.md",
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/README.md",
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/window.py",
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/scoring.py",
+      "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/reference.py"
+    ],
+    "scorer_target": "Observed finite first-response RT with participant-macro MAE and paired neural gain, conditional on a future valid target producer.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Five downstream scientific components and generated arithmetic regression checks exist; no native reader admission, target producer, isolation or launch chain is delivered.",
+    "missing": [
+      "Authenticated raw roster/permissions, original identity permutation and behavioral-to-EEG clock join.",
+      "Complete at-risk response targets and scientifically justified nonresponse/censoring policy.",
+      "Physical fold/arm isolation, native filtering qualification and measured reference/resource execution."
+    ],
+    "execution_evidence": "Seven generated scoring checks are described by the source README; they do not open authentic EEG or establish causal source availability. This review ran no scientific computation."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A future fixed-window32-channel numeric or visual observation with contrast/instruction could be answered without tools.",
+      "boundary": "Any view must use only authenticated causal samples through100ms and omit response metadata; no target-informed cropping.",
+      "evidence_ids": [],
+      "missing": [
+        "Native causal producer and direct response protocol absent."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential causal EEG-window renderer with identical channel/time support.",
+      "boundary": "Typed actions must not reveal future signal, raw acquisition paths or behavioral metadata.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed viewer or authenticated causal input route."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The numerical reference modules can analyze admitted training features, but no participant per-case investigator transport is supplied.",
+      "boundary": "Future investigator must share exact inputs/compute and avoid held labels/cross-fold state.",
+      "evidence_ids": [
+        "scope",
+        "reference"
+      ],
+      "missing": [
+        "No investigator executor, native data producer or isolation."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Train-only ridge components specify a possible frozen programme; no complete executable episode exists.",
+      "boundary": "Freeze full procedure before query; admit raw input and targets independently; reset folds/arms.",
+      "evidence_ids": [
+        "scope",
+        "reference"
+      ],
+      "missing": [
+        "No runtime launcher, complete source preparation or protected target producer."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "decision",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/CONSTRUCTION_DECISION.md",
+      "sha256": "e0b4dd9e7d4cc0e979ba808763ff1f2c12c0c1db2b4f7104cf56d0581c373e8f",
+      "supports": "Existing512Hz cleaned epochs have future-influenced preprocessing; causal input chain and nonresponse targets remain unresolved."
+    },
+    {
+      "id": "scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/README.md",
+      "sha256": "3f3543ae31d2ccebb1bb47725aae46fad33dbfd9324e18b72d36f3753d2e1279",
+      "supports": "Incomplete prospective component,26people52person-arm outputs and no native producer/runtime."
+    },
+    {
+      "id": "window",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/window.py",
+      "sha256": "f8dc1d3677803ade4a50893e9e3a1ab882c101e26e8112ca9e60fb8f3de75f62",
+      "supports": "Native1024Hz forward filter, fixed[-204,+102]sample window and100ms deadline; no future source samples."
+    },
+    {
+      "id": "scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/scoring.py",
+      "sha256": "0a7ee0de45cc72d377fe84ec41487f2ce9235321cce824ec2ae6a30aad578f37",
+      "supports": "Complete26-person target-last scoring, matched-arm MAE, finite means and no3s target imputation."
+    },
+    {
+      "id": "reference",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/neural003/reference.py",
+      "sha256": "ecb3f5ae31fcbae047e8df9dbc6de496750615a8dc9a0e081874f55ad6c5c5a1",
+      "supports": "Train-only equal-person ridge references,96EEG features, contrast/instruction covariates and nested person validation."
+    },
+    {
+      "id": "author_source",
+      "kind": "primary_source",
+      "url": "https://github.com/GWeindel/decision-times/tree/76464a9ca15564897e58256081af4b99d08ae8db",
+      "locator": "data/preprocessing.py and original analysis notebooks; verified source audit reused",
+      "supports": "Original cleaned-epoch writer/metadata and retrospective source preprocessing lineage."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://elifesciences.org/articles/108049",
+      "locator": "Primary contrast-decision EEG article; verified prior source interpretation reused",
+      "supports": "Original task context and acquisition; new causal programme is not an original-paper reproduction."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "This revision inspected source and existing construction evidence only. The four historical neural programme attempts concern NEURAL-007 and NEURAL-077, not this task; no direct-observation or typed-viewer model result is asserted here.",
+    "excluded_claims": [
+      "Released retrospective cleaned epochs are not causal observations merely because they are cropped.",
+      "No capped3s, survival, or retrospectively selected complete-case endpoint is silently substituted for total observed first-response RT.",
+      "No full source acquisition/runtime or scientific model performance has been established."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make the causal100ms at-risk estimand explicit and reject released acausal512Hz derivatives as causal inputs.",
+      "Distinguish real target-last MAE components from absent raw/event/target producer and runtime.",
+      "Retain missing-response/censoring uncertainty without imputing3s or quietly changing the outcome."
+    ],
+    "source_review": "Inspected original registered definition, implementation source and source-bound scientific corrections. Primary-source citations reuse verified source provenance; publisher web checks were unavailable and do not add new source validation."
+  }
+}

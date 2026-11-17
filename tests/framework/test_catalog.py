@@ -122,6 +122,9 @@ def fixture(root):
         write(root / path, {'not_a_task': True})
         shared.append({'kind': name.lower(), 'path': path})
     (root / 'benchmarks/README.md').write_text('# Benchmark sources\n')
+    design = root / 'docs/design/four-outcomes.md'
+    design.parent.mkdir(parents=True, exist_ok=True)
+    design.write_text('# Separate scientific outcome conditions\n')
     write(root / catalog.REGISTRY,
           {'schema_version': 1, 'kind': 'neuroscience_benchmark_registry', 'source_commit': source_commit,
            'source_counts': {'paper': 116, 'neural': 118, 'total': 234, 'canonical_specifications': 200,
@@ -618,10 +621,13 @@ class PublishedInventoryTests(unittest.TestCase):
         registry = json.loads((ROOT / catalog.REGISTRY).read_text())
         expected = {row['id'] for row in registry['tasks']}
         self.assertEqual({row['id'] for row in result['tasks']}, expected)
-        self.assertEqual(result['counts']['total'], 234)
-        self.assertEqual(result['counts']['paper'], 116)
+        self.assertEqual(result['counts']['total'], 235)
+        self.assertEqual(result['counts']['paper'], 117)
         self.assertEqual(result['counts']['neural'], 118)
         self.assertEqual(result['counts']['runtime_manifests'], 95)
+        smc = next(row for row in result['tasks'] if row['id'] == 'PAPER-SMC-RNN-2024')
+        self.assertIsNone(smc['paper_improvement']['historical_specification'])
+        self.assertEqual(smc['paper_improvement']['disposition'], 'design_ready')
 
 
 if __name__ == '__main__':

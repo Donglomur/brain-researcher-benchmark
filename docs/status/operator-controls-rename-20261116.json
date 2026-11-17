@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "kind": "authentic_development_operator_controls",
+  "report_date": "2026-11-16",
+  "execution_utc_date": "2026-11-17",
+  "source_commit": "cd9816efd6ec2e81f90e06ceac0280afba2a6161",
+  "sleep_adapter_commit": "986c6ff2ba",
+  "purpose": "development-control",
+  "scope": "Repair validation through the actual public CLI in a fresh checkout of the renamed module: same previously exposed two-person EEG and sleep panels, same existing software-control submissions, target pins and comparator outputs. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.",
+  "operator_source_inventory": {
+    "path": "src/neurobench/operator-sources.json",
+    "bytes": 8872,
+    "sha256": "6fd9bebc89581d42f9b28ed2f4d4b3e8b6596c3e1e37a66341f94f0381cac573"
+  },
+  "panels": [
+    {
+      "task_id": "NEURAL-077",
+      "development_people": 2,
+      "development_rows": 400,
+      "public_input_files": 8,
+      "training_people": 6,
+      "condition": "feature_programme_input_packet; fixed p=0.5 scorer control",
+      "fixed_reference_arms": [
+        "prior",
+        "eeg",
+        "eog_site",
+        "gross_amplitude",
+        "behavioral_history",
+        "eeg_history"
+      ],
+      "primary_metric": "equal-person balanced accuracy",
+      "companion_metric": "equal-person natural log loss"
+    },
+    {
+      "task_id": "NEURAL-007",
+      "development_people": 2,
+      "development_rows": 5450,
+      "public_input_files": 24,
+      "training_people": 6,
+      "condition": "feature/common-model programme input packet; fixed uniform five-class scorer control",
+      "fixed_reference_arms": [
+        "YASA",
+        "RF"
+      ],
+      "primary_metric": "equal-person fixed-five-class macro-F1",
+      "companion_metric": "balanced accuracy and signed reference differences"
+    }
+  ],
+  "native_environment": {
+    "docker_server": "28.3.2",
+    "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156",
+    "host_dispatch_python": "3.11",
+    "local_unix_socket": true,
+    "pull": "never",
+    "network": "none",
+    "read_only": true,
+    "non_root": true,
+    "memory_bytes_per_container": 4294967296,
+    "cpus_per_container": 2,
+    "serialized_shared_lease": true
+  },
+  "controls": [
+    {
+      "id": "eeg-validate",
+      "task_id": "NEURAL-077",
+      "population_rows": 400,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "status": "valid_prediction_contract",
+      "private_stage_dispatched": false,
+      "target_loader_attempts": 0,
+      "owned_containers": 1,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "24d6951e08786e0a18eaa96d5c48e0ccb09e429f8b972f68ecc3a9f5147ab270",
+        "bytes": 615
+      },
+      "retained_receipt": {
+        "sha256": "47c31dd1beb927b15c69e27e721bea0a49faa7f257937d69809ea60ffb1e3660",
+        "bytes": 4462
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "eeg-incomplete",
+      "task_id": "NEURAL-077",
+      "population_rows": 400,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 2,
+      "observed_exit": 2,
+      "status": "invalid_submission",
+      "private_stage_dispatched": false,
+      "target_loader_attempts": 0,
+      "owned_containers": 1,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "b0b7b8b3baba37a73d9bad4d7b8f51a3739d26f87dcf9349f68341a760fe94dc",
+        "bytes": 509
+      },
+      "retained_receipt": {
+        "sha256": "219a6612def8af355ab061c4908d25f5ee5e0fd9d3258e7e20ffd9d322071448",
+        "bytes": 5141
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "eeg-score",
+      "task_id": "NEURAL-077",
+      "population_rows": 400,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "status": "scored",
+      "private_stage_dispatched": true,
+      "target_loader_attempts": 2,
+      "owned_containers": 2,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "b1f5299fc17009efcb99d14755aa33918af04d0f0b85709f7e5aa54f4a85a39a",
+        "bytes": 8892
+      },
+      "retained_receipt": {
+        "sha256": "ba8e1018bc1b596f5afca2f3c8a0ec573f48fa0b0cdaba575a336a06b47c8a48",
+        "bytes": 5704
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "eeg-wrong-target",
+      "task_id": "NEURAL-077",
+      "population_rows": 400,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 3,
+      "observed_exit": 3,
+      "status": "scoring_error",
+      "private_stage_dispatched": true,
+      "target_loader_attempts": 1,
+      "owned_containers": 2,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "4bfd139a14f6db6ffb677aaaf3b2325031d3ade3066992ae59d592913f328feb",
+        "bytes": 636
+      },
+      "retained_receipt": {
+        "sha256": "60a090860d586bb6a277d7cf6b9ec51dc2b644f70a6b65d0be618cbc8e5aca1b",
+        "bytes": 5705
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "sleep-validate",
+      "task_id": "NEURAL-007",
+      "population_rows": 5450,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "status": "valid_prediction_contract",
+      "private_stage_dispatched": false,
+      "target_loader_attempts": 0,
+      "owned_containers": 1,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "c527dd6d37bf02f6ab01fc3b94e595924ec2e5549087bf66e7281326a2705506",
+        "bytes": 376
+      },
+      "retained_receipt": {
+        "sha256": "be2af9a9dbeb90d492e0b7afc90ffcd11dd1e5be6f14e802236e48e124ee7d34",
+        "bytes": 4620
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "sleep-incomplete",
+      "task_id": "NEURAL-007",
+      "population_rows": 5450,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 2,
+      "observed_exit": 2,
+      "status": "invalid_submission",
+      "private_stage_dispatched": false,
+      "target_loader_attempts": 0,
+      "owned_containers": 1,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "aafad239038e7b2f7f169dea0aa138a5bad433947d32b0616031334870ca3234",
+        "bytes": 383
+      },
+      "retained_receipt": {
+        "sha256": "8bf7d631e0482367de021d622c07d0aee49a41a9a57dded3d444d2a0189cb07c",
+        "bytes": 5144
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "sleep-score",
+      "task_id": "NEURAL-007",
+      "population_rows": 5450,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "status": "scored",
+      "private_stage_dispatched": true,
+      "target_loader_attempts": 1,
+      "owned_containers": 2,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "e427d2824cfbccc063e81e9996917001125dd789dcc959cafeb82d301f96f3e5",
+        "bytes": 14673
+      },
+      "retained_receipt": {
+        "sha256": "d1b29caf078b7d160356458d20b48ba8f3485834b5e46b70be06388f04547a5b",
+        "bytes": 5720
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    },
+    {
+      "id": "sleep-wrong-target",
+      "task_id": "NEURAL-007",
+      "population_rows": 5450,
+      "condition": "fixed_probability_software_control",
+      "expected_exit": 3,
+      "observed_exit": 3,
+      "status": "operator_error",
+      "private_stage_dispatched": true,
+      "target_loader_attempts": 1,
+      "owned_containers": 2,
+      "all_owned_containers_absent": true,
+      "retained_result": {
+        "sha256": "2a9b83cf31e8d988acc13df3ab23399d7227d89ef3862c7f24caf65d91a10e69",
+        "bytes": 213
+      },
+      "retained_receipt": {
+        "sha256": "f9d5be9e109365ca134fac8ec872fbc32fb33a1a674469e0f46ab05c232a72ff",
+        "bytes": 5727
+      },
+      "source_unchanged_before": true,
+      "source_unchanged_after": true
+    }
+  ],
+  "totals": {
+    "native_attempts": 8,
+    "owned_containers": 12,
+    "owned_container_absence_verified": true,
+    "new_solver_attempts": 0,
+    "new_model_calls": 0,
+    "fits": 0,
+    "acquisitions": 0,
+    "environment_installs": 0,
+    "cumulative_native_attempts_including_previous_report": 16,
+    "cumulative_owned_containers_including_previous_report": 24,
+    "cumulative_owned_container_absence_verified": true
+  },
+  "public_input_observation": "Both complete native-manifest-pinned public input sets were re-inspected using the actual public CLI in this fresh checkout. All400 EEG trial IDs and5450 sleep epoch IDs authenticated; no development target opened. Full preparation remains separately recorded in the previous report.",
+  "counterexamples_preserved": [
+    "Incomplete submissions (399 EEG trials or5449 sleep epochs) again refused before private-stage dispatch with zero target-loader attempts.",
+    "The same generated wrong target/manifest fixtures again failed at the unchanged target-pin boundary after one loader attempt. No additional private target set was inspected.",
+    "All original pre-rename results and the original-tree missing-training-input refusal remain separate historical evidence."
+  ],
+  "evidence_custody": "Full exact command, input/source/submission pins, result, target-access and cleanup reports are retained in external operator custody. Numerical files and private paths are intentionally not published; the digest references above allow an authorized custodian to identify those exact reports.",
+  "limits": [
+    "Successful native software controls are not model evaluation or scientific qualification.",
+    "Both development people were already exposed; no untouched holdout was tested.",
+    "Input rows are not independent participants.",
+    "Finished-file grading does not establish a precommitted method, authoring history or direct neural interpretation.",
+    "The trusted operator, checkout, source inventories and Docker configuration are not protected against a malicious host owner.",
+    "Existing complete task contracts and historical eight solver attempts remain separate; no readiness count or solver-attempt count is promoted."
+  ],
+  "repair": {
+    "problem": "The private operator.py module shadowed Python stdlib operator when the pre-existing task validator was executed directly.",
+    "change": "Rename the private module to operator_routes.py and update catalog/CLI/test imports. Public operator command and underlying native grader bytes remain unchanged.",
+    "previous_report": {
+      "path": "docs/status/operator-controls-20261116.json",
+      "bytes": 9663,
+      "sha256": "4af071a3c97492ec627adc1e4080dfb99f2b42c09025105f8c7c71646daef214"
+    },
+    "previous_evidence_preserved": true,
+    "public_entrypoint": [
+      "python3",
+      "-I",
+      "-S",
+      "-B",
+      "scripts/neurobench.py",
+      "operator"
+    ],
+    "dispatch_source": {
+      "scripts/neurobench.py": {
+        "bytes": 315,
+        "sha256": "582d475ebe34b034c47025bb8889f53d45e2a76466f35d299372f7df285b3e6d"
+      },
+      "src/neurobench/cli.py": {
+        "bytes": 36314,
+        "sha256": "9b08523877faaeb2857526e03864914cf0f809833205ad955fb70006832e4fb1"
+      },
+      "src/neurobench/catalog.py": {
+        "bytes": 64870,
+        "sha256": "75cd881b257a93d9c98107f813c4818050b5288480a97fc89f2bf87506da00b2"
+      },
+      "src/neurobench/operator_routes.py": {
+        "bytes": 18957,
+        "sha256": "fc4d508e6d0e3a23e00bafdafddcfd3390a0413d9550b938a5e9628164426295"
+      }
+    },
+    "fresh_checkout": true,
+    "exact_source_checked_before_and_after_each_native_attempt": true,
+    "direct_task_validator_import_regression_passed": true,
+    "protocol_sha256": "46c965889ae3821160cb5f8806efd74e10aecf8692b193b3563c1cf7e00e3966"
+  },
+  "report_role": "rename_repair_validation"
+}
