@@ -6,10 +6,11 @@ from pathlib import Path
 import sys
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-LEGACY = ROOT / 'authoring/next-two-unbuilt-papers-20261103/hierarchy-bounded-task-v1/runtime-v1'
-MEMBERS = {'components/hierarchy25a-original/run_program.py',
-           'components/hierarchy25a-original/accounting.py'}
+ROOT = HERE.parents[4]
+LEGACY = ROOT / 'benchmarks/paper/PAPER-FIND-ADD-006/implementations/hierarchy-programme/hierarchy-bounded-task-v1/runtime-v1'
+CURRENT = 'benchmarks/integrity/current-closures/hierarchy25a-original'
+MEMBERS = {str((HERE / name).relative_to(ROOT)) for name in
+           ('run_program.py', 'accounting.py', 'provision.py', 'test_delivery.py')}
 
 
 def admit_successor(review, files):
@@ -18,14 +19,25 @@ def admit_successor(review, files):
                'Explicit successor source identity and independent source review')
     freeze = value['freeze']
     files.need(type(freeze) is dict and freeze.get('path') ==
-               'components/hierarchy25a-original/SOURCE_FREEZE.json', 'Fixed successor freeze location')
+               CURRENT + '/SOURCE_FREEZE.json', 'Fixed current successor freeze location')
     frozen = files.descriptor(freeze, 32768)
-    files.need(frozen.get('schema') == 'hierarchy25a_single_program_source_successor_v1'
+    files.need(frozen.get('schema') == 'hierarchy25a_relocated_source_successor_v1'
                and frozen.get('candidate_id') == files.ID
-               and frozen.get('ancestry_freeze_sha256') == review.get('freeze_sha256') ==
+               and frozen.get('ancestry_freeze_sha256') ==
                '40d4b1bcf8b62cfdeef1b4ff1d519445b534c87f4a101b548500a116aec781fc'
+               and frozen.get('new_native_qualification') is False
                and set(frozen.get('files', {})) == MEMBERS,
-               'Exact two-file successor and unchanged 44-member ancestry')
+               'Exact current delivery source and unchanged 44-member ancestry')
+    runtime = frozen.get('runtime_freeze')
+    files.need(type(runtime) is dict and runtime.get('path') == CURRENT + '/FREEZE.json'
+               and runtime.get('sha256') == review.get('freeze_sha256')
+               and runtime.get('sha256') != frozen['ancestry_freeze_sha256'],
+               'Prospective review binds distinct current runtime source')
+    current = files.descriptor(runtime, 65536)
+    files.need(current.get('ancestry_freeze_sha256') == frozen['ancestry_freeze_sha256']
+               and current.get('new_native_qualification') is False,
+               'Current runtime retains ancestry without historical qualification transfer')
+    files.bind_current_locators(current, runtime['sha256'])
     for relative, pin in frozen['files'].items():
         files.descriptor({'path': relative, **pin}, 32768, decode=False)
     reports = value['source_reviews']

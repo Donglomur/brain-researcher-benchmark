@@ -5,7 +5,7 @@ from qualified_core import regular,digest
 from engine_profile import ProfileEngine
 from profile import need,runtime
 from support import admit_unit, public_file_cap
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[5]
 
 
 def run_unit(program,program_sha,unit,out,budget,work_end,whole_end,previous,candidate_id,validate_output):

@@ -12,7 +12,7 @@ from unittest.mock import patch
 import hashlib
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
+ROOT = HERE.parents[4]
 
 
 def load(name, path):
@@ -67,8 +67,15 @@ def review():
 class Delivery(unittest.TestCase):
     def test_original_public_graph_exact_and_no_private_reads(self):
         result = p.check(ROOT, True)
-        self.assertEqual(result['ancestry_frozen_members_checked'], 40)
+        self.assertEqual(result['current_public_members_checked'], 40)
+        self.assertEqual(result['ancestry_manifest_members_authenticated'], 44)
+        self.assertEqual(result['current_binding_manifests_checked'], 3)
         self.assertEqual(result['external_files_checked'], 0)
+        self.assertEqual(result['public_members_identity'], 'current_source_successor')
+        self.assertEqual(result['ancestry_freeze_sha256'], p.FREEZE_SHA)
+        self.assertNotEqual(result['current_freeze_sha256'], p.FREEZE_SHA)
+        self.assertFalse(result['runtime_execution_ready'])
+        self.assertFalse(result['new_native_qualification'])
         ext, _ = p.contract(ROOT)
         self.assertEqual(sum(x['bytes'] for x in ext.values()), 773668517)
         self.assertEqual(len(ext), 11)
@@ -144,9 +151,10 @@ class Delivery(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'Pinned identity'):accounting(review(),780)
 
     def test_successor_review_and_body_drift(self):
-        freeze_path=HERE/'SOURCE_FREEZE.json';body=freeze_path.read_bytes()
+        freeze_path=ROOT/p.CURRENT/'SOURCE_FREEZE.json';body=freeze_path.read_bytes()
         desc={'path':str(freeze_path.relative_to(ROOT)),'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
-        v={'freeze_sha256':p.FREEZE_SHA,'source_successor':{'freeze':desc,'source_reviews':[
+        current_sha=json.loads(body)['runtime_freeze']['sha256']
+        v={'freeze_sha256':current_sha,'source_successor':{'freeze':desc,'source_reviews':[
             {'path':'invented-review.json','bytes':1,'sha256':'f'*64}]}}
         old=f.descriptor
         def capture(item,cap=250000,decode=True):
@@ -154,6 +162,18 @@ class Delivery(unittest.TestCase):
                 return {'status':'passed','findings':[],'source_freeze_sha256':desc['sha256']}
             return old(item,cap,decode)
         with patch.object(f,'descriptor',capture): self.assertEqual(r.admit_successor(v,f),desc)
+        locator_path=f.CURRENT/'LOCATORS.json'
+        old_read=f.read
+        def changed_locator(path,cap=250000):
+            raw=old_read(path,cap)
+            return raw+b' ' if Path(path)==locator_path else raw
+        with patch.object(f,'read',changed_locator),patch.object(f,'descriptor',capture):
+            with self.assertRaisesRegex(ValueError,'Exact reviewed current locator bytes'):
+                r.admit_successor(v,f)
+        legacy=copy.deepcopy(v);legacy['freeze_sha256']=p.FREEZE_SHA
+        with patch.object(f,'descriptor',capture):
+            with self.assertRaisesRegex(ValueError,'distinct current runtime'):r.admit_successor(legacy,f)
+        with self.assertRaisesRegex(ValueError,'Current source remains held'):f.freeze(v)
         bad=copy.deepcopy(v);bad['source_successor']['freeze']['sha256']='0'*64
         with self.assertRaises(ValueError):r.admit_successor(bad,f)
         with patch.object(f,'descriptor',lambda *args,**kwargs: {'status':'passed'}):

@@ -20,7 +20,7 @@ import signal
 import stat
 import types
 
-INSTALLED = 'benchmarks/neuroscience/paper-find-rep-012/score.py'
+INSTALLED = 'benchmarks/paper/PAPER-FIND-REP-012/implementations/registered-runtime/score.py'
 FACADE = 'authoring/compartment-plasticity-v1/bounded-task-v1/score.py'
 FACADE_PIN = (5699, 'a8cad32aeb96b319dbe360c913aea8433840a65d72c8667d48aa52f94269270a')
 REFERENCE = 'artifacts-build/compartment-bounded-preparation-001/scientific/private_expected.json'

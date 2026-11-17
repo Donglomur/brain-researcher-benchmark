@@ -6,7 +6,7 @@ import sys
 
 sys.dont_write_bytecode=True
 # This proposed file is intended for benchmarks/neuroscience/paper-signal-add-021.
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[5]
 SOURCE=ROOT/'authoring/v1-tms-memory-v1/scoring-adapter-v1'
 sys.path.insert(0,str(SOURCE))
 runpy.run_path(str(SOURCE/'score.py'),run_name='__main__')

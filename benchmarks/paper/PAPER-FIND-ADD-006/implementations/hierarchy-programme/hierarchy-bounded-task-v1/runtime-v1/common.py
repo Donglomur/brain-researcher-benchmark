@@ -2,9 +2,9 @@
 from pathlib import Path
 import os
 import stat
-from files import ROOT, HERE, need, read, pin, descriptor, captured_module, strict_json
+from files import ROOT, HERE, need, read, pin, descriptor, captured_module, strict_json, current_metadata
 
-IMPORTS = strict_json(read(HERE / 'IMPORTS.json', 65536))
+IMPORTS = current_metadata('IMPORTS.json')
 qualified = captured_module(IMPORTS['qualified_core'], 'qualified_core', register=True)
 validator = captured_module(IMPORTS['trusted_controller'], 'trusted_controller', register=True)
 owner = captured_module(IMPORTS['process_owner'], '_hierarchy_central_owner_v4', register=True)

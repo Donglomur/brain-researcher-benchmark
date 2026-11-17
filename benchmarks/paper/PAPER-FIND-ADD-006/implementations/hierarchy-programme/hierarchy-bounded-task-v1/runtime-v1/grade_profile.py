@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import stat
 from common import BaseEngine, ROOT, need, ordinary, pinned, strict_json
+from files import path as repo
 from absence import absence
 
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'
@@ -39,7 +40,7 @@ def mounts_for(profile, submission):
          'Exact hierarchy grader files and caps')
     mounts = {}
     for destination, item in sorted(profile['fixed_mounts'].items()):
-        path = ROOT / item['path']
+        path = repo(item['path'])
         if destination in PRIVATE:
             need(set(item) == {'path', 'bytes', 'sha256'} and not Path(item['path']).is_absolute()
                  and '..' not in Path(item['path']).parts and path == path.resolve(),

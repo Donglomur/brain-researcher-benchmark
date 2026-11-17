@@ -8,13 +8,14 @@ import sys
 import types
 
 LOCAL = Path(__file__).resolve().parent
-ROOT = LOCAL.parents[1]
+ROOT = LOCAL.parents[4]
 HERE = LOCAL/'protected'
-TRANSPORT = 'benchmarks/neuroscience/neural-095-four-cell-runner/source/'
+DEPENDENCIES = ROOT/'benchmarks/integrity/current-closures/cardiac-paired-execution/DEPENDENCIES.json'
+TRANSPORT = 'benchmarks/neural/NEURAL-095/implementations/neural-095-four-cell-runner/source/'
 SHARED = ROOT/TRANSPORT/'authoring/shared-program-runner-v2'
 ID = 'PAPER-ROOT-ADD-016'
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'
-PAIR_REL = 'components/cardiac-matched-artifacts/paired.py'
+PAIR_REL = 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/paired.py'
 _BINDING = None
 _API = None
 _PAIR = None
@@ -56,7 +57,7 @@ def save(path, value, budget, cap=250000, private=False):
 
 def source(rel):
     p=Path(rel);need(not p.is_absolute() and '..' not in p.parts and p.as_posix()==rel,'Exact repository source')
-    rows=read(LOCAL/'DEPENDENCIES.json')['files'];need(rel in rows,'Declared source dependency')
+    rows=read(DEPENDENCIES)['files'];need(rel in rows,'Declared source dependency')
     body=ordinary(ROOT/p);need(pin(body)==rows[rel],'Frozen source dependency')
     return body
 
@@ -140,9 +141,9 @@ def api():
     need('support' not in sys.modules or sys.modules['support'] is current,'No unrelated support namespace')
     sys.modules['support']=current
     # Verify the complete explicitly frozen source closure before donor imports.
-    for rel in read(LOCAL/'DEPENDENCIES.json')['files']:source(rel)
-    base='authoring/cardiac-paired-execution/protected/'
-    module('files','components/cardiac-matched-artifacts/files.py')
+    for rel in read(DEPENDENCIES)['files']:source(rel)
+    base='benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/protected/'
+    module('files','benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/files.py')
     core=module('qualified_core',TRANSPORT+'authoring/shared-program-runner-v2/qualified_core.py')
     contract=module('contract_profile',base+'contract_profile.py')
     engine=module('engine_profile',base+'engine_profile.py')
@@ -156,7 +157,7 @@ def api():
 
 def recovery():
     api()
-    return module('_cardiac_paired_strict_recovery','authoring/cardiac-paired-execution/protected/panel_recovery.py')
+    return module('_cardiac_paired_strict_recovery','benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/protected/panel_recovery.py')
 
 def configure_transport(value):
     """Use explicit operator bindings for the public transport placeholders."""
@@ -179,10 +180,10 @@ def owner(review_path,entry):
     raw=ordinary(row['path'],32768);need(pin(raw)=={k:row[k] for k in ('bytes','sha256')},'Pinned owner evidence')
     evidence=decode(raw)
     need(evidence.get('candidate_id')==ID and evidence.get('accepted') is True and
-         evidence.get('source_closure')==pin(ordinary(LOCAL/'DEPENDENCIES.json')) and
+         evidence.get('source_closure')==pin(ordinary(DEPENDENCIES)) and
          evidence.get('entrypoint')==pin(ordinary(entry)) and
          evidence.get('controller')==review['controller'] and
          evidence.get('route_interrupt_qualification_current') is True,'Operator-reviewed current route evidence, not implicit historical adoption')
     configure_transport(review['docker'])
-    module('trusted_controller','authoring/shared-program-ownership-v4/trusted_controller.py')
-    return module('_cardiac_public_owner','authoring/shared-program-ownership-v4/process_owner.py')
+    module('trusted_controller','benchmarks/shared/program-execution/ownership-v4/trusted_controller.py')
+    return module('_cardiac_public_owner','benchmarks/shared/program-execution/ownership-v4/process_owner.py')

@@ -1,11 +1,13 @@
 """Hash-pin and import qualified095 transport helpers; no source mutation."""
 from pathlib import Path
 import hashlib,importlib,json,sys
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[3]
 PINS=json.loads((HERE/'QUALIFIED_IMPORTS.json').read_text())['files']
-BASE=ROOT/'authoring/dmfc-timing/program-runner-v2'
-for value in PINS.values():
-    p=ROOT/value['path']
+BASE=ROOT/'benchmarks/shared/program-execution/dmfc-transport-v2/program-runner-v2'
+# Frozen manifest paths identify source bytes; their physical home moved.
+for name,value in PINS.items():
+    if name not in ('engine.py','runtime_contract.py','host_budget.py','absence.py','recovery.py')or value['path']!='authoring/dmfc-timing/program-runner-v2/'+name:raise ValueError('Qualified import source identity drift')
+    p=BASE/name
     if p.is_symlink()or p.stat().st_size!=value['bytes']or hashlib.sha256(p.read_bytes()).hexdigest()!=value['sha256']:raise ValueError('Qualified import source drift')
 for name in ('absence','runtime_contract','host_budget','engine','recovery'):
     if name in sys.modules and Path(sys.modules[name].__file__).resolve()!=BASE/(name+'.py'):raise ValueError('Qualified module namespace collision')

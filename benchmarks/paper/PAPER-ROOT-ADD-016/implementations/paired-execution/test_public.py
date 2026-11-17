@@ -25,10 +25,13 @@ class PublicRelocation(unittest.TestCase):
   cls.temp=tempfile.TemporaryDirectory(prefix='cardiac-public-source-')
   cls.root=Path(cls.temp.name).resolve()
   cls.checkout=cls.root/'relocated public checkout'
-  cls.local=cls.checkout/'authoring/cardiac-paired-execution'
+  cls.local=cls.checkout/'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution'
   shutil.copytree(HERE,cls.local,ignore=shutil.ignore_patterns('__pycache__'))
-  deps=json.loads((HERE/'DEPENDENCIES.json').read_text())['files']
-  source=HERE.parents[1]
+  source=HERE.parents[4]
+  closure=Path('benchmarks/integrity/current-closures/cardiac-paired-execution/DEPENDENCIES.json')
+  target=cls.checkout/closure;target.parent.mkdir(parents=True,exist_ok=True)
+  shutil.copyfile(source/closure,target)
+  deps=json.loads((source/closure).read_text())['files']
   for rel,row in deps.items():
    target=cls.checkout/rel
    if target.exists():continue
@@ -60,7 +63,7 @@ class PublicRelocation(unittest.TestCase):
  def test_public_dependency_imports_and_reference_metadata_only(self):
   self.assertEqual(self.S.ROOT,self.checkout)
   self.assertEqual(self.api['contract_profile'].IMAGE,self.S.IMAGE)
-  self.assertTrue(str(sys.modules['engine'].__file__).startswith(str(self.checkout/'benchmarks/neuroscience/neural-095-four-cell-runner/source')))
+  self.assertTrue(str(sys.modules['engine'].__file__).startswith(str(self.checkout/'benchmarks/neural/NEURAL-095/implementations/neural-095-four-cell-runner/source')))
   self.assertEqual((len(self.packet.members('A')),len(self.packet.members('B'))),(41,46))
   self.assertFalse((self.operands/'private/generated-reference.json').exists())
   self.assertFalse(any(x in sys.modules for x in ('numpy','scipy','pymc','pandas')))
@@ -86,19 +89,19 @@ class PublicRelocation(unittest.TestCase):
   self.reference.write_text(self.reference.read_text()+'\n')
   with self.assertRaisesRegex(ValueError,'metadata unchanged'):self.S.runtime_manifest(run/'A')
  def test_existing_public_owner_requires_current_route_evidence(self):
-  controller={'path':'authoring/cardiac-paired-execution/arm_controller.py',**self.S.pin((self.local/'arm_controller.py').read_bytes())}
-  evidence={'candidate_id':self.S.ID,'source_closure':self.S.pin((self.local/'DEPENDENCIES.json').read_bytes()),'accepted':False,'entrypoint':self.S.pin((self.local/'pair_run.py').read_bytes()),'controller':controller,'route_interrupt_qualification_current':True}
+  controller={'path':'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-execution/arm_controller.py',**self.S.pin((self.local/'arm_controller.py').read_bytes())}
+  evidence={'candidate_id':self.S.ID,'source_closure':self.S.pin((self.S.DEPENDENCIES).read_bytes()),'accepted':False,'entrypoint':self.S.pin((self.local/'pair_run.py').read_bytes()),'controller':controller,'route_interrupt_qualification_current':True}
   ep=self.work/'generated-admission.json';ep.write_bytes(self.S.encode(evidence))
   review={'execution_authority':True,'operator_admission_reviewed':True,'ownership_admission':{'path':str(ep),**self.S.pin(ep.read_bytes())},'controller':controller,'docker':self.docker}
   rp=self.work/'generated-review.json';rp.write_bytes(self.S.encode(review))
   with self.assertRaisesRegex(ValueError,'current route evidence'):self.S.owner(rp,self.local/'pair_run.py')
   evidence['accepted']=True;ep.write_bytes(self.S.encode(evidence));review['ownership_admission'].update(self.S.pin(ep.read_bytes()));rp.write_bytes(self.S.encode(review))
   owner=self.S.owner(rp,self.local/'pair_run.py')
-  self.assertEqual(Path(owner.__file__),self.checkout/'authoring/shared-program-ownership-v4/process_owner.py')
+  self.assertEqual(Path(owner.__file__),self.checkout/'benchmarks/shared/program-execution/ownership-v4/process_owner.py')
   target=owner.validate_controller(controller,[sys.executable,str(self.local/'arm_controller.py')])
   self.assertEqual(target,self.local/'arm_controller.py')
   self.assertFalse((self.work/'process_owner.json').exists())
-  closure=self.local/'DEPENDENCIES.json';original=closure.read_bytes();closure.write_bytes(original+b'\n')
+  closure=self.S.DEPENDENCIES;original=closure.read_bytes();closure.write_bytes(original+b'\n')
   try:
    with self.assertRaisesRegex(ValueError,'current route evidence'):self.S.owner(rp,self.local/'pair_run.py')
   finally:closure.write_bytes(original)
@@ -108,7 +111,7 @@ class PublicRelocation(unittest.TestCase):
    with self.assertRaisesRegex(ValueError,'socket address'):self.S.configure_transport(value)
   self.S.configure_transport(self.docker)
  def test_no_private_publication_bindings_and_exact_source_pins(self):
-  for rel,row in json.loads((self.local/'DEPENDENCIES.json').read_text())['files'].items():
+  for rel,row in json.loads((self.S.DEPENDENCIES).read_text())['files'].items():
    body=(self.checkout/rel).read_bytes();self.assertEqual(self.S.pin(body),row)
   for p in self.local.rglob('*'):
    if p.is_file():

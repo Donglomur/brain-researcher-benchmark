@@ -23,11 +23,11 @@ class PublicComposition(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name).resolve()
         self.checkout = self.root / 'relocated checkout with spaces'
-        self.component = self.checkout / 'components/cardiac-matched-artifacts'
+        self.component = self.checkout / 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts'
         shutil.copytree(HERE, self.component, ignore=shutil.ignore_patterns('__pycache__'))
-        dep = self.checkout / 'components/cardiac-six-model-summary'; dep.mkdir()
+        dep = self.checkout / 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary'; dep.mkdir(parents=True)
         for name in ('summary_score.py', 'submission_schema.json'):
-            shutil.copyfile(HERE.parent / 'cardiac-six-model-summary' / name, dep / name)
+            shutil.copyfile(HERE.parent / 'six-model-summary' / name, dep / name)
         self.api = load(self.component / 'paired.py')
         self.operands = self.root / 'operands'; self.operands.mkdir()
         self.binding = self.root / 'operator-binding.json'
@@ -83,7 +83,7 @@ class PublicComposition(unittest.TestCase):
         self.assertNotEqual(first.request('A', '1' * 32), second.request('A', '1' * 32))
 
     def test_dependency_drift_rejected_at_import_before_operator_inputs(self):
-        helper = self.checkout / 'components/cardiac-six-model-summary/summary_score.py'
+        helper = self.checkout / 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py'
         helper.write_bytes(helper.read_bytes() + b'\n')
         with self.assertRaisesRegex(ValueError, 'Exact trusted module'):
             load(self.component / 'paired.py')

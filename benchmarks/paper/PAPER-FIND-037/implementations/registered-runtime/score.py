@@ -16,7 +16,7 @@ SCORER = 'authoring/freeenergy-eeg-v1/submission-scoring-v2/score.py'
 SCORER_PIN = (1254, '2bedc09a2d0704bc264b7cd708edae968acf3888ae05143be6b5baab231ec0c1')
 FREEZE = 'authoring/freeenergy-eeg-v1/submission-scoring-v2/FREEZE.json'
 FREEZE_PIN = (70770, '3976253d6b74b7bb996091573f350ca95c66c354667ca53642df6ce4428b6956')
-INSTALLED = 'benchmarks/neuroscience/paper-find-037/score.py'
+INSTALLED = 'benchmarks/paper/PAPER-FIND-037/implementations/registered-runtime/score.py'
 
 
 def need(value, message):

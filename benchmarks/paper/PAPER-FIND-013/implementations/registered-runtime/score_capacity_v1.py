@@ -2,7 +2,7 @@
 """Pinned local PAPER-FIND-013 capacity successor; requires a separate attempt grant."""
 import hashlib
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[5]
 TARGET=ROOT/'authoring/task-capacity-successors-20261102/placefield-ca/score.py'
 EXPECTED='1642b6ecd0dceb72b7cfc5ef65132320e95512a5abcac281040fd441058da9a3'
 if TARGET.is_symlink() or any(p.is_symlink() for p in TARGET.parents):

@@ -14,7 +14,8 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent
-REPOSITORY = ROOT.parents[2]
+REPOSITORY = ROOT.parents[4]
+CURRENT = REPOSITORY / 'benchmarks/integrity/current-closures/marble-fit-closed'
 CAPTURE_READ_ALLOWANCE = 1024 * 1024
 SERIALIZED_IO_PRECHARGE = 64 * 1024
 FORBIDDEN = {'numpy', 'scipy', 'sklearn', 'torch', 'cebra', 'MARBLE',
@@ -41,7 +42,7 @@ def module(name, path):
 class SourcePortability(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.inventory = json.loads((ROOT / 'PUBLIC_INVENTORY.json').read_bytes())
+        cls.inventory = json.loads((CURRENT / 'PUBLIC_INVENTORY.json').read_bytes())
         for row in cls.inventory['files']:
             raw = (ROOT / row['path']).read_bytes()
             assert len(raw) == row['bytes']
@@ -59,8 +60,8 @@ class SourcePortability(unittest.TestCase):
         cls.campaign = module('campaign', ROOT / 'campaign.py')
         sys.modules['campaign'] = cls.campaign
         cls.entry = module('marble_public_entry', ROOT / 'run_comparators.py')
-        cls.dependencies = json.loads((ROOT / 'DEPENDENCIES.json').read_bytes())
-        cls.provenance = json.loads((ROOT / 'PROVENANCE.json').read_bytes())
+        cls.dependencies = json.loads((CURRENT / 'DEPENDENCIES.json').read_bytes())
+        cls.provenance = json.loads((CURRENT / 'PROVENANCE.json').read_bytes())
 
     @classmethod
     def tearDownClass(cls):
@@ -127,7 +128,7 @@ class SourcePortability(unittest.TestCase):
                         self.entry.main()
 
     def test_actual_bootstrap_refuses_unbundled_native_source(self):
-        manifest = (ROOT / 'SOURCE_MANIFEST.json').read_bytes()
+        manifest = (CURRENT / 'SOURCE_MANIFEST.json').read_bytes()
         expected = {'bytes': len(manifest), 'sha256': hashlib.sha256(manifest).hexdigest()}
         budget = self.contract.Budget(CAPTURE_READ_ALLOWANCE, 1)
         first = next(r for r in self.provenance['required_dependencies'] if not r['bundled'])

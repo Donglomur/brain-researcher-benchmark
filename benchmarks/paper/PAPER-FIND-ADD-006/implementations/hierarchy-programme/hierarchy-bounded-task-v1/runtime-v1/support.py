@@ -3,8 +3,8 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
-from files import HERE, ROOT, ID, need, path as repo, read as ordinary, json_read as read, pin, opaque, descriptor
-SHARED=ROOT/'authoring/shared-program-runner-v2'
+from files import HERE, ROOT, CURRENT, ID, need, path as repo, read as ordinary, json_read as read, pin, opaque, descriptor, current_metadata
+SHARED=ROOT/'benchmarks/shared/program-execution/qualified-imports-v2'
 SUMMARY=ROOT/'authoring/shared-summary-runner-v1'
 NAMES=tuple(sorted(('TASK.md','PUBLIC_SCORING.md','OUTPUT_SCHEMA.json','SESSION_MANIFEST.json',
                    'ACQUISITION_CONFIG.json','main.txt','main.pdf','Chiossi_etal_2025_PNAS_data.zip')))
@@ -17,7 +17,7 @@ def save(source,value,budget,cap=250000):
 
 def module(name,source):
     from files import captured_module
-    bindings=read(HERE/'SOURCE_BINDINGS.json')
+    bindings=current_metadata('SOURCE_BINDINGS.json')
     return captured_module(bindings[source.name],name,register=True)
 
 
@@ -67,7 +67,8 @@ def runtime_manifest(run):
     committed=read(run/'runtime_manifest_commit.json');raw=ordinary(run/'runtime_manifest.json',32768)
     need(committed['before_any_Docker_resource_creation'] is True and pin(raw)==committed['manifest'],'Pre-resource commitment')
     value=json.loads(raw)
-    need(value['candidate_id']==ID and repo(value['program_path'])==run/'program.py' and value['unit']==expected_unit(),
+    need(value['candidate_id']==ID and repo(value['program_path'])==run/'program.py' and value['unit']==expected_unit()
+         and value.get('source_freeze_sha256')==pin(ordinary(CURRENT/'FREEZE.json',65536))['sha256'],
          'One captured program, fixed public-only task')
     return value
 

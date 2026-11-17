@@ -1,6 +1,6 @@
 """Strict source, root authority, shared dynamic capacity and additive family cost."""
 from pathlib import Path
-from files import HERE, ROOT, ID, RUNTIME_ID, need, read, pin, json_read, descriptor, captured_module, freeze, accounting
+from files import HERE, ROOT, ID, RUNTIME_ID, need, read, pin, json_read, descriptor, captured_module, freeze, accounting, current_metadata
 
 WHOLE, WORK, CLEANUP = 780, 720, 60
 OWN_RESERVE = 32000000
@@ -55,7 +55,7 @@ def admit(args, run, admitted_state):
     need(review['public_allowlist'] == assets['public_allowlist'] and inputs['candidate_id'] == ID and
          len(inputs['public_inputs']) == 8 and inputs['public_inputs'] == assets['public_inputs'],
          'Unchanged complete public8-file boundary')
-    shared = captured_module(json_read(HERE/'IMPORTS.json')['dynamic_capacity'], '_hierarchy_dynamic_capacity')
+    shared = captured_module(current_metadata('IMPORTS.json')['dynamic_capacity'], '_hierarchy_dynamic_capacity')
     admitted = shared.validate(review, allocation, lambda desc: descriptor(desc, 2000000),
                                candidate_id=ID, own_reserve=OWN_RESERVE, minimum_other=MINIMUM_OTHER)
     need(admitted['other_reserve_bytes'] == args.other_reserve_bytes and

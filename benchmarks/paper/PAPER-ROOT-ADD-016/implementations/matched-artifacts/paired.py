@@ -70,8 +70,13 @@ def load_source(name, path, digest):
 
 
 F = load_source('_cardiac_pair_files', HERE / 'files.py', FILES_SHA)
-REPOSITORY = HERE.parents[1]
-S = load_source('_cardiac_pair_summary', REPOSITORY / 'components/cardiac-six-model-summary/summary_score.py', SCORER_SHA)
+REPOSITORY = HERE.parents[4]
+S = load_source('_cardiac_pair_summary', REPOSITORY / 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py', SCORER_SHA)
+# Frozen packet descriptors retain their logical identities across repository moves.
+REPOSITORY_SOURCES = {
+    'components/cardiac-six-model-summary/summary_score.py': 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py',
+    'components/cardiac-six-model-summary/submission_schema.json': 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/submission_schema.json',
+}
 
 
 def relative(name):
@@ -115,7 +120,10 @@ class Packet:
         need(type(item) is dict and set(item) == {'root', 'path', 'bytes', 'sha256'}, 'Exact source descriptor')
         need(item['root'] in self.roots and type(item['bytes']) is int and 0 < item['bytes'] <= 42000000, 'Bounded source identity')
         need(type(item['sha256']) is str and len(item['sha256']) == 64 and all(c in '0123456789abcdef' for c in item['sha256']), 'SHA256')
-        return self.roots[item['root']] / relative(item['path'])
+        name = relative(item['path'])
+        if item['root'] == 'repository':
+            name = relative(REPOSITORY_SOURCES.get(item['path'], item['path']))
+        return self.roots[item['root']] / name
 
     def members(self, condition):
         need(condition in ('A', 'B'), 'Exact condition')

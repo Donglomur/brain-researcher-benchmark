@@ -8,10 +8,10 @@ from contract import *
 def source_module(name,raw,path):
     m=types.ModuleType(name);m.__file__=str(path);exec(compile(raw,str(path),'exec'),m.__dict__);return m
 def bootstrap(repo,here,manifest_pin,budget):
-    manifest_raw=budget.read(here/'SOURCE_MANIFEST.json',65536,manifest_pin);manifest=parse(manifest_raw)
+    manifest_raw=budget.read(repo/'benchmarks/integrity/current-closures/marble-fit-closed/SOURCE_MANIFEST.json',65536,manifest_pin);manifest=parse(manifest_raw)
     bodies={}
     for row in manifest['files']:
-        bodies[row['path']]=budget.read(here/row['path'],row['bytes'],{k:row[k]for k in('bytes','sha256')})
+        bodies[row['path']]=budget.read(repo/row['source_path'],row['bytes'],{k:row[k]for k in('bytes','sha256')})
     deps=parse(bodies['DEPENDENCIES.json']);old={}
     for role,row in deps['files'].items():
         old[role]=budget.read(repo/row['path'],row['bytes'],{k:row[k]for k in('bytes','sha256')})

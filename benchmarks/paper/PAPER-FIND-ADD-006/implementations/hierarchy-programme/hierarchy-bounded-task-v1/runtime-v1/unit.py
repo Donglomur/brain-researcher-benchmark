@@ -2,12 +2,12 @@
 from pathlib import Path
 import base64,hashlib,json,time,uuid,subprocess
 from qualified_core import regular
-from files import opaque
+from files import opaque, path as repo
 def digest(path): return opaque(path,40000000)["sha256"]
 from engine_profile import ProfileEngine
 from profile import need,runtime
 from support import admit_unit, public_file_cap
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[3]
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[6]
 
 
 def run_unit(program,program_sha,unit,out,budget,work_end,whole_end,previous,candidate_id,validate_output):
@@ -26,7 +26,7 @@ def run_unit(program,program_sha,unit,out,budget,work_end,whole_end,previous,can
         admit_unit(unit, program_sha, out.parent)
         inputs={}
         for asset in unit['public_inputs']:
-            path=regular(ROOT/asset['path'],public_file_cap(asset))
+            path=regular(repo(asset['path']),public_file_cap(asset))
             need(path.stat().st_size==asset['bytes']and opaque(path,public_file_cap(asset))['sha256']==asset['sha256'],'Exact active public unit input')
             inputs[asset['mount_destination']]=path
         event('active_unit_release')

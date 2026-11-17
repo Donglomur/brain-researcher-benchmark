@@ -11,7 +11,7 @@ import time
 import unittest
 
 HERE=Path(__file__).resolve().parent
-REPO=HERE.parents[1]
+REPO=HERE.parents[4]
 def module(path,name):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 M=module(HERE/'paired_packet.py','paired')
@@ -29,7 +29,7 @@ class PairedControls(unittest.TestCase):
    path=cls.root/'provider'/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(body)
    row.update(**M.pin(body))
   old=sys.modules.get('schema');sys.modules['schema']=cls.p.schema
-  try:cls.fixture=module(REPO/'components/purkinje-artifacts/numeric_fixtures.py','paired_generated_fixture')
+  try:cls.fixture=module(REPO/'benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/numeric_fixtures.py','paired_generated_fixture')
   finally:
    if old is None:sys.modules.pop('schema',None)
    else:sys.modules['schema']=old

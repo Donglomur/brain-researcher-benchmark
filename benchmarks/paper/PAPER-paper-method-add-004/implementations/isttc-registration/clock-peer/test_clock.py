@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parent
 ADAPTER = HERE.parent / 'adapter.py'
-OBSERVER = HERE.parents[1] / 'next-paper-complete-program/observe.py'
+OBSERVER = HERE.parents[1] / 'isttc-programme/observe.py'
 ADAPTER_BYTES = ADAPTER.read_bytes()
 OBSERVER_BYTES = OBSERVER.read_bytes()
 A = ModuleType('clock_review')

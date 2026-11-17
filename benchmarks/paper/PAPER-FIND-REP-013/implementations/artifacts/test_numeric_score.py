@@ -8,7 +8,7 @@ import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parent
-PROFILE_ROOT = ROOT.parents[1] / "benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1"
+PROFILE_ROOT = ROOT.parents[4] / "benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1"
 
 
 def load(name, filename):

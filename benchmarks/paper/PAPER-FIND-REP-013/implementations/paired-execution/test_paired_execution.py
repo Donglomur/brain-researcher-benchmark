@@ -17,15 +17,15 @@ import time
 import unittest
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
-PAIRED = REPO/'components/purkinje-paired-access'
+REPO = HERE.parents[4]
+PAIRED = REPO/'benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access'
 PRODUCER = Path(os.environ.get('PURKINJE_SOURCE_ROOT',
- str(REPO/'benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1')))
+ str(REPO/'benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1')))
 spec=importlib.util.spec_from_file_location('pair_exec',HERE/'paired_execution.py')
 M=importlib.util.module_from_spec(spec);spec.loader.exec_module(M)
 METRICS={'generated_program_executions':0,'control_read_bytes':0,'control_reserved_writes':0,
          'maximum_observed_fixture_bytes':0,'original_body_reads':0,'docker_calls':0}
-fixture_path=REPO/'components/purkinje-artifacts/numeric_fixtures.py'
+fixture_path=REPO/'benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/numeric_fixtures.py'
 fixture_body=M.captured_source(fixture_path,{'bytes':3601,'sha256':'15004f33e06fcb8fd91c210e10808e24d88bdc07d6a8c9ced1b18e197803c096'})
 fixture_modules=M._module_graph(
  {'schema':M.captured_source(PRODUCER/'schema.py',{'bytes':2123,'sha256':M.DONORS['schema'][1]}),'fixture':fixture_body},
@@ -239,7 +239,7 @@ class Controls(unittest.TestCase):
   self.assertEqual(len(x.paired.inventory('B')),18)
   self.assertEqual(x.paired.inventory('A')['paper.html']['bytes'],622639)
   self.assertEqual(x.owner.IMAGE,M.IMAGE)
-  source=json.loads((HERE/'SOURCE.json').read_text())
+  source=json.loads((REPO/'benchmarks/integrity/current-closures/purkinje-paired-execution/SOURCE.json').read_text())
   self.assertEqual(source['source_files']['paired_execution.py'],M.pin((HERE/'paired_execution.py').read_bytes()))
   self.assertEqual(source['source_files']['test_paired_execution.py'],M.pin((HERE/'test_paired_execution.py').read_bytes()))
   for row in source['reused_dependencies']:

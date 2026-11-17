@@ -12,9 +12,11 @@ from pathlib import Path
 import stat
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
+ROOT = HERE.parents[4]
 TASK = 'PAPER-FIND-ADD-006'
-BASE = 'authoring/next-two-unbuilt-papers-20261103/hierarchy-bounded-task-v1'
+BASE = 'benchmarks/paper/PAPER-FIND-ADD-006/implementations/hierarchy-programme/hierarchy-bounded-task-v1'
+COMPONENT = 'benchmarks/paper/PAPER-FIND-ADD-006/implementations/original-hierarchy'
+CURRENT = 'benchmarks/integrity/current-closures/hierarchy25a-original'
 EXTERNAL_SHA = 'db345052413236d4275dee349e689bba15879eb157fc7773d0fd51edcc63983e'
 FREEZE_SHA = '40d4b1bcf8b62cfdeef1b4ff1d519445b534c87f4a101b548500a116aec781fc'
 PUBLIC_READ = {'paper_text', 'paper_pdf', 'released_archive', 'private_linkages', 'private_report'}
@@ -111,7 +113,7 @@ def metadata(path, sha, cap=32768):
 
 def contract(root):
     root = canonical(root)
-    external = metadata(root / 'components/hierarchy25a-original/EXTERNAL_INPUTS.json', EXTERNAL_SHA)
+    external = metadata(root / COMPONENT / 'EXTERNAL_INPUTS.json', EXTERNAL_SHA)
     freeze = metadata(root / BASE / 'runtime-v1/FREEZE.json', FREEZE_SHA)
     need(external['candidate_id'] == TASK and len(external['files']) == 11
          and freeze['candidate_id'] == TASK and len(freeze['files']) == 44, 'Fixed complete endpoint')
@@ -127,7 +129,45 @@ def contract(root):
         else:
             public[relative] = pin
     need(len(public) == 40 and len(deferred) == 4, 'Full44 source check split40 public plus4 owner-local')
-    return external['files'], public
+    current_path = member(root, CURRENT + '/FREEZE.json')
+    need(0 < current_path.stat().st_size <= 65536, 'Bounded current source closure')
+    current_raw = current_path.read_bytes()
+    current = parse(current_raw)
+    need(current.get('schema') == 'hierarchy25a_current_runtime_closure_v1'
+         and current.get('candidate_id') == TASK
+         and current.get('ancestry_freeze_sha256') == FREEZE_SHA
+         and current.get('ancestry_files') == freeze['files']
+         and current.get('deferred_files') == deferred
+         and current.get('new_native_qualification') is False
+         and current.get('runtime_execution_ready') is False,
+         'Current source identity retains original ancestry and execution hold')
+    locator_path = CURRENT + '/LOCATORS.json'
+    locators = metadata(member(root, locator_path), current['files'][locator_path]['sha256'])
+    reserved = {external['files']['owner_engine']['destination']:
+                'benchmarks/shared/program-execution/dmfc-transport-v2/program-runner-v2/engine.py'}
+    need(set(locators) == {'schema', 'candidate_id', 'paths'}
+         and locators['schema'] == 'hierarchy25a_exact_current_locators_v1'
+         and locators['candidate_id'] == TASK and set(locators['paths']) == set(public) | set(reserved)
+         and current.get('deferred_locators') == reserved
+         and all(locators['paths'][name] == target for name, target in reserved.items()),
+         'Forty public ancestry locators and the exact reserved external engine destination')
+    mapped = {}
+    for relative in public:
+        target = locators['paths'][relative]
+        member(root, target)
+        need(target not in mapped and target not in locators['paths'], 'Unique one-step current locator')
+        mapped[target] = current['files'][target]
+    deferred_current = {reserved.get(relative, relative): pin for relative, pin in deferred.items()}
+    need(all(current['files'][relative] == pin for relative, pin in deferred_current.items()),
+         'Deferred current destinations retain exact ancestry bytes')
+    auxiliary = {CURRENT + '/' + name for name in ('LOCATORS.json', 'SOURCE_BINDINGS.json', 'IMPORTS.json')}
+    need(set(current['files']) == set(mapped) | set(deferred_current) | auxiliary,
+         'Same forty public and four deferred ancestry slots plus three current binding manifests')
+    for relative in auxiliary:
+        stream(member(root, relative), current['files'][relative])
+    operative = {role: dict(row, destination=reserved.get(row['destination'], row['destination']))
+                 for role, row in external['files'].items()}
+    return operative, mapped
 
 
 def check_public(root, public):
@@ -220,9 +260,14 @@ def check(root, source_only=False):
             if role in PRIVATE_REFERENCE:
                 private_parent(member(root, row['destination']))
             stream(member(root, row['destination']), row)
-    return {'candidate_id': TASK, 'public_frozen_members_checked': 40,
+    return {'candidate_id': TASK, 'current_public_members_checked': 40,
+            'ancestry_manifest_members_authenticated': 44,
+            'current_binding_manifests_checked': 3,
+            'public_members_identity': 'current_source_successor',
+            'ancestry_freeze_sha256': FREEZE_SHA,
+            'current_freeze_sha256': hashlib.sha256(member(root, CURRENT + '/FREEZE.json').read_bytes()).hexdigest(),
+            'runtime_execution_ready': False, 'new_native_qualification': False,
             'external_files_checked': 0 if source_only else 11,
-            'ancestry_frozen_members_checked': 40 if source_only else 44,
             'native_execution': False, 'source_only': source_only}
 
 

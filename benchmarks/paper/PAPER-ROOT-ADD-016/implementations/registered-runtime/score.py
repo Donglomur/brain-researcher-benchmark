@@ -18,7 +18,7 @@ import time
 import uuid
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = HERE.parents[4]
 DOCKER = '/usr/local/bin/docker'
 EXECUTION_PINS = {'bytes': 806, 'sha256': '704cc25f8013e7399c5d5c8b0e635107870571d23491b667fcca81108b8a3c0b'}
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'

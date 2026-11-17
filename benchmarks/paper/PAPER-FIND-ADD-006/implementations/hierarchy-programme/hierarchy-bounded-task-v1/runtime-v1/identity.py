@@ -1,7 +1,7 @@
 """Exact inherited live-profile verifier and inert request capture with durable create hook."""
 from types import SimpleNamespace
-from files import HERE, json_read, captured_module
-_guard = captured_module(json_read(HERE/'IMPORTS.json')['recovery_guard'], '_hierarchy_inherited_recovery_guard')
+from files import HERE, json_read, captured_module, current_metadata
+_guard = captured_module(current_metadata('IMPORTS.json')['recovery_guard'], '_hierarchy_inherited_recovery_guard')
 verify_live = _guard.verify_live
 
 

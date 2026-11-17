@@ -20,7 +20,7 @@ import ofc_tca_inputs as component
 
 EVENTS = ("COFF", "SON", "SOFF", "Rew", "Opt")
 BLOCKS = (3, 1, 2)
-SOURCE = ROOT / "ofc-belief/private/author_code/analysis/Electrophysiology/makeTensor_TCA.m"
+SOURCE = LANE.parent / "original-author-source/private/author_code/analysis/Electrophysiology/makeTensor_TCA.m"
 SOURCE_SHA256 = "6372e3fe24b6363a9b685019a7ef886c1d14bb423f92cbe26e9f4472872f63a9"
 
 

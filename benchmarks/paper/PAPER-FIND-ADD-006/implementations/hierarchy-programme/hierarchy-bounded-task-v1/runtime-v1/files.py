@@ -9,7 +9,11 @@ import re
 import types
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[3]
+ROOT = HERE.parents[6]
+CURRENT = ROOT / 'benchmarks/integrity/current-closures/hierarchy25a-original'
+_CURRENT_LOCATORS = None
+_CURRENT_FILES = None
+_CURRENT_FREEZE_SHA = None
 ID = 'PAPER-FIND-ADD-006'
 RUNTIME_ID = 'hierarchy_bounded_task_v1'
 
@@ -23,7 +27,13 @@ def path(relative):
     p = Path(relative)
     need(type(relative) is str and relative and not p.is_absolute() and '..' not in p.parts
          and p.as_posix() == relative and not any(c in relative for c in ',\r\n'), 'Canonical project path')
-    return ROOT / p
+    locators = _CURRENT_LOCATORS or {}
+    target = locators.get(relative, relative)
+    q = Path(target)
+    need(type(target) is str and target and not q.is_absolute() and '..' not in q.parts
+         and q.as_posix() == target and not any(c in target for c in ',\r\n\0')
+         and (target == relative or target not in locators), 'Canonical one-step current locator')
+    return ROOT / q
 
 
 def stream(source, cap):
@@ -114,6 +124,45 @@ def json_read(source, cap=250000):
     return strict_json(read(source, cap))
 
 
+def current_metadata(filename):
+    need(filename in ('SOURCE_BINDINGS.json', 'IMPORTS.json'), 'Declared current metadata role')
+    need(_CURRENT_FILES is not None, 'Reviewed current closure must be bound before current imports')
+    raw = read(CURRENT / filename, 65536)
+    relative = str((CURRENT / filename).relative_to(HERE.parents[6]))
+    need(pin(raw) == _CURRENT_FILES[relative], 'Exact reviewed current binding metadata')
+    return strict_json(raw)
+
+
+def bind_current_locators(current, freeze_sha256):
+    global _CURRENT_LOCATORS, _CURRENT_FILES, _CURRENT_FREEZE_SHA
+    raw = read(CURRENT / 'FREEZE.json', 65536)
+    need(pin(raw)['sha256'] == freeze_sha256 and strict_json(raw) == current,
+         'Reviewed current freeze at its physical location')
+    relative = str((CURRENT / 'LOCATORS.json').relative_to(HERE.parents[6]))
+    raw = read(CURRENT / 'LOCATORS.json', 32768)
+    need(pin(raw) == current['files'][relative], 'Exact reviewed current locator bytes')
+    locators = strict_json(raw)
+    expected = set(current['ancestry_files']) - set(current['deferred_files'])
+    expected |= set(current['deferred_locators'])
+    need(set(locators) == {'schema', 'candidate_id', 'paths'}
+         and locators['schema'] == 'hierarchy25a_exact_current_locators_v1'
+         and locators['candidate_id'] == ID and set(locators['paths']) == expected,
+         'Exact public and reserved deferred locator inventory')
+    for source, target in locators['paths'].items():
+        q = Path(target)
+        need(type(target) is str and target and not q.is_absolute() and '..' not in q.parts
+             and q.as_posix() == target and not any(c in target for c in ',\r\n\0')
+             and target not in locators['paths'] and target in current['files'],
+             'Canonical current locator without chaining')
+    need(len(set(locators['paths'].values())) == len(expected)
+         and all(locators['paths'][source] == target
+                 for source, target in current['deferred_locators'].items()),
+         'Unique exact current destinations including deferred inputs')
+    _CURRENT_LOCATORS = dict(locators['paths'])
+    _CURRENT_FILES = dict(current['files'])
+    _CURRENT_FREEZE_SHA = freeze_sha256
+
+
 def write(source, value, cap=250000):
     raw = (json.dumps(value, sort_keys=True, indent=2, allow_nan=False) + '\n').encode()
     need(len(raw) <= cap, 'Bounded complete metadata')
@@ -126,11 +175,21 @@ def write(source, value, cap=250000):
 
 
 def freeze(review, filename='FREEZE.json'):
-    need(filename in ('FREEZE.json', 'PREP_FREEZE.json'), 'Declared source closure role')
-    raw = read(HERE / filename, 500000)
+    need(filename == 'FREEZE.json', 'Declared current ordinary source closure role')
+    raw = read(CURRENT / filename, 65536)
     need(pin(raw)['sha256'] == review['freeze_sha256'], 'Root-bound final source freeze')
     value = strict_json(raw)
-    need(value['candidate_id'] == ID and 1 <= len(value['files']) <= 256, 'Bounded exact source closure')
+    need(value.get('schema') == 'hierarchy25a_current_runtime_closure_v1'
+         and value['candidate_id'] == ID and 1 <= len(value['files']) <= 256
+         and value.get('new_native_qualification') is False,
+         'Bounded distinct current source closure without inherited qualification')
+    ancestry = read(HERE / 'FREEZE.json', 32768)
+    need(pin(ancestry)['sha256'] == value['ancestry_freeze_sha256'] ==
+         '40d4b1bcf8b62cfdeef1b4ff1d519445b534c87f4a101b548500a116aec781fc'
+         and strict_json(ancestry)['files'] == value['ancestry_files'], 'Unchanged 44-member ancestry')
+    bind_current_locators(value, review['freeze_sha256'])
+    need(value.get('runtime_execution_ready') is True,
+         'Current source remains held: exact external engine and current transport closure require independent review')
     for relative, item in value['files'].items():
         need(pin(read(path(relative), 2000000)) == item, 'Source closure drift: ' + relative)
     return value
