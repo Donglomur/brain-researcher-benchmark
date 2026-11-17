@@ -178,6 +178,30 @@ class NumericalTests(unittest.TestCase):
                     sinks=sinks, owner_targets_sink=owner)
         self.assertEqual(owner.getvalue(), b"")
 
+    def test_incomplete_backing_source_cannot_publish_partial_fold_success(self):
+        c, s, r, pins, protocol = metadata()
+        assay = protocol.assays[0]; selected = assay.folds[0]
+        first_indices = {getattr(selected, role)[0].source_start for role in subject.ROLES}
+        reads = []
+        class IncompleteRows(Sequence):
+            def __len__(self):
+                return assay.total_frames
+            def __getitem__(self, index):
+                reads.append(index)
+                if index not in first_indices:
+                    raise IndexError(index)
+                return image(1.0), (2.0, 3.0)
+        sinks = {role: io.BytesIO() for role in subject.ROLES}
+        owner = io.BytesIO()
+        with self.assertRaisesRegex(trials.AdmissionError, "source row missing"):
+            subject.prepare_selected_fold(c, s, r, **pins, assay_id="WFCI1", fold=0,
+                source_loader=lambda a, f, d: trials.SourceRows(a.source_sha256,
+                    a.representation_sha256, trials.SHAPE, a.channels, IncompleteRows()),
+                sinks=sinks, owner_targets_sink=owner)
+        self.assertEqual(reads, [selected.train[0].source_start, selected.train[1].source_start])
+        self.assertTrue(all(sink.getvalue() == b"" for sink in sinks.values()))
+        self.assertEqual(owner.getvalue(), b"")
+
     def test_short_writes_account_exact_bytes_and_refuse_invalid_returns(self):
         class Short(io.BytesIO):
             def write(self, raw): return super().write(raw[:3])
