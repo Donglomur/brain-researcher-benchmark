@@ -9,6 +9,7 @@ import stat
 import sys
 
 SCHEMA = 'neural078_deferred_grade_source_v1'
+CURRENT_SCHEMA = 'neural078_deferred_grade_current_source_v1'
 PRODUCER_RELATIVE = 'authoring/delivery-20261105/common/neural078-holder-readiness-successor-v1'
 ADAPTER_PIN = {'bytes': 472, 'sha256': 'a5912bbdb00ed898e67cd15e6e9f1fe75ddf1eb29c5807e78ef5ad8a50845e8f'}
 PROGRAM_PIN = {'bytes': 1801, 'sha256': '8a1b62ca449c5d3c089407fbe76345910fcc4684a3cbaf2811f6e043adb9dc6d'}
@@ -135,16 +136,32 @@ def producer_members(bodies):
     return sorted(expected)
 
 
-def verify(root, expected):
+def verify(root, expected, *, manifest_path=None):
     root = canonical(root)
     need(root.is_dir(), 'existing source directory')
     descriptor(expected, MANIFEST_CAP)
-    manifest_raw = capture(root / 'SOURCE_MANIFEST.json', MANIFEST_CAP, expected)
+    selected_manifest = root / 'SOURCE_MANIFEST.json' if manifest_path is None else canonical(manifest_path)
+    manifest_raw = capture(selected_manifest, MANIFEST_CAP, expected)
     manifest = parse(manifest_raw)
+    historical_bytes = 0
+    if type(manifest) is dict and manifest.get('schema') == CURRENT_SCHEMA:
+        need(manifest_path is not None and set(manifest) == {'schema', 'historical_manifest', 'files'},
+             'explicit current manifest selection')
+        historical_raw = capture(root / 'SOURCE_MANIFEST.json', MANIFEST_CAP,
+                                 descriptor(manifest['historical_manifest'], MANIFEST_CAP))
+        historical_bytes = len(historical_raw)
+        historical = parse(historical_raw)
+        need(type(historical) is dict and set(historical) == {'schema', 'files'}
+             and historical['schema'] == SCHEMA and type(historical['files']) is list,
+             'preserved historical source manifest')
+        need(type(manifest['files']) is list
+             and {row['path'] for row in manifest['files']} == {row['path'] for row in historical['files']},
+             'current closure preserves complete historical member set')
+        manifest = {'schema': SCHEMA, 'files': manifest['files']}
     need(type(manifest) is dict and set(manifest) == {'schema', 'files'}
          and manifest['schema'] == SCHEMA and type(manifest['files']) is list
          and 1 <= len(manifest['files']) <= 64, 'closed source manifest format')
-    selected, total = {}, len(manifest_raw)
+    selected, total = {}, len(manifest_raw) + historical_bytes
     for row in manifest['files']:
         need(type(row) is dict and set(row) == {'path', 'bytes', 'sha256'}, 'exact source row')
         name = member(row['path'])
@@ -223,12 +240,13 @@ def main(argv=None):
     parser.add_argument('mode', choices=('verify', 'install-producer'))
     parser.add_argument('--source-bytes', required=True, type=int)
     parser.add_argument('--source-sha256', required=True)
+    parser.add_argument('--source-manifest', help='Explicit externally pinned current manifest; historical manifest remains unchanged')
     parser.add_argument('--operator-root')
     args = parser.parse_args(argv)
     need(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode, 'use -I -S -B')
     source_root = Path(os.path.abspath(__file__)).parent
     expected = {'bytes': args.source_bytes, 'sha256': args.source_sha256}
-    bodies, _ = verify(source_root, expected)
+    bodies, _ = verify(source_root, expected, manifest_path=args.source_manifest)
     if args.mode == 'install-producer':
         need(args.operator_root is not None, 'explicit fresh operator root')
         receipt = install_producer(args.operator_root, source_root, bodies, expected)
